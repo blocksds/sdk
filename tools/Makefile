@@ -8,9 +8,14 @@ BINMODE		:= 755
 MAKE		:= make
 INSTALL		:= install
 
-.PHONY: clean grit install mmutil ndstool
+.PHONY: bin2c clean grit install mmutil ndstool
 
-all: grit mmutil ndstool
+all: bin2c grit mmutil ndstool
+
+bin2c: bin2c/bin2c
+
+bin2c/bin2c:
+	make -C bin2c
 
 grit: grit/grit
 
@@ -33,14 +38,17 @@ install: all
 	@echo "INSTALLDIR = '$(INSTALLDIR)' (must not be empty)"
 	@test $(INSTALLDIR)
 	$(INSTALL) -d $(INSTALLDIR_ABS)/tools \
+		      $(INSTALLDIR_ABS)/tools/bin2c \
 		      $(INSTALLDIR_ABS)/tools/grit \
 		      $(INSTALLDIR_ABS)/tools/mmutil \
 		      $(INSTALLDIR_ABS)/tools/ndstool
+	$(INSTALL) $(STRIP) -m $(BINMODE) bin2c/bin2c $(INSTALLDIR_ABS)/tools/bin2c/
 	$(INSTALL) $(STRIP) -m $(BINMODE) grit/grit $(INSTALLDIR_ABS)/tools/grit/
 	$(INSTALL) $(STRIP) -m $(BINMODE) mmutil/mmutil $(INSTALLDIR_ABS)/tools/mmutil/
 	$(INSTALL) $(STRIP) -m $(BINMODE) ndstool/ndstool $(INSTALLDIR_ABS)/tools/ndstool/
 
 clean:
+	$(MAKE) -C bin2c clean
 	$(MAKE) -C grit distclean
 	$(MAKE) -C mmutil distclean
 	$(MAKE) -C ndstool distclean
