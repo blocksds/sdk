@@ -1,0 +1,24 @@
+[submodule "libs/libnds"]
+	path = libs/libnds
+	url = https://github.com/blocksds/libnds
+[submodule "libs/dswifi"]
+	path = libs/dswifi
+	url = https://github.com/blocksds/dswifi
+[submodule "libs/maxmod"]
+	path = libs/maxmod
+	url = https://github.com/blocksds/maxmod
+[submodule "tools/ndstool"]
+	path = tools/ndstool
+	url = https://github.com/blocksds/ndstool
+[submodule "tools/grit"]
+	path = tools/grit
+	url = https://github.com/blocksds/grit
+[submodule "tools/mmutil"]
+	path = tools/mmutil
+	url = https://github.com/blocksds/mmutil
+[submodule "sys/default_arm7"]
+	path = sys/default_arm7
+	url = https://github.com/blocksds/default_arm7
+[submodule "sys/crts"]
+	path = sys/crts
+	url = https://github.com/blocksds/crts
