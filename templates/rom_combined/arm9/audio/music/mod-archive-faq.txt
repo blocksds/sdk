@@ -1,0 +1,52 @@
+Original site: https://modarchive.org/index.php?faq-licensing
+
+===============================================================================
+
+Licensing Modules and Copyright
+
+- Who owns the copyrights to the modules?
+
+The composers do - unless the Public Domain license attribution has been
+specifically attributed in which case you are free to do with the module
+whatever you like.
+
+- Can I use a module of modarchive.org in my game/application/etc...?
+
+If the module in question has license deeds attributed to it, please refer to
+those.
+
+Otherwise, the only way to be genuinely fair to the artist who's music you want
+to use is to contact them and get their permission. We can't grant permissions
+on their behalf. Period.
+
+- Can I redistribute the module in its original unmodified form?
+
+Yes. All uploads to the site are governed by an upload agreement of which one of
+the terms is the right to redistribute the original unmodified module file. This
+does not cover inclusion in a packed/bundled application or game. See previous
+item.
+
+- The contact information isn't in the module, what can I do to contact the
+artist?
+
+You can try using the modarchive.org forums, specifically the Wanted: forum.
+Search the Internet, do some homework. If you fail to find the necessary
+information then you are pretty much out of luck.
+
+- I can't get in contact with an artist who's music I want to use, what now?
+
+It's up to you how you proceed. We will not condone illegal use of someone's
+works, but if you still wish to continue to use that particular piece of music
+in your project, then you take on those risks yourself.
+
+If your project is small and free (non commercial) then it's wise to give clear
+and concise due credit to the artist in your production. If your production is
+for commercial purposes then you are technically left with no other choice than
+to find a different module where the artist has attributed a compatible license,
+or is contactable - or go out on a limb and ask to have someone compose a custom
+module for your project.
+
+- Where can I find the license attribution information on a module?
+
+Look on a module's information page, there is a section dedicated to the License
+Attribution information.
