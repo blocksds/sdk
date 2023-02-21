@@ -22,3 +22,6 @@
 [submodule "sys/crts"]
 	path = sys/crts
 	url = https://github.com/blocksds/crts
+[submodule "libs/picolibc"]
+	path = libs/picolibc
+	url = https://github.com/blocksds/picolibc
