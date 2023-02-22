@@ -12,12 +12,6 @@
 //
 //     https://sourceware.org/newlib/libc.html#Syscalls
 
-#undef errno
-extern int errno;
-
-char *__env[1] = { 0 };
-char **environ = __env;
-
 int _getpid(void)
 {
     return 1;

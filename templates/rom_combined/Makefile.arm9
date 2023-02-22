@@ -19,10 +19,11 @@ DEFINES		:=
 # Libraries
 # ---------
 
-LIBS		:= -lnds9 -lsysnds9 -lmm9
+LIBS		:= -lnds9 -lsysnds9 -lmm9 -lc
 LIBDIRS		:= $(BLOCKSDS)/libs/libnds \
 		   $(BLOCKSDS)/libs/libsysnds \
-		   $(BLOCKSDS)/libs/maxmod
+		   $(BLOCKSDS)/libs/maxmod \
+		   $(BLOCKSDS)/libs/libc
 
 # Build artifacts
 # ---------------
@@ -111,7 +112,7 @@ CXXFLAGS	+= -std=gnu++14 $(WARNFLAGS) $(DEFINES) $(ARCH) \
 		   -fomit-frame-pointer
 
 LDFLAGS		:= -mthumb -mthumb-interwork $(LIBDIRSFLAGS) \
-		   -Wl,-Map,$(MAP) -Wl,--gc-sections -specs=nano.specs \
+		   -Wl,-Map,$(MAP) -Wl,--gc-sections -nolibc -nostartfiles \
 		   -T$(BLOCKSDS)/sys/crts/ds_arm9.mem \
 		   -T$(BLOCKSDS)/sys/crts/ds_arm9.ld \
 		   -Wl,--start-group $(LIBS) -Wl,--end-group

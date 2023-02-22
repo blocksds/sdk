@@ -45,7 +45,7 @@ Native installation
 
 You need to install a cross compiler to build applications for NDS. You also
 need to build a few host tools, so you need a compiler for the host, the
-FreeImage library, and Autotools.
+FreeImage library, and some build tools (Autotools, Meson and Ninja):
 
 If you're on Ubuntu, for example, run the following command:
 
@@ -53,7 +53,9 @@ If you're on Ubuntu, for example, run the following command:
 
     sudo apt-get install -y --no-install-recommends \
         build-essential gcc-arm-none-eabi libfreeimage-dev \
-        libnewlib-arm-none-eabi libtool m4 automake
+        libtool m4 automake python3 python3-pip ninja-build
+
+    pip install meson
 
 Clone this repository:
 

@@ -15,6 +15,11 @@ BINDIRS		:=
 
 DEFINES		:=
 
+# Libraries
+# ---------
+
+LIBDIRS		:= $(BLOCKSDS)/libs/libc
+
 # Build artifacts
 # ---------------
 
@@ -66,7 +71,8 @@ ARCH		:= -march=armv5te -mtune=arm946e-s
 
 WARNFLAGS	:= -Wall
 
-INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path))
+INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path)) \
+		   $(foreach path,$(LIBDIRS),-I$(path)/include)
 
 ASFLAGS		+= -x assembler-with-cpp $(DEFINES) $(ARCH) \
 		   -mthumb -mthumb-interwork $(INCLUDEFLAGS) \

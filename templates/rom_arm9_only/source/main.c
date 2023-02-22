@@ -24,7 +24,7 @@ void on_key_pressed(int key)
 {
    if (key > 0)
    {
-      iprintf("%c", key);
+      printf("%c", key);
       // stdout is line-buffered. It waits until a newline character is printed
       // to send all buffered text to the terminal. This forces the buffer to be
       // sent right away.
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
         // -----------------------------------
 
         // Clear console
-        iprintf("\x1b[2J");
+        printf("\x1b[2J");
 
         // Print current time
         char str[100];
@@ -110,21 +110,21 @@ int main(int argc, char **argv)
         struct tm *tmp = localtime(&t);
         if (strftime(str, sizeof(str), "%Y-%m-%dT%H:%M:%S%z", tmp) == 0)
             snprintf(str, sizeof(str), "Failed to get time");
-        iprintf("%s\n\n", str);
+        printf("%s\n\n", str);
 
         // Print contents of the BIN file
         for (int i = 0; i < data_string_bin_size; i++)
-            iprintf("%c", data_string_bin[i]);
-        iprintf("\n");
+            printf("%c", data_string_bin[i]);
+        printf("\n");
 
         // Print some controls
-        iprintf("PAD:    Rotate triangle\n");
-        iprintf("SELECT: Keyboard input test\n");
-        iprintf("START:  Exit to loader\n");
-        iprintf("A:      Play SFX\n");
-        iprintf("\n");
+        printf("PAD:    Rotate triangle\n");
+        printf("SELECT: Keyboard input test\n");
+        printf("START:  Exit to loader\n");
+        printf("A:      Play SFX\n");
+        printf("\n");
 
-        iprintf("Name: [%s]\n", name);
+        printf("Name: [%s]\n", name);
 
         // Handle user input
         // -----------------
@@ -149,7 +149,7 @@ int main(int argc, char **argv)
 
         if (keys & KEY_SELECT)
         {
-            iprintf("\x1b[12;1HType your name: ");
+            printf("\x1b[12;1HType your name: ");
             scanf("%s", name);
         }
 

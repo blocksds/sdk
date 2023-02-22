@@ -3,11 +3,11 @@
 # Copyright (c) 2023 Antonio Niño Díaz
 
 # Base image with make and the ARM cross compiler
-FROM debian:11-slim AS base-cross-compiler
+FROM ubuntu:23.04 AS base-cross-compiler
 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-        gcc-arm-none-eabi libnewlib-arm-none-eabi make
+        gcc-arm-none-eabi make
 
 # Image that contains all the code and the build results. This can be used to
 # develop applications with BlocksDS, or to develop the components of BlocksDS
@@ -15,14 +15,16 @@ RUN apt-get update && apt-get upgrade -y && \
 FROM base-cross-compiler AS blocksds-dev
 
 RUN apt-get install -y --no-install-recommends \
-        build-essential ca-certificates git libfreeimage-dev libtool m4 automake
+        build-essential ca-certificates git libfreeimage-dev \
+        libtool m4 automake python3 python3-pip ninja-build
+RUN pip3 install meson
 
 WORKDIR /opt/blocksds/
 RUN git clone --recurse-submodules https://github.com/blocksds/sdk.git
 ENV BLOCKSDS=/opt/blocksds/sdk/
 
 WORKDIR /opt/blocksds/sdk/
-RUN make -j`nproc`
+RUN make -j`nproc` VERBOSE=1
 
 WORKDIR /work/
 
