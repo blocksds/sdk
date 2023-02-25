@@ -7,7 +7,7 @@
 / FatFs module is an open source software. Redistribution and use of FatFs in
 / source and binary forms, with or without modification, are permitted provided
 / that the following condition is met:
-
+/
 / 1. Redistributions of source code must retain the above copyright notice,
 /    this condition and the following disclaimer.
 /

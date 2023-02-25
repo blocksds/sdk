@@ -1,5 +1,23 @@
-/*-----------------------------------------------------------------------*/
-/* Low level disk I/O module SKELETON for FatFs     (C)ChaN, 2019        */
+/*------------------------------------------------------------------------/
+/  Low level disk I/O module SKELETON for FatFs                           /
+/-------------------------------------------------------------------------/
+/
+/ Copyright (C) 2019, ChaN, all right reserved.
+/
+/ FatFs module is an open source software. Redistribution and use of FatFs in
+/ source and binary forms, with or without modification, are permitted provided
+/ that the following condition is met:
+/
+/ 1. Redistributions of source code must retain the above copyright notice,
+/    this condition and the following disclaimer.
+/
+/ This software is provided by the copyright holder and contributors "AS IS"
+/ and any warranties related to this software are DISCLAIMED.
+/ The copyright owner or contributors be NOT LIABLE for any damages caused
+/ by use of this software.
+/
+/----------------------------------------------------------------------------*/
+
 /*-----------------------------------------------------------------------*/
 /* If a working storage control module is available, it should be        */
 /* attached to the FatFs via a glue function rather than modifying it.   */
