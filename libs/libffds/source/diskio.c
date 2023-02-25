@@ -3,6 +3,7 @@
 /-------------------------------------------------------------------------/
 /
 / Copyright (C) 2019, ChaN, all right reserved.
+/ Copyright (C) 2023, AntonioND, all right reserved.
 /
 / FatFs module is an open source software. Redistribution and use of FatFs in
 / source and binary forms, with or without modification, are permitted provided
@@ -18,230 +19,249 @@
 /
 /----------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------*/
-/* If a working storage control module is available, it should be        */
-/* attached to the FatFs via a glue function rather than modifying it.   */
-/* This is an example of glue functions to attach various exsisting      */
-/* storage control modules to the FatFs module with a defined API.       */
-/*-----------------------------------------------------------------------*/
+//-----------------------------------------------------------------------
+// If a working storage control module is available, it should be
+// attached to the FatFs via a glue function rather than modifying it.
+// This is an example of glue functions to attach various exsisting
+// storage control modules to the FatFs module with a defined API.
+//-----------------------------------------------------------------------
 
-#include "ff.h"			/* Obtains integer types */
-#include "diskio.h"		/* Declarations of disk functions */
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
 
-/* Definitions of physical drive number for each drive */
-#define DEV_RAM		0	/* Example: Map Ramdisk to physical drive 0 */
-#define DEV_MMC		1	/* Example: Map MMC/SD card to physical drive 1 */
-#define DEV_USB		2	/* Example: Map USB MSD to physical drive 2 */
+#include <nds/arm9/dldi.h>
+#include <nds/system.h>
 
+#include "ff.h"     // Obtains integer types
+#include "diskio.h" // Declarations of disk functions
 
-/*-----------------------------------------------------------------------*/
-/* Get Drive Status                                                      */
-/*-----------------------------------------------------------------------*/
+// Definitions of physical drive number for each drive
+#define DEV_DLDI    0 // DLDI driver (flashcard)
+#define DEV_SD      1 // SD slot of the DSi
 
-DSTATUS disk_status (
-	BYTE pdrv		/* Physical drive nmuber to identify the drive */
-)
+// NOTE: The clearStatus() function of DISC_INTERFACE isn't used in libfat, so
+// it isn't needed here either.
+
+static bool fs_initialized[FF_VOLUMES];
+static const DISC_INTERFACE *fs_io[FF_VOLUMES];
+
+//-----------------------------------------------------------------------
+// Get Drive Status
+//-----------------------------------------------------------------------
+
+// pdrv: Physical drive nmuber to identify the drive
+DSTATUS disk_status(BYTE pdrv)
 {
-	DSTATUS stat;
-	int result;
+    switch (pdrv)
+    {
+        case DEV_DLDI:
+            return fs_initialized[pdrv] ? 0 : STA_NOINIT;
 
-	switch (pdrv) {
-	case DEV_RAM :
-		result = RAM_disk_status();
-
-		// translate the reslut code here
-
-		return stat;
-
-	case DEV_MMC :
-		result = MMC_disk_status();
-
-		// translate the reslut code here
-
-		return stat;
-
-	case DEV_USB :
-		result = USB_disk_status();
-
-		// translate the reslut code here
-
-		return stat;
-	}
-	return STA_NOINIT;
+        case DEV_SD:
+            return fs_initialized[pdrv] ? 0 : STA_NOINIT;
+    }
+    return STA_NOINIT;
 }
 
+//-----------------------------------------------------------------------
+// Inidialize a Drive
+//-----------------------------------------------------------------------
 
-
-/*-----------------------------------------------------------------------*/
-/* Inidialize a Drive                                                    */
-/*-----------------------------------------------------------------------*/
-
-DSTATUS disk_initialize (
-	BYTE pdrv				/* Physical drive nmuber to identify the drive */
-)
+// pdrv: Physical drive nmuber to identify the drive
+DSTATUS disk_initialize(BYTE pdrv)
 {
-	DSTATUS stat;
-	int result;
+    // TODO: Should we fail if the device has been initialized, or succeed?
+    if (fs_initialized[pdrv])
+        return 0;
 
-	switch (pdrv) {
-	case DEV_RAM :
-		result = RAM_disk_initialize();
+    switch (pdrv)
+    {
+        case DEV_DLDI:
+        {
+            const DISC_INTERFACE *io = dldiGetInternal();
 
-		// translate the reslut code here
+            if (!io->startup())
+                return STA_NOINIT;
 
-		return stat;
+            if (!io->isInserted())
+                return STA_NODISK;
 
-	case DEV_MMC :
-		result = MMC_disk_initialize();
+            fs_io[pdrv] = io;
+            fs_initialized[pdrv] = true;
 
-		// translate the reslut code here
+            return 0;
+        }
+        case DEV_SD:
+        {
+            const DISC_INTERFACE *io = get_io_dsisd();
 
-		return stat;
+            if (!io->startup())
+                return STA_NOINIT;
 
-	case DEV_USB :
-		result = USB_disk_initialize();
+            if (!io->isInserted())
+                return STA_NODISK;
 
-		// translate the reslut code here
+            fs_io[pdrv] = io;
+            fs_initialized[pdrv] = true;
 
-		return stat;
-	}
-	return STA_NOINIT;
+            return 0;
+        }
+    }
+    return STA_NOINIT;
 }
 
+//-----------------------------------------------------------------------
+// Read Sector(s)
+//-----------------------------------------------------------------------
 
-
-/*-----------------------------------------------------------------------*/
-/* Read Sector(s)                                                        */
-/*-----------------------------------------------------------------------*/
-
-DRESULT disk_read (
-	BYTE pdrv,		/* Physical drive nmuber to identify the drive */
-	BYTE *buff,		/* Data buffer to store read data */
-	LBA_t sector,	/* Start sector in LBA */
-	UINT count		/* Number of sectors to read */
-)
+// pdrv:   Physical drive nmuber to identify the drive
+// buff:   Data buffer to store read data
+// sector: Start sector in LBA
+// count:  Number of sectors to read
+DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
 {
-	DRESULT res;
-	int result;
+    if (!fs_initialized[pdrv])
+        return RES_NOTRDY;
 
-	switch (pdrv) {
-	case DEV_RAM :
-		// translate the arguments here
+    switch (pdrv)
+    {
+        case DEV_DLDI:
+        {
+            const DISC_INTERFACE *io = fs_io[pdrv];
+            if (!io->readSectors(sector, count, buff))
+                return RES_NOTRDY;
 
-		result = RAM_disk_read(buff, sector, count);
+            return RES_OK;
+        }
+        case DEV_SD:
+        {
+            const DISC_INTERFACE *io = fs_io[pdrv];
 
-		// translate the reslut code here
+#if FF_MAX_SS != FF_MIN_SS
+#error "This assumes that the sector size is fixed".
+#endif
+            // The transfer of data from the SD is done using a DMA which
+            // doesn't have access to DTCM. To prevent accidentally trying to
+            // DMA into DTCM, which contains the stack, it is better to allocate
+            // memory in the heap always.
+            //
+            // This is inefficient, but all this code will go away when a SD
+            // cache is implemented.
+            size_t size = count * FF_MAX_SS;
 
-		return res;
+            void *ptr = malloc(size);
+            if (ptr == NULL)
+                return RES_NOTRDY;
 
-	case DEV_MMC :
-		// translate the arguments here
+            if (!io->readSectors(sector, count, ptr))
+            {
+                free(ptr);
+                return RES_NOTRDY;
+            }
 
-		result = MMC_disk_read(buff, sector, count);
+            //DC_InvalidateRange(ptr, size);
+            char *uncached = memUncached(ptr);
 
-		// translate the reslut code here
+            memcpy(buff, uncached, size);
 
-		return res;
+            free(ptr);
 
-	case DEV_USB :
-		// translate the arguments here
+            return RES_OK;
+        }
+    }
 
-		result = USB_disk_read(buff, sector, count);
-
-		// translate the reslut code here
-
-		return res;
-	}
-
-	return RES_PARERR;
+    return RES_PARERR;
 }
 
-
-
-/*-----------------------------------------------------------------------*/
-/* Write Sector(s)                                                       */
-/*-----------------------------------------------------------------------*/
+//-----------------------------------------------------------------------
+// Write Sector(s)
+//-----------------------------------------------------------------------
 
 #if FF_FS_READONLY == 0
 
-DRESULT disk_write (
-	BYTE pdrv,			/* Physical drive nmuber to identify the drive */
-	const BYTE *buff,	/* Data to be written */
-	LBA_t sector,		/* Start sector in LBA */
-	UINT count			/* Number of sectors to write */
-)
+// pdrv:   Physical drive nmuber to identify the drive
+// buff:   Data to be written
+// sector: Start sector in LBA
+// count:  Number of sectors to write
+DRESULT disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
 {
-	DRESULT res;
-	int result;
+    if (fs_initialized[pdrv] == 0)
+        return RES_NOTRDY;
 
-	switch (pdrv) {
-	case DEV_RAM :
-		// translate the arguments here
+    switch (pdrv)
+    {
+        case DEV_DLDI:
+        {
+            const DISC_INTERFACE *io = fs_io[pdrv];
+            if (!io->writeSectors(sector, count, buff))
+                return RES_NOTRDY;
 
-		result = RAM_disk_write(buff, sector, count);
+            return RES_OK;
+        }
+        case DEV_SD:
+        {
+            // Writing is disabled because it doesn't work properly
+            //const DISC_INTERFACE *io = fs_io[pdrv];
+            //if (!io->writeSectors(sector, count, buff))
+                return RES_NOTRDY;
 
-		// translate the reslut code here
+            //return RES_OK;
+        }
+    }
 
-		return res;
-
-	case DEV_MMC :
-		// translate the arguments here
-
-		result = MMC_disk_write(buff, sector, count);
-
-		// translate the reslut code here
-
-		return res;
-
-	case DEV_USB :
-		// translate the arguments here
-
-		result = USB_disk_write(buff, sector, count);
-
-		// translate the reslut code here
-
-		return res;
-	}
-
-	return RES_PARERR;
+    return RES_PARERR;
 }
 
 #endif
 
+//-----------------------------------------------------------------------
+// Miscellaneous Functions
+//-----------------------------------------------------------------------
 
-/*-----------------------------------------------------------------------*/
-/* Miscellaneous Functions                                               */
-/*-----------------------------------------------------------------------*/
-
-DRESULT disk_ioctl (
-	BYTE pdrv,		/* Physical drive nmuber (0..) */
-	BYTE cmd,		/* Control code */
-	void *buff		/* Buffer to send/receive control data */
-)
+// pdrv: Physical drive nmuber (0..)
+// cmd:  Control code
+// buff: Buffer to send/receive control data
+DRESULT disk_ioctl(BYTE pdrv, BYTE cmd, void *buff)
 {
-	DRESULT res;
-	int result;
+    if (!fs_initialized[pdrv])
+        return RES_NOTRDY;
 
-	switch (pdrv) {
-	case DEV_RAM :
+    // Only CTRL_SYNC is needed for now:
+    // - GET_SECTOR_COUNT: Used by f_mkfs and f_fdisk.
+    // - GET_SECTOR_SIZE: Required only if FF_MAX_SS > FF_MIN_SS.
+    // - GET_BLOCK_SIZE: Used by f_mkfs.
+    // - CTRL_TRIM: Required when FF_USE_TRIM == 1.
 
-		// Process of the command for the RAM drive
+    switch (pdrv)
+    {
+        case DEV_DLDI:
+            // This command flushes the cache, but there is no cache right now
+            if (cmd == CTRL_SYNC)
+                return RES_OK;
 
-		return res;
+            return RES_NOTRDY;
 
-	case DEV_MMC :
+        case DEV_SD:
+            // This command flushes the cache, but there is no cache right now
+            if (cmd == CTRL_SYNC)
+                return RES_OK;
 
-		// Process of the command for the MMC/SD card
+            return RES_NOTRDY;
+    }
 
-		return res;
-
-	case DEV_USB :
-
-		// Process of the command the USB drive
-
-		return res;
-	}
-
-	return RES_PARERR;
+    return RES_PARERR;
 }
 
+DWORD get_fattime (void)
+{
+    time_t t = time(0);
+    struct tm *stm = localtime(&t);
+
+    return (DWORD)(stm->tm_year - 80) << 25 |
+           (DWORD)(stm->tm_mon + 1) << 21 |
+           (DWORD)stm->tm_mday << 16 |
+           (DWORD)stm->tm_hour << 11 |
+           (DWORD)stm->tm_min << 5 |
+           (DWORD)stm->tm_sec >> 1;
+}
