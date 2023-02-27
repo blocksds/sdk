@@ -183,13 +183,13 @@ int open(const char *path, int flags, ...)
     return -1;
 }
 
-int read(int file, char *ptr, int len)
+int read(int fd, char *ptr, int len)
 {
     // This isn't handled here
-    if (file == FD_STDIN)
+    if (fd == FD_STDIN)
         return -1;
 
-    FIL *fp = (FIL *)file;
+    FIL *fp = (FIL *)fd;
     UINT bytes_read = 0;
 
     FRESULT result = f_read(fp, ptr, len, &bytes_read);
@@ -235,13 +235,13 @@ int read(int file, char *ptr, int len)
     return -1;
 }
 
-int write(int file, char *ptr, int len)
+int write(int fd, char *ptr, int len)
 {
     // This isn't handled here
-    if ((file >= FD_STDIN) && (file <= FD_STDERR))
+    if ((fd >= FD_STDIN) && (fd <= FD_STDERR))
         return -1;
 
-    FIL *fp = (FIL *)file;
+    FIL *fp = (FIL *)fd;
     UINT bytes_written = 0;
 
     FRESULT result = f_write(fp, ptr, len, &bytes_written);
@@ -287,9 +287,9 @@ int write(int file, char *ptr, int len)
     return -1;
 }
 
-int close(int file)
+int close(int fd)
 {
-    FIL *fp = (FIL *)file;
+    FIL *fp = (FIL *)fd;
 
     FRESULT result = f_close(fp);
 

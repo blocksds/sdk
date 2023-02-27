@@ -14,9 +14,8 @@
 //     https://sourceware.org/newlib/libc.html#Syscalls
 //     https://github.com/picolibc/picolibc/blob/main/doc/os.md
 
+// Defined in libnds
 void __libnds_exit(int rc);
-
-// System calls
 
 void __attribute__((noreturn)) _exit(int status)
 {
