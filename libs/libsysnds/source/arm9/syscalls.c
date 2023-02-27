@@ -18,20 +18,6 @@ void __libnds_exit(int rc);
 
 // System calls
 
-int getpid(void)
-{
-    return 1;
-}
-
-int _kill(int pid, int sig)
-{
-    (void)pid;
-    (void)sig;
-
-    errno = EINVAL;
-    return -1;
-}
-
 void __attribute__((noreturn)) _exit(int status)
 {
     _kill(status, -1);
@@ -42,16 +28,34 @@ void __attribute__((noreturn)) _exit(int status)
     while (1);
 }
 
+pid_t getpid(void)
+{
+    // The PID of this process is 1
+    return 1;
+}
+
+int _kill(pid_t pid, int sig)
+{
+    // The only process that exists is this process, and it can be killed.
+    if (pid == 1)
+        _exit(128 + sig);
+
+    errno = ESRCH;
+    return -1;
+}
+
 clock_t times(struct tms *buf)
 {
     (void)buf;
+
+    // TODO
 
     return -1;
 }
 
 int fork(void)
 {
-    errno = EAGAIN;
+    errno = ENOSYS;
     return -1;
 }
 

@@ -4,6 +4,7 @@
 
 #include <errno.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <sys/fcntl.h>
 #include <sys/stat.h>
 #include <sys/times.h>
@@ -333,26 +334,141 @@ int close(int file)
     return -1;
 }
 
-int isatty(int file)
+off_t lseek(int fd, off_t offset, int whence)
 {
-    (void)file;
+    FIL *fp = (FIL *)fd;
 
-    return 1;
+    if (whence == SEEK_END)
+    {
+        // The file offset is set to the size of the file plus offset bytes
+        whence = SEEK_SET;
+        offset += f_size(fp);
+    }
+    else if (whence == SEEK_CUR)
+    {
+        // The file offset is set to its current location plus offset bytes
+        whence = SEEK_SET;
+        offset += f_tell(fp);
+    }
+    else if (whence == SEEK_SET)
+    {
+        // The file offset is set to offset bytes.
+    }
+    else
+    {
+        errno = EINVAL;
+        return (off_t)-1;
+    }
+
+    FRESULT result = f_lseek(fp, offset);
+
+    // The following errno codes have been picked so that they make some sort of
+    // sense, but also so that they can be told apart.
+    switch (result)
+    {
+        case FR_OK: // (0) Succeeded
+            return offset;
+        case FR_DISK_ERR: // (1) A hard error occurred in the low level disk I/O layer
+            errno = EIO;
+            return -1;
+        case FR_INT_ERR: // (2) Assertion failed
+            errno = EFAULT;
+            return -1;
+        case FR_INVALID_OBJECT: // (9) The file/directory object is invalid
+            errno = EINVAL;
+            return -1;
+        case FR_TIMEOUT: // (15) Could not get a grant to access the volume within defined period
+            errno = ETIME;
+            return -1;
+
+        case FR_NOT_READY:
+        case FR_NO_FILE:
+        case FR_NO_PATH:
+        case FR_INVALID_NAME:
+        case FR_DENIED:
+        case FR_EXIST:
+        case FR_WRITE_PROTECTED:
+        case FR_INVALID_DRIVE:
+        case FR_NOT_ENABLED:
+        case FR_NO_FILESYSTEM:
+        case FR_MKFS_ABORTED:
+        case FR_LOCKED:
+        case FR_NOT_ENOUGH_CORE:
+        case FR_TOO_MANY_OPEN_FILES:
+        case FR_INVALID_PARAMETER:
+        default:
+            break;
+    }
+
+    return -1;
 }
 
-int lseek(int file, int ptr, int dir)
+_off64_t lseek64(int fd, _off64_t offset, int whence)
 {
-    (void)file;
-    (void)ptr;
-    (void)dir;
-
-    return 0;
+    return (_off64_t)lseek(fd, (off_t)offset, whence);
 }
 
 int unlink(const char *name)
 {
-    (void)name;
+    FRESULT result = f_unlink(name);
 
+    // The following errno codes have been picked so that they make some sort of
+    // sense, but also so that they can be told apart.
+    switch (result)
+    {
+        case FR_OK: // (0) Succeeded
+            return 0;
+        case FR_DISK_ERR: // (1) A hard error occurred in the low level disk I/O layer
+            errno = EIO;
+            return -1;
+        case FR_INT_ERR: // (2) Assertion failed
+            errno = EFAULT;
+            return -1;
+        case FR_NOT_READY: // (3) The physical drive cannot work
+            errno = ECANCELED;
+            return -1;
+        case FR_NO_FILE: // (4) Could not find the file
+            errno = ENOENT;
+            return -1;
+        case FR_NO_PATH: // (5) Could not find the path
+            errno = ENOENT;
+            return -1;
+        case FR_INVALID_NAME: // (6) The path name format is invalid
+            errno = EINVAL;
+            return -1;
+        case FR_DENIED: // (7) Access denied due to prohibited access or directory full
+            errno = EACCES;
+            return -1;
+        case FR_WRITE_PROTECTED: // (10) The physical drive is write protected
+            errno = EPERM;
+            return -1;
+        case FR_INVALID_DRIVE: // (11) The logical drive number is invalid
+            errno = EINVAL;
+            return -1;
+        case FR_NOT_ENABLED: // (12) The volume has no work area
+            errno = ENOMEM;
+            return -1;
+        case FR_NO_FILESYSTEM: // (13) There is no valid FAT volume
+            errno = ENODEV;
+            return -1;
+        case FR_TIMEOUT: // (15) Could not get a grant to access the volume within defined period
+            errno = ETIME;
+            return -1;
+        case FR_LOCKED: // (16) The operation is rejected according to the file sharing policy
+            errno = EPERM;
+            return -1;
+        case FR_NOT_ENOUGH_CORE: // (17) LFN working buffer could not be allocated
+            errno = ENOMEM;
+            return -1;
+
+        case FR_EXIST:
+        case FR_INVALID_OBJECT:
+        case FR_MKFS_ABORTED:
+        case FR_TOO_MANY_OPEN_FILES:
+        case FR_INVALID_PARAMETER:
+        default:
+            break;
+    }
     errno = ENOENT;
     return -1;
 }
@@ -360,16 +476,12 @@ int unlink(const char *name)
 int fstat(int file, struct stat *st)
 {
     (void)file;
-
     st->st_mode = S_IFCHR;
     return 0;
 }
 
-int _stat(char *file, struct stat *st)
+int isatty(int fd)
 {
-    (void)file;
-
-    st->st_mode = S_IFCHR;
     return 0;
 }
 
