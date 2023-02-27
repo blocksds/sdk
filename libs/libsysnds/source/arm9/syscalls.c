@@ -19,8 +19,6 @@ void __libnds_exit(int rc);
 
 void __attribute__((noreturn)) _exit(int status)
 {
-    _kill(status, -1);
-
     __libnds_exit(status);
 
     // Hang, there is nowhere to go
