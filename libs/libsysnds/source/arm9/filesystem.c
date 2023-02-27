@@ -148,7 +148,7 @@ int open(const char *path, int flags, ...)
             errno = EINVAL;
             return -1;
         case FR_WRITE_PROTECTED: // (10) The physical drive is write protected
-            errno = EPERM;
+            errno = EROFS;
             return -1;
         case FR_INVALID_DRIVE: // (11) The logical drive number is invalid
             errno = EINVAL;
@@ -440,7 +440,7 @@ int unlink(const char *name)
             errno = EACCES;
             return -1;
         case FR_WRITE_PROTECTED: // (10) The physical drive is write protected
-            errno = EPERM;
+            errno = EROFS;
             return -1;
         case FR_INVALID_DRIVE: // (11) The logical drive number is invalid
             errno = EINVAL;
