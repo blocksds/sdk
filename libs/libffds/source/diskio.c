@@ -65,7 +65,7 @@ DSTATUS disk_status(BYTE pdrv)
 }
 
 //-----------------------------------------------------------------------
-// Inidialize a Drive
+// Initialize a Drive
 //-----------------------------------------------------------------------
 
 // pdrv: Physical drive nmuber to identify the drive
@@ -253,7 +253,7 @@ DRESULT disk_ioctl(BYTE pdrv, BYTE cmd, void *buff)
     return RES_PARERR;
 }
 
-DWORD get_fattime (void)
+DWORD get_fattime(void)
 {
     time_t t = time(0);
     struct tm *stm = localtime(&t);
