@@ -24,6 +24,61 @@
 #define FD_STDOUT   1
 #define FD_STDERR   2
 
+static int fatfs_error_to_posix(FRESULT error)
+{
+    // The following errno codes have been picked so that they make some sort of
+    // sense, but also so that they can be told apart.
+
+    const FRESULT codes[] = {
+        // Succeeded
+        [FR_OK] = 0,
+        // A hard error occurred in the low level disk I/O layer
+        [FR_DISK_ERR] = EIO,
+        // Assertion failed
+        [FR_INT_ERR] = EFAULT,
+        // The physical drive cannot work
+        [FR_NOT_READY] = ECANCELED,
+         // Could not find the file
+        [FR_NO_FILE] = ENOENT,
+         // Could not find the path
+        [FR_NO_PATH] = ENOENT,
+        // The path name format is invalid
+        [FR_INVALID_NAME] = EINVAL,
+         // Access denied due to prohibited access or directory full
+        [FR_DENIED] = EACCES,
+        // Access denied due to prohibited access
+        [FR_EXIST] = EEXIST,
+        // The file/directory object is invalid
+        [FR_INVALID_OBJECT] = EBADF,
+        // The physical drive is write protected
+        [FR_WRITE_PROTECTED] = EROFS,
+        // The logical drive number is invalid
+        [FR_INVALID_DRIVE] = EINVAL,
+        // The volume has no work area
+        [FR_NOT_ENABLED] = ENOMEM,
+        // There is no valid FAT volume
+        [FR_NO_FILESYSTEM] = ENODEV,
+        // The f_mkfs() aborted due to any problem
+        [FR_MKFS_ABORTED] = ENXIO,
+        // Could not get a grant to access the volume within defined period
+        [FR_TIMEOUT] = ETIME,
+        // The operation is rejected according to the file sharing policy
+        [FR_LOCKED] = EPERM,
+        // LFN working buffer could not be allocated
+        [FR_NOT_ENOUGH_CORE] = ENOMEM,
+        // Number of open files > FF_FS_LOCK
+        [FR_TOO_MANY_OPEN_FILES] = ENOSR,
+        // Given parameter is invalid
+        [FR_INVALID_PARAMETER] = EINVAL,
+    };
+
+    // If this ever happens, there has been a serious error in FatFs
+    if ((error > FR_INVALID_PARAMETER) || (error < 0))
+        return ENOMSG;
+
+    return codes[error];
+}
+
 int open(const char *path, int flags, ...)
 {
     // POSIX | FatFs
@@ -114,72 +169,10 @@ int open(const char *path, int flags, ...)
 
     FRESULT result = f_open(fp, path, mode);
 
-    // The following errno codes have been picked so that they make some sort of
-    // sense, but also so that they can be told apart.
-    switch (result)
-    {
-        case FR_OK: // (0) Succeeded
-            return (int)fp;
-        case FR_DISK_ERR: // (1) A hard error occurred in the low level disk I/O layer
-            errno = EIO;
-            return -1;
-        case FR_INT_ERR: // (2) Assertion failed
-            errno = EFAULT;
-            return -1;
-        case FR_NOT_READY: // (3) The physical drive cannot work
-            errno = ECANCELED;
-            return -1;
-        case FR_NO_FILE: // (4) Could not find the file
-            errno = ENOENT;
-            return -1;
-        case FR_NO_PATH: // (5) Could not find the path
-            errno = ENOENT;
-            return -1;
-        case FR_INVALID_NAME: // (6) The path name format is invalid
-            errno = EINVAL;
-            return -1;
-        case FR_DENIED: // (7) Access denied due to prohibited access or directory full
-            errno = EACCES;
-            return -1;
-        case FR_EXIST: // (8) Access denied due to prohibited access
-            errno = EEXIST;
-            return -1;
-        case FR_INVALID_OBJECT: // (9) The file/directory object is invalid
-            errno = EINVAL;
-            return -1;
-        case FR_WRITE_PROTECTED: // (10) The physical drive is write protected
-            errno = EROFS;
-            return -1;
-        case FR_INVALID_DRIVE: // (11) The logical drive number is invalid
-            errno = EINVAL;
-            return -1;
-        case FR_NOT_ENABLED: // (12) The volume has no work area
-            errno = ENOMEM;
-            return -1;
-        case FR_NO_FILESYSTEM: // (13) There is no valid FAT volume
-            errno = ENODEV;
-            return -1;
-        case FR_TIMEOUT: // (15) Could not get a grant to access the volume within defined period
-            errno = ETIME;
-            return -1;
-        case FR_LOCKED: // (16) The operation is rejected according to the file sharing policy
-            errno = EPERM;
-            return -1;
-        case FR_NOT_ENOUGH_CORE: // (17) LFN working buffer could not be allocated
-            errno = ENOMEM;
-            return -1;
-        case FR_TOO_MANY_OPEN_FILES: // (18) Number of open files > FF_FS_LOCK
-            errno = ENOSR;
-            return -1;
-        case FR_INVALID_PARAMETER: // (19) Given parameter is invalid
-            errno = EINVAL;
-            return -1;
+    if (result == FR_OK)
+        return (int)fp;
 
-        case FR_MKFS_ABORTED:
-        default:
-            break;
-    }
-
+    errno = fatfs_error_to_posix(result);
     return -1;
 }
 
@@ -194,44 +187,10 @@ int read(int fd, char *ptr, int len)
 
     FRESULT result = f_read(fp, ptr, len, &bytes_read);
 
-    switch (result)
-    {
-        case FR_OK: // (0) Succeeded
-            return bytes_read;
-        case FR_DISK_ERR: // (1) A hard error occurred in the low level disk I/O layer
-            errno = EIO;
-            return -1;
-        case FR_INT_ERR: // (2) Assertion failed
-            errno = EFAULT;
-            return -1;
-        case FR_DENIED: // (7) Access denied due to prohibited access or directory full
-            errno = EACCES;
-            return -1;
-        case FR_INVALID_OBJECT: // (9) The file/directory object is invalid
-            errno = EBADF;
-            return -1;
-        case FR_TIMEOUT: // (15) Could not get a grant to access the volume within defined period
-            errno = ETIME;
-            return -1;
+    if (result == FR_OK)
+        return bytes_read;
 
-        case FR_NOT_READY:
-        case FR_NO_FILE:
-        case FR_NO_PATH:
-        case FR_INVALID_NAME:
-        case FR_EXIST:
-        case FR_WRITE_PROTECTED:
-        case FR_INVALID_DRIVE:
-        case FR_NOT_ENABLED:
-        case FR_NO_FILESYSTEM:
-        case FR_MKFS_ABORTED:
-        case FR_LOCKED:
-        case FR_NOT_ENOUGH_CORE:
-        case FR_TOO_MANY_OPEN_FILES:
-        case FR_INVALID_PARAMETER:
-        default:
-            break;
-    }
-
+    errno = fatfs_error_to_posix(result);
     return -1;
 }
 
@@ -246,44 +205,10 @@ int write(int fd, char *ptr, int len)
 
     FRESULT result = f_write(fp, ptr, len, &bytes_written);
 
-    switch (result)
-    {
-        case FR_OK: // (0) Succeeded
-            return bytes_written;
-        case FR_DISK_ERR: // (1) A hard error occurred in the low level disk I/O layer
-            errno = EIO;
-            return -1;
-        case FR_INT_ERR: // (2) Assertion failed
-            errno = EFAULT;
-            return -1;
-        case FR_DENIED: // (7) Access denied due to prohibited access or directory full
-            errno = EACCES;
-            return -1;
-        case FR_INVALID_OBJECT: // (9) The file/directory object is invalid
-            errno = EBADF;
-            return -1;
-        case FR_TIMEOUT: // (15) Could not get a grant to access the volume within defined period
-            errno = ETIME;
-            return -1;
+    if (result == FR_OK)
+        return bytes_written;
 
-        case FR_NOT_READY:
-        case FR_NO_FILE:
-        case FR_NO_PATH:
-        case FR_INVALID_NAME:
-        case FR_EXIST:
-        case FR_WRITE_PROTECTED:
-        case FR_INVALID_DRIVE:
-        case FR_NOT_ENABLED:
-        case FR_NO_FILESYSTEM:
-        case FR_MKFS_ABORTED:
-        case FR_LOCKED:
-        case FR_NOT_ENOUGH_CORE:
-        case FR_TOO_MANY_OPEN_FILES:
-        case FR_INVALID_PARAMETER:
-        default:
-            break;
-    }
-
+    errno = fatfs_error_to_posix(result);
     return -1;
 }
 
@@ -295,42 +220,10 @@ int close(int fd)
 
     free(fp);
 
-    switch (result)
-    {
-        case FR_OK: // (0) Succeeded
-            return 0;
-        case FR_DISK_ERR: // (1) A hard error occurred in the low level disk I/O layer
-            errno = EIO;
-            return -1;
-        case FR_INT_ERR: // (2) Assertion failed
-            errno = EFAULT;
-            return -1;
-        case FR_INVALID_OBJECT: // (9) The file/directory object is invalid
-            errno = EBADF;
-            return -1;
-        case FR_TIMEOUT: // (15) Could not get a grant to access the volume within defined period
-            errno = ETIME;
-            return -1;
+    if (result == FR_OK)
+        return 0;
 
-        case FR_NOT_READY:
-        case FR_NO_FILE:
-        case FR_NO_PATH:
-        case FR_INVALID_NAME:
-        case FR_DENIED:
-        case FR_EXIST:
-        case FR_WRITE_PROTECTED:
-        case FR_INVALID_DRIVE:
-        case FR_NOT_ENABLED:
-        case FR_NO_FILESYSTEM:
-        case FR_MKFS_ABORTED:
-        case FR_LOCKED:
-        case FR_NOT_ENOUGH_CORE:
-        case FR_TOO_MANY_OPEN_FILES:
-        case FR_INVALID_PARAMETER:
-        default:
-            break;
-    }
-
+    errno = fatfs_error_to_posix(result);
     return -1;
 }
 
@@ -362,44 +255,10 @@ off_t lseek(int fd, off_t offset, int whence)
 
     FRESULT result = f_lseek(fp, offset);
 
-    // The following errno codes have been picked so that they make some sort of
-    // sense, but also so that they can be told apart.
-    switch (result)
-    {
-        case FR_OK: // (0) Succeeded
-            return offset;
-        case FR_DISK_ERR: // (1) A hard error occurred in the low level disk I/O layer
-            errno = EIO;
-            return -1;
-        case FR_INT_ERR: // (2) Assertion failed
-            errno = EFAULT;
-            return -1;
-        case FR_INVALID_OBJECT: // (9) The file/directory object is invalid
-            errno = EINVAL;
-            return -1;
-        case FR_TIMEOUT: // (15) Could not get a grant to access the volume within defined period
-            errno = ETIME;
-            return -1;
+    if (result == FR_OK)
+        return offset;
 
-        case FR_NOT_READY:
-        case FR_NO_FILE:
-        case FR_NO_PATH:
-        case FR_INVALID_NAME:
-        case FR_DENIED:
-        case FR_EXIST:
-        case FR_WRITE_PROTECTED:
-        case FR_INVALID_DRIVE:
-        case FR_NOT_ENABLED:
-        case FR_NO_FILESYSTEM:
-        case FR_MKFS_ABORTED:
-        case FR_LOCKED:
-        case FR_NOT_ENOUGH_CORE:
-        case FR_TOO_MANY_OPEN_FILES:
-        case FR_INVALID_PARAMETER:
-        default:
-            break;
-    }
-
+    errno = fatfs_error_to_posix(result);
     return -1;
 }
 
@@ -412,64 +271,10 @@ int unlink(const char *name)
 {
     FRESULT result = f_unlink(name);
 
-    // The following errno codes have been picked so that they make some sort of
-    // sense, but also so that they can be told apart.
-    switch (result)
-    {
-        case FR_OK: // (0) Succeeded
-            return 0;
-        case FR_DISK_ERR: // (1) A hard error occurred in the low level disk I/O layer
-            errno = EIO;
-            return -1;
-        case FR_INT_ERR: // (2) Assertion failed
-            errno = EFAULT;
-            return -1;
-        case FR_NOT_READY: // (3) The physical drive cannot work
-            errno = ECANCELED;
-            return -1;
-        case FR_NO_FILE: // (4) Could not find the file
-            errno = ENOENT;
-            return -1;
-        case FR_NO_PATH: // (5) Could not find the path
-            errno = ENOENT;
-            return -1;
-        case FR_INVALID_NAME: // (6) The path name format is invalid
-            errno = EINVAL;
-            return -1;
-        case FR_DENIED: // (7) Access denied due to prohibited access or directory full
-            errno = EACCES;
-            return -1;
-        case FR_WRITE_PROTECTED: // (10) The physical drive is write protected
-            errno = EROFS;
-            return -1;
-        case FR_INVALID_DRIVE: // (11) The logical drive number is invalid
-            errno = EINVAL;
-            return -1;
-        case FR_NOT_ENABLED: // (12) The volume has no work area
-            errno = ENOMEM;
-            return -1;
-        case FR_NO_FILESYSTEM: // (13) There is no valid FAT volume
-            errno = ENODEV;
-            return -1;
-        case FR_TIMEOUT: // (15) Could not get a grant to access the volume within defined period
-            errno = ETIME;
-            return -1;
-        case FR_LOCKED: // (16) The operation is rejected according to the file sharing policy
-            errno = EPERM;
-            return -1;
-        case FR_NOT_ENOUGH_CORE: // (17) LFN working buffer could not be allocated
-            errno = ENOMEM;
-            return -1;
+    if (result == FR_OK)
+        return 0;
 
-        case FR_EXIST:
-        case FR_INVALID_OBJECT:
-        case FR_MKFS_ABORTED:
-        case FR_TOO_MANY_OPEN_FILES:
-        case FR_INVALID_PARAMETER:
-        default:
-            break;
-    }
-    errno = ENOENT;
+    errno = fatfs_error_to_posix(result);
     return -1;
 }
 
