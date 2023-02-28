@@ -69,3 +69,9 @@ int gettimeofday(struct timeval *tp, void *tz)
 
     return 0;
 }
+
+int execve(char *name, char **argv, char **env)
+{
+    errno = ENOMEM;
+    return -1;
+}
