@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include <sys/times.h>
 #include <sys/_timeval.h>
+#include <sys/unistd.h>
 #include <time.h>
 
 #include <ff.h>
@@ -18,11 +19,6 @@
 //
 //     https://sourceware.org/newlib/libc.html#Syscalls
 //     https://github.com/picolibc/picolibc/blob/main/doc/os.md
-
-// The file descriptors for stdin, stdout, and stderr are 0, 1, and 2.
-#define FD_STDIN    0
-#define FD_STDOUT   1
-#define FD_STDERR   2
 
 static int fatfs_error_to_posix(FRESULT error)
 {
@@ -176,10 +172,10 @@ int open(const char *path, int flags, ...)
     return -1;
 }
 
-int read(int fd, char *ptr, int len)
+ssize_t read(int fd, void *ptr, size_t len)
 {
     // This isn't handled here
-    if (fd == FD_STDIN)
+    if (fd == STDIN_FILENO)
         return -1;
 
     FIL *fp = (FIL *)fd;
@@ -194,10 +190,10 @@ int read(int fd, char *ptr, int len)
     return -1;
 }
 
-int write(int fd, char *ptr, int len)
+ssize_t write(int fd, const void *ptr, size_t len)
 {
     // This isn't handled here
-    if ((fd >= FD_STDIN) && (fd <= FD_STDERR))
+    if ((fd >= STDIN_FILENO) && (fd <= STDERR_FILENO))
         return -1;
 
     FIL *fp = (FIL *)fd;
@@ -328,7 +324,7 @@ int isatty(int fd)
     return 0;
 }
 
-int link(char *old, char *new)
+int link(const char *old, const char *new)
 {
     (void)old;
     (void)new;
