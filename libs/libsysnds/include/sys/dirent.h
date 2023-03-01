@@ -3,8 +3,9 @@
   International Business Machines Corporation,
   Sony Computer Entertainment, Incorporated,
   Toshiba Corporation,
-
   All rights reserved.
+
+  Copyright (c) 2023 Antonio Niño Díaz
 
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are met:
@@ -36,22 +37,26 @@
 extern "C" {
 #endif
 
-#define MAXNAMLEN	255
+#include <sys/types.h>
+
+#define MAXNAMLEN   255
 
 struct dirent {
-  ino_t  d_ino;
-  char   d_name[MAXNAMLEN + 1];
+    ino_t  d_ino;
+    char   d_name[MAXNAMLEN + 1];
 };
 
 typedef struct {
-  unsigned long long ppc_dir;
-  /*
-   * Allow one readdir for each opendir, and store the data here.
-   */
-  struct dirent dirent;
+    // Private pointer to internal state of the directory.
+    void    *dp;
+    // Index of the current entry (for telldir() and seekdir()).
+    int     index;
+    // Allow one readdir for each opendir, and store the data here.
+    struct  dirent dirent;
 } DIR;
 
 #ifdef __cplusplus
 }
 #endif
-#endif
+
+#endif // _SYS_DIRENT_H
