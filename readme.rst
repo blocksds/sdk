@@ -53,9 +53,7 @@ If you're on Ubuntu, for example, run the following command:
 
     sudo apt-get install -y --no-install-recommends \
         build-essential gcc-arm-none-eabi libfreeimage-dev \
-        libtool m4 automake python3 python3-pip ninja-build
-
-    pip install meson
+        libtool m4 automake meson ninja-build
 
 Clone this repository:
 

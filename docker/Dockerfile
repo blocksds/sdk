@@ -16,8 +16,7 @@ FROM base-cross-compiler AS blocksds-dev
 
 RUN apt-get install -y --no-install-recommends \
         build-essential ca-certificates git libfreeimage-dev \
-        libtool m4 automake python3 python3-pip ninja-build
-RUN pip3 install meson
+        libtool m4 automake meson ninja-build
 
 WORKDIR /opt/blocksds/
 RUN git clone --recurse-submodules https://github.com/blocksds/sdk.git
