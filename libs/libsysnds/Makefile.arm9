@@ -6,7 +6,7 @@
 # -----------------
 
 SOURCEDIRS	:= source/arm9
-INCLUDEDIRS	:= include
+INCLUDEDIRS	:= include source/arm9/fatfs
 
 # Defines passed to all files
 # ---------------------------
@@ -17,8 +17,7 @@ DEFINES		:=
 # ---------
 
 LIBDIRS		:= $(BLOCKSDS)/libs/libnds/ \
-		   $(BLOCKSDS)/libs/libc/ \
-		   $(BLOCKSDS)/libs/libffds/
+		   $(BLOCKSDS)/libs/libc/
 
 # Build artifacts
 # ---------------
