@@ -6,7 +6,7 @@
 # -----------------
 
 SOURCEDIRS	:= source/arm9
-INCLUDEDIRS	:= include source/arm9/fatfs
+INCLUDEDIRS	:= include
 
 # Defines passed to all files
 # ---------------------------

@@ -12,15 +12,14 @@
 #include <sys/unistd.h>
 #include <time.h>
 
-#include <ff.h>
+#include "fatfs/ff.h"
+#include "fatfs_internal.h"
 
 // This file implements stubs for system calls. For more information about it,
 // check the documentation of newlib and picolibc:
 //
 //     https://sourceware.org/newlib/libc.html#Syscalls
 //     https://github.com/picolibc/picolibc/blob/main/doc/os.md
-
-int fatfs_error_to_posix(FRESULT error);
 
 int open(const char *path, int flags, ...)
 {

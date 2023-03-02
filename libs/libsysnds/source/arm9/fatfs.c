@@ -4,7 +4,9 @@
 
 #include <errno.h>
 
-#include <ff.h>
+#include <nds/system.h>
+
+#include "fatfs/ff.h"
 
 int fatfs_error_to_posix(FRESULT error)
 {
@@ -60,5 +62,3 @@ int fatfs_error_to_posix(FRESULT error)
 
     return codes[error];
 }
-
-

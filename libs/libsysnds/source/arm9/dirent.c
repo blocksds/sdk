@@ -13,14 +13,13 @@
 // unmodified so that updating it is easier, so this is a hack to rename it just
 // in this compilation unit.
 #define DIR DIRff
-#include <ff.h>
+#include "fatfs/ff.h"
+#include "fatfs_internal.h"
 #undef DIR
 
 #include <dirent.h>
 
 #define INDEX_NO_ENTRY  -1
-
-int fatfs_error_to_posix(FRESULT error);
 
 static DIR *alloc_dir(void)
 {
