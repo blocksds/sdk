@@ -3,10 +3,14 @@
 // Copyright (c) 2023 Antonio Niño Díaz
 
 #include <errno.h>
+#include <stdbool.h>
 
 #include <nds/system.h>
 
 #include "fatfs/ff.h"
+
+// Devices: "fat:/", "sd:/"
+static FATFS fs_info[FF_VOLUMES] = { 0 };
 
 int fatfs_error_to_posix(FRESULT error)
 {
@@ -61,4 +65,26 @@ int fatfs_error_to_posix(FRESULT error)
         return ENOMSG;
 
     return codes[error];
+}
+
+bool fatInitDefault(void)
+{
+    FRESULT result = f_mount(&fs_info[0], "fat:/", 1);
+    if (result != FR_OK)
+    {
+        errno = fatfs_error_to_posix(result);
+        return false;
+    }
+
+    if (isDSiMode())
+    {
+        result = f_mount(&fs_info[1], "sd:/", 1);
+        if (result != FR_OK)
+        {
+            errno = fatfs_error_to_posix(result);
+            return false;
+        }
+    }
+
+    return true;
 }
