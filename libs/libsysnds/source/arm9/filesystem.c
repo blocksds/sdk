@@ -411,3 +411,17 @@ int truncate(const char *path, off_t length)
 
     return 0;
 }
+
+int mkdir(const char *path, mode_t mode)
+{
+    (void)mode; // There are no permissions in FAT filesystems
+
+    FRESULT result = f_mkdir(path);
+    if (result != FR_OK)
+    {
+        errno = fatfs_error_to_posix(result);
+        return -1;
+    }
+
+    return 0;
+}
