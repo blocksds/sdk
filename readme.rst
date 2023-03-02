@@ -31,8 +31,8 @@ the SDK using the native installation instructions.
 If you are on Windows, you need to install MinGW, WSL or similar.
 
 However, there are Docker images of BlocksDS that can be used in any OS. They
-usee more disk space than the native installation, but they may be needed in
-some cases.
+require more disk space than the native installation, but they may be needed if
+a native installation isn't possible.
 
 Docker
 ======
