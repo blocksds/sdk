@@ -425,3 +425,28 @@ int mkdir(const char *path, mode_t mode)
 
     return 0;
 }
+
+int chmod(const char *path, mode_t mode)
+{
+    // The only attributes that FAT supports are "Read only", "Archive",
+    // "System" and "Hidden". This doesn't match very well with UNIX
+    // permissions, so this funciton simply does nothing.
+
+    (void)path;
+    (void)mode;
+
+    errno = ENOSYS;
+    return -1;
+}
+
+int chown (const char *path, uid_t owner, gid_t group)
+{
+    // FAT doesn't support file and group owners.
+
+    (void)path;
+    (void)owner;
+    (void)group;
+
+    errno = ENOSYS;
+    return -1;
+}
