@@ -8,7 +8,7 @@
 NAME		:= test
 
 GAME_TITLE	:= Test ROM
-GAME_SUBTITLE1	:= Built with GCC
+GAME_SUBTITLE1	:= Built with BlocksDS
 GAME_SUBTITLE2	:= http://skylyrac.net
 GAME_ICON	:= icon.bmp
 
@@ -31,10 +31,10 @@ DEFINES		:=
 # Libraries
 # ---------
 
-LIBS		:= -lnds9 -lsysnds9 -lmm9 -lc
-LIBDIRS		:= $(BLOCKSDS)/libs/libnds \
+LIBS		:= -lmm9 -lsysnds9 -lnds9 -lc
+LIBDIRS		:= $(BLOCKSDS)/libs/maxmod \
 		   $(BLOCKSDS)/libs/libsysnds \
-		   $(BLOCKSDS)/libs/maxmod \
+		   $(BLOCKSDS)/libs/libnds \
 		   $(BLOCKSDS)/libs/libc
 
 # Build artifacts

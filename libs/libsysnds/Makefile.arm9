@@ -16,8 +16,7 @@ DEFINES		:=
 # Libraries
 # ---------
 
-LIBDIRS		:= $(BLOCKSDS)/libs/libnds/ \
-		   $(BLOCKSDS)/libs/libc/
+LIBDIRS		:= $(BLOCKSDS)/libs/libnds/ $(BLOCKSDS)/libs/libc/
 
 # Build artifacts
 # ---------------

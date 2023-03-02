@@ -10,7 +10,7 @@ NAME		:= test
 NITRO_FILES	:=
 
 GAME_TITLE	:= Test ROM
-GAME_SUBTITLE1	:= Built with GCC
+GAME_SUBTITLE1	:= Built with BlocksDS
 GAME_SUBTITLE2	:= http://skylyrac.net
 GAME_ICON	:= icon.bmp
 

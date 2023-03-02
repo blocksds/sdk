@@ -19,10 +19,10 @@ DEFINES		:=
 # Libraries
 # ---------
 
-LIBS		:= -lnds9 -lsysnds9 -lmm9 -lc
-LIBDIRS		:= $(BLOCKSDS)/libs/libnds \
+LIBS		:= -lmm9 -lsysnds9 -lnds9 -lc
+LIBDIRS		:= $(BLOCKSDS)/libs/maxmod \
 		   $(BLOCKSDS)/libs/libsysnds \
-		   $(BLOCKSDS)/libs/maxmod \
+		   $(BLOCKSDS)/libs/libnds \
 		   $(BLOCKSDS)/libs/libc
 
 # Build artifacts
