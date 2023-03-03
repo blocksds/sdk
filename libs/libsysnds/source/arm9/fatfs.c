@@ -69,8 +69,23 @@ int fatfs_error_to_posix(FRESULT error)
 
 bool fatInitDefault(void)
 {
-    FRESULT result = f_mount(&fs_info[0], "fat:/", 1);
-    if (result != FR_OK)
+    // In DSi mode, require that there is a SD card in the SD card slot. In DS
+    // mode, require that there is a flashcard, that this ROM has been DLDI
+    // patched, and that DLDI can be initialized.
+
+    bool require_fat = false, require_sd = false;
+
+    if (isDSiMode())
+        require_sd = true;
+    else
+        require_fat = true;
+
+    const char *fat_drive = "fat:/";
+    const char *sd_drive = "sd:/";
+
+    // Try to initialize DLDI on DS and DSi
+    FRESULT result = f_mount(&fs_info[0], fat_drive, 1);
+    if ((result != FR_OK) && require_fat)
     {
         errno = fatfs_error_to_posix(result);
         return false;
@@ -78,7 +93,26 @@ bool fatInitDefault(void)
 
     if (isDSiMode())
     {
-        result = f_mount(&fs_info[1], "sd:/", 1);
+        // On DSi, try to initialize the internal SD slot
+        result = f_mount(&fs_info[1], sd_drive, 1);
+        if ((result != FR_OK) && require_sd)
+        {
+            errno = fatfs_error_to_posix(result);
+            return false;
+        }
+
+        // Default to using the internal SD slot
+        result = f_chdrive(sd_drive);
+        if (result != FR_OK)
+        {
+            errno = fatfs_error_to_posix(result);
+            return false;
+        }
+    }
+    else
+    {
+        // On DS, use the DLDI driver
+        result = f_chdrive(fat_drive);
         if (result != FR_OK)
         {
             errno = fatfs_error_to_posix(result);
