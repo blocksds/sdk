@@ -63,10 +63,12 @@ install: all
 	@test $(INSTALLDIR)
 	$(INSTALL) -d $(INSTALLDIR_ABS)/libs \
 		      $(INSTALLDIR_ABS)/libs/dswifi \
+		      $(INSTALLDIR_ABS)/libs/libc \
 		      $(INSTALLDIR_ABS)/libs/libnds \
 		      $(INSTALLDIR_ABS)/libs/libsysnds \
 		      $(INSTALLDIR_ABS)/libs/maxmod
 	$(CP) -r dswifi/include dswifi/lib $(INSTALLDIR_ABS)/libs/dswifi
+	$(CP) -r libc/include libc/lib $(INSTALLDIR_ABS)/libs/libc
 	$(CP) -r libnds/include libnds/lib $(INSTALLDIR_ABS)/libs/libnds
 	$(CP) -r libsysnds/lib $(INSTALLDIR_ABS)/libs/libsysnds
 	$(CP) -r maxmod/include maxmod/lib $(INSTALLDIR_ABS)/libs/maxmod
