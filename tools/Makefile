@@ -15,27 +15,27 @@ all: bin2c dlditool grit mmutil ndstool
 bin2c: bin2c/bin2c
 
 bin2c/bin2c:
-	make -C bin2c
+	$(MAKE) -C bin2c -j`nproc`
 
 grit: grit/grit
 
 grit/grit:
-	cd grit && ./autogen.sh && ./configure && make -j`nproc`
+	$(MAKE) -C grit -j`nproc`
 
 dlditool: dlditool/dlditool
 
 dlditool/dlditool:
-	make -C dlditool
+	$(MAKE) -C dlditool -j`nproc`
 
 mmutil: mmutil/mmutil
 
 mmutil/mmutil:
-	cd mmutil && ./autogen.sh && ./configure && make -j`nproc`
+	$(MAKE) -C mmutil -j`nproc`
 
 ndstool: ndstool/ndstool
 
 ndstool/ndstool:
-	cd ndstool && ./autogen.sh && ./configure && make -j`nproc`
+	$(MAKE) -C ndstool -j`nproc`
 
 INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
 
@@ -57,6 +57,6 @@ install: all
 clean:
 	$(MAKE) -C bin2c clean
 	$(MAKE) -C dlditool clean
-	$(MAKE) -C grit distclean
-	$(MAKE) -C mmutil distclean
-	$(MAKE) -C ndstool distclean
+	$(MAKE) -C grit clean
+	$(MAKE) -C mmutil clean
+	$(MAKE) -C ndstool clean

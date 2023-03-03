@@ -15,8 +15,7 @@ RUN apt-get update && apt-get upgrade -y && \
 FROM base-cross-compiler AS blocksds-dev
 
 RUN apt-get install -y --no-install-recommends \
-        build-essential ca-certificates git libfreeimage-dev \
-        libtool m4 automake meson ninja-build
+        build-essential ca-certificates git libfreeimage-dev meson ninja-build
 
 WORKDIR /opt/blocksds/
 RUN git clone --recurse-submodules https://github.com/blocksds/sdk.git
