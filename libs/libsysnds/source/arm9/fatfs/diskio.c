@@ -201,12 +201,11 @@ DRESULT disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
         }
         case DEV_SD:
         {
-            // Writing is disabled because it doesn't work properly
-            //const DISC_INTERFACE *io = fs_io[pdrv];
-            //if (!io->writeSectors(sector, count, buff))
+            const DISC_INTERFACE *io = fs_io[pdrv];
+            if (!io->writeSectors(sector, count, buff))
                 return RES_NOTRDY;
 
-            //return RES_OK;
+            return RES_OK;
         }
     }
 
