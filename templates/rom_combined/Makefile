@@ -43,7 +43,7 @@ ROM		:= $(NAME).nds
 # Targets
 # -------
 
-.PHONY: all clean dump arm9 arm7
+.PHONY: all clean arm9 arm7
 
 all: $(ROM)
 
