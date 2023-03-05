@@ -100,20 +100,31 @@ struct dirent *readdir(DIR *dirp)
 
     FILINFO fno = { 0 };
     FRESULT result = f_readdir(dp, &fno);
-
     if (result != FR_OK)
     {
         errno = fatfs_error_to_posix(result);
         return NULL;
     }
 
+    if (strlen(fno.fname) == 0)
+    {
+        // End of directory reached
+        dirp->index = INDEX_NO_ENTRY;
+        return NULL;
+    }
+
+    dirp->index++;
+    ent->d_off = dirp->index;
+
     strncpy(ent->d_name, fno.fname, sizeof(ent->d_name));
     fno.fname[sizeof(ent->d_name) - 1] = '\0';
 
-    if (strlen(fno.fname) == 0)
-        dirp->index = INDEX_NO_ENTRY;
+    if (fno.fattrib & AM_DIR)
+        ent->d_type = DT_DIR; // Directory
     else
-        dirp->index++;
+        ent->d_type = DT_REG; // Regular file
+
+    ent->d_reclen = sizeof(struct dirent);
 
     return ent;
 }
