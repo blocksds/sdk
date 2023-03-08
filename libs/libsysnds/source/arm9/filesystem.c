@@ -438,7 +438,7 @@ int chmod(const char *path, mode_t mode)
     return -1;
 }
 
-int chown (const char *path, uid_t owner, gid_t group)
+int chown(const char *path, uid_t owner, gid_t group)
 {
     // FAT doesn't support file and group owners.
 
