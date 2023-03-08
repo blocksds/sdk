@@ -2,12 +2,12 @@
 #
 # Copyright (c) 2023 Antonio Niño Díaz
 
-# Base image with make and the ARM cross compiler
+# Base image with build tools and the ARM cross compiler
 FROM ubuntu:23.04 AS base-cross-compiler
 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-        gcc-arm-none-eabi make
+        gcc-arm-none-eabi make dosfstools mtools
 
 # Image that contains all the code and the build results. This can be used to
 # develop applications with BlocksDS, or to develop the components of BlocksDS

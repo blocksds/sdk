@@ -52,7 +52,8 @@ If you're on Ubuntu, for example, run the following command:
 .. code:: bash
 
     sudo apt-get install -y --no-install-recommends \
-        build-essential gcc-arm-none-eabi libfreeimage-dev meson ninja-build
+        build-essential gcc-arm-none-eabi libfreeimage-dev meson ninja-build \
+        dosfstools mtools
 
 Clone this repository:
 
