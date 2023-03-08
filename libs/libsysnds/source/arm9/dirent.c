@@ -87,16 +87,16 @@ int closedir(DIR *dirp)
 
 struct dirent *readdir(DIR *dirp)
 {
+    DIRff *dp = dirp->dp;
+    struct dirent *ent = &(dirp->dirent);
+
+    memset(ent, 0, sizeof(struct dirent));
+
     if (dirp == NULL)
     {
         errno = EBADF;
         return NULL;
     }
-
-    DIRff *dp = dirp->dp;
-    struct dirent *ent = &(dirp->dirent);
-
-    memset(ent, 0, sizeof(struct dirent));
 
     FILINFO fno = { 0 };
     FRESULT result = f_readdir(dp, &fno);
