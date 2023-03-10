@@ -27,8 +27,10 @@ void build_argv(struct __argv* argstruct)
     size_t len = argstruct->length;
 
     // Make sure that the last argument has a NULL terminator.
-    p[len] = '\0';
-    len++;
+    if (p[len - 1] != '\0')
+        p[len] = '\0';
+    else
+        len--;
 
     char *end = p + len;
 
