@@ -8,7 +8,7 @@ all: libs sys tools
 
 MAKE		:= make
 
-# libnds depends on grit and png2c
+# libnds depends on grit and bin2c
 libs: tools
 	+$(MAKE) -C libs
 
