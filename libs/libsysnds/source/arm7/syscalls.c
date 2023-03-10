@@ -5,6 +5,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <sys/times.h>
+#include <sys/_timeval.h>
 #include <time.h>
 
 // This file implements stubs for system calls. For more information about it,
@@ -12,77 +13,53 @@
 //
 //     https://sourceware.org/newlib/libc.html#Syscalls
 
-int _getpid(void)
+// TODO: Use stderr console to send messages to no$gba?
+
+int getpid(void)
 {
+    // The PID of this process is 1
     return 1;
 }
 
-int _kill(int pid, int sig)
+void __attribute__((noreturn)) _exit(int status)
 {
-    (void)pid;
-    (void)sig;
-
-    errno = EINVAL;
-    return -1;
-}
-
-void _exit(int status)
-{
-    _kill(status, -1);
-
-    // Hang, there is nowhere to go
+    // Hang, there is nowhere to go. The ARM7 shouldn't call this directly, only
+    // the ARM9 should.
     while (1);
 }
 
-__attribute__((weak)) int _read(int file, char *ptr, int len)
+int _kill(pid_t pid, int sig)
 {
-    (void)file;
-    (void)ptr;
+    // The only process that exists is this process, and it can be killed.
+    if (pid == 1)
+        _exit(128 + sig);
 
-    return len;
-}
-
-__attribute__((weak)) int _write(int file, char *ptr, int len)
-{
-    (void)file;
-    (void)ptr;
-
-    return len;
-}
-
-int _close(int file)
-{
-    (void)file;
-
+    errno = ESRCH;
     return -1;
 }
 
-
-int _fstat(int file, struct stat *st)
+int isatty(int file)
 {
     (void)file;
-
-    st->st_mode = S_IFCHR;
-    return 0;
-}
-
-int _isatty(int file)
-{
-    (void)file;
-
-    return 1;
-}
-
-int _lseek(int file, int ptr, int dir)
-{
-    (void)file;
-    (void)ptr;
-    (void)dir;
 
     return 0;
 }
 
-int _open(char *path, int flags, ...)
+off_t lseek(int fd, off_t offset, int whence)
+{
+    (void)fd;
+    (void)offset;
+    (void)whence;
+
+    return 0;
+}
+
+_off64_t lseek64(int fd, _off64_t offset, int whence)
+{
+    return (_off64_t)lseek(fd, (off_t)offset, whence);
+}
+
+int open(const char *path, int flags, ...)
 {
     (void)path;
     (void)flags;
@@ -90,15 +67,30 @@ int _open(char *path, int flags, ...)
     return -1;
 }
 
-int _wait(int *status)
+ssize_t read(int fd, void *ptr, size_t len)
 {
-    (void)status;
+    (void)fd;
+    (void)ptr;
 
-    errno = ECHILD;
+    return len;
+}
+
+ssize_t write(int fd, const void *ptr, size_t len)
+{
+    (void)fd;
+    (void)ptr;
+
+    return len;
+}
+
+int close(int fd)
+{
+    (void)fd;
+
     return -1;
 }
 
-int _unlink(char *name)
+int unlink(const char *name)
 {
     (void)name;
 
@@ -106,22 +98,24 @@ int _unlink(char *name)
     return -1;
 }
 
-int _times(struct tms *buf)
+clock_t times(struct tms *buf)
 {
     (void)buf;
+
+    // TODO
 
     return -1;
 }
 
-int _stat(char *file, struct stat *st)
+int stat(const char *path, struct stat *st)
 {
-    (void)file;
+    (void)path;
 
     st->st_mode = S_IFCHR;
     return 0;
 }
 
-int _link(char *old, char *new)
+int link(const char *old, const char *new)
 {
     (void)old;
     (void)new;
@@ -130,13 +124,33 @@ int _link(char *old, char *new)
     return -1;
 }
 
-int _fork(void)
+int fork(void)
 {
-    errno = EAGAIN;
+    errno = ENOSYS;
     return -1;
 }
 
-int _execve(char *name, char **argv, char **env)
+int gettimeofday(struct timeval *tp, void *tz)
+{
+    // TODO
+
+    (void)tp;
+    (void)tz;
+
+    // This is available in libnds in `__transferRegion()->unixTime;`, but it
+    // needs to be exposed externally.
+
+    //if (tp != NULL)
+    //{
+    //    tp->tv_sec = *punixTime;
+    //    tp->tv_usec = 0;
+    //}
+
+    //return 0;
+    return -1;
+}
+
+int execve(char *name, char **argv, char **env)
 {
     (void)name;
     (void)argv;
@@ -146,7 +160,7 @@ int _execve(char *name, char **argv, char **env)
     return -1;
 }
 
-void *_sbrk(int incr)
+void *sbrk(int incr)
 {
     errno = ENOMEM;
     return (void *)-1;

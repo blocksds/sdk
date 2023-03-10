@@ -267,6 +267,8 @@ int stat(const char *path, struct stat *st)
 
 int isatty(int fd)
 {
+    (void)fd;
+
     return 0;
 }
 

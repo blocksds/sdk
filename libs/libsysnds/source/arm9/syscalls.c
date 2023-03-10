@@ -5,8 +5,8 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <sys/times.h>
-#include <time.h>
 #include <sys/_timeval.h>
+#include <time.h>
 
 // This file implements stubs for system calls. For more information about it,
 // check the documentation of newlib and picolibc:
