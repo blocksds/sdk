@@ -2,26 +2,11 @@
 //
 // Copyright (c) 2023 Antonio Niño Díaz
 
-#include <stdint.h>
 #include <stddef.h>
 
+#include <nds/system.h>
+
 // Documented here: https://devkitpro.org/wiki/Homebrew_Menu
-
-// argv struct magic number
-#define ARGV_MAGIC 0x5f617267
-
-// Structure used to set up argc/argv on the DS
-struct __argv {
-    int argvMagic;     // argv magic number, set to 0x5f617267 ('_arg') if valid
-    char *commandLine; // Base address of command line, set of null terminated strings
-    int length;        // Total length of command line
-    int argc;          // Internal use, number of arguments
-    char **argv;       // Internal use, argv pointer
-    char **endARGV;    // Internal use, pointer to the end of argv in the heap
-};
-
-// Default location for the libnds argv structure.
-#define __system_argv        ((struct __argv *)0x02FFFE70)
 
 // When this function is called:
 //
