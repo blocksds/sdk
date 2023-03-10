@@ -41,7 +41,14 @@ Run the following command to get the image:
 
     docker image pull skylyrac/blocksds:slim-latest
 
-To open a shell inside it, run:
+First, clone this repository to get the templates:
+
+.. code:: sh
+
+    git clone https://github.com/blocksds/sdk
+
+Write down the path to the templates. Open a shell inside the container and
+share the folder with the templates:
 
 .. code:: sh
 
@@ -52,7 +59,8 @@ The part of the command that shares a folder is ``-v /path/to/your/code:/work``.
 This example will share the path ``/path/to/your/code`` from the host and show
 it in ``/work`` inside the container.
 
-To update the image, simply run the previous ``git image pull`` command again.
+To update the image, simply run the previous ``docker image pull`` command
+again.
 
 Development image
 =================

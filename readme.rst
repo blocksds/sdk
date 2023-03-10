@@ -19,8 +19,9 @@ has the following goals:
   should be enough to replace the makefile by one of BlocksDS to build any
   project that uses ``libnds``.
 
-This project is currently in alpha stage, and some important features (like
-filesystem access) are missing.
+This project is currently in beta stage, and most features are working. Please,
+check the `libc port documentation <docs/libc.rst>`_ for more information about
+the supported libc functions.
 
 2. Setup
 ********
@@ -60,13 +61,12 @@ Clone this repository:
 .. code:: bash
 
     git clone --recurse-submodules https://github.com/blocksds/sdk.git
-
+    cd sdk
 
 To build the SDK, run this from the root of this repository:
 
 .. code:: bash
 
-    cd sdk
     export BLOCKSDS=/path/to/sdk/
     make
 
