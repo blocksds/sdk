@@ -5,11 +5,12 @@
 #include <errno.h>
 #include <stdbool.h>
 
+#include <nds/memory.h>
 #include <nds/system.h>
 
 #include "fatfs/ff.h"
 
-// Devices: "fat:/", "sd:/"
+// Devices: "fat:/", "sd:/", "nitro:/"
 static FATFS fs_info[FF_VOLUMES] = { 0 };
 
 int fatfs_error_to_posix(FRESULT error)
@@ -118,6 +119,24 @@ bool fatInitDefault(void)
             errno = fatfs_error_to_posix(result);
             return false;
         }
+    }
+
+    return true;
+}
+
+bool nitroFSInit(char **basepath)
+{
+    (void)basepath;
+
+    const char *nitro_drive = "nitro:/";
+
+    sysSetBusOwners(BUS_OWNER_ARM9, BUS_OWNER_ARM9);
+
+    FRESULT result = f_mount(&fs_info[2], nitro_drive, 1);
+    if (result != FR_OK)
+    {
+        errno = fatfs_error_to_posix(result);
+        return false;
     }
 
     return true;

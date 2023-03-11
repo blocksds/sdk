@@ -21,4 +21,6 @@
 // On the DSi it is possible to switch between both filesystems with `chdir()`.
 bool fatInitDefault(void);
 
+bool nitroFSInit(char **basepath);
+
 #endif // FATFS_H__

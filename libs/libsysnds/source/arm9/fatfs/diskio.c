@@ -26,11 +26,14 @@
 // storage control modules to the FatFs module with a defined API.
 //-----------------------------------------------------------------------
 
-#include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #include <nds/arm9/dldi.h>
+#include <nds/card.h>
+#include <nds/memory.h>
 #include <nds/system.h>
 
 #include "ff.h"     // Obtains integer types
@@ -39,12 +42,20 @@
 // Definitions of physical drive number for each drive
 #define DEV_DLDI    0 // DLDI driver (flashcard)
 #define DEV_SD      1 // SD slot of the DSi
+#define DEV_NITRO   2 // Filesystem included in NDS ROM
 
 // NOTE: The clearStatus() function of DISC_INTERFACE isn't used in libfat, so
 // it isn't needed here either.
 
 static bool fs_initialized[FF_VOLUMES];
 static const DISC_INTERFACE *fs_io[FF_VOLUMES];
+
+static FILE *nitro_file;
+static uint32_t nitro_fat_offset;
+
+#if FF_MAX_SS != FF_MIN_SS
+#error "This file assumes that the sector size is always the same".
+#endif
 
 //-----------------------------------------------------------------------
 // Get Drive Status
@@ -56,12 +67,13 @@ DSTATUS disk_status(BYTE pdrv)
     switch (pdrv)
     {
         case DEV_DLDI:
+        case DEV_SD:
+        case DEV_NITRO:
             return fs_initialized[pdrv] ? 0 : STA_NOINIT;
 
-        case DEV_SD:
-            return fs_initialized[pdrv] ? 0 : STA_NOINIT;
+        default:
+            return STA_NOINIT;
     }
-    return STA_NOINIT;
 }
 
 //-----------------------------------------------------------------------
@@ -107,6 +119,33 @@ DSTATUS disk_initialize(BYTE pdrv)
 
             return 0;
         }
+        case DEV_NITRO:
+        {
+            if (__NDSHeader->fatSize == 0)
+                return STA_NODISK;
+
+            nitro_fat_offset = __NDSHeader->fatOffset;
+
+            int argc = __system_argv->argc;
+            char **argv = __system_argv->argv;
+
+            // NitroFAT checks if the path of the NDS ROM has been passed in
+            // argv[0]. If not, it defaults to Slot-1 card commands.
+            //
+            // Out of all emulators I've tried only DeSmuMe fills the argv info
+
+            nitro_file = NULL; // Use card commands
+
+            if (argc > 0)
+            {
+                if (strlen(argv[0]) > 0)
+                    nitro_file = fopen(argv[0], "rb");
+            }
+
+            fs_initialized[pdrv] = true;
+
+            return 0;
+        }
     }
     return STA_NOINIT;
 }
@@ -114,6 +153,38 @@ DSTATUS disk_initialize(BYTE pdrv)
 //-----------------------------------------------------------------------
 // Read Sector(s)
 //-----------------------------------------------------------------------
+
+#define NDS_CARD_BLOCK_SIZE 0x200
+
+// Size must be smaller or equal to NDS_CARD_BLOCK_SIZE
+static void cardReadBlock(void *dest, uint32_t offset, uint32_t size)
+{
+    const uint32_t flags =
+        CARD_DELAY1(0x1FFF) | CARD_DELAY2(0x3F) | CARD_CLK_SLOW |
+        CARD_nRESET | CARD_SEC_CMD | CARD_SEC_DAT | CARD_ACTIVATE |
+        CARD_BLK_SIZE(1);
+
+    cardParamCommand(CARD_CMD_DATA_READ, offset, flags, dest, size);
+}
+
+// The destination and size must be word-aligned
+static void cardRead(void *dest, uint32_t offset, uint32_t size)
+{
+    char *curr_dest = dest;
+
+    while (size > 0)
+    {
+        // The cardReadBlock() function can only read up to NDS_CARD_BLOCK_SIZE
+        uint32_t curr_size = size;
+        if (curr_size > NDS_CARD_BLOCK_SIZE)
+            curr_size = NDS_CARD_BLOCK_SIZE;
+
+        cardReadBlock(curr_dest, offset, curr_size);
+        curr_dest += curr_size;
+        offset += curr_size;
+        size -= curr_size;
+    }
+}
 
 // pdrv:   Physical drive nmuber to identify the drive
 // buff:   Data buffer to store read data
@@ -138,9 +209,6 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
         {
             const DISC_INTERFACE *io = fs_io[pdrv];
 
-#if FF_MAX_SS != FF_MIN_SS
-#error "This assumes that the sector size is fixed".
-#endif
             // The transfer of data from the SD is done using a DMA which
             // doesn't have access to DTCM. To prevent accidentally trying to
             // DMA into DTCM, which contains the stack, it is better to allocate
@@ -166,6 +234,26 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
             memcpy(buff, uncached, size);
 
             free(ptr);
+
+            return RES_OK;
+        }
+        case DEV_NITRO:
+        {
+            uint32_t offset = nitro_fat_offset + sector * FF_MAX_SS;
+            uint32_t size = count * FF_MAX_SS;
+
+            if (nitro_file != NULL)
+            {
+                if (fseek(nitro_file, offset, SEEK_SET) != 0)
+                    return RES_ERROR;
+
+                if (fread(buff, 1, size, nitro_file) != size)
+                    return RES_ERROR;
+            }
+            else
+            {
+                cardRead(buff, offset, size);
+            }
 
             return RES_OK;
         }
@@ -207,6 +295,11 @@ DRESULT disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
 
             return RES_OK;
         }
+        case DEV_NITRO:
+        {
+            // This filesystem is read-only
+            return RES_WRPRT;
+        }
     }
 
     return RES_PARERR;
@@ -237,21 +330,17 @@ DRESULT disk_ioctl(BYTE pdrv, BYTE cmd, void *buff)
     switch (pdrv)
     {
         case DEV_DLDI:
+        case DEV_SD:
+        case DEV_NITRO:
             // This command flushes the cache, but there is no cache right now
             if (cmd == CTRL_SYNC)
                 return RES_OK;
 
             return RES_PARERR;
 
-        case DEV_SD:
-            // This command flushes the cache, but there is no cache right now
-            if (cmd == CTRL_SYNC)
-                return RES_OK;
-
+        default:
             return RES_PARERR;
     }
-
-    return RES_PARERR;
 }
 
 DWORD get_fattime(void)
