@@ -3,7 +3,7 @@
 # Copyright (c) 2023, Antonio Niño Díaz
 
 dlditool: dlditool.c
-	gcc -Wall -Wextra -Wno-unused-result -std=gnu11 -O3 -o $@ $<
+	gcc -Wall -Wextra -std=gnu11 -O3 -o $@ $<
 
 .PHONY: clean
 

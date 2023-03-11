@@ -18,6 +18,9 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+	* v1.26 - 2023-03-11 - AntonioND
+		* Add error checks
+
 	* v1.25 - 2017-01-18 - ichfly
 		* Made not enough space for patch a warning
 
@@ -59,7 +62,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-#define DLDITOOL_VERSION "1.25"
+#define DLDITOOL_VERSION "1.26"
 
 #ifndef _MSC_VER
 #include <unistd.h>
@@ -386,8 +389,24 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	fread (appFileData, 1, appFileSize, appFile);
-	fread (dldiFileData, 1, dldiFileSize, dldiFile);
+	if (fread (appFileData, 1, appFileSize, appFile) != appFileSize) {
+		fclose (appFile);
+		fclose (dldiFile);
+		free (appFileData);
+		free (dldiFileData);
+		printf ("Couldn't read application: %s\n", appFileName);
+		return EXIT_FAILURE;
+	}
+
+	if (fread (dldiFileData, 1, dldiFileSize, dldiFile) != dldiFileSize) {
+		fclose (appFile);
+		fclose (dldiFile);
+		free (appFileData);
+		free (dldiFileData);
+		printf ("Couldn't read DLDI driver: %s\n", dldiFileName);
+		return EXIT_FAILURE;
+	}
+
 	fclose (dldiFile);
 
 	// Find the DSDI reserved space in the file
