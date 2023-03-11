@@ -12,69 +12,66 @@
 
 int chdir(const char *path)
 {
-    int ret = -1;
+    char *divide = strstr(path, ":/");
 
-    // Copy string to be able to modify it freely
-    char *full = strdup(path);
-    if (full == NULL)
+    if (divide == NULL)
     {
-        errno = ENOMEM;
-        return -1;
-    }
+        // This path doesn't include a drive name
 
-    // Split full path into drive plus dir
-    char *drive = NULL;
-    char *dir = NULL;
-
-    char *divide = strstr(full, ":/");
-    if (divide != NULL)
-    {
-        divide[0] = '\0';
-        drive = full;
-        dir = divide + 1;
-    }
-    else
-    {
-        dir = full;
-    }
-
-    // Remove all trailing '/' from the dir path
-    size_t len = strlen(dir);
-    while (len > 0)
-    {
-        if (full[len - 1] != '/')
-            break;
-
-        full[len - 1] = 0;
-        len--;
-    }
-
-    if (strlen(dir) == 0)
-        dir = "/";
-
-    FRESULT result = FR_OK;
-    if (drive != NULL)
-    {
-        result = f_chdrive(drive);
+        FRESULT result = f_chdir(path);
         if (result != FR_OK)
         {
             errno = fatfs_error_to_posix(result);
-            goto cleanup;
+            return -1;
         }
-    }
 
-    result = f_chdir(dir);
-    if (result != FR_OK)
+        return 0;
+    }
+    else
     {
-        errno = fatfs_error_to_posix(result);
-        goto cleanup;
-    }
+        // This path includes a drive name. Split it.
 
-    // Success
-    ret = 0;
-cleanup:
-    free(full);
-    return ret;
+        char drive[10]; // The longest name of a drive is "nitro:"
+
+        // Size of the drive name
+        size_t size = divide - path + 2;
+        if (size > (10 - 1))
+        {
+            errno = ENOMEM;
+            return -1;
+        }
+
+        // Copy drive name
+        memcpy(drive, path, size);
+        drive[size - 1] = '\0';
+
+        FRESULT result = f_chdrive(drive);
+        if (result != FR_OK)
+        {
+            errno = fatfs_error_to_posix(result);
+            return -1;
+        }
+
+        // Get directory without its path
+        char *dir = strdup(divide + 1);
+        if (dir == NULL)
+        {
+            errno = ENOMEM;
+            return -1;
+        }
+
+        result = f_chdir(dir);
+
+        free(dir);
+
+        if (result != FR_OK)
+        {
+            errno = fatfs_error_to_posix(result);
+            return -1;
+        }
+
+        return 0;
+    }
 }
 
 char *getcwd(char *buf, size_t size)
