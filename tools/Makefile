@@ -44,12 +44,16 @@ install: all
 	@test $(INSTALLDIR)
 	$(INSTALL) -d $(INSTALLDIR_ABS)/tools \
 		      $(INSTALLDIR_ABS)/tools/bin2c \
+		      $(INSTALLDIR_ABS)/tools/dldi \
 		      $(INSTALLDIR_ABS)/tools/dlditool \
 		      $(INSTALLDIR_ABS)/tools/grit \
+		      $(INSTALLDIR_ABS)/tools/imgbuild \
 		      $(INSTALLDIR_ABS)/tools/mmutil \
 		      $(INSTALLDIR_ABS)/tools/ndstool
 	$(INSTALL) $(STRIP) -m $(BINMODE) bin2c/bin2c $(INSTALLDIR_ABS)/tools/bin2c/
+	$(INSTALL) dldi/r4tfv2.dldi $(INSTALLDIR_ABS)/tools/dldi/
 	$(INSTALL) $(STRIP) -m $(BINMODE) dlditool/dlditool $(INSTALLDIR_ABS)/tools/dlditool/
+	$(INSTALL) -m $(BINMODE) imgbuild/imgbuild.sh $(INSTALLDIR_ABS)/tools/imgbuild/
 	$(INSTALL) $(STRIP) -m $(BINMODE) grit/grit $(INSTALLDIR_ABS)/tools/grit/
 	$(INSTALL) $(STRIP) -m $(BINMODE) mmutil/mmutil $(INSTALLDIR_ABS)/tools/mmutil/
 	$(INSTALL) $(STRIP) -m $(BINMODE) ndstool/ndstool $(INSTALLDIR_ABS)/tools/ndstool/
