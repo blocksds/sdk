@@ -12,6 +12,11 @@ GAME_SUBTITLE1	:= Built with BlocksDS
 GAME_SUBTITLE2	:= http://skylyrac.net
 GAME_ICON	:= icon.bmp
 
+# Root folder of the SD image and name for the generated image.
+# Name it "DSi-1.sd" for no$gba in DSi mode
+SDROOT		:= sdroot
+SDIMAGE		:= image.bin
+
 # Source code paths
 # -----------------
 
@@ -154,7 +159,7 @@ DEPS		:= $(OBJS:.o=.d)
 # Targets
 # -------
 
-.PHONY: all clean dump
+.PHONY: all clean dump dldipatch sdimage
 
 all: $(ROM)
 
@@ -182,6 +187,15 @@ dump: $(DUMP)
 clean:
 	@echo "  CLEAN"
 	$(V)$(RM) $(ELF) $(DUMP) $(MAP) $(BUILDDIR)
+
+sdimage:
+	@echo "  IMGBUILD $(SDIMAGE) $(SDROOT)"
+	$(V)sh $(BLOCKSDS)/tools/imgbuild/imgbuild.sh $(SDIMAGE) $(SDROOT)
+
+dldipatch: $(ROM)
+	@echo "  DLDITOOL $(ROM)"
+	$(V)$(BLOCKSDS)/tools/dlditool/dlditool \
+		$(BLOCKSDS)/tools/dldi/r4tfv2.dldi $(ROM)
 
 # Rules
 # -----

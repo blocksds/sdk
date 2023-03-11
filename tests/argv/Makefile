@@ -7,15 +7,15 @@
 
 NAME		:= argv
 
-# Root folder of the SD image
-SDROOT		:=
-# Call it "DSi-1.sd" for no$gba in DSi mode
-SDIMAGE		:=
-
 GAME_TITLE	:= Test ROM
 GAME_SUBTITLE1	:= Built with BlocksDS
 GAME_SUBTITLE2	:= http://skylyrac.net
 GAME_ICON	:= icon.bmp
+
+# Root folder of the SD image and name for the generated image.
+# Name it "DSi-1.sd" for no$gba in DSi mode
+SDROOT		:= sdroot
+SDIMAGE		:= image.bin
 
 # Source code paths
 # -----------------
