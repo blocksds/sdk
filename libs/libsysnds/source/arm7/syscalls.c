@@ -23,6 +23,8 @@ int getpid(void)
 
 void __attribute__((noreturn)) _exit(int status)
 {
+    (void)status;
+
     // Hang, there is nowhere to go. The ARM7 shouldn't call this directly, only
     // the ARM9 should.
     while (1);
@@ -150,7 +152,7 @@ int gettimeofday(struct timeval *tp, void *tz)
     return -1;
 }
 
-int execve(char *name, char **argv, char **env)
+int execve(const char *name, char * const *argv, char * const *env)
 {
     (void)name;
     (void)argv;
@@ -162,6 +164,8 @@ int execve(char *name, char **argv, char **env)
 
 void *sbrk(int incr)
 {
+    (void)incr;
+
     errno = ENOMEM;
     return (void *)-1;
 }

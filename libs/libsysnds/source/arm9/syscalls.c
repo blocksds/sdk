@@ -58,6 +58,8 @@ int fork(void)
 
 int gettimeofday(struct timeval *tp, void *tz)
 {
+    (void)tz;
+
     // Defined in libnds
     extern time_t *punixTime;
 
@@ -70,8 +72,12 @@ int gettimeofday(struct timeval *tp, void *tz)
     return 0;
 }
 
-int execve(char *name, char **argv, char **env)
+int execve(const char *name, char * const *argv, char * const *env)
 {
+    (void)name;
+    (void)argv;
+    (void)env;
+
     errno = ENOMEM;
     return -1;
 }

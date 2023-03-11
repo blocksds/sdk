@@ -61,7 +61,7 @@ int fatfs_error_to_posix(FRESULT error)
     };
 
     // If this ever happens, there has been a serious error in FatFs
-    if ((error > FR_INVALID_PARAMETER) || (error < 0))
+    if (error > FR_INVALID_PARAMETER) // error is unsigned
         return ENOMSG;
 
     return codes[error];

@@ -223,6 +223,8 @@ DRESULT disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
 // buff: Buffer to send/receive control data
 DRESULT disk_ioctl(BYTE pdrv, BYTE cmd, void *buff)
 {
+    (void)buff;
+
     if (!fs_initialized[pdrv])
         return RES_NOTRDY;
 

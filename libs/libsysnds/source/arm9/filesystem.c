@@ -312,7 +312,7 @@ static int ftruncate_internal(int fd, off_t length)
     // If the new file is smaller, it is enough to call f_lseek to set the
     // pointer to the new size, and then call f_truncate.
 
-    if (length > fsize)
+    if ((size_t)length > (size_t)fsize)
     {
         // Expand the file to a bigger size
 
@@ -367,7 +367,7 @@ int ftruncate(int fd, off_t length)
 {
     FIL *fp = (FIL *)fd;
 
-    if (length == f_size(fp))
+    if ((size_t)length == (size_t)f_size(fp))
         return 0; // There is nothing to do
 
     // Preserve the current pointer
@@ -399,7 +399,7 @@ int truncate(const char *path, off_t length)
         return -1;
 
     FIL *fp = (FIL *)fd;
-    if (length != f_size(fp))
+    if ((size_t)length != (size_t)f_size(fp))
     {
         int ret = ftruncate_internal(fd, length);
         if (ret != 0)
