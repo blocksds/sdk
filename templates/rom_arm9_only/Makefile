@@ -186,7 +186,7 @@ dump: $(DUMP)
 
 clean:
 	@echo "  CLEAN"
-	$(V)$(RM) $(ELF) $(DUMP) $(MAP) $(BUILDDIR)
+	$(V)$(RM) $(ROM) $(DUMP) $(BUILDDIR) $(SDIMAGE)
 
 sdimage:
 	@echo "  IMGBUILD $(SDIMAGE) $(SDROOT)"

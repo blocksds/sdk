@@ -56,7 +56,7 @@ clean:
 	@echo "  CLEAN"
 	$(V)$(MAKE) -f Makefile.arm9 clean --no-print-directory
 	$(V)$(MAKE) -f Makefile.arm7 clean --no-print-directory
-	$(V)$(RM) $(ROM) build
+	$(V)$(RM) $(ROM) build $(SDIMAGE)
 
 # Rules
 # -----
