@@ -130,7 +130,7 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
         {
             const DISC_INTERFACE *io = fs_io[pdrv];
             if (!io->readSectors(sector, count, buff))
-                return RES_NOTRDY;
+                return RES_ERROR;
 
             return RES_OK;
         }
@@ -152,12 +152,12 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
 
             void *ptr = malloc(size);
             if (ptr == NULL)
-                return RES_NOTRDY;
+                return RES_ERROR;
 
             if (!io->readSectors(sector, count, ptr))
             {
                 free(ptr);
-                return RES_NOTRDY;
+                return RES_ERROR;
             }
 
             //DC_InvalidateRange(ptr, size);
@@ -195,7 +195,7 @@ DRESULT disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
         {
             const DISC_INTERFACE *io = fs_io[pdrv];
             if (!io->writeSectors(sector, count, buff))
-                return RES_NOTRDY;
+                return RES_ERROR;
 
             return RES_OK;
         }
@@ -203,7 +203,7 @@ DRESULT disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
         {
             const DISC_INTERFACE *io = fs_io[pdrv];
             if (!io->writeSectors(sector, count, buff))
-                return RES_NOTRDY;
+                return RES_ERROR;
 
             return RES_OK;
         }
@@ -241,14 +241,14 @@ DRESULT disk_ioctl(BYTE pdrv, BYTE cmd, void *buff)
             if (cmd == CTRL_SYNC)
                 return RES_OK;
 
-            return RES_NOTRDY;
+            return RES_PARERR;
 
         case DEV_SD:
             // This command flushes the cache, but there is no cache right now
             if (cmd == CTRL_SYNC)
                 return RES_OK;
 
-            return RES_NOTRDY;
+            return RES_PARERR;
     }
 
     return RES_PARERR;
