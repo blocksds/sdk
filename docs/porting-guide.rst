@@ -95,12 +95,16 @@ leave them empty if you aren't using them:
 
 .. code:: make
 
-    SOURCEDIRS  := source source/common
+    SOURCEDIRS  := source
     INCLUDEDIRS := include
     GFXDIRS     := graphics
     BINDIRS     := data
     AUDIODIRS   := audio
     NITROFATDIR := nitrofs
+
+Important note: ``SOURCEDIRS`` searches all directories recursively. If you
+don't like this behaviour, go to the ``SOURCES_S``, ``SOURCES_C`` and
+``SOURCES_CPP`` lines and add ``-maxdepth 1`` to the ``find`` command.
 
 Note that ``TARGET`` is not part of this group. The top of the Makefile has this
 other group of variables that you can also set to your own values:
@@ -147,3 +151,42 @@ The reason for this additional complexity with ``LIBS`` and ``LIBDIRS`` is to
 allow the user as much flexibility as possible when mixing and matching
 libraries. Right now, ``libsysnds``, ``libc`` and ``libnds`` are tied together,
 but that may not always be the case in the future.
+
+5. Annotations in filenames
+===========================
+
+Makefiles of devkitPro support annotations. For example, a file named
+``engine.arm.c`` will be built as ARM code, and a file called
+``interrupts.itcm.c`` will be placed in the ITCM memory section. However, not
+all of them work on BlocksDS.
+
+You are free to modify the Makefile to make it work like before, but you can
+also use the annotations in ``<nds/ndstypes.h>``:
+
+Work in BlocksDS:
+
+- ``*.dtcm.*``:  ``DTCM_DATA``, ``DTCM_BSS``
+- ``*.itcm.*``: ``ITCM_CODE``
+- ``*.twl.*``: ``TWL_CODE``, ``TWL_DATA``, ``TWL_BSS``
+
+Don't work in BlocksDS, you need to use the annotations:
+
+- ``*.arm.*``: ``ARM_CODE``
+- ``*.thumb.*``: ``THUMB_CODE``
+
+6. Integer version of ``stdio.h`` functions
+===========================================
+
+Functions like ``iprintf()`` or ``siscanf()`` aren't provided by the build of
+``picolibc`` of BlocksDS. Replace them by ``printf()``, ``sscanf()`` and
+similar.
+
+If you don't want to do that, you can also add the following command line
+arguments to the ``LDFLAGS`` of your Makefile:
+
+.. code:: make
+
+    LDFLAGS := [all other options go here] \
+        -Wl,--defsym=vfprintf=__d_vfprintf -Wl,--defsym=vfscanf=__d_vfscanf
+
+For more information: https://github.com/picolibc/picolibc/blob/main/doc/printf.md

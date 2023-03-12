@@ -132,5 +132,5 @@ This project wouldn't have been possible without:
 - `grit <https://www.coranac.com/projects/grit/>`_
 - `GCC <https://gcc.gnu.org/>`_
 - `make <https://www.gnu.org/software/make/>`_
-- `asie <https://asie.pl`_ for his advice.
+- `asie <https://asie.pl>`_ for his advice.
 - And many others!
