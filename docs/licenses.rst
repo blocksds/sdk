@@ -12,6 +12,7 @@ aren't sure about what copyright notices you need to add.
 MIT license. Copyright notice required:
 
 ::
+
     Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org
 
 ``libs/libnds``
@@ -22,6 +23,7 @@ across the codebase. You could take a look at what your code uses and select
 only the parts that you are using, but that's not very practical.
 
 ::
+
     Copyright (C) 2005 Michael Noland (joat)
     Copyright (C) 2005-2010 Jason Rogers (Dovoto)
     Copyright (C) 2005-2021 Dave Murphy (WinterMute)
@@ -38,21 +40,25 @@ only the parts that you are using, but that's not very practical.
 If you use the hardware position testing code:
 
 ::
+
     Copyright (C) 2007 Gabe Ghearing (gabebear)
 
 If you use DS Motion Card/DS Motion Pak functionality, add:
 
 ::
+
     Copyright (C) 2007 Keith Epstein (KeithE)
 
 If you use NDS Easy Piano, add:
 
 ::
+
     Copyright (C) 2011 Tobias Weyand (0xtob)
 
 If you use ``gl2d``, add:
 
 ::
+
     Copyright (C) 2010 Richard Eric M. Lope BSN RN (Relminator)
 
 ``libs/libsysnds``
@@ -68,6 +74,7 @@ either.
 MIT license. Copyright notice required:
 
 ::
+
     Copyright (c) 2008, Mukunda Johnson (mukunda@maxmod.org)
 
 ``libs/picolibc``
@@ -86,5 +93,6 @@ Mozilla Public License v2.0. No copyright notice required.
 BSD 3-Clause. Copyright notice required:
 
 ::
+
     Copyright (C) 2005-2010 Michael Noland (joat), Jason Rogers (dovoto), Dave Murphy (WinterMute)
 
