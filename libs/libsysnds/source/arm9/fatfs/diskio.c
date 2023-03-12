@@ -36,6 +36,8 @@
 #include <nds/memory.h>
 #include <nds/system.h>
 
+#include <fatfs.h>
+
 #include "ff.h"     // Obtains integer types
 #include "diskio.h" // Declarations of disk functions
 
@@ -139,7 +141,10 @@ DSTATUS disk_initialize(BYTE pdrv)
             if (argc > 0)
             {
                 if (strlen(argv[0]) > 0)
+                {
+                    fatInitDefault();
                     nitro_file = fopen(argv[0], "rb");
+                }
             }
 
             fs_initialized[pdrv] = true;

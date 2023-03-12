@@ -172,16 +172,10 @@ int main(int argc, char **argv)
         printf("argv[0]: %s\n", argv[0]);
     printf("\n");
 
-    bool init_ok;
-
-    init_ok = fatInitDefault();
-    if (!init_ok)
-    {
-        // This is normal in emulators
-        perror("fatInitDefault()");
-    }
-
-    init_ok = nitroFSInit(NULL);
+    // It isn't needed to call fatInitDefault() manually. If nitroFSInit detects
+    // that the ROM is running in a flashcard or from the DSi internal SD slot,
+    // it will call it internally.
+    bool init_ok = nitroFSInit(NULL);
     if (!init_ok)
     {
         perror("nitroFSInit()");

@@ -7,7 +7,8 @@
 
 #include <stdbool.h>
 
-// This initializes NitroFAT.
+// This initializes NitroFAT. If argv[0] has been set to a non-NULL string, it
+// will call fatInitDefault() internally.
 //
 // The argument 'basepath' is ignored. Please, always pass NULL to it.
 //
