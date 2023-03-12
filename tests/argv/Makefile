@@ -7,14 +7,17 @@
 
 NAME		:= argv
 
-GAME_TITLE	:= Test ROM
+GAME_TITLE	:= argv example
 GAME_SUBTITLE1	:= Built with BlocksDS
 GAME_SUBTITLE2	:= http://skylyrac.net
 GAME_ICON	:= icon.bmp
 
-# Root folder of the SD image and name for the generated image.
-# Name it "DSi-1.sd" for no$gba in DSi mode
+# DLDI and internal SD slot of DSi
+# --------------------------------
+
+# Root folder of the SD image
 SDROOT		:= sdroot
+# Name of the generated image it "DSi-1.sd" for no$gba in DSi mode
 SDIMAGE		:= image.bin
 
 # Source code paths
@@ -25,8 +28,7 @@ INCLUDEDIRS	:=
 GFXDIRS		:=
 BINDIRS		:=
 AUDIODIRS	:=
-
-NITRO_FILES	:=
+NITROFATDIR	:=
 
 # Defines passed to all files
 # ---------------------------
@@ -47,6 +49,7 @@ LIBDIRS		:= $(BLOCKSDS)/libs/libsysnds \
 BUILDDIR	:= build
 ELF		:= build/$(NAME).elf
 DUMP		:= build/$(NAME).dump
+NITROFAT_IMG	:= build/nitrofat.bin
 MAP		:= build/$(NAME).map
 SOUNDBANKDIR	:= $(BUILDDIR)/maxmod
 ROM		:= $(NAME).nds
@@ -162,8 +165,16 @@ DEPS		:= $(OBJS:.o=.d)
 
 all: $(ROM)
 
-ifneq ($(strip $(NITRO_FILES)),)
-_NITRO_FILES	:=	-d $(NITRO_FILES)
+ifneq ($(strip $(NITROFATDIR)),)
+# Additional arguments for ndstool
+NDSTOOL_FAT	:= -F $(NITROFAT_IMG)
+
+$(NITROFAT_IMG): $(NITROFATDIR)
+	@echo "  IMGBUILD $@ $(NITROFATDIR)"
+	$(V)sh $(BLOCKSDS)/tools/imgbuild/imgbuild.sh $@ $(NITROFATDIR)
+
+# Make the NDS ROM depend on the filesystem image only if it is needed
+$(ROM): $(NITROFAT_IMG)
 endif
 
 $(ROM): $(ELF)
@@ -171,7 +182,7 @@ $(ROM): $(ELF)
 	$(V)$(BLOCKSDS)/tools/ndstool/ndstool -c $@ \
 		-7 $(BLOCKSDS)/sys/default_arm7/arm7.elf -9 $(ELF) \
 		-b $(GAME_ICON) "$(GAME_TITLE);$(GAME_SUBTITLE1);$(GAME_SUBTITLE2)" \
-		$(_NITRO_FILES)
+		$(NDSTOOL_FAT)
 
 $(ELF): $(OBJS)
 	@echo "  LD      $@"

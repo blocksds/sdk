@@ -5,19 +5,25 @@
 # User config
 # ===========
 
-NAME		:= test
+NAME		:= template_combined
 
-NITRO_FILES	:=
-
-GAME_TITLE	:= Test ROM
+GAME_TITLE	:= Combined ARM7+ARM9 template
 GAME_SUBTITLE1	:= Built with BlocksDS
 GAME_SUBTITLE2	:= http://skylyrac.net
 GAME_ICON	:= icon.bmp
 
-# Root folder of the SD image and name for the generated image.
-# Name it "DSi-1.sd" for no$gba in DSi mode
+# DLDI and internal SD slot of DSi
+# --------------------------------
+
+# Root folder of the SD image
 SDROOT		:= sdroot
+# Name of the generated image it "DSi-1.sd" for no$gba in DSi mode
 SDIMAGE		:= image.bin
+
+# Source code paths
+# -----------------
+
+NITROFATDIR	:=
 
 # Tools
 # -----
@@ -43,6 +49,7 @@ ARM7DIR		:= arm7
 # Build artfacts
 # --------------
 
+NITROFAT_IMG	:= build/nitrofat.bin
 ROM		:= $(NAME).nds
 
 # Targets
@@ -58,17 +65,22 @@ clean:
 	$(V)$(MAKE) -f Makefile.arm7 clean --no-print-directory
 	$(V)$(RM) $(ROM) build $(SDIMAGE)
 
-# Rules
-# -----
-
 arm9:
 	$(V)+$(MAKE) -f Makefile.arm9 --no-print-directory
 
 arm7:
 	$(V)+$(MAKE) -f Makefile.arm7 --no-print-directory
 
-ifneq ($(strip $(NITRO_FILES)),)
-_NITRO_FILES	:=	-d $(NITRO_FILES)
+ifneq ($(strip $(NITROFATDIR)),)
+# Additional arguments for ndstool
+NDSTOOL_FAT	:= -F $(NITROFAT_IMG)
+
+$(NITROFAT_IMG): $(NITROFATDIR)
+	@echo "  IMGBUILD $@ $(NITROFATDIR)"
+	$(V)sh $(BLOCKSDS)/tools/imgbuild/imgbuild.sh $@ $(NITROFATDIR)
+
+# Make the NDS ROM depend on the filesystem image only if it is needed
+$(ROM): $(NITROFAT_IMG)
 endif
 
 $(ROM): arm9 arm7
@@ -76,7 +88,7 @@ $(ROM): arm9 arm7
 	$(V)$(BLOCKSDS)/tools/ndstool/ndstool -c $@ \
 		-7 build/arm7.elf -9 build/arm9.elf \
 		-b $(GAME_ICON) "$(GAME_TITLE);$(GAME_SUBTITLE1);$(GAME_SUBTITLE2)" \
-		$(_NITRO_FILES)
+		$(NDSTOOL_FAT)
 
 sdimage:
 	@echo "  IMGBUILD $(SDIMAGE) $(SDROOT)"
