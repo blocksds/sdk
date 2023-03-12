@@ -41,7 +41,7 @@ DEFINES		:=
 LIBS		:= -lsysnds9 -lnds9 -lc
 LIBDIRS		:= $(BLOCKSDS)/libs/libsysnds \
 		   $(BLOCKSDS)/libs/libnds \
-		   $(BLOCKSDS)/libs/libc
+		   $(BLOCKSDS)/libs/libc9
 
 # Build artifacts
 # ---------------

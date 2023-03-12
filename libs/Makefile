@@ -24,20 +24,21 @@ libsysnds: picolibc
 maxmod: picolibc
 	+$(MAKE) -C maxmod -f Makefile.blocks ds -j`nproc`
 
-picolibc: libc
+picolibc: libc9 libc7
 
-PICOLIBC_INSTALL_PATH	:= $(CURDIR)/libc
+LIBC9_INSTALL_PATH	:= $(CURDIR)/libc9
+LIBC7_INSTALL_PATH	:= $(CURDIR)/libc7
 
 # Get the available list of targets with: `arm-none-eabi-gcc --print-multi-lib`
 # For information about the build options, picolibc/doc/build.md
-libc:
+libc9:
 	@cd picolibc && \
-	$(RM) build-arm-none-eabi && \
-	$(MKDIR) build-arm-none-eabi && \
-	cd build-arm-none-eabi && \
-	../scripts/do-arm-configure \
+	$(RM) build-libc9 && \
+	$(MKDIR) build-libc9 && \
+	cd build-libc9 && \
+	meson setup \
+		--cross-file=../../cross-libc9.txt \
 		-Dmultilib=false \
-		-Dmultilib-list="arm/v5te/softfp;@marm@march=armv5te+fp@mfloat-abi=softfp,thumb/nofp;@mthumb@mfloat-abi=soft" \
 		-Dpicocrt=false \
 		-Dsemihost=false \
 		-Dspecsdir=none \
@@ -51,9 +52,37 @@ libc:
 		\
 		-Dnewlib-nano-malloc=false \
 		\
-		-Dprefix=$(PICOLIBC_INSTALL_PATH) \
+		-Dprefix=$(LIBC9_INSTALL_PATH) \
 		-Dlibdir=lib \
-		-Dincludedir=include && \
+		-Dincludedir=include \
+		.. && \
+	ninja && ninja install
+
+libc7:
+	@cd picolibc && \
+	$(RM) build-libc7 && \
+	$(MKDIR) build-libc7 && \
+	cd build-libc7 && \
+	meson setup \
+		--cross-file=../../cross-libc7.txt \
+		-Dmultilib=false \
+		-Dpicocrt=false \
+		-Dsemihost=false \
+		-Dspecsdir=none \
+		-Dtests=false \
+		\
+		-Dio-long-long=true \
+		-Dio-pos-args=true \
+		\
+		-Dposix-console=true \
+		-Dformat-default=double \
+		\
+		-Dnewlib-nano-malloc=false \
+		\
+		-Dprefix=$(LIBC7_INSTALL_PATH) \
+		-Dlibdir=lib \
+		-Dincludedir=include \
+		.. && \
 	ninja && ninja install
 
 INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
@@ -63,12 +92,14 @@ install: all
 	@test $(INSTALLDIR)
 	$(INSTALL) -d $(INSTALLDIR_ABS)/libs \
 		      $(INSTALLDIR_ABS)/libs/dswifi \
-		      $(INSTALLDIR_ABS)/libs/libc \
+		      $(INSTALLDIR_ABS)/libs/libc7 \
+		      $(INSTALLDIR_ABS)/libs/libc9 \
 		      $(INSTALLDIR_ABS)/libs/libnds \
 		      $(INSTALLDIR_ABS)/libs/libsysnds \
 		      $(INSTALLDIR_ABS)/libs/maxmod
 	$(CP) -r dswifi/include dswifi/lib $(INSTALLDIR_ABS)/libs/dswifi
-	$(CP) -r libc/include libc/lib $(INSTALLDIR_ABS)/libs/libc
+	$(CP) -r libc7/include libc7/lib $(INSTALLDIR_ABS)/libs/libc7
+	$(CP) -r libc9/include libc9/lib $(INSTALLDIR_ABS)/libs/libc9
 	$(CP) -r libnds/include libnds/lib $(INSTALLDIR_ABS)/libs/libnds
 	$(CP) -r libsysnds/lib $(INSTALLDIR_ABS)/libs/libsysnds
 	$(CP) -r maxmod/include maxmod/lib $(INSTALLDIR_ABS)/libs/maxmod
@@ -78,4 +109,5 @@ clean:
 	+$(MAKE) -C libnds -f Makefile.blocks clean
 	+$(MAKE) -C libsysnds clean
 	+$(MAKE) -C maxmod -f Makefile.blocks clean
-	+$(RM) libc
+	$(RM) libc7 libc9
+	$(RM) picolibc/build-libc7 picolibc/build-libc9

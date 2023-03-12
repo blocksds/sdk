@@ -132,11 +132,11 @@ This would be the equivalent in a BlocksDS project:
                $(BLOCKSDS)/libs/maxmod \
                $(BLOCKSDS)/libs/libsysnds \
                $(BLOCKSDS)/libs/libnds \
-               $(BLOCKSDS)/libs/libc
+               $(BLOCKSDS)/libs/libc9
 
 It is very important to keep the last 3 in that order in the ``LIBS`` variable
 (``-lsysnds9 -lnds9 -lc``) and the ``LIBDIRS`` variable
-(``$(BLOCKSDS)/libs/libsysnds $(BLOCKSDS)/libs/libnds $(BLOCKSDS)/libs/libc``).
+(``$(BLOCKSDS)/libs/libsysnds $(BLOCKSDS)/libs/libnds $(BLOCKSDS)/libs/libc9``).
 
 You can remove the dswifi or maxmod libraries if you aren't using them.
 

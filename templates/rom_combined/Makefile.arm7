@@ -22,7 +22,7 @@ LIBDIRS		:= $(BLOCKSDS)/libs/libnds \
 		   $(BLOCKSDS)/libs/libsysnds \
 		   $(BLOCKSDS)/libs/dswifi \
 		   $(BLOCKSDS)/libs/maxmod \
-		   $(BLOCKSDS)/libs/libc
+		   $(BLOCKSDS)/libs/libc7
 
 # Build artifacts
 # -----------------
