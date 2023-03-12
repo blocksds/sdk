@@ -24,24 +24,17 @@ BlocksDS uses `Elm's FatFs library <http://elm-chan.org/fsw/ff/00index_e.html>`_
 instead. This library has been ported to use the DLDI and DSi interna SD card
 drivers that are provided by ``libnds``.
 
-From the point of view of the source code, you will need to replace the
-following includes:
+From the point of view of the source code, you can use the same includes as when
+using ``libfat`` and ``libfilesystem``:
 
 .. code:: c
 
     #include <fat.h>
     #include <filesystem.h>
 
-By this other include:
-
-.. code:: c
-
-    #include <fatfs.h>
-
-The ``fatfs.h`` header provides ``fatInitDefault()`` and ``nitroFSInit()``. They
-should be compatible with the ones in ``libfat`` and ``libfilesystem``. Please,
-report any behaviour that isn't the same. If you need any other fuction, report
-it as well.
+They provide ``fatInitDefault()`` and ``nitroFSInit()``. They should be
+compatible with the ones in the original libraries. Please, report any behaviour
+that isn't the same. If you need any other fuction, report it as well.
 
 3. Text console differences
 ===========================

@@ -13,6 +13,9 @@
 // Devices: "fat:/", "sd:/", "nitro:/"
 static FATFS fs_info[FF_VOLUMES] = { 0 };
 
+static bool fat_initialized = false;
+static bool nitrofat_initialized = false;
+
 int fatfs_error_to_posix(FRESULT error)
 {
     // The following errno codes have been picked so that they make some sort of
@@ -70,6 +73,13 @@ int fatfs_error_to_posix(FRESULT error)
 
 bool fatInitDefault(void)
 {
+    static bool has_been_called = false;
+
+    if (has_been_called == true)
+        return fat_initialized;
+
+    has_been_called = true;
+
     // In DSi mode, require that there is a SD card in the SD card slot. In DS
     // mode, require that there is a flashcard, that this ROM has been DLDI
     // patched, and that DLDI can be initialized.
@@ -121,11 +131,20 @@ bool fatInitDefault(void)
         }
     }
 
+    fat_initialized = true;
+
     return true;
 }
 
 bool nitroFSInit(char **basepath)
 {
+    static bool has_been_called = false;
+
+    if (has_been_called == true)
+        return nitrofat_initialized;
+
+    has_been_called = true;
+
     (void)basepath;
 
     const char *nitro_drive = "nitro:/";
@@ -138,6 +157,8 @@ bool nitroFSInit(char **basepath)
         errno = fatfs_error_to_posix(result);
         return false;
     }
+
+    nitrofat_initialized = true;
 
     return true;
 }
