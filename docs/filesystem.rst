@@ -45,6 +45,35 @@ This function whether it's running on a regular DS or a DSi.
 The initial working directory is "fat:/" on the DS (DLDI), and "sd:/" on DSi.
 On the DSi it is possible to switch between both filesystems with ``chdir()``.
 
+It is also possible to embed a filesystem in the NDS ROM with NitroFAT. This is
+a good way to keep all the assets and code of your game as one single file. You
+can access files in this filesystem by using the drive name ``nitro:/`` in
+any path provided to the C library functions.
+
+.. code:: c
+
+    #include <fatfs.h>
+
+    int main(int argc, char *argv[])
+    {
+        // Call fatInitDefault() here if you want.
+
+        bool init_ok = nitroFSInit(NULL);
+        if (!init_ok)
+        {
+            // Handle error. You probably want to hang here if NitroFAT can´t be
+            // read, because all of your assets will be unavailable. Another
+            // option is to return from main() or call exit() to return to the
+            // loader.
+        }
+
+        // Rest of the code
+    }
+
+It is possible to call ``nitroFSInit()`` without ``fatInitDefault()``, but it
+won't work on flashcarts, just emulators. Check `this example
+<../examples/nitrofat>`_ to see how to use ``NitroFAT``.
+
 Supported functions
 ===================
 

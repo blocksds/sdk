@@ -29,13 +29,23 @@ Other ``argv`` entries may be set as well, but this isn't a common occurrence.
 
 For more information, check: https://devkitpro.org/wiki/Homebrew_Menu
 
-Important note: Nitro FS (``nitro:``) is not supported at the moment.
-
 Filesystem
 ==========
 
 Functions like ``fopen``, ``opendir``, etc. For more information, check the
 `filesystem documentation <filesystem.rst>`_.
+
+NitroFS
+=======
+
+NitroFS (``nitro:``) is supported, but the implementation is different than the
+one in ``libfilesystem``. The implementation included in BlocksDS is called
+NitroFAT.
+
+NitroFS uses Nintendo's cartridge filesystem format, NitroFAT uses FAT12/FAT16
+images. This is done to reuse the code that reads from SD cards. ROM hacking
+tools to see the filesystem won't work on NDS ROMs that use NitroFAT, as they
+expect to see Nintendo's format. However, this doesn't matter to developers.
 
 Text console (stdout, stderr, stdin)
 ====================================

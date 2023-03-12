@@ -23,6 +23,16 @@ This project is currently in beta stage, and most features are working. Please,
 check the `libc port documentation <docs/libc.rst>`_ for more information about
 the supported libc functions.
 
+You may keep multiple versions of this SDK in your PC. The location of the
+active SDK is stored in the environment variable ``BLOCKSDS``, so all you need
+to do is to change its value and point to the right version.
+
+If you want to port a project built with devkitPro, follow `this guide
+<docs/porting-guide.rst>`_ for instructions.
+
+For detailed information about the design of BlocksDS, check `this other document
+<docs/design-guide.rst>`_.
+
 2. Setup
 ********
 
@@ -113,10 +123,12 @@ Credits
 This project wouldn't have been possible without:
 
 - `devkitPro <https://devkitpro.org/>`_
+- `picolibc <https://github.com/picolibc/picolibc>`_
 - `libnds <https://github.com/devkitPro/libnds>`_
 - `dswifi <http://akkit.org/dswifi/>`_
 - `maxmod <https://maxmod.devkitpro.org/>`_ (and `mmutil`)
 - `grit <https://www.coranac.com/projects/grit/>`_
 - `GCC <https://gcc.gnu.org/>`_
 - `make <https://www.gnu.org/software/make/>`_
+- `asie <https://asie.pl`_ for his advice.
 - And many others!
