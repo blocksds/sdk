@@ -177,16 +177,22 @@ Don't work in BlocksDS, you need to use the annotations:
 6. Integer version of ``stdio.h`` functions
 ===========================================
 
-Functions like ``iprintf()`` or ``siscanf()`` aren't provided by the build of
-``picolibc`` of BlocksDS. Replace them by ``printf()``, ``sscanf()`` and
-similar.
+Functions like ``iprintf()`` or ``siscanf()``, provided by ``newlib``,  aren't
+provided by ``picolibc``. Replace any calls to them by the standard names of
+the functions: ``printf()``, ``sscanf()``, etc.
 
-If you don't want to do that, you can also add the following command line
-arguments to the ``LDFLAGS`` of your Makefile:
+By default, the build of ``picolibc`` of BlocksDS makes ``printf()``,
+``sscanf()`` and similar functions floats and doubles. This is done to increase
+compatibility with any pre-existing code, but it increases the size of the final
+binaries.
+
+It is possible to switch to integer-only versions of the functions, and save
+that additional space, by adding the following line to the ``LDFLAGS`` of your
+Makefile:
 
 .. code:: make
 
     LDFLAGS := [all other options go here] \
-        -Wl,--defsym=vfprintf=__d_vfprintf -Wl,--defsym=vfscanf=__d_vfscanf
+        -Wl,--defsym=vfprintf=__i_vfprintf -Wl,--defsym=vfscanf=__i_vfscanf
 
 For more information: https://github.com/picolibc/picolibc/blob/main/doc/printf.md
