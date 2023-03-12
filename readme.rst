@@ -33,6 +33,8 @@ If you want to port a project built with devkitPro, follow `this guide
 For detailed information about the design of BlocksDS, check `this other document
 <docs/design-guide.rst>`_.
 
+For licensing information, check `this <docs/licenses.rst>`_.
+
 2. Setup
 ********
 
