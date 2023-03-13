@@ -8,9 +8,12 @@ MAKE		:= make
 RM		:= rm -rf
 MKDIR		:= mkdir
 
-.PHONY: all clean dswifi install libnds libsysnds maxmod picolibc
+.PHONY: all clean dswifi install libnds libsysnds maxmod picolibc stdcpp
 
-all: dswifi libnds libsysnds maxmod picolibc
+all: dswifi libnds libsysnds maxmod picolibc stdcpp
+
+# Build targets
+# =============
 
 dswifi: libnds picolibc
 	+$(MAKE) -C dswifi -f Makefile.blocks -j`nproc`
@@ -85,6 +88,12 @@ libc7:
 		.. && \
 	ninja && ninja install
 
+stdcpp: picolibc
+	+$(MAKE) -C stdcpp -j`nproc` install
+
+# Install target
+# ==============
+
 INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
 
 install: all
@@ -94,20 +103,28 @@ install: all
 		      $(INSTALLDIR_ABS)/libs/dswifi \
 		      $(INSTALLDIR_ABS)/libs/libc7 \
 		      $(INSTALLDIR_ABS)/libs/libc9 \
+		      $(INSTALLDIR_ABS)/libs/libstdc++7 \
+		      $(INSTALLDIR_ABS)/libs/libstdc++9 \
 		      $(INSTALLDIR_ABS)/libs/libnds \
 		      $(INSTALLDIR_ABS)/libs/libsysnds \
 		      $(INSTALLDIR_ABS)/libs/maxmod
 	$(CP) -r dswifi/include dswifi/lib $(INSTALLDIR_ABS)/libs/dswifi
 	$(CP) -r libc7/include libc7/lib $(INSTALLDIR_ABS)/libs/libc7
 	$(CP) -r libc9/include libc9/lib $(INSTALLDIR_ABS)/libs/libc9
+	$(CP) -r libstdc++7/include libstdc++7/lib $(INSTALLDIR_ABS)/libs/libstdc++7
+	$(CP) -r libstdc++9/include libstdc++9/lib $(INSTALLDIR_ABS)/libs/libstdc++9
 	$(CP) -r libnds/include libnds/lib $(INSTALLDIR_ABS)/libs/libnds
 	$(CP) -r libsysnds/lib $(INSTALLDIR_ABS)/libs/libsysnds
 	$(CP) -r maxmod/include maxmod/lib $(INSTALLDIR_ABS)/libs/maxmod
+
+# Clean target
+# ============
 
 clean:
 	+$(MAKE) -C dswifi -f Makefile.blocks clean
 	+$(MAKE) -C libnds -f Makefile.blocks clean
 	+$(MAKE) -C libsysnds clean
 	+$(MAKE) -C maxmod -f Makefile.blocks clean
-	$(RM) libc7 libc9
+	+$(MAKE) -C stdcpp clean
+	$(RM) libc7 libc9 libstdc++7 libstdc++9
 	$(RM) picolibc/build-libc7 picolibc/build-libc9
