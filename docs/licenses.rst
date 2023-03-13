@@ -41,6 +41,15 @@ MIT license. Copyright notice required:
 
 Take a look at ``COPYING.picolibc`` in the ``picolibc`` folder.
 
+``libs/stdcpp/avr-libcpp``
+==========================
+
+It uses license GPL 3.0 with an exception for any program compiled with GCC.
+That means that, as long as you use GCC as your compiler, you can license your
+compiled application under any license you want, or make it closed source:
+
+https://www.gnu.org/licenses/gcc-exception-3.1.en.html
+
 ``sys/crts``
 ============
 
