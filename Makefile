@@ -25,6 +25,9 @@ install: all
 	+$(MAKE) -C libs install INSTALLDIR=$(abspath $(INSTALLDIR))
 	+$(MAKE) -C sys install INSTALLDIR=$(abspath $(INSTALLDIR))
 	+$(MAKE) -C tools install INSTALLDIR=$(abspath $(INSTALLDIR))
+	@if [ `git rev-parse HEAD 2> /dev/null` ]; then \
+		git rev-parse HEAD > $(INSTALLDIR)/version.txt ; \
+	fi
 
 clean:
 	+$(MAKE) -C libs clean
