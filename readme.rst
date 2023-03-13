@@ -33,8 +33,10 @@ If you want to port a project built with devkitPro, follow `this guide
 For detailed information about the design of BlocksDS, check `this other document
 <docs/design-guide.rst>`_.
 
-For licensing information, check `this <docs/licenses.rst>`_. Note that the C++
-standard library (``avr-libcpp``) is licensed under the GPL 3.0 with an
+For licensing information, check `this <docs/licenses.rst>`_.
+
+C++ standard library support is very limited and experimental. Also, Note that
+the C++ standard library (``avr-libcpp``) is licensed under the GPL 3.0 with an
 exception that lets you license your compiled application under any license, as
 long as the compiler you have used is GCC. If you use any other compiler, you
 need to license your application under the GPL 3.0.
