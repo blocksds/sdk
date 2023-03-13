@@ -2,6 +2,10 @@
 #
 # SPDX-FileContributor: Antonio Niño Díaz, 2023
 
+ifeq ($(strip $(BLOCKSDS)),)
+    $(error "Environment variable BLOCKSDS not found")
+endif
+
 # User config
 # ===========
 
@@ -120,12 +124,12 @@ ASFLAGS		+= -x assembler-with-cpp $(DEFINES) $(ARCH) \
 		   -ffunction-sections -fdata-sections
 
 CFLAGS		+= -std=gnu11 $(WARNFLAGS) $(DEFINES) $(ARCH) \
-		   -mthumb -mthumb-interwork $(INCLUDEFLAGS) -O3 \
+		   -mthumb -mthumb-interwork $(INCLUDEFLAGS) -O2 \
 		   -ffunction-sections -fdata-sections \
 		   -fomit-frame-pointer
 
 CXXFLAGS	+= -std=gnu++14 $(WARNFLAGS) $(DEFINES) $(ARCH) \
-		   -mthumb -mthumb-interwork $(INCLUDEFLAGS) -O3 \
+		   -mthumb -mthumb-interwork $(INCLUDEFLAGS) -O2 \
 		   -ffunction-sections -fdata-sections \
 		   -fno-exceptions -fno-rtti \
 		   -fomit-frame-pointer
