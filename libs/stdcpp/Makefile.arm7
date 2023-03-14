@@ -12,6 +12,10 @@ endif
 SOURCEDIRS	:= avr-libstdcpp/src
 INCLUDEDIRS	:= avr-libstdcpp/include
 
+SOURCES_CPP	:= $(shell find -L $(SOURCEDIRS) -name "*.cc") \
+		   avr-libstdcpp/examples/common/cxxabi.cpp \
+		   avr-libstdcpp/examples/common/new.cpp
+
 # Defines passed to all files
 # ---------------------------
 
@@ -48,13 +52,6 @@ else
 V		:= @
 endif
 
-# Source files
-# ------------
-
-SOURCES_S	:= $(shell find -L $(SOURCEDIRS) -name "*.s")
-SOURCES_C	:= $(shell find -L $(SOURCEDIRS) -name "*.c")
-SOURCES_CPP	:= $(shell find -L $(SOURCEDIRS) -name "*.cc")
-
 # Compiler and linker flags
 # -------------------------
 
@@ -67,16 +64,7 @@ WARNFLAGS	:= -Wall -Wextra
 INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path)) \
 		   $(foreach path,$(LIBDIRS),-I$(path)/include)
 
-ASFLAGS		+= -x assembler-with-cpp $(DEFINES) $(ARCH) \
-		   -mthumb -mthumb-interwork $(INCLUDEFLAGS) \
-		   -ffunction-sections -fdata-sections
-
-CFLAGS		+= -std=gnu11 $(WARNFLAGS) $(DEFINES) $(ARCH) \
-		   -mthumb -mthumb-interwork $(INCLUDEFLAGS) -O2 \
-		   -ffunction-sections -fdata-sections \
-		   -fomit-frame-pointer
-
-CXXFLAGS	+= -std=gnu++14 $(WARNFLAGS) $(DEFINES) $(ARCH) \
+CXXFLAGS	+= -std=gnu++17 $(WARNFLAGS) $(DEFINES) $(ARCH) \
 		   -mthumb -mthumb-interwork $(INCLUDEFLAGS) -O2 \
 		   -ffunction-sections -fdata-sections \
 		   -fno-exceptions -fno-rtti \
@@ -85,9 +73,7 @@ CXXFLAGS	+= -std=gnu++14 $(WARNFLAGS) $(DEFINES) $(ARCH) \
 # Intermediate build files
 # ------------------------
 
-OBJS	:= $(addsuffix .o,$(addprefix $(BUILDDIR)/,$(SOURCES_S))) \
-		   $(addsuffix .o,$(addprefix $(BUILDDIR)/,$(SOURCES_C))) \
-		   $(addsuffix .o,$(addprefix $(BUILDDIR)/,$(SOURCES_CPP)))
+OBJS	:= $(addsuffix .o,$(addprefix $(BUILDDIR)/,$(SOURCES_CPP)))
 
 DEPS		:= $(OBJS:.o=.d)
 
@@ -99,28 +85,23 @@ DEPS		:= $(OBJS:.o=.d)
 all: $(ARCHIVE)
 
 $(ARCHIVE): $(OBJS)
-	@echo "  AR.7    $@"
+	@echo "  AR.9    $@"
 	@$(MKDIR) -p $(@D)
 	$(V)$(AR) rcs $@ $(OBJS)
 
 clean:
-	@echo "  CLEAN.7"
+	@echo "  CLEAN.9"
 	$(V)$(RM) $(ARCHIVE) $(BUILDDIR)
 
 # Rules
 # -----
 
-$(BUILDDIR)/%.s.o : %.s
-	@echo "  AS.7    $<"
-	@$(MKDIR) -p $(@D)
-	$(V)$(CC) $(ASFLAGS) -MMD -MP -c -o $@ $<
-
-$(BUILDDIR)/%.c.o : %.c
-	@echo "  CC.7    $<"
-	@$(MKDIR) -p $(@D)
-	$(V)$(CC) $(CFLAGS) -MMD -MP -c -o $@ $<
-
 $(BUILDDIR)/%.cc.o : %.cc
+	@echo "  CXX.7   $<"
+	@$(MKDIR) -p $(@D)
+	$(V)$(CC) $(CXXFLAGS) -MMD -MP -c -o $@ $<
+
+$(BUILDDIR)/%.cpp.o : %.cpp
 	@echo "  CXX.7   $<"
 	@$(MKDIR) -p $(@D)
 	$(V)$(CXX) $(CXXFLAGS) -MMD -MP -c -o $@ $<
