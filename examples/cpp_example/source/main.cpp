@@ -7,6 +7,7 @@
 
 // C++ I/O streams aren't supported
 #include <cstdio>
+#include <vector>
 
 #include <nds.h>
 
@@ -102,6 +103,20 @@ void global_constructor_test(void)
 
 // ------------------------------------------------------------------
 
+void vector_test(void)
+{
+    std::vector<int> my_vector{123, 12, 6, 234, 6};
+    my_vector.push_back(55);
+
+    for(auto i : my_vector)
+    {
+        printf("%i ", i);
+    }
+    puts("\n");
+}
+
+// ------------------------------------------------------------------
+
 int main(int argc, char *argv[])
 {
     consoleDemoInit();
@@ -110,6 +125,7 @@ int main(int argc, char *argv[])
 
     virtual_functions_test();
     global_constructor_test();
+    vector_test();
 
     printf("\n\n");
     printf("START: Exit to loader\n");
