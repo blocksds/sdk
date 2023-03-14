@@ -58,7 +58,7 @@ static int stderr_putc_buffered(char c, FILE *file)
 }
 
 
-int sys_semihost_getc(FILE *file)
+int stdin_getc_keyboard(FILE *file)
 {
     (void)file;
 
@@ -86,7 +86,7 @@ int sys_semihost_getc(FILE *file)
     return c;
 }
 
-static FILE __stdin = FDEV_SETUP_STREAM(NULL, sys_semihost_getc, NULL,
+static FILE __stdin = FDEV_SETUP_STREAM(NULL, stdin_getc_keyboard, NULL,
                                         _FDEV_SETUP_READ);
 static FILE __stdout = FDEV_SETUP_STREAM(stdout_putc_buffered, NULL, NULL,
                                          _FDEV_SETUP_WRITE);

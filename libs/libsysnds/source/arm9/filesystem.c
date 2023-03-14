@@ -64,7 +64,7 @@ int open(const char *path, int flags, ...)
             can_write = 1;
             mode = FA_READ | FA_WRITE;
             break;
-        default: // Default to just reading
+        default:
             errno = EINVAL;
             return -1;
     }
