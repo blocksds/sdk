@@ -21,7 +21,7 @@ BlocksDS uses ``picolibc`` instead of ``newlib``, and it implements filesystem
 functions in a different way.
 
 BlocksDS uses `Elm's FatFs library <http://elm-chan.org/fsw/ff/00index_e.html>`_
-instead. This library has been ported to use the DLDI and DSi interna SD card
+instead. This library has been ported to use the DLDI and DSi internal SD card
 drivers that are provided by ``libnds``.
 
 From the point of view of the source code, you can use the same includes as when
