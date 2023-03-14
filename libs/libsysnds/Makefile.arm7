@@ -9,8 +9,8 @@ endif
 # Source code paths
 # -----------------
 
-SOURCEDIRS	:= source/arm7
-INCLUDEDIRS	:=
+SOURCEDIRS	:= source/common source/arm7
+INCLUDEDIRS	:= source/common/ndsabi
 
 # Defines passed to all files
 # ---------------------------
