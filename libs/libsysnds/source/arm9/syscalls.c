@@ -31,7 +31,7 @@ pid_t getpid(void)
     return 1;
 }
 
-int _kill(pid_t pid, int sig)
+int kill(pid_t pid, int sig)
 {
     // The only process that exists is this process, and it can be killed.
     if (pid == 1)
