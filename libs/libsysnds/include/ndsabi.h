@@ -52,6 +52,24 @@ void __ndsabi_rmemcpy1(void* __restrict__ dest, const void* __restrict__ src, si
  */
 void __ndsabi_rmemcpy(void* __restrict__ dest, const void* __restrict__ src, size_t n) __attribute__((nonnull(1, 2)));
 
+/**
+ * Copies n bytes in multiples of 16 bytes from src to dest (forward) using FIQ mode
+ * Assumes dest and src are 4-byte aligned
+ * @param dest Destination address
+ * @param src Source address
+ * @param n Number of bytes to copy, must be a multiple of 16
+ */
+void __ndsabi_fiq_memcpy4x4(void* __restrict__ dest, const void* __restrict__ src, size_t n) __attribute__((nonnull(1, 2)));
+
+/**
+ * Copies n bytes from src to dest (forward) using FIQ mode
+ * Assumes dest and src are 4-byte aligned
+ * @param dest Destination address
+ * @param src Source address
+ * @param n Number of bytes to copy
+ */
+void __ndsabi_fiq_memcpy4(void* __restrict__ dest, const void* __restrict__ src, size_t n) __attribute__((nonnull(1, 2)));
+
 #ifdef __cplusplus
 }
 #endif
