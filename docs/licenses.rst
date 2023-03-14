@@ -46,7 +46,9 @@ Take a look at ``COPYING.picolibc`` in the ``picolibc`` folder.
 
 It uses license GPL 3.0 with an exception for any program compiled with GCC.
 That means that, as long as you use GCC as your compiler, you can license your
-compiled application under any license you want, or make it closed source:
+compiled application under any license you want, or make it closed source. If
+you use any other compiler, you need to license your application under the
+GPL 3.0.
 
 https://www.gnu.org/licenses/gcc-exception-3.1.en.html
 

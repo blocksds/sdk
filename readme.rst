@@ -35,11 +35,9 @@ For detailed information about the design of BlocksDS, check `this other documen
 
 For licensing information, check `this <docs/licenses.rst>`_.
 
-C++ standard library support is very limited and experimental. Also, Note that
-the C++ standard library (``avr-libcpp``) is licensed under the GPL 3.0 with an
-exception that lets you license your compiled application under any license, as
-long as the compiler you have used is GCC. If you use any other compiler, you
-need to license your application under the GPL 3.0.
+C++ standard library support is limited. It is provided by `avr-libcpp
+<https://github.com/modm-io/avr-libstdcpp>`_. If you don't use GCC as a
+compiler, check the licensing notes of this library.
 
 2. Setup
 ********
