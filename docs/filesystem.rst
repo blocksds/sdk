@@ -127,6 +127,10 @@ through the command line, run it like this:
 
     desmume --slot1=R4 --slot1-fat-dir=<path-to-folder> <path-to-rom>.nds
 
+IMPORTANT: Remember that the R4 DLDI driver doesn't have an open source license,
+so don't distribute any binaries patched with this driver. Only distribute the
+unpatched versions of your binaries.
+
 2. no$gba
 ---------
 
