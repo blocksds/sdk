@@ -2,16 +2,16 @@
 BlocksDS changelog
 ##################
 
-Version 0.2
-===========
+Version 0.2 (2023-03-15)
+========================
 
 - Improve C++ support (now the C++ standard library it is actually usable).
 - Improve C library support.
 - Integrate agbabi as ndsabi (provides fast memcpy, coroutines, etc).
 - Fix install target.
 
-Version 0.1
-===========
+Version 0.1 (2023-03-14)
+========================
 
 First beta release of BlocksDS. Features:
 
