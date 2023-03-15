@@ -493,29 +493,24 @@ int chown(const char *path, uid_t owner, gid_t group)
 
 int access(const char *path, int amode)
 {
-    int open_flags = 0;
-
-    if (amode == F_OK)
+    FILINFO fno = { 0 };
+    FRESULT result = f_stat(path, &fno);
+    if (result != FR_OK)
     {
-         open_flags = O_RDONLY;
+        errno = fatfs_error_to_posix(result);
+        return -1;
     }
-    else
+
+    if (amode != F_OK)
     {
         // Ignore R_OK and X_OK. Always test for read access, and test for write
         // access if requested.
-        if (amode & W_OK)
-            open_flags = O_RDWR;
-        else
-            open_flags = O_RDONLY;
+        if ((amode & W_OK) && (fno.fattrib & (AM_RDO | AM_DIR)))
+        {
+            errno = EACCES;
+            return -1;
+        }
     }
-
-    int fd = open(path, open_flags);
-    if (fd == -1)
-        return -1;
-
-    int ret = close(fd);
-    if (ret == -1)
-        return -1;
 
     return 0;
 }
