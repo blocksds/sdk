@@ -90,6 +90,38 @@ void __ndsabi_lwordset4(void* dest, size_t n, long long c) __attribute__((nonnul
  */
 void __ndsabi_wordset4(void* dest, size_t n, int c) __attribute__((nonnull(1)));
 
+/**
+ * Coroutine state
+ * @param arm_sp Pointer to coroutine stack
+ * @param joined Flag if the coroutine has joined
+ */
+typedef struct {
+    unsigned int arm_sp : 31;
+    unsigned int joined : 1;
+} __ndsabi_coro_t;
+
+/**
+ * Initializes a coro struct to call a given coroutine
+ * @param coro pointer to coro struct to initialize
+ * @param sp_top the TOP of the stack for this coroutine (stack grows down!)
+ * @param coproc procedure to call as a coroutine
+ */
+void __ndsabi_coro_make(__ndsabi_coro_t* __restrict__ coro, void* __restrict__ sp_top, int(*coproc)(__ndsabi_coro_t*)) __attribute__((nonnull(1, 2, 3)));
+
+/**
+ * Starts/resumes a given coroutine
+ * @param coro coroutine to start/resume
+ * @return integer value from coroutine
+ */
+int __ndsabi_coro_resume(__ndsabi_coro_t* coro) __attribute__((nonnull(1)));
+
+/**
+ * Yields a given value of a coroutine back to the caller
+ * @param coro coroutine that is yielding
+ * @param value returned to caller
+ */
+void __ndsabi_coro_yield(__ndsabi_coro_t* coro, int value) __attribute__((nonnull(1)));
+
 #ifdef __cplusplus
 }
 #endif
