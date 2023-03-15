@@ -220,6 +220,17 @@ int unlink(const char *name)
     return -1;
 }
 
+int rmdir(const char *name)
+{
+    FRESULT result = f_rmdir(name);
+
+    if (result == FR_OK)
+        return 0;
+
+    errno = fatfs_error_to_posix(result);
+    return -1;
+}
+
 int stat(const char *path, struct stat *st)
 {
     FILINFO fno = { 0 };
