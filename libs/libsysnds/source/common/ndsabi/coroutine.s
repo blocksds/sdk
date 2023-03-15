@@ -44,10 +44,12 @@ __ndsabi_coro_yield:
     .global __ndsabi_coro_pop
     .type __ndsabi_coro_pop, %function
 __ndsabi_coro_pop:
-    ldr     r1, [sp, #4]
+    ldr     r1, [r0, #4] // Load argument
 
-    mov     lr, pc
-    bx      r1
+    ldr     r2, [sp, #4] // Load entrypoint
+    mov     lr, pc       // Load return address (current + 8)
+    bx      r2           // Jump to entrypoint
+
     ldr     r1, [sp]
     @ r0 contains return value
     @ r1 points to ndsabi_coro_t*

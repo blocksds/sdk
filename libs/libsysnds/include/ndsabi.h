@@ -98,6 +98,7 @@ void __ndsabi_wordset4(void* dest, size_t n, int c) __attribute__((nonnull(1)));
 typedef struct {
     unsigned int arm_sp : 31;
     unsigned int joined : 1;
+    unsigned int arg;
 } __ndsabi_coro_t;
 
 /**
@@ -105,8 +106,11 @@ typedef struct {
  * @param coro pointer to coro struct to initialize
  * @param sp_top the TOP of the stack for this coroutine (stack grows down!)
  * @param coproc procedure to call as a coroutine
+ * @param arg initial argument to be passed to the coroutine.
  */
-void __ndsabi_coro_make(__ndsabi_coro_t* __restrict__ coro, void* __restrict__ sp_top, int(*coproc)(__ndsabi_coro_t*)) __attribute__((nonnull(1, 2, 3)));
+void __ndsabi_coro_make(__ndsabi_coro_t* __restrict__ coro,
+    void* __restrict__ sp_top, int(*coproc)(__ndsabi_coro_t*, void*), void *arg)
+    __attribute__((nonnull(1, 2, 3)));
 
 /**
  * Starts/resumes a given coroutine

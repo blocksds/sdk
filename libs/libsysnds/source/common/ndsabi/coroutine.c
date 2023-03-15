@@ -12,7 +12,11 @@
 
 #include <ndsabi.h>
 
-void __ndsabi_coro_make(__ndsabi_coro_t* __restrict__ coro, void* __restrict__ sp_top, int(*coproc)(__ndsabi_coro_t*)) {
+void __ndsabi_coro_make(__ndsabi_coro_t* __restrict__ coro,
+                        void* __restrict__ sp_top,
+                        int(*coproc)(__ndsabi_coro_t*, void*),
+                        void *arg)
+{
     void __ndsabi_coro_pop(void);
 
     /* AAPCS wants stack to be aligned to 8 bytes */
@@ -27,4 +31,5 @@ void __ndsabi_coro_make(__ndsabi_coro_t* __restrict__ coro, void* __restrict__ s
 
     coro->arm_sp = ((unsigned int) stack) & 0x7fffffff;
     coro->joined = 0; /* Clear joined flag (ready to start) */
+    coro->arg = (unsigned int)arg;
 }
