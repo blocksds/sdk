@@ -10,7 +10,7 @@ endif
 # -----------------
 
 SOURCEDIRS	:= source/common source/arm7
-INCLUDEDIRS	:= source/common/ndsabi
+INCLUDEDIRS	:= source/common/ndsabi include
 
 # Defines passed to all files
 # ---------------------------
