@@ -253,11 +253,39 @@ int stat(const char *path, struct stat *st)
 
     time_t time = mktime(&timeinfo);
 
-    // If there is any problem determining the modification timestam, just leave
+    // If there is any problem determining the modification timestamp, just leave
     // it empty.
     if (time == (time_t)-1)
         time = 0;
 
+    st->st_atim.tv_sec = time; // Time of last access
+    st->st_mtim.tv_sec = time; // Time of last modification
+    st->st_ctim.tv_sec = time; // Time of last status change
+
+    return 0;
+}
+
+int fstat(int fd, struct stat *st)
+{
+    FIL *fp = (FIL *)fd;
+
+    st->st_size = fp->obj.objsize;
+
+#if FF_MAX_SS != FF_MIN_SS
+#error "Set the block size to the right value"
+#endif
+    st->st_blksize = FF_MAX_SS;
+    st->st_blocks = (fp->obj.objsize + FF_MAX_SS - 1) / FF_MAX_SS;
+
+    st->st_mode = (fp->obj.attr & AM_DIR) ?
+                   S_IFDIR : // Directory
+                   S_IFREG;  // Regular file
+
+    // TODO: FatFS does not allow running f_stat() on an open file. While some
+    // information can be gathered from the open file structure, the timestamp
+    // is not among them, so it is not available via fstat().
+
+    time_t time = 0;
     st->st_atim.tv_sec = time; // Time of last access
     st->st_mtim.tv_sec = time; // Time of last modification
     st->st_ctim.tv_sec = time; // Time of last status change
