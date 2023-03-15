@@ -114,7 +114,7 @@ install: all
 	$(CP) -r libstdc++7/include libstdc++7/lib $(INSTALLDIR_ABS)/libs/libstdc++7
 	$(CP) -r libstdc++9/include libstdc++9/lib $(INSTALLDIR_ABS)/libs/libstdc++9
 	$(CP) -r libnds/include libnds/lib $(INSTALLDIR_ABS)/libs/libnds
-	$(CP) -r libsysnds/lib $(INSTALLDIR_ABS)/libs/libsysnds
+	$(CP) -r libsysnds/include libsysnds/lib $(INSTALLDIR_ABS)/libs/libsysnds
 	$(CP) -r maxmod/include maxmod/lib $(INSTALLDIR_ABS)/libs/maxmod
 
 # Clean target
