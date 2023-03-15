@@ -470,7 +470,7 @@ int chmod(const char *path, mode_t mode)
 {
     // The only attributes that FAT supports are "Read only", "Archive",
     // "System" and "Hidden". This doesn't match very well with UNIX
-    // permissions, so this funciton simply does nothing.
+    // permissions, so this function simply does nothing.
 
     (void)path;
     (void)mode;
