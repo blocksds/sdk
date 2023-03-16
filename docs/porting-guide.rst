@@ -104,13 +104,13 @@ other group of variables that you can also set to your own values:
 
 .. code:: make
 
-    NAME            := template_arm9     # Name of the resulting NDS file
+    NAME          := template_arm9     # Name of the resulting NDS file
 
     # Banner and icon information
-    GAME_TITLE      := Combined ARM7+ARM9 template
-    GAME_SUBTITLE1  := Built with BlocksDS
-    GAME_SUBTITLE2  := http://skylyrac.net
-    GAME_ICON       := icon.bmp
+    GAME_TITLE    := Combined ARM7+ARM9 template
+    GAME_SUBTITLE := Built with BlocksDS
+    GAME_AUTHOR   := http://skylyrac.net
+    GAME_ICON     := icon.bmp
 
 Once this has been adapted to your desired values, you will need to link with
 the libraries used by your program.
