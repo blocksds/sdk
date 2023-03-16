@@ -8,8 +8,8 @@
 NAME		:= template_combined
 
 GAME_TITLE	:= Combined ARM7+ARM9 template
-GAME_SUBTITLE1	:= Built with BlocksDS
-GAME_SUBTITLE2	:= http://skylyrac.net
+GAME_SUBTITLE	:= Built with BlocksDS
+GAME_AUTHOR	:= http://skylyrac.net
 GAME_ICON	:= icon.bmp
 
 # DLDI and internal SD slot of DSi
@@ -79,6 +79,13 @@ $(NITROFAT_IMG): $(NITROFATDIR)
 	@echo "  IMGBUILD $@ $(NITROFATDIR)"
 	$(V)sh $(BLOCKSDS)/tools/imgbuild/imgbuild.sh $@ $(NITROFATDIR)
 
+# Combine the title strings
+ifeq ($(strip $(GAME_SUBTITLE)),)
+    GAME_FULL_TITLE := $(GAME_TITLE);$(GAME_AUTHOR)
+else
+    GAME_FULL_TITLE := $(GAME_TITLE);$(GAME_SUBTITLE);$(GAME_AUTHOR)
+endif
+
 # Make the NDS ROM depend on the filesystem image only if it is needed
 $(ROM): $(NITROFAT_IMG)
 endif
@@ -87,7 +94,7 @@ $(ROM): arm9 arm7
 	@echo "  NDSTOOL $@"
 	$(V)$(BLOCKSDS)/tools/ndstool/ndstool -c $@ \
 		-7 build/arm7.elf -9 build/arm9.elf \
-		-b $(GAME_ICON) "$(GAME_TITLE);$(GAME_SUBTITLE1);$(GAME_SUBTITLE2)" \
+		-b $(GAME_ICON) "$(GAME_FULL_TITLE)" \
 		$(NDSTOOL_FAT)
 
 sdimage:

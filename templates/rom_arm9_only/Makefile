@@ -12,8 +12,8 @@ endif
 NAME		:= template_arm9
 
 GAME_TITLE	:= Combined ARM7+ARM9 template
-GAME_SUBTITLE1	:= Built with BlocksDS
-GAME_SUBTITLE2	:= http://skylyrac.net
+GAME_SUBTITLE	:= Built with BlocksDS
+GAME_AUTHOR	:= http://skylyrac.net
 GAME_ICON	:= icon.bmp
 
 # DLDI and internal SD slot of DSi
@@ -182,11 +182,18 @@ $(NITROFAT_IMG): $(NITROFATDIR)
 $(ROM): $(NITROFAT_IMG)
 endif
 
+# Combine the title strings
+ifeq ($(strip $(GAME_SUBTITLE)),)
+    GAME_FULL_TITLE := $(GAME_TITLE);$(GAME_AUTHOR)
+else
+    GAME_FULL_TITLE := $(GAME_TITLE);$(GAME_SUBTITLE);$(GAME_AUTHOR)
+endif
+
 $(ROM): $(ELF)
 	@echo "  NDSTOOL $@"
 	$(V)$(BLOCKSDS)/tools/ndstool/ndstool -c $@ \
 		-7 $(BLOCKSDS)/sys/default_arm7/arm7.elf -9 $(ELF) \
-		-b $(GAME_ICON) "$(GAME_TITLE);$(GAME_SUBTITLE1);$(GAME_SUBTITLE2)" \
+		-b $(GAME_ICON) "$(GAME_FULL_TITLE)" \
 		$(NDSTOOL_FAT)
 
 $(ELF): $(OBJS)
