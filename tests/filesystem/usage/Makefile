@@ -9,7 +9,7 @@ endif
 # User config
 # ===========
 
-NAME		:= filesystem
+NAME		:= filesystem_usage
 
 GAME_TITLE	:= SD filesystem example
 GAME_SUBTITLE	:= Built with BlocksDS
