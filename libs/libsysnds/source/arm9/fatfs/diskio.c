@@ -220,12 +220,13 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
                 {
                     void *cache = cache_sector_add(pdrv, sector);
 
-                    DC_InvalidateRange(cache, FF_MAX_SS);
+                    // The functions of libnds to access the SD card of the DSi
+                    // already handle the cache.
+                    if (pdrv == DEV_DLDI)
+                        DC_FlushRange(cache, FF_MAX_SS);
 
                     if (!io->readSectors(sector, 1, cache))
                         return RES_ERROR;
-
-                    DC_InvalidateRange(cache, FF_MAX_SS);
 
                     memcpy(buff, cache, FF_MAX_SS);
                 }
