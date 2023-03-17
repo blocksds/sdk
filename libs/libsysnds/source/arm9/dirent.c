@@ -51,6 +51,11 @@ static void free_dir(DIR *dirp)
 DIR *opendir(const char *name)
 {
     DIR *dirp = alloc_dir();
+    if (dirp == NULL)
+    {
+        // errno setting is handled by alloc_dir()
+        return NULL;
+    }
     DIRff *dp = dirp->dp;
 
     dirp->index = INDEX_NO_ENTRY;
