@@ -64,35 +64,55 @@ void *cache_sector_get(uint8_t pdrv, uint32_t sector)
 void *cache_sector_add(uint8_t pdrv, uint32_t sector)
 {
     int entry_found = 0;
-    uint32_t selected_entry = 0;
+    static uint32_t selected_entry = 0;
 
     for (uint32_t i = 0; i < cache_num_sectors; i++)
     {
-        if (cache_entries[i].valid == 0)
+        if (cache_entries[selected_entry].valid == 0)
         {
             entry_found = 1;
-            selected_entry = i;
             break;
         }
+
+        selected_entry++;
+        if (selected_entry >= cache_num_sectors)
+            selected_entry = 0;
     }
 
     // Cache full, evict one entry
     if (entry_found == 0)
     {
-        selected_entry = 0;
-        uint32_t min_usage_count = cache_entries[0].usage_count;
+        uint32_t min_usage_count = cache_entries[selected_entry].usage_count;
 
-        for (uint32_t i = 1; i < cache_num_sectors; i++)
+        if (min_usage_count > 1)
         {
-            cache_entry_t *entry = &(cache_entries[i]);
+            cache_entries[selected_entry].usage_count--;
+            selected_entry++;
+            if (selected_entry >= cache_num_sectors)
+                selected_entry = 0;
 
-            if (entry->usage_count < min_usage_count)
+            uint32_t min_entry = selected_entry;
+
+            for (uint32_t i = 1; i < cache_num_sectors; i++)
             {
-                min_usage_count = entry->usage_count;
-                selected_entry = i;
+                cache_entry_t *entry = &(cache_entries[selected_entry]);
+
+                if (entry->usage_count < min_usage_count)
+                {
+                    min_usage_count = entry->usage_count;
+                    min_entry = selected_entry;
+                }
+
+                entry->usage_count--;
+                if (min_usage_count <= 1)
+                    break;
+
+                selected_entry++;
+                if (selected_entry >= cache_num_sectors)
+                    selected_entry = 0;
             }
 
-            entry->usage_count--;
+            selected_entry = min_entry;
         }
     }
 

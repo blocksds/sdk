@@ -48,6 +48,9 @@
 #define DEV_SD      1 // SD slot of the DSi
 #define DEV_NITRO   2 // Filesystem included in NDS ROM
 
+// Disk I/O behaviour configuration
+#define IO_CACHE_IGNORE_LARGE_READS 2
+
 // NOTE: The clearStatus() function of DISC_INTERFACE isn't used in libfat, so
 // it isn't needed here either.
 
@@ -208,7 +211,19 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
         case DEV_SD:
         {
             const DISC_INTERFACE *io = fs_io[pdrv];
+#ifdef IO_CACHE_IGNORE_LARGE_READS
+            if (count >= IO_CACHE_IGNORE_LARGE_READS)
+            {
+                // Is the target in main RAM?
+                if (((uint32_t) buff) >> 24 == 0x02 && !(((uint32_t) buff) & 0x03))
+                {
+                    if (!io->readSectors(sector, count, buff))
+                        return RES_ERROR;
 
+                    return RES_OK;
+                }
+            }
+#endif
             while (count > 0)
             {
                 void *cache = cache_sector_get(pdrv, sector);
@@ -219,11 +234,8 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
                 else
                 {
                     void *cache = cache_sector_add(pdrv, sector);
-
-                    // The functions of libnds to access the SD card of the DSi
-                    // already handle the cache.
-                    if (pdrv == DEV_DLDI)
-                        DC_FlushRange(cache, FF_MAX_SS);
+                    if (cache == NULL)
+                        return RES_ERROR;
 
                     if (!io->readSectors(sector, 1, cache))
                         return RES_ERROR;
@@ -257,6 +269,13 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
             }
             else
             {
+#ifdef IO_CACHE_IGNORE_LARGE_READS
+                if (count >= IO_CACHE_IGNORE_LARGE_READS)
+                {
+                    cardRead(buff, 0, count * FF_MAX_SS);
+                    return RES_OK;
+                }
+#endif
                 while (count > 0)
                 {
                     void *cache = cache_sector_get(pdrv, sector);
@@ -267,6 +286,8 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
                     else
                     {
                         void *cache = cache_sector_add(pdrv, sector);
+                        if (cache == NULL)
+                            return RES_ERROR;
 
                         cardRead(cache, offset, FF_MAX_SS);
 
@@ -299,6 +320,7 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
 // count:  Number of sectors to write
 DRESULT disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
 {
+    uint8_t align_buffer[FF_MAX_SS];
     if (fs_initialized[pdrv] == 0)
         return RES_NOTRDY;
 
@@ -311,8 +333,25 @@ DRESULT disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
                 cache_sector_invalidate(pdrv, sector + i);
 
             const DISC_INTERFACE *io = fs_io[pdrv];
-            if (!io->writeSectors(sector, count, buff))
-                return RES_ERROR;
+            if (((uint32_t) buff) & 0x03)
+            {
+                // DLDI drivers expect a 4-byte aligned buffer.
+                while (count > 0)
+                {
+                    memcpy(align_buffer, buff, FF_MAX_SS);
+                    if (!io->writeSectors(sector, 1, align_buffer))
+                        return RES_ERROR;
+
+                    count--;
+                    sector++;
+                    buff += FF_MAX_SS;
+                }
+            }
+            else
+            {
+                if (!io->writeSectors(sector, count, buff))
+                    return RES_ERROR;
+            }
 
             return RES_OK;
         }
