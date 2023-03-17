@@ -13,7 +13,7 @@ NAME		:= template_arm9
 
 GAME_TITLE	:= Combined ARM7+ARM9 template
 GAME_SUBTITLE	:= Built with BlocksDS
-GAME_AUTHOR	:= http://skylyrac.net
+GAME_AUTHOR	:= github.com/blocksds/sdk
 GAME_ICON	:= icon.bmp
 
 # DLDI and internal SD slot of DSi

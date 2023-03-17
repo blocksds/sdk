@@ -13,7 +13,7 @@ NAME		:= dldi_arm7_arm9
 
 GAME_TITLE	:= DLDI ARM7 or ARM9 test
 GAME_SUBTITLE	:= Built with BlocksDS
-GAME_AUTHOR	:= http://skylyrac.net
+GAME_AUTHOR	:= github.com/blocksds/sdk
 GAME_ICON	:= icon.bmp
 
 # DLDI and internal SD slot of DSi
