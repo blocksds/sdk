@@ -234,8 +234,6 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
                 else
                 {
                     void *cache = cache_sector_add(pdrv, sector);
-                    if (cache == NULL)
-                        return RES_ERROR;
 
                     if (!io->readSectors(sector, 1, cache))
                         return RES_ERROR;
@@ -286,8 +284,6 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
                     else
                     {
                         void *cache = cache_sector_add(pdrv, sector);
-                        if (cache == NULL)
-                            return RES_ERROR;
 
                         cardRead(cache, offset, FF_MAX_SS);
 
