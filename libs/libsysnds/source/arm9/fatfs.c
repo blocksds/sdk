@@ -8,7 +8,10 @@
 #include <nds/memory.h>
 #include <nds/system.h>
 
+#include "fatfs/cache.h"
 #include "fatfs/ff.h"
+
+#define DEFAULT_CACHED_SECTORS (40) // Each sector is 512 bytes
 
 // Devices: "fat:/", "sd:/", "nitro:/"
 static FATFS fs_info[FF_VOLUMES] = { 0 };
@@ -93,6 +96,13 @@ bool fatInitDefault(void)
 
     const char *fat_drive = "fat:/";
     const char *sd_drive = "sd:/";
+
+    int ret = cache_init(DEFAULT_CACHED_SECTORS);
+    if (ret != 0)
+    {
+        errno = ENOMEM;
+        return false;
+    }
 
     // Try to initialize DLDI on DS and DSi
     FRESULT result = f_mount(&fs_info[0], fat_drive, 1);

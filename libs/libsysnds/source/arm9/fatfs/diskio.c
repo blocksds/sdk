@@ -31,6 +31,7 @@
 #include <string.h>
 #include <time.h>
 
+#include <nds/arm9/cache.h>
 #include <nds/arm9/dldi.h>
 #include <nds/card.h>
 #include <nds/memory.h>
@@ -40,6 +41,7 @@
 
 #include "ff.h"     // Obtains integer types
 #include "diskio.h" // Declarations of disk functions
+#include "cache.h"
 
 // Definitions of physical drive number for each drive
 #define DEV_DLDI    0 // DLDI driver (flashcard)
@@ -203,42 +205,35 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
     switch (pdrv)
     {
         case DEV_DLDI:
-        {
-            const DISC_INTERFACE *io = fs_io[pdrv];
-            if (!io->readSectors(sector, count, buff))
-                return RES_ERROR;
-
-            return RES_OK;
-        }
         case DEV_SD:
         {
             const DISC_INTERFACE *io = fs_io[pdrv];
 
-            // The transfer of data from the SD is done using a DMA which
-            // doesn't have access to DTCM. To prevent accidentally trying to
-            // DMA into DTCM, which contains the stack, it is better to allocate
-            // memory in the heap always.
-            //
-            // This is inefficient, but all this code will go away when a SD
-            // cache is implemented.
-            size_t size = count * FF_MAX_SS;
-
-            void *ptr = malloc(size);
-            if (ptr == NULL)
-                return RES_ERROR;
-
-            if (!io->readSectors(sector, count, ptr))
+            while (count > 0)
             {
-                free(ptr);
-                return RES_ERROR;
+                void *cache = cache_sector_get(pdrv, sector);
+                if (cache != NULL)
+                {
+                    memcpy(buff, cache, FF_MAX_SS);
+                }
+                else
+                {
+                    void *cache = cache_sector_add(pdrv, sector);
+
+                    DC_InvalidateRange(cache, FF_MAX_SS);
+
+                    if (!io->readSectors(sector, 1, cache))
+                        return RES_ERROR;
+
+                    DC_InvalidateRange(cache, FF_MAX_SS);
+
+                    memcpy(buff, cache, FF_MAX_SS);
+                }
+
+                count--;
+                sector++;
+                buff += FF_MAX_SS;
             }
-
-            //DC_InvalidateRange(ptr, size);
-            char *uncached = memUncached(ptr);
-
-            memcpy(buff, uncached, size);
-
-            free(ptr);
 
             return RES_OK;
         }
@@ -249,6 +244,10 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
 
             if (nitro_file != NULL)
             {
+                // Only use the cache if NitroFAT is reading directly from the
+                // cartridge with card read commands. When reading from the
+                // filesystem, it is already cached in the other devices.
+
                 if (fseek(nitro_file, offset, SEEK_SET) != 0)
                     return RES_ERROR;
 
@@ -257,7 +256,27 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
             }
             else
             {
-                cardRead(buff, offset, size);
+                while (count > 0)
+                {
+                    void *cache = cache_sector_get(pdrv, sector);
+                    if (cache != NULL)
+                    {
+                        memcpy(buff, cache, FF_MAX_SS);
+                    }
+                    else
+                    {
+                        void *cache = cache_sector_add(pdrv, sector);
+
+                        cardRead(cache, offset, FF_MAX_SS);
+
+                        memcpy(buff, cache, FF_MAX_SS);
+                    }
+
+                    count--;
+                    sector++;
+                    offset += FF_MAX_SS;
+                    buff += FF_MAX_SS;
+                }
             }
 
             return RES_OK;
@@ -285,15 +304,11 @@ DRESULT disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
     switch (pdrv)
     {
         case DEV_DLDI:
-        {
-            const DISC_INTERFACE *io = fs_io[pdrv];
-            if (!io->writeSectors(sector, count, buff))
-                return RES_ERROR;
-
-            return RES_OK;
-        }
         case DEV_SD:
         {
+            for (uint32_t i = 0; i < count; i++)
+                cache_sector_invalidate(pdrv, sector + i);
+
             const DISC_INTERFACE *io = fs_io[pdrv];
             if (!io->writeSectors(sector, count, buff))
                 return RES_ERROR;
