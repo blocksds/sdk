@@ -316,7 +316,7 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
 // count:  Number of sectors to write
 DRESULT disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
 {
-    uint8_t align_buffer[FF_MAX_SS];
+    uint8_t *align_buffer;
     if (fs_initialized[pdrv] == 0)
         return RES_NOTRDY;
 
@@ -332,6 +332,10 @@ DRESULT disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
             if (((uint32_t) buff) & 0x03)
             {
                 // DLDI drivers expect a 4-byte aligned buffer.
+                align_buffer = malloc(FF_MAX_SS);
+                if (align_buffer == NULL)
+                    return RES_ERROR;
+
                 while (count > 0)
                 {
                     memcpy(align_buffer, buff, FF_MAX_SS);
@@ -342,6 +346,8 @@ DRESULT disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
                     sector++;
                     buff += FF_MAX_SS;
                 }
+
+                free(align_buffer);
             }
             else
             {
