@@ -82,6 +82,10 @@ void *cache_sector_add(uint8_t pdrv, uint32_t sector)
     // Cache full, evict one entry
     if (entry_found == 0)
     {
+        selected_entry++;
+        if (selected_entry >= cache_num_sectors)
+            selected_entry = 0;
+
         uint32_t min_usage_count = cache_entries[selected_entry].usage_count;
 
         if (min_usage_count > 1)
