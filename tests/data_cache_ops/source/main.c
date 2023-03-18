@@ -35,9 +35,9 @@
 // The results screen should look like this:
 //
 //   No operation:
-//     Ones:    256     0     0
-//     Twoes:   256     0     0
-//
+//     Ones:    256     0     0 | Note that the results here may vary a bit
+//     Twoes:   256     0     0 | because the cache is still active, we are
+//                              | just not affecting it directly.
 //   Flush range:
 //     Ones:    128   128     0
 //     Twoes:   128     0   128
