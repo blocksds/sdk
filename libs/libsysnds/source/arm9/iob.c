@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: Zlib
+//
+// Copyright (c) 2023 Antonio Niño Díaz
+
 #include <stdio.h>
 
 #include <nds/interrupts.h>
