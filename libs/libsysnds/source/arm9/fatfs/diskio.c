@@ -32,6 +32,7 @@
 #include <time.h>
 
 #include <nds/arm9/cache.h>
+#include <nds/arm9/card.h>
 #include <nds/arm9/dldi.h>
 #include <nds/card.h>
 #include <nds/memory.h>
@@ -164,38 +165,6 @@ DSTATUS disk_initialize(BYTE pdrv)
 // Read Sector(s)
 //-----------------------------------------------------------------------
 
-#define NDS_CARD_BLOCK_SIZE 0x200
-
-// Size must be smaller or equal to NDS_CARD_BLOCK_SIZE
-static void cardReadBlock(void *dest, uint32_t offset, uint32_t size)
-{
-    const uint32_t flags =
-        CARD_DELAY1(0x1FFF) | CARD_DELAY2(0x3F) | CARD_CLK_SLOW |
-        CARD_nRESET | CARD_SEC_CMD | CARD_SEC_DAT | CARD_ACTIVATE |
-        CARD_BLK_SIZE(1);
-
-    cardParamCommand(CARD_CMD_DATA_READ, offset, flags, dest, size);
-}
-
-// The destination and size must be word-aligned
-static void cardRead(void *dest, uint32_t offset, uint32_t size)
-{
-    char *curr_dest = dest;
-
-    while (size > 0)
-    {
-        // The cardReadBlock() function can only read up to NDS_CARD_BLOCK_SIZE
-        uint32_t curr_size = size;
-        if (curr_size > NDS_CARD_BLOCK_SIZE)
-            curr_size = NDS_CARD_BLOCK_SIZE;
-
-        cardReadBlock(curr_dest, offset, curr_size);
-        curr_dest += curr_size;
-        offset += curr_size;
-        size -= curr_size;
-    }
-}
-
 // pdrv:   Physical drive nmuber to identify the drive
 // buff:   Data buffer to store read data
 // sector: Start sector in LBA
@@ -270,7 +239,7 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
 #ifdef IO_CACHE_IGNORE_LARGE_READS
                 if (count >= IO_CACHE_IGNORE_LARGE_READS)
                 {
-                    cardRead(buff, 0, count * FF_MAX_SS);
+                    cardReadArm7(buff, 0, count * FF_MAX_SS);
                     return RES_OK;
                 }
 #endif
@@ -285,7 +254,7 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
                     {
                         void *cache = cache_sector_add(pdrv, sector);
 
-                        cardRead(cache, offset, FF_MAX_SS);
+                        cardReadArm7(cache, offset, FF_MAX_SS);
 
                         memcpy(buff, cache, FF_MAX_SS);
                     }
