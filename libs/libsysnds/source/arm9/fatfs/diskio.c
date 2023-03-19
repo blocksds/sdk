@@ -236,10 +236,16 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
             }
             else
             {
+                extern bool nitrofat_reader_is_arm9;
+
 #ifdef IO_CACHE_IGNORE_LARGE_READS
                 if (count >= IO_CACHE_IGNORE_LARGE_READS)
                 {
-                    cardReadArm7(buff, 0, count * FF_MAX_SS);
+                    if (nitrofat_reader_is_arm9)
+                        cardRead(buff, 0, count * FF_MAX_SS);
+                    else
+                        cardReadArm7(buff, 0, count * FF_MAX_SS);
+
                     return RES_OK;
                 }
 #endif
@@ -254,7 +260,10 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
                     {
                         void *cache = cache_sector_add(pdrv, sector);
 
-                        cardReadArm7(cache, offset, FF_MAX_SS);
+                        if (nitrofat_reader_is_arm9)
+                            cardRead(cache, offset, FF_MAX_SS);
+                        else
+                            cardReadArm7(cache, offset, FF_MAX_SS);
 
                         memcpy(buff, cache, FF_MAX_SS);
                     }

@@ -19,6 +19,8 @@ static FATFS fs_info[FF_VOLUMES] = { 0 };
 static bool fat_initialized = false;
 static bool nitrofat_initialized = false;
 
+bool nitrofat_reader_is_arm9 = false;
+
 int fatfs_error_to_posix(FRESULT error)
 {
     // The following errno codes have been picked so that they make some sort of
@@ -171,4 +173,9 @@ bool nitroFSInit(char **basepath)
     nitrofat_initialized = true;
 
     return true;
+}
+
+void nitroFATSetReaderCPU(bool use_arm9)
+{
+    nitrofat_reader_is_arm9 = use_arm9;
 }
