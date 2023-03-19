@@ -28,3 +28,6 @@
 [submodule "libs/stdcpp/avr-libstdcpp"]
 	path = libs/stdcpp/avr-libstdcpp
 	url = https://github.com/modm-io/avr-libstdcpp
+[submodule "tools/dldipatch"]
+	path = tools/dldipatch
+	url = https://github.com/lifehackerhansol/dldipatch
