@@ -10,7 +10,7 @@ INSTALL		:= install
 
 .PHONY: bin2c clean dldipatch dlditool grit install mmutil ndstool
 
-all: bin2c dlditool grit mmutil ndstool
+all: bin2c dldipatch dlditool grit mmutil ndstool
 
 bin2c: bin2c/bin2c
 
@@ -50,6 +50,7 @@ install: all
 	$(INSTALL) -d $(INSTALLDIR_ABS)/tools \
 		      $(INSTALLDIR_ABS)/tools/bin2c \
 		      $(INSTALLDIR_ABS)/tools/dldi \
+		      $(INSTALLDIR_ABS)/tools/dldipatch \
 		      $(INSTALLDIR_ABS)/tools/dlditool \
 		      $(INSTALLDIR_ABS)/tools/grit \
 		      $(INSTALLDIR_ABS)/tools/imgbuild \
@@ -57,6 +58,7 @@ install: all
 		      $(INSTALLDIR_ABS)/tools/ndstool
 	$(INSTALL) $(STRIP) -m $(BINMODE) bin2c/bin2c $(INSTALLDIR_ABS)/tools/bin2c/
 	$(INSTALL) dldi/r4tfv2.dldi $(INSTALLDIR_ABS)/tools/dldi/
+	$(INSTALL) $(STRIP) -m $(BINMODE) dldipatch/dldipatch $(INSTALLDIR_ABS)/tools/dldipatch/
 	$(INSTALL) $(STRIP) -m $(BINMODE) dlditool/dlditool $(INSTALLDIR_ABS)/tools/dlditool/
 	$(INSTALL) -m $(BINMODE) imgbuild/imgbuild.sh $(INSTALLDIR_ABS)/tools/imgbuild/
 	$(INSTALL) $(STRIP) -m $(BINMODE) grit/grit $(INSTALLDIR_ABS)/tools/grit/
