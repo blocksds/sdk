@@ -8,7 +8,7 @@ BINMODE		:= 755
 MAKE		:= make
 INSTALL		:= install
 
-.PHONY: bin2c clean dlditool grit install mmutil ndstool
+.PHONY: bin2c clean dldipatch dlditool grit install mmutil ndstool
 
 all: bin2c dlditool grit mmutil ndstool
 
@@ -26,6 +26,11 @@ dlditool: dlditool/dlditool
 
 dlditool/dlditool:
 	$(MAKE) -C dlditool -j`nproc`
+
+dldipatch: dldipatch/dldipatch
+
+dldipatch/dldipatch:
+	$(MAKE) -C dldipatch -j`nproc`
 
 mmutil: mmutil/mmutil
 
@@ -60,6 +65,7 @@ install: all
 
 clean:
 	$(MAKE) -C bin2c clean
+	$(MAKE) -C dldipatch clean
 	$(MAKE) -C dlditool clean
 	$(MAKE) -C grit clean
 	$(MAKE) -C mmutil clean
