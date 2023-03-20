@@ -16,13 +16,13 @@ all: dswifi libnds maxmod picolibc stdcpp
 # =============
 
 dswifi: libnds picolibc
-	+$(MAKE) -C dswifi -f Makefile.blocks -j`nproc`
+	+$(MAKE) -C dswifi -j`nproc`
 
 libnds: picolibc
 	+$(MAKE) -C libnds -j`nproc`
 
 maxmod: picolibc
-	+$(MAKE) -C maxmod -f Makefile.blocks ds -j`nproc`
+	+$(MAKE) -C maxmod ds -j`nproc`
 
 picolibc: libc9 libc7
 
@@ -116,9 +116,9 @@ install: all
 # ============
 
 clean:
-	+$(MAKE) -C dswifi -f Makefile.blocks clean
+	+$(MAKE) -C dswifi clean
 	+$(MAKE) -C libnds clean
-	+$(MAKE) -C maxmod -f Makefile.blocks clean
+	+$(MAKE) -C maxmod clean
 	+$(MAKE) -C stdcpp clean
 	$(RM) libc7 libc9 libstdc++7 libstdc++9
 	$(RM) picolibc/build-libc7 picolibc/build-libc9

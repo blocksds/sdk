@@ -14,7 +14,7 @@ crts:
 	+$(MAKE) -C crts -j`nproc`
 
 default_arm7:
-	+$(MAKE) -C default_arm7 -f Makefile.blocks -j`nproc`
+	+$(MAKE) -C default_arm7 -j`nproc`
 
 INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
 
@@ -29,4 +29,4 @@ install: all
 
 clean:
 	+$(MAKE) -C crts clean
-	+$(MAKE) -C default_arm7 -f Makefile.blocks clean
+	+$(MAKE) -C default_arm7 clean
