@@ -2,6 +2,22 @@
 BlocksDS changelog
 ##################
 
+Version 0.3 (2023-03-20)
+========================
+
+- FatFs performance improvements (like adding a disk cache).
+- Support DLDI in the ARM7 as well as the ARM9.
+- Add function for the ARM9 to request the ARM7 to read the cartridge.
+- Add some missing definitions of DSi registers (SCFG/NDMA).
+- General cleanup of libnds code (like replacing magic numbers by defines).
+- Build system improvements (support two line app titles, remove old makefiles).
+- libsysnds has been integrated in libnds.
+- Bugfixes in libc and libnds.
+  - EEPROM handling functions.
+  - Data cache handling bugs.
+  - Fix transparency in keyboard of libnds.
+- Added some tests.
+
 Version 0.2 (2023-03-15)
 ========================
 
