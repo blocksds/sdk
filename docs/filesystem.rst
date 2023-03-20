@@ -7,13 +7,8 @@ Introduction
 
 BlocksDS supports using standard C functions to access the filesystem. It is
 possible to use them to access both the SD cards of flashcards, and the internal
-SD slot of the DSi.
-
-To enable this, you need to use ``libsysnds`` in your projects. This library has
-glue code between ``picolibc`` (the C library) and ``libnds``. Check the
-``Makefile`` of any example that uses the filesystem and see how ``libsysnds``
-is added to the ``LIBDIRS`` variable, and how ``-lsysnds9`` is added to
-``LIBS``.
+SD slot of the DSi. This code is integrated in ``libnds``, so you don't need to
+do anything special to use it.
 
 Add the following to your project:
 

@@ -88,9 +88,9 @@ heap memory used by ``malloc()``.
 
 For example, for ``malloc()`` to work, ``picolibc`` expects the port to provide
 a function called ``sbrk()``. This function needs to get information from
-``libnds`` to work. The glue code between ``picolibc`` and ``libnds`` is in a
-library called `libsysnds <../libs/libsysnds>`. This library adds support to the
-ARM9 core to a lot of standard C features:
+``libnds`` to work. The glue code between ``picolibc`` and ``libnds`` is in
+``libnds``, in ``source/arm9/libc``. This library adds support to the ARM9 core
+to a lot of standard C features:
 
 - ``stdout``, ``stderr``: They use the console provided by ``libnds``, which can
   print to the screen of the DS or the debug console of ``no$gba``.
@@ -122,7 +122,7 @@ libraries in the future.
 =====================
 
 This section will describe how the filesystem support has been implemented in
-``libsysnds``. Check `this document <./filesystem.rst>`_ if you're interested in
+``libnds``. Check `this document <./filesystem.rst>`_ if you're interested in
 the C standard functions that are supported.
 
 Filesystem support requires 3 things:

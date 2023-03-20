@@ -42,9 +42,8 @@ DEFINES		:=
 # Libraries
 # ---------
 
-LIBS		:= -lmm9 -lsysnds9 -lnds9 -lc
+LIBS		:= -lmm9 -lnds9 -lc
 LIBDIRS		:= $(BLOCKSDS)/libs/maxmod \
-		   $(BLOCKSDS)/libs/libsysnds \
 		   $(BLOCKSDS)/libs/libnds \
 		   $(BLOCKSDS)/libs/libc9
 

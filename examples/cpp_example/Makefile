@@ -42,9 +42,8 @@ DEFINES		:=
 # Libraries
 # ---------
 
-LIBS		:= -lnds9 -lsysnds9 -lstdc++ -lc
-LIBDIRS		:= $(BLOCKSDS)/libs/libsysnds \
-		   $(BLOCKSDS)/libs/libnds \
+LIBS		:= -lnds9 -lstdc++ -lc
+LIBDIRS		:= $(BLOCKSDS)/libs/libnds \
 		   $(BLOCKSDS)/libs/libstdc++9 \
 		   $(BLOCKSDS)/libs/libc9
 

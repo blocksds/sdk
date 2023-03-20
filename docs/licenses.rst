@@ -20,12 +20,8 @@ MIT license. Copyright notice required:
 
 Zlib license. No copyright notice required in binary distributions.
 
-``libs/libsysnds``
-==================
-
-Zlib license. No copyright notice required in binary distributions. FatFs uses a
-custom BSD/MIT/ISC-like license that doesn't require attribution in binary files
-either.
+FatFs uses a custom BSD/MIT/ISC-like license that doesn't require attribution in
+binary files either.
 
 ``libs/maxmod``
 ===============

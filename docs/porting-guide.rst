@@ -127,23 +127,21 @@ This would be the equivalent in a BlocksDS project:
 
 .. code:: make
 
-    LIBS    := -ldswifi9 -lmm9 -lsysnds9 -lnds9 -lc
+    LIBS    := -ldswifi9 -lmm9 -lnds9 -lc
     LIBDIRS := $(BLOCKSDS)/libs/dswifi \
                $(BLOCKSDS)/libs/maxmod \
-               $(BLOCKSDS)/libs/libsysnds \
                $(BLOCKSDS)/libs/libnds \
                $(BLOCKSDS)/libs/libc9
 
-It is very important to keep the last 3 in that order in the ``LIBS`` variable
-(``-lsysnds9 -lnds9 -lc``) and the ``LIBDIRS`` variable
-(``$(BLOCKSDS)/libs/libsysnds $(BLOCKSDS)/libs/libnds $(BLOCKSDS)/libs/libc9``).
+It is very important to keep the last 2 in that order in the ``LIBS`` variable
+(``-lnds9 -lc``) and the ``LIBDIRS`` variable (``$(BLOCKSDS)/libs/libnds
+$(BLOCKSDS)/libs/libc9``).
 
 You can remove the dswifi or maxmod libraries if you aren't using them.
 
 The reason for this additional complexity with ``LIBS`` and ``LIBDIRS`` is to
 allow the user as much flexibility as possible when mixing and matching
-libraries. Right now, ``libsysnds``, ``libc`` and ``libnds`` are tied together,
-but that may not always be the case in the future.
+libraries.
 
 5. Annotations in filenames
 ===========================

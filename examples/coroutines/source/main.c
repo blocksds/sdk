@@ -7,6 +7,12 @@
 #include <nds.h>
 #include <ndsabi.h>
 
+// In this example, this value is returned from the coroutine to mean that it
+// hasn't finished yet. This isn't needed, as the "join" field of the context is
+// set to 1 when the coroutine ends, but it is used to test that everything is
+// working as expected.
+#define COROUTINE_IN_PROGRESS -1
+
 int entrypoint_coro(__ndsabi_coro_t *coro, void *arg)
 {
     int index = (int)arg;
@@ -19,11 +25,11 @@ int entrypoint_coro(__ndsabi_coro_t *coro, void *arg)
     {
         printf("\x1b[%d;%d;H%5d", y, x, count);
         fflush(stdout);
-        __ndsabi_coro_yield(coro, 1);
+        __ndsabi_coro_yield(coro, COROUTINE_IN_PROGRESS);
         count--;
     }
 
-    return 0;
+    return index;
 }
 
 #define NUM_CORO (50)
@@ -50,10 +56,28 @@ int main(int argc, char **argv)
         for (int i = 0; i < NUM_CORO; i++)
         {
             __ndsabi_coro_t *cur = &(coro[i]);
-            if (!cur->joined)
+            if (cur->joined)
+                continue;
+
+            any_thread_running = true;
+
+            int x = (i % 4) * 8;
+            int y = (i / 4);
+
+            int ret = __ndsabi_coro_resume(&(coro[i]));
+            if (cur->joined)
             {
-                any_thread_running = true;
-                __ndsabi_coro_resume(&(coro[i]));
+                printf("\x1b[%d;%d;H%s", y, x, (ret == i) ? "OK   " : "FAIL ");
+                fflush(stdout);
+            }
+            else if (ret != COROUTINE_IN_PROGRESS)
+            {
+                // If this happens, there has been some error with yield(), stop
+                // the coroutine.
+                cur->joined = 1;
+
+                printf("\x1b[%d;%d;H%s", y, x,  "ERROR");
+                fflush(stdout);
             }
         }
 
