@@ -19,7 +19,7 @@ dswifi: libnds picolibc
 	+$(MAKE) -C dswifi -f Makefile.blocks -j`nproc`
 
 libnds: picolibc
-	+$(MAKE) -C libnds -f Makefile.blocks -j`nproc`
+	+$(MAKE) -C libnds -j`nproc`
 
 libsysnds: picolibc
 	+$(MAKE) -C libsysnds -j`nproc`
@@ -122,7 +122,7 @@ install: all
 
 clean:
 	+$(MAKE) -C dswifi -f Makefile.blocks clean
-	+$(MAKE) -C libnds -f Makefile.blocks clean
+	+$(MAKE) -C libnds clean
 	+$(MAKE) -C libsysnds clean
 	+$(MAKE) -C maxmod -f Makefile.blocks clean
 	+$(MAKE) -C stdcpp clean
