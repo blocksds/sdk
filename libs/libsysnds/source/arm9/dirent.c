@@ -111,7 +111,7 @@ struct dirent *readdir(DIR *dirp)
         return NULL;
     }
 
-    if (strlen(fno.fname) == 0)
+    if (fno.fname[0] == '\0')
     {
         // End of directory reached
         dirp->index = INDEX_NO_ENTRY;
@@ -122,7 +122,7 @@ struct dirent *readdir(DIR *dirp)
     ent->d_off = dirp->index;
 
     strncpy(ent->d_name, fno.fname, sizeof(ent->d_name));
-    fno.fname[sizeof(ent->d_name) - 1] = '\0';
+    ent->d_name[sizeof(ent->d_name) - 1] = '\0';
 
     if (fno.fattrib & AM_DIR)
         ent->d_type = DT_DIR; // Directory
