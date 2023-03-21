@@ -20,7 +20,7 @@ static char input_buffer[1024];
 PrintConsole topScreen;
 PrintConsole bottomScreen;
 
-int calculate_file_md5(void *_ctx, void *arg)
+int calculate_file_md5(void *arg)
 {
     const char *path = arg;
 
@@ -132,7 +132,7 @@ int main(int argc, char **argv)
     fflush(stdout);
 
     int load_thread = cothread_create(calculate_file_md5, (void *)"random.bin",
-                                      NULL, 0, 0);
+                                      0, 0);
 
     int count = 0;
     while (1)

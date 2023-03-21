@@ -11,7 +11,7 @@
 
 #define NUM_CORO (50)
 
-int entrypoint_thread(void *ctx, void *arg)
+int entrypoint_thread(void *arg)
 {
     int index = (int)arg;
 
@@ -30,7 +30,7 @@ int entrypoint_thread(void *ctx, void *arg)
     return index;
 }
 
-int entrypoint_thread_detached(void *ctx, void *arg)
+int entrypoint_thread_detached(void *arg)
 {
     int count = (int)arg;
 
@@ -54,9 +54,9 @@ int main(int argc, char **argv)
     int threads[NUM_CORO];
 
     for (int i = 0; i < NUM_CORO; i++)
-        threads[i] = cothread_create(entrypoint_thread, (void *)i, NULL, 0, 0);
+        threads[i] = cothread_create(entrypoint_thread, (void *)i, 0, 0);
 
-    cothread_create(entrypoint_thread_detached, (void *)10000, NULL, 0,
+    cothread_create(entrypoint_thread_detached, (void *)10000, 0,
                     COTHREAD_DETACHED);
 
     while (1)
