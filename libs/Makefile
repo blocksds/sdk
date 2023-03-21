@@ -79,7 +79,7 @@ libc7:
 		-Dposix-console=true \
 		-Dformat-default=double \
 		\
-		-Dnewlib-nano-malloc=false \
+		-Dnewlib-nano-malloc=true \
 		\
 		-Dprefix=$(LIBC7_INSTALL_PATH) \
 		-Dlibdir=lib \
