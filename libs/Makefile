@@ -40,6 +40,7 @@ libc9:
 		--cross-file=../../cross-libc9.txt \
 		-Dmultilib=false \
 		-Dpicocrt=false \
+		-Dpicolib=false \
 		-Dsemihost=false \
 		-Dspecsdir=none \
 		-Dtests=false \
@@ -67,6 +68,7 @@ libc7:
 		--cross-file=../../cross-libc7.txt \
 		-Dmultilib=false \
 		-Dpicocrt=false \
+		-Dpicolib=false \
 		-Dsemihost=false \
 		-Dspecsdir=none \
 		-Dtests=false \
