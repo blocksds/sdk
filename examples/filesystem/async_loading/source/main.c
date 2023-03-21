@@ -104,6 +104,20 @@ int main(int argc, char **argv)
     printf("\n");
     printf("DSi mode: %d\n", isDSiMode());
 
+    if (isDSiMode() == 0)
+    {
+        // In DS mode, access to the SD card is done with DLDI. When running on
+        // emulators DLDI is not be needed, but cartridge reads happen in the
+        // ARM7 at the moment. DLDI usually runs in the ARM9.
+        //
+        // If DLDI runs on the ARM9, it isn't possible to do multithreading
+        // while accessing the filesystem. That can only work if the ARM7 loads
+        // data while the ARM9 waits for it and switches to other threads in the
+        // meantime.
+        printf("Forcing DLDI in ARM7...\n");
+        dldiSetMode(DLDI_MODE_ARM7);
+    }
+
     bool init_ok = nitroFSInit(NULL);
     if (!init_ok)
     {
