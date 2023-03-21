@@ -74,7 +74,8 @@ Supported functions
 
 You may use functions such as ``fopen``, ``fread``, ``fwrite``, ``fseek``,
 ``fclose``, ``stat``, ``rename``, ``truncate``, ``mkdir``, ``unlink``,
-``access``, ``chdir``, ``getcwd``.
+``access``, ``chdir``, ``getcwd``. ``fstat`` works, but a limitation: it doesn't
+have access to the modification date of the file, while ``stat`` does.
 
 You can also use ``open``, ``read``, ``write``, ``lseek`` and ``close``, but
 this isn't as common.
