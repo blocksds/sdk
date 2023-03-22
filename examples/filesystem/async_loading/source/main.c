@@ -149,7 +149,7 @@ int main(int argc, char **argv)
             break;
         }
 
-        cothread_sleep();
+        cothread_yield();
     }
 
 wait_loop:

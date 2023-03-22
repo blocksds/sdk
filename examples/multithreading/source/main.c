@@ -23,7 +23,7 @@ int entrypoint_thread(void *arg)
     {
         printf("\x1b[%d;%d;H%5d", y, x, count);
         fflush(stdout);
-        cothread_sleep();
+        cothread_yield();
         count--;
     }
 
@@ -38,7 +38,7 @@ int entrypoint_thread_detached(void *arg)
     {
         printf("\x1b[23;0;H%5d", count + i);
         fflush(stdout);
-        cothread_sleep();
+        cothread_yield();
     }
 
     printf("\x1b[23;0;HDone    ");
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
         if (any_thread_running == false)
             break;
 
-        cothread_sleep();
+        cothread_yield();
     }
 
     printf("\x1b[18;0HPress START to exit to loader\n");
@@ -98,7 +98,7 @@ int main(int argc, char **argv)
     {
         swiWaitForVBlank();
 
-        cothread_sleep();
+        cothread_yield();
 
         scanKeys();
 
