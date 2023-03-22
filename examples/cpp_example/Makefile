@@ -3,44 +3,17 @@
 # SPDX-FileContributor: Antonio Niño Díaz, 2023
 
 # User config
-# ===========
 
 NAME		:= cpp_example
-
 GAME_TITLE	:= C++ example
-GAME_SUBTITLE	:= Built with BlocksDS
-GAME_AUTHOR	:= github.com/blocksds/sdk
-GAME_ICON	:= icon.bmp
-
-# DLDI and internal SD slot of DSi
-# --------------------------------
-
-# Root folder of the SD image
-SDROOT		:= sdroot
-# Name of the generated image it "DSi-1.sd" for no$gba in DSi mode
-SDIMAGE		:= image.bin
 
 # Source code paths
-# -----------------
 
 SOURCEDIRS	:= source
-INCLUDEDIRS	:=
-GFXDIRS		:=
-BINDIRS		:=
-AUDIODIRS	:=
-NITROFATDIR	:=
-
-# Defines passed to all files
-# ---------------------------
-
-DEFINES		:=
 
 # Libraries
-# ---------
 
-LIBS		:= -lnds9 -lstdc++ -lc
-LIBDIRS		:= $(BLOCKSDS)/libs/libnds \
-		   $(BLOCKSDS)/libs/libstdc++9 \
-		   $(BLOCKSDS)/libs/libc9
+LIBS		:= -lstdc++
+LIBDIRS		:= $(BLOCKSDS)/libs/libstdc++9
 
-include ../Makefile.include
+include ../../tests/Makefile.include

@@ -6,6 +6,28 @@ ifeq ($(strip $(BLOCKSDS)),)
     $(error "Environment variable BLOCKSDS not found")
 endif
 
+# User config
+# ===========
+
+GAME_SUBTITLE	:= Built with BlocksDS
+GAME_AUTHOR	:= github.com/blocksds/sdk
+GAME_ICON	:= $(BLOCKSDS)/tests/icon.bmp
+
+# DLDI and internal SD slot of DSi
+# --------------------------------
+
+# Root folder of the SD image
+SDROOT		:= sdroot
+# Name of the generated image it "DSi-1.sd" for no$gba in DSi mode
+SDIMAGE		:= image.bin
+
+# Libraries
+# ---------
+
+LIBS		+= -lnds9 -lc
+LIBDIRS		+= $(BLOCKSDS)/libs/libnds \
+		   $(BLOCKSDS)/libs/libc9
+
 # Build artifacts
 # ---------------
 
