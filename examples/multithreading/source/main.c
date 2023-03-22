@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
-    int threads[NUM_CORO];
+    cothread_t threads[NUM_CORO];
 
     for (int i = 0; i < NUM_CORO; i++)
         threads[i] = cothread_create(entrypoint_thread, (void *)i, 0, 0);

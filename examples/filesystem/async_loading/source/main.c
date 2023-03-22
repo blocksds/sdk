@@ -131,8 +131,8 @@ int main(int argc, char **argv)
     printf("\x1b[10;0;HMain thread: ");
     fflush(stdout);
 
-    int load_thread = cothread_create(calculate_file_md5, (void *)"random.bin",
-                                      0, 0);
+    cothread_t load_thread = cothread_create(calculate_file_md5,
+                                             (void *)"random.bin", 0, 0);
 
     int count = 0;
     while (1)
