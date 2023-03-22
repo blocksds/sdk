@@ -4,11 +4,11 @@
 
 # User config
 
-NAME		:= filesystem_usage
-GAME_TITLE	:= SD filesystem example
+NAME		:= comutex
+GAME_TITLE	:= Comutex example
 
 # Source code paths
 
 SOURCEDIRS	:= source
 
-include ../../Makefile.include
+include ../Makefile.include

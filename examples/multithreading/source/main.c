@@ -11,7 +11,7 @@
 
 #define NUM_CORO (50)
 
-int entrypoint_thread(void *ctx, void *arg)
+int entrypoint_thread(void *arg)
 {
     int index = (int)arg;
 
@@ -23,14 +23,14 @@ int entrypoint_thread(void *ctx, void *arg)
     {
         printf("\x1b[%d;%d;H%5d", y, x, count);
         fflush(stdout);
-        cothread_sleep();
+        cothread_yield();
         count--;
     }
 
     return index;
 }
 
-int entrypoint_thread_detached(void *ctx, void *arg)
+int entrypoint_thread_detached(void *arg)
 {
     int count = (int)arg;
 
@@ -38,7 +38,7 @@ int entrypoint_thread_detached(void *ctx, void *arg)
     {
         printf("\x1b[23;0;H%5d", count + i);
         fflush(stdout);
-        cothread_sleep();
+        cothread_yield();
     }
 
     printf("\x1b[23;0;HDone    ");
@@ -51,12 +51,12 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
-    int threads[NUM_CORO];
+    cothread_t threads[NUM_CORO];
 
     for (int i = 0; i < NUM_CORO; i++)
-        threads[i] = cothread_create(entrypoint_thread, (void *)i, NULL, 0, 0);
+        threads[i] = cothread_create(entrypoint_thread, (void *)i, 0, 0);
 
-    cothread_create(entrypoint_thread_detached, (void *)10000, NULL, 0,
+    cothread_create(entrypoint_thread_detached, (void *)10000, 0,
                     COTHREAD_DETACHED);
 
     while (1)
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
         if (any_thread_running == false)
             break;
 
-        cothread_sleep();
+        cothread_yield();
     }
 
     printf("\x1b[18;0HPress START to exit to loader\n");
@@ -98,7 +98,7 @@ int main(int argc, char **argv)
     {
         swiWaitForVBlank();
 
-        cothread_sleep();
+        cothread_yield();
 
         scanKeys();
 

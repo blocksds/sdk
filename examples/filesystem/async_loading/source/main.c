@@ -20,7 +20,7 @@ static char input_buffer[1024];
 PrintConsole topScreen;
 PrintConsole bottomScreen;
 
-int calculate_file_md5(void *_ctx, void *arg)
+int calculate_file_md5(void *arg)
 {
     const char *path = arg;
 
@@ -104,6 +104,20 @@ int main(int argc, char **argv)
     printf("\n");
     printf("DSi mode: %d\n", isDSiMode());
 
+    if (isDSiMode() == 0)
+    {
+        // In DS mode, access to the SD card is done with DLDI. When running on
+        // emulators DLDI is not be needed, but cartridge reads happen in the
+        // ARM7 at the moment. DLDI usually runs in the ARM9.
+        //
+        // If DLDI runs on the ARM9, it isn't possible to do multithreading
+        // while accessing the filesystem. That can only work if the ARM7 loads
+        // data while the ARM9 waits for it and switches to other threads in the
+        // meantime.
+        printf("Forcing DLDI in ARM7...\n");
+        dldiSetMode(DLDI_MODE_ARM7);
+    }
+
     bool init_ok = nitroFSInit(NULL);
     if (!init_ok)
     {
@@ -117,8 +131,8 @@ int main(int argc, char **argv)
     printf("\x1b[10;0;HMain thread: ");
     fflush(stdout);
 
-    int load_thread = cothread_create(calculate_file_md5, (void *)"random.bin",
-                                      NULL, 0, 0);
+    cothread_t load_thread = cothread_create(calculate_file_md5,
+                                             (void *)"random.bin", 0, 0);
 
     int count = 0;
     while (1)
@@ -135,7 +149,7 @@ int main(int argc, char **argv)
             break;
         }
 
-        cothread_sleep();
+        cothread_yield();
     }
 
 wait_loop:
