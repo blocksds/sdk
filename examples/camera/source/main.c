@@ -1,3 +1,8 @@
+// SPDX-License-Identifier: CC0-1.0
+//
+// SPDX-FileContributor: EpicPkmn11, 2020, 2021, 2022
+// SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
 #include <stdio.h>
 #include <math.h>
 #include <sys/stat.h>
@@ -76,12 +81,12 @@ int getImageNumber() {
 	return highest + 1;
 }
 
-static void exitOnError(void) {
+static int exitOnError(void) {
 	while (!(keysDown() & KEY_START)) {
 		swiWaitForVBlank();
 		scanKeys();
 	}
-	exit(1);
+	return 1;
 }
 
 int main(int argc, char **argv) {
