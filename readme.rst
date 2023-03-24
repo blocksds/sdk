@@ -69,10 +69,21 @@ If you're on Ubuntu, for example, run the following command:
 .. code:: bash
 
     sudo apt-get install -y --no-install-recommends \
-        build-essential gcc-arm-none-eabi libfreeimage-dev meson ninja-build \
+        build-essential libfreeimage-dev meson ninja-build \
         dosfstools mtools
 
-Clone this repository:
+You will also need to install the ARM toolchain of Wonderful Toolchains, but you
+can skip step 5:
+
+https://wonderful.asie.pl/doc/general/getting-started/#linux
+
+When you're done, remember to add the following to your ``PATH``:
+
+.. code:: bash
+
+    export PATH=/opt/wonderful/toolchain/gcc-arm-none-eabi/bin/:$PATH
+
+Now, clone this repository:
 
 .. code:: bash
 
@@ -86,8 +97,8 @@ To build the SDK, run this from the root of this repository:
     export BLOCKSDS=/path/to/sdk/
     make
 
-You can avoid exporting ``BLOCKSDS`` every time by adding it to your
-``.bashrc``, ``.zshenv`` or similar.
+You can avoid exporting ``BLOCKSDS`` and ``PATH`` every time by adding it to
+your ``.bashrc``, ``.zshenv`` or similar.
 
 Test
 ****
