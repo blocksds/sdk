@@ -139,7 +139,8 @@ Credits
 
 This project wouldn't have been possible without:
 
-- `asie <https://asie.pl>`_ for his help and advice.
+- `asie <https://asie.pl>`_ for his help and advice, and for `Wonderful
+  Toolchains https://wonderful.asie.pl/>`_
 - `devkitPro <https://devkitpro.org/>`_
 - `picolibc <https://github.com/picolibc/picolibc>`_
 - `libnds <https://github.com/devkitPro/libnds>`_
