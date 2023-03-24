@@ -5,8 +5,8 @@
 // This example uses a few C++ features that hopefully test whether the
 // linkerscript and crt0 setup the C++ runtime correctly.
 
-// C++ I/O streams aren't supported
 #include <cstdio>
+#include <string>
 #include <vector>
 
 #include <nds.h>
@@ -117,6 +117,19 @@ void vector_test(void)
 
 // ------------------------------------------------------------------
 
+void string_test(void)
+{
+    std::string hello = "hello";
+    std::string world = "world";
+
+    std::string greeting = "[std::string] " + hello + " " + world + "!";
+
+    printf("%s ", greeting.c_str());
+    puts("\n");
+}
+
+// ------------------------------------------------------------------
+
 int main(int argc, char *argv[])
 {
     consoleDemoInit();
@@ -126,6 +139,7 @@ int main(int argc, char *argv[])
     virtual_functions_test();
     global_constructor_test();
     vector_test();
+    string_test();
 
     printf("\n\n");
     printf("START: Exit to loader\n");
