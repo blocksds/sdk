@@ -1,0 +1,31 @@
+##################
+Filesystem example
+##################
+
+Running on hardware
+===================
+
+Copy the contents of folder ``sdroot`` to the root of your SD card. This test
+will work on flashcarts that support DLDI, and in the internal SD slot in a DSi
+running in DSi mode.
+
+The resulting structure should look like this:
+
+.. code:: bash
+
+    SD root
+    |
+    |- Other files
+    | ...
+    \- fstest
+       |- d1
+       |  \ d1f1.txt
+       |- f1.txt
+       |- f2.txt
+       \- f3.txt
+
+Running on emulators
+====================
+
+Check the `filesystem documentation <../../../docs/filesystem.rst>`_ for more
+information.
