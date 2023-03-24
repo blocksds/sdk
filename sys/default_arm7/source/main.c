@@ -80,6 +80,10 @@ int main() {
 
 	installSystemFIFO();
 
+	if (isDSiMode()) {
+		installCameraFIFO();
+	}
+
 	irqSet(IRQ_VCOUNT, VcountHandler);
 	irqSet(IRQ_VBLANK, VblankHandler);
 
