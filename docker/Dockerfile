@@ -9,7 +9,7 @@ FROM ubuntu:23.04 AS base-cross-compiler
 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-        ca-certificates make dosfstools mtools
+        ca-certificates git make dosfstools mtools
 
 RUN mkdir -p /opt/wonderful/
 ADD https://wonderful.asie.pl/bootstrap/wf-bootstrap-x86_64.tar.gz /opt/wonderful/
@@ -44,7 +44,7 @@ ENV PATH /opt/wonderful/toolchain/gcc-arm-none-eabi/bin/:$PATH
 FROM base-cross-compiler AS blocksds-dev
 
 RUN apt-get install -y --no-install-recommends \
-        build-essential git libfreeimage-dev meson ninja-build
+        build-essential libfreeimage-dev meson ninja-build
 
 WORKDIR /opt/blocksds/
 RUN git clone --recurse-submodules https://github.com/blocksds/sdk.git
