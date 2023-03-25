@@ -2,11 +2,14 @@
 #
 # Copyright (c) 2023 Antonio Niño Díaz
 
-.PHONY: all clean install libs sys tools
+.PHONY: all clean examples install libs sys templates tests tools
 
 all: libs sys tools
 
 MAKE		:= make
+
+examples:
+	+$(MAKE) -C examples
 
 # libnds depends on grit and bin2c
 libs: tools
@@ -15,6 +18,12 @@ libs: tools
 # The default ARM7 depends on some libraries
 sys: libs
 	+$(MAKE) -C sys
+
+templates:
+	+$(MAKE) -C templates
+
+tests:
+	+$(MAKE) -C tests
 
 tools:
 	+$(MAKE) -C tools
@@ -30,6 +39,9 @@ install: all
 	fi
 
 clean:
+	+$(MAKE) -C examples clean
 	+$(MAKE) -C libs clean
 	+$(MAKE) -C sys clean
+	+$(MAKE) -C tests clean
+	+$(MAKE) -C templates clean
 	+$(MAKE) -C tools clean

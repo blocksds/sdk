@@ -1,3 +1,4 @@
 *.nds
 *.sav
-build
+build/
+build-all/
