@@ -192,6 +192,16 @@ SECTIONS
 
 	__tdata_size = __tdata_end - __tdata_start ;
 
+	.tbss ALIGN(4) (NOLOAD) :
+	{
+		 __tbss_start = ABSOLUTE(.) ;
+		*(.tbss .tbss.* .gnu.linkonce.tb.*)
+		*(.tcommon)
+		 __tbss_end = ABSOLUTE(.) ;
+	} >iwram AT>ewram
+
+	__tbss_size = __tbss_end - __tbss_start ;
+
 	.bss ALIGN(4) (NOLOAD) :
 	{
 		__arm7_end__ = .;
@@ -206,26 +216,16 @@ SECTIONS
 		__end__ = ABSOLUTE(.);
 	} >iwram
 
+	/* Space reserved for the thread local storage of main() */
 	.tls ALIGN(8) (NOLOAD) :
 	{
 		__tls_start = ABSOLUTE(.) ;
-
-		/* Reserve space for .tdata */
-		. = . + __tdata_size;
-		. = ALIGN(4) ;
-
-		/* Allocate all tbss symbols */
-		 __tbss_start = ABSOLUTE(.) ;
-		*(.tbss .tbss.* .gnu.linkonce.tb.*)
-		*(.tcommon)
-		 __tbss_end = ABSOLUTE(.) ;
-
+		. = . + __tdata_size + __tbss_size;
 		 __tls_end = ABSOLUTE(.) ;
-
 		__end__ = ABSOLUTE(.) ;
 	} >iwram
 
-	__tbss_size = __tbss_end - __tbss_start;
+	__tls_size = __tls_end - __tls_start;
 
 	/* Stabs debugging sections.  */
 	.stab 0 : { *(.stab) }
