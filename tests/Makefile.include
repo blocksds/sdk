@@ -164,9 +164,9 @@ endif
 
 # Combine the title strings
 ifeq ($(strip $(GAME_SUBTITLE)),)
-    GAME_FULL_TITLE := \"$(GAME_TITLE);$(GAME_AUTHOR)\"
+    GAME_FULL_TITLE := $(GAME_TITLE);$(GAME_AUTHOR)
 else
-    GAME_FULL_TITLE := \"$(GAME_TITLE);$(GAME_SUBTITLE);$(GAME_AUTHOR)\"
+    GAME_FULL_TITLE := $(GAME_TITLE);$(GAME_SUBTITLE);$(GAME_AUTHOR)
 endif
 
 $(ROM): $(ELF)
