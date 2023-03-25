@@ -15,8 +15,8 @@ void print_thread_info(char *name)
 
     printf("\n");
     printf("TLS:        %X [%s]\n", (uintptr_t)p->tls, name);
-    printf("&var_tdata: %X\n", (uintptr_t)&var_tdata);
-    printf("&var_tbss:  %X\n", (uintptr_t)&var_tbss);
+    printf("&var_tdata: %X (%d)\n", (uintptr_t)&var_tdata, var_tdata);
+    printf("&var_tbss:  %X (%d)\n", (uintptr_t)&var_tbss, var_tbss);
 }
 
 int entrypoint_thread(void *arg)
