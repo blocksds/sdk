@@ -164,7 +164,6 @@ SECTIONS
 		. = ALIGN(4);
 	} >ewram :main = 0xff
 
-	/* The thread control block must be aligned to at least 8 bytes */
 	.tdata ALIGN(4) :
 	{
 		__tdata_start = ABSOLUTE(.) ;

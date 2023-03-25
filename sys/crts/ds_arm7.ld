@@ -180,7 +180,6 @@ SECTIONS
 		. = ALIGN(4);
 	} >iwram AT>ewram
 
-	/* The thread control block must be aligned to at least 8 bytes */
 	.tdata ALIGN(4) :
 	{
 		__tdata_start = ABSOLUTE(.) ;
