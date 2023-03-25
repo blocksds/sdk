@@ -10,5 +10,6 @@ GAME_TITLE	:= SD performance test
 # Source code paths
 
 SOURCEDIRS	:= source
+NITROFATDIR	:= nitrofat
 
 include ../../Makefile.include
