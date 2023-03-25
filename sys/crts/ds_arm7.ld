@@ -181,7 +181,7 @@ SECTIONS
 	} >iwram AT>ewram
 
 	/* The thread control block must be aligned to at least 8 bytes */
-	.tdata ALIGN(8) :
+	.tdata ALIGN(4) :
 	{
 		__tdata_start = ABSOLUTE(.) ;
 		*(.tdata .tdata.* .gnu.linkonce.td.*)
@@ -217,7 +217,7 @@ SECTIONS
 	} >iwram
 
 	/* Space reserved for the thread local storage of main() */
-	.tls ALIGN(8) (NOLOAD) :
+	.tls ALIGN(4) (NOLOAD) :
 	{
 		__tls_start = ABSOLUTE(.) ;
 		. = . + __tdata_size + __tbss_size;
