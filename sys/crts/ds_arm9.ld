@@ -164,8 +164,7 @@ SECTIONS
 		. = ALIGN(4);
 	} >ewram :main = 0xff
 
-	/* The thread control block must be aligned to at least 8 bytes */
-	.tdata ALIGN(8) :
+	.tdata ALIGN(4) :
 	{
 		__tdata_start = ABSOLUTE(.) ;
 		*(.tdata .tdata.* .gnu.linkonce.td.*)
@@ -175,6 +174,16 @@ SECTIONS
 	} >ewram :main = 0xff
 
 	__tdata_size = __tdata_end - __tdata_start ;
+
+	.tbss ALIGN(4) :
+	{
+		 __tbss_start = ABSOLUTE(.) ;
+		*(.tbss .tbss.* .gnu.linkonce.tb.*)
+		*(.tcommon)
+		 __tbss_end = ABSOLUTE(.) ;
+	} >ewram :main = 0
+
+	__tbss_size = __tbss_end - __tbss_start ;
 
 	__bss_vma = . ;
 
@@ -228,26 +237,16 @@ SECTIONS
 		__bss_end__ = ABSOLUTE(.) ;
 	} >ewram :NONE
 
-	.tls ALIGN(8) (NOLOAD) :
+	/* Space reserved for the thread local storage of main() */
+	.tls ALIGN(4) (NOLOAD) :
 	{
 		__tls_start = ABSOLUTE(.) ;
-
-		/* Reserve space for .tdata */
-		. = . + __tdata_size;
-		. = ALIGN(4) ;
-
-		/* Allocate all tbss symbols */
-		 __tbss_start = ABSOLUTE(.) ;
-		*(.tbss .tbss.* .gnu.linkonce.tb.*)
-		*(.tcommon)
-		 __tbss_end = ABSOLUTE(.) ;
-
+		. = . + __tdata_size + __tbss_size;
 		 __tls_end = ABSOLUTE(.) ;
-
 		__end__ = ABSOLUTE(.) ;
 	} >ewram :NONE
 
-	__tbss_size = __tbss_end - __tbss_start;
+	__tls_size = __tls_end - __tls_start ;
 
 	.twl __end__ : AT(MAX(0x2400000,MAX(__end__,LOADADDR(.vectors)+SIZEOF(.vectors))))
 	{
