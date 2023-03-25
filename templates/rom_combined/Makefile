@@ -79,15 +79,15 @@ $(NITROFAT_IMG): $(NITROFATDIR)
 	@echo "  IMGBUILD $@ $(NITROFATDIR)"
 	$(V)sh $(BLOCKSDS)/tools/imgbuild/imgbuild.sh $@ $(NITROFATDIR)
 
-# Combine the title strings
-ifeq ($(strip $(GAME_SUBTITLE)),)
-    GAME_FULL_TITLE := $(GAME_TITLE);$(GAME_AUTHOR)
-else
-    GAME_FULL_TITLE := $(GAME_TITLE);$(GAME_SUBTITLE);$(GAME_AUTHOR)
-endif
-
 # Make the NDS ROM depend on the filesystem image only if it is needed
 $(ROM): $(NITROFAT_IMG)
+endif
+
+# Combine the title strings
+ifeq ($(strip $(GAME_SUBTITLE)),)
+    GAME_FULL_TITLE := \"$(GAME_TITLE);$(GAME_AUTHOR)\"
+else
+    GAME_FULL_TITLE := \"$(GAME_TITLE);$(GAME_SUBTITLE);$(GAME_AUTHOR)\"
 endif
 
 $(ROM): arm9 arm7
