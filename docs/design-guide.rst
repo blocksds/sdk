@@ -21,20 +21,13 @@ instructions.
 2. Custom build of GCC vs not custom build
 ==========================================
 
-BlocksDS doesn't build or include its own build of GCC because there isn't a lot
-of benefit in doing that. It's very easy to install your own compiler in Linux.
-For example, ``sudo apt build-essential gcc-arm-none-eabi`` will install both a
-GCC to build code for your PC and the cross-compiler to build code for the ARM
-CPUs used by the Nintendo DS.
-
 Building GCC is a long and not-too-easy process that doesn't give you a big
 advantage over the other approach. It would make setting up the SDK a more
 fragile process.
 
-However, advanced users should feel free to use whichever compiler they want to
-use. It is entirely possible to build your own version of the cross compiler on
-your PC and use that to build with BlocksDS (just ensure that it's in the
-system's ``PATH``).
+However, in order to take advantage of per-CPU optimizations and to have a
+robust toolchain, it is required to use a custom build of GCC. For this purpose,
+BlocksDS relies on `Wonderful Toolchains <https://wonderful.asie.pl/>`_.
 
 3. All libraries have to be built by hand
 =========================================
@@ -47,8 +40,10 @@ However, part of the reason for creating this SDK is to show users how easy it
 actually is to modify any part of the code in your program. The build process
 takes between a few seconds to half a minute, depending on your computer. This
 is a shorter time than most installation processes of other SDKs. There just
-isn't that much to build! The biggest library in the SDK is ``picolibc``, and it
-only takes a few seconds to build it.
+isn't that much to build!
+
+The exception is ``picolibc`` (standard C library) and ``libstdc++`` (standard
+C++ library), which come with the toolchain.
 
 4. ``picolibc`` vs ``newlib``
 =============================
@@ -112,6 +107,9 @@ to a lot of standard C features:
 
 - Exit program: If the program calls ``exit()`` or it returns from ``main()``,
   and the loader of the NDS file supports it, it will return to the loader.
+
+- The port of libnds in this SDK contains ``ndsabi``, with optimized versions of
+  ``memcpy()``, ``memset()``, and other functions.
 
 The reason to keep this as its own library, instead of adding it to
 ``picolibc``, is to make updating ``picolibc`` easier. It could also be added to
@@ -212,3 +210,24 @@ work in all emulators.
 This system makes it possible to use the integrated filesystem transparently.
 The developer doesn't need to worry about how it is being accessed, ``NitroFAT``
 will handle that complexity.
+
+8. DLDI in the ARM7
+===================
+
+Unlike other development kits, BlocksDS supports running DLDI from either the
+ARM9 or the ARM7. Please, read `this document <dldi-arm7.rst>`_ for more
+information.
+
+9. Multithreading
+=================
+
+The original ``libnds`` didn't support any kind of multithreading. This made it
+impossible to fully utilize the CPUs of the NDS. For example, it wasn't possible
+to use the ARM7 to load files while the ARM9 is running the application. It was
+required to pause the application, load files, and continue (or try to be very
+careful when loading files, which was complicated to do).
+
+BlocksDS supports cooperative multithreading. By integrating it with ``libnds``
+it is possible for functions like ``fopen`` or ``fread`` to switch to a
+different thread while they are waiting for the SD card to finish reading a
+block.

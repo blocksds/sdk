@@ -13,7 +13,9 @@ has the following goals:
 
 - To encourage developers to hack and improve the SDK by letting them have all
   the source code of the SDK. This also shows how easy it is to build the whole
-  codebase.
+  codebase. The exception is the tolchain, which is non-trivial to build.
+  Because of that, `Wonderful Toolchains <https://wonderful.asie.pl/>`_ is used
+  instead of asking the users to build it themselves.
 
 - To try to keep compatibility with pre-existing C projects. In theory, it
   should be enough to replace the makefile by one of BlocksDS to build any
@@ -34,10 +36,6 @@ For detailed information about the design of BlocksDS, check `this other documen
 <docs/design-guide.rst>`_.
 
 For licensing information, check `this <docs/licenses.rst>`_.
-
-C++ standard library support is limited. It is provided by `avr-libcpp
-<https://github.com/modm-io/avr-libstdcpp>`_. If you don't use GCC as a
-compiler, check the licensing notes of this library.
 
 2. Setup
 ********

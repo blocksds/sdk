@@ -32,13 +32,13 @@ MIT license. Copyright notice required:
 
     Copyright (c) 2008, Mukunda Johnson (mukunda@maxmod.org)
 
-``libs/picolibc``
-=================
+``picolibc``
+============
 
 Take a look at ``COPYING.picolibc`` in the ``picolibc`` folder.
 
-``libs/stdcpp/avr-libcpp``
-==========================
+``libstdc++``
+=============
 
 It uses license GPL 3.0 with an exception for any program compiled with GCC.
 That means that, as long as you use GCC as your compiler, you can license your
