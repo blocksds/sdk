@@ -15,7 +15,7 @@ Version 0.4 (2023-03-26)
     loading.
   - Support thread local storage.
   - Added mutexes to problematic parts of ``libnds`` and FatFs.
-- Add initial support and example of DSi camera.
+- Add initial support and example of DSi camera (thanks, asie!).
 - Support ``malloc()`` in the ARM7.
 - Simplify build system of tests and examples.
 - Bugfixes.
