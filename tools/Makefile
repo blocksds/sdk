@@ -58,7 +58,6 @@ install: all
 		      $(INSTALLDIR_ABS)/tools/dldipatch \
 		      $(INSTALLDIR_ABS)/tools/dlditool \
 		      $(INSTALLDIR_ABS)/tools/grit \
-		      $(INSTALLDIR_ABS)/tools/imgbuild \
 		      $(INSTALLDIR_ABS)/tools/mkfatimg \
 		      $(INSTALLDIR_ABS)/tools/mmutil \
 		      $(INSTALLDIR_ABS)/tools/ndstool
@@ -66,7 +65,6 @@ install: all
 	$(INSTALL) dldi/r4tfv2.dldi $(INSTALLDIR_ABS)/tools/dldi/
 	$(INSTALL) $(STRIP) -m $(BINMODE) dldipatch/dldipatch $(INSTALLDIR_ABS)/tools/dldipatch/
 	$(INSTALL) $(STRIP) -m $(BINMODE) dlditool/dlditool $(INSTALLDIR_ABS)/tools/dlditool/
-	$(INSTALL) -m $(BINMODE) imgbuild/imgbuild.sh $(INSTALLDIR_ABS)/tools/imgbuild/
 	$(INSTALL) $(STRIP) -m $(BINMODE) grit/grit $(INSTALLDIR_ABS)/tools/grit/
 	$(INSTALL) $(STRIP) -m $(BINMODE) mkfatimg/mkfatimg $(INSTALLDIR_ABS)/tools/mkfatimg/
 	$(INSTALL) $(STRIP) -m $(BINMODE) mmutil/mmutil $(INSTALLDIR_ABS)/tools/mmutil/
