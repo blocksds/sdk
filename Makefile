@@ -34,6 +34,7 @@ tools:
 install: all
 	@echo "INSTALLDIR = '$(INSTALLDIR)' (must not be empty)"
 	@test $(INSTALLDIR)
+	@rm -rf $(INSTALLDIR)
 	+$(MAKE) -C libs install INSTALLDIR=$(abspath $(INSTALLDIR))
 	+$(MAKE) -C sys install INSTALLDIR=$(abspath $(INSTALLDIR))
 	+$(MAKE) -C tools install INSTALLDIR=$(abspath $(INSTALLDIR))
