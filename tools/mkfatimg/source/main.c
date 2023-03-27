@@ -57,6 +57,7 @@ extern void st_dword (BYTE* ptr, DWORD val);	/* Store a 4-byte word in little-en
 BYTE *RamDisk;		/* Poiter to the RAM disk */
 DWORD RamDiskSize;	/* Size of RAM disk in unit of sector */
 
+static int verbose = 0;
 
 static FATFS FatFs;
 static FIL DstFile;
@@ -95,6 +96,8 @@ int maketree (void)
 
 		if (S_ISDIR(statbuf.st_mode)) {	/* The item is a directory */
 			if (strcmp(pent->d_name, ".") && strcmp(pent->d_name, "..")) {
+				if (verbose)
+					printf("Creating: %s\n", SrcPath);
 				if (f_mkdir(DstPath)) {	/* Create destination directory */
 					printf("Failed to create directory.\n"); break;
 				}
@@ -102,6 +105,8 @@ int maketree (void)
 				Dirs++;
 			}
 		} else {	/* The item is a file */
+			if (verbose)
+				printf("Adding:   %s\n", SrcPath);
 			if ((SrcFile = fopen(SrcPath, "rb")) == NULL) {	/* Open source file */
 				printf("Failed to open source file.\n"); break;
 			}
@@ -142,18 +147,24 @@ int main (int argc, char* argv[])
 
 
 	/* Initialize parameters */
-	if (argc >= 2 && *argv[ai] == '-') {
+	while (argc >= 2 && *argv[ai] == '-') {
 		if (!strcmp(argv[ai], "-t")) {
 			truncation = 1;
+			ai++;
+			argc--;
+		} else if (!strcmp(argv[ai], "-v")) {
+			verbose = 1;
 			ai++;
 			argc--;
 		} else {
 			argc = 0;
 		}
 	}
+
 	if (argc < 3) {
-		printf("usage: mkfatimg [-t] <source node> <output image> <image size> [<cluster size>]\n"
+		printf("usage: mkfatimg [-t] [-v] <source node> <output image> <image size> [<cluster size>]\n"
 				"    -t: Truncate unused area for read only volume.\n"
+				"    -v: Verbose mode.\n"
 				"    <source node>: Source node as root of output image\n"
 				"    <output image>: FAT volume image file\n"
 				"    <image size>: Size of output image in unit of KiB\n"
