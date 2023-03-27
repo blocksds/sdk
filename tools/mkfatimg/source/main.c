@@ -230,6 +230,11 @@ int main (int argc, char* argv[])
 	if (RamDiskSize == 0) {
 		printf("Autocalculating size...\n");
 		RamDiskSize = (TotalFilesSize * 140) / 100;
+
+		/* Minimum size for FAT12 */
+		if (RamDiskSize < 64 * 1024)
+			RamDiskSize = 64 * 1024;
+
 		RamDiskSize = (RamDiskSize / csz) + 1; /* Sectors */
 	}
 
