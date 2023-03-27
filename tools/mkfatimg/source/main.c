@@ -223,7 +223,7 @@ int main (int argc, char* argv[])
 
 	TotalFilesSize = 0;
 	treesize();
-	printf("Total size of files: %llu bytes\n", TotalFilesSize);
+	printf("Total size of files: %lu bytes\n", TotalFilesSize);
 
 	/* If the user hasn't set the size, use an image size of 40% the total of
 	 * the sizes of all files. */
@@ -235,7 +235,14 @@ int main (int argc, char* argv[])
 
 	/* Create an FAT volume (Supports only FAT/FAT32). This function can select
 	 * FAT12, FAT16 or FAT32 automatically depending on the image size. */
-	if (f_mkfs("", FM_FAT | FM_FAT32 | FM_SFD, csz, Buff, sizeof Buff)) {
+	MKFS_PARM opt = {
+		.fmt = FM_FAT | FM_FAT32 | FM_SFD,
+		.n_fat = 1,
+		.align = 0,
+		.n_root = 1,
+		.au_size = csz
+	};
+	if (f_mkfs("", &opt, Buff, sizeof Buff)) {
 		printf("Failed to create FAT volume. Adjust volume size or cluster size.\n");
 		return 2;
 	}
@@ -347,7 +354,7 @@ int main (int argc, char* argv[])
 		return 4;
 	}
 
-	printf("\n%u files and %u directories in the %luKiB of FAT volume.\n", Files, Dirs, szvol / 1024);
+	printf("\n%u files and %u directories in the %uKiB of FAT volume.\n", Files, Dirs, szvol / 1024);
 
 	return 0;
 }

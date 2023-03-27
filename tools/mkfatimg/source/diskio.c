@@ -24,9 +24,10 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
-#include "diskio.h"
 #include "ff.h"
+#include "diskio.h"
 
 
 /*--------------------------------------------------------------------------
@@ -157,4 +158,15 @@ DRESULT disk_ioctl (
 	return dr;
 }
 
+DWORD get_fattime(void)
+{
+    time_t t = time(0);
+    struct tm *stm = localtime(&t);
 
+    return (DWORD)(stm->tm_year - 80) << 25 |
+           (DWORD)(stm->tm_mon + 1) << 21 |
+           (DWORD)stm->tm_mday << 16 |
+           (DWORD)stm->tm_hour << 11 |
+           (DWORD)stm->tm_min << 5 |
+           (DWORD)stm->tm_sec >> 1;
+}
