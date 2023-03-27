@@ -8,9 +8,9 @@ BINMODE		:= 755
 MAKE		:= make
 INSTALL		:= install
 
-.PHONY: bin2c clean dldipatch dlditool grit install mmutil ndstool
+.PHONY: bin2c clean dldipatch dlditool grit install mkfatimg mmutil ndstool
 
-all: bin2c dldipatch dlditool grit mmutil ndstool
+all: bin2c dldipatch dlditool grit mkfatimg mmutil ndstool
 
 bin2c: bin2c/bin2c
 
@@ -31,6 +31,11 @@ dldipatch: dldipatch/dldipatch
 
 dldipatch/dldipatch:
 	$(MAKE) -C dldipatch -j`nproc`
+
+mkfatimg: mkfatimg/mkfatimg
+
+mkfatimg/mkfatimg:
+	$(MAKE) -C mkfatimg -j`nproc`
 
 mmutil: mmutil/mmutil
 
@@ -54,6 +59,7 @@ install: all
 		      $(INSTALLDIR_ABS)/tools/dlditool \
 		      $(INSTALLDIR_ABS)/tools/grit \
 		      $(INSTALLDIR_ABS)/tools/imgbuild \
+		      $(INSTALLDIR_ABS)/tools/mkfatimg \
 		      $(INSTALLDIR_ABS)/tools/mmutil \
 		      $(INSTALLDIR_ABS)/tools/ndstool
 	$(INSTALL) $(STRIP) -m $(BINMODE) bin2c/bin2c $(INSTALLDIR_ABS)/tools/bin2c/
@@ -62,6 +68,7 @@ install: all
 	$(INSTALL) $(STRIP) -m $(BINMODE) dlditool/dlditool $(INSTALLDIR_ABS)/tools/dlditool/
 	$(INSTALL) -m $(BINMODE) imgbuild/imgbuild.sh $(INSTALLDIR_ABS)/tools/imgbuild/
 	$(INSTALL) $(STRIP) -m $(BINMODE) grit/grit $(INSTALLDIR_ABS)/tools/grit/
+	$(INSTALL) $(STRIP) -m $(BINMODE) mkfatimg/mkfatimg $(INSTALLDIR_ABS)/tools/mkfatimg/
 	$(INSTALL) $(STRIP) -m $(BINMODE) mmutil/mmutil $(INSTALLDIR_ABS)/tools/mmutil/
 	$(INSTALL) $(STRIP) -m $(BINMODE) ndstool/ndstool $(INSTALLDIR_ABS)/tools/ndstool/
 
@@ -70,5 +77,6 @@ clean:
 	$(MAKE) -C dldipatch clean
 	$(MAKE) -C dlditool clean
 	$(MAKE) -C grit clean
+	$(MAKE) -C mkfatimg clean
 	$(MAKE) -C mmutil clean
 	$(MAKE) -C ndstool clean
