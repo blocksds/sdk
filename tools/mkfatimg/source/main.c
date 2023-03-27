@@ -141,7 +141,7 @@ int maketree (void)
 		if (S_ISDIR(statbuf.st_mode)) {	/* The item is a directory */
 			if (strcmp(pent->d_name, ".") && strcmp(pent->d_name, "..")) {
 				if (verbose)
-					printf("Creating: %s\n", SrcPath);
+					printf("Creating: %s\n", DstPath);
 				if (f_mkdir(DstPath)) {	/* Create destination directory */
 					printf("Failed to create directory.\n"); break;
 				}
@@ -150,7 +150,7 @@ int maketree (void)
 			}
 		} else {	/* The item is a file */
 			if (verbose)
-				printf("Adding:   %s\n", SrcPath);
+				printf("Adding:   %s\n", DstPath);
 			if ((SrcFile = fopen(SrcPath, "rb")) == NULL) {	/* Open source file */
 				printf("Failed to open source file.\n"); break;
 			}
@@ -216,12 +216,14 @@ int main (int argc, char* argv[])
 			);
 		return 1;
 	}
-	strcpy(SrcPath, argv[ai++]);
+
+	const char *SrcPathArg = argv[ai++];
 	outfile = argv[ai++];
 	RamDiskSize = atoi(argv[ai++]) * 2;
 	csz = (argc >= 5) ? atoi(argv[ai++]) : 512;
 
 	TotalFilesSize = 0;
+	strcpy(SrcPath, SrcPathArg);
 	treesize();
 	printf("Total size of files: %lu bytes\n", TotalFilesSize);
 
@@ -254,6 +256,8 @@ int main (int argc, char* argv[])
 
 	/* Copy source directory tree into the FAT volume */
 	f_mount(&FatFs, "", 0);
+	strcpy(SrcPath, SrcPathArg);
+	DstPath[0] = 0;
 	if (!maketree()) return 3;
 
 	/* Right after f_mount() there is no filesystem type information */
