@@ -65,8 +65,52 @@ static FILE *SrcFile;
 static char SrcPath[512], DstPath[512];
 static BYTE Buff[4096];
 static UINT Dirs, Files;
+static QWORD TotalFilesSize;
 
+int treesize(void)
+{
+	DIR *pdir;
+	int slen, dlen, rv = 0;
 
+	slen = strlen(SrcPath);
+	dlen = strlen(DstPath);
+
+	pdir = opendir(SrcPath);		/* Open directory */
+	if (pdir == NULL) {
+		printf("Failed to open the source directory.\n");
+		goto end;
+	}
+
+	struct dirent *pent;
+	struct stat statbuf;
+
+	while ((pent = readdir(pdir)) != NULL)
+	{
+		sprintf(&SrcPath[slen], "/%s", pent->d_name);
+		sprintf(&DstPath[dlen], "/%s", pent->d_name);
+
+		stat(SrcPath, &statbuf);
+
+		if (S_ISDIR(statbuf.st_mode)) {	/* The item is a directory */
+			if (strcmp(pent->d_name, ".") && strcmp(pent->d_name, "..")) {
+				if (verbose)
+					printf("Dir:  %s\n", SrcPath);
+				if (!treesize()) break;	/* Enter the directory */
+			}
+		} else {	/* The item is a file */
+			if (verbose)
+				printf("File: %s (%zu bytes)\n", SrcPath, statbuf.st_size);
+			TotalFilesSize += statbuf.st_size;
+		}
+	}
+	closedir(pdir);
+	rv = 1;
+
+end:
+	SrcPath[slen] = 0;
+	DstPath[dlen] = 0;
+	return rv;
+}
 
 int maketree (void)
 {
@@ -167,7 +211,7 @@ int main (int argc, char* argv[])
 				"    -v: Verbose mode.\n"
 				"    <source node>: Source node as root of output image\n"
 				"    <output image>: FAT volume image file\n"
-				"    <image size>: Size of output image in unit of KiB\n"
+				"    <image size>: Size of output image in unit of sectors (0 = auto)\n"
 				"    <cluster size>: Size of cluster in unit of byte (default:512)\n"
 			);
 		return 1;
@@ -177,7 +221,20 @@ int main (int argc, char* argv[])
 	RamDiskSize = atoi(argv[ai++]) * 2;
 	csz = (argc >= 5) ? atoi(argv[ai++]) : 512;
 
-	/* Create an FAT volume (Supports only FAT/FAT32) */
+	TotalFilesSize = 0;
+	treesize();
+	printf("Total size of files: %llu bytes\n", TotalFilesSize);
+
+	/* If the user hasn't set the size, use an image size of 40% the total of
+	 * the sizes of all files. */
+	if (RamDiskSize == 0) {
+		printf("Autocalculating size...\n");
+		RamDiskSize = (TotalFilesSize * 140) / 100;
+		RamDiskSize = (RamDiskSize / csz) + 1; /* Sectors */
+	}
+
+	/* Create an FAT volume (Supports only FAT/FAT32). This function can select
+	 * FAT12, FAT16 or FAT32 automatically depending on the image size. */
 	if (f_mkfs("", FM_FAT | FM_FAT32 | FM_SFD, csz, Buff, sizeof Buff)) {
 		printf("Failed to create FAT volume. Adjust volume size or cluster size.\n");
 		return 2;
