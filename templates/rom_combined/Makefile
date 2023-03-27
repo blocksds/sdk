@@ -79,8 +79,8 @@ ifneq ($(strip $(NITROFATDIR)),)
 NDSTOOL_FAT	:= -F $(NITROFAT_IMG)
 
 $(NITROFAT_IMG): $(NITROFATDIR)
-	@echo "  IMGBUILD $@ $(NITROFATDIR)"
-	$(V)sh $(BLOCKSDS)/tools/imgbuild/imgbuild.sh $@ $(NITROFATDIR)
+	@echo "  MKFATIMG $@ $(NITROFATDIR)"
+	$(V)$(BLOCKSDS)/tools/mkfatimg/mkfatimg -t $(NITROFATDIR) $@ 0
 
 # Make the NDS ROM depend on the filesystem image only if it is needed
 $(ROM): $(NITROFAT_IMG)
@@ -101,8 +101,8 @@ $(ROM): arm9 arm7
 		$(NDSTOOL_FAT)
 
 sdimage:
-	@echo "  IMGBUILD $(SDIMAGE) $(SDROOT)"
-	$(V)sh $(BLOCKSDS)/tools/imgbuild/imgbuild.sh $(SDIMAGE) $(SDROOT)
+	@echo "  MKFATIMG $(SDIMAGE) $(SDROOT)"
+	$(V)$(BLOCKSDS)/tools/mkfatimg/mkfatimg -t $(SDROOT) $(SDIMAGE) 0
 
 dldipatch: $(ROM)
 	@echo "  DLDITOOL $(ROM)"
