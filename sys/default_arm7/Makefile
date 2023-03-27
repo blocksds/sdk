@@ -2,9 +2,8 @@
 #
 # Copyright (c) 2023 Antonio Niño Díaz
 
-ifeq ($(strip $(BLOCKSDS)),)
-    $(error "Environment variable BLOCKSDS not found")
-endif
+BLOCKSDS	?= /opt/blocksds/core
+BLOCKSDSEXT	?= /opt/blocksds/external
 
 ARM7_MAJOR	:= 0
 ARM7_MINOR	:= 7

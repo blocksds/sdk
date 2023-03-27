@@ -96,6 +96,9 @@ When you're done, remember to add the following to your ``PATH``:
 
     export PATH=/opt/wonderful/toolchain/gcc-arm-none-eabi/bin/:$PATH
 
+You can avoid exporting ``PATH`` every time by adding it to your ``.bashrc``,
+``.zshenv`` or similar.
+
 Now, clone this repository:
 
 .. code:: bash
@@ -110,8 +113,28 @@ To build the SDK, run this from the root of this repository:
     export BLOCKSDS=/path/to/sdk/
     make
 
-You can avoid exporting ``BLOCKSDS`` and ``PATH`` every time by adding it to
-your ``.bashrc``, ``.zshenv`` or similar.
+Now, you have two options.
+
+1. Use the libraries from this path. Make sure that the environment variable
+   ``BLOCKSDS`` is  always set to the right path. The build system of the
+   templates and examples will detect it and use it. Any other external library
+   will need to be managed by you.
+
+   You can avoid exporting ``BLOCKSDS`` every time by adding it to your
+   ``.bashrc``, ``.zshenv`` or similar.
+
+2. Install it in your system. You won't need to set ``BLOCKSDS`` again to use
+   the SDK if you choose this option. Run:
+
+   .. code:: bash
+
+        sudo mkdir /opt/blocksds/ && sudo chown $USER:$USER /opt/blocksds
+        mkdir /opt/blocksds/external
+        make install
+
+   This will install the libraries and tools to ``/opt/blocksds/core``. Third
+   party libraries and tools are expected to be installed to
+   ``/opt/blocksds/external``.
 
 Test
 ****

@@ -2,6 +2,9 @@
 #
 # SPDX-FileContributor: Antonio Niño Díaz, 2023
 
+BLOCKSDS	?= /opt/blocksds/core
+BLOCKSDSEXT	?= /opt/blocksds/external
+
 # User config
 # ===========
 

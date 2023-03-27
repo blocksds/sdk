@@ -2,9 +2,8 @@
 #
 # SPDX-FileContributor: Antonio Niño Díaz, 2023
 
-ifeq ($(strip $(BLOCKSDS)),)
-    $(error "Environment variable BLOCKSDS not found")
-endif
+BLOCKSDS	?= /opt/blocksds/core
+BLOCKSDSEXT	?= /opt/blocksds/external
 
 # User config
 # ===========

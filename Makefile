@@ -2,6 +2,9 @@
 #
 # Copyright (c) 2023 Antonio Niño Díaz
 
+# Default installation path of BlocksDS core components
+INSTALLDIR	?= /opt/blocksds/core/
+
 .PHONY: all clean examples install libs sys templates tests tools
 
 all: libs sys tools
