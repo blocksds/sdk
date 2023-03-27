@@ -41,20 +41,14 @@ FROM base-cross-compiler AS blocksds-dev
 RUN apt-get install -y --no-install-recommends \
         build-essential libfreeimage-dev meson ninja-build
 
-WORKDIR /opt/blocksds/
+WORKDIR /opt/
 RUN git clone --recurse-submodules https://github.com/blocksds/sdk.git
-ENV BLOCKSDS=/opt/blocksds/sdk/
 
-WORKDIR /opt/blocksds/sdk/
-RUN make -j`nproc` VERBOSE=1
+WORKDIR /opt/sdk/
+RUN BLOCKSDS=$PWD make install -j`nproc` VERBOSE=1 && \
+    mkdir /opt/blocksds/external
 
 WORKDIR /work/
-
-# Intermediate image to extract the built SDK to some other folder
-FROM blocksds-dev AS installed-sdk
-
-WORKDIR /opt/blocksds/sdk/
-RUN make INSTALLDIR=/build/sdk/ -j`nproc` install
 
 # Slim image
 # ==========
@@ -67,7 +61,6 @@ FROM base-cross-compiler AS blocksds-slim
 RUN apt-get install -y --no-install-recommends \
     libfreeimage3
 
-COPY --from=installed-sdk /build/ /opt/blocksds/
-ENV BLOCKSDS=/opt/blocksds/sdk/
+COPY --from=blocksds-dev /opt/blocksds/ /opt/blocksds/
 
 WORKDIR /work/
