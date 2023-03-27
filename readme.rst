@@ -26,8 +26,14 @@ check the `libc port documentation <docs/libc.rst>`_ for more information about
 the supported libc functions.
 
 You may keep multiple versions of this SDK in your PC. The location of the
-active SDK is stored in the environment variable ``BLOCKSDS``, so all you need
-to do is to change its value and point to the right version.
+active SDK is stored in the environment variables ``BLOCKSDS`` and
+``BLOCKSDSEXT``, so all you need to do is to change their values and point to
+the version of the SDK you want to use.
+
+By default, the paths are assumed to be ``/opt/blocksds/core/`` and
+``/opt/blocksds/external/``. The first one is used for core BlocksDS libraries
+and tools, and it is managed by BlocksDS. The second one is left for users to
+freely install third party libraries and tools.
 
 If you want to port a project built with devkitPro, follow `this guide
 <docs/porting-guide.rst>`_ for instructions.
@@ -105,21 +111,12 @@ To build the SDK, run this from the root of this repository:
 
 .. code:: bash
 
-    export BLOCKSDS=/path/to/sdk/
-    make
+    BLOCKSDS=$PWD make
 
 Now, you have two options.
 
-1. Use the libraries from this path. Make sure that the environment variable
-   ``BLOCKSDS`` is  always set to the right path. The build system of the
-   templates and examples will detect it and use it. Any other external library
-   will need to be managed by you.
-
-   You can avoid exporting ``BLOCKSDS`` every time by adding it to your
-   ``.bashrc``, ``.zshenv`` or similar.
-
-2. Install it in your system. You won't need to set ``BLOCKSDS`` again to use
-   the SDK if you choose this option. Run:
+1. Recommended. Install it in your system. You won't need to set ``BLOCKSDS``
+   again to use the SDK. Run:
 
    .. code:: bash
 
@@ -130,6 +127,15 @@ Now, you have two options.
    This will install the libraries and tools to ``/opt/blocksds/core``. Third
    party libraries and tools are expected to be installed to
    ``/opt/blocksds/external``.
+
+2. Use the libraries from this path. Make sure that the environment variable
+   ``BLOCKSDS`` is always set to the right location when you want to use the
+   SDK. The build system of the templates and examples will use this variable to
+   locate the components of BlocksDS it and use them. Any other external library
+   will need to be managed by you.
+
+   You can avoid exporting ``BLOCKSDS`` every time by adding it to your
+   ``.bashrc``, ``.zshenv`` or similar.
 
 Test
 ****
