@@ -175,6 +175,23 @@ int main (int argc, char* argv[])
 	/* Copy source directory tree into the FAT volume */
 	f_mount(&FatFs, "", 0);
 	if (!maketree()) return 3;
+
+	/* Right after f_mount() there is no filesystem type information */
+	switch (FatFs.fs_type) {
+	case FS_FAT12:
+		printf("Using format FAT12");
+		break;
+	case FS_FAT16:
+		printf("Using format FAT16");
+		break;
+	case FS_FAT32:
+		printf("Using format FAT32");
+		break;
+	default:
+		printf("Using format unknown (%d)\n", FatFs.fs_type);
+		return 3;
+	}
+
 	if (!Files) { printf("No file in the source directory."); return 3; }
 	szvol = ld_word(RamDisk + BPB_TotSec16);
 	if (!szvol) szvol = ld_dword(RamDisk + BPB_TotSec32);
