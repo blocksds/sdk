@@ -83,12 +83,7 @@ Now, install the ARM toolchain:
 
     wf-pacman -Syu
 
-    wf-pacman -S \
-        toolchain-gcc-arm-none-eabi-binutils \
-        toolchain-gcc-arm-none-eabi-gcc \
-        toolchain-gcc-arm-none-eabi-gcc-libs \
-        toolchain-gcc-arm-none-eabi-libstdcxx-picolibc \
-        toolchain-gcc-arm-none-eabi-picolibc-generic
+    wf-pacman -S toolchain-gcc-arm-none-eabi
 
 When you're done, remember to add the following to your ``PATH``:
 

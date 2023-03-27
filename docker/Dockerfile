@@ -25,12 +25,7 @@ RUN cd etc && \
     ln -sf ../proc/self/mounts mtab
 
 RUN wf-pacman -Syu --noconfirm && \
-    wf-pacman -S --noconfirm \
-        toolchain-gcc-arm-none-eabi-binutils \
-        toolchain-gcc-arm-none-eabi-gcc \
-        toolchain-gcc-arm-none-eabi-gcc-libs \
-        toolchain-gcc-arm-none-eabi-libstdcxx-picolibc \
-        toolchain-gcc-arm-none-eabi-picolibc-generic
+    wf-pacman -S --noconfirm toolchain-gcc-arm-none-eabi
 
 ENV PATH /opt/wonderful/toolchain/gcc-arm-none-eabi/bin/:$PATH
 
