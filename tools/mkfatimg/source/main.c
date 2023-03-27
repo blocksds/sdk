@@ -1,5 +1,6 @@
 /*
 / Copyright (C) 2017, ChaN, all right reserved.
+/ Copyright (C) 2023, AntonioND, all right reserved.
 /
 / FatFs module is an open source software. Redistribution and use of FatFs in
 / source and binary forms, with or without modification, are permitted provided
@@ -18,9 +19,16 @@
 /  FAT image creator R0.02               (C)ChaN, 2017
 /--------------------------------------------------------*/
 
-#include <windows.h>
-#include <stdio.h>
+#define DIR DIRff
 #include "ff.h"
+#undef DIR
+
+#include <dirent.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+
 #include "diskio.h"
 
 
@@ -52,8 +60,7 @@ DWORD RamDiskSize;	/* Size of RAM disk in unit of sector */
 
 static FATFS FatFs;
 static FIL DstFile;
-static HANDLE SrcFile;
-static WIN32_FIND_DATA Fd;
+static FILE *SrcFile;
 static char SrcPath[512], DstPath[512];
 static BYTE Buff[4096];
 static UINT Dirs, Files;
@@ -62,69 +69,74 @@ static UINT Dirs, Files;
 
 int maketree (void)
 {
-	HANDLE hdir;
+	DIR *pdir;
 	int slen, dlen, rv = 0;
 	DWORD br;
 	UINT bw;
 
-
 	slen = strlen(SrcPath);
 	dlen = strlen(DstPath);
-	sprintf(&SrcPath[slen], "/*");
-	hdir = FindFirstFile(SrcPath, &Fd);		/* Open directory */
-	if (hdir == INVALID_HANDLE_VALUE) {
+
+	pdir = opendir(SrcPath);		/* Open directory */
+	if (pdir == NULL) {
 		printf("Failed to open the source directory.\n");
-	} else {
-		for (;;) {
-			sprintf(&SrcPath[slen], "/%s", Fd.cFileName);
-			sprintf(&DstPath[dlen], "/%s", Fd.cFileName);
-			if (Fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {	/* The item is a directory */
-				if (strcmp(Fd.cFileName, ".") && strcmp(Fd.cFileName, "..")) {
-					if (f_mkdir(DstPath)) {	/* Create destination directory */
-						printf("Failed to create directory.\n"); break;
-					}
-					if (!maketree()) break;	/* Enter the directory */
-					Dirs++;
-				}
-			} else {	/* The item is a file */
-				printf("%s\n", SrcPath);
-				if ((SrcFile = CreateFile(SrcPath, GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0)) == INVALID_HANDLE_VALUE) {	/* Open source file */
-					printf("Failed to open source file.\n"); break;
-				}
-				if (f_open(&DstFile, DstPath, FA_CREATE_ALWAYS | FA_WRITE)) {	/* Create destination file */
-					printf("Failed to create destination file.\n"); break;
-				}
-				do {	/* Copy source file to destination file */
-					ReadFile(SrcFile, Buff, sizeof Buff, &br, 0);
-					if (br == 0) break;
-					f_write(&DstFile, Buff, (UINT)br, &bw);
-				} while (br == bw);
-				CloseHandle(SrcFile);
-				f_close(&DstFile);
-				if (br && br != bw) {
-					printf("Failed to write file.\n"); break;
-				}
-				Files++;
-			}
-			if (!FindNextFile(hdir, &Fd)) {
-				rv = 1; break;
-			}
-		}
-		FindClose(hdir);
+		goto end;
 	}
+
+	struct dirent *pent;
+	struct stat statbuf;
+
+	while ((pent = readdir(pdir)) != NULL)
+	{
+		sprintf(&SrcPath[slen], "/%s", pent->d_name);
+		sprintf(&DstPath[dlen], "/%s", pent->d_name);
+
+		stat(SrcPath, &statbuf);
+
+		if (S_ISDIR(statbuf.st_mode)) {	/* The item is a directory */
+			if (strcmp(pent->d_name, ".") && strcmp(pent->d_name, "..")) {
+				if (f_mkdir(DstPath)) {	/* Create destination directory */
+					printf("Failed to create directory.\n"); break;
+				}
+				if (!maketree()) break;	/* Enter the directory */
+				Dirs++;
+			}
+		} else {	/* The item is a file */
+			if ((SrcFile = fopen(SrcPath, "rb")) == NULL) {	/* Open source file */
+				printf("Failed to open source file.\n"); break;
+			}
+			if (f_open(&DstFile, DstPath, FA_CREATE_ALWAYS | FA_WRITE)) {	/* Create destination file */
+				printf("Failed to create destination file.\n"); break;
+			}
+			do {	/* Copy source file to destination file */
+				br = fread(Buff, 1, sizeof(Buff), SrcFile);
+				if (br == 0) break;
+				f_write(&DstFile, Buff, (UINT)br, &bw);
+			} while (br == bw);
+			fclose(SrcFile);
+			f_close(&DstFile);
+			if (br && br != bw) {
+				printf("Failed to write file.\n"); break;
+			}
+			Files++;
+		}
+	}
+	closedir(pdir);
+	rv = 1;
+
+end:
 	SrcPath[slen] = 0;
 	DstPath[dlen] = 0;
 	return rv;
 }
 
 
-
 int main (int argc, char* argv[])
 {
 	UINT csz;
-	HANDLE wh;
+	FILE *fout;
 	DWORD wb, szvol;
-	DIR dir;
+	DIRff dir;
 	int ai = 1, truncation = 0;
 	const char *outfile;
 
@@ -183,7 +195,7 @@ int main (int argc, char* argv[])
 			if (szd < szdp) {
 				edd = FatFs.dirbase + szd;
 				eddp = FatFs.database;
-				MoveMemory(RamDisk + (edd * FF_MIN_SS), RamDisk + (eddp * FF_MIN_SS), (szvol - eddp) * FF_MIN_SS);
+				memcpy(RamDisk + (edd * FF_MIN_SS), RamDisk + (eddp * FF_MIN_SS), (szvol - eddp) * FF_MIN_SS);
 				szvol -= szdp - szd;
 				FatFs.database -= szdp - szd;
 				st_word(RamDisk + BPB_RootEntCnt, (WORD)(szd * (FF_MIN_SS / 32)));
@@ -217,7 +229,7 @@ int main (int argc, char* argv[])
 		if (!szfp) szfp = ld_dword(RamDisk + BPB_FATSz32) * RamDisk[BPB_NumFATs];
 		edf = FatFs.fatbase + szf;
 		edfp = (FatFs.fs_type == FS_FAT32) ? FatFs.database : FatFs.dirbase;
-		MoveMemory(RamDisk + (edf * FF_MIN_SS), RamDisk + (edfp * FF_MIN_SS), (szvol - edfp) * FF_MIN_SS);
+		memcpy(RamDisk + (edf * FF_MIN_SS), RamDisk + (edfp * FF_MIN_SS), (szvol - edfp) * FF_MIN_SS);
 		szvol -= (szfp - szf) + FatFs.csize * (FatFs.n_fatent - nent);
 		if (FatFs.fs_type == FS_FAT32) {
 			st_dword(RamDisk + BPB_FATSz32, szf);
@@ -236,21 +248,21 @@ int main (int argc, char* argv[])
 
 	/* Output the FAT volume to the file */
 	printf("\nWriting output file...");
-	wh = CreateFile(outfile, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, 0, 0);
-	if (wh == INVALID_HANDLE_VALUE) {
+	fout = fopen(outfile, "wb");
+	if (fout == NULL) {
 		printf("Failed to create output file.\n");
 		return 4;
 	}
 	szvol *= FF_MIN_SS;
-	WriteFile(wh, RamDisk, szvol, &wb, 0);
-	CloseHandle(wh);
+	wb = fwrite(RamDisk, 1, szvol, fout);
+	fclose(fout);
 	if (szvol != wb) {
-		DeleteFile(outfile);
+		remove(outfile);
 		printf("Failed to write output file.\n");
 		return 4;
 	}
 
-	printf("\n%u files and %u directories in the %uKiB of FAT volume.\n", Files, Dirs, szvol / 1024);
+	printf("\n%u files and %u directories in the %luKiB of FAT volume.\n", Files, Dirs, szvol / 1024);
 
 	return 0;
 }

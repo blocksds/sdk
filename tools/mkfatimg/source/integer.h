@@ -21,15 +21,6 @@
 #ifndef FF_INTEGER
 #define FF_INTEGER
 
-#ifdef _WIN32	/* FatFs development platform */
-
-#include <windows.h>
-#include <tchar.h>
-typedef unsigned __int64 QWORD;
-
-
-#else			/* Embedded platform */
-
 /* These types MUST be 16-bit or 32-bit */
 typedef int				INT;
 typedef unsigned int	UINT;
@@ -48,7 +39,5 @@ typedef unsigned long	DWORD;
 
 /* This type MUST be 64-bit (Remove this for ANSI C (C89) compatibility) */
 typedef unsigned long long QWORD;
-
-#endif
 
 #endif

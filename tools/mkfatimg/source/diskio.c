@@ -22,7 +22,9 @@
 /* RAM disk control module for Win32              (C)ChaN, 2014          */
 /*-----------------------------------------------------------------------*/
 
-#include <windows.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "diskio.h"
 #include "ff.h"
 
@@ -56,7 +58,7 @@ DSTATUS disk_initialize (
 	if (pdrv) return STA_NOINIT;
 
 	if (!RamDisk) {
-		RamDisk = VirtualAlloc(0, RamDiskSize * FF_MIN_SS, MEM_COMMIT, PAGE_READWRITE);
+		RamDisk = calloc(1, RamDiskSize * FF_MIN_SS);
 	}
 
 	return RamDisk ? 0 : STA_NOINIT;
@@ -93,7 +95,7 @@ DRESULT disk_read (
 	if (pdrv || !RamDisk) return RES_NOTRDY;
 	if (sector >= RamDiskSize) return RES_PARERR;
 
-	CopyMemory(buff, RamDisk + sector * FF_MIN_SS, count * FF_MIN_SS);
+	memcpy(buff, RamDisk + sector * FF_MIN_SS, count * FF_MIN_SS);
 
 	return RES_OK;
 }
@@ -114,7 +116,7 @@ DRESULT disk_write (
 	if (pdrv || !RamDisk) return RES_NOTRDY;
 	if (sector >= RamDiskSize) return RES_PARERR;
 
-	CopyMemory(RamDisk + sector * FF_MIN_SS, buff, count * FF_MIN_SS);
+	memcpy(RamDisk + sector * FF_MIN_SS, buff, count * FF_MIN_SS);
 
 	return RES_OK;
 }
