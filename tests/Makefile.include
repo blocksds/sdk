@@ -10,7 +10,7 @@ BLOCKSDSEXT	?= /opt/blocksds/external
 
 GAME_SUBTITLE	:= Built with BlocksDS
 GAME_AUTHOR	:= github.com/blocksds/sdk
-GAME_ICON	:= $(BLOCKSDS)/tests/icon.bmp
+GAME_ICON	:= $(BLOCKSDS)/sys/icon.bmp
 
 # DLDI and internal SD slot of DSi
 # --------------------------------

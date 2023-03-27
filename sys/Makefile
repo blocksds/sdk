@@ -24,6 +24,7 @@ install: all
 	$(INSTALL) -d $(INSTALLDIR_ABS)/sys \
 		      $(INSTALLDIR_ABS)/sys/crts \
 		      $(INSTALLDIR_ABS)/sys/default_arm7
+	$(CP) icon.bmp $(INSTALLDIR_ABS)/sys/icon.bmp
 	$(CP) -r crts/*.o crts/*.ld crts/*.mem $(INSTALLDIR_ABS)/sys/crts
 	$(CP) -r default_arm7/arm7.elf $(INSTALLDIR_ABS)/sys/default_arm7
 
