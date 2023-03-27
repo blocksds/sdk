@@ -75,6 +75,21 @@ can skip step 5:
 
 https://wonderful.asie.pl/doc/general/getting-started/#linux
 
+Now, install the ARM toolchain:
+
+.. code:: bash
+
+    export PATH=/opt/wonderful/bin:$PATH
+
+    wf-pacman -Syu
+
+    wf-pacman -S \
+        toolchain-gcc-arm-none-eabi-binutils \
+        toolchain-gcc-arm-none-eabi-gcc \
+        toolchain-gcc-arm-none-eabi-gcc-libs \
+        toolchain-gcc-arm-none-eabi-libstdcxx-picolibc \
+        toolchain-gcc-arm-none-eabi-picolibc-generic
+
 When you're done, remember to add the following to your ``PATH``:
 
 .. code:: bash
