@@ -9,7 +9,7 @@ FROM ubuntu:23.04 AS base-cross-compiler
 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-        ca-certificates git make dosfstools mtools
+        ca-certificates git make
 
 RUN mkdir -p /opt/wonderful/
 ADD https://wonderful.asie.pl/bootstrap/wf-bootstrap-x86_64.tar.gz /opt/wonderful/

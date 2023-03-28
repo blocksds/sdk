@@ -73,8 +73,7 @@ If you're on Ubuntu, for example, run the following command:
 .. code:: bash
 
     sudo apt-get install -y --no-install-recommends \
-        build-essential libfreeimage-dev meson ninja-build \
-        dosfstools mtools
+        build-essential libfreeimage-dev meson ninja-build
 
 You will also need to install the ARM toolchain of Wonderful Toolchains, but you
 can skip step 5:
