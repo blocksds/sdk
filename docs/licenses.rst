@@ -23,6 +23,15 @@ Zlib license. No copyright notice required in binary distributions.
 FatFs uses a custom BSD/MIT/ISC-like license that doesn't require attribution in
 binary files either.
 
+``libs/libxm7``
+===============
+
+MIT license. Copyright notice required:
+
+::
+
+    Copyright (C) 2018 sverx
+
 ``libs/maxmod``
 ===============
 

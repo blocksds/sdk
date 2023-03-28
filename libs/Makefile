@@ -8,9 +8,9 @@ MAKE		:= make
 RM		:= rm -rf
 MKDIR		:= mkdir
 
-.PHONY: all clean dswifi install libnds maxmod
+.PHONY: all clean dswifi install libnds libxm7 maxmod
 
-all: dswifi libnds maxmod
+all: dswifi libnds libxm7 maxmod
 
 # Build targets
 # =============
@@ -20,6 +20,9 @@ dswifi: libnds
 
 libnds:
 	+$(MAKE) -C libnds -j`nproc`
+
+libxm7: libnds
+	+$(MAKE) -C libxm7 -j`nproc`
 
 maxmod:
 	+$(MAKE) -C maxmod ds -j`nproc`
@@ -35,9 +38,11 @@ install: all
 	$(INSTALL) -d $(INSTALLDIR_ABS)/libs \
 		      $(INSTALLDIR_ABS)/libs/dswifi \
 		      $(INSTALLDIR_ABS)/libs/libnds \
+		      $(INSTALLDIR_ABS)/libs/libxm7 \
 		      $(INSTALLDIR_ABS)/libs/maxmod
 	$(CP) -r dswifi/include dswifi/lib $(INSTALLDIR_ABS)/libs/dswifi
 	$(CP) -r libnds/include libnds/lib $(INSTALLDIR_ABS)/libs/libnds
+	$(CP) -r libxm7/include libxm7/lib $(INSTALLDIR_ABS)/libs/libxm7
 	$(CP) -r maxmod/include maxmod/lib $(INSTALLDIR_ABS)/libs/maxmod
 
 # Clean target
@@ -46,4 +51,5 @@ install: all
 clean:
 	+$(MAKE) -C dswifi clean
 	+$(MAKE) -C libnds clean
+	+$(MAKE) -C libxm7 clean
 	+$(MAKE) -C maxmod clean
