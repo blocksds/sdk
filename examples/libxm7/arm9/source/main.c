@@ -11,8 +11,12 @@
 // XM module by Lasse. Obtained from the original libxm7 example by sverx
 #include <lasse_haen_pyykit_xm_bin.h>
 
+// Parallax Glacier by Raina:
+// http://modarchive.org/index.php?request=view_by_moduleid&query=163194
+#include <parallax_80599_xm_bin.h>
+
 // Assign FIFO_USER_07 channel to libxm7
-#define FIFO_XM7    (FIFO_USER_07)
+#define FIFO_XM7 (FIFO_USER_07)
 
 void song_start(XM7_ModuleManager_Type *module)
 {
@@ -24,30 +28,41 @@ void song_stop(void)
     fifoSendValue32(FIFO_XM7, 0);
 }
 
+// You can also allocate this with malloc()
+static XM7_ModuleManager_Type module[2];
+
 int main(int argc, char **argv)
 {
     consoleDemoInit();
 
     printf("libXM7 example\n");
+    printf("==============\n");
     printf("\n");
-    printf("A:     Start song\n");
-    printf("B:     Stop song\n");
+    printf("X: haen pyykit by Lasse\n");
+    printf("Y: Parallax Glacier by Raina\n");
+    printf("\n");
+    printf("B: Stop song\n");
+    printf("\n");
     printf("START: Return to loader\n");
 
-    bool libxm7_enabled = true;
+    bool songs_loaded = true;
 
-    XM7_ModuleManager_Type *module = malloc(sizeof(XM7_ModuleManager_Type));
-    if (module == NULL)
-    {
-        printf("malloc() error\n");
-        libxm7_enabled = false;
-    }
+    u16 res;
 
-    u16 res = XM7_LoadXM(module, (XM7_XMModuleHeader_Type *)lasse_haen_pyykit_xm_bin);
+    res = XM7_LoadXM(&module[0],
+                     (XM7_XMModuleHeader_Type *)lasse_haen_pyykit_xm_bin);
     if (res != 0)
     {
-        printf("libxm7 error: 0x%04x\n", res);
-        libxm7_enabled = false;
+        printf("libxm7 error (module 0): 0x%04x\n", res);
+        songs_loaded = false;
+    }
+
+    res = XM7_LoadXM(&module[1],
+                     (XM7_XMModuleHeader_Type *)parallax_80599_xm_bin);
+    if (res != 0)
+    {
+        printf("libxm7 error (module 1): 0x%04x\n", res);
+        songs_loaded = false;
     }
 
     // Ensure that the ARM7 can see the libxm7 initialized data
@@ -65,32 +80,41 @@ int main(int argc, char **argv)
 
         uint16_t keys_down = keysDown();
 
-        if (libxm7_enabled)
+        if (songs_loaded)
         {
-            if (playing)
+            if (keys_down & KEY_B)
             {
-                if (keys_down & KEY_B)
+                if (playing)
                 {
                     song_stop();
                     playing = false;
                 }
             }
-            else
-            {
-                if (keys_down & KEY_A)
-                {
-                    song_start(module);
-                    playing = true;
-                }
-            }
 
+            if (keys_down & KEY_X)
+            {
+                if (playing)
+                    song_stop();
+
+                song_start(&module[0]);
+                playing = true;
+            }
+            if (keys_down & KEY_Y)
+            {
+                if (playing)
+                    song_stop();
+
+                song_start(&module[1]);
+                playing = true;
+            }
         }
 
         if (keys_down & KEY_START)
             break;
     }
 
-    XM7_UnloadXM(module);
+    XM7_UnloadXM(&module[0]);
+    XM7_UnloadXM(&module[1]);
 
     soundDisable();
 
