@@ -37,6 +37,7 @@ _start:
 	sub	r1,r1,#0x100
 	mov	sp,r1
 
+	@ This sets r8 to the end address of RAM for that DS model
 	ldr	r3, =__libnds_mpu_setup
 	blx	r3
 
