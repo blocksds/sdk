@@ -324,26 +324,27 @@ int main (int argc, char* argv[])
 		}
 		if (!nent) {
 			printf("\nAnother FAT sub-type is requierd for truncation. Adjust volume size or cluster size.\n");
-			return 3;
-		}
-		szfp = ld_word(RamDisk + BPB_FATSz16) * RamDisk[BPB_NumFATs];
-		if (!szfp) szfp = ld_dword(RamDisk + BPB_FATSz32) * RamDisk[BPB_NumFATs];
-		edf = FatFs.fatbase + szf;
-		edfp = (FatFs.fs_type == FS_FAT32) ? FatFs.database : FatFs.dirbase;
-		memcpy(RamDisk + (edf * FF_MIN_SS), RamDisk + (edfp * FF_MIN_SS), (szvol - edfp) * FF_MIN_SS);
-		szvol -= (szfp - szf) + FatFs.csize * (FatFs.n_fatent - nent);
-		if (FatFs.fs_type == FS_FAT32) {
-			st_dword(RamDisk + BPB_FATSz32, szf);
 		} else {
-			st_word(RamDisk + BPB_FATSz16, (WORD)szf);
-		}
-		RamDisk[BPB_NumFATs] = 1;
-		if (szvol < 0x10000) {
-			st_word(RamDisk + BPB_TotSec16, (WORD)szvol);
-			st_dword(RamDisk + BPB_TotSec32, 0);
-		} else {
-			st_word(RamDisk + BPB_TotSec16, 0);
-			st_dword(RamDisk + BPB_TotSec32, szvol);
+			/* Actually truncate the filesystem image */
+			szfp = ld_word(RamDisk + BPB_FATSz16) * RamDisk[BPB_NumFATs];
+			if (!szfp) szfp = ld_dword(RamDisk + BPB_FATSz32) * RamDisk[BPB_NumFATs];
+			edf = FatFs.fatbase + szf;
+			edfp = (FatFs.fs_type == FS_FAT32) ? FatFs.database : FatFs.dirbase;
+			memcpy(RamDisk + (edf * FF_MIN_SS), RamDisk + (edfp * FF_MIN_SS), (szvol - edfp) * FF_MIN_SS);
+			szvol -= (szfp - szf) + FatFs.csize * (FatFs.n_fatent - nent);
+			if (FatFs.fs_type == FS_FAT32) {
+				st_dword(RamDisk + BPB_FATSz32, szf);
+			} else {
+				st_word(RamDisk + BPB_FATSz16, (WORD)szf);
+			}
+			RamDisk[BPB_NumFATs] = 1;
+			if (szvol < 0x10000) {
+				st_word(RamDisk + BPB_TotSec16, (WORD)szvol);
+				st_dword(RamDisk + BPB_TotSec32, 0);
+			} else {
+				st_word(RamDisk + BPB_TotSec16, 0);
+				st_dword(RamDisk + BPB_TotSec32, szvol);
+			}
 		}
 	}
 
