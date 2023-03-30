@@ -65,15 +65,15 @@ Native installation
 ===================
 
 You need to install a cross compiler to build applications for NDS. You also
-need to build a few host tools, so you need a compiler for the host, the
-FreeImage library, and some build tools (Meson and Ninja):
+need to build a few host tools, so you need a compiler for the host and the
+FreeImage library.
 
 If you're on Ubuntu, for example, run the following command:
 
 .. code:: bash
 
     sudo apt-get install -y --no-install-recommends \
-        build-essential libfreeimage-dev meson ninja-build
+        build-essential libfreeimage-dev
 
 You will also need to install the ARM toolchain of Wonderful Toolchains, but you
 can skip step 5:

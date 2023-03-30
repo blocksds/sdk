@@ -39,7 +39,7 @@ ENV PATH /opt/wonderful/toolchain/gcc-arm-none-eabi/bin/:$PATH
 FROM base-cross-compiler AS blocksds-dev
 
 RUN apt-get install -y --no-install-recommends \
-        build-essential libfreeimage-dev meson ninja-build
+        build-essential libfreeimage-dev
 
 WORKDIR /opt/
 RUN git clone --recurse-submodules https://github.com/blocksds/sdk.git
