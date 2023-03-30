@@ -24,6 +24,9 @@ BlocksDS uses `Elm's FatFs library <http://elm-chan.org/fsw/ff/00index_e.html>`_
 instead. This library has been ported to use the DLDI and DSi internal SD card
 drivers that are provided by ``libnds``.
 
+In the makefile, you have to remove ``-lfat`` and ``-lfilesystem``, as they
+don't exist in BlocksDS.
+
 From the point of view of the source code, you can use the same includes as when
 using ``libfat`` and ``libfilesystem``:
 
@@ -149,13 +152,13 @@ all of them work on BlocksDS.
 You are free to modify the Makefile to make it work like before, but you can
 also use the annotations in ``<nds/ndstypes.h>``:
 
-Work in BlocksDS:
+Names that work in BlocksDS:
 
 - ``*.dtcm.*``:  ``DTCM_DATA``, ``DTCM_BSS``
 - ``*.itcm.*``: ``ITCM_CODE``
 - ``*.twl.*``: ``TWL_CODE``, ``TWL_DATA``, ``TWL_BSS``
 
-Don't work in BlocksDS, you need to use the annotations:
+Names that don't work in BlocksDS, you need to use the annotations:
 
 - ``*.arm.*``: ``ARM_CODE``
 - ``*.thumb.*``: ``THUMB_CODE``
