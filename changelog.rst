@@ -2,6 +2,18 @@
 BlocksDS changelog
 ##################
 
+Version 0.5 (2023-03-31)
+========================
+
+- Define a default location for BlocksDS: ``/opt/blocksds/``
+- Use ``mkfatimg`` (distributed with FatFs) instead of ``imgbuild.sh`` to reduce
+  the number of dependencies.
+- Fix ``mmutil`` target in Makefiles in parallel builds.
+- Cleanup of GBA slot peripherals drivers.
+- Integrate ``libxm7`` as a core library.
+- Fix exit to loader code from the ARM7. It has been simplified a bit.
+- Document exit to loader code.
+
 Version 0.4 (2023-03-26)
 ========================
 
