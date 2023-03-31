@@ -84,4 +84,4 @@ Exit
 
 If the NDS ROM loader supports it, ``exit`` can be used to return to the loader.
 
-For more information, check: https://devkitpro.org/wiki/Homebrew_Menu
+For more information, check this `document <./exit-to-loader.rst>`_.
