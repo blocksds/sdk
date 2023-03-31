@@ -26,10 +26,10 @@ LIBDIRS		:=
 # Build artifacts
 # ---------------
 
-NAME		:= libtest
+NAME		:= test
 INSTALLNAME	:= library_arm9_only
 BUILDDIR	:= build
-ARCHIVE		:= lib/$(NAME).a
+ARCHIVE		:= lib/lib$(NAME).a
 
 # Tools
 # -----

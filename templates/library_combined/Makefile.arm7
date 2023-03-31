@@ -24,9 +24,9 @@ LIBDIRS		:=
 # Build artifacts
 # ---------------
 
-NAME		:= libtest7
+NAME		:= test7
 BUILDDIR	:= build/arm7
-ARCHIVE		:= lib/$(NAME).a
+ARCHIVE		:= lib/lib$(NAME).a
 
 # Tools
 # -----
