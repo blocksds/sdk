@@ -27,6 +27,7 @@ LIBDIRS		:=
 # ---------------
 
 NAME		:= libtest
+INSTALLNAME	:= library_arm9_only
 BUILDDIR	:= build
 ARCHIVE		:= lib/$(NAME).a
 
@@ -39,6 +40,8 @@ CXX		:= $(PREFIX)g++
 AR		:= ar
 MKDIR		:= mkdir
 RM		:= rm -rf
+CP		:= cp
+INSTALL	:= install
 
 # Verbose flag
 # ------------
@@ -112,7 +115,7 @@ DEPS		:= $(OBJS:.o=.d)
 # Targets
 # -------
 
-.PHONY: all clean
+.PHONY: all clean install
 
 all: $(ARCHIVE)
 
@@ -124,6 +127,12 @@ $(ARCHIVE): $(OBJS)
 clean:
 	@echo "  CLEAN"
 	$(V)$(RM) $(ARCHIVE) $(BUILDDIR)
+
+install: all
+	@echo "  INSTALL $(BLOCKSDSEXT)/$(INSTALLNAME)/"
+	$(V)$(RM) $(BLOCKSDSEXT)/$(INSTALLNAME)/
+	$(V)$(INSTALL) -d $(BLOCKSDSEXT)/$(INSTALLNAME)/
+	$(V)$(CP) -r include lib $(BLOCKSDSEXT)/$(INSTALLNAME)/
 
 # Rules
 # -----
