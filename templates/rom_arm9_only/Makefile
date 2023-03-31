@@ -10,7 +10,7 @@ BLOCKSDSEXT	?= /opt/blocksds/external
 
 NAME		:= template_arm9
 
-GAME_TITLE	:= Combined ARM7+ARM9 template
+GAME_TITLE	:= ARM9 only template
 GAME_SUBTITLE	:= Built with BlocksDS
 GAME_AUTHOR	:= github.com/blocksds/sdk
 GAME_ICON	:= icon.bmp
