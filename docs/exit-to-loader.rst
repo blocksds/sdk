@@ -72,7 +72,9 @@ boot and points to this location.
 
 ``__libnds_exit()`` tries to access the struct at that location. If ``bootsig``
 matches ``BOOTSIG``, it means that the exit to loader data has been provided and
-the function can try to start the exit process.
+the function can try to start the exit process. If the signature isn't found, it
+will simply power off the console (which actually causes a reset to the system
+menu in the DSi).
 
 If the reset has been requested from the ARM7, ``arm7reboot()`` is called.
 Similarly, if the ARM9 has requested the reset, ``arm9reboot()`` is called. Note
