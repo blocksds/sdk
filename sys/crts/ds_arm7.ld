@@ -184,7 +184,7 @@ SECTIONS
 	{
 		__tdata_start = ABSOLUTE(.) ;
 		*(.tdata .tdata.* .gnu.linkonce.td.*)
-		. = ALIGN(4) ;
+		. = ALIGN(4);    /* REQUIRED. LD is flaky without it. */
 		__tdata_end = ABSOLUTE(.) ;
 		__data_end = . ;
 	} >iwram AT>ewram
@@ -196,6 +196,7 @@ SECTIONS
 		 __tbss_start = ABSOLUTE(.) ;
 		*(.tbss .tbss.* .gnu.linkonce.tb.*)
 		*(.tcommon)
+		. = ALIGN(4);    /* REQUIRED. LD is flaky without it. */
 		 __tbss_end = ABSOLUTE(.) ;
 	} >iwram AT>ewram
 
