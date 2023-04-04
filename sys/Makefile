@@ -4,6 +4,7 @@
 
 CP		:= cp
 INSTALL		:= install
+RM		:= rm -rf
 MAKE		:= make
 
 .PHONY: all clean crts default_arm7 install
@@ -16,17 +17,17 @@ crts:
 default_arm7:
 	+$(MAKE) -C default_arm7 -j`nproc`
 
+INSTALLDIR	?= /opt/blocksds/core/sys
 INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
 
 install: all
-	@echo "INSTALLDIR = '$(INSTALLDIR)' (must not be empty)"
-	@test $(INSTALLDIR)
-	$(INSTALL) -d $(INSTALLDIR_ABS)/sys \
-		      $(INSTALLDIR_ABS)/sys/crts \
-		      $(INSTALLDIR_ABS)/sys/default_arm7
-	$(CP) icon.bmp $(INSTALLDIR_ABS)/sys/icon.bmp
-	$(CP) -r crts/*.o crts/*.ld crts/*.mem $(INSTALLDIR_ABS)/sys/crts
-	$(CP) -r default_arm7/arm7.elf $(INSTALLDIR_ABS)/sys/default_arm7
+	@echo "  INSTALL $(INSTALLDIR_ABS)"
+	@test $(INSTALLDIR_ABS)
+	@$(RM) $(INSTALLDIR_ABS)
+	@$(INSTALL) -d $(INSTALLDIR_ABS)
+	$(CP) icon.bmp $(INSTALLDIR_ABS)
+	+$(MAKE) -C crts install INSTALLDIR=$(INSTALLDIR_ABS)/crts
+	+$(MAKE) -C default_arm7 install INSTALLDIR=$(INSTALLDIR_ABS)/default_arm7
 
 clean:
 	+$(MAKE) -C crts clean

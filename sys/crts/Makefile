@@ -9,6 +9,8 @@ _PATCH		:= 0
 # Tools
 # -----
 
+CP		:= cp
+INSTALL		:= install
 PREFIX		:= arm-none-eabi-
 CC		:= $(PREFIX)gcc
 RM		:= rm -rf
@@ -27,13 +29,23 @@ endif
 
 OBJS		:= ds_arm7_vram_crt0.o ds_arm7_crt0.o ds_arm9_crt0.o
 
-.PHONY: all clean
+.PHONY: all clean install
 
 all: $(OBJS)
 
 clean:
 	@echo "  CLEAN"
 	$(V)$(RM) $(OBJS)
+
+INSTALLDIR	?= /opt/blocksds/core/sys/crts
+INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
+
+install: all
+	@echo "  INSTALL $(INSTALLDIR_ABS)"
+	@test $(INSTALLDIR_ABS)
+	$(V)$(RM) $(INSTALLDIR_ABS)
+	$(V)$(INSTALL) -d $(INSTALLDIR_ABS)
+	$(V)$(CP) -r ./*.o ./*.ld ./*.mem $(INSTALLDIR_ABS)
 
 # Rules
 # -----

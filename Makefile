@@ -2,14 +2,13 @@
 #
 # Copyright (c) 2023 Antonio Niño Díaz
 
-# Default installation path of BlocksDS core components
-INSTALLDIR	?= /opt/blocksds/core/
-
 .PHONY: all clean examples install libs sys templates tests tools
 
 all: libs sys tools
 
+INSTALL		:= install
 MAKE		:= make
+RM		:= rm -rf
 
 examples:
 	+$(MAKE) -C examples
@@ -31,13 +30,18 @@ tests:
 tools:
 	+$(MAKE) -C tools
 
+# Default installation path of BlocksDS core components
+INSTALLDIR	?= /opt/blocksds/core/
+INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
+
 install: all
-	@echo "INSTALLDIR = '$(INSTALLDIR)' (must not be empty)"
-	@test $(INSTALLDIR)
-	@rm -rf $(INSTALLDIR)
-	+$(MAKE) -C libs install INSTALLDIR=$(abspath $(INSTALLDIR))
-	+$(MAKE) -C sys install INSTALLDIR=$(abspath $(INSTALLDIR))
-	+$(MAKE) -C tools install INSTALLDIR=$(abspath $(INSTALLDIR))
+	@echo "  INSTALL $(INSTALLDIR_ABS)"
+	@test $(INSTALLDIR_ABS)
+	$(RM) $(INSTALLDIR_ABS)
+	$(INSTALL) -d $(INSTALLDIR_ABS)
+	+$(MAKE) -C libs install INSTALLDIR=$(INSTALLDIR_ABS)/libs
+	+$(MAKE) -C sys install INSTALLDIR=$(INSTALLDIR_ABS)/sys
+	+$(MAKE) -C tools install INSTALLDIR=$(INSTALLDIR_ABS)/tools
 	@if [ `git rev-parse HEAD 2> /dev/null` ]; then \
 		git rev-parse HEAD > $(INSTALLDIR)/version.txt ; \
 	fi

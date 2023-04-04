@@ -48,6 +48,8 @@ CXX		:= $(PREFIX)g++
 OBJDUMP		:= $(PREFIX)objdump
 MKDIR		:= mkdir
 RM		:= rm -rf
+CP		:= cp
+INSTALL		:= install
 
 # Verbose flag
 # ------------
@@ -135,6 +137,16 @@ dump: $(DUMP)
 clean:
 	@echo "  CLEAN"
 	$(V)$(RM) $(ELF) $(DUMP) $(MAP) $(BUILDDIR)
+
+INSTALLDIR	?= /opt/blocksds/core/sys/default_arm7
+INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
+
+install: all
+	@echo "  INSTALL $(INSTALLDIR_ABS)"
+	@test $(INSTALLDIR_ABS)
+	$(V)$(RM) $(INSTALLDIR_ABS)
+	$(V)$(INSTALL) -d $(INSTALLDIR_ABS)
+	$(V)$(CP) -r arm7.elf $(INSTALLDIR_ABS)
 
 # Rules
 # -----

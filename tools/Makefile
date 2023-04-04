@@ -47,28 +47,30 @@ ndstool: ndstool/ndstool
 ndstool/ndstool:
 	$(MAKE) -C ndstool -j`nproc`
 
+INSTALLDIR	?= /opt/blocksds/core/tools
 INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
 
 install: all
-	@echo "INSTALLDIR = '$(INSTALLDIR)' (must not be empty)"
-	@test $(INSTALLDIR)
-	$(INSTALL) -d $(INSTALLDIR_ABS)/tools \
-		      $(INSTALLDIR_ABS)/tools/bin2c \
-		      $(INSTALLDIR_ABS)/tools/dldi \
-		      $(INSTALLDIR_ABS)/tools/dldipatch \
-		      $(INSTALLDIR_ABS)/tools/dlditool \
-		      $(INSTALLDIR_ABS)/tools/grit \
-		      $(INSTALLDIR_ABS)/tools/mkfatimg \
-		      $(INSTALLDIR_ABS)/tools/mmutil \
-		      $(INSTALLDIR_ABS)/tools/ndstool
-	$(INSTALL) $(STRIP) -m $(BINMODE) bin2c/bin2c $(INSTALLDIR_ABS)/tools/bin2c/
-	$(INSTALL) dldi/r4tfv2.dldi $(INSTALLDIR_ABS)/tools/dldi/
-	$(INSTALL) $(STRIP) -m $(BINMODE) dldipatch/dldipatch $(INSTALLDIR_ABS)/tools/dldipatch/
-	$(INSTALL) $(STRIP) -m $(BINMODE) dlditool/dlditool $(INSTALLDIR_ABS)/tools/dlditool/
-	$(INSTALL) $(STRIP) -m $(BINMODE) grit/grit $(INSTALLDIR_ABS)/tools/grit/
-	$(INSTALL) $(STRIP) -m $(BINMODE) mkfatimg/mkfatimg $(INSTALLDIR_ABS)/tools/mkfatimg/
-	$(INSTALL) $(STRIP) -m $(BINMODE) mmutil/mmutil $(INSTALLDIR_ABS)/tools/mmutil/
-	$(INSTALL) $(STRIP) -m $(BINMODE) ndstool/ndstool $(INSTALLDIR_ABS)/tools/ndstool/
+	@echo "  INSTALL $(INSTALLDIR_ABS)"
+	@test $(INSTALLDIR_ABS)
+	@$(V)$(RM) $(INSTALLDIR_ABS)
+	@$(V)$(INSTALL) -d $(INSTALLDIR_ABS) \
+		      $(INSTALLDIR_ABS)/bin2c \
+		      $(INSTALLDIR_ABS)/dldi \
+		      $(INSTALLDIR_ABS)/dldipatch \
+		      $(INSTALLDIR_ABS)/dlditool \
+		      $(INSTALLDIR_ABS)/grit \
+		      $(INSTALLDIR_ABS)/mkfatimg \
+		      $(INSTALLDIR_ABS)/mmutil \
+		      $(INSTALLDIR_ABS)/ndstool
+	$(INSTALL) $(STRIP) -m $(BINMODE) bin2c/bin2c $(INSTALLDIR_ABS)/bin2c/
+	$(INSTALL) dldi/r4tfv2.dldi $(INSTALLDIR_ABS)/dldi/
+	$(INSTALL) $(STRIP) -m $(BINMODE) dldipatch/dldipatch $(INSTALLDIR_ABS)/dldipatch/
+	$(INSTALL) $(STRIP) -m $(BINMODE) dlditool/dlditool $(INSTALLDIR_ABS)/dlditool/
+	$(INSTALL) $(STRIP) -m $(BINMODE) grit/grit $(INSTALLDIR_ABS)/grit/
+	$(INSTALL) $(STRIP) -m $(BINMODE) mkfatimg/mkfatimg $(INSTALLDIR_ABS)/mkfatimg/
+	$(INSTALL) $(STRIP) -m $(BINMODE) mmutil/mmutil $(INSTALLDIR_ABS)/mmutil/
+	$(INSTALL) $(STRIP) -m $(BINMODE) ndstool/ndstool $(INSTALLDIR_ABS)/ndstool/
 
 clean:
 	$(MAKE) -C bin2c clean

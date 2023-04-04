@@ -30,20 +30,18 @@ maxmod:
 # Install target
 # ==============
 
+INSTALLDIR	?= /opt/blocksds/core/libs
 INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
 
 install: all
-	@echo "INSTALLDIR = '$(INSTALLDIR)' (must not be empty)"
-	@test $(INSTALLDIR)
-	$(INSTALL) -d $(INSTALLDIR_ABS)/libs \
-		      $(INSTALLDIR_ABS)/libs/dswifi \
-		      $(INSTALLDIR_ABS)/libs/libnds \
-		      $(INSTALLDIR_ABS)/libs/libxm7 \
-		      $(INSTALLDIR_ABS)/libs/maxmod
-	$(CP) -r dswifi/include dswifi/lib $(INSTALLDIR_ABS)/libs/dswifi
-	$(CP) -r libnds/include libnds/lib $(INSTALLDIR_ABS)/libs/libnds
-	$(CP) -r libxm7/include libxm7/lib $(INSTALLDIR_ABS)/libs/libxm7
-	$(CP) -r maxmod/include maxmod/lib $(INSTALLDIR_ABS)/libs/maxmod
+	@echo "  INSTALL $(INSTALLDIR_ABS)"
+	@test $(INSTALLDIR_ABS)
+	@$(RM) $(INSTALLDIR_ABS)
+	@$(INSTALL) -d $(INSTALLDIR_ABS)
+	+$(MAKE) -C libnds install INSTALLDIR=$(INSTALLDIR_ABS)/libnds
+	+$(MAKE) -C dswifi install INSTALLDIR=$(INSTALLDIR_ABS)/dswifi
+	+$(MAKE) -C libxm7 install INSTALLDIR=$(INSTALLDIR_ABS)/libxm7
+	+$(MAKE) -C maxmod install INSTALLDIR=$(INSTALLDIR_ABS)/maxmod
 
 # Clean target
 # ============
