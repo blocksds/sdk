@@ -16,6 +16,7 @@
 #define SET_CHANNEL(v)  (((v) << 28) & MASK_CHANNEL)
 
 unsigned int latest_command[8];
+int error[8];
 
 int thread_fifo(void *arg)
 {
@@ -29,7 +30,9 @@ int thread_fifo(void *arg)
 
         uint32_t command = fifoGetValue32(expected_channel);
 
-        latest_command[expected_channel - FIFO_USER_01] = command;
+        int index = expected_channel - FIFO_USER_01;
+
+        latest_command[index] = command;
 
         uint32_t value = GET_VALUE(command);
         uint32_t channel = GET_CHANNEL(command);
@@ -37,7 +40,7 @@ int thread_fifo(void *arg)
         // If the channel doesn't match, stop the loop
         if (channel != expected_channel)
         {
-            latest_command[expected_channel - FIFO_USER_01] = 0xDEAD;
+            error[index] = 1;
             return 0;
         }
 
@@ -61,8 +64,18 @@ int main(int argc, char **argv)
         cothread_yield_irq(IRQ_VBLANK);
 
         printf("\x1b[2J"); // Clear console
+
         for (uint32_t ch = FIFO_USER_01; ch < FIFO_USER_08; ch++)
-            printf("%X\n", latest_command[ch - FIFO_USER_01]);
+        {
+            int index = ch - FIFO_USER_01;
+
+            printf("%X", latest_command[index]);
+
+            if (error[index] != 0)
+                printf(" [!]");
+
+            printf("\n");
+        }
 
         printf("\n\nPress START to exit");
 
