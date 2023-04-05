@@ -14,6 +14,5 @@ SOURCEDIRS	:= source
 # Libraries
 
 LIBS		:= -lstdc++
-LIBDIRS		:= $(BLOCKSDS)/libs/libstdc++9
 
 include ../../tests/Makefile.include
