@@ -2,14 +2,15 @@
 //
 // Copyright (c) 2014, 2019-2020, 2023 Antonio Niño Díaz
 
+#include <ctype.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_PATH_LEN    1024
+#define MAX_PATH_LEN    2048
 
-char base_array_name[MAX_PATH_LEN];
+char out_array_name[MAX_PATH_LEN];
 char c_file_name[MAX_PATH_LEN];
 char h_file_name[MAX_PATH_LEN];
 
@@ -51,8 +52,8 @@ void file_load(const char *path, void **buffer, size_t *size)
     fclose(f);
 }
 
-// Converts `/my/file/data.bin` to `data_bin` and saves it to `base_array_name`
-void generate_transformed_name(const char *path)
+// Converts a file name to an array name and output file names
+void generate_transformed_name(const char *path, const char *dir_out)
 {
     size_t len = strlen(path);
 
@@ -67,15 +68,53 @@ void generate_transformed_name(const char *path)
         }
     }
 
-    snprintf(base_array_name, sizeof(base_array_name), "%s", &(path[start]));
+    const char *basename = &(path[start]);
 
-    len = strlen(base_array_name);
+    snprintf(c_file_name, sizeof(c_file_name), "%s/%s.c", dir_out, basename);
+    snprintf(h_file_name, sizeof(h_file_name), "%s/%s.h", dir_out, basename);
 
-    for (size_t i = 0; i < len; i++)
+    // Fix names of header and C files and replace '.bin' by '_bin'.
+    //
+    //     out.path/34.my.bin.file.bin -> out.path/34.my.bin.file_bin.h
+    //                                    out.path/34.my.bin.file_bin.c
     {
-        if (base_array_name[i] == '.')
+        len = strlen(h_file_name);
+
+        for (size_t i = len - 3; i > 0; i--)
         {
-            base_array_name[i] = '_';
+            if (h_file_name[i] == '.')
+            {
+                h_file_name[i] = '_';
+                c_file_name[i] = '_';
+                break;
+            }
+            else if (h_file_name[i] == '/')
+            {
+                break;
+            }
+        }
+    }
+
+    // Create the array name. If the name begins by a digit, prefix it with a
+    // '_' to form a valid identifier. Also, convert dots and dashes to
+    // underscores.
+    //
+    //     my-bin-file.bin -> my_bin_file_bin[]
+    //     34.my.bin.file.bin -> _34_my_bin_file_bin[]
+    {
+        const char *prefix = "";
+        if (isdigit(path[start]))
+            prefix = "_";
+
+        snprintf(out_array_name, sizeof(out_array_name), "%s%s",
+                 prefix, &(path[start]));
+
+        len = strlen(out_array_name);
+
+        for (size_t i = 0; i < len; i++)
+        {
+            if ((out_array_name[i] == '.') || (out_array_name[i] == '-'))
+                out_array_name[i] = '_';
         }
     }
 }
@@ -93,16 +132,11 @@ int main(int argc, char **argv)
     }
 
     const char *path_in = argv[1];
-    const char *path_out = argv[2];
+    const char *dir_out = argv[2];
 
     file_load(path_in, &file, &size);
 
-    generate_transformed_name(path_in);
-
-    snprintf(c_file_name, sizeof(c_file_name),
-             "%s/%s.c", path_out, base_array_name);
-    snprintf(h_file_name, sizeof(h_file_name),
-             "%s/%s.h", path_out, base_array_name);
+    generate_transformed_name(path_in, dir_out);
 
     FILE *fc = fopen(c_file_name, "w");
     if (fc == NULL)
@@ -119,7 +153,7 @@ int main(int argc, char **argv)
 
     fprintf(fc, "%s", c_header);
     fprintf(fc, "const uint8_t %s[%zu] __attribute__((aligned(4)))  =\n",
-            base_array_name, size);
+            out_array_name, size);
     fprintf(fc, "{\n");
 
     uint8_t *data = file;
@@ -160,8 +194,8 @@ int main(int argc, char **argv)
         "\n"
         "#define %s_size (%zu)\n"
         "extern const uint8_t %s[%zu];\n",
-        base_array_name, size,
-        base_array_name, size);
+        out_array_name, size,
+        out_array_name, size);
 
     fclose(fh);
 
