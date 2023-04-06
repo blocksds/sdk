@@ -137,10 +137,7 @@ int main(int argc, char **argv)
     {
         cothread_create(thread_fifo_value32, (void *)ch, 0, COTHREAD_DETACHED);
         cothread_create(thread_fifo_address, (void *)ch, 0, COTHREAD_DETACHED);
-        // TODO: If more channels are enabled below, there is stack corruption
-        // after a few seconds.
-        if (ch < FIFO_USER_03)
-            cothread_create(thread_fifo_datamsg, (void *)ch, 0, COTHREAD_DETACHED);
+        cothread_create(thread_fifo_datamsg, (void *)ch, 0, COTHREAD_DETACHED);
     }
 
     while (1)
