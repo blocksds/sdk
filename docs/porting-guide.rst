@@ -185,3 +185,33 @@ Makefile:
         -Wl,--defsym=vfprintf=__i_vfprintf -Wl,--defsym=vfscanf=__i_vfscanf
 
 For more information: https://github.com/picolibc/picolibc/blob/main/doc/printf.md
+
+7. Note about ``readdir()``
+===========================
+
+The expected behaviour of FatFs is to not include ``.`` and ``..`` as entries
+when iterating over the entries of a directory. This is different than in
+devkitPro, and it's a behaviour that may be added in the future.
+
+Also, ``readdir()`` returns a ``struct dirent`` pointer with the field
+``d_type``. This field can be used to determine if an entry is a directory or a
+file. I've seen that some programs use it like this:
+
+.. code:: c
+
+    struct dirent *cur = readdir(dirp);
+    if (cur->d_type & DT_DIR)
+        printf("This is a directory\n");
+    else if (cur->d_type & DT_REG)
+        printf("This is a file\n");
+
+However, this is incorrect. The right way to compare it is by checking if the
+value is equal:
+
+.. code:: c
+
+    struct dirent *cur = readdir(dirp);
+    if (cur->d_type == DT_DIR)
+        printf("This is a directory\n");
+    else if (cur->d_type == DT_REG)
+        printf("This is a file\n");
