@@ -190,8 +190,8 @@ For more information: https://github.com/picolibc/picolibc/blob/main/doc/printf.
 ===========================
 
 The expected behaviour of FatFs is to not include ``.`` and ``..`` as entries
-when iterating over the entries of a directory. This is different than in
-devkitPro, and it's a behaviour that may be added in the future.
+when iterating over the entries of a directory. This is different than under
+devkitARM, and it's a behaviour that may be added in the future.
 
 Also, ``readdir()`` returns a ``struct dirent`` pointer with the field
 ``d_type``. This field can be used to determine if an entry is a directory or a
