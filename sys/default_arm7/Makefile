@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# Copyright (c) 2023 Antonio Niño Díaz
+# SPDX-FileContributor: Antonio Niño Díaz, 2023
 
 BLOCKSDS	?= /opt/blocksds/core
 BLOCKSDSEXT	?= /opt/blocksds/external
