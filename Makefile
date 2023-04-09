@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: Zlib
+# SPDX-License-Identifier: CC0-1.0
 #
 # Copyright (c) 2023 Antonio Niño Díaz
 
