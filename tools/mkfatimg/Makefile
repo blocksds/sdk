@@ -29,10 +29,16 @@ ELF		:= $(NAME)
 # Tools
 # -----
 
+STRIP		:= -s
+BINMODE		:= 755
+
 CC		:= gcc
 CXX		:= g++
+CP		:= cp
 MKDIR		:= mkdir
 RM		:= rm -rf
+MAKE		:= make
+INSTALL		:= install
 
 # Verbose flag
 # ------------
@@ -85,7 +91,7 @@ DEPS		:= $(OBJS:.o=.d)
 # Targets
 # -------
 
-.PHONY: all clean
+.PHONY: all clean install
 
 all: $(ELF)
 
@@ -96,6 +102,16 @@ $(ELF): $(OBJS)
 clean:
 	@echo "  CLEAN  "
 	$(V)$(RM) $(ELF) $(BUILDDIR)
+
+INSTALLDIR	?= /opt/blocksds/core/tools/mkfatimg
+INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
+
+install: all
+	@echo "  INSTALL $(INSTALLDIR_ABS)"
+	@test $(INSTALLDIR_ABS)
+	$(V)$(RM) $(INSTALLDIR_ABS)
+	$(V)$(INSTALL) -d $(INSTALLDIR_ABS)
+	$(V)$(INSTALL) $(STRIP) -m $(BINMODE) $(NAME) $(INSTALLDIR_ABS)
 
 # Rules
 # -----
