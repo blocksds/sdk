@@ -18,8 +18,8 @@
 	.asciz	" Chishm"		@ Identifying Magic string (8 bytes with null terminator)
 	.byte	0x01			@ Version number
 	.byte	DLDI_SIZE_16KB	@16KiB	@ Log [base-2] of the size of this driver in bytes.
-	.byte	0x00			@ Sections to fix
-	.byte 	DLDI_SIZE_16KB	@16KiB	@ Log [base-2] of the allocated space in bytes.
+	.byte	FIX_GOT | FIX_BSS | FIX_GLUE	@ Sections to fix
+	.byte 	0x00			@ Space allocated in the application, leave empty.
 	
 @---------------------------------------------------------------------------------
 @ Text identifier - can be anything up to 47 chars + terminating null -- 48 bytes
