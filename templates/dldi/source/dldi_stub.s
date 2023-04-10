@@ -42,8 +42,7 @@
 #ifdef ARM9
     .word   FEATURE_MEDIUM_CANREAD | FEATURE_MEDIUM_CANWRITE | FEATURE_SLOT_NDS
 #else
-    .word   FEATURE_MEDIUM_CANREAD | FEATURE_MEDIUM_CANWRITE | FEATURE_SLOT_NDS |
-            FEATURE_ARM7_CAPABLE
+    .word   FEATURE_MEDIUM_CANREAD | FEATURE_MEDIUM_CANWRITE | FEATURE_SLOT_NDS | FEATURE_ARM7_CAPABLE
 #endif
     .word   startup         @ Function pointers to standard device driver functions
     .word   is_inserted
