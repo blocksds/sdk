@@ -10,72 +10,67 @@
 #include <dswifi7.h>
 #include <maxmod7.h>
 
-//---------------------------------------------------------------------------------
-void VblankHandler(void) {
-//---------------------------------------------------------------------------------
-	Wifi_Update();
+void VblankHandler(void)
+{
+    Wifi_Update();
 }
 
-
-//---------------------------------------------------------------------------------
-void VcountHandler() {
-//---------------------------------------------------------------------------------
-	inputGetAndSend();
+void VcountHandler(void)
+{
+    inputGetAndSend();
 }
 
 volatile bool exitflag = false;
 
-//---------------------------------------------------------------------------------
-void powerButtonCB() {
-//---------------------------------------------------------------------------------
-	exitflag = true;
+void powerButtonCB(void)
+{
+    exitflag = true;
 }
 
-//---------------------------------------------------------------------------------
-int main() {
-//---------------------------------------------------------------------------------
-	// clear sound registers
-	dmaFillWords(0, (void*)0x04000400, 0x100);
+int main(int argc, char **argv)
+{
+    // Clear sound registers
+    dmaFillWords(0, (void*)0x04000400, 0x100);
 
-	REG_SOUNDCNT |= SOUND_ENABLE;
-	writePowerManagement(PM_CONTROL_REG, ( readPowerManagement(PM_CONTROL_REG) & ~PM_SOUND_MUTE ) | PM_SOUND_AMP );
-	powerOn(POWER_SOUND);
+    REG_SOUNDCNT |= SOUND_ENABLE;
+    writePowerManagement(PM_CONTROL_REG, ( readPowerManagement(PM_CONTROL_REG) & ~PM_SOUND_MUTE ) | PM_SOUND_AMP );
+    powerOn(POWER_SOUND);
 
-	readUserSettings();
-	ledBlink(0);
+    readUserSettings();
+    ledBlink(0);
 
-	irqInit();
-	// Start the RTC tracking IRQ
-	initClockIRQ();
-	fifoInit();
-	touchInit();
+    irqInit();
+    // Start the RTC tracking IRQ
+    initClockIRQ();
+    fifoInit();
+    touchInit();
 
-	mmInstall(FIFO_MAXMOD);
+    mmInstall(FIFO_MAXMOD);
 
-	SetYtrigger(80);
+    SetYtrigger(80);
 
-	installWifiFIFO();
-	installSoundFIFO();
+    installWifiFIFO();
+    installSoundFIFO();
 
-	installSystemFIFO();
+    installSystemFIFO();
 
-	if (isDSiMode()) {
-		installCameraFIFO();
-	}
+    if (isDSiMode())
+        installCameraFIFO();
 
-	irqSet(IRQ_VCOUNT, VcountHandler);
-	irqSet(IRQ_VBLANK, VblankHandler);
+    irqSet(IRQ_VCOUNT, VcountHandler);
+    irqSet(IRQ_VBLANK, VblankHandler);
 
-	irqEnable( IRQ_VBLANK | IRQ_VCOUNT | IRQ_NETWORK);
+    irqEnable( IRQ_VBLANK | IRQ_VCOUNT | IRQ_NETWORK);
 
-	setPowerButtonCB(powerButtonCB);
+    setPowerButtonCB(powerButtonCB);
 
-	// Keep the ARM7 mostly idle
-	while (!exitflag) {
-		if ( 0 == (REG_KEYINPUT & (KEY_SELECT | KEY_START | KEY_L | KEY_R))) {
-			exitflag = true;
-		}
-		swiWaitForVBlank();
-	}
-	return 0;
+    // Keep the ARM7 mostly idle
+    while (!exitflag)
+    {
+        if (0 == (REG_KEYINPUT & (KEY_SELECT | KEY_START | KEY_L | KEY_R)))
+            exitflag = true;
+
+        swiWaitForVBlank();
+    }
+    return 0;
 }
