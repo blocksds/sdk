@@ -25,7 +25,7 @@ PHDRS {
 
 SECTIONS
 {
-	/* Secure area crap */
+	/* Secure area reserved space */
 	.secure : { *(.secure) } >ewram :main = 0
 
 	.crt0	:

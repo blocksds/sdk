@@ -135,7 +135,6 @@ NotTWL:
 	str	r8, [r1]
 
 	push	{r0}
-	ldr	r0, =__secure_area__
 	ldr	r3, =initSystem
 	blx	r3			@ system initialisation
 
@@ -154,6 +153,9 @@ NotTWL:
 	ldr	r3, =cothread_start	@ This starts main as a thread
 	ldr	lr, =__libnds_exit
 	bx	r3			@ jump to user code
+
+	// Reference __secure_area__ so it isn't discarded by the garbage collector
+	ldr	r0, =__secure_area__
 
 @---------------------------------------------------------------------------------
 @ check for a commandline 
