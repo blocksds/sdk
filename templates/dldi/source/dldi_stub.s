@@ -5,13 +5,12 @@
 
 #include <nds/arm9/dldi_asm.h>
 
+@---------------------------------------------------------------------------------
+	.section ".crt0","ax"
+@---------------------------------------------------------------------------------
+	.global _start
 	.align	4
 	.arm
-	.global _io_dldi_stub
-@---------------------------------------------------------------------------------
-
-_io_dldi_stub:
-
 
 @---------------------------------------------------------------------------------
 @ Driver patch file standard header -- 16 bytes
@@ -30,14 +29,14 @@ _io_dldi_stub:
 @---------------------------------------------------------------------------------
 @ Offsets to important sections within the data	-- 32 bytes
 	.align	6
-	.word   dldi_start		@ data start
-	.word   dldi_end		@ data end
-	.word	0x00000000		@ Interworking glue start	-- Needs address fixing
-	.word	0x00000000		@ Interworking glue end
-	.word   0x00000000		@ GOT start					-- Needs address fixing
-	.word   0x00000000		@ GOT end
-	.word   0x00000000		@ bss start					-- Needs setting to zero
-	.word   0x00000000		@ bss end
+	.word   __text_start	@ data start
+	.word   __data_end		@ data end
+	.word	__glue_start	@ Interworking glue start	-- Needs address fixing
+	.word	__glue_end		@ Interworking glue end
+	.word   __got_start		@ GOT start					-- Needs address fixing
+	.word   __got_end		@ GOT end
+	.word   __bss_start		@ bss start					-- Needs setting to zero
+	.word   __bss_end		@ bss end
 
 @---------------------------------------------------------------------------------
 @ DISC_INTERFACE data -- 32 bytes
@@ -63,6 +62,8 @@ _DLDI_shutdown:
 
 
 
+@---------------------------------------------------------------------------------
+_start:
 @---------------------------------------------------------------------------------
 	.align
 	.pool
