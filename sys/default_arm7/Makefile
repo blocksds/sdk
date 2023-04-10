@@ -146,7 +146,7 @@ install: all
 	@test $(INSTALLDIR_ABS)
 	$(V)$(RM) $(INSTALLDIR_ABS)
 	$(V)$(INSTALL) -d $(INSTALLDIR_ABS)
-	$(V)$(CP) -r arm7.elf $(INSTALLDIR_ABS)
+	$(V)$(CP) -r arm7.elf COPYING $(INSTALLDIR_ABS)
 
 # Rules
 # -----
