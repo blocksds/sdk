@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Zlib
 //
-// Copyright (C) 2005-2010 Michael Noland (joat)
-// Copyright (C) 2005-2010 Jason Rogers (Dovoto)
-// Copyright (C) 2005-2010 Dave Murphy (WinterMute)
+// Copyright (C) 2005 Michael Noland (joat)
+// Copyright (C) 2005 Jason Rogers (Dovoto)
+// Copyright (C) 2005-2015 Dave Murphy (WinterMute)
 
 // Default ARM7 core
 
@@ -73,5 +73,6 @@ int main(int argc, char **argv)
 
         swiWaitForVBlank();
     }
+
     return 0;
 }
