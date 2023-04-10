@@ -46,12 +46,12 @@ install: all
 		      $(INSTALLDIR_ABS)/dldipatch
 	$(INSTALL) dldi/r4tfv2.dldi $(INSTALLDIR_ABS)/dldi/
 	$(INSTALL) $(STRIP) -m $(BINMODE) dldipatch/dldipatch $(INSTALLDIR_ABS)/dldipatch/
-	$(MAKE) -C bin2c install
-	$(MAKE) -C dlditool install
-	$(MAKE) -C grit install
-	$(MAKE) -C mkfatimg install
-	$(MAKE) -C mmutil install
-	$(MAKE) -C ndstool install
+	$(MAKE) -C bin2c install INSTALLDIR=$(INSTALLDIR_ABS)/bin2c
+	$(MAKE) -C dlditool install INSTALLDIR=$(INSTALLDIR_ABS)/dlditool
+	$(MAKE) -C grit install INSTALLDIR=$(INSTALLDIR_ABS)/grit
+	$(MAKE) -C mkfatimg install INSTALLDIR=$(INSTALLDIR_ABS)/mkfatimg
+	$(MAKE) -C mmutil install INSTALLDIR=$(INSTALLDIR_ABS)/mmutil
+	$(MAKE) -C ndstool install INSTALLDIR=$(INSTALLDIR_ABS)/ndstool
 
 clean:
 	$(MAKE) -C bin2c clean
