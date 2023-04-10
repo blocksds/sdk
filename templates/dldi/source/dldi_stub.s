@@ -10,11 +10,8 @@
 	.global _io_dldi_stub
 @---------------------------------------------------------------------------------
 
-.equ DLDI_ALLOCATED_SPACE,		16384
-
 _io_dldi_stub:
 
-dldi_start:
 
 @---------------------------------------------------------------------------------
 @ Driver patch file standard header -- 16 bytes
@@ -69,12 +66,5 @@ _DLDI_shutdown:
 @---------------------------------------------------------------------------------
 	.align
 	.pool
-
-dldi_data_end:
-
-@ Pad to end of allocated space
-.space DLDI_ALLOCATED_SPACE - (dldi_data_end - dldi_start)	
-
-dldi_end:
 	.end
 @---------------------------------------------------------------------------------
