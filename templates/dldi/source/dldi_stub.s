@@ -23,7 +23,7 @@ _io_dldi_stub:
 	.byte 	DLDI_SIZE_16KB	@16KiB	@ Log [base-2] of the allocated space in bytes.
 	
 @---------------------------------------------------------------------------------
-@ Text identifier - can be anything up to 47 chars + terminating null -- 16 bytes
+@ Text identifier - can be anything up to 47 chars + terminating null -- 48 bytes
 	.align	4
 	.asciz "Default (No interface)"
 
