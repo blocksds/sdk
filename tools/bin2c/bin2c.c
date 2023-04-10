@@ -1,6 +1,6 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: CC0-1.0
 //
-// Copyright (c) 2014, 2019-2020, 2023 Antonio Niño Díaz
+// SPDX-FileContributor: Antonio Niño Díaz, 2014, 2019-2020, 2023
 
 #include <ctype.h>
 #include <stdint.h>
