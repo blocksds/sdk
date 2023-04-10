@@ -1,59 +1,10 @@
-/*
-    dlditool - Dynamically Linked Disk Interface patch tool
-    Copyright (C) 2006  Michael Chisholm (Chishm)
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+// Copyright (C) 2006  Michael Chisholm (Chishm)
+//
+// dlditool - Dynamically Linked Disk Interface patch tool
+// Send all queries to chishm@hotmail.com
 
-	Send all queries to chishm@hotmail.com
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
-	* v1.26 - 2023-03-11 - AntonioND
-		* Add error checks
-
-	* v1.25 - 2017-01-18 - ichfly
-		* Made not enough space for patch a warning
-
-	* v1.24 - 2007-08-02 - SmileyDude
-		* Now using EXIT_SUCCESS and EXIT_FAILURE at the suggestion of MachinShin.
-		* Defined EXIT_NO_DLDI_SECTION for when there is no DLDI section in a file.
-		* Added cast to strcmp() call to appease the compiler.
-
-	* v1.23 - 2007-01-23 - Chishm
-		* Fixed bug when DLDI section doesn't exist
-		* addr_t is now a signed int
-
-	* v1.22 - 2007-01-12 - WinterMute
-		* add search paths for dldi files
-
-	* v1.21 - 2007-01-12 - Chishm
-		* Improved error messages
-
-	* v1.20 - 2007-01-11 - Chishm
-		* Changed offset calculation method
-
-	* v1.10 - 2007-01-07 - Chishm
-		* Removed assumptions about endianess of computer
-			* Word size shouldn't matter now either, except that an int type must be at least 32 bits long
-		* Added *.sc.nds and *.gba.nds file extensions
-		* Improved command line argument parsing
-
-	* v1.01 - 2006-12-30 - Chishm
-		* Minor bugfix parsing 3 arguments
-
-	* v1.00 - 2006-12-25 - Chishm
-		* Original release
-*/
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -520,4 +471,3 @@ int main(int argc, char* argv[])
 
 	return EXIT_SUCCESS;
 }
-
