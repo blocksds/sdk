@@ -39,30 +39,21 @@
 	.word   __bss_end		@ bss end
 
 @---------------------------------------------------------------------------------
-@ DISC_INTERFACE data -- 32 bytes
-	.ascii	"DLDI"				@ ioType
-	.word	0x00000000			@ Features
-	.word	_DLDI_startup			@ 
-	.word	_DLDI_isInserted		@ 
-	.word	_DLDI_readSectors		@   Function pointers to standard device driver functions
-	.word	_DLDI_writeSectors		@ 
-	.word	_DLDI_clearStatus		@ 
-	.word	_DLDI_shutdown			@ 
-	
-@---------------------------------------------------------------------------------
+@ IO_INTERFACE data -- 32 bytes
 
-_DLDI_startup:
-_DLDI_isInserted:
-_DLDI_readSectors:
-_DLDI_writeSectors:
-_DLDI_clearStatus:
-_DLDI_shutdown:
-	mov		r0, #0x00				@ Return false for every function
-	bx		lr
-
-
-
-@---------------------------------------------------------------------------------
+    .ascii  "XXXX"        @ ioType
+#ifdef ARM9
+    .word   FEATURE_MEDIUM_CANREAD | FEATURE_MEDIUM_CANWRITE | FEATURE_SLOT_NDS
+#else
+    .word   FEATURE_MEDIUM_CANREAD | FEATURE_MEDIUM_CANWRITE | FEATURE_SLOT_NDS |
+            FEATURE_ARM7_CAPABLE
+#endif
+    .word   startup @ Function pointers to standard device driver functions
+    .word   is_inserted
+    .word   read_sectors
+    .word   write_sectors
+    .word   clear_status
+    .word   shutdown
 _start:
 @---------------------------------------------------------------------------------
 	.align
