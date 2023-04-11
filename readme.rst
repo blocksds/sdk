@@ -25,16 +25,6 @@ This project is currently in beta stage, and most features are working. Please,
 check the `libc port documentation <docs/libc.rst>`_ for more information about
 the supported libc functions.
 
-You may keep multiple versions of this SDK in your PC. The location of the
-active SDK is stored in the environment variables ``BLOCKSDS`` and
-``BLOCKSDSEXT``, so all you need to do is to change their values and point to
-the version of the SDK you want to use.
-
-By default, the paths are assumed to be ``/opt/blocksds/core/`` and
-``/opt/blocksds/external/``. The first one is used for core BlocksDS libraries
-and tools, and it is managed by BlocksDS. The second one is left for users to
-freely install third party libraries and tools.
-
 If you want to port a project built with devkitPro, follow `this guide
 <docs/porting-guide.rst>`_ for instructions.
 
@@ -55,89 +45,113 @@ However, there are Docker images of BlocksDS that can be used in any OS. They
 require more disk space than the native installation, but they may be needed if
 a native installation isn't possible.
 
-Docker
-======
+Option 1: Docker
+================
 
 Follow the instructions in `this file <docker/readme.rst>`_ to use the Docker
 images.
 
-Native installation
-===================
+Option 2: Native installation
+=============================
 
-You need to install a cross compiler to build applications for NDS. You also
-need to build a few host tools, so you need a compiler for the host and the
-FreeImage library.
+1. You need to install a cross compiler to build applications for NDS. You also
+   need to build a few host tools, so you need a compiler for the host and the
+   FreeImage library.
 
-If you're on Ubuntu, for example, run the following command:
-
-.. code:: bash
-
-    sudo apt-get install -y --no-install-recommends \
-        build-essential libfreeimage-dev
-
-You will also need to install the ARM toolchain of Wonderful Toolchains, but you
-can skip step 5:
-
-https://wonderful.asie.pl/doc/general/getting-started/#linux
-
-Now, install the ARM toolchain:
-
-.. code:: bash
-
-    export PATH=/opt/wonderful/bin:$PATH
-
-    wf-pacman -Syu
-
-    wf-pacman -S toolchain-gcc-arm-none-eabi
-
-When you're done, remember to add the following to your ``PATH``:
-
-.. code:: bash
-
-    export PATH=/opt/wonderful/toolchain/gcc-arm-none-eabi/bin/:$PATH
-
-You can avoid exporting ``PATH`` every time by adding it to your ``.bashrc``,
-``.zshenv`` or similar.
-
-Now, clone this repository:
-
-.. code:: bash
-
-    git clone --recurse-submodules https://github.com/blocksds/sdk.git
-    cd sdk
-
-To build the SDK, run this from the root of this repository:
-
-.. code:: bash
-
-    BLOCKSDS=$PWD make
-
-Now, you have two options.
-
-1. Recommended. Install it in your system. You won't need to set ``BLOCKSDS``
-   again to use the SDK. Run:
+   If you're on Ubuntu, for example, run the following command:
 
    .. code:: bash
 
-        sudo mkdir /opt/blocksds/ && sudo chown $USER:$USER /opt/blocksds
-        mkdir /opt/blocksds/external
-        make install
+       sudo apt-get install -y --no-install-recommends \
+           build-essential libfreeimage-dev
 
-   This will install the libraries and tools to ``/opt/blocksds/core``. Third
-   party libraries and tools are expected to be installed to
-   ``/opt/blocksds/external``.
+2. You will also need to install the ARM toolchain of Wonderful Toolchains.
+   Follow the instructions in this link but you skip step 5:
+   https://wonderful.asie.pl/doc/general/getting-started/#linux
 
-2. Use the libraries from this path. Make sure that the environment variable
-   ``BLOCKSDS`` is always set to the right location when you want to use the
-   SDK. The build system of the templates and examples will use this variable to
-   locate the components of BlocksDS it and use them. Any other external library
-   will need to be managed by you.
+3. Now, install the ARM toolchain of Wonderful Toolchains:
 
-   You can avoid exporting ``BLOCKSDS`` every time by adding it to your
-   ``.bashrc``, ``.zshenv`` or similar.
+   .. code:: bash
 
-3. Test
-=======
+       export PATH=/opt/wonderful/bin:$PATH
+       wf-pacman -Syu
+       wf-pacman -S toolchain-gcc-arm-none-eabi
+
+4. When you're done, remember to add the following to your ``PATH``:
+
+   .. code:: bash
+
+       export PATH=/opt/wonderful/toolchain/gcc-arm-none-eabi/bin/:$PATH
+
+   You can avoid exporting ``PATH`` every time by adding it to your ``.bashrc``,
+   ``.zshenv`` or similar.
+
+5. Now, clone this repository:
+
+   .. code:: bash
+
+       git clone --recurse-submodules https://github.com/blocksds/sdk.git
+       cd sdk
+
+6. To build the SDK, run this from the root of this repository:
+
+   .. code:: bash
+
+       BLOCKSDS=$PWD make
+
+7. Now, you have some options. The first one is recommended, the others are for
+   users that may have advanced needs.
+
+   7.1. **Recommended**. Install it in your system. You won't need to set
+        ``BLOCKSDS`` or ``BLOCKSDSEXT`` manually to use the SDK. Run:
+
+        .. code:: bash
+
+            sudo mkdir /opt/blocksds/ && sudo chown $USER:$USER /opt/blocksds
+            mkdir /opt/blocksds/external
+            make install
+
+        This will install the libraries and tools to ``/opt/blocksds/core``.
+        Third party libraries and tools are expected to be installed to
+        ``/opt/blocksds/external``.
+
+        ``BLOCKDS`` defaults to ``/opt/blocksds/core`` in all Makefiles, and
+        ``BLOCKDSEXT`` defaults to ``/opt/blocksds/external``.
+
+   7.2. Install it in your system in a custom path. You will need to set
+        ``BLOCKSDS`` or ``BLOCKSDSEXT`` manually to use the SDK. Run:
+
+        .. code:: bash
+
+            BLOCKSDS=$PWD make INSTALLDIR=my/path
+
+        You can avoid exporting ``BLOCKSDS`` every time by adding it to your
+        ``.bashrc``, ``.zshenv`` or similar.
+
+   7.3. Use the libraries from this path. Make sure that the environment
+        variable ``BLOCKSDS`` is always set to the right location when you want
+        to use the SDK. The build system of the templates and examples will use
+        this variable to locate the components of BlocksDS it and use them. Any
+        other external library will need to be managed by you.
+
+        You can avoid exporting ``BLOCKSDS`` every time by adding it to your
+        ``.bashrc``, ``.zshenv`` or similar.
+
+3. Keeping multiple versions of BlocksDS
+****************************************
+
+You may keep multiple versions of this SDK in your PC. The location of the
+active SDK is stored in the environment variables ``BLOCKSDS`` and
+``BLOCKSDSEXT``, so all you need to do is to change their values and point to
+the version of the SDK you want to use.
+
+By default, the paths are assumed to be ``/opt/blocksds/core/`` and
+``/opt/blocksds/external/``. The first one is used for core BlocksDS libraries
+and tools, and it is managed by BlocksDS. The second one is left for users to
+freely install third party libraries and tools.
+
+4. Test
+*******
 
 To test that everything is working, you can try building one of the templates.
 
@@ -170,8 +184,8 @@ need to use folders outside of the folder of the project, create a symlink to
 the destination, or build the other code as a static library and link it with
 the project.
 
-4. Additional libraries
-=======================
+5. Additional libraries
+***********************
 
 This is a list of libraries that support BlocksDS and can be installed in
 ``/opt/blocksds/external``:
@@ -188,8 +202,8 @@ This is a list of libraries that support BlocksDS and can be installed in
   animated models, supports all texture types, and has basic 2D support using
   the 3D hardware. It's compatible with NightFox's Lib.
 
-5. Credits
-==========
+6. Credits
+**********
 
 This project wouldn't have been possible without:
 
