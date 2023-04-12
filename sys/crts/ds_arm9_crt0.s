@@ -149,7 +149,7 @@ NotTWL:
     sub     r2, sp, #0x100  // main thread stack. This allocates 0x100 bytes of
                             // stack for the scheduler and the rest of the stack
                             // is available for the main thread.
-
+    bic     r2, r2, #(8-1)  // Align to 8 bytes
     ldr     r3, =cothread_start     // This starts main as a thread
     ldr     lr, =__libnds_exit      // Jump to user code
     bx      r3
