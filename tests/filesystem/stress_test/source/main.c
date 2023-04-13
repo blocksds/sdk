@@ -4,6 +4,7 @@
 
 #include <dirent.h>
 #include <stdio.h>
+#include <time.h>
 
 #include <fatfs.h>
 #include <nds.h>
@@ -167,6 +168,8 @@ int main(int argc, char **argv)
     chdir("nitro:/");
     printf("Current dir: %s\n\n", getcwd(NULL, 0));
 
+    time_t start_time = time(NULL);
+
     // Scan directories and fill the list of files
 
     scan_dir(".");
@@ -184,6 +187,10 @@ int main(int argc, char **argv)
             goto exit;
         }
     }
+
+    time_t total_time = time(NULL) - start_time;
+
+    printf("\n\nTotal time: %llu seconds\n", total_time);
 
 exit:
     printf("\n");
