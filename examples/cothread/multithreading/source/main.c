@@ -11,16 +11,26 @@
 
 #define NUM_CORO (50)
 
+static PrintConsole topScreen;
+static PrintConsole bottomScreen;
+
 int entrypoint_thread(void *arg)
 {
     int index = (int)arg;
 
     int x = (index % 4) * 8;
     int y = (index / 4);
+
+    register char *stack_ptr asm("sp");
+
+    consoleSelect(&topScreen);
+    printf("\x1b[%d;%d;H%X", y, x, (unsigned int)stack_ptr);
+
     int count = (1 + index) * 50;
 
     while (count > 0)
     {
+        consoleSelect(&bottomScreen);
         printf("\x1b[%d;%d;H%5d", y, x, count);
         fflush(stdout);
         cothread_yield();
@@ -36,11 +46,13 @@ int entrypoint_thread_detached(void *arg)
 
     for (int i = 0; i < 1000; i++)
     {
+        consoleSelect(&bottomScreen);
         printf("\x1b[23;0;H%5d", count + i);
         fflush(stdout);
         cothread_yield();
     }
 
+    consoleSelect(&bottomScreen);
     printf("\x1b[23;0;HDone    ");
     fflush(stdout);
 
@@ -49,7 +61,18 @@ int entrypoint_thread_detached(void *arg)
 
 int main(int argc, char **argv)
 {
-    consoleDemoInit();
+    videoSetMode(MODE_0_2D);
+    videoSetModeSub(MODE_0_2D);
+
+    vramSetBankA(VRAM_A_MAIN_BG);
+    vramSetBankC(VRAM_C_SUB_BG);
+
+    consoleInit(&topScreen, 3,BgType_Text4bpp, BgSize_T_256x256, 31, 0, true, true);
+    consoleInit(&bottomScreen, 3,BgType_Text4bpp, BgSize_T_256x256, 31, 0, false, true);
+
+    consoleSelect(&bottomScreen);
+
+    // Start threads
 
     cothread_t threads[NUM_CORO];
 
@@ -79,6 +102,7 @@ int main(int argc, char **argv)
                 int x = (i % 4) * 8;
                 int y = (i / 4);
 
+                consoleSelect(&bottomScreen);
                 printf("\x1b[%d;%d;H%s", y, x, (ret == i) ? "OK   " : "FAIL ");
                 fflush(stdout);
             }
@@ -92,6 +116,7 @@ int main(int argc, char **argv)
             break;
     }
 
+    consoleSelect(&bottomScreen);
     printf("\x1b[18;0HPress START to exit to loader\n");
 
     while (1)
