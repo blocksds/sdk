@@ -6,19 +6,6 @@
 
 #include <nds.h>
 
-// Note: This test is here to make sure that the stdin integration with picolibc
-// still works, but it shouldn't be used to get keyboard input in a normal
-// application.
-//
-// For example, when backspace is pressed, it stores a backspace character in
-// the input string instead of deleting one character.
-//
-// Also, it blocks the rest of the program because it waits until the user has
-// pressed return to exit.
-//
-// For a better way of using the keyboard of libnds, check the keyboard example
-// in the examples folder.
-
 // Callback called whenever the keyboard is pressed so that a character is
 // printed on the screen.
 void on_key_pressed(int key)
@@ -59,7 +46,7 @@ int main(int argc, char **argv)
         if (keys & KEY_SELECT)
         {
             printf("\x1b[9;0HName: ");
-            scanf("%s", string);
+            scanf("%255s", string);
         }
 
         if (keys & KEY_START)
@@ -68,7 +55,3 @@ int main(int argc, char **argv)
 
     return 0;
 }
-
-
-
-
