@@ -200,6 +200,7 @@ SECTIONS
 		__itcm_lma = LOADADDR(.itcm);
 		__itcm_start = ABSOLUTE(.);
 		*(.itcm)
+		*(.itcm.*)
 		*.itcm*(.text .stub .text.*)
 		. = ALIGN(4);
 		__itcm_end = ABSOLUTE(.);
