@@ -37,22 +37,67 @@ For licensing information, check `this <docs/licenses.rst>`_.
 ********
 
 If you are using Linux, MinGW, WSL, or any similar environment, you can install
-the SDK using the native installation instructions.
+the SDK using ``wf-pacman``, Docker, or the native installation instructions.
 
-If you are on Windows, you need to install MinGW, WSL or similar.
+If you are on Windows, you need to install WSL and follow the Linux
+instructions, or to use the Docker instructions.
 
-However, there are Docker images of BlocksDS that can be used in any OS. They
-require more disk space than the native installation, but they may be needed if
-a native installation isn't possible.
+The Docker images of BlocksDS can be used in any OS. They require more disk
+space than the native installation, but they may be needed if a native
+installation isn't possible.
 
-Option 1: Docker
+Option 1: ``wf-pacman``
+=======================
+
+This is the easiest option, but you may not get the latest version of the SDK
+right away.
+
+1. You will also need to install the ARM toolchain of Wonderful Toolchains.
+   Follow the instructions in this link but you skip step 5:
+   https://wonderful.asie.pl/doc/general/getting-started/#linux
+
+2. Now, install the ARM toolchain of Wonderful Toolchains, as well as the
+   BlocksDS packages.
+
+   .. code:: bash
+
+       export PATH=/opt/wonderful/bin:$PATH
+       wf-pacman -Syu
+       wf-pacman -S toolchain-gcc-arm-none-eabi
+
+   For the latest stable version, run:
+
+   .. code:: bash
+
+       wf-pacman -S thirdparty-blocksds-toolchain
+
+   For the latest unstable version, run:
+
+   .. code:: bash
+
+       wf-pacman -S thirdparty-blocksds-git-toolchain
+
+3. Optional step. You can also install some third party libraries like
+   `NightFox’s Lib <https://github.com/knightfox75/nds_nflib>`_ and
+   `Nitro Engine <https://github.com/AntonioND/nitro-engine>`_ using
+   ``wf-pacman``:
+
+   .. code:: bash
+
+       wf-pacman -S thirdparty-blocksds-nflib \
+                    thirdparty-blocksds-nitroengine
+
+Option 2: Docker
 ================
 
 Follow the instructions in `this file <docker/readme.rst>`_ to use the Docker
 images.
 
-Option 2: Native installation
-=============================
+Option 3: Build the SDK yourself
+================================
+
+This is the option you should use if you want to help develop BlocksDS, or if
+you want to always use the cutting edge version of BlocksDS.
 
 1. You need to install a cross compiler to build applications for NDS. You also
    need to build a few host tools, so you need a compiler for the host and the
@@ -137,20 +182,7 @@ Option 2: Native installation
         You can avoid exporting ``BLOCKSDS`` every time by adding it to your
         ``.bashrc``, ``.zshenv`` or similar.
 
-3. Keeping multiple versions of BlocksDS
-****************************************
-
-You may keep multiple versions of this SDK in your PC. The location of the
-active SDK is stored in the environment variables ``BLOCKSDS`` and
-``BLOCKSDSEXT``, so all you need to do is to change their values and point to
-the version of the SDK you want to use.
-
-By default, the paths are assumed to be ``/opt/blocksds/core/`` and
-``/opt/blocksds/external/``. The first one is used for core BlocksDS libraries
-and tools, and it is managed by BlocksDS. The second one is left for users to
-freely install third party libraries and tools.
-
-4. Test
+3. Test
 *******
 
 To test that everything is working, you can try building one of the templates.
@@ -184,7 +216,7 @@ need to use folders outside of the folder of the project, create a symlink to
 the destination, or build the other code as a static library and link it with
 the project.
 
-5. Additional libraries
+4. Additional libraries
 ***********************
 
 This is a list of libraries that support BlocksDS and can be installed in
@@ -202,13 +234,27 @@ This is a list of libraries that support BlocksDS and can be installed in
   animated models, supports all texture types, and has basic 2D support using
   the 3D hardware. It's compatible with NightFox's Lib.
 
+5. Keeping multiple versions of BlocksDS
+****************************************
+
+You may keep multiple versions of this SDK in your PC. The location of the
+active SDK is stored in the environment variables ``BLOCKSDS`` and
+``BLOCKSDSEXT``, so all you need to do is to change their values and point to
+the version of the SDK you want to use.
+
+By default, the paths are assumed to be ``/opt/blocksds/core/`` and
+``/opt/blocksds/external/``. The first one is used for core BlocksDS libraries
+and tools, and it is managed by BlocksDS. The second one is left for users to
+freely install third party libraries and tools.
+
+
 6. Credits
 **********
 
 This project wouldn't have been possible without:
 
-- `asie <https://asie.pl>`_ for his help and advice, and for `Wonderful
-  Toolchains <https://wonderful.asie.pl/>`_
+- Many thanks to `asie <https://asie.pl>`_ for his help and advice, and for
+  `Wonderful Toolchains <https://wonderful.asie.pl/>`_
 - `devkitPro <https://devkitpro.org/>`_
 - `picolibc <https://github.com/picolibc/picolibc>`_
 - `libnds <https://github.com/devkitPro/libnds>`_
