@@ -89,7 +89,7 @@ right away.
 
 4. ``wf-pacman`` installs BlocksDS in ``/opt/wonderful/thirdparty/blocksds/``.
    This isn't the standard location (``wf-pacman`` can only write files to
-   ``/opt/wonderfu/``) so you need to do one of the two following options:
+   ``/opt/wonderful/``) so you need to do one of the two following options:
 
    4.1 Create a symlink:
 
