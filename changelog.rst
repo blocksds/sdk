@@ -2,6 +2,46 @@
 BlocksDS changelog
 ##################
 
+Version 0.7 (2023-04-19)
+========================
+
+- ``libnds``:
+
+  - Unify all coding and documentation style of the codebase.
+  - Change license of GL2D to Zlib (with the author's permission).
+  - Improve ``sassert()`` so that it can exit to the loader instead of locking
+    the application.
+
+  - Keyboard:
+
+    - Fix initialization glitch where it would blink for a frame.
+    - Fix backspace handling.
+    - Make it use cothread functions so that it never blocks the application.
+
+  - ``cothread``:
+
+    - Fixed stack alignment
+    - Fixed stack size of the scheduler thread.
+
+  - ``libc``:
+
+    - Fix no$gba debug messages on the ARM9.
+    - Add support of no$gba debug messages to the ARM7.
+
+- ``mmutil``:
+
+  - Fix segfault with samples with implied zero loop.
+
+- SDK:
+
+  - Improve some old examples. Fix memory leaks in all examples that used
+    ``getcwd()``.
+  - Fix ARM9 linkerscript to place ITCM sections in ITCM correctly.
+  - Add new examples: Exception handling, assertions, no$gba debug console.
+  - Prevent ``mkfatimg`` from generating FAT images that are so small that FatFs
+    can't mount them.
+  - Improve installation instructions.
+
 Version 0.6 (2023-04-11)
 ========================
 
