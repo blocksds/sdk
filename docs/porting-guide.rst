@@ -163,6 +163,18 @@ Names that don't work in BlocksDS, you need to use the annotations:
 - ``*.arm.*``: ``ARM_CODE``
 - ``*.thumb.*``: ``THUMB_CODE``
 
+For assembly source files, you can use the ``BEGIN_ASM_FUNC`` macro and specify
+the section in the second parameter:
+
+.. code:: asm
+
+    #include <nds/asminc.h>
+
+    BEGIN_ASM_FUNC my_function itcm
+
+        mov r0, #0
+        bx  lr
+
 6. Integer version of ``stdio.h`` functions
 ===========================================
 
