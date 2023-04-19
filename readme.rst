@@ -165,13 +165,13 @@ the project.
 This is a list of libraries that support BlocksDS and can be installed in
 ``/opt/blocksds/external``:
 
-- **`NightFox’s Lib <https://github.com/knightfox75/nds_nflib>`_**
+- `NightFox’s Lib <https://github.com/knightfox75/nds_nflib>`_
 
   Library designed to make development of 2D games easy, with support for
   sprites, backgrounds (even "infinite" maps), and it also has limited 2D
   graphics support using the 3D engine.
 
-- **`Nitro Engine <https://github.com/AntonioND/nitro-engine>`_**
+- `Nitro Engine <https://github.com/AntonioND/nitro-engine>`_
 
   Library to create 3D applications. It supports dual screen 3D, static and
   animated models, supports all texture types, and has basic 2D support using
