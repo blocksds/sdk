@@ -13,6 +13,6 @@ SOURCEDIRS	:= source
 
 # Libraries
 
-LIBS		:= -lstdc++
+LIBS		:= -lnds9 -lstdc++ -lc
 
 include ../../tests/Makefile.include
