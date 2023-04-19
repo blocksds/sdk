@@ -92,8 +92,8 @@ int main(int argc, char **argv)
     vramSetBankA(VRAM_A_MAIN_BG);
     vramSetBankC(VRAM_C_SUB_BG);
 
-    consoleInit(&topScreen, 3,BgType_Text4bpp, BgSize_T_256x256, 31, 0, true, true);
-    consoleInit(&bottomScreen, 3,BgType_Text4bpp, BgSize_T_256x256, 31, 0, false, true);
+    consoleInit(&topScreen, 3, BgType_Text4bpp, BgSize_T_256x256, 31, 0, true, true);
+    consoleInit(&bottomScreen, 3, BgType_Text4bpp, BgSize_T_256x256, 31, 0, false, true);
 
     consoleSelect(&bottomScreen);
 
@@ -126,7 +126,9 @@ int main(int argc, char **argv)
     }
 
     chdir("nitro:/");
-    printf("Current dir: %s\n\n", getcwd(NULL, 0));
+    char *cwd = getcwd(NULL, 0);
+    printf("Current dir: %s\n\n", cwd);
+    free(cwd);
 
     printf("\x1b[10;0;HMain thread: ");
     fflush(stdout);

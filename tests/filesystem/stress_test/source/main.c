@@ -166,7 +166,10 @@ int main(int argc, char **argv)
     }
 
     chdir("nitro:/");
-    printf("Current dir: %s\n\n", getcwd(NULL, 0));
+
+    char *cwd = getcwd(NULL, 0);
+    printf("Current dir: %s\n\n", cwd);
+    free(cwd);
 
     time_t start_time = time(NULL);
 

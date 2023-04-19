@@ -183,7 +183,10 @@ int main(int argc, char **argv)
 
     chdir("fstest");
 
-    printf("Current dir: %s\n", getcwd(NULL, 0));
+    char *cwd = getcwd(NULL, 0);
+    printf("Current dir: %s\n\n", cwd);
+    free(cwd);
+
     wait_press_button_a();
 
     // Print the contents of multiple directories.

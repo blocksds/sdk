@@ -43,7 +43,9 @@ void dir_list(void)
 {
     printf("\x1b[2J"); // Clear console
 
-    printf("path: %s\n", getcwd(NULL, 0));
+    char *cwd = getcwd(NULL, 0);
+    printf("path: %s\n", cwd);
+    free(cwd);
     printf("\n");
 
     DIR *dirp = opendir(".");
@@ -190,7 +192,9 @@ int main(int argc, char **argv)
 
     chdir("nitro:/fstest");
 
-    printf("Current dir: %s\n", getcwd(NULL, 0));
+    char *cwd = getcwd(NULL, 0);
+    printf("Current dir: %s\n", cwd);
+    free(cwd);
     wait_press_button_a();
 
     // Print the contents of multiple directories.
