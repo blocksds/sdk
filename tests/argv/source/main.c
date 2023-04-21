@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 
+#include <fat.h>
 #include <nds.h>
 
 int main(int argc, char **argv)
@@ -27,9 +28,9 @@ int main(int argc, char **argv)
         printf("%c", c);
     }
     printf("]\n");
+    printf("\n");
+    printf("\n");
 
-    printf("\n");
-    printf("\n");
     printf("Parsed command line\n");
     printf("-------------------\n");
     printf("\n");
@@ -39,11 +40,16 @@ int main(int argc, char **argv)
         printf("[%s]\n", argv[i]);
     printf("\n");
     printf("\n");
-    printf("\n");
-    printf("\n");
-    printf("Press START to exit\n");
 
-    fflush(stdout);
+    printf("Default CWD\n");
+    printf("-----------\n");
+    char *cwd = fatGetDefaultCwd();
+    printf("%s\n", cwd);
+    free(cwd);
+    printf("\n");
+    printf("\n");
+
+    printf("Press START to exit\n");
 
     while (1)
     {
