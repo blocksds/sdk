@@ -32,11 +32,19 @@ void dir_list(void)
         if (strlen(cur->d_name) == 0)
             break;
 
-        int index = telldir(dirp);
-        printf("%d - %s%s\n", index, cur->d_name,
-               (cur->d_type == DT_DIR) ? "/" : " ");
-
         num_entries++;
+
+        // Only print up to 10 entries
+        if (num_entries < 10)
+        {
+            int index = telldir(dirp);
+            printf("%d - %s%s\n", index, cur->d_name,
+                (cur->d_type == DT_DIR) ? "/" : " ");
+        }
+        else if (num_entries == 10)
+        {
+            printf("[...]\n");
+        }
     }
 
     closedir(dirp);
@@ -62,8 +70,6 @@ int main(int argc, char **argv)
     }
     else
     {
-        chdir("fstest");
-
         char *cwd = getcwd(NULL, 0);
         printf("Current dir: %s\n\n", cwd);
         free(cwd);
