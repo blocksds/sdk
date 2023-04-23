@@ -41,7 +41,7 @@ DEFINES		:=
 # Libraries
 # ---------
 
-LIBS		:= -lmm9 -lnds9 -lc
+LIBS		:= -lmm9 -lnds9
 LIBDIRS		:= $(BLOCKSDS)/libs/maxmod \
 		   $(BLOCKSDS)/libs/libnds
 
@@ -107,9 +107,11 @@ ARCH		:= -march=armv5te -mtune=arm946e-s
 WARNFLAGS	:= -Wall
 
 ifeq ($(SOURCES_CPP),)
-    LD	:= $(CC)
+    LD		:= $(CC)
+    LIBS	+= -lc
 else
-    LD	:= $(CXX)
+    LD		:= $(CXX)
+    LIBS	+= -lstdc++ -lc
 endif
 
 INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path)) \

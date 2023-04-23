@@ -10,6 +10,6 @@ GAME_TITLE	:= Assert test
 # Source code paths
 
 SOURCEDIRS	:= source
-LIBS		:= -lnds9d -lc
+LIBS		:= -lnds9d
 
 include ../../tests/Makefile.include

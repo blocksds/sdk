@@ -25,7 +25,7 @@ DEFINES		:=
 # Libraries
 # ---------
 
-LIBS		:= -ldswifi7 -lmm7 -lnds7 -lc
+LIBS		:= -ldswifi7 -lmm7 -lnds7
 LIBDIRS		:= $(BLOCKSDS)/libs/dswifi \
 		   $(BLOCKSDS)/libs/maxmod \
 		   $(BLOCKSDS)/libs/libnds
@@ -77,9 +77,11 @@ ARCH		:= -mcpu=arm7tdmi -mtune=arm7tdmi
 WARNFLAGS	:= -Wall
 
 ifeq ($(SOURCES_CPP),)
-    LD	:= $(CC)
+    LD		:= $(CC)
+    LIBS	+= -lc
 else
-    LD	:= $(CXX)
+    LD		:= $(CXX)
+    LIBS	+= -lstdc++ -lc
 endif
 
 INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path)) \

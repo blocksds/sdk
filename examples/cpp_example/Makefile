@@ -11,8 +11,4 @@ GAME_TITLE	:= C++ example
 
 SOURCEDIRS	:= source
 
-# Libraries
-
-LIBS		:= -lnds9 -lstdc++ -lc
-
 include ../../tests/Makefile.include
