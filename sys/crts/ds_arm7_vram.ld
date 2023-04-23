@@ -7,7 +7,7 @@ ENTRY(_start)
 MEMORY {
 
 	rom	: ORIGIN = 0x08000000, LENGTH = 32M
-	iwram	: ORIGIN = 0x037f8000, LENGTH = 96K	
+	iwram	: ORIGIN = 0x037f8000, LENGTH = 96K
 	vram	: ORIGIN = 0x06000000, LENGTH = 256K
 }
 
@@ -137,6 +137,27 @@ SECTIONS
 		__data_end = ABSOLUTE(.) ;
 	} >vram = 0xff
 
+	.tdata ALIGN(4) :
+	{
+		__tdata_start = ABSOLUTE(.) ;
+		*(.tdata .tdata.* .gnu.linkonce.td.*)
+		. = ALIGN(4);    /* REQUIRED. LD is flaky without it. */
+		__tdata_end = ABSOLUTE(.) ;
+		__data_end = . ;
+	} >vram = 0xff
+
+	__tdata_size = __tdata_end - __tdata_start ;
+
+	.tbss ALIGN(4) (NOLOAD) :
+	{
+		 __tbss_start = ABSOLUTE(.) ;
+		*(.tbss .tbss.* .gnu.linkonce.tb.*)
+		*(.tcommon)
+		. = ALIGN(4);    /* REQUIRED. LD is flaky without it. */
+		 __tbss_end = ABSOLUTE(.) ;
+	} >vram = 0xff
+
+	__tbss_size = __tbss_end - __tbss_start ;
 
 	__arm7_end__ = .;
 
@@ -153,6 +174,15 @@ SECTIONS
 		. = ALIGN(4);    /* REQUIRED. LD is flaky without it. */
 		__bss_end__ = ABSOLUTE(.);
 		__end__ = ABSOLUTE(.);
+	} >vram
+
+	/* Space reserved for the thread local storage of main() */
+	.tls ALIGN(4) (NOLOAD) :
+	{
+		__tls_start = ABSOLUTE(.) ;
+		. = . + __tdata_size + __tbss_size;
+		 __tls_end = ABSOLUTE(.) ;
+		__end__ = ABSOLUTE(.) ;
 	} >vram
 
 	/* Stabs debugging sections.  */

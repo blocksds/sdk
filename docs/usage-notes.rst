@@ -36,3 +36,31 @@ the section in the second parameter:
 
         mov r0, #0
         bx  lr
+
+3. Using alternative memory layouts
+===================================
+
+ARM7 options
+------------
+
+There are three different layouts provided by BlocksDS that applications can use
+for their ARM7 code. They can be selected by modifying the ARM7 makefile:
+
+- Default: ``ds_arm7.ld`` and ``ds_arm7_crt0.o``. It expects all code to be in
+  main RAM, and relocates it to IWRAM during boot.
+
+- IWRAM: ``ds_arm7_iwram.ld`` and ``ds_arm7_iwram_crt0.o``. It expects all code
+  to be in IWRAM from the start.
+
+- VRAM: ``ds_arm7_vram.ld`` and ``ds_arm7_vram_crt0.o``. This option places all
+  sections in VRAM (which needs to be configured as ARM7 memory by the ARM9) and
+  expects the code to be in VRAM from the start.
+
+ARM9 options
+------------
+
+They can be selected by changing the ``.mem`` file used in the Makefile:
+
+- DS layout: ``ds_arm9.mem``
+
+- DSi layout: ``dsi_arm9.mem``

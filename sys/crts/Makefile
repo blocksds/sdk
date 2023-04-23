@@ -27,7 +27,8 @@ endif
 # Targets
 # -------
 
-OBJS		:= ds_arm7_vram_crt0.o ds_arm7_crt0.o ds_arm9_crt0.o
+OBJS		:= ds_arm7_vram_crt0.o ds_arm7_crt0.o ds_arm7_iwram_crt0.o \
+			   ds_arm9_crt0.o
 
 .PHONY: all clean install
 
@@ -57,6 +58,12 @@ ARCHARM9	:= -march=armv5te -mtune=arm946e-s
 ds_arm7_vram_crt0.o: ds_arm7_crt0.s
 	@echo "  AS.7    $@"
 	$(V)$(CC) $(ASFLAGS) $(ARCHARM7) -DVRAM -c -o $@ $<
+
+# They are the same, but it's more intuitive to have two files than to remember
+# that the VRAM crt0 works with the IWRAM linkerscript.
+ds_arm7_iwram_crt0.o: ds_arm7_vram_crt0.o
+	@echo "  CP      $@"
+	$(V)$(CP) $< $@
 
 ds_arm7_crt0.o: ds_arm7_crt0.s
 	@echo "  AS.7    $@"
