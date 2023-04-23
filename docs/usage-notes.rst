@@ -56,6 +56,8 @@ for their ARM7 code. They can be selected by modifying the ARM7 makefile:
   sections in VRAM (which needs to be configured as ARM7 memory by the ARM9) and
   expects the code to be in VRAM from the start.
 
+Note that the IWRAM and VRAM options aren't supported for DSi applications.
+
 ARM9 options
 ------------
 
