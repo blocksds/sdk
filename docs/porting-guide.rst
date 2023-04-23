@@ -39,26 +39,7 @@ They provide ``fatInitDefault()`` and ``nitroFSInit()``. They should be
 compatible with the ones in the original libraries. Please, report any behaviour
 that isn't the same. If you need any other fuction, report it as well.
 
-3. Text console differences
-===========================
-
-The main difference is that ``stdout`` and ``stderr`` are line-buffered, unlike
-in ``libnds``. In most cases this won't be noticeable, but it's possible that in
-a few situations a bit of text is missing from the screen. This can be fixed by
-using the following functions:
-
-.. code:: c
-
-    #include <stdio.h>
-
-    fflush(stdout);
-    fflush(stderr);
-
-The reason for this change is that ``picolibc`` breaks ANSI escape sequences if
-they aren't buffered, and this would break compatibility with old ``libnds``
-projects.
-
-4. Build system differences
+3. Build system differences
 ===========================
 
 This is the biggest difference between devkitPro and BlocksDS. devkitPro
@@ -130,7 +111,7 @@ This would be the equivalent in a BlocksDS project:
 
 .. code:: make
 
-    LIBS    := -ldswifi9 -lmm9 -lnds9 -lc
+    LIBS    := -ldswifi9 -lmm9 -lnds9
     LIBDIRS := $(BLOCKSDS)/libs/dswifi \
                $(BLOCKSDS)/libs/maxmod \
                $(BLOCKSDS)/libs/libnds
@@ -141,41 +122,7 @@ The reason for this additional complexity with ``LIBS`` and ``LIBDIRS`` is to
 allow the user as much flexibility as possible when mixing and matching
 libraries.
 
-5. Annotations in filenames
-===========================
-
-Makefiles of devkitPro support annotations. For example, a file named
-``engine.arm.c`` will be built as ARM code, and a file called
-``interrupts.itcm.c`` will be placed in the ITCM memory section. However, not
-all of them work on BlocksDS.
-
-You are free to modify the Makefile to make it work like before, but you can
-also use the annotations in ``<nds/ndstypes.h>``:
-
-Names that work in BlocksDS:
-
-- ``*.dtcm.*``:  ``DTCM_DATA``, ``DTCM_BSS``
-- ``*.itcm.*``: ``ITCM_CODE``
-- ``*.twl.*``: ``TWL_CODE``, ``TWL_DATA``, ``TWL_BSS``
-
-Names that don't work in BlocksDS, you need to use the annotations:
-
-- ``*.arm.*``: ``ARM_CODE``
-- ``*.thumb.*``: ``THUMB_CODE``
-
-For assembly source files, you can use the ``BEGIN_ASM_FUNC`` macro and specify
-the section in the second parameter:
-
-.. code:: asm
-
-    #include <nds/asminc.h>
-
-    BEGIN_ASM_FUNC my_function itcm
-
-        mov r0, #0
-        bx  lr
-
-6. Integer version of ``stdio.h`` functions
+4. Integer version of ``stdio.h`` functions
 ===========================================
 
 Functions like ``iprintf()`` or ``siscanf()``, provided by ``newlib``,  aren't
@@ -198,7 +145,7 @@ Makefile:
 
 For more information: https://github.com/picolibc/picolibc/blob/main/doc/printf.md
 
-7. Note about ``readdir()``
+5. Note about ``readdir()``
 ===========================
 
 The expected behaviour of FatFs is to not include ``.`` and ``..`` as entries
