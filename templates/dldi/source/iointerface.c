@@ -34,7 +34,7 @@ bool read_sectors(uint32_t sector, uint32_t num_sectors, void *buffer)
 
 // Writes 512 byte sectors from a buffer that may be unaligned. Returns true on
 // success.
-bool write_sectors(uint32_t sector, uint32_t num_sectors, void *buffer)
+bool write_sectors(uint32_t sector, uint32_t num_sectors, const void *buffer)
 {
     return false;
 }
