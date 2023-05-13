@@ -19,7 +19,7 @@ void file_load(const char *path, void **buffer, size_t *size)
     FILE *f = fopen(path, "rb");
     if (f == NULL)
     {
-        printf("%s couldn't be opened!", path);
+        fprintf(stderr, "Can't open %s for reading\n", path);
         exit(1);
     }
 
@@ -28,7 +28,7 @@ void file_load(const char *path, void **buffer, size_t *size)
 
     if (*size == 0)
     {
-        printf("Size of %s is 0!", path);
+        fprintf(stderr, "%s is an empty file\n", path);
         fclose(f);
         exit(1);
     }
@@ -37,14 +37,14 @@ void file_load(const char *path, void **buffer, size_t *size)
     *buffer = malloc(*size);
     if (*buffer == NULL)
     {
-        printf("Not enought memory to load %s!", path);
+        fprintf(stderr, "Out of memory trying to load %s\n", path);
         fclose(f);
         exit(1);
     }
 
     if (fread(*buffer, *size, 1, f) != 1)
     {
-        printf("Error while reading.");
+        fprintf(stderr, "Error while reading file %s\n", path);
         fclose(f);
         exit(1);
     }
@@ -55,9 +55,9 @@ void file_load(const char *path, void **buffer, size_t *size)
 // Converts a file name to an array name and output file names
 void generate_transformed_name(const char *path, const char *dir_out)
 {
-    size_t len = strlen(path);
+    int len = strlen(path);
 
-    size_t start = 0;
+    int start = 0;
 
     for (int i = len - 1; i > 0; i--)
     {
@@ -70,7 +70,14 @@ void generate_transformed_name(const char *path, const char *dir_out)
 
     const char *basename = &(path[start]);
 
-    snprintf(c_file_name, sizeof(c_file_name), "%s/%s.c", dir_out, basename);
+    len = snprintf(c_file_name, sizeof(c_file_name), "%s/%s.c", dir_out, basename);
+    if (len < 0 || len >= (int) sizeof(c_file_name))
+    {
+        fprintf(stderr, "Output file name too long\n");
+        exit(1);
+    }
+
+    // h_file_name will be the same length as c_file_name.
     snprintf(h_file_name, sizeof(h_file_name), "%s/%s.h", dir_out, basename);
 
     // Fix names of header and C files and replace '.bin' by '_bin'.
@@ -78,9 +85,7 @@ void generate_transformed_name(const char *path, const char *dir_out)
     //     out.path/34.my.bin.file.bin -> out.path/34.my.bin.file_bin.h
     //                                    out.path/34.my.bin.file_bin.c
     {
-        len = strlen(h_file_name);
-
-        for (size_t i = len - 3; i > 0; i--)
+        for (int i = len - 3; i > 0; i--)
         {
             if (h_file_name[i] == '.')
             {
@@ -96,24 +101,28 @@ void generate_transformed_name(const char *path, const char *dir_out)
     }
 
     // Create the array name. If the name begins by a digit, prefix it with a
-    // '_' to form a valid identifier. Also, convert dots and dashes to
-    // underscores.
+    // '_' to form a valid identifier. Also, convert characters which are not
+    // valid C identifier characters underscores.
     //
     //     my-bin-file.bin -> my_bin_file_bin[]
     //     34.my.bin.file.bin -> _34_my_bin_file_bin[]
+    //     my-fancy-file%.bin -> my_fancy_file__bin[]
     {
         const char *prefix = "";
         if (isdigit(path[start]))
             prefix = "_";
 
-        snprintf(out_array_name, sizeof(out_array_name), "%s%s",
-                 prefix, &(path[start]));
-
-        len = strlen(out_array_name);
-
-        for (size_t i = 0; i < len; i++)
+        len = snprintf(out_array_name, sizeof(out_array_name), "%s%s",
+               prefix, &(path[start]));
+        if (len < 0 || len >= (int) sizeof(out_array_name))
         {
-            if ((out_array_name[i] == '.') || (out_array_name[i] == '-'))
+            fprintf(stderr, "Output array name too long\n");
+            exit(1);
+        }
+
+        for (int i = 0; i < len; i++)
+        {
+            if (!isalnum(out_array_name[i]))
                 out_array_name[i] = '_';
         }
     }
@@ -126,8 +135,8 @@ int main(int argc, char **argv)
 
     if (argc < 3)
     {
-        printf("Invalid arguments.\n"
-               "Usage: %s [file_in] [folder_out]\n", argv[0]);
+        fprintf(stderr, "Invalid arguments.\n"
+                        "Usage: %s [file_in] [folder_out]\n", argv[0]);
         return 1;
     }
 
@@ -141,7 +150,7 @@ int main(int argc, char **argv)
     FILE *fc = fopen(c_file_name, "w");
     if (fc == NULL)
     {
-        printf("Can't open %s\n", c_file_name);
+        fprintf(stderr, "Can't open %s for writing\n", c_file_name);
         return 1;
     }
 
@@ -181,7 +190,7 @@ int main(int argc, char **argv)
     FILE *fh = fopen(h_file_name, "w");
     if (fh == NULL)
     {
-        printf("Can't open %s\n", h_file_name);
+        fprintf(stderr, "Can't open %s for writing\n", h_file_name);
         return 1;
     }
 
