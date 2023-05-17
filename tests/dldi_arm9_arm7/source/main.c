@@ -93,8 +93,6 @@ int main(int argc, char **argv)
         }
     }
 
-    fflush(stdout);
-
     bool init_ok = fatInitDefault();
     if (!init_ok)
     {

@@ -38,7 +38,6 @@ int main(int argc, char **argv)
 
         printf("\x1b[0;6;H%5d", irq_frame_count);
         printf("\x1b[1;6;H%5d", loop_count);
-        fflush(stdout);
 
         scanKeys();
 

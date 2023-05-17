@@ -18,8 +18,6 @@ PrintConsole bottomScreen;
 
 void wait_press_button_a(void)
 {
-    fflush(stdout);
-
     while(1)
     {
         swiWaitForVBlank();
@@ -33,8 +31,6 @@ void wait_press_button_a(void)
 
 void wait_forever(void)
 {
-    fflush(stdout);
-
     while(1)
         swiWaitForVBlank();
 }
@@ -166,8 +162,6 @@ int main(int argc, char **argv)
     printf("%s\n", io_dldi_data->friendlyName);
     printf("\n");
     printf("DSi mode: %d\n", isDSiMode());
-
-    fflush(stdout);
 
     consoleSelect(&bottomScreen);
 

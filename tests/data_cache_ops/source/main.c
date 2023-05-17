@@ -230,8 +230,6 @@ int main(int argc, char **argv)
     printf("\n");
     printf("Press START to exit\n");
 
-    fflush(stdout);
-
     while (1)
     {
         swiWaitForVBlank();

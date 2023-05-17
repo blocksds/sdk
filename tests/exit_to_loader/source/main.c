@@ -37,8 +37,6 @@ int main(int argc, char **argv)
     printf("arm7reboot: 0x%X\n", (uintptr_t)bootstub->arm9reboot);
     printf("bootsize:   0x%lX\n", bootstub->bootsize);
 
-    fflush(stdout);
-
     while (1)
     {
         swiWaitForVBlank();

@@ -61,8 +61,6 @@ int main(int argc, char **argv)
     printf("DLDI name:\n%s\n\n", io_dldi_data->friendlyName);
     printf("DSi mode: %d\n\n", isDSiMode());
 
-    fflush(stdout);
-
     bool init_ok = fatInitDefault();
     if (!init_ok)
     {

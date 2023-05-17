@@ -18,9 +18,7 @@ PrintConsole bottomScreen;
 
 void wait_press_button_a(void)
 {
-    fflush(stdout);
-
-    while(1)
+    while (1)
     {
         swiWaitForVBlank();
 
@@ -33,9 +31,7 @@ void wait_press_button_a(void)
 
 void wait_forever(void)
 {
-    fflush(stdout);
-
-    while(1)
+    while (1)
         swiWaitForVBlank();
 }
 
@@ -184,7 +180,6 @@ int main(int argc, char **argv)
         wait_forever();
     }
 
-    fflush(stdout);
     consoleSelect(&bottomScreen);
 
     // Change the current working directory to the base directory used for

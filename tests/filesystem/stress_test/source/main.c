@@ -156,8 +156,6 @@ int main(int argc, char **argv)
     printf("\n");
     printf("DSi mode: %d\n\n", isDSiMode());
 
-    fflush(stdout);
-
     bool init_ok = nitroFSInit(NULL);
     if (!init_ok)
     {
