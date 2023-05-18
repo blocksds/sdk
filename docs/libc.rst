@@ -51,12 +51,13 @@ Text console (stdout, stderr, stdin)
 ====================================
 
 ``stdout`` and ``stderr`` can be redirected to the libnds console or to the
-no$gba debug console. They are line-buffered. When text is sent to them (by
-using ``printf`` or ``fprintf(stderr, ...)`` it may not actually be sent to the
-console until ``fflush(stdout)`` or ``fflush(stderr)`` are used.
+no$gba debug console. They are unbuffered. When text is sent to them (by
+using ``printf()`` or ``fprintf(stderr, ...)`` it's always sent to the console.
+The exceptions are ANSI escape sequences, which are buffered until the end of
+the sequence is received, and then sent to the console low level functions.
 
-This is required to make ANSI escape sequences work, as they need to be sent in
-one go to the libnds functions that are used to print.
+Remember that you can use ``fflush(stdout)`` or ``fflush(stderr)`` if buffering
+becomes an issue.
 
 For more information about ANSI escape sequences, check the following link:
 https://en.wikipedia.org/wiki/ANSI_escape_code
