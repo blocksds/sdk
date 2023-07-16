@@ -2,6 +2,36 @@
 BlocksDS changelog
 ##################
 
+Version 0.8 (2023-07-16)
+========================
+
+- ``libnds``:
+
+  - Document MPU setup code properly.
+  - Cleanup exception handling code.
+  - Add asynchronous math functions to complement the previous synchronous ones.
+  - Support redirecting ``stdout`` and ``stderr`` to user functions.
+  - Fix code that selects the default filesystem (DSi SD or DLDI).
+  - Fix leaking file handlers in ``truncate()``.
+  - Fix memory leaks in ``image`` and ``pcx`` modules.
+  - Support more rumble packs.
+
+- ``ndstool``:
+
+  - Fix warnings.
+  - Remove non-homebrew-related functionality.
+
+- SDK:
+
+  - Automatically link with libc and libstdc++ rather than forcing users to do
+    it explicitly.
+  - Support ``*.arm.c`` and ``*.arm.cpp`` filenames for compatibility with
+    devkitARM.
+  - Correctly initialize TLS in the ARM7.
+  - Improve ``bin2c``.
+  - Update libc documentation.
+  - Improve and cleanup some examples.
+
 Version 0.7 (2023-04-19)
 ========================
 
