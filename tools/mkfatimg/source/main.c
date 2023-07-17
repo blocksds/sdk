@@ -211,7 +211,7 @@ int main (int argc, char* argv[])
 				"    -v: Verbose mode.\n"
 				"    <source node>: Source node as root of output image\n"
 				"    <output image>: FAT volume image file\n"
-				"    <image size>: Size of output image in unit of sectors (0 = auto)\n"
+				"    <image size>: Size of output image in unit of sectors (0 = auto, default:0)\n"
 				"    <cluster size>: Size of cluster in unit of byte (default:512)\n"
 			);
 		return 1;
@@ -219,7 +219,7 @@ int main (int argc, char* argv[])
 
 	const char *SrcPathArg = argv[ai++];
 	outfile = argv[ai++];
-	RamDiskSize = atoi(argv[ai++]) * 2;
+	RamDiskSize = (argc >= 4) ? atoi(argv[ai++]) * 2 : 0;
 	csz = (argc >= 5) ? atoi(argv[ai++]) : 512;
 
 	TotalFilesSize = 0;
