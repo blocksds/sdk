@@ -16,16 +16,16 @@ all: dswifi libnds libxm7 maxmod
 # =============
 
 dswifi: libnds
-	+$(MAKE) -C dswifi -j`nproc`
+	+$(MAKE) -C dswifi
 
 libnds:
-	+$(MAKE) -C libnds -j`nproc`
+	+$(MAKE) -C libnds
 
 libxm7: libnds
-	+$(MAKE) -C libxm7 -j`nproc`
+	+$(MAKE) -C libxm7
 
 maxmod:
-	+$(MAKE) -C maxmod ds -j`nproc`
+	+$(MAKE) -C maxmod ds
 
 # Install target
 # ==============

@@ -14,25 +14,25 @@ INSTALL		:= install
 all: bin2c dldipatch dlditool grit mkfatimg mmutil ndstool
 
 bin2c:
-	$(MAKE) -C bin2c -j`nproc`
+	$(MAKE) -C bin2c
 
 grit:
-	$(MAKE) -C grit -j`nproc`
+	$(MAKE) -C grit
 
 dlditool:
-	$(MAKE) -C dlditool -j`nproc`
+	$(MAKE) -C dlditool
 
 dldipatch:
-	$(MAKE) -C dldipatch -j`nproc`
+	$(MAKE) -C dldipatch
 
 mkfatimg:
-	$(MAKE) -C mkfatimg -j`nproc`
+	$(MAKE) -C mkfatimg
 
 mmutil:
-	$(MAKE) -C mmutil -j`nproc`
+	$(MAKE) -C mmutil
 
 ndstool:
-	$(MAKE) -C ndstool -j`nproc`
+	$(MAKE) -C ndstool
 
 INSTALLDIR	?= /opt/blocksds/core/tools
 INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))

@@ -12,10 +12,10 @@ MAKE		:= make
 all: crts default_arm7
 
 crts:
-	+$(MAKE) -C crts -j`nproc`
+	+$(MAKE) -C crts
 
 default_arm7:
-	+$(MAKE) -C default_arm7 -j`nproc`
+	+$(MAKE) -C default_arm7
 
 INSTALLDIR	?= /opt/blocksds/core/sys
 INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))

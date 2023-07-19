@@ -48,7 +48,7 @@ you want to always use the cutting edge version of BlocksDS.
 
    .. code:: bash
 
-       BLOCKSDS=$PWD make
+       BLOCKSDS=$PWD make -j`nproc`
 
 7. Now, you have some options. The first one is recommended, the others are for
    users that may have advanced needs.
@@ -74,7 +74,7 @@ you want to always use the cutting edge version of BlocksDS.
 
         .. code:: bash
 
-            BLOCKSDS=$PWD make INSTALLDIR=my/path
+            BLOCKSDS=$PWD make INSTALLDIR=my/path -j`nproc`
 
         You can avoid exporting ``BLOCKSDS`` every time by adding it to your
         ``.bashrc``, ``.zshenv`` or similar.
