@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 
     bool playing = false;
 
-    while(1)
+    while (1)
     {
         swiWaitForVBlank();
 
