@@ -53,8 +53,15 @@ ELF		:= build/$(NAME).elf
 DUMP		:= build/$(NAME).dump
 NITROFAT_IMG	:= build/nitrofat.bin
 MAP		:= build/$(NAME).map
-SOUNDBANKDIR	:= $(BUILDDIR)/maxmod
 ROM		:= $(NAME).nds
+
+# If NITROFATDIR is set, the output of mmutil will be placed in that directory
+SOUNDBANKINFODIR	:= $(BUILDDIR)/maxmod
+ifeq ($(strip $(NITROFATDIR)),)
+    SOUNDBANKDIR	:= $(BUILDDIR)/maxmod
+else
+    SOUNDBANKDIR	:= $(NITROFATDIR)
+endif
 
 # Tools
 # -----
@@ -89,7 +96,7 @@ endif
 ifneq ($(AUDIODIRS),)
     SOURCES_AUDIO	:= $(shell find -L $(AUDIODIRS) -regex '.*\.\(it\|mod\|s3m\|wav\|xm\)')
     ifneq ($(SOURCES_AUDIO),)
-        INCLUDEDIRS	+= $(SOUNDBANKDIR)
+        INCLUDEDIRS	+= $(SOUNDBANKINFODIR)
     endif
 endif
 
@@ -151,8 +158,10 @@ HEADERS_ASSETS	:= $(patsubst %.bin,%_bin.h,$(addprefix $(BUILDDIR)/,$(SOURCES_BI
 		   $(patsubst %.png,%.h,$(addprefix $(BUILDDIR)/,$(SOURCES_PNG)))
 
 ifneq ($(SOURCES_AUDIO),)
-    OBJS_ASSETS		+= $(SOUNDBANKDIR)/soundbank.c.o
-    HEADERS_ASSETS	+= $(SOUNDBANKDIR)/soundbank.h
+    ifeq ($(strip $(NITROFATDIR)),)
+        OBJS_ASSETS		+= $(SOUNDBANKDIR)/soundbank.c.o
+    endif
+    HEADERS_ASSETS	+= $(SOUNDBANKINFODIR)/soundbank.h
 endif
 
 OBJS_SOURCES	:= $(addsuffix .o,$(addprefix $(BUILDDIR)/,$(SOURCES_S))) \
@@ -208,7 +217,8 @@ dump: $(DUMP)
 
 clean:
 	@echo "  CLEAN"
-	$(V)$(RM) $(ROM) $(DUMP) $(BUILDDIR) $(SDIMAGE)
+	$(V)$(RM) $(ROM) $(DUMP) $(BUILDDIR) $(SDIMAGE) \
+		$(SOUNDBANKDIR)/soundbank.bin
 
 sdimage:
 	@echo "  MKFATIMG $(SDIMAGE) $(SDROOT)"
@@ -258,21 +268,28 @@ $(BUILDDIR)/%.png.o $(BUILDDIR)/%.h : %.png %.grit
 	@$(MKDIR) -p $(@D)
 	$(V)$(BLOCKSDS)/tools/grit/grit $< -ftc -W1 -o$(BUILDDIR)/$*
 	$(V)$(CC) $(CFLAGS) -MMD -MP -c -o $(BUILDDIR)/$*.png.o $(BUILDDIR)/$*.c
-	$(V)touch $(BUILDDIR)/$*.png.o $(BUILDDIR)/$*.h
 
-$(SOUNDBANKDIR)/soundbank.h: $(SOURCES_AUDIO)
+ifneq ($(SOURCES_AUDIO),)
+
+$(SOUNDBANKINFODIR)/soundbank.h: $(SOURCES_AUDIO)
 	@echo "  MMUTIL  $^"
 	@$(MKDIR) -p $(@D)
 	@$(BLOCKSDS)/tools/mmutil/mmutil $^ -d \
-		-o$(SOUNDBANKDIR)/soundbank.bin -h$(SOUNDBANKDIR)/soundbank.h
+		-o$(SOUNDBANKDIR)/soundbank.bin -h$(SOUNDBANKINFODIR)/soundbank.h
 
-$(SOUNDBANKDIR)/soundbank.c.o: $(SOUNDBANKDIR)/soundbank.h
+ifeq ($(strip $(NITROFATDIR)),)
+$(SOUNDBANKDIR)/soundbank.c.o: $(SOUNDBANKINFODIR)/soundbank.h
 	@echo "  BIN2C   soundbank.bin"
 	$(V)$(BLOCKSDS)/tools/bin2c/bin2c $(SOUNDBANKDIR)/soundbank.bin \
 		$(SOUNDBANKDIR)
 	@echo "  CC.9    soundbank_bin.c"
 	$(V)$(CC) $(CFLAGS) -MMD -MP -c -o $(SOUNDBANKDIR)/soundbank.c.o \
 		$(SOUNDBANKDIR)/soundbank_bin.c
+else
+$(NITROFAT_IMG): $(SOUNDBANKINFODIR)/soundbank.h
+endif
+
+endif
 
 # All assets must be built before the source code
 # -----------------------------------------------
