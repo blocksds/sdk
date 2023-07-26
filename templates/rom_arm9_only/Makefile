@@ -31,7 +31,7 @@ INCLUDEDIRS	:=
 GFXDIRS		:= graphics
 BINDIRS		:= data
 AUDIODIRS	:= audio
-NITROFATDIR	:=
+NITROFATDIR	:= # A single directory that is the root of NitroFAT
 
 # Defines passed to all files
 # ---------------------------

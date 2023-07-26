@@ -26,7 +26,7 @@ SDIMAGE		:= image.bin
 # Source code paths
 # -----------------
 
-NITROFATDIR	:=
+NITROFATDIR	:= # A single directory that is the root of NitroFAT
 
 # Tools
 # -----
