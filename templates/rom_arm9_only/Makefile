@@ -185,7 +185,7 @@ NDSTOOL_FAT	:= -F $(NITROFAT_IMG)
 
 $(NITROFAT_IMG): $(NITROFATDIR)
 	@echo "  MKFATIMG $@ $(NITROFATDIR)"
-	$(V)$(BLOCKSDS)/tools/mkfatimg/mkfatimg -t $(NITROFATDIR) $@ 0
+	$(V)$(BLOCKSDS)/tools/mkfatimg/mkfatimg -t $(NITROFATDIR) $@
 
 # Make the NDS ROM depend on the filesystem image only if it is needed
 $(ROM): $(NITROFAT_IMG)
@@ -222,7 +222,7 @@ clean:
 
 sdimage:
 	@echo "  MKFATIMG $(SDIMAGE) $(SDROOT)"
-	$(V)$(BLOCKSDS)/tools/mkfatimg/mkfatimg -t $(SDROOT) $(SDIMAGE) 0
+	$(V)$(BLOCKSDS)/tools/mkfatimg/mkfatimg -t $(SDROOT) $(SDIMAGE)
 
 dldipatch: $(ROM)
 	@echo "  DLDITOOL $(ROM)"
