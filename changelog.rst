@@ -2,6 +2,26 @@
 BlocksDS changelog
 ##################
 
+Version 0.8.1 (2023-08-01)
+==========================
+
+- ``libnds``:
+
+  - Fix NitroFAT in emulators. It only worked when DLDI was initialized
+    correctly, which isn't the case in emulators like no$gba.
+  - Set the right CPU as owner of the Slot-1 bus in NitroFAT handling functions.
+
+- SDK:
+
+  - Update build systems to generate Maxmod soundbanks in the NitroFAT
+    filesystem if the filesystem is used. This isn't supported by ARM9 + ARM7
+    makefiles for now, only by ARM9 makefiles.
+  - Fix segmentation fault in ``mkfatimg`` when not enough arguments are
+    provided.
+  - Stop relying on ``make -j`` in Makefiles. It is passed by make to any
+    sub-make, so it isn't required.
+  - Add basic Maxmod and Maxmod + NitroFAT examples.
+
 Version 0.8 (2023-07-16)
 ========================
 
