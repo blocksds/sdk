@@ -36,6 +36,8 @@ For licensing information, check `this <docs/licenses.rst>`_.
 2. Setup on Windows
 *******************
 
+**Important note**: Native Windows support is experimental.
+
 The following instructions describe how to install BlocksDS on Windows natively.
 If you want to use it in WSL, follow the instructions for Linux instead.
 
