@@ -33,8 +33,54 @@ For detailed information about the design of BlocksDS, check `this other documen
 
 For licensing information, check `this <docs/licenses.rst>`_.
 
-2. Setup
-********
+2. Setup on Windows
+*******************
+
+The following instructions describe how to install BlocksDS on Windows natively.
+If you want to use it in WSL, follow the instructions for Linux instead.
+
+1. You will need to install the ARM toolchain of Wonderful Toolchains. Follow
+   the instructions in this link:
+   https://wonderful.asie.pl/docs/getting-started/#windows-via-msys2
+
+2. Now, install the ARM toolchain of Wonderful Toolchains, as well as the
+   BlocksDS packages.
+
+   .. code:: bash
+
+       wf-pacman -Syu
+       wf-pacman -S toolchain-gcc-arm-none-eabi
+
+   For the latest stable version of BlocksDS, run:
+
+   .. code:: bash
+
+       wf-pacman -S thirdparty-blocksds-toolchain
+
+   For the latest unstable version, run:
+
+   .. code:: bash
+
+       wf-pacman -S thirdparty-blocksds-git-toolchain
+
+3. (Optional step) You can also install some third party libraries like
+   `NightFox’s Lib <https://github.com/knightfox75/nds_nflib>`_ and
+   `Nitro Engine <https://github.com/AntonioND/nitro-engine>`_ using
+   ``wf-pacman``:
+
+   .. code:: bash
+
+       wf-pacman -S thirdparty-blocksds-nflib \
+                    thirdparty-blocksds-nitroengine
+
+4. Whenever you need to update the SDK, run:
+
+   .. code:: bash
+
+       wf-pacman -Syu
+
+3. Setup on Linux
+*****************
 
 If you are using Linux, MinGW, WSL, or any similar environment, you can install
 the SDK using ``wf-pacman``, Docker, or the native installation instructions.
@@ -53,8 +99,8 @@ This is the easiest option, but you may not get the latest version of the SDK
 right away.
 
 1. You will also need to install the ARM toolchain of Wonderful Toolchains.
-   Follow the instructions in this link but you skip step 5:
-   https://wonderful.asie.pl/doc/general/getting-started/#linux
+   Follow the instructions in this link:
+   https://wonderful.asie.pl/docs/getting-started/#linux
 
 2. Now, install the ARM toolchain of Wonderful Toolchains, as well as the
    BlocksDS packages.
@@ -65,7 +111,7 @@ right away.
        wf-pacman -Syu
        wf-pacman -S toolchain-gcc-arm-none-eabi
 
-   For the latest stable version, run:
+   For the latest stable version of BlocksDS, run:
 
    .. code:: bash
 
@@ -134,7 +180,7 @@ you want to always use the cutting edge version of BlocksDS.
 Follow the instructions in `this file <docs/build-from-code.rst>`_ to use the
 Docker images.
 
-3. Test
+4. Test
 *******
 
 To test that everything is working, you can try building one of the templates.
@@ -168,7 +214,7 @@ need to use folders outside of the folder of the project, create a symlink to
 the destination, or build the other code as a static library and link it with
 the project.
 
-4. Additional libraries
+5. Additional libraries
 ***********************
 
 This is a list of libraries that support BlocksDS and can be installed in
@@ -186,7 +232,7 @@ This is a list of libraries that support BlocksDS and can be installed in
   animated models, supports all texture types, and has basic 2D support using
   the 3D hardware. It's compatible with NightFox's Lib.
 
-5. Keeping multiple versions of BlocksDS
+6. Keeping multiple versions of BlocksDS
 ****************************************
 
 You may keep multiple versions of this SDK in your PC. The location of the
@@ -199,7 +245,7 @@ By default, the paths are assumed to be ``/opt/blocksds/core/`` and
 and tools, and it is managed by BlocksDS. The second one is left for users to
 freely install third party libraries and tools.
 
-6. Credits
+7. Credits
 **********
 
 This project wouldn't have been possible without:
