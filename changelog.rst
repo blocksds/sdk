@@ -154,12 +154,14 @@ Version 0.4 (2023-03-26)
 - Remove ``picolibc`` and ``avr-libstdcpp`` as submodules (all previous history
   has been condensed to one commit).
 - Multithreading:
+
   - Add cooperative multithreading scheduler.
   - Enable scheduler in the ARM9 by default.
   - Add examples of having multiple threads, mutexes, and asynchronous file
     loading.
   - Support thread local storage.
   - Added mutexes to problematic parts of ``libnds`` and FatFs.
+
 - Add initial support and example of DSi camera (thanks, asie!).
 - Support ``malloc()`` in the ARM7.
 - Simplify build system of tests and examples.
@@ -180,10 +182,12 @@ Version 0.3 (2023-03-20)
 - General cleanup of ``libnds`` code (like replacing magic numbers by defines).
 - Build system improvements (support two line app titles, remove old makefiles).
 - ``libsysnds`` has been integrated in ``libnds``.
-- Bugfixes in libc and`` libnds``.
+- Bugfixes in libc and ``libnds``.
+
   - EEPROM handling functions.
   - Data cache handling bugs.
   - Fix transparency in keyboard of ``libnds``.
+
 - Added some tests.
 
 Version 0.2 (2023-03-15)
