@@ -58,9 +58,9 @@ _start:
     sub     r1, r1, r0
     bl      ClearMem
 
-    cmp     r10, #1
+    cmp     r10, #1             // r10 contains SCFG_A9ROM
     bne     NotTWL
-    ldr     r1, =__dsimode      // set DSi mode flag
+    ldr     r1, =__dsimode      // Set DSi mode flag
     strb    r10, [r1]
 
 #ifndef VRAM
@@ -87,13 +87,19 @@ NotTWL:
     ldr     r3, =__libc_init_array  // global constructors
     bl      _blx_r3_stub
 
+    // Prepare address, arguments and return address of main().
     mov     r0, #0              // int argc
     mov     r1, #0              // char *argv[]
     ldr     r3, =main
     ldr     lr, =__libnds_exit
-    mov     r12, #0x4000000     // tell arm9 we are ready
+
+    // Send 0x0 to the ARM9 to tell it that we are ready
+    mov     r12, #0x4000000
     mov     r9, #0
     str     r9, [r12, #0x180]
+
+    // Fall through to call main()
+
 _blx_r3_stub:
     bx      r3
 
@@ -107,22 +113,31 @@ arm7lma:
 // ARM7 <-> ARM9 synchronization code
 // -----------------------------------------------------------------------------
 
+// This function returns SCFG_A9ROM in r10
 __sync_start:
     push    {lr}
     mov     r12, #0x4000000
-    mov     r9, #0x0
-    bl      IPCSync
-    mov     r9, #(0x9 << 8)
-    str     r9, [r12, #0x180]
-    mov     r9, #0xA
-    bl      IPCSync
-    mov     r9, #(0xB << 8)
-    str     r9, [r12, #0x180]
-    mov     r9, #0xC
-    bl      IPCSync
-    mov     r9, #(0xD << 8)
-    str     r9, [r12, #0x180]
 
+    mov     r9, #0x0
+    bl      IPCSync // Wait until ARM9 sends 0x0
+
+    mov     r9, #(0x9 << 8)
+    str     r9, [r12, #0x180] // Send 0x9 to the ARM9
+
+    mov     r9, #0xA
+    bl      IPCSync // Wait until ARM9 sends 0xA
+
+    mov     r9, #(0xB << 8)
+    str     r9, [r12, #0x180] // Send 0xB to the ARM9
+
+    mov     r9, #0xC
+    bl      IPCSync // Wait until ARM9 sends 0xC
+
+    mov     r9, #(0xD << 8)
+    str     r9, [r12, #0x180] // Send 0xD to the ARM9
+
+    // Wait until the ARM9 changes the previously sent 0xC. In place of that
+    // 0xC, it will send the result of reading SCFG_A9ROM
 IPCRecvFlag:
     ldr     r10, [r12, #0x180]
     and     r10, r10, #0xF

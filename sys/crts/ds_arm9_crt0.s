@@ -47,26 +47,36 @@ _start:
     ldr     sp, =__sp_usr   // Set user stack
 
     mov     r12, #0x4000000 // Read system ROM status (NTR/TWL)
-    ldrb    r11, [r12, r12, lsr #12]
+    ldrb    r11, [r12, r12, lsr #12] // SCFG_A9ROM
     and     r11, r11, #0x3
 
-    mov     r9, #(0x0 << 8) // Synchronize with ARM7
-    str     r9, [r12, #0x180]
+    // Synchronize with ARM7
+
+    mov     r9, #(0x0 << 8)
+    str     r9, [r12, #0x180] // Send 0x0 to the ARM7
+
     mov     r9, #0x9
-    bl      IPCSync
+    bl      IPCSync // Wait until ARM7 sends 0x9
+
     mov     r9, #(0xA << 8)
-    str     r9, [r12, #0x180]
+    str     r9, [r12, #0x180] // Send 0xA to the ARM7
+
     mov     r9, #0xB
-    bl      IPCSync
+    bl      IPCSync // Wait until ARM7 sends 0xB
+
     mov     r9, #(0xC << 8)
-    str     r9, [r12, #0x180]
+    str     r9, [r12, #0x180] // Send 0xC to the ARM7
+
     mov     r9, #0xD
-    bl      IPCSync
+    bl      IPCSync // Wait until ARM7 sends 0xD
+
     mov     r9, r11, lsl #8
-    str     r9, [r12, #0x180]
+    str     r9, [r12, #0x180] // Send SCFG_A9ROM to the ARM7
+
     mov     r9, #0
-    bl      IPCSync
-    str     r9, [r12, #0x180]
+    bl      IPCSync // Wait until ARM7 sends 0x0 to know it has entered main()
+
+    str     r9, [r12, #0x180] // Set sent value back to 0x0
 
     // Copy ITCM from LMA to VMA
     ldr     r1, =__itcm_lma
