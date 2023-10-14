@@ -7,6 +7,10 @@
 
 FROM ubuntu:23.04 AS base-cross-compiler
 
+# Set locale for iconv, used by ndstool
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
         ca-certificates git make
