@@ -3,73 +3,73 @@
 // Copyright (C) 2005 Michael Noland (joat)
 // Copyright (C) 2005 Jason Rogers (Dovoto)
 // Copyright (C) 2005-2015 Dave Murphy (WinterMute)
+// Copyright (C) 2023 Antonio Niño Díaz
 
 // Default ARM7 core
 
-#include <nds.h>
 #include <dswifi7.h>
+#include <nds.h>
 #include <maxmod7.h>
 
-void VblankHandler(void)
+volatile bool exit_loop = false;
+
+void power_button_callback(void)
 {
+    exit_loop = true;
+}
+
+void vblank_handler(void)
+{
+    inputGetAndSend();
     Wifi_Update();
 }
 
-void VcountHandler(void)
+int main(int argc, char *argv[])
 {
-    inputGetAndSend();
-}
+    // Initialize sound hardware
+    enableSound();
 
-volatile bool exitflag = false;
-
-void powerButtonCB(void)
-{
-    exitflag = true;
-}
-
-int main(int argc, char **argv)
-{
-    // Clear sound registers
-    dmaFillWords(0, (void*)0x04000400, 0x100);
-
-    REG_SOUNDCNT |= SOUND_ENABLE;
-    writePowerManagement(PM_CONTROL_REG,
-        (readPowerManagement(PM_CONTROL_REG) & ~PM_SOUND_MUTE) | PM_SOUND_AMP);
-    powerOn(POWER_SOUND);
-
+    // Read user information from the firmware (name, birthday, etc)
     readUserSettings();
+
+    // Stop LED blinking
     ledBlink(0);
 
-    irqInit();
-    // Start the RTC tracking IRQ
-    initClockIRQ();
-    fifoInit();
+    // Using the calibration values read from the firmware with
+    // readUserSettings(), calculate some internal values to convert raw
+    // coordinates into screen coordinates.
     touchInit();
 
-    mmInstall(FIFO_MAXMOD);
+    irqInit();
+    irqSet(IRQ_VBLANK, vblank_handler);
 
-    SetYtrigger(80);
+    fifoInit();
 
     installWifiFIFO();
     installSoundFIFO();
+    installSystemFIFO(); // Sleep mode, storage, firmware...
 
-    installSystemFIFO();
+    mmInstall(FIFO_MAXMOD);
 
-    if (isDSiMode())
-        installCameraFIFO();
+    // This sets a callback that is called when the power button in a DSi
+    // console is pressed. It has no effect in a DS.
+    setPowerButtonCB(power_button_callback);
 
-    irqSet(IRQ_VCOUNT, VcountHandler);
-    irqSet(IRQ_VBLANK, VblankHandler);
+    // Read current date from the RTC and setup an interrupt to update the time
+    // regularly. The interrupt simply adds one second every time, it doesn't
+    // read the date. Reading the RTC is very slow, so it's a bad idea to do it
+    // frequently.
+    initClockIRQ();
 
-    irqEnable(IRQ_VBLANK | IRQ_VCOUNT | IRQ_NETWORK);
+    irqEnable(IRQ_VBLANK | IRQ_RTC);
 
-    setPowerButtonCB(powerButtonCB);
-
-    // Keep the ARM7 mostly idle
-    while (!exitflag)
+    while (!exit_loop)
     {
-        if (0 == (REG_KEYINPUT & (KEY_SELECT | KEY_START | KEY_L | KEY_R)))
-            exitflag = true;
+        const uint16_t key_mask = KEY_SELECT | KEY_START | KEY_L | KEY_R;
+        uint16_t keys_pressed = ~REG_KEYINPUT;
+
+        if ((keys_pressed & key_mask) == key_mask)
+            exit_loop = true;
 
         swiWaitForVBlank();
     }

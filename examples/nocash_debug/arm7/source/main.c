@@ -6,37 +6,55 @@
 
 #include <nds.h>
 
+volatile bool exit_loop = false;
+
+void power_button_callback(void)
+{
+    exit_loop = true;
+}
+
 void vblank_handler(void)
 {
     inputGetAndSend();
 }
 
-volatile bool exitflag = false;
-
-void power_button_callback(void)
-{
-    exitflag = true;
-}
-
 int main(int argc, char **argv)
 {
-    REG_SOUNDCNT &= ~SOUND_ENABLE;
-    powerOff(POWER_SOUND);
+    // Initialize sound hardware
+    enableSound();
 
+    // Read user information from the firmware (name, birthday, etc)
     readUserSettings();
+
+    // Stop LED blinking
     ledBlink(0);
 
+    // Using the calibration values read from the firmware with
+    // readUserSettings(), calculate some internal values to convert raw
+    // coordinates into screen coordinates.
+    touchInit();
+
     irqInit();
+    irqSet(IRQ_VBLANK, vblank_handler);
 
     fifoInit();
-    installSystemFIFO();
 
-    irqSet(IRQ_VBLANK, vblank_handler);
-    irqEnable(IRQ_VBLANK);
+    installSoundFIFO();
+    installSystemFIFO(); // Sleep mode, storage, firmware...
 
+    // This sets a callback that is called when the power button in a DSi
+    // console is pressed. It has no effect in a DS.
     setPowerButtonCB(power_button_callback);
 
-    while (!exitflag)
+    // Read current date from the RTC and setup an interrupt to update the time
+    // regularly. The interrupt simply adds one second every time, it doesn't
+    // read the date. Reading the RTC is very slow, so it's a bad idea to do it
+    // frequently.
+    initClockIRQ();
+
+    irqEnable(IRQ_VBLANK | IRQ_RTC);
+
+    while (!exit_loop)
     {
         // The console is setup to redirect stderr to the no$gba debug console
         // by default.
@@ -46,7 +64,7 @@ int main(int argc, char **argv)
         uint16_t keys_pressed = ~REG_KEYINPUT;
 
         if ((keys_pressed & key_mask) == key_mask)
-            exitflag = true;
+            exit_loop = true;
 
         swiWaitForVBlank();
     }

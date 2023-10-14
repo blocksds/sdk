@@ -4,6 +4,18 @@
 
 #include <nds.h>
 
+volatile bool exit_loop = false;
+
+void power_button_callback(void)
+{
+    exit_loop = true;
+}
+
+void vblank_handler(void)
+{
+    inputGetAndSend();
+}
+
 void fifo_handler_value32(u32 command, void *userdata)
 {
     uint32_t channel = (uint32_t)userdata;
@@ -37,35 +49,41 @@ void fifo_handler_datamsg(int num_bytes, void *userdata)
     fifoSendDatamsg(expected_channel, sizeof(msg), (void *)&msg);
 }
 
-void vblank_handler(void)
+int main(int argc, char *argv[])
 {
-    inputGetAndSend();
-}
+    // Initialize sound hardware
+    enableSound();
 
-volatile bool exitflag = false;
-
-void power_button_callback(void)
-{
-    exitflag = true;
-}
-
-int main(int argc, char **argv)
-{
-    REG_SOUNDCNT &= ~SOUND_ENABLE;
-    powerOff(POWER_SOUND);
-
+    // Read user information from the firmware (name, birthday, etc)
     readUserSettings();
+
+    // Stop LED blinking
     ledBlink(0);
 
+    // Using the calibration values read from the firmware with
+    // readUserSettings(), calculate some internal values to convert raw
+    // coordinates into screen coordinates.
+    touchInit();
+
     irqInit();
+    irqSet(IRQ_VBLANK, vblank_handler);
 
     fifoInit();
-    installSystemFIFO();
 
-    irqSet(IRQ_VBLANK, vblank_handler);
-    irqEnable(IRQ_VBLANK);
+    installSoundFIFO();
+    installSystemFIFO(); // Sleep mode, storage, firmware...
 
+    // This sets a callback that is called when the power button in a DSi
+    // console is pressed. It has no effect in a DS.
     setPowerButtonCB(power_button_callback);
+
+    // Read current date from the RTC and setup an interrupt to update the time
+    // regularly. The interrupt simply adds one second every time, it doesn't
+    // read the date. Reading the RTC is very slow, so it's a bad idea to do it
+    // frequently.
+    initClockIRQ();
+
+    irqEnable(IRQ_VBLANK | IRQ_RTC);
 
     for (uint32_t ch = FIFO_USER_01; ch <= FIFO_USER_08; ch++)
     {
@@ -74,13 +92,13 @@ int main(int argc, char **argv)
         fifoSetDatamsgHandler(ch, fifo_handler_datamsg, (void *)ch);
     }
 
-    while (!exitflag)
+    while (!exit_loop)
     {
         const uint16_t key_mask = KEY_SELECT | KEY_START | KEY_L | KEY_R;
         uint16_t keys_pressed = ~REG_KEYINPUT;
 
         if ((keys_pressed & key_mask) == key_mask)
-            exitflag = true;
+            exit_loop = true;
 
         swiWaitForVBlank();
     }
