@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 
+    .syntax unified
     .section ".crt0","ax"
     .global  _start
 

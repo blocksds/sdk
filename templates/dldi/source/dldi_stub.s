@@ -5,6 +5,7 @@
 
 #include <nds/arm9/dldi_asm.h>
 
+    .syntax unified
     .section ".crt0","ax"
     .global _start
     .align    4

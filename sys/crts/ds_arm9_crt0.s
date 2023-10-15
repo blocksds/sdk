@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 
+    .syntax unified
     .arch   armv5te
     .cpu    arm946e-s
 
@@ -193,7 +194,7 @@ checkARGV:
     str     r3, [r0, #4]        // Set command line address
 
     cmp     r2, #0
-    subnes  r4, r3, r1          // dst - src
+    subsne  r4, r3, r1          // dst - src
     bxeq    lr                  // dst == src or len == 0 : nothing to do.
 
     cmphi   r2, r4              // len > (dst - src)
