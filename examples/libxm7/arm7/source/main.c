@@ -68,11 +68,11 @@ int main(int argc, char *argv[])
     // regularly. The interrupt simply adds one second every time, it doesn't
     // read the date. Reading the RTC is very slow, so it's a bad idea to do it
     // frequently.
-    initClockIRQ();
+    initClockIRQTimer(3);
 
     irqEnable(IRQ_VBLANK | IRQ_RTC);
 
-    // Initialize libxm7
+    // Initialize libxm7. It uses timer 1 internally.
     XM7_Initialize();
     // Setup the FIFO handler for libXM7
     fifoSetValue32Handler(FIFO_XM7, XM7_Value32Handler, 0);

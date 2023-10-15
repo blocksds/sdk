@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
     installSoundFIFO();
     installSystemFIFO(); // Sleep mode, storage, firmware...
 
+    // Initialize Maxmod. It uses timer 0 internally.
     mmInstall(FIFO_MAXMOD);
 
     // This sets a callback that is called when the power button in a DSi
@@ -59,7 +60,7 @@ int main(int argc, char *argv[])
     // regularly. The interrupt simply adds one second every time, it doesn't
     // read the date. Reading the RTC is very slow, so it's a bad idea to do it
     // frequently.
-    initClockIRQ();
+    initClockIRQTimer(3);
 
     irqEnable(IRQ_VBLANK | IRQ_RTC);
 
