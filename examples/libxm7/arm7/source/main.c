@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     // frequently.
     initClockIRQTimer(3);
 
-    irqEnable(IRQ_VBLANK | IRQ_RTC);
+    irqEnable(IRQ_VBLANK);
 
     // Initialize libxm7. It uses timer 1 internally.
     XM7_Initialize();

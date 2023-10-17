@@ -52,7 +52,7 @@ int main(int argc, char **argv)
     // frequently.
     initClockIRQTimer(3);
 
-    irqEnable(IRQ_VBLANK | IRQ_RTC);
+    irqEnable(IRQ_VBLANK);
 
     while (!exit_loop)
     {

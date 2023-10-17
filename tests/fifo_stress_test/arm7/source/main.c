@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
     // frequently.
     initClockIRQTimer(3);
 
-    irqEnable(IRQ_VBLANK | IRQ_RTC);
+    irqEnable(IRQ_VBLANK);
 
     for (uint32_t ch = FIFO_USER_01; ch <= FIFO_USER_08; ch++)
     {

@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
     // frequently.
     initClockIRQTimer(3);
 
-    irqEnable(IRQ_VBLANK | IRQ_RTC);
+    irqEnable(IRQ_VBLANK);
 
     // Setup the FIFO handler
     fifoSetAddressHandler(FIFO_USER_01, FIFO_UserAddressHandler, 0);
