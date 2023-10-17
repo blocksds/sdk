@@ -43,7 +43,7 @@ ENV PATH /opt/wonderful/toolchain/gcc-arm-none-eabi/bin/:$PATH
 FROM base-cross-compiler AS blocksds-dev
 
 RUN apt-get install -y --no-install-recommends \
-        build-essential libfreeimage-dev
+        build-essential
 
 WORKDIR /opt/
 RUN git clone --recurse-submodules https://github.com/blocksds/sdk.git
@@ -61,9 +61,6 @@ WORKDIR /work/
 # BlocksDS. The source code of BlocksDS isn't included.
 
 FROM base-cross-compiler AS blocksds-slim
-
-RUN apt-get install -y --no-install-recommends \
-    libfreeimage3
 
 COPY --from=blocksds-dev /opt/blocksds/ /opt/blocksds/
 

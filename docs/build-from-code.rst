@@ -14,7 +14,7 @@ you want to always use the cutting edge version of BlocksDS.
    .. code:: bash
 
        sudo apt-get install -y --no-install-recommends \
-           build-essential libfreeimage-dev
+           build-essential
 
 2. You will also need to install the ARM toolchain of Wonderful Toolchains.
    Follow the instructions in this link but you skip step 5:
