@@ -2,6 +2,74 @@
 BlocksDS changelog
 ##################
 
+Version 0.9.0 (2023-10-18)
+==========================
+
+- SDK:
+
+  - Native windows support added. Wonderful toolchains now distribute native
+    Windows binaries, and the only required change in BlocksDS was to change a
+    library used by Grit.
+  - The RTC interrupt is no longer used in any test, example or template. Users
+    are now expected to timer interrupt instead because the RTC interrupt isn't
+    supported on 3DS in DS/DSi mode or most emulators. Check the new code to see
+    how to adapt old code. The RTC interrupt functions will still be supported
+    to preserve compatibility with old projects that aren't updated.
+  - Document the ARM9 <-> ARM7 boot synchronization routine.
+  - In the dockerfile, set a locale to be able to pass UTF-8 characters to
+    ndstool to appear in the title of the NDS ROM.
+  - Add a test to ensure that the libnds modules that use the ARM9 <-> ARM7
+    transfer memory region don't break.
+  - New examples:
+
+    - Getting key input state.
+    - Using NitroFAT, DLDI and DSi SD in the same program.
+    - Send a buffer in main RAM to the ARM7 from the ARM9.
+    - Read battery status.
+    - Set the real time clock of the NDS.
+
+- ``libnds``:
+
+  - RTC:
+
+    - Add new helpers to get and set the date. They use typedefs to move values
+      between functions instead of byte arrays.
+    - The old helpers that use byte arrays have been deprecated.
+    - Using the RTC interrupt as a way to update the time every second has been
+      deprecated.
+
+  - Documentation:
+
+    - Document values returned by the battery read function.
+    - Document RTC helpers.
+    - Add some ARM7 modules to the front page of the Doxygen documentation.
+
+  - Memory:
+
+    - Disable data cache and instruction fetch access to DTCM.
+    - Rumble detection functions won't try to detect anything on DSi.
+    - Change location of transfer region area on DSi so that it's uncached.
+    - Import safe DMA helpers written by Gericom and use them from all DMA
+      helpers.
+
+  - Video:
+
+    - Make ``glGetInt()`` wait for the GPU to be idle when getting the polygon
+      and vertices count. It is common for developers to forget to wait.
+    - Cleanup some helpers and add some missing VRAM definitions.
+    - Document hardware bug of the DMA in GFX FIFO mode.
+
+  - Other:
+
+    - FatFs updated to R0.15p3.
+    - Support the debug button (only available in emulators and debug consoles).
+    - Switch to using ARM unified syntax (UAL).
+
+- Grit:
+
+  - Switch from libfreeimage to libplum. This allows us to build Grit on Windows
+    easier.
+
 Version 0.8.1 (2023-08-01)
 ==========================
 
