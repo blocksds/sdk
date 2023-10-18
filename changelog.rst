@@ -2,6 +2,11 @@
 BlocksDS changelog
 ##################
 
+Version 0.9.1 (2023-10-19)
+==========================
+
+- Revert changes in maxmod that duplicated some symbols.
+
 Version 0.9.0 (2023-10-18)
 ==========================
 
