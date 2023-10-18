@@ -10,6 +10,9 @@ Version 0.9.0 (2023-10-18)
   - Native windows support added. Wonderful toolchains now distribute native
     Windows binaries, and the only required change in BlocksDS was to change a
     library used by Grit.
+  - The stdio implementation of picolibc provided by Wonderful Toolchains has
+    been patched by asie and this has substantially improved direct SD card read
+    and write speeds.
   - The RTC interrupt is no longer used in any test, example or template. Users
     are now expected to timer interrupt instead because the RTC interrupt isn't
     supported on 3DS in DS/DSi mode or most emulators. Check the new code to see
