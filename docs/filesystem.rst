@@ -67,7 +67,7 @@ any path provided to the C library functions.
 
 It is possible to call ``nitroFSInit()`` without ``fatInitDefault()``, but it
 won't work on flashcarts, just emulators. Check `this example
-<../examples/nitrofat>`_ to see how to use ``NitroFAT``.
+<../examples/filesystem/nitrofat>`_ to see how to use ``NitroFAT``.
 
 Supported functions
 ===================

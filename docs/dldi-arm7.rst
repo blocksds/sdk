@@ -83,8 +83,8 @@ Supported flashcards
 ====================
 
 This is a list of flashcards that have been reported to work. Please, test your
-flashcard using `this test <../tests/dldi_arm9_arm7/>`_ and report your
-findings.
+flashcard using `this test <../tests/filesystem/dldi_arm9_arm7/>`_ and report
+your findings.
 
 +-----------------+------+------+----------------------+
 | Flashcard       | ARM9 | ARM7 | Notes                |
