@@ -14,7 +14,7 @@ Version 0.9.0 (2023-10-18)
 
   - Native windows support added. Wonderful toolchains now distribute native
     Windows binaries, and the only required change in BlocksDS was to change a
-    library used by Grit.
+    library used by Grit. Thank you, Generic and asie!
   - The stdio implementation of picolibc provided by Wonderful Toolchains has
     been patched by asie and this has substantially improved direct SD card read
     and write speeds.
