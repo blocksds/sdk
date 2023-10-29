@@ -20,13 +20,13 @@ you want to always use the cutting edge version of BlocksDS.
    Follow the instructions in this link but you skip step 5:
    https://wonderful.asie.pl/doc/general/getting-started/#linux
 
-3. Now, install the ARM toolchain of Wonderful Toolchains:
+3. Now, install the ARM and Teak toolchains of Wonderful Toolchains:
 
    .. code:: bash
 
        export PATH=/opt/wonderful/bin:$PATH
        wf-pacman -Syu
-       wf-pacman -S toolchain-gcc-arm-none-eabi
+       wf-pacman -S toolchain-gcc-arm-none-eabi toolchain-llvm-teak-llvm
 
 4. When you're done, remember to add the following to your ``PATH``:
 

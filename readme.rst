@@ -53,6 +53,12 @@ If you want to use it in WSL, follow the instructions for Linux instead.
        wf-pacman -Syu
        wf-pacman -S toolchain-gcc-arm-none-eabi
 
+   Install the following if you plan to develop binaries for the DSP of the DSi:
+
+   .. code:: bash
+
+       wf-pacman -S toolchain-llvm-teak-llvm
+
    For the latest stable version of BlocksDS, run:
 
    .. code:: bash
@@ -112,6 +118,12 @@ right away.
        export PATH=/opt/wonderful/bin:$PATH
        wf-pacman -Syu
        wf-pacman -S toolchain-gcc-arm-none-eabi
+
+   Install the following if you plan to develop binaries for the DSP of the DSi:
+
+   .. code:: bash
+
+       wf-pacman -S toolchain-llvm-teak-llvm
 
    For the latest stable version of BlocksDS, run:
 
