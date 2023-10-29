@@ -9,9 +9,9 @@ RM		:= rm -rf
 MAKE		:= make
 INSTALL		:= install
 
-.PHONY: bin2c clean dldipatch dlditool grit install mkfatimg mmutil ndstool
+.PHONY: bin2c clean dldipatch dlditool grit install mkfatimg mmutil ndstool teaktool
 
-all: bin2c dldipatch dlditool grit mkfatimg mmutil ndstool
+all: bin2c dldipatch dlditool grit mkfatimg mmutil ndstool teaktool
 
 bin2c:
 	$(MAKE) -C bin2c
@@ -34,6 +34,9 @@ mmutil:
 ndstool:
 	$(MAKE) -C ndstool
 
+teaktool:
+	$(MAKE) -C teaktool
+
 INSTALLDIR	?= /opt/blocksds/core/tools
 INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
 
@@ -52,6 +55,7 @@ install: all
 	$(MAKE) -C mkfatimg install INSTALLDIR=$(INSTALLDIR_ABS)/mkfatimg
 	$(MAKE) -C mmutil install INSTALLDIR=$(INSTALLDIR_ABS)/mmutil
 	$(MAKE) -C ndstool install INSTALLDIR=$(INSTALLDIR_ABS)/ndstool
+	$(MAKE) -C teaktool install INSTALLDIR=$(INSTALLDIR_ABS)/teaktool
 
 clean:
 	$(MAKE) -C bin2c clean
@@ -61,3 +65,4 @@ clean:
 	$(MAKE) -C mkfatimg clean
 	$(MAKE) -C mmutil clean
 	$(MAKE) -C ndstool clean
+	$(MAKE) -C teaktool clean
