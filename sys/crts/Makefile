@@ -15,6 +15,9 @@ PREFIX		:= arm-none-eabi-
 CC		:= $(PREFIX)gcc
 RM		:= rm -rf
 
+LLVM_TEAK	:= /opt/wonderful/toolchain/llvm-teak/bin/
+CCTEAK		:= $(LLVM_TEAK)clang
+
 # Verbose flag
 # ------------
 
@@ -28,7 +31,8 @@ endif
 # -------
 
 OBJS		:= ds_arm7_vram_crt0.o ds_arm7_crt0.o ds_arm7_iwram_crt0.o \
-			   ds_arm9_crt0.o
+			   ds_arm9_crt0.o \
+			   ds_teak_crt0.o
 
 .PHONY: all clean install
 
@@ -46,7 +50,7 @@ install: all
 	@test $(INSTALLDIR_ABS)
 	$(V)$(RM) $(INSTALLDIR_ABS)
 	$(V)$(INSTALL) -d $(INSTALLDIR_ABS)
-	$(V)$(CP) -r ./*.o ./*.ld ./*.mem COPYING $(INSTALLDIR_ABS)
+	$(V)$(CP) -r ./*.o ./*.ld ./*.mem ./COPYING* $(INSTALLDIR_ABS)
 
 # Rules
 # -----
@@ -54,6 +58,7 @@ install: all
 ASFLAGS		:= -x assembler-with-cpp
 ARCHARM7	:= -mcpu=arm7tdmi -mtune=arm7tdmi
 ARCHARM9	:= -march=armv5te -mtune=arm946e-s
+ARCHTEAK	:= --target=teak -march=teak -integrated-as
 
 ds_arm7_vram_crt0.o: ds_arm7_crt0.s
 	@echo "  AS.7    $@"
@@ -72,3 +77,7 @@ ds_arm7_crt0.o: ds_arm7_crt0.s
 ds_arm9_crt0.o: ds_arm9_crt0.s
 	@echo "  AS.9    $@"
 	$(V)$(CC) $(ASFLAGS) $(ARCHARM9) -c -o $@ $<
+
+ds_teak_crt0.o: ds_teak_crt0.s
+	@echo "  AS.TEAK $@"
+	$(V)$(CCTEAK) $(ASFLAGS) $(ARCHTEAK) -c -o $@ $<
