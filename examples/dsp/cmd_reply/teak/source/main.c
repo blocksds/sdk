@@ -6,7 +6,7 @@
 
 int main(void)
 {
-    icuInit();
+    teakInit();
 
     while (1)
     {

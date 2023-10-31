@@ -6,35 +6,19 @@
 
 #include <nds.h>
 
-#include <nds/arm9/teak/dsp.h>
-
 #include "dsp_tlf_bin.h"
-
-static bool dsp_start(void)
-{
-    nwramSetBlockMapping(NWRAM_BLOCK_A, NWRAM_BASE, 0, NWRAM_BLOCK_IMAGE_SIZE_32K);
-
-    // Map NWRAM to copy the DSP code
-    nwramSetBlockMapping(NWRAM_BLOCK_B, 0x03000000, 256 * 1024,
-                         NWRAM_BLOCK_IMAGE_SIZE_256K);
-    nwramSetBlockMapping(NWRAM_BLOCK_C, 0x03400000, 256 * 1024,
-                         NWRAM_BLOCK_IMAGE_SIZE_256K);
-
-    if (!dspExecuteTLF(dsp_tlf_bin))
-        return false;
-
-    // Remove NWRAM from the memory map
-    nwramSetBlockMapping(NWRAM_BLOCK_B, NWRAM_BASE, 0, NWRAM_BLOCK_IMAGE_SIZE_32K);
-    nwramSetBlockMapping(NWRAM_BLOCK_C, NWRAM_BASE, 0, NWRAM_BLOCK_IMAGE_SIZE_32K);
-
-    return true;
-}
 
 int main(int argc, char **argv)
 {
     consoleDemoInit();
 
-    dsp_start();
+    if (!dspExecuteDefaultTLF(dsp_tlf_bin))
+    {
+        printf("Failed to execute TLF");
+
+        while (1)
+            swiWaitForVBlank();
+    }
 
     int16_t rep0 = 0;
     int16_t rep1 = 0;
