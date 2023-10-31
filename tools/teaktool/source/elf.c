@@ -124,14 +124,12 @@ Elf32_Ehdr *elf_load(const char *path)
         {
             printf("Physical and virtual addresses are different: 0x%X != 0x%X\n",
                    (unsigned int)phdr->p_vaddr, (unsigned int)phdr->p_paddr);
-            goto cleanup;
         }
 
         if (phdr->p_filesz != phdr->p_memsz)
         {
             printf("File and memory sizes are different: 0x%X != 0x%X\n",
                    (unsigned int)phdr->p_filesz, (unsigned int)phdr->p_memsz);
-            goto cleanup;
         }
 
         printf("%u: Address: 0x%04X | Size: 0x%04X | ",
