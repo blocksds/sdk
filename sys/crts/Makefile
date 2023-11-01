@@ -2,21 +2,21 @@
 #
 # SPDX-FileContributor: Antonio Niño Díaz, 2023
 
-_MAJOR		:= 1
-_MINOR		:= 1
-_PATCH		:= 0
+BLOCKSDS	?= /opt/blocksds/core
+BLOCKSDSEXT	?= /opt/blocksds/external
+
+WONDERFUL_TOOLCHAIN	?= /opt/wonderful/
+ARM_NONE_EABI_PATH	?= $(WONDERFUL_TOOLCHAIN)toolchain/gcc-arm-none-eabi/bin/
+LLVM_TEAK_PATH		?= $(WONDERFUL_TOOLCHAIN)toolchain/llvm-teak/bin/
 
 # Tools
 # -----
 
 CP		:= cp
 INSTALL		:= install
-PREFIX		:= arm-none-eabi-
-CC		:= $(PREFIX)gcc
+CCARM		:= $(ARM_NONE_EABI_PATH)arm-none-eabi-gcc
+CCTEAK		:= $(LLVM_TEAK_PATH)clang
 RM		:= rm -rf
-
-LLVM_TEAK	:= /opt/wonderful/toolchain/llvm-teak/bin/
-CCTEAK		:= $(LLVM_TEAK)clang
 
 # Verbose flag
 # ------------
@@ -62,7 +62,7 @@ ARCHTEAK	:= --target=teak -march=teak -integrated-as
 
 ds_arm7_vram_crt0.o: ds_arm7_crt0.s
 	@echo "  AS.7    $@"
-	$(V)$(CC) $(ASFLAGS) $(ARCHARM7) -DVRAM -c -o $@ $<
+	$(V)$(CCARM) $(ASFLAGS) $(ARCHARM7) -DVRAM -c -o $@ $<
 
 # They are the same, but it's more intuitive to have two files than to remember
 # that the VRAM crt0 works with the IWRAM linkerscript.
@@ -72,11 +72,11 @@ ds_arm7_iwram_crt0.o: ds_arm7_vram_crt0.o
 
 ds_arm7_crt0.o: ds_arm7_crt0.s
 	@echo "  AS.7    $@"
-	$(V)$(CC) $(ASFLAGS) $(ARCHARM7) -c -o $@ $<
+	$(V)$(CCARM) $(ASFLAGS) $(ARCHARM7) -c -o $@ $<
 
 ds_arm9_crt0.o: ds_arm9_crt0.s
 	@echo "  AS.9    $@"
-	$(V)$(CC) $(ASFLAGS) $(ARCHARM9) -c -o $@ $<
+	$(V)$(CCARM) $(ASFLAGS) $(ARCHARM9) -c -o $@ $<
 
 ds_teak_crt0.o: ds_teak_crt0.s
 	@echo "  AS.TEAK $@"

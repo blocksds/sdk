@@ -5,6 +5,9 @@
 BLOCKSDS	?= /opt/blocksds/core
 BLOCKSDSEXT	?= /opt/blocksds/external
 
+WONDERFUL_TOOLCHAIN	?= /opt/wonderful/
+LLVM_TEAK_PATH		?= $(WONDERFUL_TOOLCHAIN)toolchain/llvm-teak/bin/
+
 # Source code paths
 # -----------------
 
@@ -38,10 +41,10 @@ MAP		:= build/$(NAME).map
 
 LLVM_TEAK := /opt/wonderful/toolchain/llvm-teak/bin/
 
-CC		:= $(LLVM_TEAK)clang
-CXX		:= $(LLVM_TEAK)clang++
-LD		:= $(LLVM_TEAK)ld.lld
-OBJDUMP		:= $(LLVM_TEAK)llvm-objdump
+CC		:= $(LLVM_TEAK_PATH)clang
+CXX		:= $(LLVM_TEAK_PATH)clang++
+LD		:= $(LLVM_TEAK_PATH)ld.lld
+OBJDUMP		:= $(LLVM_TEAK_PATH)llvm-objdump
 MKDIR		:= mkdir
 RM		:= rm -rf
 TEAKTOOL	:= $(BLOCKSDS)/tools/teaktool/teaktool

@@ -5,6 +5,9 @@
 BLOCKSDS	?= /opt/blocksds/core
 BLOCKSDSEXT	?= /opt/blocksds/external
 
+WONDERFUL_TOOLCHAIN	?= /opt/wonderful/
+ARM_NONE_EABI_PATH	?= $(WONDERFUL_TOOLCHAIN)toolchain/gcc-arm-none-eabi/bin/
+
 # User config
 # ===========
 
@@ -44,7 +47,7 @@ DLDI	:= $(NAME).dldi
 # Tools
 # -----
 
-PREFIX		:= arm-none-eabi-
+PREFIX		:= $(ARM_NONE_EABI_PATH)arm-none-eabi-
 CC		:= $(PREFIX)gcc
 CXX		:= $(PREFIX)g++
 OBJDUMP		:= $(PREFIX)objdump

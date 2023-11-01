@@ -5,11 +5,8 @@
 BLOCKSDS	?= /opt/blocksds/core
 BLOCKSDSEXT	?= /opt/blocksds/external
 
-ARM7_MAJOR	:= 0
-ARM7_MINOR	:= 7
-ARM7_PATCH	:= 4
-
-VERSTRING	:= $(ARM7_MAJOR).$(ARM7_MINOR).$(ARM7_PATCH)
+WONDERFUL_TOOLCHAIN	?= /opt/wonderful/
+ARM_NONE_EABI_PATH	?= $(WONDERFUL_TOOLCHAIN)toolchain/gcc-arm-none-eabi/bin/
 
 # Source code paths
 # -----------------
@@ -42,7 +39,7 @@ MAP		:= build/$(NAME).map
 # Tools
 # -----
 
-PREFIX		:= arm-none-eabi-
+PREFIX		:= $(ARM_NONE_EABI_PATH)arm-none-eabi-
 CC		:= $(PREFIX)gcc
 CXX		:= $(PREFIX)g++
 OBJDUMP		:= $(PREFIX)objdump
