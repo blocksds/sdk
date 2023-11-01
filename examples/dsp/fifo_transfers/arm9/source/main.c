@@ -37,6 +37,13 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
+    if (!isDSiMode())
+    {
+        printf("DSP only available on DSi");
+        while (1)
+            swiWaitForVBlank();
+    }
+
     if (!dspExecuteDefaultTLF(dsp_tlf_bin))
     {
         printf("Failed to execute TLF");
