@@ -28,32 +28,23 @@ you want to always use the cutting edge version of BlocksDS.
        wf-pacman -Syu
        wf-pacman -S toolchain-gcc-arm-none-eabi toolchain-llvm-teak-llvm
 
-4. When you're done, remember to add the following to your ``PATH``:
-
-   .. code:: bash
-
-       export PATH=/opt/wonderful/toolchain/gcc-arm-none-eabi/bin/:$PATH
-
-   You can avoid exporting ``PATH`` every time by adding it to your ``.bashrc``,
-   ``.zshenv`` or similar.
-
-5. Now, clone this repository:
+4. Now, clone this repository:
 
    .. code:: bash
 
        git clone --recurse-submodules https://github.com/blocksds/sdk.git
        cd sdk
 
-6. To build the SDK, run this from the root of this repository:
+5. To build the SDK, run this from the root of this repository:
 
    .. code:: bash
 
        BLOCKSDS=$PWD make -j`nproc`
 
-7. Now, you have some options. The first one is recommended, the others are for
+6. Now, you have some options. The first one is recommended, the others are for
    users that may have advanced needs.
 
-   7.1. **Recommended**. Install it in your system. You won't need to set
+   6.1. **Recommended**. Install it in your system. You won't need to set
         ``BLOCKSDS`` or ``BLOCKSDSEXT`` manually to use the SDK. Run:
 
         .. code:: bash
@@ -69,7 +60,7 @@ you want to always use the cutting edge version of BlocksDS.
         ``BLOCKDS`` defaults to ``/opt/blocksds/core`` in all Makefiles, and
         ``BLOCKDSEXT`` defaults to ``/opt/blocksds/external``.
 
-   7.2. Install it in your system in a custom path. You will need to set
+   6.2. Install it in your system in a custom path. You will need to set
         ``BLOCKSDS`` or ``BLOCKSDSEXT`` manually to use the SDK. Run:
 
         .. code:: bash
@@ -79,7 +70,7 @@ you want to always use the cutting edge version of BlocksDS.
         You can avoid exporting ``BLOCKSDS`` every time by adding it to your
         ``.bashrc``, ``.zshenv`` or similar.
 
-   7.3. Use the libraries from this path. Make sure that the environment
+   6.3. Use the libraries from this path. Make sure that the environment
         variable ``BLOCKSDS`` is always set to the right location when you want
         to use the SDK. The build system of the templates and examples will use
         this variable to locate the components of BlocksDS it and use them. Any

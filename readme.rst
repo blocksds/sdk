@@ -147,33 +147,24 @@ right away.
        wf-pacman -S thirdparty-blocksds-nflib \
                     thirdparty-blocksds-nitroengine
 
-4. Add the cross compiler to your ``PATH``:
-
-   .. code:: bash
-
-       export PATH=/opt/wonderful/toolchain/gcc-arm-none-eabi/bin/:$PATH
-
-   You can avoid exporting ``PATH`` every time by adding it to your ``.bashrc``,
-   ``.zshenv`` or similar.
-
-5. ``wf-pacman`` installs BlocksDS in ``/opt/wonderful/thirdparty/blocksds/``.
+4. ``wf-pacman`` installs BlocksDS in ``/opt/wonderful/thirdparty/blocksds/``.
    This isn't the standard location (``wf-pacman`` can only write files to
    ``/opt/wonderful/``) so you need to do one of the two following options:
 
-   5.1 Create a symlink:
+   4.1 Create a symlink:
 
    .. code:: bash
 
        ln -s /opt/wonderful/thirdparty/blocksds /opt/blocksds
 
-   5.2 Set your environment variables correctly:
+   4.2 Set your environment variables correctly:
 
    .. code:: bash
 
        export BLOCKSDS=/opt/wonderful/thirdparty/blocksds/core
        export BLOCKSDSEXT=/opt/wonderful/thirdparty/blocksds/external
 
-6. Whenever you need to update the SDK, run:
+5. Whenever you need to update the SDK, run:
 
    .. code:: bash
 
