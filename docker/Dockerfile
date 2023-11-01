@@ -31,8 +31,6 @@ RUN cd etc && \
 RUN wf-pacman -Syu --noconfirm && \
     wf-pacman -S --noconfirm toolchain-gcc-arm-none-eabi toolchain-llvm-teak-llvm
 
-ENV PATH /opt/wonderful/toolchain/gcc-arm-none-eabi/bin/:$PATH
-
 # Full development image
 # ======================
 #
