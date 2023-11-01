@@ -69,10 +69,10 @@ clean:
 	$(V)$(MAKE) -f Makefile.arm7 clean --no-print-directory
 	$(V)$(MAKE) -f Makefile.teak clean --no-print-directory
 	$(V)$(RM) $(ROM) build $(SDIMAGE)
-	$(V)$(RM) arm9/data/dsp_tlf.bin
+	$(V)$(RM) arm9/data/teak_tlf.bin
 
 arm9: teak
-	$(V)$(CP) build/dsp.tlf arm9/data/dsp_tlf.bin
+	$(V)$(CP) build/teak.tlf arm9/data/teak_tlf.bin
 	$(V)+$(MAKE) -f Makefile.arm9 --no-print-directory
 
 arm7:

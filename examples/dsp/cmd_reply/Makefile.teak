@@ -27,7 +27,7 @@ LIBDIRS		:= $(BLOCKSDS)/libs/libnds
 # ---------------
 
 BUILDDIR	:= build/teak
-NAME		:= dsp
+NAME		:= teak
 ELF		:= build/$(NAME).elf
 TLF		:= build/$(NAME).tlf
 DUMP		:= build/$(NAME).dump

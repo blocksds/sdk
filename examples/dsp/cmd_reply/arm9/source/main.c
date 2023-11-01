@@ -6,7 +6,7 @@
 
 #include <nds.h>
 
-#include "dsp_tlf_bin.h"
+#include "teak_tlf_bin.h"
 
 int main(int argc, char **argv)
 {
@@ -19,7 +19,7 @@ int main(int argc, char **argv)
             swiWaitForVBlank();
     }
 
-    if (!dspExecuteDefaultTLF(dsp_tlf_bin))
+    if (!dspExecuteDefaultTLF(teak_tlf_bin))
     {
         printf("Failed to execute TLF");
         while (1)

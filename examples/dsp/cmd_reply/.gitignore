@@ -1,4 +1,4 @@
 *.nds
 *.sav
 build
-arm9/data/dsp_tlf.bin
+arm9/data/teak_tlf.bin
