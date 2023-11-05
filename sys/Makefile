@@ -28,6 +28,7 @@ install: all
 	$(CP) icon.bmp $(INSTALLDIR_ABS)
 	+$(MAKE) -C crts install INSTALLDIR=$(INSTALLDIR_ABS)/crts
 	+$(MAKE) -C default_arm7 install INSTALLDIR=$(INSTALLDIR_ABS)/default_arm7
+	+$(MAKE) -C default_makefiles install INSTALLDIR=$(INSTALLDIR_ABS)/default_makefiles
 
 clean:
 	+$(MAKE) -C crts clean
