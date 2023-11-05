@@ -2,13 +2,11 @@
 #
 # SPDX-FileContributor: Antonio Niño Díaz, 2023
 
+BLOCKSDS	?= /opt/blocksds/core
+
 # User config
 
 NAME		:= coroutines
 GAME_TITLE	:= Coroutines example
 
-# Source code paths
-
-SOURCEDIRS	:= source
-
-include ../../Makefile.include
+include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

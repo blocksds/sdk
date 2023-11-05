@@ -2,6 +2,8 @@
 #
 # SPDX-FileContributor: Antonio Niño Díaz, 2023
 
+BLOCKSDS	?= /opt/blocksds/core
+
 # User config
 
 NAME		:= assert_test
@@ -12,4 +14,4 @@ GAME_TITLE	:= Assert test
 SOURCEDIRS	:= source
 LIBS		:= -lnds9d
 
-include ../../../tests/Makefile.include
+include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

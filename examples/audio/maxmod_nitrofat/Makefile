@@ -22,4 +22,4 @@ NITROFATDIR	:= nitrofat
 LIBS		:= -lnds9 -lmm9
 LIBDIRS		:= $(BLOCKSDS)/libs/maxmod
 
-include ../../../tests/Makefile.include
+include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

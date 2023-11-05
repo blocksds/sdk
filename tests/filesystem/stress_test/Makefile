@@ -13,6 +13,8 @@ $(warning "Skipping filesystem stress test because python3 wasn't found")
 
 else
 
+BLOCKSDS	?= /opt/blocksds/core
+
 # User config
 
 NAME		:= filesystem_stress_test
@@ -20,10 +22,9 @@ GAME_TITLE	:= Filesystem stress test
 
 # Source code paths
 
-SOURCEDIRS	:= source
 NITROFATDIR	:= nitrofat
 
-include ../../Makefile.include
+include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile
 
 nitrofat:
 	@echo "  GEN_FILESYSTEM"

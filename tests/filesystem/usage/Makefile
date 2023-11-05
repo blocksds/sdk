@@ -2,13 +2,11 @@
 #
 # SPDX-FileContributor: Antonio Niño Díaz, 2023
 
+BLOCKSDS	?= /opt/blocksds/core
+
 # User config
 
 NAME		:= filesystem_usage
 GAME_TITLE	:= SD filesystem example
 
-# Source code paths
-
-SOURCEDIRS	:= source
-
-include ../../Makefile.include
+include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

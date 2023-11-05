@@ -2,6 +2,8 @@
 #
 # SPDX-FileContributor: Antonio Niño Díaz, 2023
 
+BLOCKSDS	?= /opt/blocksds/core
+
 # User config
 
 NAME		:= sync_to_vbl_cothread
@@ -11,4 +13,4 @@ GAME_TITLE	:= Sync to VBL cothread
 
 SOURCEDIRS	:= source
 
-include ../../../tests/Makefile.include
+include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

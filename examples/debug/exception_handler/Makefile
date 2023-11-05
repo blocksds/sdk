@@ -2,6 +2,8 @@
 #
 # SPDX-FileContributor: Antonio Niño Díaz, 2023
 
+BLOCKSDS	?= /opt/blocksds/core
+
 # User config
 
 NAME		:= exception_handler
@@ -11,4 +13,4 @@ GAME_TITLE	:= Exception handler test
 
 SOURCEDIRS	:= source
 
-include ../../../tests/Makefile.include
+include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

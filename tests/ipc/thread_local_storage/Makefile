@@ -2,13 +2,11 @@
 #
 # SPDX-FileContributor: Antonio Niño Díaz, 2023
 
+BLOCKSDS	?= /opt/blocksds/core
+
 # User config
 
 NAME		:= thread_local_storage
 GAME_TITLE	:= TLS example
 
-# Source code paths
-
-SOURCEDIRS	:= source
-
-include ../../Makefile.include
+include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile
