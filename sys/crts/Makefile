@@ -5,9 +5,9 @@
 BLOCKSDS	?= /opt/blocksds/core
 BLOCKSDSEXT	?= /opt/blocksds/external
 
-WONDERFUL_TOOLCHAIN	?= /opt/wonderful/
-ARM_NONE_EABI_PATH	?= $(WONDERFUL_TOOLCHAIN)toolchain/gcc-arm-none-eabi/bin/
-LLVM_TEAK_PATH		?= $(WONDERFUL_TOOLCHAIN)toolchain/llvm-teak/bin/
+WONDERFUL_TOOLCHAIN	?= /opt/wonderful
+ARM_NONE_EABI_PATH	?= $(WONDERFUL_TOOLCHAIN)/toolchain/gcc-arm-none-eabi/bin/
+LLVM_TEAK_PATH		?= $(WONDERFUL_TOOLCHAIN)/toolchain/llvm-teak/bin/
 
 # Tools
 # -----

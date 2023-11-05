@@ -5,8 +5,8 @@
 BLOCKSDS	?= /opt/blocksds/core
 BLOCKSDSEXT	?= /opt/blocksds/external
 
-WONDERFUL_TOOLCHAIN	?= /opt/wonderful/
-LLVM_TEAK_PATH		?= $(WONDERFUL_TOOLCHAIN)toolchain/llvm-teak/bin/
+WONDERFUL_TOOLCHAIN	?= /opt/wonderful
+LLVM_TEAK_PATH		?= $(WONDERFUL_TOOLCHAIN)/toolchain/llvm-teak/bin/
 
 # Source code paths
 # -----------------
