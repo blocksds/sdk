@@ -1,6 +1,6 @@
-#############
-NitroFAT test
-#############
+############
+NitroFS test
+############
 
 Running on hardware
 ===================

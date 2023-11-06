@@ -132,12 +132,12 @@ int main(int argc, char **argv)
 
     consoleSelect(&bottomScreen);
 
-    // List the contents in a folder in NitroFAT
+    // List the contents in a folder in NitroFS
 
     printf("\x1b[2J"); // Clear console
 
-    printf("NitroFAT\n");
-    printf("========\n");
+    printf("NitroFS\n");
+    printf("=======\n");
     printf("\n");
 
     if (chdir("nitro:/fstest") == 0)

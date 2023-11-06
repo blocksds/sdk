@@ -6,16 +6,16 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= maxmod_nitrofat
-GAME_TITLE	:= Maxmod NitroFAT example
+NAME		:= maxmod_nitrofs
+GAME_TITLE	:= Maxmod NitroFS example
 
 # Source code paths
 
 SOURCEDIRS	:= source
 AUDIODIRS	:= audio
-# When a directory is added to NITROFATDIR, the Makefile rules will save the
+# When a directory is added to NITROFSDIR, the Makefile rules will save the
 # soundbank to that directory instead of the build directory.
-NITROFATDIR	:= nitrofat
+NITROFSDIR	:= nitrofs
 
 # Libraries
 

@@ -23,8 +23,8 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
-    printf("maxmod NitroFAT example\n");
-    printf("=======================\n");
+    printf("maxmod NitroFS example\n");
+    printf("======================\n");
     printf("\n");
     printf("START: Return to loader\n");
     printf("\n");
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
         }
     }
 
-    printf("NitroFAT init ok!\n");
+    printf("NitroFS init ok!\n");
     printf("\n");
     printf("\n");
 

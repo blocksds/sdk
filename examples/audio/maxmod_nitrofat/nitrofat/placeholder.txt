@@ -1,2 +1,0 @@
-This is here so that the NitroFAT filesystem isn't empty and the Makefile
-creates the Maxmod soundbank here.

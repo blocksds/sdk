@@ -6,12 +6,12 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= nitrofat_and_fat
-GAME_TITLE	:= NitroFAT+FAT example
+NAME		:= nitrofs
+GAME_TITLE	:= NitroFS example
 
 # Source code paths
 
 SOURCEDIRS	:= source
-NITROFATDIR	:= nitrofat
+NITROFSDIR	:= nitrofs
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

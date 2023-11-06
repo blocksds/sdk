@@ -46,7 +46,7 @@ def gen_tree(base_path):
         gen_file(destination_dir, size)
 
 if __name__ == "__main__":
-    base = "nitrofat"
+    base = "nitrofs"
 
     if os.path.isdir(base):
          shutil.rmtree(base)

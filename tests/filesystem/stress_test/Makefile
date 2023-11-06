@@ -22,18 +22,18 @@ GAME_TITLE	:= Filesystem stress test
 
 # Source code paths
 
-NITROFATDIR	:= nitrofat
+NITROFSDIR	:= nitrofs
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile
 
-nitrofat:
+nitrofs:
 	@echo "  GEN_FILESYSTEM"
 	@python3 gen_filesystem.py
 
-clean: clean_nitrofat
+clean: clean_nitrofs
 
-clean_nitrofat:
-	@echo "  CLEAN NITROFAT"
-	@rm -rf nitrofat
+clean_nitrofs:
+	@echo "  CLEAN NITROFS"
+	@rm -rf nitrofs
 
 endif

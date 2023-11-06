@@ -34,7 +34,7 @@ INCLUDEDIRS	?=
 GFXDIRS		?=
 BINDIRS		?=
 AUDIODIRS	?=
-NITROFATDIR	?= # A single directory that is the root of NitroFAT
+NITROFSDIR	?= # A single directory that is the root of NitroFS
 
 # Defines passed to all files
 # ---------------------------
@@ -53,16 +53,15 @@ LIBDIRS		+= $(BLOCKSDS)/libs/libnds
 BUILDDIR	:= build
 ELF		:= build/$(NAME).elf
 DUMP		:= build/$(NAME).dump
-NITROFAT_IMG	:= build/nitrofat.bin
 MAP		:= build/$(NAME).map
 ROM		:= $(NAME).nds
 
-# If NITROFATDIR is set, the output of mmutil will be placed in that directory
+# If NITROFSDIR is set, the output of mmutil will be placed in that directory
 SOUNDBANKINFODIR	:= $(BUILDDIR)/maxmod
-ifeq ($(strip $(NITROFATDIR)),)
+ifeq ($(strip $(NITROFSDIR)),)
     SOUNDBANKDIR	:= $(BUILDDIR)/maxmod
 else
-    SOUNDBANKDIR	:= $(NITROFATDIR)
+    SOUNDBANKDIR	:= $(NITROFSDIR)
 endif
 
 # Tools
@@ -160,7 +159,7 @@ HEADERS_ASSETS	:= $(patsubst %.bin,%_bin.h,$(addprefix $(BUILDDIR)/,$(SOURCES_BI
 		   $(patsubst %.png,%.h,$(addprefix $(BUILDDIR)/,$(SOURCES_PNG)))
 
 ifneq ($(SOURCES_AUDIO),)
-    ifeq ($(strip $(NITROFATDIR)),)
+    ifeq ($(strip $(NITROFSDIR)),)
         OBJS_ASSETS		+= $(SOUNDBANKDIR)/soundbank.c.o
     endif
     HEADERS_ASSETS	+= $(SOUNDBANKINFODIR)/soundbank.h
@@ -181,16 +180,12 @@ DEPS		:= $(OBJS:.o=.d)
 
 all: $(ROM)
 
-ifneq ($(strip $(NITROFATDIR)),)
+ifneq ($(strip $(NITROFSDIR)),)
 # Additional arguments for ndstool
-NDSTOOL_FAT	:= -F $(NITROFAT_IMG)
+NDSTOOL_ARGS	:= -d $(NITROFSDIR)
 
-$(NITROFAT_IMG): $(NITROFATDIR)
-	@echo "  MKFATIMG $@ $(NITROFATDIR)"
-	$(V)$(BLOCKSDS)/tools/mkfatimg/mkfatimg -t $(NITROFATDIR) $@
-
-# Make the NDS ROM depend on the filesystem image only if it is needed
-$(ROM): $(NITROFAT_IMG)
+# Make the NDS ROM depend on the filesystem only if it is needed
+$(ROM): $(NITROFSDIR)
 endif
 
 # Combine the title strings
@@ -205,7 +200,7 @@ $(ROM): $(ELF)
 	$(V)$(BLOCKSDS)/tools/ndstool/ndstool -c $@ \
 		-7 $(BLOCKSDS)/sys/default_arm7/arm7.elf -9 $(ELF) \
 		-b $(GAME_ICON) "$(GAME_FULL_TITLE)" \
-		$(NDSTOOL_FAT)
+		$(NDSTOOL_ARGS)
 
 $(ELF): $(OBJS)
 	@echo "  LD      $@"
@@ -279,7 +274,7 @@ $(SOUNDBANKINFODIR)/soundbank.h: $(SOURCES_AUDIO)
 	@$(BLOCKSDS)/tools/mmutil/mmutil $^ -d \
 		-o$(SOUNDBANKDIR)/soundbank.bin -h$(SOUNDBANKINFODIR)/soundbank.h
 
-ifeq ($(strip $(NITROFATDIR)),)
+ifeq ($(strip $(NITROFSDIR)),)
 $(SOUNDBANKDIR)/soundbank.c.o: $(SOUNDBANKINFODIR)/soundbank.h
 	@echo "  BIN2C   soundbank.bin"
 	$(V)$(BLOCKSDS)/tools/bin2c/bin2c $(SOUNDBANKDIR)/soundbank.bin \
@@ -287,8 +282,6 @@ $(SOUNDBANKDIR)/soundbank.c.o: $(SOUNDBANKINFODIR)/soundbank.h
 	@echo "  CC.9    soundbank_bin.c"
 	$(V)$(CC) $(CFLAGS) -MMD -MP -c -o $(SOUNDBANKDIR)/soundbank.c.o \
 		$(SOUNDBANKDIR)/soundbank_bin.c
-else
-$(NITROFAT_IMG): $(SOUNDBANKINFODIR)/soundbank.h
 endif
 
 endif

@@ -26,7 +26,7 @@ SDIMAGE		:= image.bin
 # Source code paths
 # -----------------
 
-NITROFATDIR	?=
+NITROFSDIR	?=
 
 # Tools
 # -----
@@ -52,7 +52,6 @@ ARM7DIR		:= arm7
 # Build artfacts
 # --------------
 
-NITROFAT_IMG	:= build/nitrofat.bin
 ROM		:= $(NAME).nds
 
 # Targets
@@ -74,16 +73,12 @@ arm9:
 arm7:
 	$(V)+$(MAKE) -f Makefile.arm7 --no-print-directory
 
-ifneq ($(strip $(NITROFATDIR)),)
+ifneq ($(strip $(NITROFSDIR)),)
 # Additional arguments for ndstool
-NDSTOOL_FAT	:= -F $(NITROFAT_IMG)
+NDSTOOL_ARGS	:= -d $(NITROFSDIR)
 
-$(NITROFAT_IMG): $(NITROFATDIR)
-	@echo "  MKFATIMG $@ $(NITROFATDIR)"
-	$(V)$(BLOCKSDS)/tools/mkfatimg/mkfatimg -t $(NITROFATDIR) $@
-
-# Make the NDS ROM depend on the filesystem image only if it is needed
-$(ROM): $(NITROFAT_IMG)
+# Make the NDS ROM depend on the filesystem only if it is needed
+$(ROM): $(NITROFSDIR)
 endif
 
 # Combine the title strings
@@ -98,7 +93,7 @@ $(ROM): arm9 arm7
 	$(V)$(BLOCKSDS)/tools/ndstool/ndstool -c $@ \
 		-7 build/arm7.elf -9 build/arm9.elf \
 		-b $(GAME_ICON) "$(GAME_FULL_TITLE)" \
-		$(NDSTOOL_FAT)
+		$(NDSTOOL_ARGS)
 
 sdimage:
 	@echo "  MKFATIMG $(SDIMAGE) $(SDROOT)"

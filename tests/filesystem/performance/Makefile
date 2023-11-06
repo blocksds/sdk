@@ -11,6 +11,6 @@ GAME_TITLE	:= SD performance test
 
 # Source code paths
 
-NITROFATDIR	:= nitrofat
+NITROFSDIR	:= nitrofs
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile
