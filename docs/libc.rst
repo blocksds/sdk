@@ -39,13 +39,8 @@ NitroFS
 =======
 
 NitroFS (``nitro:``) is supported, but the implementation is different than the
-one in ``libfilesystem``. The implementation included in BlocksDS is called
-NitroFAT.
-
-NitroFS uses Nintendo's cartridge filesystem format, NitroFAT uses FAT12/FAT16
-images. This is done to reuse the code that reads from SD cards. ROM hacking
-tools to see the filesystem won't work on NDS ROMs that use NitroFAT, as they
-expect to see Nintendo's format. However, this doesn't matter to developers.
+one in ``libfilesystem``. It should be 100% compatible with it. Please, report
+any bugs you may find with it.
 
 Text console (stdout, stderr, stdin)
 ====================================

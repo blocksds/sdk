@@ -151,8 +151,8 @@ card are provided as a DLDI driver. ``f_open()`` must determine the location of
 the file (based on the filesystem prefix, ``fat:`` or ``sd:``) and use DLDI
 driver functions or DSi SD driver functions accordingly.
 
-7. NitroFAT
-===========
+7. NitroFS
+==========
 
 When creating a game, it is needed to add a lot of assets such as graphics and
 music. Initially, most people just include them in their ARM9 binary, but this
@@ -169,22 +169,9 @@ filesystem format called Nitro ROM Filesystem. This is a custom format designed
 by Nintendo. There is a library that can be used to access this filesystem,
 called `libfilesystem <https://github.com/devkitPro/libfilesystem>`_ (formerly
 `Nitrofs <http://blea.ch/wiki/index.php/Nitrofs>`_). The problem is that this
-library doesn't have an open source license,
-
-BlocksDS uses FAT as filesystem format instead. This has a very big advantage:
-It's the same code used to access SD cards of flashcards and the SD of the DSi.
-It's easy to setup ``FatFs`` to consider this filesystem as a different drive.
-
-Also, rhere are lots of tools to generate FAT filesystems, improved over several
-decades. The main disadvantage is that ROM hacking tools won't be able to
-recognize the filesystem, as they expect Nitro ROM Filesystem format.
-
-In order to optimize the fileystem image, NitroFS has a script called `imgbuild
-<../tools/imgbuild>`_ that uses FAT12 or FAT16 depending on the size of your
-files. FAT12 is very compact, but it has a 32 MiB max size limit. Its min size
-limit is 64 KiB. Any FAT12 image will be at least 64 KiB, even if the files
-inside it are smaller. FAT16 is less compact, and the minimum size is 16 MiB
-(even if it's almost empty!) but it has a max limit of 2 GiB.
+library doesn't have an open source license. Instead of using this library,
+BlocksDS has a reimplementation of NitroFS programmed by asie, which should be
+fully compatible with `libfilesystem``.
 
 Accessing the filesystem itself is tricky.
 
@@ -193,12 +180,12 @@ emulators and real cartridges. Flashcarts and homebrew loaders would need to
 patch the instructions, which isn't viable for homebrew games. The solution is
 ``argv``.
 
-When it is initialized, ``NitroFAT`` (the same way as ``Nitrofs``) checks if
-``argv[0]`` has been provided and it can be open. ``argv[0]`` is a path to the
-NDS ROM being run. For example, it may look like ``fat:/games/my-game.nds`` if
-the game has been opened from a flashcart.
+When it is initialized, ``NitroFS`` checks if ``argv[0]`` has been provided and
+it can be open. ``argv[0]`` is a path to the NDS ROM being run. For example, it
+may look like ``fat:/games/my-game.nds`` if the game has been opened from a
+flashcart.
 
-First, ``NitroFAT`` will try to open the file using ``FatFs``. If it can be
+First, ``NitroFS`` will try to open the file using ``FatFs``. If it can be
 opened, whenever ``fopen()`` is called with a path that starts with ``nitro:/``,
 ``FatFs`` will read blocks from the file in ``argv[0]`` with ``fseek()`` and
 ``fread()``.
@@ -208,7 +195,7 @@ in special ways), it will try to use card read commands. The commands should
 work in all emulators.
 
 This system makes it possible to use the integrated filesystem transparently.
-The developer doesn't need to worry about how it is being accessed, ``NitroFAT``
+The developer doesn't need to worry about how it is being accessed, ``NitroFs``
 will handle that complexity.
 
 8. DLDI in the ARM7

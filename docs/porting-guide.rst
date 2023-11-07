@@ -77,7 +77,7 @@ leave them empty if you aren't using them:
     GFXDIRS     := graphics
     BINDIRS     := data
     AUDIODIRS   := audio
-    NITROFATDIR := nitrofs
+    NITROFSDIR  := nitrofs
 
 Important note: ``SOURCEDIRS`` searches all directories recursively. If you
 don't like this behaviour, go to the ``SOURCES_S``, ``SOURCES_C`` and
