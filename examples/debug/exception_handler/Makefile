@@ -9,8 +9,4 @@ BLOCKSDS	?= /opt/blocksds/core
 NAME		:= exception_handler
 GAME_TITLE	:= Exception handler test
 
-# Source code paths
-
-SOURCEDIRS	:= source
-
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

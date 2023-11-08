@@ -9,9 +9,8 @@ BLOCKSDS	?= /opt/blocksds/core
 NAME		:= assert_test
 GAME_TITLE	:= Assert test
 
-# Source code paths
+# Use debug build of libnds
 
-SOURCEDIRS	:= source
 LIBS		:= -lnds9d
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

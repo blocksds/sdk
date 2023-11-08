@@ -9,8 +9,4 @@ BLOCKSDS	?= /opt/blocksds/core
 NAME		:= sync_to_vbl_cothread
 GAME_TITLE	:= Sync to VBL cothread
 
-# Source code paths
-
-SOURCEDIRS	:= source
-
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

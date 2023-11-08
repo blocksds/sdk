@@ -9,8 +9,4 @@ BLOCKSDS	?= /opt/blocksds/core
 NAME		:= directory
 GAME_TITLE	:= Directories example
 
-# Source code paths
-
-SOURCEDIRS	:= source
-
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

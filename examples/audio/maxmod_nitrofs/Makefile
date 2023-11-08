@@ -11,7 +11,6 @@ GAME_TITLE	:= Maxmod NitroFS example
 
 # Source code paths
 
-SOURCEDIRS	:= source
 AUDIODIRS	:= audio
 # When a directory is added to NITROFSDIR, the Makefile rules will save the
 # soundbank to that directory instead of the build directory.

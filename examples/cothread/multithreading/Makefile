@@ -9,8 +9,4 @@ BLOCKSDS	?= /opt/blocksds/core
 NAME		:= multithreading
 GAME_TITLE	:= Cooperative multithreading
 
-# Source code paths
-
-SOURCEDIRS	:= source
-
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

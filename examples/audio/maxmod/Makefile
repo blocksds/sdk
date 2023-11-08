@@ -11,7 +11,6 @@ GAME_TITLE	:= Maxmod example
 
 # Source code paths
 
-SOURCEDIRS	:= source
 AUDIODIRS	:= audio
 
 # Libraries

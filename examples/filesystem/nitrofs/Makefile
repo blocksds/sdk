@@ -11,7 +11,6 @@ GAME_TITLE	:= NitroFS example
 
 # Source code paths
 
-SOURCEDIRS	:= source
 NITROFSDIR	:= nitrofs
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile
