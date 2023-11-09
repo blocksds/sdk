@@ -44,12 +44,6 @@ else
 V		:= @
 endif
 
-# Directories
-# -----------
-
-ARM9DIR		:= arm9
-ARM7DIR		:= arm7
-
 # Build artfacts
 # --------------
 
