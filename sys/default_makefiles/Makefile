@@ -37,4 +37,5 @@ install:
 	@test $(INSTALLDIR_ABS)
 	$(V)$(RM) $(INSTALLDIR_ABS)
 	$(V)$(INSTALL) -d $(INSTALLDIR_ABS)
-	$(V)$(CP) -r rom_arm9 rom_arm9arm7 rom_arm9arm7teak ./COPYING* $(INSTALLDIR_ABS)
+	$(V)$(CP) -r rom_arm9 rom_arm9arm7 rom_arm9arm7teak rom_arm9teak $(INSTALLDIR_ABS)
+	$(V)$(CP) -r ./COPYING* $(INSTALLDIR_ABS)
