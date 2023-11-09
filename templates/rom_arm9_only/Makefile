@@ -225,7 +225,7 @@ sdimage:
 dldipatch: $(ROM)
 	@echo "  DLDITOOL $(ROM)"
 	$(V)$(BLOCKSDS)/tools/dlditool/dlditool \
-		$(BLOCKSDS)/tools/dldi/r4tfv2.dldi $(ROM)
+		$(BLOCKSDS)/sys/dldi_r4/r4tf.dldi $(ROM)
 
 # Rules
 # -----

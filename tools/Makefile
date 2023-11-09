@@ -45,9 +45,7 @@ install: all
 	@test $(INSTALLDIR_ABS)
 	@$(V)$(RM) $(INSTALLDIR_ABS)
 	@$(V)$(INSTALL) -d $(INSTALLDIR_ABS) \
-		      $(INSTALLDIR_ABS)/dldi \
 		      $(INSTALLDIR_ABS)/dldipatch
-	$(INSTALL) dldi/r4tfv2.dldi $(INSTALLDIR_ABS)/dldi/
 	$(INSTALL) $(STRIP) -m $(BINMODE) dldipatch/dldipatch $(INSTALLDIR_ABS)/dldipatch/
 	$(MAKE) -C bin2c install INSTALLDIR=$(INSTALLDIR_ABS)/bin2c
 	$(MAKE) -C dlditool install INSTALLDIR=$(INSTALLDIR_ABS)/dlditool
