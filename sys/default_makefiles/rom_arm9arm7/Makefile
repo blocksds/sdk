@@ -68,10 +68,10 @@ clean:
 	$(V)$(RM) $(ROM) build $(SDIMAGE)
 
 arm9:
-	$(V)+$(MAKE) -f Makefile.arm9 --no-print-directory
+	$(V)$(MAKE) -f Makefile.arm9 --no-print-directory
 
 arm7:
-	$(V)+$(MAKE) -f Makefile.arm7 --no-print-directory
+	$(V)$(MAKE) -f Makefile.arm7 --no-print-directory
 
 ifneq ($(strip $(NITROFSDIR)),)
 # Additional arguments for ndstool

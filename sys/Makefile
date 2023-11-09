@@ -12,13 +12,13 @@ MAKE		:= make
 all: crts default_arm7 dldi_r4
 
 crts:
-	+$(MAKE) -C crts
+	$(MAKE) -C crts
 
 default_arm7:
-	+$(MAKE) -C default_arm7
+	$(MAKE) -C default_arm7
 
 dldi_r4:
-	+$(MAKE) -C dldi_r4
+	$(MAKE) -C dldi_r4
 
 INSTALLDIR	?= /opt/blocksds/core/sys
 INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
@@ -31,11 +31,11 @@ install: all
 		      $(INSTALLDIR_ABS)/dldi_r4
 	$(INSTALL) dldi_r4/r4tf.dldi dldi_r4/LICENSE $(INSTALLDIR_ABS)/dldi_r4/
 	$(CP) icon.bmp $(INSTALLDIR_ABS)
-	+$(MAKE) -C crts install INSTALLDIR=$(INSTALLDIR_ABS)/crts
-	+$(MAKE) -C default_arm7 install INSTALLDIR=$(INSTALLDIR_ABS)/default_arm7
-	+$(MAKE) -C default_makefiles install INSTALLDIR=$(INSTALLDIR_ABS)/default_makefiles
+	$(MAKE) -C crts install INSTALLDIR=$(INSTALLDIR_ABS)/crts
+	$(MAKE) -C default_arm7 install INSTALLDIR=$(INSTALLDIR_ABS)/default_arm7
+	$(MAKE) -C default_makefiles install INSTALLDIR=$(INSTALLDIR_ABS)/default_makefiles
 
 clean:
-	+$(MAKE) -C crts clean
-	+$(MAKE) -C default_arm7 clean
-	+$(MAKE) -C dldi_r4 clean
+	$(MAKE) -C crts clean
+	$(MAKE) -C default_arm7 clean
+	$(MAKE) -C dldi_r4 clean
