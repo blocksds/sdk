@@ -6,4 +6,4 @@ BLOCKSDS	?= /opt/blocksds/core
 
 BINDIRS		:= arm9/data
 
-include $(BLOCKSDS)/sys/default_makefiles/rom_arm9arm7teak/Makefile.arm9
+include $(BLOCKSDS)/sys/default_makefiles/rom_arm9teak/Makefile.arm9

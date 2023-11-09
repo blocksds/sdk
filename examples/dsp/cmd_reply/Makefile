@@ -9,4 +9,4 @@ BLOCKSDS	?= /opt/blocksds/core
 NAME		:= dsp_cmd_reply
 GAME_TITLE	:= DSP CMD and REPLY
 
-include $(BLOCKSDS)/sys/default_makefiles/rom_arm9arm7teak/Makefile
+include $(BLOCKSDS)/sys/default_makefiles/rom_arm9teak/Makefile
