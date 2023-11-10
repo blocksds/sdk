@@ -163,14 +163,14 @@ int2_handler:
 
 .global start
 start:
-    mov     0, mod3
+    mov     0x0, mod3
     mov     0, prpage
     nop
     nop
     mov     0, sp
     addv    0x4ff, sp
     dint
-    mov     0, mod3
+    mov     0x0, mod3
     call    initConfigRegs, always
     call    initConfigRegsShadow, always
     dint
@@ -181,7 +181,7 @@ exit:
 .global
 initConfigRegs:
     rst     0x6ce3, mod0
-    set     3, mod0
+    set     0x3, mod0
     load    0u8, page
     rst     0xd000, mod1
     set     0x2000, mod1
@@ -192,23 +192,23 @@ initConfigRegs:
     mov     0, stepj0
     mov     0x110c, ar0
     mov     0x55ab, ar1
-    mov     0x0021, arp0
+    mov     0x21, arp0
     mov     0x258c, arp1
     mov     0x4ab5, arp2
-    mov     0x0442, arp3
+    mov     0x442, arp3
     ret     always
 
 .global initConfigRegsShadow
 initConfigRegsShadow:
     cntx    s
-    mov     1, st0
-    mov     0, st1
-    mov     0, st2
+    mov     0x1, st0
+    mov     0x0, st1
+    mov     0x0, st2
     mov     0x110c, ar0
     mov     0x55ab, ar1
-    mov     0x0021, arp0
+    mov     0x21, arp0
     mov     0x258c, arp1
     mov     0x4ab5, arp2
-    mov     0x0442, arp3
+    mov     0x442, arp3
     cntx    r
     ret     always
