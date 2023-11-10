@@ -13,12 +13,14 @@
 
 @ Driver patch file standard header -- 16 bytes
 
-    .word   0xBF8DA5ED      @ Magic number to identify this region
-    .asciz  " Chishm"       @ Identifying Magic string (8 bytes with null terminator)
-    .byte   0x01            @ Version number
-    .byte   DLDI_SIZE_16KB  @ Log [base-2] of the size of this driver in bytes.
-    .byte   FIX_GOT | FIX_BSS | FIX_GLUE    @ Sections to fix
-    .byte   0x00            @ Space allocated in the application, leave empty.
+    .word   0xBF8DA5ED                  @ DLDI identifier - magic number
+    .asciz  " Chishm"                   @ DLDI identifier - magic string (8 bytes with null terminator)
+    .byte   0x01                        @ DLDI identifier - DLDI version number
+    .byte   __dldi_header_driver_size   @ Log [base-2] of the size of this driver in bytes.
+                                        @ Calculated automatically in the link script.
+    .byte   __dldi_header_fix_flags     @ Sections to fix.
+                                        @ Calculated automatically in the link script.
+    .byte   0x00                        @ Space allocated in the .nds file; leave empty.
 
 @ Text identifier - can be anything up to 47 chars + terminating null -- 48 bytes
 

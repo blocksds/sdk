@@ -97,6 +97,6 @@ sdimage:
 	$(V)$(BLOCKSDS)/tools/mkfatimg/mkfatimg -t $(SDROOT) $(SDIMAGE)
 
 dldipatch: $(ROM)
-	@echo "  DLDITOOL $(ROM)"
-	$(V)$(BLOCKSDS)/tools/dlditool/dlditool \
+	@echo "  DLDIPATCH $(ROM)"
+	$(V)$(BLOCKSDS)/tools/dldipatch/dldipatch patch \
 		$(BLOCKSDS)/sys/dldi_r4/r4tf.dldi $(ROM)

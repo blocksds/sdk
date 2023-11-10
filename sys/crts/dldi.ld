@@ -158,6 +158,10 @@ SECTIONS
     __end__ = .;
     PROVIDE (end = _end);
 
+    /* DLDI header flags. */
+    PROVIDE (__dldi_header_fix_flags = ((ABSOLUTE(__bss_end) - ABSOLUTE(__bss_start)) > 0 ? 8 : 0) + ((ABSOLUTE(__got_end) - ABSOLUTE(__got_start)) > 0 ? 4 : 0) + ((ABSOLUTE(__glue_end) - ABSOLUTE(__glue_start)) > 0 ? 2 : 0));
+    PROVIDE (__dldi_header_driver_size = LOG2CEIL(ABSOLUTE(__bss_end) - ABSOLUTE(__text_start)));
+
     /* Stabs debugging sections.  */
     .stab 0 : { *(.stab) }
     .stabstr 0 : { *(.stabstr) }
