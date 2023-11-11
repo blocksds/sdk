@@ -18,10 +18,10 @@
 	url = https://github.com/blocksds/mmutil
 [submodule "tools/dldipatch"]
 	path = tools/dldipatch
-	url = https://github.com/lifehackerhansol/dldipatch
+	url = https://github.com/blocksds/dldipatch
 [submodule "libs/libxm7"]
 	path = libs/libxm7
 	url = https://github.com/blocksds/libxm7
 [submodule "sys/dldi_r4"]
 	path = sys/dldi_r4
-	url = https://github.com/asiekierka/dldi-r4
+	url = https://github.com/blocksds/dldi_r4
