@@ -93,6 +93,12 @@ ds_arm9_crt0.o: ds_arm9_crt0.s
 	@echo "  AS.9    $@"
 	$(V)$(CCARM) $(ASFLAGS) $(ARCHARM9) $(INCLUDEFLAGS) $(DEFINESARM9) -c -o $@ $<
 
+LLVM_TEAK_CLANG_VERSION	:= $(shell $(LLVM_TEAK_PATH)clang --version 2> /dev/null)
+
 ds_teak_crt0.o: ds_teak_crt0.s
+ifeq ($(strip $(LLVM_TEAK_CLANG_VERSION)),)
+	@echo "Skipping DSP examples: toolchain-llvm-teak-llvm not found"
+else
 	@echo "  AS.TEAK $@"
 	$(V)$(CCTEAK) $(ASFLAGS) $(ARCHTEAK) $(INCLUDEFLAGS) $(DEFINESTEAK) -c -o $@ $<
+endif
