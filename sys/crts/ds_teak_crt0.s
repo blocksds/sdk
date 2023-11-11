@@ -163,13 +163,13 @@ int2_handler:
 
 .global start
 start:
+    dint
     mov     0x0, mod3
     mov     0, prpage
     nop
     nop
     mov     0, sp
     addv    0x4ff, sp
-    dint
     mov     0x0, mod3
     call    initConfigRegs, always
     call    initConfigRegsShadow, always

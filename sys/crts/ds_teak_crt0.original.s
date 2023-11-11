@@ -5,6 +5,20 @@
 
 #include <teak/cpuregs.h>
 
+#define BIT(n)                          (1 << (n))
+
+#define ICU_IRQ_MASK_TMR1               BIT(9)
+#define ICU_IRQ_MASK_TMR0               BIT(10)
+#define ICU_IRQ_MASK_BTDMP0             BIT(11)
+#define ICU_IRQ_MASK_BTDMP1             BIT(12)
+#define ICU_IRQ_MASK_SIO                BIT(13)
+#define ICU_IRQ_MASK_APBP               BIT(14)
+#define ICU_IRQ_MASK_DMA                BIT(15)
+
+#define REG_ICU_IRQ_PENDING             0x8200
+#define REG_ICU_IRQ_ACK                 0x8202
+#define REG_ICU_IRQ_REQ                 0x8204
+
 .section .text.start
 
 .global inttbl
@@ -56,9 +70,9 @@ trap_handler_tmr:
     push    r0
 
     // Convert this trap to a proper timer IRQ
-    mov     0x8204, r0  // r0 = &REG_ICU_IRQ_REQ
-    set     0x400, [r0] // *r0 |= ICU_IRQ_MASK_TMR0
-    rst     0x400, [r0] // *r0 &= ~ICU_IRQ_MASK_TMR0
+    mov     REG_ICU_IRQ_REQ, r0
+    set     ICU_IRQ_MASK_TMR0, [r0] // Set and clear the bit
+    rst     ICU_IRQ_MASK_TMR0, [r0]
 
     pop     r0
     pop     stt0
@@ -82,10 +96,10 @@ int1_handler:
     push    sv
     push    r0
 
-    //ack     irq
-    //mov     0x8202, r0  // r0 = &REG_ICU_IRQ_ACK
-    //mov     0x8000, a0  // a0 = ICU_IRQ_MASK_DMA
-    //mov     a0l, [r0]   // *r0 = a0l
+    // Acknowledge IRQ
+    //mov     REG_ICU_IRQ_ACK, r0
+    //mov     ICU_IRQ_MASK_DMA, a0
+    //mov     a0l, [r0] // *r0 = a0l
 
     //call    onDMACompleted, always
     //call    ..., always
@@ -122,10 +136,10 @@ int0_handler:
     push    sv
     push    r0
 
-    // Ack IRQ
-    mov     0x8202, r0  // r0 = &REG_ICU_IRQ_ACK
-    mov     0x4000, a0  // a0 = ICU_IRQ_MASK_APBP
-    mov     a0l, [r0]   // *r0 = a0l
+    // Acknowledge IRQ
+    mov     REG_ICU_IRQ_ACK, r0
+    mov     ICU_IRQ_MASK_APBP, a0
+    mov     a0l, [r0] // *r0 = a0l
 
     //call    onIpcCommandReceived, always
 
@@ -161,10 +175,10 @@ int2_handler:
     push    sv
     push    r0
 
-    // Ack IRQ
-    mov     0x8202, r0  // r0 = &REG_ICU_IRQ_ACK
-    mov     0x8000, a0  // a0 = ICU_IRQ_MASK_DMA
-    mov     a0l, [r0]   // *r0 = a0l
+    // Acknowledge IRQ
+    mov     REG_ICU_IRQ_ACK, r0
+    mov     ICU_IRQ_MASK_DMA, a0
+    mov     a0l, [r0] // *r0 = a0l
 
     //call    ..., always
 
@@ -184,18 +198,19 @@ int2_handler:
 
 .global start
 start:
+    dint
     mov     (MOD3_IRQ_DISABLE | MOD3_STACK_ORDER_NORMAL), mod3
     mov     0, prpage
     nop
     nop
 
     mov     0, sp
-    addv    0x4ff, sp
-    dint
+    addv    0x4ff, sp   // Allocate space for the stack
+
     mov     (MOD3_IRQ_DISABLE | MOD3_STACK_ORDER_NORMAL), mod3
-    //eint
     call    initConfigRegs, always
     call    initConfigRegsShadow, always
+
     dint
     call    main, always
 exit:
