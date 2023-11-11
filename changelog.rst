@@ -2,6 +2,82 @@
 BlocksDS changelog
 ##################
 
+Version 0.10.0 (2023-11-11)
+===========================
+
+- Build system:
+
+  - The default makefiles no longer rely on the toolchain being in the current
+    ``PATH``. Now, the default Makefiles have the default path to Wonderful
+    Toolchain, which can be overriden by the user if desired.
+  - The makefiles used by the tests and examples have been moved to a system
+    location so that they are more easily reused.
+  - ``dldipatch`` has replaced ``dlditool`` as the default to apply DLDI
+    patches, due to bugs in dlditool's patch application process:
+    https://problemkaputt.de/gbatek-ds-cart-dldi-driver-guessed-address-adjustments.htm
+  - Update your makefiles to take advantage of the updates.
+
+- Filesystem improvements:
+
+  - Replaced NitroFAT by a new Zlib-licensed implementation of the NitroFS
+    filesystem by @asiekierka. This fixes the performance drawbacks of NitroFAT.
+  - In ``stat()`` and ``fstat()``, the fields ``st_dev`` and ``st_ino`` are now
+    properly populated.
+  - Fixed ``stat()`` not acknowledging ``/`` as a directory.
+  - Remove NitroFAT support from ``ndstool``.
+  - The example makefiles have been modified to stop using ``mkfatimg``.
+
+- DSP:
+
+  - Initial **experimental, incomplete** support for the Teak DSP of the DSi.
+    This isn't ready to be used, it's still under development and it's going
+    through a lot of changes. Most of the code is derived from @Gericom's
+    prototype code.
+  - Support for building DSP binaries won't be present on Windows until it's
+    more stable. However, if you already have pre-built DSP binaries, it's
+    possible to use them on Windows.
+  - Introduced ``teaktool``, which converts ELF files into TLF (Teak Loadable
+    Format) files that can be loaded by ``libnds``.
+  - Added ARM9 functions to ``libnds`` to handle the DSP, load TLF files and
+    communicate with programs running on the DSP.
+  - Introduce ``libteak``, a library with helpers to use the AHBM, DMA, APBP,
+    ICU and timer peripherals. It has been documented and added to the Doxygen
+    pages of ``libnds``.
+  - Added a few examples of how to use the currently supported DSP features.
+  - Update user instructions and Dockerfile to use and mention the LLVM Teak
+    toolchain.
+  - Add NWRAM defintions and helpers.
+
+- DLDI improvements:
+
+  - The DLDI template now automatically calculates the "size" and "fix flags"
+    fields of the header.
+  - The binary R4 DLDI driver, used for DeSmuMe compatibility, has been replaced
+    by a Zlib-licensed impementation built from source.
+
+- ``libnds``:
+
+  - Microphone samples can now be captured using full 16-bit precision on DSi.
+  - Cleaned up and added some missing MMIO/bitfield defines throughout libnds.
+  - Implemented inlined BIOS calls based on ``gba-hpp``. This should make code
+    using BIOS calls slightly smaller and faster.
+  - Small reorganization of syscalls code.
+  - Slightly optimized coroutine threading code.
+  - Added documentation about ARM7 audio helpers.
+
+- Submodules:
+
+  - Before this version, repositories owned by third parties were added as
+    submodules to the SDK repository. This can be a problem if the owner isn't
+    responsive, changes name, deletes the repository... In order to avoid
+    issues, forks have been created under the BlocksDS organization.
+    It is expected to contribute to the original repositories and update the
+    fork to stay in sync. Contributing to the forks is a last resort option.
+
+- Tests:
+
+  - Added a new test for SWI functions.
+
 Version 0.9.1 (2023-10-19)
 ==========================
 
