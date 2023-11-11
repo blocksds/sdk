@@ -2,6 +2,11 @@
 BlocksDS changelog
 ##################
 
+Version 0.10.2 (2023-11-11)
+===========================
+
+- NitroFS: Fix file traversal not working without running a ``chdir()`` first.
+
 Version 0.10.1 (2023-11-11)
 ===========================
 
