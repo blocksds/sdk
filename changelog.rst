@@ -5,7 +5,7 @@ BlocksDS changelog
 Version 0.10.1 (2023-11-11)
 ===========================
 
-- Fix NitroFS directory reads occasionally failing on non-DLDI environts.
+- Fix NitroFS directory reads occasionally failing on non-DLDI environments.
 
 Version 0.10.0 (2023-11-11)
 ===========================
