@@ -182,8 +182,8 @@ Option 3: Build the SDK yourself
 This is the option you should use if you want to help develop BlocksDS, or if
 you want to always use the cutting edge version of BlocksDS.
 
-Follow the instructions in `this file <docs/build-from-code.rst>`_ to use the
-Docker images.
+Follow the instructions in `this file <docs/build-from-code.rst>`_ to see how to
+build the SDK from source.
 
 4. Test
 *******
