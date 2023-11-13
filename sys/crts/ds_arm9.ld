@@ -35,6 +35,23 @@ SECTIONS
 		. = ALIGN(4);  /* REQUIRED. LD is flaky without it. */
 	} >ewram :main = 0x00
 
+	/* Create DLDI driver area. It should be zero-byte if DLDI code
+	   is not present, but set to an user-provided size if it is
+           present. */
+	PROVIDE(__dldi_size = 16384);
+	__dldi_log2_size = LOG2CEIL(__dldi_size + 1) - 1;
+	.dldi :
+	{
+		__dldi_start = .;
+		*(.dldi)
+		. = ALIGN(4);
+
+		__dldi_data_end = .;
+		__dldi_end = __dldi_data_end > __dldi_start ? __dldi_start + __dldi_size : __dldi_start;
+		. = __dldi_end;
+		. = ALIGN(4);
+	} >ewram :main = 0x00
+
 	.plt : { *(.plt) } >ewram :main = 0xff
 
 	.init :
