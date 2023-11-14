@@ -7,24 +7,18 @@
 
 #define BIT(n)                          (1 << (n))
 
-#define ICU_IRQ_MASK_TMR1               BIT(9)
 #define ICU_IRQ_MASK_TMR0               BIT(10)
-#define ICU_IRQ_MASK_BTDMP0             BIT(11)
-#define ICU_IRQ_MASK_BTDMP1             BIT(12)
-#define ICU_IRQ_MASK_SIO                BIT(13)
-#define ICU_IRQ_MASK_APBP               BIT(14)
-#define ICU_IRQ_MASK_DMA                BIT(15)
 
-#define REG_ICU_IRQ_PENDING             0x8200
-#define REG_ICU_IRQ_ACK                 0x8202
 #define REG_ICU_IRQ_REQ                 0x8204
+
+// Vector table
+// ------------
 
 .section .text.start
 
-.global inttbl
-inttbl:
 .global _start
 _start:
+
     br      start, always           // 0x00000
     br      trap_handler, always    // 0x00002
     br      nmi_handler, always     // 0x00004
@@ -43,33 +37,37 @@ _start:
     nop
     nop
     br      int2_handler, always    // 0x00016
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
 
 .text
 
-.global nmi_handler
+// Global NMI handler
+// ------------------
+
 nmi_handler:
+
     cntx    s
     rst     MOD0_SHIFT_MODE_MASK, mod0 // Set mode arithmetic
     retic   always
 
-.global trap_handler
+// Global trap handler
+// -------------------
+
 trap_handler:
+
     cntx    s
     rst     MOD0_SHIFT_MODE_MASK, mod0 // Set mode arithmetic
     retic   always
 
-.global trap_handler_tmr
+// Trap handler that triggers an IRQ timer
+// ---------------------------------------
+
 trap_handler_tmr:
+
+    // TODO: This is unused and untested
     push    stt0
     push    r0
 
-    // Convert this trap to a proper timer IRQ
+    // Convert this trap to a proper timer IRQ that can be routed
     mov     REG_ICU_IRQ_REQ, r0
     set     ICU_IRQ_MASK_TMR0, [r0] // Set and clear the bit
     rst     ICU_IRQ_MASK_TMR0, [r0]
@@ -78,48 +76,11 @@ trap_handler_tmr:
     pop     stt0
     reti    always
 
-.global int1_handler
-int1_handler:
-    cntx    s
-    load    0, ps01
-    rst     MOD0_SHIFT_MODE_MASK, mod0 // Set mode arithmetic
-    push    a0e
-    pusha   a0
-    push    a1e
-    pusha   a1
-    push    b0e
-    pusha   b0
-    push    b1e
-    pusha   b1
-    push    p0
-    push    p1
-    push    sv
-    push    r0
+// Global interrupt handler for INT0
+// ---------------------------------
 
-    // Acknowledge IRQ
-    //mov     REG_ICU_IRQ_ACK, r0
-    //mov     ICU_IRQ_MASK_DMA, a0
-    //mov     a0l, [r0] // *r0 = a0l
-
-    //call    onDMACompleted, always
-    //call    ..., always
-
-    pop     r0
-    pop     sv
-    pop     p1
-    pop     p0
-    popa    b1
-    pop     b1e
-    popa    b0
-    pop     b0e
-    popa    a1
-    pop     a1e
-    popa    a0
-    pop     a0e
-    retic   always
-
-.global int0_handler
 int0_handler:
+
     cntx    s
     load    0, ps01
     rst     MOD0_SHIFT_MODE_MASK, mod0 // Set mode arithmetic
@@ -136,12 +97,7 @@ int0_handler:
     push    sv
     push    r0
 
-    // Acknowledge IRQ
-    mov     REG_ICU_IRQ_ACK, r0
-    mov     ICU_IRQ_MASK_APBP, a0
-    mov     a0l, [r0] // *r0 = a0l
-
-    //call    onIpcCommandReceived, always
+    call    irqHandlerInt0, always
 
     pop     r0
     pop     sv
@@ -157,8 +113,48 @@ int0_handler:
     pop     a0e
     retic   always
 
-.global int2_handler
+// Global interrupt handler for INT1
+// ---------------------------------
+
+int1_handler:
+
+    cntx    s
+    load    0, ps01
+    rst     MOD0_SHIFT_MODE_MASK, mod0 // Set mode arithmetic
+    push    a0e
+    pusha   a0
+    push    a1e
+    pusha   a1
+    push    b0e
+    pusha   b0
+    push    b1e
+    pusha   b1
+    push    p0
+    push    p1
+    push    sv
+    push    r0
+
+    call    irqHandlerInt1, always
+
+    pop     r0
+    pop     sv
+    pop     p1
+    pop     p0
+    popa    b1
+    pop     b1e
+    popa    b0
+    pop     b0e
+    popa    a1
+    pop     a1e
+    popa    a0
+    pop     a0e
+    retic   always
+
+// Global interrupt handler for INT2
+// ---------------------------------
+
 int2_handler:
+
     cntx    s
     load    0, ps01
     rst     MOD0_SHIFT_MODE_MASK, mod0 // Set mode arithmetic
@@ -175,12 +171,7 @@ int2_handler:
     push    sv
     push    r0
 
-    // Acknowledge IRQ
-    mov     REG_ICU_IRQ_ACK, r0
-    mov     ICU_IRQ_MASK_DMA, a0
-    mov     a0l, [r0] // *r0 = a0l
-
-    //call    ..., always
+    call    irqHandlerInt2, always
 
     pop     r0
     pop     sv
@@ -196,28 +187,42 @@ int2_handler:
     pop     a0e
     retic   always
 
-.global start
+// Start of the boot code
+// ----------------------
+
 start:
+
     dint
     mov     (MOD3_IRQ_DISABLE | MOD3_STACK_ORDER_NORMAL), mod3
+
+    // prpage isn't used in DSi code because there are only 64 kilowords of
+    // code in the available address space. The following two nops ensure that
+    // the write is in effect.
     mov     0, prpage
     nop
     nop
 
+    // Allocate space for the stack
     mov     0, sp
-    addv    0x4ff, sp   // Allocate space for the stack
+    addv    0x4ff, sp
 
+    // Set default values to config registers
     mov     (MOD3_IRQ_DISABLE | MOD3_STACK_ORDER_NORMAL), mod3
     call    initConfigRegs, always
     call    initConfigRegsShadow, always
 
+    // Make sure that interrupts are disabled before jumping to the user code
     dint
     call    main, always
+
 exit:
     br      exit, always
 
-.global
+// Initialize config registers to some default values
+// --------------------------------------------------
+
 initConfigRegs:
+
     rst     (MOD0_SATURATION_MASK | MOD0_SATURATION_STORE_MASK | \
              MOD0_HW_MUL_MASK | MOD0_SHIFT_MODE_MASK | \
              MOD0_PRODUCT_SHIFTER_P0_MASK | MOD0_PRODUCT_SHIFTER_P1_MASK), mod0
@@ -250,8 +255,11 @@ initConfigRegs:
              ARPn_RIn_REGISTER_Rn(1) | ARPn_RJn_REGISTER_Rn(4)), arp3
     ret     always
 
-.global initConfigRegsShadow
+// Initialize shadow config registers to some default values
+// ---------------------------------------------------------
+
 initConfigRegsShadow:
+
     cntx    s
     mov     (ST0_SATURATION_ON | ST0_IRQ_DISABLE | ST0_IRQ_INT0_DISABLE | \
              ST0_IRQ_INT1_DISABLE), st0
@@ -276,4 +284,32 @@ initConfigRegsShadow:
              ARPn_PMJn_POST_MODIFY_STEP_M1 | ARPn_CJn_OFFSET_P0 | \
              ARPn_RIn_REGISTER_Rn(1) | ARPn_RJn_REGISTER_Rn(4)), arp3
     cntx    r
+    ret     always
+
+
+// Default INT0 IRQ handler. Weak definition.
+// ------------------------------------------
+
+    .global irqHandlerInt0
+    .weak irqHandlerInt0
+irqHandlerInt0:
+
+    ret     always
+
+// Default INT1 IRQ handler. Weak definition.
+// ------------------------------------------
+
+    .global irqHandlerInt1
+    .weak irqHandlerInt1
+irqHandlerInt1:
+
+    ret     always
+
+// Default INT2 IRQ handler. Weak definition.
+// ------------------------------------------
+
+    .global irqHandlerInt2
+    .weak irqHandlerInt2
+irqHandlerInt2:
+
     ret     always

@@ -7,9 +7,6 @@
 
 .section .text.start
 
-.global inttbl
-inttbl:
-
 .global _start
 _start:
     br      start, always
@@ -30,28 +27,16 @@ _start:
     nop
     nop
     br      int2_handler, always
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
 
 .text
-
-.global nmi_handler
 nmi_handler:
     cntx    s
     rst     0x80, mod0
     retic   always
-
-.global trap_handler
 trap_handler:
     cntx    s
     rst     0x80, mod0
     retic   always
-
-.global trap_handler_tmr
 trap_handler_tmr:
     push    stt0
     push    r0
@@ -61,39 +46,6 @@ trap_handler_tmr:
     pop     r0
     pop     stt0
     reti    always
-
-.global int1_handler
-int1_handler:
-    cntx    s
-    load    0, ps01
-    rst     0x80, mod0
-    push    a0e
-    pusha   a0
-    push    a1e
-    pusha   a1
-    push    b0e
-    pusha   b0
-    push    b1e
-    pusha   b1
-    push    p0
-    push    p1
-    push    sv
-    push    r0
-    pop     r0
-    pop     sv
-    pop     p1
-    pop     p0
-    popa    b1
-    pop     b1e
-    popa    b0
-    pop     b0e
-    popa    a1
-    pop     a1e
-    popa    a0
-    pop     a0e
-    retic   always
-
-.global int0_handler
 int0_handler:
     cntx    s
     load    0, ps01
@@ -110,9 +62,7 @@ int0_handler:
     push    p1
     push    sv
     push    r0
-    mov     0x8202, r0
-    mov     0x4000, a0
-    mov     a0l, [r0]
+    call    irqHandlerInt0, always
     pop     r0
     pop     sv
     pop     p1
@@ -126,8 +76,36 @@ int0_handler:
     popa    a0
     pop     a0e
     retic   always
-
-.global int2_handler
+int1_handler:
+    cntx    s
+    load    0, ps01
+    rst     0x80, mod0
+    push    a0e
+    pusha   a0
+    push    a1e
+    pusha   a1
+    push    b0e
+    pusha   b0
+    push    b1e
+    pusha   b1
+    push    p0
+    push    p1
+    push    sv
+    push    r0
+    call    irqHandlerInt1, always
+    pop     r0
+    pop     sv
+    pop     p1
+    pop     p0
+    popa    b1
+    pop     b1e
+    popa    b0
+    pop     b0e
+    popa    a1
+    pop     a1e
+    popa    a0
+    pop     a0e
+    retic   always
 int2_handler:
     cntx    s
     load    0, ps01
@@ -144,9 +122,7 @@ int2_handler:
     push    p1
     push    sv
     push    r0
-    mov     0x8202, r0
-    mov     0x8000, a0
-    mov     a0l, [r0]
+    call    irqHandlerInt2, always
     pop     r0
     pop     sv
     pop     p1
@@ -160,8 +136,6 @@ int2_handler:
     popa    a0
     pop     a0e
     retic   always
-
-.global start
 start:
     dint
     mov     0x0, mod3
@@ -177,8 +151,6 @@ start:
     call    main, always
 exit:
     br      exit, always
-
-.global
 initConfigRegs:
     rst     0x6ce3, mod0
     set     0x3, mod0
@@ -197,8 +169,6 @@ initConfigRegs:
     mov     0x4ab5, arp2
     mov     0x442, arp3
     ret     always
-
-.global initConfigRegsShadow
 initConfigRegsShadow:
     cntx    s
     mov     0x1, st0
@@ -211,4 +181,22 @@ initConfigRegsShadow:
     mov     0x4ab5, arp2
     mov     0x442, arp3
     cntx    r
+    ret     always
+
+.global irqHandlerInt0
+
+.weak irqHandlerInt0
+irqHandlerInt0:
+    ret     always
+
+.global irqHandlerInt1
+
+.weak irqHandlerInt1
+irqHandlerInt1:
+    ret     always
+
+.global irqHandlerInt2
+
+.weak irqHandlerInt2
+irqHandlerInt2:
     ret     always
