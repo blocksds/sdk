@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: Zlib
+// SPDX-FileNotice: Modified from the original version by the BlocksDS project.
 //
 // Copyright (C) 2020 Gericom
 // Copyright (C) 2023 Antonio Niño Díaz
