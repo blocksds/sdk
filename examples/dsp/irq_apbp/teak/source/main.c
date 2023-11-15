@@ -34,18 +34,10 @@ int main(void)
     // interrupts caused by channels 1 and 2 enabled.
     REG_APBP_CONTROL = APBP_CONTROL_IRQ_CMD0_DISABLE;
 
-    // Configure IRQ
-    REG_ICU_IRQ_MODE |= ICU_IRQ_MASK_APBP;
-    REG_ICU_IRQ_POLARITY = ~ICU_IRQ_MASK_APBP;
-    REG_ICU_IRQ_DISABLE = ~ICU_IRQ_MASK_APBP;
+    // Enable and route APBP interrupt to CPU interrupt 0
+    icuIrqSetup(ICU_IRQ_MASK_APBP, 0);
 
-    // Clear pending IRQ just in case
-    REG_ICU_IRQ_ACK = ICU_IRQ_MASK_APBP;
-
-    // Route APBP IRQ to INT0
-    REG_ICU_IRQ_INT0 = ICU_IRQ_MASK_APBP;
-
-    // Enable interrupts
+    // Enable CPU interrupts
     cpuEnableIrqs();
     cpuEnableInt0();
 
