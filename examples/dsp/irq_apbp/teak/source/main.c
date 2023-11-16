@@ -23,6 +23,7 @@ void irqHandlerInt0(void)
         apbpReceiveData(2);
     }
 
+    // Acknowledge interrupt before returning
     REG_ICU_IRQ_ACK = ICU_IRQ_MASK_APBP;
 }
 
