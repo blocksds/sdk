@@ -29,11 +29,12 @@ def preprocess_teak_crt0(input_file, output_file):
             if len(line) == 0:
                 continue
 
+            # Directives
             if line.startswith('.'):
-                out_file.write(f"\n")
                 out_file.write(f"{line}\n")
                 continue
 
+            # Labels
             if line.endswith(':'):
                 out_file.write(f"{line}\n")
                 continue

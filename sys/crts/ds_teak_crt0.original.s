@@ -20,173 +20,26 @@
 .global _start
 _start:
 
-    br      start, always           // 0x00000
-    br      trap_handler, always    // 0x00002
-    br      nmi_handler, always     // 0x00004
-    br      int0_handler, always    // 0x00006
+    br      start, always               // 0x00000
+    br      trapHandlerAsm, always      // 0x00002
+    br      nmiHandlerAsm, always       // 0x00004
+    br      irqHandlerInt0Asm, always   // 0x00006
     nop
     nop
     nop
     nop
     nop
     nop
-    br      int1_handler, always    // 0x0000E
+    br      irqHandlerInt1Asm, always   // 0x0000E
     nop
     nop
     nop
     nop
     nop
     nop
-    br      int2_handler, always    // 0x00016
+    br      irqHandlerInt2Asm, always   // 0x00016
 
 .text
-
-// Global NMI handler
-// ------------------
-
-nmi_handler:
-
-    cntx    s
-    rst     MOD0_SHIFT_MODE_MASK, mod0 // Set mode arithmetic
-    retic   always
-
-// Global trap handler
-// -------------------
-
-trap_handler:
-
-    cntx    s
-    rst     MOD0_SHIFT_MODE_MASK, mod0 // Set mode arithmetic
-    retic   always
-
-// Trap handler that triggers an IRQ timer
-// ---------------------------------------
-
-trap_handler_tmr:
-
-    // TODO: This is unused and untested
-    push    stt0
-    push    r0
-
-    // Convert this trap to a proper timer IRQ that can be routed
-    mov     REG_ICU_IRQ_REQ, r0
-    set     ICU_IRQ_MASK_TMR0, [r0] // Set and clear the bit
-    rst     ICU_IRQ_MASK_TMR0, [r0]
-
-    pop     r0
-    pop     stt0
-    reti    always
-
-// Global interrupt handler for INT0
-// ---------------------------------
-
-int0_handler:
-
-    cntx    s
-    load    0, ps01
-    rst     MOD0_SHIFT_MODE_MASK, mod0 // Set mode arithmetic
-    push    a0e
-    pusha   a0
-    push    a1e
-    pusha   a1
-    push    b0e
-    pusha   b0
-    push    b1e
-    pusha   b1
-    push    p0
-    push    p1
-    push    sv
-    push    r0
-
-    call    irqHandlerInt0, always
-
-    pop     r0
-    pop     sv
-    pop     p1
-    pop     p0
-    popa    b1
-    pop     b1e
-    popa    b0
-    pop     b0e
-    popa    a1
-    pop     a1e
-    popa    a0
-    pop     a0e
-    retic   always
-
-// Global interrupt handler for INT1
-// ---------------------------------
-
-int1_handler:
-
-    cntx    s
-    load    0, ps01
-    rst     MOD0_SHIFT_MODE_MASK, mod0 // Set mode arithmetic
-    push    a0e
-    pusha   a0
-    push    a1e
-    pusha   a1
-    push    b0e
-    pusha   b0
-    push    b1e
-    pusha   b1
-    push    p0
-    push    p1
-    push    sv
-    push    r0
-
-    call    irqHandlerInt1, always
-
-    pop     r0
-    pop     sv
-    pop     p1
-    pop     p0
-    popa    b1
-    pop     b1e
-    popa    b0
-    pop     b0e
-    popa    a1
-    pop     a1e
-    popa    a0
-    pop     a0e
-    retic   always
-
-// Global interrupt handler for INT2
-// ---------------------------------
-
-int2_handler:
-
-    cntx    s
-    load    0, ps01
-    rst     MOD0_SHIFT_MODE_MASK, mod0 // Set mode arithmetic
-    push    a0e
-    pusha   a0
-    push    a1e
-    pusha   a1
-    push    b0e
-    pusha   b0
-    push    b1e
-    pusha   b1
-    push    p0
-    push    p1
-    push    sv
-    push    r0
-
-    call    irqHandlerInt2, always
-
-    pop     r0
-    pop     sv
-    pop     p1
-    pop     p0
-    popa    b1
-    pop     b1e
-    popa    b0
-    pop     b0e
-    popa    a1
-    pop     a1e
-    popa    a0
-    pop     a0e
-    retic   always
 
 // Start of the boot code
 // ----------------------
@@ -287,9 +140,164 @@ initConfigRegsShadow:
     cntx    r
     ret     always
 
+// Global NMI handler
+// ------------------
 
-// Default INT0 IRQ handler. Weak definition.
-// ------------------------------------------
+    .global nmiHandlerAsm
+    .weak nmiHandlerAsm
+nmiHandlerAsm:
+
+    cntx    s
+    rst     MOD0_SHIFT_MODE_MASK, mod0 // Set mode arithmetic
+    retic   always
+
+// Trap handler that converts the trap to a timer 0 IRQ
+// ----------------------------------------------------
+
+    .global trapHandlerAsm
+    .weak trapHandlerAsm
+trapHandlerAsm:
+
+    push    stt0
+    push    r0
+
+    // Convert this trap to a proper timer 0 IRQ that can be routed
+    mov     REG_ICU_IRQ_REQ, r0
+    set     ICU_IRQ_MASK_TMR0, [r0] // Set and clear the bit
+    rst     ICU_IRQ_MASK_TMR0, [r0]
+
+    pop     r0
+    pop     stt0
+    reti    always
+
+// Global interrupt handler for INT0
+// ---------------------------------
+
+    .global irqHandlerInt0Asm
+    .weak irqHandlerInt0Asm
+irqHandlerInt0Asm:
+
+    cntx    s
+    load    0, ps01
+    rst     MOD0_SHIFT_MODE_MASK, mod0 // Set mode arithmetic
+    push    a0e
+    pusha   a0
+    push    a1e
+    pusha   a1
+    push    b0e
+    pusha   b0
+    push    b1e
+    pusha   b1
+    push    p0
+    push    p1
+    push    sv
+    push    r0
+
+    call    irqHandlerInt0, always
+
+    pop     r0
+    pop     sv
+    pop     p1
+    pop     p0
+    popa    b1
+    pop     b1e
+    popa    b0
+    pop     b0e
+    popa    a1
+    pop     a1e
+    popa    a0
+    pop     a0e
+    retic   always
+
+// Global interrupt handler for INT1
+// ---------------------------------
+
+    .global irqHandlerInt1Asm
+    .weak irqHandlerInt1Asm
+irqHandlerInt1Asm:
+
+    cntx    s
+    load    0, ps01
+    rst     MOD0_SHIFT_MODE_MASK, mod0 // Set mode arithmetic
+    push    a0e
+    pusha   a0
+    push    a1e
+    pusha   a1
+    push    b0e
+    pusha   b0
+    push    b1e
+    pusha   b1
+    push    p0
+    push    p1
+    push    sv
+    push    r0
+
+    call    irqHandlerInt1, always
+
+    pop     r0
+    pop     sv
+    pop     p1
+    pop     p0
+    popa    b1
+    pop     b1e
+    popa    b0
+    pop     b0e
+    popa    a1
+    pop     a1e
+    popa    a0
+    pop     a0e
+    retic   always
+
+// Global interrupt handler for INT2
+// ---------------------------------
+
+    .global irqHandlerInt2Asm
+    .weak irqHandlerInt2Asm
+irqHandlerInt2Asm:
+
+    cntx    s
+    load    0, ps01
+    rst     MOD0_SHIFT_MODE_MASK, mod0 // Set mode arithmetic
+    push    a0e
+    pusha   a0
+    push    a1e
+    pusha   a1
+    push    b0e
+    pusha   b0
+    push    b1e
+    pusha   b1
+    push    p0
+    push    p1
+    push    sv
+    push    r0
+
+    call    irqHandlerInt2, always
+
+    pop     r0
+    pop     sv
+    pop     p1
+    pop     p0
+    popa    b1
+    pop     b1e
+    popa    b0
+    pop     b0e
+    popa    a1
+    pop     a1e
+    popa    a0
+    pop     a0e
+    retic   always
+
+// Default trap handler
+// --------------------
+
+    .global trapHandler
+    .weak trapHandler
+trapHandler:
+
+    ret     always
+
+// Default INT0 IRQ handler
+// ------------------------
 
     .global irqHandlerInt0
     .weak irqHandlerInt0
@@ -297,8 +305,8 @@ irqHandlerInt0:
 
     ret     always
 
-// Default INT1 IRQ handler. Weak definition.
-// ------------------------------------------
+// Default INT1 IRQ handler
+// ------------------------
 
     .global irqHandlerInt1
     .weak irqHandlerInt1
@@ -306,8 +314,8 @@ irqHandlerInt1:
 
     ret     always
 
-// Default INT2 IRQ handler. Weak definition.
-// ------------------------------------------
+// Default INT2 IRQ handler
+// ------------------------
 
     .global irqHandlerInt2
     .weak irqHandlerInt2
