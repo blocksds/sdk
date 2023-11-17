@@ -219,23 +219,34 @@ need to use folders outside of the folder of the project, create a symlink to
 the destination, or build the other code as a static library and link it with
 the project.
 
-5. Additional libraries
-***********************
+5. Additional tools and libraries
+*********************************
 
-This is a list of libraries that support BlocksDS and can be installed in
-``/opt/blocksds/external``:
+This section has a list of tools and libraries that support BlocksDS and can be
+installed in ``/opt/blocksds/external``:
 
-- `NightFox’s Lib <https://github.com/knightfox75/nds_nflib>`_
+Libraries:
 
-  Library designed to make development of 2D games easy, with support for
-  sprites, backgrounds (even "infinite" maps), and it also has limited 2D
-  graphics support using the 3D engine.
+- `NightFox’s Lib <https://github.com/knightfox75/nds_nflib>`_: Library designed
+  to make development of 2D games easy, with support for sprites, backgrounds
+  (even "infinite" maps), and it also has limited 2D graphics support using the
+  3D engine.
 
-- `Nitro Engine <https://github.com/AntonioND/nitro-engine>`_
+- `Nitro Engine <https://github.com/AntonioND/nitro-engine>`_: Library to create
+  3D applications. It supports dual screen 3D, static and animated models,
+  supports all texture types, and has basic 2D support using the 3D hardware.
+  It's compatible with NightFox's Lib.
 
-  Library to create 3D applications. It supports dual screen 3D, static and
-  animated models, supports all texture types, and has basic 2D support using
-  the 3D hardware. It's compatible with NightFox's Lib.
+- `gbajpeg <https://github.com/blocksds/gbajpeg>`_: Library designed to load
+  JPEG files on GBA with very low resource usage, which also makes it a good
+  library for NDS.
+
+Tools:
+
+- `ptexconv <https://github.com/blocksds/ptexconv>`_: Tool to convert images to
+  files in the format of the NDS. This tool is one of the few available tools
+  that can output files in the very efficient tex4x4 format used by the GPU of
+  the NDS.
 
 6. Keeping multiple versions of BlocksDS
 ****************************************
