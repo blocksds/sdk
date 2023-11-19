@@ -6,26 +6,29 @@
 #include <stdio.h>
 #include <nds.h>
 
-// TODO: This currently only tests performance.
-// It would be a good idea to make it validate the RAM, too.
-
-static char ram_buffer[1048576];
-
 static void doReadTest(uint32_t bytes)
 {
     cpuStartTiming(0);
-    char *ptr = (char*) peripheralSlot2RamStart();
-    memcpy(ram_buffer, ptr, bytes);
+    volatile uint16_t *ptr = peripheralSlot2RamStart();
+    bool valid = true;
+    for (int i = 0; i < bytes >> 1; i++)
+    {
+        if (ptr[i] != (i & 0xFFFF))
+            valid = false;
+    }
     uint64_t ticks = cpuEndTiming();
 
-    printf("%llu ticks\n", ticks);
+    printf("%llu ticks%s\n", ticks, valid ? "" : " ERR");
 }
 
 static void doWriteTest(uint32_t bytes)
 {
     cpuStartTiming(0);
-    char *ptr = (char*) peripheralSlot2RamStart();
-    memset(ptr, 0, bytes);
+    volatile uint16_t *ptr = peripheralSlot2RamStart();
+    for (int i = 0; i < bytes >> 1; i++)
+    {
+        ptr[i] = i;
+    }
     uint64_t ticks = cpuEndTiming();
 
     printf("%llu ticks\n", ticks);
@@ -52,20 +55,18 @@ int main(int argc, char **argv)
     peripheralSlot2Open(SLOT2_PERIPHERAL_EXTRAM);
 
     uint32_t bytes_to_write = peripheralSlot2RamSize();
-    if (bytes_to_write > sizeof(ram_buffer))
-        bytes_to_write = sizeof(ram_buffer);
 
-    printf("\nLarge read: ");
+    printf("\nLarge write: ");
+    doWriteTest(bytes_to_write);
+
+    printf("Large read: ");
     doReadTest(bytes_to_write);
 
-    printf("Large write: ");
-    doWriteTest(bytes_to_write);
+    for (int i = 0; i < 120; i++)
+        swiWaitForVBlank();
 
     printf("-- 2K write: ");
     doWriteTest(2048);
-
-    printf("-- 2K read: ");
-    doReadTest(2048);
 
     printf("-- 2K read: ");
     doReadTest(2048);
@@ -94,6 +95,9 @@ int main(int argc, char **argv)
     printf("WT 2K write: ");
     doWriteTest(2048);
 
+    printf("WT 2K read: ");
+    doReadTest(2048);
+
     DC_FlushAll();
     peripheralSlot2EnableCache(true);
 
@@ -111,6 +115,9 @@ int main(int argc, char **argv)
 
     printf("WB 2K write: ");
     doWriteTest(2048);
+
+    printf("WB 2K read: ");
+    doReadTest(2048);
 
     peripheralSlot2DisableCache();
 
