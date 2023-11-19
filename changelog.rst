@@ -5,7 +5,7 @@ BlocksDS changelog
 Version 0.11.0 (2023-11-19)
 ===========================
 
-libc:
+- libc:
 
   - Fixed an important regression in ``memcpy()`` and ``memset()``
     implementations.
@@ -41,7 +41,7 @@ libc:
   - Fixed detection of GBA cartridge rumble (WarioWare, Drill Dozer).
   - Modify rumble example to show how to use the new API.
 
-DLDI:
+- DLDI:
 
   - Moved the built-in sector cache into unused memory occupied by the reserved
     DLDI driver area. This effectly saves ~20KB of heap RAM for most homebrew.
