@@ -2,6 +2,75 @@
 BlocksDS changelog
 ##################
 
+Version 0.11.0 (2023-11-19)
+===========================
+
+libc:
+
+  - Fixed an important regression in ``memcpy()`` and ``memset()``
+    implementations.
+
+- Improved file I/O performance:
+
+  - Added support for batch reads and writes of contiguous clusters, improving
+    SD card performance for very large sequential reads/writes.
+  - Added ``fatInitLookupCacheFile()``. This allows opting a file into having a
+    special in-memory cache which significantly speeds up file seek operations.
+  - Provisionally automatically enabled the in-memory cache for NitroFS files.
+    If you're experiencing slowdowns, make sure to defragment your SD card -
+    this requirement will be loosened in future releases (but it's still a good
+    idea).
+  - Integrated profi200's `dsi_sdmmc <https://github.com/profi200/dsi_sdmmc>`_
+    driver, improving reliability and performance for reading from and writing
+    to the DSi's SD card.
+  - Optimized unaligned buffer I/O performance for the DSi's SD card.
+  - Only cluster table/directory-related reads will now be cached by the
+    built-in sector cache. This allows better use of this sector cache; one can
+    use ``setvbuf()`` to enable a larger cache for file I/O.
+  - Other minor optimizations have been made throughout the code.
+
+- Added a new Slot-2 API (``arm9/peripherals/slot2.h``).
+
+  - Added support for detecting external RAM cartridges (SuperCard, M3, G6, DS
+    Memory Expansion Pak, EZ-Flash variants, EverDrive).
+  - Added support for enabling and disabling the data cache on the Slot-2 memory
+    area. Combined with suitable bus speed detection for these cartridges, this
+    allows efficient usage of such an external RAM area.
+  - Added support for detecting and using the Gyro, Solar and Tilt sensors
+    available on various GBA game cartridges.
+  - Fixed detection of GBA cartridge rumble (WarioWare, Drill Dozer).
+  - Modify rumble example to show how to use the new API.
+
+DLDI:
+
+  - Moved the built-in sector cache into unused memory occupied by the reserved
+    DLDI driver area. This effectly saves ~20KB of heap RAM for most homebrew.
+  - The DLDI driver area size can now be changed by defining the ``__dldi_size``
+    symbol to a value away from the default of ``16384``, such as ``8192`` (if
+    your application is highly RAM-constrained - this may break support with
+    some cartridges, however) or ``32768`` (restores compatibility with
+    MoonShell versions at the cost of an additional 16KB of RAM).
+  - The DLDI driver area is now guaranteed to be close to the beginning of the
+    .nds file, which may slightly improve load times.
+
+- DSP:
+
+  - Add BTDMP and ICU helpers.
+  - Refactor ``crt0.s``.
+  - Add examples of handling interrupts, including timer interrupts.
+
+- ``libnds``:
+
+  - Rename some cache helpers for consistency.
+  - Fixed a file handle leak that could occur if ``nitroFSInit()`` was pointed
+    to an .nds file which does not contain a NitroFS file system.
+  - Fixed a rare case in which ``nitroFSInit()`` could try reading from the GBA
+    slot on the DSi, causing an exception.
+  - Added ``readFirmwareJEDEC()`` function to read the ID of the DS firmware
+    flash chip. (lifehackerhansol)
+  - Minor optimizations have been done to ``readUserSettings()``.
+  - Fixed the ``NDMA_DST_FIX`` macro definition.
+
 Version 0.10.2 (2023-11-11)
 ===========================
 
