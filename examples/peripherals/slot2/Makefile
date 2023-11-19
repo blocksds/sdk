@@ -6,7 +6,7 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= rumble
-GAME_TITLE	:= Rumble example
+NAME		:= slot2
+GAME_TITLE	:= Slot-2 peripheral example
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile
