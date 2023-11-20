@@ -14,7 +14,7 @@ all: crts default_arm7 dldi_r4
 crts:
 	$(MAKE) -C crts
 
-default_arm7:
+default_arm7: crts
 	$(MAKE) -C default_arm7
 
 dldi_r4:
