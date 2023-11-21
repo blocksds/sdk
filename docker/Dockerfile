@@ -7,6 +7,8 @@
 
 FROM ubuntu:23.04 AS base-cross-compiler
 
+ARG BRANCH=master
+
 # Set locale for iconv, used by ndstool
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
@@ -44,7 +46,8 @@ RUN apt-get install -y --no-install-recommends \
         build-essential
 
 WORKDIR /opt/
-RUN git clone --recurse-submodules https://github.com/blocksds/sdk.git
+RUN git clone --recurse-submodules https://github.com/blocksds/sdk.git \
+              --branch $BRANCH
 
 WORKDIR /opt/sdk/
 RUN BLOCKSDS=$PWD make install -j`nproc` VERBOSE=1 && \

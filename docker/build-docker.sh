@@ -6,6 +6,10 @@
 # It is possible to overwrite the version by invoking the script like this:
 #
 #     VERSION=v0.1 sh build-docker.sh
+#
+# It is also possible to specify a branch or tag with, for example,
+# "BRANCH=v0.11.0". If VERSION is set to "latest" branch will default to
+# "master" unless it is set by the user to a different value.
 
 set -e
 
@@ -13,10 +17,25 @@ if [ -z $VERSION ]; then
     VERSION="latest"
 fi
 
-docker build --target blocksds-dev --tag blocksds:dev .
-docker tag blocksds:dev skylyrac/blocksds:dev-$VERSION
-docker push skylyrac/blocksds:dev-$VERSION
+if [ -z $BRANCH ]; then
+    if [ "$VERSION" = "latest" ]; then
+        BRANCH="master"
+    else
+        BRANCH="$VERSION"
+    fi
+fi
 
-docker build --target blocksds-slim --tag blocksds:slim .
+
+echo "VERSION = $VERSION"
+echo "BRANCH = $BRANCH"
+
+docker build --target blocksds-dev --tag blocksds:dev \
+             --build-arg BRANCH=$BRANCH .
+docker tag blocksds:dev skylyrac/blocksds:dev-$VERSION
+
+docker build --target blocksds-slim --tag blocksds:slim \
+             --build-arg BRANCH=$BRANCH .
 docker tag blocksds:slim skylyrac/blocksds:slim-$VERSION
+
+docker push skylyrac/blocksds:dev-$VERSION
 docker push skylyrac/blocksds:slim-$VERSION
