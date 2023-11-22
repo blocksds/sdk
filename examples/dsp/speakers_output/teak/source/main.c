@@ -39,7 +39,7 @@ int main(void)
 {
     teakInit();
 
-    // Enable BTDMP channel 0 trigger interrupts in CPU interrupt 1
+    // Enable BTDMP channel 0 and make it trigger interrupts in CPU interrupt 1
     btdmpSetupOutputSpeakers(0, 1);
 
     cpuEnableInt1();

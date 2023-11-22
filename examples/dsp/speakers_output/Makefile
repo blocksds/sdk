@@ -6,7 +6,7 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= dsp_btdmp_speakers
-GAME_TITLE	:= DSP BTDMP speakers
+NAME		:= dsp_speakers_output
+GAME_TITLE	:= DSP speakers output
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9arm7teak/Makefile
