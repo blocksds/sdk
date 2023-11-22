@@ -2,6 +2,20 @@
 BlocksDS changelog
 ##################
 
+Version 0.XX.X (20XX-XX-XX)
+===========================
+
+- DSP:
+
+  - Added BTDMP helpers to stream audio from the DSP to the speakers. Added an
+    example to show how to generate audio from the ARM7 and the DSP at the same
+    time.
+
+- ``libnds``:
+
+  - Wrap DSi camera functions to prevent crashes on NDS.
+  - Fix Doxygen documentation of peripherals.
+
 Version 0.11.0 (2023-11-19)
 ===========================
 
