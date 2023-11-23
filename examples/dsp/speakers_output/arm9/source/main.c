@@ -8,9 +8,9 @@
 // if you want). You can also change the frequency of the DSP waves to show that
 // you can still communicate with the DSP while everything is happening.
 //
-// Only the ARM7 can change the ARM/DSP volume ratio. This example sends FIFO
-// messages to the ARM7 to adjust it, but normally you would hardcode it to a
-// specific ratio after testing what works best for your application.
+// Only the ARM7 can change the ARM/DSP volume ratio, but libnds provides
+// helpers to ask the ARM7 to adjust settings. Normally you would hardcode the
+// ratio to a specific value after testing what works best for your application.
 
 #include <stdio.h>
 
