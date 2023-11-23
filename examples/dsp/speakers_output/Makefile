@@ -9,4 +9,4 @@ BLOCKSDS	?= /opt/blocksds/core
 NAME		:= dsp_speakers_output
 GAME_TITLE	:= DSP speakers output
 
-include $(BLOCKSDS)/sys/default_makefiles/rom_arm9arm7teak/Makefile
+include $(BLOCKSDS)/sys/default_makefiles/rom_arm9teak/Makefile

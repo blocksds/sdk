@@ -4,4 +4,4 @@
 
 BLOCKSDS	?= /opt/blocksds/core
 
-include $(BLOCKSDS)/sys/default_makefiles/rom_arm9arm7teak/Makefile.teak
+include $(BLOCKSDS)/sys/default_makefiles/rom_arm9teak/Makefile.teak

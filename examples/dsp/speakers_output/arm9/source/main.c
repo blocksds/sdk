@@ -61,6 +61,10 @@ int main(int argc, char **argv)
     uint16_t frequency_left = 100;
     uint16_t frequency_right = 300;
 
+    // Enable DSP sound output to the speakers
+    soundExtEnable();
+    soundExtSetRatio(arm_dsp_ratio);
+
     while (1)
     {
         swiWaitForVBlank();
@@ -82,8 +86,8 @@ int main(int argc, char **argv)
                 arm_dsp_ratio--;
         }
 
-        // Ask the ARM7 to change the ARM/DSP ratio
-        fifoSendValue32(FIFO_USER_01, arm_dsp_ratio);
+        // Set the requested ARM/DSP volume ratio
+        soundExtSetRatio(arm_dsp_ratio);
 
         if (keys & KEY_UP)
         {
