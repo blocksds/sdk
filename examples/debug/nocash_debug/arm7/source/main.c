@@ -58,7 +58,7 @@ int main(int argc, char **argv)
     {
         // The console is setup to redirect stderr to the no$gba debug console
         // by default.
-        fprintf(stderr,"ARM7 %%frame%%\n");
+        fprintf(stderr, "ARM7 %%frame%%\n");
 
         const uint16_t key_mask = KEY_SELECT | KEY_START | KEY_L | KEY_R;
         uint16_t keys_pressed = ~REG_KEYINPUT;
