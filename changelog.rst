@@ -2,19 +2,28 @@
 BlocksDS changelog
 ##################
 
-Version 0.XX.X (20XX-XX-XX)
+Version 0.11.1 (2023-11-25)
 ===========================
+
+- ``libnds``:
+
+  - Fixed an edge case which could read to invalid small reads/writes to DSi/ARM7-controlled removable storage.
+  - Added helpers to control REG_SNDEXTCNT from the ARM9 (to enable DSP audio
+    output to the speakers, for example).
+  - Some DSP functions have been moved to ``twl`` sections to save memory when
+    the game runs in a regular DS.
+  - Wrapped camera functions to prevent crashes when used in NDS mode.
+  - Change license of DLDI-related files to Zlib with permission from the
+    authors.
+  - Fix Doxygen documentation of peripherals.
 
 - DSP:
 
   - Added BTDMP helpers to stream audio from the DSP to the speakers. Added an
     example to show how to generate audio from the ARM7 and the DSP at the same
     time.
-
-- ``libnds``:
-
-  - Wrap DSi camera functions to prevent crashes on NDS.
-  - Fix Doxygen documentation of peripherals.
+  - Added an example of how to use DMA to transfer data from the DSP memory to
+    the ARM9 memory.
 
 Version 0.11.0 (2023-11-19)
 ===========================
