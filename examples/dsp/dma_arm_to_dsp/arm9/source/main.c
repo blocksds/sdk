@@ -8,6 +8,9 @@
 // It copies an array to the DSP, the DSP will add all the values in the array
 // and return the sum. The ARM9 will then verify that it matches the expected
 // result.
+//
+// In order for the DSP to see updated RAM values it is needed to flush the
+// buffer in RAM from the ARM9.
 
 #include <stdio.h>
 
@@ -49,6 +52,8 @@ int main(int argc, char **argv)
         buffer[i] = i + 1;
     for (int i = BUFFER_SIZE ; i < BUFFER_SIZE * 2; i++)
         buffer[i] = 0;
+
+    DC_FlushRange(buffer, BUFFER_SIZE);
 
     uint16_t rep0 = 0;
     uint16_t rep1 = 0;
