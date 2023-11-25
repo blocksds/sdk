@@ -6,7 +6,7 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= dsp_dma_transfers
-GAME_TITLE	:= DSP DMA transfers
+NAME		:= dsp_dma_arm_to_dsp
+GAME_TITLE	:= DSP DMA ARM to DSP
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9arm7teak/Makefile
