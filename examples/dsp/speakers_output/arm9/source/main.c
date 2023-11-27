@@ -62,7 +62,6 @@ int main(int argc, char **argv)
     uint16_t frequency_right = 300;
 
     // Enable DSP sound output to the speakers
-    soundExtEnable();
     soundExtSetRatio(arm_dsp_ratio);
 
     while (1)
