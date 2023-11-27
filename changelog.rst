@@ -2,14 +2,32 @@
 BlocksDS changelog
 ##################
 
+Version 0.11.2 (2023-11-27)
+===========================
+
+- ``libnds``:
+
+  - Fix a bug introduced in version 0.11.1 that didn't initialize audio hardware
+    correctly in DSi mode.
+  - Some superfluous audio helpers added in version 0.11.1 have been removed.
+  - Move libteak to its own repository so that it can be reused by other
+    toolchains.
+  - Modify functions to load DSP binaries to return int instead of bool for more
+    flexibility.
+
+- DSP:
+
+  - Move crt0 and linkerscript to ``libteak`` repository.
+  - Preprocess all assembly files, not just the crt0.
+
 Version 0.11.1 (2023-11-25)
 ===========================
 
 - ``libnds``:
 
   - Fixed an edge case which could read to invalid small reads/writes to DSi/ARM7-controlled removable storage.
-  - Added helpers to control REG_SNDEXTCNT from the ARM9 (to enable DSP audio
-    output to the speakers, for example).
+  - Added helpers to control ``REG_SNDEXTCNT`` from the ARM9 (to enable DSP
+    audio output to the speakers, for example).
   - Some DSP functions have been moved to ``twl`` sections to save memory when
     the game runs in a regular DS.
   - Wrapped camera functions to prevent crashes when used in NDS mode.
