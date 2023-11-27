@@ -25,3 +25,6 @@
 [submodule "sys/dldi_r4"]
 	path = sys/dldi_r4
 	url = https://github.com/blocksds/dldi_r4
+[submodule "libs/libteak"]
+	path = libs/libteak
+	url = https://github.com/blocksds/libteak

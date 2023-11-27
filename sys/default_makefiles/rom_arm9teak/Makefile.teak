@@ -24,7 +24,7 @@ DEFINES		?=
 # ---------
 
 LIBS		?= -lteak
-LIBDIRS		+= $(BLOCKSDS)/libs/libnds
+LIBDIRS		+= $(BLOCKSDS)/libs/libteak
 
 # Build artifacts
 # ---------------
