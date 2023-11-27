@@ -99,7 +99,7 @@ CXXFLAGS	+= -std=gnu++14 $(WARNFLAGS) $(DEFINES) $(ARCH) \
 
 LDFLAGS		:= $(LIBDIRSFLAGS) \
 		   -Map $(MAP) -nostdlib \
-		   -T $(BLOCKSDS)/sys/crts/ds_teak.ld \
+		   -T $(BLOCKSDS)/libs/libteak/teak.ld \
 		   --start-group $(LIBS) --end-group
 
 # Intermediate build files
@@ -126,7 +126,7 @@ all: $(ELF) $(TLF)
 
 $(ELF): $(OBJS)
 	@echo "  LD.TEAK $@"
-	$(V)$(LD) -o $@ $(OBJS) $(BLOCKSDS)/sys/crts/ds_teak_crt0.o $(LDFLAGS)
+	$(V)$(LD) -o $@ $(OBJS) $(LDFLAGS)
 
 $(TLF): $(ELF)
 	@echo "  TEAKTOOL $@"

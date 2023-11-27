@@ -7,7 +7,6 @@ BLOCKSDSEXT	?= /opt/blocksds/external
 
 WONDERFUL_TOOLCHAIN	?= /opt/wonderful
 ARM_NONE_EABI_PATH	?= $(WONDERFUL_TOOLCHAIN)/toolchain/gcc-arm-none-eabi/bin/
-LLVM_TEAK_PATH		?= $(WONDERFUL_TOOLCHAIN)/toolchain/llvm-teak/bin/
 
 # Libraries
 # ---------
@@ -20,8 +19,7 @@ LIBDIRS		+= $(BLOCKSDS)/libs/libnds
 
 CP		:= cp
 INSTALL		:= install
-CCARM		:= $(ARM_NONE_EABI_PATH)arm-none-eabi-gcc
-CCTEAK		:= $(LLVM_TEAK_PATH)clang
+CC		:= $(ARM_NONE_EABI_PATH)arm-none-eabi-gcc
 RM		:= rm -rf
 
 # Verbose flag
@@ -41,18 +39,15 @@ INCLUDEFLAGS	:= $(foreach path,$(LIBDIRS),-I$(path)/include)
 ASFLAGS		:= -x assembler-with-cpp
 ARCHARM7	:= -mcpu=arm7tdmi -mtune=arm7tdmi
 ARCHARM9	:= -march=armv5te -mtune=arm946e-s
-ARCHTEAK	:= --target=teak -march=teak -integrated-as
 
 DEFINESARM7	:= -D__NDS__ -DARM7
 DEFINESARM9	:= -D__NDS__ -DARM9
-DEFINESTEAK	:= -D__NDS__ -DTEAK
 
 # Targets
 # -------
 
 OBJS		:= ds_arm7_vram_crt0.o ds_arm7_crt0.o ds_arm7_iwram_crt0.o \
-			   ds_arm9_crt0.o \
-			   ds_teak_crt0.o
+			   ds_arm9_crt0.o
 
 .PHONY: all clean install
 
@@ -77,7 +72,7 @@ install: all
 
 ds_arm7_vram_crt0.o: ds_arm7_crt0.s
 	@echo "  AS.7    $@"
-	$(V)$(CCARM) $(ASFLAGS) $(ARCHARM7) $(INCLUDEFLAGS) $(DEFINESARM7) -DVRAM -c -o $@ $<
+	$(V)$(CC) $(ASFLAGS) $(ARCHARM7) $(INCLUDEFLAGS) $(DEFINESARM7) -DVRAM -c -o $@ $<
 
 # They are the same, but it's more intuitive to have two files than to remember
 # that the VRAM crt0 works with the IWRAM linkerscript.
@@ -87,18 +82,8 @@ ds_arm7_iwram_crt0.o: ds_arm7_vram_crt0.o
 
 ds_arm7_crt0.o: ds_arm7_crt0.s
 	@echo "  AS.7    $@"
-	$(V)$(CCARM) $(ASFLAGS) $(ARCHARM7) $(INCLUDEFLAGS) $(DEFINESARM7) -c -o $@ $<
+	$(V)$(CC) $(ASFLAGS) $(ARCHARM7) $(INCLUDEFLAGS) $(DEFINESARM7) -c -o $@ $<
 
 ds_arm9_crt0.o: ds_arm9_crt0.s
 	@echo "  AS.9    $@"
-	$(V)$(CCARM) $(ASFLAGS) $(ARCHARM9) $(INCLUDEFLAGS) $(DEFINESARM9) -c -o $@ $<
-
-LLVM_TEAK_CLANG_VERSION	:= $(shell $(LLVM_TEAK_PATH)clang --version 2> /dev/null)
-
-ds_teak_crt0.o: ds_teak_crt0.s
-ifeq ($(strip $(LLVM_TEAK_CLANG_VERSION)),)
-	@echo "Skipping DSP examples: toolchain-llvm-teak-llvm not found"
-else
-	@echo "  AS.TEAK $@"
-	$(V)$(CCTEAK) $(ASFLAGS) $(ARCHTEAK) $(INCLUDEFLAGS) $(DEFINESTEAK) -c -o $@ $<
-endif
+	$(V)$(CC) $(ASFLAGS) $(ARCHARM9) $(INCLUDEFLAGS) $(DEFINESARM9) -c -o $@ $<
