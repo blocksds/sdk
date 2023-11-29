@@ -33,7 +33,7 @@ int main(int argc, char **argv)
             swiWaitForVBlank();
     }
 
-    if (dspExecuteDefaultTLF(teak_tlf_bin))
+    if (dspExecuteDefaultTLF(teak_tlf_bin) != DSP_EXEC_OK)
     {
         printf("Failed to execute TLF");
 
