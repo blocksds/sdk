@@ -2,12 +2,23 @@
 BlocksDS changelog
 ##################
 
+Version dev (2023-XX-XX)
+========================
+
+- ``libnds``:
+
+  - Added helpers to control microphone power independently from recording.
+    This can be used for scenarios in which the DSP is tasked from recording
+    microphone input.
+  - Fixed ``atexit()`` handlers not being called during a normal ``main()``
+    return.
+
 Version 0.11.2 (2023-11-27)
 ===========================
 
 - ``libnds``:
 
-  - Fix a bug introduced in version 0.11.1 that didn't initialize audio hardware
+  - Fixed a bug introduced in version 0.11.1 that didn't initialize audio hardware
     correctly in DSi mode.
   - Some superfluous audio helpers added in version 0.11.1 have been removed.
   - Move libteak to its own repository so that it can be reused by other
@@ -25,7 +36,8 @@ Version 0.11.1 (2023-11-25)
 
 - ``libnds``:
 
-  - Fixed an edge case which could read to invalid small reads/writes to DSi/ARM7-controlled removable storage.
+  - Fixed an edge case which could read to invalid small reads/writes to
+    DSi/ARM7-controlled removable storage.
   - Added helpers to control ``REG_SNDEXTCNT`` from the ARM9 (to enable DSP
     audio output to the speakers, for example).
   - Some DSP functions have been moved to ``twl`` sections to save memory when
@@ -279,98 +291,112 @@ Version 0.8.1 (2023-08-01)
 
 - ``libnds``:
 
-  - Fix NitroFAT in emulators. It only worked when DLDI was initialized
+  - Fixed NitroFAT in emulators. It only worked when DLDI was initialized
     correctly, which isn't the case in emulators like no$gba.
   - Set the right CPU as owner of the Slot-1 bus in NitroFAT handling functions.
 
 - SDK:
 
-  - Update build systems to generate Maxmod soundbanks in the NitroFAT
+  - Updated build systems to generate Maxmod soundbanks in the NitroFAT
     filesystem if the filesystem is used. This isn't supported by ARM9 + ARM7
     makefiles for now, only by ARM9 makefiles.
-  - Fix segmentation fault in ``mkfatimg`` when not enough arguments are
+  - Fixed segmentation fault in ``mkfatimg`` when not enough arguments are
     provided.
-  - Stop relying on ``make -j`` in Makefiles. It is passed by make to any
+  - Stopped relying on ``make -j`` in Makefiles. It is passed by make to any
     sub-make, so it isn't required.
-  - Add basic Maxmod and Maxmod + NitroFAT examples.
+  - Added basic Maxmod and Maxmod + NitroFAT examples.
 
 Version 0.8 (2023-07-16)
 ========================
 
 - ``libnds``:
 
-  - Document MPU setup code properly.
-  - Cleanup exception handling code.
-  - Add asynchronous math functions to complement the previous synchronous ones.
-  - Support redirecting ``stdout`` and ``stderr`` to user functions.
-  - Fix code that selects the default filesystem (DSi SD or DLDI).
-  - Fix leaking file handlers in ``truncate()``.
-  - Fix memory leaks in ``image`` and ``pcx`` modules.
-  - Support more rumble packs.
+  - Filesystem:
+
+    - ``fatInit()`` now correctly sets the current working directory.
+    - NitroFAT now changes directory to ``nitro:/`` on initialization.
+    - Fixed code that selects the default filesystem (DSi SD or DLDI).
+
+  - Added asynchronous math functions to complement the previous synchronous ones.
+  - Added support for redirecting ``stdout`` and ``stderr`` to user functions.
+  - Added support for more rumble packs.
+  - Improved support for DSi regions in ``guruMeditationDump()``.
+  - Documented MPU setup code properly.
+  - Cleaned up exception handling code.
+  - Added missing ``DLDI_SIZE_2KB`` define.
+  - Fixed leaking file handlers in ``truncate()``.
+  - Fixed memory leaks and handling in ``image`` and ``pcx`` modules.
 
 - ``ndstool``:
 
-  - Fix warnings.
-  - Remove non-homebrew-related functionality.
+  - Fixed warnings.
+  - Removed non-homebrew-related functionality.
 
 - SDK:
 
   - Automatically link with libc and libstdc++ rather than forcing users to do
     it explicitly.
   - Support ``*.arm.c`` and ``*.arm.cpp`` filenames for compatibility with
-    devkitARM.
-  - Correctly initialize TLS in the ARM7.
-  - Improve ``bin2c``.
-  - Update libc documentation.
-  - Improve and cleanup some examples.
+    devkitARM-utilizing projects.
+  - Fixed TLS initialization on the ARM7.
+  - Improved ``bin2c``.
+  - Updated libc documentation.
+  - Improved and cleanup some examples.
 
 Version 0.7 (2023-04-19)
 ========================
 
 - ``libnds``:
 
-  - Unify all coding and documentation style of the codebase.
-  - Change license of GL2D to Zlib (with the author's permission).
-  - Improve ``sassert()`` so that it can exit to the loader instead of locking
-    the application.
-
   - Keyboard:
 
-    - Fix initialization glitch where it would blink for a frame.
-    - Fix backspace handling.
-    - Make it use cothread functions so that it never blocks the application.
+    - Fixed initialization glitch where it could blink for a frame.
+    - Fixed backspace handling.
+    - Added support for non-blocking keyboard capture when using cothreads.
 
   - ``cothread``:
 
-    - Fixed stack alignment
-    - Fixed stack size of the scheduler thread.
+    - Fixed stack alignment.
+    - Fixed the stack size of the scheduler thread.
 
-  - ``libc``:
-
-    - Fix no$gba debug messages on the ARM9.
-    - Add support of no$gba debug messages to the ARM7.
+  - Fixed no$gba debug messages on the ARM9.
+  - Added support of no$gba debug messages to the ARM7.
+  - Implemented ``fatInit()``.
+  - Improved ``sassert()`` so that it can exit to the loader instead of locking
+    the application.
+  - Unified all coding and documentation style of the codebase.
+  - Changed license of GL2D to Zlib (with the author's permission).
+  - Reduced the size of ``OamState`` structures.
 
 - ``mmutil``:
 
-  - Fix segfault with samples with implied zero loop.
+  - Fixed segfault with samples with implied zero loop.
 
 - SDK:
 
-  - Improve some old examples. Fix memory leaks in all examples that used
+  - Improved some old examples. Fix memory leaks in all examples that used
     ``getcwd()``.
-  - Fix ARM9 linkerscript to place ITCM sections in ITCM correctly.
-  - Add new examples: Exception handling, assertions, no$gba debug console.
+  - Fixed ARM9 linkerscript to place ITCM sections in ITCM correctly.
+  - Added new examples: Exception handling, assertions, no$gba debug console.
   - Prevent ``mkfatimg`` from generating FAT images that are so small that FatFs
     can't mount them.
-  - Improve installation instructions.
+  - Improved installation instructions.
 
 Version 0.6 (2023-04-11)
 ========================
 
-- ``libnds``:
+- SDK:
 
-  - Document MPU setup steps and CP15 registers.
-  - Enable more warnings in the Makefile and fix them.
+  - Added a DLDI driver template.
+  - Refactored ``install`` targets of the SDK components. Now, all components
+    can be installed on their own, and they copy the licenses of the components
+    to the installation directory.
+  - Tweak ``bin2c`` behaviour to more closely match devkitPro's ``bin2s``.
+  - Use SPDX license identifiers in all libraries and components that end up in
+    the NDS application binary.
+  - Some cleanup of code formatting.
+
+- ``libnds``:
 
   - FIFO subsystem:
 
@@ -379,16 +405,17 @@ Version 0.6 (2023-04-11)
       fails, though).
     - Prevent using ``cothread_yield()`` in the ARM7.
 
-  - ``libc``:
-
-    - Alignment of thread local storage sections has been fixed.
-    - Support ``stat()`` in the root directory of a filesystem.
-    - Support ``statvfs()`` and ``fstatvfs()``.
-
-  - Avoid including the default keyboard data if it isn't used.
+  - Alignment of thread local storage sections has been fixed.
+  - Added support for calling ``stat()`` on the root directory of a filesystem.
+  - Added support for ``statvfs()`` and ``fstatvfs()``.
+  - Avoid pulling in the default keyboard data when stdin-requesting code is
+    used. This saves over 10 KB of data in any situation where the default
+    keyboard is not used (no keyboard or non-default keyboard alike).
   - Allow setting the duration of the lid sleep check, and to disable it
     completely.
   - Build release versions of the library as well as debug.
+  - Document MPU setup steps and CP15 registers.
+  - Enable more warnings in the Makefile and fix them.
 
 - ``ndstool``:
 
@@ -396,79 +423,119 @@ Version 0.6 (2023-04-11)
   - Support more file formats for icons (GIF, PNG).
   - Support animated icons (from GIF files).
 
-- SDK:
-
-  - Refactor ``install`` targets of the SDK components. Now, all components can
-    be installed on their own, and they copy the licenses of the components to 
-    the installation directory.
-  - Emulate behaviour of ``bin2s`` of devkitPro more closely with ``bin2c``.
-  - Use SPDX license identifiers in all libraries and components that end up in
-    the NDS application binary.
-  - Some cleanup of code formatting.
-  - Added a DLDI driver template.
-
 Version 0.5 (2023-03-31)
 ========================
 
-- Define a default location for BlocksDS: ``/opt/blocksds/``
-- Use ``mkfatimg`` (distributed with FatFs) instead of ``imgbuild.sh`` to reduce
-  the number of dependencies.
-- Fix ``mmutil`` target in Makefiles in parallel builds.
-- Cleanup of GBA slot peripherals drivers.
-- Integrate ``libxm7`` as a core library.
-- Fix exit to loader code from the ARM7. It has been simplified a bit.
-- Document exit to loader code.
+- SDK:
+
+  - Defined a default location for BlocksDS: ``/opt/blocksds/``
+  - Integrated ``libxm7`` as a core library.
+  - Use ``mkfatimg`` (distributed with FatFs) instead of ``imgbuild.sh`` to reduce
+    the number of dependencies.
+  - Fixed ``mmutil`` target in Makefiles in parallel builds.
+
+- libnds:
+
+  - Peripherals:
+
+    - Improved rumble peripheral handling (including detection of the DS Rumble
+      Pak).
+    - Cleaned up REG_EXMEMCNT initialization for the Guitar Grip and Paddle
+      peripheral drivers.
+
+  - Improved error recovery in ``glInit()``. This allows recovering the
+    geometry engine from certain situations where a program exited in the
+    middle of 3D engine processing.
+  - Improved error recovery in ``getcwd()``.
+  - Fixed and simplified exit to loader code on the ARM7 side.
+  - Improved documentation of exit to loader logic and ``BoxTest()``.
 
 Version 0.4 (2023-03-26)
 ========================
 
-- Use Wonderful Toolchains to get full C++ standard library support.
-- Remove ``picolibc`` and ``avr-libstdcpp`` as submodules (all previous history
-  has been condensed to one commit).
-- Multithreading:
+- SDK:
 
-  - Add cooperative multithreading scheduler.
-  - Enable scheduler in the ARM9 by default.
-  - Add examples of having multiple threads, mutexes, and asynchronous file
-    loading.
-  - Support thread local storage.
-  - Added mutexes to problematic parts of ``libnds`` and FatFs.
+  - Use the Wonderful toolchain's to get full C++ standard library support.
+    - As a result, BlocksDS now targets a specific version of ``binutils``,
+      ``gcc`` and ``picolibc``.
+    - Removed ``picolibc`` and ``avr-libstdcpp`` as submodules (all previous
+      history has been condensed to one commit).
+  - Simplified the build system of tests and examples.
 
-- Add initial support and example of DSi camera (thanks, asie!).
-- Support ``malloc()`` in the ARM7.
-- Simplify build system of tests and examples.
-- Bugfixes.
+- libnds:
+
+  - Multithreading:
+
+    - Added cooperative multithreading scheduler.
+    - Enabled scheduler in the ARM9 by default.
+    - Added examples of having multiple threads, mutexes, and asynchronous file
+      loading.
+    - Added support for thread-local storage.
+    - Added mutexes to FIFO handling and removable storage accesses.
+
+  - Added initial support and example of DSi camera (thanks, asie!).
+  - Added support for ``malloc()`` on the ARM7.
+  - Implemented stubs for ``fchmod()``, ``fchmodat()``, ``fchown()``,
+    ``fchownat()``. ``readlink()``, ``symlink()``, ``getentropy()``.
+  - Updated FatFS to R0.15p2.
+  - Fixed ``glTexImage2D()`` not flushing textures before copying them with
+    DMA.
 
 Version 0.3.1 (2023-03-20)
 ==========================
 
-- Hotfix.
+- libnds:
+
+  - Restored support of gettimeofday() on the ARM7.
 
 Version 0.3 (2023-03-20)
 ========================
 
-- FatFs performance improvements (like adding a disk cache).
-- Support DLDI in the ARM7 as well as the ARM9.
-- Add function for the ARM9 to request the ARM7 to read the cartridge.
-- Add some missing definitions of DSi registers (SCFG/NDMA).
-- General cleanup of ``libnds`` code (like replacing magic numbers by defines).
-- Build system improvements (support two line app titles, remove old makefiles).
-- ``libsysnds`` has been integrated in ``libnds``.
-- Bugfixes in libc and ``libnds``.
+- SDK:
 
-  - EEPROM handling functions.
-  - Data cache handling bugs.
-  - Fix transparency in keyboard of ``libnds``.
+  - Added some tests.
+  - Build system improvements (support two line app titles, remove old makefiles).
+  - ``libsysnds`` has been integrated in ``libnds``.
 
-- Added some tests.
+- libnds:
+
+  - Implemented a disk cache to improve FatFs performance.
+  - Added support for handling DLDI in the ARM7, as opposed to only the ARM9.
+    - This is currently controlled either using an additional, previously
+      unused bit in the DLDI specification, or explicitly requested by the
+      homebrew program.
+  - Added function for the ARM9 to request the ARM7 to read the cartridge.
+  - Added some missing definitions of DSi registers (SCFG/NDMA).
+  - Improved TWL/DSi interrupt support.
+  - Improved data cache handling for removable storage read/writes.
+  - Fixed detecting certain types of 128 KB cart EEPROMs.
+  - Fixed incorrect size detection for certain cases of cart EEPROM data.
+  - Tweaked default keyboard texture to make the keycap legends opaque.
+  - General cleanup of ``libnds`` code (like replacing magic numbers by
+    defines).
+  - Fixed ``consoleDemoInit()`` to restore display brightness when
+    initializing.
 
 Version 0.2 (2023-03-15)
 ========================
 
-- Improve C++ support (now the C++ standard library it is actually usable).
-- Improve C library support.
-- Integrate agbabi as ``ndsabi`` (provides fast ``memcpy``, coroutines, etc).
-- Fix ``install`` target.
+- SDK:
+
+  - Improved C++ support (now the C++ standard library it is actually usable).
+  - Improved C library support.
+  - Fixed ``install`` target.
+
+- libnds:
+
+  - Integrated agbabi as ``ndsabi``. This provides fast implementations of
+    ``memcpy``/``memmove``/``memset``, helper functions for facilitating
+    coroutines, etc.
+  - Implemented support for 1BPP fonts in ``consoleLoadFont()`` and replaced
+    default_font.bin with a derivative of `Unscii <http://viznut.fi/unscii/>`,
+    limited to ASCII characters 32-127. In total, this saves ~7.25 KB of code
+    size for any program using the built-in console.
+  - Reduced the size of data structures controlling the built-in keyboard.
+  - Implemented missing bounds checks in ``keyboardGetKey()``.
 
 Version 0.1 (2023-03-14)
 ========================
@@ -483,3 +550,11 @@ First beta release of BlocksDS. Features:
 - Documentation on how to migrate projects to BlocksDS.
 - Docker image provided.
 
+Changes:
+
+- ``libnds``:
+
+  - Added new CP15 control helpers for the ARM9.
+  - Added Z1/Z2 read support for the TWL/DSi touch screen controller.
+    This allows measuring an approximation of pressure, similar to NTR/NDS
+    mode.
