@@ -25,8 +25,6 @@ int main(void)
         uint16_t size_words = data0 & 0xFFF;
         uint32_t destination_address = ((uint32_t)data1 << 16) | data2;
 
-        uint16_t source_address = (uint16_t)&buffer[0];
-
         if (apbpGetSemaphore() & BIT(0))
         {
             apbpAckSemaphore(BIT(0));
@@ -40,7 +38,7 @@ int main(void)
                 buffer[i] = 0;
 
             // Read data from the ARM9
-            ok = dmaTransferDspToArm9(dma_channel, &buffer[0],
+            ok = dmaTransferDspToArm9(dma_channel, (const void *)&buffer[0],
                                       destination_address, size_words);
 
             apbpSetSemaphore(BIT(0));
