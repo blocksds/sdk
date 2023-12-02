@@ -48,8 +48,7 @@ Adding support to a DLDI driver
 ===============================
 
 All you need to do is to make sure that your code is built for the ARM7 instead
-of the ARM9. Use ``-mcpu=arm7tdmi -mtune=arm7tdmi`` instead of
-``-march=armv5te -mtune=arm946e-s``.
+of the ARM9. Use ``-mcpu=arm7tdmi`` instead of ``-mcpu=arm946e-s+nofp``.
 
 Then add the following flag to the features entry of your DLDI header:
 

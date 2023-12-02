@@ -76,7 +76,7 @@ SOURCES_CPP	:= $(shell find -L $(SOURCEDIRS) -name "*.cpp")
 
 DEFINES		+= -D__NDS__ -DARM9
 
-ARCH		:= -march=armv5te -mtune=arm946e-s
+ARCH		:= -mcpu=arm946e-s+nofp
 
 WARNFLAGS	:= -Wall
 

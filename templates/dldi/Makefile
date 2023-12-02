@@ -81,10 +81,10 @@ SOURCES_CPP	:= $(shell find -L $(SOURCEDIRS) -name "*.cpp")
 
 ifeq ($(DLDI_ARM9),1)
 DEFINES		+= -D__NDS__ -DARM9
-ARCH		:= -march=armv5te -mtune=arm946e-s
+ARCH		:= -mcpu=arm946e-s+nofp
 else
 DEFINES		+= -D__NDS__ -DARM7
-ARCH		:= -mcpu=arm7tdmi -mtune=arm7tdmi
+ARCH		:= -mcpu=arm7tdmi
 endif
 
 WARNFLAGS	:= -Wall
