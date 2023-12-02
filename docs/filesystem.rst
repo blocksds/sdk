@@ -47,7 +47,7 @@ any path provided to the C library functions.
 
 .. code:: c
 
-    #include <fatfs.h>
+    #include <filesystem.h>
 
     int main(int argc, char *argv[])
     {

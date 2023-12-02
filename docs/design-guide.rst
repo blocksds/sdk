@@ -2,23 +2,7 @@
 BlocksDS design guide
 #####################
 
-1. Lack of native Windows support
-=================================
-
-Adding native support for building on Windows restricts the SDK too much. WSL is
-probably the best option if you use Windows and you want to use BlocksDS. It's
-a way to have Linux inside Windows in a way that is very well integrated with
-the rest of the system. For example, you can see the hard drives of Windows from
-the ``/mnt/`` folder. For example, ``/mnt/c/Users/yourname/Desktop``.
-
-Other options include MinGW, and probably Cygwin. However, instead of using
-them, it is possible to use a Docker image. The main benefit of this approach is
-that the image you have in your computer is the exact same image as everyone
-else, which makes it easy to setup and debug. You will need to learn a bit of
-Docker, but there is a guide `here <../docker/readme.rst>`_ with some basic
-instructions.
-
-2. Custom build of GCC vs not custom build
+1. Custom build of GCC vs not custom build
 ==========================================
 
 Building GCC is a long and not-too-easy process that doesn't give you a big
@@ -27,14 +11,14 @@ fragile process.
 
 However, in order to take advantage of per-CPU optimizations and to have a
 robust toolchain, it is required to use a custom build of GCC. For this purpose,
-BlocksDS relies on `Wonderful Toolchains <https://wonderful.asie.pl/>`_.
+BlocksDS relies on `Wonderful Toolchain <https://wonderful.asie.pl/>`_.
 
-3. All libraries have to be built by hand
-=========================================
+2. All libraries must be easy to be built by hand
+=================================================
 
 Most SDKs come with pre-built libraries and users only need to build them
-manually if they want to modify them. If this is what you want to do, please,
-check the `Docker guide <../docker/readme.rst>`_ and use the ``slim`` image.
+manually if they want to modify them. This is supported by BlocksDS thanks to
+Wonderful Toolchain.
 
 However, part of the reason for creating this SDK is to show users how easy it
 actually is to modify any part of the code in your program. The build process
@@ -42,10 +26,10 @@ takes between a few seconds to half a minute, depending on your computer. This
 is a shorter time than most installation processes of other SDKs. There just
 isn't that much to build!
 
-The exception is ``picolibc`` (standard C library) and ``libstdc++`` (standard
+The exceptions are ``picolibc`` (standard C library) and ``libstdc++`` (standard
 C++ library), which come with the toolchain.
 
-4. ``picolibc`` vs ``newlib``
+3. ``picolibc`` vs ``newlib``
 =============================
 
 The C library `picolibc <https://github.com/picolibc/picolibc>`_ is used in
@@ -68,7 +52,7 @@ BlocksDS instead of `newlib <https://sourceware.org/newlib/>`_. The reasons are:
 The main disadvantage I've seen is that the documentation of ``picolibc`` about
 how to port it to a new system is worse than the one of ``newlib``.
 
-5. Standard C library port
+4. Standard C library port
 ==========================
 
 ``picolibc`` only provides the generic functionality of the standard C library.
@@ -116,7 +100,7 @@ The reason to keep this as its own library, instead of adding it to
 ``libnds``, but that means it wouldn't be possible to reuse it for other
 libraries in the future.
 
-6. Filesystem support
+5. Filesystem support
 =====================
 
 This section will describe how the filesystem support has been implemented in
@@ -151,7 +135,7 @@ card are provided as a DLDI driver. ``f_open()`` must determine the location of
 the file (based on the filesystem prefix, ``fat:`` or ``sd:``) and use DLDI
 driver functions or DSi SD driver functions accordingly.
 
-7. NitroFS
+6. NitroFS
 ==========
 
 When creating a game, it is needed to add a lot of assets such as graphics and
@@ -198,14 +182,14 @@ This system makes it possible to use the integrated filesystem transparently.
 The developer doesn't need to worry about how it is being accessed, ``NitroFs``
 will handle that complexity.
 
-8. DLDI in the ARM7
+7. DLDI in the ARM7
 ===================
 
 Unlike other development kits, BlocksDS supports running DLDI from either the
 ARM9 or the ARM7. Please, read `this document <dldi-arm7.rst>`_ for more
 information.
 
-9. Multithreading
+8. Multithreading
 =================
 
 The original ``libnds`` didn't support any kind of multithreading. This made it
