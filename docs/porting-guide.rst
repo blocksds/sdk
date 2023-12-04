@@ -7,10 +7,8 @@ Porting NDS devkitPro projects to BlocksDS
 
 Porting devkitPro projects to BlocksDS should be relatively easy in most cases.
 BlocksDS includes most of the DS libraries that come with devkitPro. The biggest
-difference is the build system. You will need to replace the Makefile. Another
-smaller difference is that ``libfat`` and ``libfilesystem`` aren't included in
-BlocksDS, and a subtle change in the text console. For more information, keep
-reading.
+difference is the build system. You will need to replace the Makefile that you
+have in your project by the one of one of the templates of BlocksDS.
 
 2. Filesystem libraries
 =======================
@@ -24,8 +22,8 @@ BlocksDS uses `Elm's FatFs library <http://elm-chan.org/fsw/ff/00index_e.html>`_
 instead. This library has been ported to use the DLDI and DSi internal SD card
 drivers that are provided by ``libnds``.
 
-In the makefile, you have to remove ``-lfat`` and ``-lfilesystem``, as they
-don't exist in BlocksDS.
+In the makefile, you have to remove ``-lfat`` and ``-lfilesystem`` from
+``LIBS``, as they don't exist in BlocksDS.
 
 From the point of view of the source code, you can use the same includes as when
 using ``libfat`` and ``libfilesystem``:
@@ -103,7 +101,7 @@ This is how it looks like in a devkitPro project:
 
 .. code:: make
 
-    LIBS := -ldswifi9 -lmm9 -lnds9
+    LIBS := -ldswifi9 -lmm9 -lnds9 -lfat -lfilesystem
 
     LIBDIRS := $(LIBNDS)
 
