@@ -2,16 +2,45 @@
 BlocksDS changelog
 ##################
 
-Version dev (2023-XX-XX)
-========================
+Version 0.11.3 (2023-12-04)
+===========================
 
 - ``libnds``:
 
   - Added helpers to control microphone power independently from recording.
     This can be used for scenarios in which the DSP is tasked from recording
     microphone input.
+  - Added helpers and definitions for the DSi GPIO registers.
+  - Added function to detect availability of NWRAM.
   - Fixed ``atexit()`` handlers not being called during a normal ``main()``
     return.
+  - Fixed TSC configuration for enabling 47 kHz input/output in DSi mode.
+  - Improved error handling in Teak DSP code execution helpers.
+  - The Teak DSP is now powered off before loading a DSP binary.
+
+- ``dswifi``:
+
+  - Reduced memory usage, especially while Wi-Fi is not initialized.
+
+- ndstool:
+
+  - Breaking: Instead of providing alternate-language banner text using
+    ``-bt5 "Text"``, the form ``-bt 5 "Text"`` is now required.
+  - Added support for providing mutliple root directories for building NitroFS
+    images. All specified root directories are combined to create the root of
+    the file system.
+  - Fixed ``-w`` treating other options as file masks.
+  - Improved argument handling.
+
+- SDK:
+
+  - Updated compiler flags:
+    - The superfluous ``-mtune=arm7tdmi`` has been removed from ARM7 Makefiles.
+    - ``-march=armv5te -mtune=arm946e-s`` has been replaced with
+      ``-mcpu=arm946e-s+nofp`` in ARM9 Makefiles.
+    - ``-Wl,--use-blx`` has been added to ARM9 linker flags. This allows the
+      use of the BLX opcode for linking ARM/Thumb code in place of trampolines,
+      slightly improving final executable size and performance.
 
 Version 0.11.2 (2023-11-27)
 ===========================
