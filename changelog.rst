@@ -35,6 +35,7 @@ Version 0.11.3 (2023-12-04)
 - SDK:
 
   - Updated compiler flags:
+
     - The superfluous ``-mtune=arm7tdmi`` has been removed from ARM7 Makefiles.
     - ``-march=armv5te -mtune=arm946e-s`` has been replaced with
       ``-mcpu=arm946e-s+nofp`` in ARM9 Makefiles.
