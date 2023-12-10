@@ -2,10 +2,10 @@
 #
 # SPDX-FileContributor: Antonio Niño Díaz, 2023
 
-BLOCKSDS	?= /opt/blocksds/core
-BLOCKSDSEXT	?= /opt/blocksds/external
+export BLOCKSDS			?= /opt/blocksds/core
+export BLOCKSDSEXT		?= /opt/blocksds/external
 
-WONDERFUL_TOOLCHAIN	?= /opt/wonderful
+export WONDERFUL_TOOLCHAIN	?= /opt/wonderful
 ARM_NONE_EABI_PATH	?= $(WONDERFUL_TOOLCHAIN)/toolchain/gcc-arm-none-eabi/bin/
 
 # User config
@@ -110,18 +110,16 @@ SOURCES_CPP	:= $(shell find -L $(SOURCEDIRS) -name "*.cpp")
 # Compiler and linker flags
 # -------------------------
 
-DEFINES		+= -D__NDS__ -DARM9
-
-ARCH		:= -mcpu=arm946e-s+nofp
+SPECS		:= $(BLOCKSDS)/sys/crts/ds_arm9.specs
 
 WARNFLAGS	:= -Wall
 
 ifeq ($(SOURCES_CPP),)
-    LD		:= $(CC)
-    LIBS	+= -lc
+	LD	:= $(CC)
+	LIBS	+= -lc
 else
-    LD		:= $(CXX)
-    LIBS	+= -lstdc++ -lc
+	LD	:= $(CXX)
+	LIBS	+= -lstdc++ -lc
 endif
 
 INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path)) \
@@ -129,27 +127,21 @@ INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path)) \
 
 LIBDIRSFLAGS	:= $(foreach path,$(LIBDIRS),-L$(path)/lib)
 
-ASFLAGS		+= -x assembler-with-cpp $(DEFINES) $(ARCH) \
-		   -mthumb -mthumb-interwork $(INCLUDEFLAGS) \
-		   -ffunction-sections -fdata-sections
+ASFLAGS		+= -x assembler-with-cpp $(DEFINES) $(INCLUDEFLAGS) \
+		   -mthumb -ffunction-sections -fdata-sections \
+		   -specs=$(SPECS)
 
-CFLAGS		+= -std=gnu11 $(WARNFLAGS) $(DEFINES) $(ARCH) \
-		   -mthumb -mthumb-interwork $(INCLUDEFLAGS) -O2 \
-		   -ffunction-sections -fdata-sections \
-		   -fomit-frame-pointer
+CFLAGS		+= -std=gnu11 $(WARNFLAGS) $(DEFINES) $(INCLUDEFLAGS) \
+		   -mthumb -O2 -ffunction-sections -fdata-sections \
+		   -specs=$(SPECS)
 
-CXXFLAGS	+= -std=gnu++14 $(WARNFLAGS) $(DEFINES) $(ARCH) \
-		   -mthumb -mthumb-interwork $(INCLUDEFLAGS) -O2 \
-		   -ffunction-sections -fdata-sections \
+CXXFLAGS	+= -std=gnu++14 $(WARNFLAGS) $(DEFINES) $(INCLUDEFLAGS) \
+		   -mthumb -O2 -ffunction-sections -fdata-sections \
 		   -fno-exceptions -fno-rtti \
-		   -fomit-frame-pointer
+		   -specs=$(SPECS)
 
-LDFLAGS		:= -mthumb -mthumb-interwork $(LIBDIRSFLAGS) \
-		   -Wl,-Map,$(MAP) -Wl,--gc-sections -nostdlib \
-		   -T$(BLOCKSDS)/sys/crts/ds_arm9.mem \
-		   -T$(BLOCKSDS)/sys/crts/ds_arm9.ld \
-		   -Wl,--no-warn-rwx-segments -Wl,--use-blx \
-		   -Wl,--start-group $(LIBS) -lgcc -Wl,--end-group
+LDFLAGS		:= -mthumb $(LIBDIRSFLAGS) -Wl,-Map,$(MAP) $(DEFINES) \
+		   -Wl,--start-group $(LIBS) -Wl,--end-group -specs=$(SPECS)
 
 # Intermediate build files
 # ------------------------
@@ -206,7 +198,7 @@ $(ROM): $(ELF)
 
 $(ELF): $(OBJS)
 	@echo "  LD      $@"
-	$(V)$(LD) -o $@ $(OBJS) $(BLOCKSDS)/sys/crts/ds_arm9_crt0.o $(LDFLAGS)
+	$(V)$(LD) -o $@ $(OBJS) $(LDFLAGS)
 
 $(DUMP): $(ELF)
 	@echo "  OBJDUMP   $@"

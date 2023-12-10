@@ -1,0 +1,25 @@
+%include <picolibc.specs>
+
+%rename cc1 blocksds_cc1
+%rename cc1plus blocksds_cc1plus
+%rename cpp blocksds_cpp
+%rename link blocksds_link
+%rename startfile blocksds_startfile
+
+*cpp:
+-D__NDS__ -D__BLOCKSDS__ -DARM9 %(blocksds_cpp)
+
+*cc1:
+-fPIC %(blocksds_cc1)
+
+*cc1plus:
+-fPIC %(blocksds_cc1plus)
+
+*cc1_cpu:
+-mcpu=arm946e-s+nofp
+
+*link:
+%(blocksds_link) -T %:getenv(BLOCKSDS /sys/crts/dldi.ld) --gc-sections --no-warn-rwx-segments
+
+*lib:
+%(libgcc)
