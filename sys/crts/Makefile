@@ -65,7 +65,7 @@ install: all
 	@test $(INSTALLDIR_ABS)
 	$(V)$(RM) $(INSTALLDIR_ABS)
 	$(V)$(INSTALL) -d $(INSTALLDIR_ABS)
-	$(V)$(CP) -r ./*.o ./*.ld ./*.mem ./COPYING* $(INSTALLDIR_ABS)
+	$(V)$(CP) -r ./*.o ./*.ld ./*.mem ./*.specs ./COPYING* $(INSTALLDIR_ABS)
 
 # Rules
 # -----

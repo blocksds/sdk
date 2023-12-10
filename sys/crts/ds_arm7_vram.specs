@@ -1,8 +1,19 @@
-%rename link                old_link
+%include <picolibc.specs>
+
+%rename cpp blocksds_cpp
+%rename link blocksds_link
+
+*cpp:
+-D__NDS__ -D__BLOCKSDS__ -DARM7 %(blocksds_cpp)
+
+*cc1_cpu:
+-mcpu=arm7tdmi
 
 *link:
-%(old_link) -T ds_arm7_vram.ld%s --no-warn-rwx-segments
+%(blocksds_link) -T %:getenv(BLOCKSDS /sys/crts/ds_arm7_vram.ld) --gc-sections --no-warn-rwx-segments
 
 *startfile:
-ds_arm7_vram_crt0%O%s crti%O%s crtbegin%O%s
+%:getenv(BLOCKSDS /sys/crts/ds_arm7_vram_crt0%O)
 
+*lib:
+%(libgcc)

@@ -2,10 +2,10 @@
 #
 # SPDX-FileContributor: Antonio Niño Díaz, 2023
 
-BLOCKSDS	?= /opt/blocksds/core
-BLOCKSDSEXT	?= /opt/blocksds/external
+export BLOCKSDS			?= /opt/blocksds/core
+export BLOCKSDSEXT		?= /opt/blocksds/external
 
-WONDERFUL_TOOLCHAIN	?= /opt/wonderful
+export WONDERFUL_TOOLCHAIN	?= /opt/wonderful
 ARM_NONE_EABI_PATH	?= $(WONDERFUL_TOOLCHAIN)/toolchain/gcc-arm-none-eabi/bin/
 
 # Source code paths
@@ -60,29 +60,25 @@ SOURCES_CPP	:= $(shell find -L $(SOURCEDIRS) -name "*.cpp")
 # Compiler and linker flags
 # -------------------------
 
-DEFINES		+= -D__NDS__ -DARM7
-
-ARCH		:= -mcpu=arm7tdmi
+SPECS		:= $(BLOCKSDS)/sys/crts/ds_arm7.specs
 
 WARNFLAGS	:= -Wall
 
 INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path)) \
 		   $(foreach path,$(LIBDIRS),-I$(path)/include)
 
-ASFLAGS		+= -x assembler-with-cpp $(DEFINES) $(ARCH) \
-		   -mthumb -mthumb-interwork $(INCLUDEFLAGS) \
-		   -ffunction-sections -fdata-sections
+ASFLAGS		+= -x assembler-with-cpp $(DEFINES) $(INCLUDEFLAGS) \
+		   -mthumb -ffunction-sections -fdata-sections \
+		   -specs=$(SPECS)
 
-CFLAGS		+= -std=gnu11 $(WARNFLAGS) $(DEFINES) $(ARCH) \
-		   -mthumb -mthumb-interwork $(INCLUDEFLAGS) -O2 \
-		   -ffunction-sections -fdata-sections \
-		   -fomit-frame-pointer
+CFLAGS		+= -std=gnu11 $(WARNFLAGS) $(DEFINES) $(INCLUDEFLAGS) \
+		   -mthumb -O2 -ffunction-sections -fdata-sections \
+		   -specs=$(SPECS)
 
-CXXFLAGS	+= -std=gnu++14 $(WARNFLAGS) $(DEFINES) $(ARCH) \
-		   -mthumb -mthumb-interwork $(INCLUDEFLAGS) -O2 \
-		   -ffunction-sections -fdata-sections \
+CXXFLAGS	+= -std=gnu++14 $(WARNFLAGS) $(DEFINES) $(INCLUDEFLAGS) \
+		   -mthumb -O2 -ffunction-sections -fdata-sections \
 		   -fno-exceptions -fno-rtti \
-		   -fomit-frame-pointer
+		   -specs=$(SPECS)
 
 # Intermediate build files
 # ------------------------
