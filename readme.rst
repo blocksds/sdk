@@ -63,11 +63,18 @@ If you want to use it in WSL, follow the instructions for Linux instead.
 
        wf-pacman -S thirdparty-blocksds-toolchain
 
-   For the latest unstable version, run:
+   To install the documentation and examples you can install:
 
    .. code:: bash
 
-       wf-pacman -S thirdparty-blocksds-git-toolchain
+       wf-pacman -S thirdparty-blocksds-docs
+
+   For the latest unstable version, install the following packages instead:
+
+   .. code:: bash
+
+       wf-pacman -S thirdparty-blocksds-git-toolchain \
+                    thirdparty-blocksds-git-docs
 
 3. (Optional step) You can also install some third party libraries like
    `NightFox’s Lib <https://github.com/knightfox75/nds_nflib>`_ and
@@ -129,11 +136,18 @@ right away.
 
        wf-pacman -S thirdparty-blocksds-toolchain
 
-   For the latest unstable version, run:
+   To install the documentation and examples you can install:
 
    .. code:: bash
 
-       wf-pacman -S thirdparty-blocksds-git-toolchain
+       wf-pacman -S thirdparty-blocksds-docs
+
+   For the latest unstable version, install the following packages instead:
+
+   .. code:: bash
+
+       wf-pacman -S thirdparty-blocksds-git-toolchain \
+                    thirdparty-blocksds-git-docs
 
 3. (Optional step) You can also install some third party libraries like
    `NightFox’s Lib <https://github.com/knightfox75/nds_nflib>`_ and
