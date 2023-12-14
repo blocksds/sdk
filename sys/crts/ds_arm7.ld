@@ -40,6 +40,9 @@ SECTIONS
 		__arm7i_lma__ = LOADADDR(.twl);
 		__arm7i_start__ = .;
 		*(.twl)
+		*(.twl.text .twl.text.*)
+		*(.twl.rodata .twl.rodata.*)
+		*(.twl.data .twl.data.*)
 		*.twl*(.text .stub .text.* .gnu.linkonce.t.*)
 		*.twl*(.rodata)
 		*.twl*(.roda)
@@ -54,7 +57,8 @@ SECTIONS
 	.twl_bss ALIGN(4) (NOLOAD) :
 	{
 		__twl_bss_start__ = .;
-		*(.twl_bss)
+		*(.twl_bss .twl_bss.*)
+		*(.twl.bss .twl.bss.*)
 		*.twl.*(.dynbss)
 		*.twl.*(.gnu.linkonce.b*)
 		*.twl.*(.bss*)
