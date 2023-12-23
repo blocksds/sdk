@@ -48,6 +48,8 @@ int main(int argc, char *argv[])
 
     installWifiFIFO();
     installSoundFIFO();
+    if (isDSiMode())
+        installCameraFIFO();
     installSystemFIFO(); // Sleep mode, storage, firmware...
 
     // Initialize Maxmod. It uses timer 0 internally.
