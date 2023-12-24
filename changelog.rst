@@ -2,6 +2,39 @@
 BlocksDS changelog
 ##################
 
+Version DEV (2023-12-??)
+========================
+
+- ``libnds``:
+
+  - Dot and dot-dot entries are now properly emitted in readdir(). In line
+    with common software expectations, they mirror standard FAT filesystem
+    behaviour, that is are present for all subdirectories. For NitroFS,
+    these entries are emulated accordingly.
+  - The "d_ino" field in readdir() output is now correctly populated, to
+    match stat() and fstat().
+  - Added ``nitroFSOpenById()`` and ``nitroFSFopenById()`` functions, allowing
+    opening files directly without paying the cost of a directory lookup.
+  - Accordingly, NitroFS file systems which contain a FAT table but no FNT
+    table can now be opened.
+  - Optimized ``glMaterialShinyness()``.
+
+- SDK:
+
+  - The default Makefiles have been simplified and now use compiler-provided
+    .specs files. In turn, a few additional features have been added:
+    - Support for picolibc's compiler define-based selection of the printf
+      and scanf implementations.
+    - The __BLOCKSDS__ define, which can be used to detect a BlocksDS
+      environment during building.
+  - Fixed camera initialization with the default ARM7 binary.
+
+- grit:
+
+  - Added the ``-ftB`` argument, which outputs files with ``.img``, ``.map``,
+    ``.meta``, ``.pal`` extensions, as opposed to ``..img.bin``, ``.map.bin``,
+    ``.meta.bin`` and ``.pal.bin``.
+
 Version 0.11.3 (2023-12-04)
 ===========================
 
