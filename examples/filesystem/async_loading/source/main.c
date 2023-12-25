@@ -133,8 +133,11 @@ int main(int argc, char **argv)
     printf("\x1b[10;0;HMain thread: ");
     fflush(stdout);
 
+    // This thread needs enough stack to do filesystem access. By default it
+    // isn't enough for it and it will make the ROM crash because of a stack
+    // overflow.
     cothread_t load_thread = cothread_create(calculate_file_md5,
-                                             (void *)"random.bin", 0, 0);
+                                             (void *)"random.bin", 4 * 1024, 0);
 
     int count = 0;
     while (1)
