@@ -1,5 +1,6 @@
 %include <picolibc.specs>
 
+%rename cc1plus blocksds_cc1plus
 %rename cpp blocksds_cpp
 %rename link blocksds_link
 
@@ -8,6 +9,9 @@
 
 *cc1_cpu:
 -mcpu=arm946e-s+nofp
+
+*cc1plus:
+%(cpp) %(blocksds_cc1plus)
 
 *link:
 %(blocksds_link) -T %:getenv(BLOCKSDS /sys/crts/ds_arm9.mem) -T %:getenv(BLOCKSDS /sys/crts/ds_arm9.ld) --gc-sections --no-warn-rwx-segments --use-blx
