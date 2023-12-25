@@ -80,8 +80,10 @@ SOURCES_CPP	:= $(shell find -L $(SOURCEDIRS) -name "*.cpp")
 # -------------------------
 
 ifeq ($(DLDI_ARM9),1)
+	ARCH	:= -mthumb -mcpu=arm946e-s+nofp
 	SPECS	:= $(BLOCKSDS)/sys/crts/dldi_arm9.specs
 else
+	ARCH	:= -mthumb -mcpu=arm7tdmi
 	SPECS	:= $(BLOCKSDS)/sys/crts/dldi_arm7.specs
 endif
 
@@ -101,19 +103,19 @@ INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path)) \
 LIBDIRSFLAGS	:= $(foreach path,$(LIBDIRS),-L$(path)/lib)
 
 ASFLAGS		+= -x assembler-with-cpp $(DEFINES) $(INCLUDEFLAGS) \
-		   -mthumb -ffunction-sections -fdata-sections \
+		   $(ARCH) -ffunction-sections -fdata-sections \
 		   -specs=$(SPECS)
 
 CFLAGS		+= -std=gnu11 $(WARNFLAGS) $(DEFINES) $(INCLUDEFLAGS) \
-		   -mthumb -O2 -ffunction-sections -fdata-sections \
+		   $(ARCH) -O2 -ffunction-sections -fdata-sections \
 		   -specs=$(SPECS)
 
 CXXFLAGS	+= -std=gnu++14 $(WARNFLAGS) $(DEFINES) $(INCLUDEFLAGS) \
-		   -mthumb -O2 -ffunction-sections -fdata-sections \
+		   $(ARCH) -O2 -ffunction-sections -fdata-sections \
 		   -fno-exceptions -fno-rtti \
 		   -specs=$(SPECS)
 
-LDFLAGS		:= -mthumb $(LIBDIRSFLAGS) -Wl,-Map,$(MAP) $(DEFINES) \
+LDFLAGS		:= $(ARCH) $(LIBDIRSFLAGS) -Wl,-Map,$(MAP) $(DEFINES) \
 		   -Wl,--start-group $(LIBS) -Wl,--end-group -specs=$(SPECS)
 
 # Intermediate build files
