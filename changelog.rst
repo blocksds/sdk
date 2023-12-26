@@ -34,7 +34,7 @@ Version 0.12.0 (2023-12-26)
 - grit:
 
   - Added the ``-ftB`` argument, which outputs files with ``.img``, ``.map``,
-    ``.meta``, ``.pal`` extensions, as opposed to ``..img.bin``, ``.map.bin``,
+    ``.meta``, ``.pal`` extensions, as opposed to ``.img.bin``, ``.map.bin``,
     ``.meta.bin`` and ``.pal.bin``.
 
 Version 0.11.3 (2023-12-04)
