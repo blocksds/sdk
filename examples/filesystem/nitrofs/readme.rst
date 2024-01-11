@@ -12,4 +12,4 @@ website: https://devkitpro.org/wiki/Homebrew_Menu
 Running on emulators
 ====================
 
-Check the `documentation <../../docs/filesystem.rst>`_ for more information.
+Check the `documentation <../../../docs/filesystem.rst>`_ for more information.
