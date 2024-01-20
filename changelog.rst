@@ -2,6 +2,29 @@
 BlocksDS changelog
 ##################
 
+Version DEV (2024-??-??)
+========================
+
+- ``libnds``:
+
+  - Implemented ``utime()`` and ``utimes()`` for changing file modification
+    dates.
+  - Implemented ``scandir()``, ``alphasort()`` and ``versionsort()``,
+  - Fixed ``statvfs()`` and ``fstatvfs()`` on NitroFS paths and files.
+  - Added stubs for ``getwd()`` and ``get_current_dir_name()``.
+  - Added stubs for ``getuid()``, ``getgid()``, etc.
+
+- grit:
+
+  - Added the ``-D`` argument, specifying the destination folder for
+    non-shared data as a counterpart to ``-O``.
+  - Fixed a situation in which the first color in an image's palette would be
+    used as transparent if the user-provided color (with ``-gT``) was not
+    present in the image.
+  - Fixed GRF file output to properly follow the RIFF chunk format.
+  - Fixed palette size calculation for DS textures.
+  - Improvements to error messages.
+
 Version 0.12.0 (2023-12-26)
 ===========================
 
