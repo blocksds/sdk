@@ -27,6 +27,8 @@ int main(int argc, char **argv)
     {
         swiWaitForVBlank();
 
+        scanKeys();
+
         // Clear console
         printf("\x1b[2J");
 
@@ -59,7 +61,6 @@ int main(int argc, char **argv)
         printf("\x1b[5;0H[%s]\n", string);
         printf("Length: %d\n", strlen(string));
 
-        scanKeys();
         if (keysDown() & KEY_START)
             break;
     }
