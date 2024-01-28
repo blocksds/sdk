@@ -41,6 +41,9 @@ int main(int argc, char **argv)
 
         uint8_t rumble = 0;
 
+        if (peripheralSlot2GetSupportMask() & SLOT2_PERIPHERAL_TILT)
+                peripheralSlot2TiltStart();
+
         while (1)
         {
             swiWaitForVBlank();
@@ -85,8 +88,12 @@ int main(int argc, char **argv)
             if (peripheralSlot2GetSupportMask() & SLOT2_PERIPHERAL_TILT)
             {
                 slot2TiltPosition pos;
-                if (peripheralSlot2TiltUpdate(&pos))
+
+                if (peripheralSlot2TiltRead(&pos))
+                {
                     printf("Tilt: X=%03X, Y=%03X", pos.x, pos.y);
+                    peripheralSlot2TiltStart();
+                }
             }
 
             if (peripheralSlot2GetSupportMask() & SLOT2_PERIPHERAL_GUITAR_GRIP)
