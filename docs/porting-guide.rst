@@ -172,3 +172,47 @@ value is equal:
         printf("This is a directory\n");
     else if (cur->d_type == DT_REG)
         printf("This is a file\n");
+
+6. Touch screen and libnds keyboard
+===================================
+
+``scanKeys()`` updates the internal state of the key handling code. This is then
+used by ``keysHeld()``, ``keysDown()`` and ``keysHeld()``.
+
+BlocksDS also requires the user to call ``scanKeys()`` before any of the
+following functions: ``touchRead()``, ``keyboardGetChar()``,
+``keyboardUpdate()`` and the deprecated ``touchReadXY()``.
+
+This is unlikely to be a problem in most projects, as the normal thing to do is
+to both scan the keys and read the touchscreen status, not just read the
+touchscreen.
+
+The reason is that the functions ``scanKeys()`` and ``touchRead()`` aren't
+synchronized in any way, which creates a race condition. Consider this code:
+
+.. code:: c
+
+    while (1)
+    {
+        scanKeys();
+        if (keysHeld() & KEY_TOUCH)
+        {
+            touchPosition touchPos;
+            touchRead(&touchPos);
+            printf("%d, %d\n", touchPos.px, touchPos.py);
+        }
+        swiWaitForVBlank();
+    }
+
+The state of the X and Y buttons, as well as the state of the touch screen, is
+passed from the ARM7 with a FIFO message. This message can technically happen in
+between ``scanKeys()`` and ``touchRead()``, which means that it's possible that
+``keysHeld() & KEY_TOUCH`` is true, but the coordinates read by ``touchRead()``
+are (0, 0) because the user has stopped pressing the screen right at that point,
+and ``scanKeys()`` read the outdated values while ``touchRead()`` read the
+updated values.
+
+In BlocksDS, ``scanKeys()`` is used to latch the current state of the keys and
+the touch screen. This forces the developer to call ``scanKeys()``, but it also
+ensures that there are no race conditions, as ``scanKeys()`` will read all the
+state atomically.
