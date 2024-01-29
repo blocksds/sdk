@@ -49,16 +49,14 @@ int main(int argc, char **argv)
 
     u16 res;
 
-    res = XM7_LoadXM(&module[0],
-                     (XM7_XMModuleHeader_Type *)lasse_haen_pyykit_xm_bin);
+    res = XM7_LoadXM(&module[0], lasse_haen_pyykit_xm_bin);
     if (res != 0)
     {
         printf("libxm7 error (module 0): 0x%04x\n", res);
         songs_loaded = false;
     }
 
-    res = XM7_LoadXM(&module[1],
-                     (XM7_XMModuleHeader_Type *)parallax_80599_xm_bin);
+    res = XM7_LoadXM(&module[1], parallax_80599_xm_bin);
     if (res != 0)
     {
         printf("libxm7 error (module 1): 0x%04x\n", res);
