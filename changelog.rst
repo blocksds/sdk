@@ -44,6 +44,21 @@ Version DEV (2024-??-??)
   - Fixed palette size calculation for DS textures.
   - Improvements to error messages.
 
+- ``libxm7``:
+
+  - Make types ``XM7_XMModuleHeader_Type`` and ``XM7_MODModuleHeader_Type``
+    private. Developers consider their MOD/XM files as a typeless blob of data,
+    they shouldn't need to cast it to anything, the library should do it itself.
+  - The structs that define the MOD and XM formats have been made private, as
+    well as some definitions internal to the player.
+  - Some defines have been turned into enums, which will help developers and
+    IDEs identify what to use in which functions.
+
+- Tests:
+
+  - Add test to read DSi SCFG registers to see which DSi features are available
+    with the loader that has been used to launch the application.
+
 Version 0.12.0 (2023-12-26)
 ===========================
 
