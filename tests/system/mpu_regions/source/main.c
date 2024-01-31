@@ -1,10 +1,46 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2023
+// SPDX-FileContributor: Antonio Niño Díaz, 2024
 
 #include <stdio.h>
 
 #include <nds.h>
+
+// Returns the size of main RAM in bytes.
+//
+// DS retail: 4 MB.
+// - Cached mirror at 0x02000000.
+// - 3 uncached mirrors at 0x02400000, 0x02800000, 0x02C00000.
+//
+// DS debugger: 8 MB
+// - Cached mirror at 0x02000000.
+// - Uncached mirror at 0x02800000.
+//
+// DSi retail: 16 MB
+// - Cached mirror at 0x02000000.
+// - Uncached mirror at 0x0C000000.
+//
+// DSi debugger: 32 MB
+// - Cached mirror of first 16 MB at 0x02000000.
+// - Uncached mirror of first 16 MB at 0x0C000000.
+// - Uncached second 16 MB at 0x0D000000.
+size_t get_system_ram_size(void)
+{
+    if (isDSiMode())
+    {
+        if (isHwDebugger())
+            return 32 * 1024 * 1024;
+        else
+            return 16 * 1024 * 1024;
+    }
+    else
+    {
+        if (isHwDebugger())
+            return 8 * 1024 * 1024;
+        else
+            return 4 * 1024 * 1024;
+    }
+}
 
 size_t region_size_to_bytes(uint32_t size)
 {
@@ -90,6 +126,7 @@ int main(int argc, char **argv)
     consoleDemoInit();
 
     printf("DSi mode: %s\n", isDSiMode() ? "yes" : "no");
+    printf("RAM size: %u MB\n", get_system_ram_size() / (1024 * 1024));
     printf("\n");
 
     printf("MPU regions:\n");
