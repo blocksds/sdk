@@ -31,7 +31,10 @@ _start:
     sub     r1, r1, #0x100
     mov     sp, r1
 
-    // This sets r8 to the end address of RAM for that DS model
+    // This sets r7 to 1 if the console is a debugger unit, 0 if it is a retail
+    // unit. It also sets r8 to the end address of RAM for that DS model. The
+    // values need to be saved until after the RAM contents have been cleared so
+    // that they are saved to __dsimode and __debugger_unit.
     ldr     r3, =__libnds_mpu_setup
     blx     r3
 
@@ -111,6 +114,9 @@ _start:
     ldr     r1, =__sbss_end
     sub     r1, r1, r0
     bl      ClearMem
+
+    ldr     r9, =__debugger_unit // Set DS/DSi debugger flag
+    strb    r7, [r9]
 
     cmp     r11, #1
     bne     NotTWL
