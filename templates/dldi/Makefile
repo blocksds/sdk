@@ -38,7 +38,7 @@ LIBDIRS		:= $(BLOCKSDS)/libs/libnds
 # Build artifacts
 # -----------------
 
-BUILDDIR	:= build/
+BUILDDIR	:= build/$(NAME)
 ELF		:= build/$(NAME).elf
 DUMP		:= build/$(NAME).dump
 MAP		:= build/$(NAME).map

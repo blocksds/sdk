@@ -32,8 +32,8 @@ LIBDIRS		:= $(BLOCKSDS)/libs/maxmod \
 # Build artifacts
 # ---------------
 
-BUILDDIR	:= build/arm9
 NAME		:= arm9
+BUILDDIR	:= build/$(NAME)
 ELF		:= build/$(NAME).elf
 DUMP		:= build/$(NAME).dump
 MAP		:= build/$(NAME).map

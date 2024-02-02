@@ -28,7 +28,7 @@ LIBDIRS		:=
 # ---------------
 
 NAME		:= test7
-BUILDDIR	:= build/arm7
+BUILDDIR	:= build/$(NAME)
 ARCHIVE		:= lib/lib$(NAME).a
 
 # Tools

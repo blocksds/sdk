@@ -31,7 +31,7 @@ LIBDIRS		:=
 
 NAME		:= test
 INSTALLNAME	:= library_arm9_only
-BUILDDIR	:= build
+BUILDDIR	:= build/$(NAME)
 ARCHIVE		:= lib/lib$(NAME).a
 
 # Tools
