@@ -29,8 +29,8 @@ LIBDIRS		+= $(BLOCKSDS)/libs/libteak
 # Build artifacts
 # ---------------
 
-BUILDDIR	:= build/teak
 NAME		:= teak
+BUILDDIR	:= build/$(NAME)
 ELF		:= build/$(NAME).elf
 TLF		:= build/$(NAME).tlf
 DUMP		:= build/$(NAME).dump
