@@ -30,7 +30,7 @@ LIBDIRS		:=
 # ---------------
 
 NAME		:= test9
-BUILDDIR	:= build/arm9
+BUILDDIR	:= build/$(NAME)
 ARCHIVE		:= lib/lib$(NAME).a
 
 # Tools

@@ -52,7 +52,7 @@ LIBDIRS		:= $(BLOCKSDS)/libs/maxmod \
 # Build artifacts
 # ---------------
 
-BUILDDIR	:= build
+BUILDDIR	:= build/$(NAME)
 ELF		:= build/$(NAME).elf
 DUMP		:= build/$(NAME).dump
 MAP		:= build/$(NAME).map
