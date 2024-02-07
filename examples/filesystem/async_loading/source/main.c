@@ -1,39 +1,49 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2023
+// SPDX-FileContributor: Antonio Niño Díaz, 2023-2024
 
-// Random file generated with:
+// Random files generated with:
 //
 //     dd bs=1024 count=2048 < /dev/urandom > random.bin
 
+// Note: Currently this example only works on emulators, not DSi or flashcards.
+
 #include <stdio.h>
 
-#include <fatfs.h>
+#include <filesystem.h>
 #include <nds.h>
-#include <nds/cothread.h>
 #include <nds/arm9/dldi.h>
+#include <nds/cothread.h>
 
 #include "md5/md5.h"
 
 static char input_buffer[1024];
 
-PrintConsole topScreen;
-PrintConsole bottomScreen;
+typedef struct {
+    const char *path;
+    PrintConsole *console;
+} thread_args;
 
 int calculate_file_md5(void *arg)
 {
-    const char *path = arg;
+    thread_args *args = arg;
+
+    const char *path = args->path;
+    PrintConsole *con = args->console;
+
+    consoleSelect(con);
+    printf("Opening: %s\n", path);
 
     FILE *f = fopen(path, "r");
     if (f == NULL)
     {
-        consoleSelect(&topScreen);
-        perror("fopen(random.bin)");
+        consoleSelect(con);
+        perror("fopen");
         fflush(stdout);
         return -1;
     }
 
-    consoleSelect(&topScreen);
+    consoleSelect(con);
     printf("Calculating MD5 in a thread\n");
     printf("\n");
     fflush(stdout);
@@ -56,14 +66,15 @@ int calculate_file_md5(void *arg)
         size += input_size;
         if ((size % (1024 * 64)) == 0)
         {
-            consoleSelect(&topScreen);
+            consoleSelect(con);
             printf(".");
             fflush(stdout);
         }
+
+        cothread_yield();
     }
 
-    consoleSelect(&topScreen);
-    printf("\n");
+    consoleSelect(con);
     printf("\n");
     printf("\n");
     fflush(stdout);
@@ -73,10 +84,10 @@ int calculate_file_md5(void *arg)
     uint8_t digest[16];
     memcpy(digest, ctx.digest, 16);
 
-    consoleSelect(&topScreen);
+    printf("Calculated:\n");
+    consoleSelect(con);
     for (int i = 0; i < 16; i++)
         printf("%02X", digest[i]);
-    printf("\n");
     fflush(stdout);
 
     fclose(f);
@@ -86,6 +97,9 @@ int calculate_file_md5(void *arg)
 
 int main(int argc, char **argv)
 {
+    PrintConsole topScreen;
+    PrintConsole bottomScreen;
+
     videoSetMode(MODE_0_2D);
     videoSetModeSub(MODE_0_2D);
 
@@ -127,35 +141,54 @@ int main(int argc, char **argv)
 
     chdir("nitro:/");
     char *cwd = getcwd(NULL, 0);
-    printf("Current dir: %s\n\n", cwd);
+    printf("Current dir: %s\n", cwd);
     free(cwd);
+    printf("\n");
+    printf("\n");
 
-    printf("\x1b[10;0;HMain thread: ");
-    fflush(stdout);
-
-    // This thread needs enough stack to do filesystem access. By default it
+    // The threads need enough stack to do filesystem access. By default it
     // isn't enough for it and it will make the ROM crash because of a stack
     // overflow.
-    cothread_t load_thread = cothread_create(calculate_file_md5,
-                                             (void *)"random.bin", 4 * 1024, 0);
+    size_t stack_size = 4 * 1024;
 
-    int count = 0;
-    while (1)
+    thread_args args1 = {
+        .path = "random1.bin",
+        .console = &topScreen
+    };
+    thread_args args2 = {
+        .path = "random2.bin",
+        .console = &bottomScreen
+    };
+    cothread_t load_thread1 =
+                    cothread_create(calculate_file_md5, &args1, stack_size, 0);
+    cothread_t load_thread2 =
+                    cothread_create(calculate_file_md5, &args2, stack_size, 0);
+
+    // Wait until the two threads are done
+    bool joined1 = false;
+    bool joined2 = false;
+    while (!joined1 || !joined2)
     {
         cothread_yield_irq(IRQ_VBLANK);
 
-        consoleSelect(&bottomScreen);
-        printf("\x1b[10;14;H%5d", count);
-        fflush(stdout);
-
-        count++;
-
-        if (cothread_has_joined(load_thread))
+        if (cothread_has_joined(load_thread1))
         {
-            cothread_delete(load_thread);
-            break;
+            joined1 = true;
+            cothread_delete(load_thread1);
+        }
+        if (cothread_has_joined(load_thread2))
+        {
+            joined2 = true;
+            cothread_delete(load_thread2);
         }
     }
+
+    consoleSelect(&topScreen);
+    printf("Expected:\n");
+    printf("BB8E334C5F383F22960E9AC9E01CB558");
+    consoleSelect(&bottomScreen);
+    printf("Expected:\n");
+    printf("7F2B08C3D649F46084D351BFD6607D2F");
 
 wait_loop:
     printf("\n");
