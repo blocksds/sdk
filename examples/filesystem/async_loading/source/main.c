@@ -171,15 +171,21 @@ int main(int argc, char **argv)
     {
         cothread_yield_irq(IRQ_VBLANK);
 
-        if (cothread_has_joined(load_thread1))
+        if (!joined1)
         {
-            joined1 = true;
-            cothread_delete(load_thread1);
+            if (cothread_has_joined(load_thread1))
+            {
+                joined1 = true;
+                cothread_delete(load_thread1);
+            }
         }
-        if (cothread_has_joined(load_thread2))
+        if (!joined2)
         {
-            joined2 = true;
-            cothread_delete(load_thread2);
+            if (cothread_has_joined(load_thread2))
+            {
+                joined2 = true;
+                cothread_delete(load_thread2);
+            }
         }
     }
 
