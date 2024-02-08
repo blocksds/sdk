@@ -85,3 +85,4 @@ Flashcard       | ARM9 | ARM7 | Notes
 ----------------|------|------|------
 Acekard 2i      | Yes  | Yes  |
 SuperCard DSTWO | Yes  | Yes  |
+Original R4     | Yes  | Yes  |
