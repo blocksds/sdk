@@ -7,10 +7,9 @@ This is the option you should use if you want to help develop BlocksDS, or if
 you want to always use the cutting edge version of BlocksDS.
 
 1. You need to install a cross compiler to build applications for NDS. You also
-   need to build a few host tools, so you need a compiler for the host and the
-   FreeImage library.
+   need to build a few host tools, including a C/C++ compiler.
 
-   If you're on Ubuntu, for example, run the following command:
+   If you're on Ubuntu run the following command:
 
    ```bash
    sudo apt-get install -y --no-install-recommends build-essential
