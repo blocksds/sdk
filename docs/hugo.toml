@@ -5,11 +5,7 @@ baseURL = "http://localhost"
 title = "BlocksDS"
 theme = "hugo-geekdoc"
 
-#relativeURLs = false
-
 pluralizeListTitles = false
-
-#geekdocOverwriteHTMLBase = true
 
 # Geekdoc required configuration
 pygmentsUseClasses = true
@@ -18,10 +14,6 @@ disablePathToLower = true
 
 # Required if you want to render robots.txt template
 enableRobotsTXT = true
-
-#[module]
-#[[module.imports]]
-#  path = "github.com/blocksds/hugo-geekdoc"
 
 # Needed for mermaid shortcodes
 [markup]
