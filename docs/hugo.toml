@@ -1,0 +1,40 @@
+languageCode = 'en-us'
+
+#baseURL = "https://blocksds.github.io/docs/"
+baseURL = "http://localhost"
+title = "BlocksDS"
+theme = "hugo-geekdoc"
+
+#relativeURLs = false
+
+pluralizeListTitles = false
+
+#geekdocOverwriteHTMLBase = true
+
+# Geekdoc required configuration
+pygmentsUseClasses = true
+pygmentsCodeFences = true
+disablePathToLower = true
+
+# Required if you want to render robots.txt template
+enableRobotsTXT = true
+
+#[module]
+#[[module.imports]]
+#  path = "github.com/blocksds/hugo-geekdoc"
+
+# Needed for mermaid shortcodes
+[markup]
+  [markup.goldmark.renderer]
+    # Needed for mermaid shortcode
+    unsafe = true
+  [markup.tableOfContents]
+    startLevel = 1
+    endLevel = 9
+
+[taxonomies]
+   tag = "tags"
+
+[params.geekdocContentLicense]
+   name = "CC BY-SA 4.0"
+   link = "https://creativecommons.org/licenses/by-sa/4.0/"
