@@ -12,12 +12,12 @@ If you're looking for information on how to install BlocksDS, check the
 If you're looking for documentation about specific libraries, check the
 following links:
 
-- **libnds**:
+- **libnds**: General-purpose library to use the hardware of the NDS.
 
   - [API Information](./libnds/index.html)
   - [Examples](https://github.com/blocksds/sdk/tree/master/examples)
 
-- **libteak**:
+- **libteak**: Library to use the Teak DSP included in the DSi and 3DS consoles.
 
   - [API Information](./libteak/index.html)
   - [Examples](https://github.com/blocksds/sdk/tree/master/examples/dsp)
