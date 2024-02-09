@@ -27,6 +27,11 @@ make docs
 popd
 mv ../libs/libteak/docs/html public/libteak
 
+pushd ../libs/libxm7
+make docs
+popd
+mv ../libs/libxm7/docs/html public/libxm7
+
 rm -rf ../../blocksds-docs/*
 mv -v public/* ../../blocksds-docs/
 
