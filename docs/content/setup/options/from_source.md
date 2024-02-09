@@ -28,7 +28,7 @@ you want to always use the cutting edge version of BlocksDS.
    ```
 
    You can also install the Teak toolchain if you want to develop binaries for
-   the DSP of the DSi. This isn't available in all platforms, like Windows.
+   the DSP of the DSi. This isn't available in all platforms (like in Windows).
 
    ```bash
    wf-pacman -S toolchain-llvm-teak-llvm
