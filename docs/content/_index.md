@@ -28,6 +28,11 @@ following links:
   - [API Information](./libxm7/index.html)
   - [Example](https://github.com/blocksds/sdk/tree/master/examples/audio/libxm7)
 
+- **dswifi**: Library to use the WiFi hardware of the NDS. It has no support for
+  the WiFi improvements of the DSi.
+
+  - [API Information](./dswifi/index.html)
+
 BlocksDS comes with sample Makefiles to build projects. They don't support many
 common use-cases, like converting graphics and storing them in the filesystem.
 They don't support things like having multiple DSP binaries either. You can

@@ -32,6 +32,11 @@ make docs
 popd
 mv ../libs/libxm7/docs/html public/libxm7
 
+pushd ../libs/dswifi
+make docs
+popd
+mv ../libs/dswifi/docs/html public/dswifi
+
 rm -rf ../../blocksds-docs/*
 mv -v public/* ../../blocksds-docs/
 
