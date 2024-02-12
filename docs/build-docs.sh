@@ -37,6 +37,11 @@ make docs
 popd
 mv ../libs/dswifi/docs/html public/dswifi
 
+pushd ../libs/maxmod
+make docs
+popd
+mv ../libs/maxmod/docs/html public/maxmod
+
 rm -rf ../../blocksds-docs/*
 mv -v public/* ../../blocksds-docs/
 

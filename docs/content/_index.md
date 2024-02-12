@@ -17,10 +17,10 @@ following links:
   - [API Information](./libnds/index.html)
   - [Examples](https://github.com/blocksds/sdk/tree/master/examples)
 
-- **libteak**: Library to use the Teak DSP included in the DSi and 3DS consoles.
+- **maxmod**: Music player that can play MOD, S3M, XM, IT and WAV files.
 
-  - [API Information](./libteak/index.html)
-  - [Examples](https://github.com/blocksds/sdk/tree/master/examples/dsp)
+  - [API Information](./maxmod/index.html)
+  - [Examples](https://github.com/blocksds/sdk/tree/master/examples/audio)
 
 - **libxm7**: Hardware-accelerated player of XM and MOD music files that runs
   on the ARM7.
@@ -32,6 +32,11 @@ following links:
   the WiFi improvements of the DSi.
 
   - [API Information](./dswifi/index.html)
+
+- **libteak**: Library to use the Teak DSP included in the DSi and 3DS consoles.
+
+  - [API Information](./libteak/index.html)
+  - [Examples](https://github.com/blocksds/sdk/tree/master/examples/dsp)
 
 BlocksDS comes with sample Makefiles to build projects. They don't support many
 common use-cases, like converting graphics and storing them in the filesystem.
