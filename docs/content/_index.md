@@ -14,28 +14,28 @@ following links:
 
 - **libnds**: General-purpose library to use the hardware of the NDS.
 
-  - [API Information](./libnds/index.html)
+  - [Library documentation](./libnds/index.html)
   - [Examples](https://github.com/blocksds/sdk/tree/master/examples)
 
 - **maxmod**: Music player that can play MOD, S3M, XM, IT and WAV files.
 
-  - [API Information](./maxmod/index.html)
+  - [Library documentation](./maxmod/index.html)
   - [Examples](https://github.com/blocksds/sdk/tree/master/examples/audio)
 
 - **libxm7**: Hardware-accelerated player of XM and MOD music files that runs
   on the ARM7.
 
-  - [API Information](./libxm7/index.html)
+  - [Library documentation](./libxm7/index.html)
   - [Example](https://github.com/blocksds/sdk/tree/master/examples/audio/libxm7)
 
 - **dswifi**: Library to use the WiFi hardware of the NDS. It has no support for
   the WiFi improvements of the DSi.
 
-  - [API Information](./dswifi/index.html)
+  - [Library documentation](./dswifi/index.html)
 
 - **libteak**: Library to use the Teak DSP included in the DSi and 3DS consoles.
 
-  - [API Information](./libteak/index.html)
+  - [Library documentation](./libteak/index.html)
   - [Examples](https://github.com/blocksds/sdk/tree/master/examples/dsp)
 
 BlocksDS comes with sample Makefiles to build projects. They don't support many
