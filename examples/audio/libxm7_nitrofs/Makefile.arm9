@@ -4,10 +4,6 @@
 
 BLOCKSDS	?= /opt/blocksds/core
 
-# Source code paths
-
-BINDIRS		:= arm9/data
-
 # Libraries
 
 LIBS		:= -lnds9 -lxm79 -lc
