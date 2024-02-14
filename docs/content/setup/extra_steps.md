@@ -5,14 +5,17 @@ weight: 40
 
 ## 1. Test
 
-To test that everything is working, you can try building one of the templates.
+To test that everything is working, you can try building one of the
+[examples](https://github.com/blocksds/sdk/tree/master/examples) or
+[project templates](https://github.com/blocksds/sdk/tree/master/templates)
+included in BlocksDS.
 
 There is a template that lets the programmer write the code for both CPUs of the
-NDS (`templates/rom_combined`) and a template that uses the default ARM7 core
-that comes with Blocks DS and lets the programmer focus on the ARM9 core. There
-are also two templates to create static libraries.
+NDS (`rom_combined`) and a template that uses the default ARM7 core that comes
+with Blocks DS and lets the programmer focus on the ARM9 core (`rom_arm9`).
+There are also two templates to create static libraries.
 
-For example, go to the combined template folder and run:
+For example, go to the combined template folder and build it:
 
 ```bash
 cd templates/rom_combined
