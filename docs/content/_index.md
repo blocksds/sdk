@@ -9,8 +9,8 @@ This is an [introduction](./introduction/introduction) to the SDK.
 If you're looking for information on how to install BlocksDS, check the
 [instructions](./setup/options).
 
-If you're looking for documentation about specific libraries, check the
-following links:
+If you're looking for documentation about specific libraries of BlocksDS,
+check the following links:
 
 - **libnds**: General-purpose library to use the hardware of the NDS.
 
@@ -38,8 +38,7 @@ following links:
   - [Library documentation](./libteak/index.html)
   - [Examples](https://github.com/blocksds/sdk/tree/master/examples/dsp)
 
-BlocksDS comes with sample Makefiles to build projects. They don't support many
-common use-cases, like converting graphics and storing them in the filesystem.
-They don't support things like having multiple DSP binaries either. You can
-check [ArchitectDS](https://github.com/AntonioND/architectds) if you need a more
-flexible build system.
+There are also some libraries and tools that are supported by BlocksDS, but not
+fully integrated with it. They include libraries to easily handle 2D and 3D
+graphics, additional converters for graphics and build systems. Take a look at
+the [documentation](./setup/additional_libs) for more information.
