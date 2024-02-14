@@ -26,7 +26,7 @@ following links:
   on the ARM7.
 
   - [Library documentation](./libxm7/index.html)
-  - [Example](https://github.com/blocksds/sdk/tree/master/examples/audio/libxm7)
+  - [Examples](https://github.com/blocksds/sdk/tree/master/examples/audio)
 
 - **dswifi**: Library to use the WiFi hardware of the NDS. It has no support for
   the WiFi improvements of the DSi.
