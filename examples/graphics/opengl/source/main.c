@@ -3,7 +3,6 @@
 // SPDX-FileContributor: Antonio Niño Díaz, 2023
 
 #include <stdio.h>
-#include <time.h>
 
 #include <nds.h>
 
@@ -13,6 +12,9 @@
 int main(int argc, char **argv)
 {
     int textureID;
+
+    // Setup sub screen for the text console
+    consoleDemoInit();
 
     videoSetMode(MODE_0_3D);
 
@@ -47,9 +49,6 @@ int main(int argc, char **argv)
     gluLookAt(0.0, 0.0, 2.0,  // Position
               0.0, 0.0, 0.0,  // Look at
               0.0, 1.0, 0.0); // Up
-
-    // Setup sub screen for the text console
-    consoleDemoInit();
 
     int angle_x = 0;
     int angle_z = 0;

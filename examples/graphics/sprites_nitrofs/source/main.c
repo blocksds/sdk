@@ -67,6 +67,7 @@ int main(int argc, char *argv[])
         wait_forever();
     }
 
+    // Flush cache so that we can use DMA to copy the data to VRAM
     DC_FlushAll();
 
     // Allocate space for the tiles and copy them there
