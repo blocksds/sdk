@@ -127,7 +127,7 @@ $(ARCHIVE): $(OBJS)
 
 clean:
 	@echo "  CLEAN"
-	$(V)$(RM) $(ARCHIVE) $(BUILDDIR)
+	$(V)$(RM) $(ARCHIVE) build $(BUILDDIR)
 
 install: all
 	@echo "  INSTALL $(BLOCKSDSEXT)/$(INSTALLNAME)/"

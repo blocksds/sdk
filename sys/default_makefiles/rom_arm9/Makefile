@@ -209,7 +209,7 @@ dump: $(DUMP)
 
 clean:
 	@echo "  CLEAN"
-	$(V)$(RM) $(ROM) $(DUMP) $(BUILDDIR) $(SDIMAGE) \
+	$(V)$(RM) $(ROM) $(DUMP) build $(SDIMAGE) \
 		$(SOUNDBANKDIR)/soundbank.bin
 
 sdimage:
