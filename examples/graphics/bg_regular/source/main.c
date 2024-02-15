@@ -9,14 +9,14 @@
 
 int main(int argc, char *argv[])
 {
-    videoSetMode(MODE_0_2D | DISPLAY_SPR_1D_LAYOUT | DISPLAY_SPR_ACTIVE);
+    videoSetMode(MODE_0_2D);
 
     vramSetPrimaryBanks(VRAM_A_MAIN_BG, VRAM_B_LCD, VRAM_C_LCD, VRAM_D_LCD);
 
     int bg = bgInit(0, BgType_Text8bpp, BgSize_T_256x256, 0,1);
 
     dmaCopy(cityTiles, bgGetGfxPtr(bg), cityTilesLen);
-    dmaCopy(cityMap, bgGetMapPtr(bg),  cityMapLen);
+    dmaCopy(cityMap, bgGetMapPtr(bg), cityMapLen);
     dmaCopy(cityPal, BG_PALETTE, cityPalLen);
 
     consoleDemoInit();
