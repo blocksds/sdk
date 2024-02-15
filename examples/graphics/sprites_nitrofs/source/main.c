@@ -39,9 +39,10 @@ int main(int argc, char *argv[])
 
     void *gfxDst = NULL;
     void *palDst = NULL;
+    size_t gfxSize, palSize;
     GRFHeader header = { 0 };
-    GRFError err = grfLoadPath("grit/ball_png.grf", &header, &gfxDst, NULL,
-                               &palDst, NULL, NULL);
+    GRFError err = grfLoadPath("grit/ball_png.grf", &header, &gfxDst, &gfxSize,
+                               NULL, NULL, &palDst, &palSize);
     if (err != GRF_NO_ERROR)
     {
         printf("Couldn't load GRF file: %d", err);
@@ -66,13 +67,11 @@ int main(int argc, char *argv[])
         wait_forever();
     }
 
-    size_t gfxSize = header.gfxWidth * header.gfxHeight;
+    DC_FlushAll();
 
     // Allocate space for the tiles and copy them there
     u16 *gfx = oamAllocateGfx(&oamMain, SpriteSize_32x32, SpriteColorFormat_256Color);
     dmaCopy(gfxDst, gfx, gfxSize);
-
-    size_t palSize = header.palAttr * 2;
 
     // Copy palette
     dmaCopy(palDst, SPRITE_PALETTE, palSize);
