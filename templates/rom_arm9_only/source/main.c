@@ -153,12 +153,12 @@ int main(int argc, char **argv)
         // Render 3D scene
         // ---------------
 
+        glMatrixMode(GL_MODELVIEW);
+
         glPushMatrix();
 
         glRotateZ(angle_z);
         glRotateX(angle_x);
-
-        glMatrixMode(GL_MODELVIEW);
 
         glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE);
 
@@ -181,7 +181,6 @@ int main(int argc, char **argv)
             glVertex3v16(floattov16(-1), floattov16(1), 0);
 
         glEnd();
-
 
         glPopMatrix(1);
 
