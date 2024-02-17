@@ -128,8 +128,7 @@ int main(int argc, char *argv[])
     powerOn(POWER_ALL);
 
 #ifdef USE_3D_MODE
-    videoSetMode(MODE_5_3D | DISPLAY_BG2_ACTIVE | DISPLAY_SPR_ACTIVE |
-                 DISPLAY_SPR_2D_BMP_256);
+    videoSetMode(MODE_5_3D | DISPLAY_BG2_ACTIVE);
     REG_BG0CNT |= BG_PRIORITY_1;
     REG_BG2CNT = BG_BMP16_256x256 | BG_PRIORITY_0;
     REG_BG2PA = 1 << 8;
