@@ -32,6 +32,7 @@ check the following links:
   the WiFi improvements of the DSi.
 
   - [Library documentation](./dswifi/index.html)
+  - [Examples](https://github.com/blocksds/sdk/tree/master/examples/dswifi)
 
 - **libteak**: Library to use the Teak DSP included in the DSi and 3DS consoles.
 
