@@ -120,10 +120,20 @@ int main(int argc, char **argv)
         printf("argv[0]: %s\n", argv[0]);
     printf("\n");
 
-    // It isn't needed to call fatInitDefault() manually. If nitroFSInit detects
-    // that the ROM is running in a flashcard or from the DSi internal SD slot,
-    // it will call it internally.
-    bool init_ok = nitroFSInit(NULL);
+    // Initialize FAT and NitroFS independently in case this ROM is running in
+    // an emulator. In that case, NitroFS will work with card commands, so FAT
+    // would neve be initialized. On a DS flashcard or a DSi FAT would be
+    // initialized by nitroFSInit(), but it's ok if we have initialized it
+    // before.
+
+    bool init_ok = fatInitDefault();
+    if (!init_ok)
+    {
+        perror("fatInitDefault()");
+        // We may be running in an emulator, don't hang the execution
+    }
+
+    init_ok = nitroFSInit(NULL);
     if (!init_ok)
     {
         perror("nitroFSInit()");
