@@ -211,7 +211,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        printf("Connected\n");
+        printf("Connected!\n");
 
         // sgstair's website, with a surprise for NDS consoles connecting to it!
         getHttp("www.akkit.org", "/dswifi/example1.php");
