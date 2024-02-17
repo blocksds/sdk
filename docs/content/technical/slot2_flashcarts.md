@@ -32,10 +32,9 @@ loaded to slot-2 memory, so nitroFS will rely on DLDI reads to load data. This
 also means that FAT access is possible.
 
 This method is recommended, as it doesn't ask the developer to modify the build
-system, and all no features are unavailable.
+system, and no features are unavailable.
 
-Example: SuperCard SD
----------------------
+### Example: SuperCard SD
 
 - Download `nds-hb-menu` [here](https://github.com/devkitPro/nds-hb-menu/releases).
   The file that is required for this is `BOOT.NDS`.
@@ -43,7 +42,7 @@ Example: SuperCard SD
 - Download `ndsmall.bin` from [DarkFader's website](https://www.darkfader.net/ds/).
   A copy is also provided [here](/ndsmall.bin).
 
-- Downloaded `scsd_moon.dldi` from
+- Download `scsd_moon.dldi` from
   [this DLDI archive](https://github.com/DS-Homebrew/DLDI/blob/master/prebuilts/scsd_moon.dldi).
 
 - Concatenate `ndsmall.bin` and `BOOT.NDS`:

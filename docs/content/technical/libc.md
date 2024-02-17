@@ -64,9 +64,7 @@ always return space from the main RAM region.
 
 ## 7. Time
 
-`gettimeofday` and `time` are supported. Note that, at the time of writing this
-document, they only work in real hardware and no$gba. Other emulators show the
-time frozen in time because they don't emulate the RTC interrupt of the ARM7.
+`gettimeofday` and `time` are supported.
 
 ## 8. Exit
 
