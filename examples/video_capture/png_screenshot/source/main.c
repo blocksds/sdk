@@ -265,7 +265,7 @@ int main(int argc, char *argv[])
             vramSetBankC(VRAM_C_SUB_BG_0x06200000);
         }
 
-        glViewport(0, 0, 255, 192);
+        glViewport(0, 0, 255, 191);
 
         // Real scene
         // ----------

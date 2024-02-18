@@ -238,7 +238,7 @@ int main(int argc, char *argv[])
                 // Enable capture
                 DCAP_ENABLE;
 
-            glViewport(0, 0, 255, 192);
+            glViewport(0, 0, 255, 191);
 
             // Real scene
             // ----------
@@ -301,7 +301,7 @@ int main(int argc, char *argv[])
                 // Enable capture
                 DCAP_ENABLE;
 
-            glViewport(0, 64, 128, 192);
+            glViewport(0, 64, 128, 191);
 
             // Texture scene
             // -------------
