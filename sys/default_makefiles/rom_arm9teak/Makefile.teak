@@ -88,11 +88,11 @@ ASFLAGS		+= -x assembler-with-cpp $(DEFINES) $(ARCH) \
 		    $(INCLUDEFLAGS) \
 		    -integrated-as -nostdlib -ffreestanding -fno-builtin
 
-CFLAGS		+= -std=gnu11 $(WARNFLAGS) $(DEFINES) $(ARCH) \
+CFLAGS		+= -std=gnu17 $(WARNFLAGS) $(DEFINES) $(ARCH) \
 		    $(INCLUDEFLAGS) -O2 \
 		    -integrated-as -nostdlib -ffreestanding -fno-builtin
 
-CXXFLAGS	+= -std=gnu++14 $(WARNFLAGS) $(DEFINES) $(ARCH) \
+CXXFLAGS	+= -std=gnu++17 $(WARNFLAGS) $(DEFINES) $(ARCH) \
 		    $(INCLUDEFLAGS) -O2 \
 		    -integrated-as -nostdlib -ffreestanding -fno-builtin \
 		    -fno-rtti -fno-exceptions
