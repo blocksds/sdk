@@ -1,4 +1,4 @@
-# Get website demo
+# WiFi connection information example
 
 In order for this demo to work you need a valid access point set up in your DS.
 
