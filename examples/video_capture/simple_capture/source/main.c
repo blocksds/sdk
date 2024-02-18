@@ -9,7 +9,6 @@
 // This is created automatically from neon.png and neon.grit
 #include "neon.h"
 
-// Draw a cube face at the specified color
 void DrawCube(void)
 {
     int bx = floattov16(-0.5);

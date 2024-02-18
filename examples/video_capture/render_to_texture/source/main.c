@@ -38,7 +38,6 @@
 //     makes it easier to setup, but it's less flexible as you can't use other
 //     layers on top of it.
 
-// Draw a cube face at the specified color
 void DrawCube(void)
 {
     int bx = floattov16(-0.5);
