@@ -12,17 +12,14 @@ have in your project by the one of one of the templates of BlocksDS.
 
 ## 2. Filesystem libraries
 
-While devkitARM uses `libfat` and `libfilesystem`, BlocksDS can't. They use the
-`devoptab` interface implemented in the `newlib` fork of devkitARM.  BlocksDS
+devkitARM uses `libfat` and `libfilesystem`, but BlocksDS can't. They use the
+`devoptab` interface implemented in the `newlib` fork of devkitARM. BlocksDS
 uses `picolibc` instead of `newlib`, and it implements filesystem functions in a
-different way.
-
-BlocksDS uses [Elm's FatFs library](http://elm-chan.org/fsw/ff/00index_e.html)
-instead. This library has been ported to use the DLDI and DSi internal SD card
-drivers that are provided by `libnds`.
+different way. It also has its own implementation of `NitroFS`.
 
 In the makefile, you have to remove `-lfat` and `-lfilesystem` from `LIBS`, as
-they don't exist in BlocksDS.
+they don't exist in BlocksDS. You don't need to add any additional library. The
+filesystem support is included in `libnds`.
 
 From the point of view of the source code, you can use the same includes as when
 using `libfat` and `libfilesystem`:
@@ -35,6 +32,11 @@ using `libfat` and `libfilesystem`:
 They provide `fatInitDefault()` and `nitroFSInit()`. They should be compatible
 with the ones in the original libraries. Please, report any behaviour that isn't
 the same. If you need any other fuction, report it as well.
+
+BlocksDS uses [Elm's FatFs library](http://elm-chan.org/fsw/ff/00index_e.html)
+instead of `libfat`. This library has been ported to use the DLDI and DSi
+internal SD card drivers that are provided by `libnds`. It should be fully
+compatible with `libfat`.
 
 ## 3. Build system differences
 
