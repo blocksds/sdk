@@ -22,6 +22,9 @@ Libraries:
   JPEG files on GBA with very low resource usage, which also makes it a good
   library for NDS.
 
+- [LibDSF](https://github.com/AntonioND/libdsf): Library to render text using
+  the 3D hardware of the NDS.
+
 Tools:
 
 - [ptexconv](https://github.com/blocksds/ptexconv): Tool to convert images to
