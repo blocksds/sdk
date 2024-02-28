@@ -3,54 +3,25 @@ title: 'devkitARM porting guide'
 weight: 50
 ---
 
-## 1. Introduccion
+## 1. Introduction
 
-Porting devkitARM projects to BlocksDS should be relatively easy in most cases.
-BlocksDS includes most of the DS libraries that come with devkitARM. The biggest
-difference is the build system. You will need to replace the Makefile that you
-have in your project by the one of one of the templates of BlocksDS.
+In most cases, porting devkitARM projects to BlocksDS should be relatively easy.
+BlocksDS includes most of the NDS functionality provided by devkitARM. For simple
+projects, only minor changes should be required.
 
-## 2. Filesystem libraries
+## 2. New build system
 
-devkitARM uses `libfat` and `libfilesystem`, but BlocksDS can't. They use the
-`devoptab` interface implemented in the `newlib` fork of devkitARM. BlocksDS
-uses `picolibc` instead of `newlib`, and it implements filesystem functions in a
-different way. It also has its own implementation of `NitroFS`.
+This is the biggest difference between devkitARM and BlocksDS. Makefiles provided
+by devkitARM are more complicated: they call themselves recursively from the build
+directory. They also hide a lot of compilation rules from the user, as they are
+provided by sub-makefiles in the devkitARM system directory.
 
-In the makefile, you have to remove `-lfat` and `-lfilesystem` from `LIBS`, as
-they don't exist in BlocksDS. You don't need to add any additional library. The
-filesystem support is included in `libnds`.
+The Makefiles of BlocksDS include all available rules so that its behaviour is
+easier to understand and customize. This allows for example creating a new build
+system based on them, tailored to your project (for example, with CMake or Meson).
+They also do not rely on self-recursion.
 
-From the point of view of the source code, you can use the same includes as when
-using `libfat` and `libfilesystem`:
-
-```c
-#include <fat.h>
-#include <filesystem.h>
-```
-
-They provide `fatInitDefault()` and `nitroFSInit()`. They should be compatible
-with the ones in the original libraries. Please, report any behaviour that isn't
-the same. If you need any other fuction, report it as well.
-
-BlocksDS uses [Elm's FatFs library](http://elm-chan.org/fsw/ff/00index_e.html)
-instead of `libfat`. This library has been ported to use the DLDI and DSi
-internal SD card drivers that are provided by `libnds`. It should be fully
-compatible with `libfat`.
-
-## 3. Build system differences
-
-This is the biggest difference between devkitARM and BlocksDS. devkitARM
-Makefiles are very complicated: they call themselves recursively from the build
-directory. They also hide a lot of information from the user: they include
-sub-makefiles in the devkitARM system directory, which has a lot of important
-rules.
-
-The Makefiles of BlocksDS include all available rules so that it's easy to
-create a new build system based on them (for example, with CMake or Meson). They
-don't use self-recursion, so they are easier to understand.
-
-As a BlocksDS user you need to edit a few paths and variables, same as with
+As a BlocksDS user, you need to edit a few paths and variables, same as with
 devkitARM. Open the Makefile of your devkitARM project and check this part (some
 variables may be missing if you're not using them):
 
@@ -119,34 +90,43 @@ You can remove the dswifi or maxmod libraries if you aren't using them.
 The reason for this additional complexity with `LIBS` and `LIBDIRS` is to allow
 the user as much flexibility as possible when mixing and matching libraries.
 
-## 4. Integer version of stdio.h functions
+## 3. Filesystem libraries
 
-Functions like `iprintf()` or `siscanf()`, provided by `newlib`,  aren't
-provided by `picolibc`. Replace any calls to them by the standard names of the
-functions: `printf()`, `sscanf()`, etc.
+devkitARM and BlocksDS also heavily differ with regards to the structure of
+their filesystem access libraries. For most users, this should not lead to major
+code chagnes.
 
-By default, the build of `picolibc` of BlocksDS makes `printf()`, `sscanf()` and
-similar functions floats and doubles. This is done to increase compatibility
-with any pre-existing code, but it increases the size of the final binaries.
+devkitARM uses `libfat` and `libfilesystem`, connected to a modified version of
+its C library `newlib` through the `devoptab` interface. These are devkitPro's
+additions, and are not replicated in BlocksDS.
 
-It is possible to switch to integer-only versions of the functions, and save
-that additional space, by adding the following line to the `LDFLAGS` of your
-Makefile:
+Instead, BlocksDS uses the `picolibc` C library's "tiny" stdio implementation.
+In addition, to cut down on RAM and code size, it omits the `devoptab` interface.
+AS most homebrew does not modify the device list, this should not affect them.
+It also uses a modified version of [Elm's FatFS library](http://elm-chan.org/fsw/ff/00index_e.html)
+in place of libfat, as well as a custom implementation of NitroFS.
 
-```make
-LDFLAGS := [all other options go here] \
-    -Wl,--defsym=vfprintf=__i_vfprintf -Wl,--defsym=vfscanf=__i_vfscanf
+To adapt, you have to remove `-lfat` and `-lfilesystem` from `LIBS` in your Makefile.
+As all filesystem support is included in `libnds`, no additional libraries are required.
+
+From the point of view of the source code, you can use the same includes as when
+using `libfat` and `libfilesystem`:
+
+```c
+#include <fat.h>
+#include <filesystem.h>
 ```
 
-For more information: https://github.com/picolibc/picolibc/blob/main/doc/printf.md
+They provide `fatInitDefault()` and `nitroFSInit()`. They should be compatible
+with the ones in the original libraries.
 
-## 5. Note about readdir()
+Beyond the limitations listed above, filesystem support should work identically.
+Please report any behaviour that isn't the same. If any other functionality your
+homebrew program requires is missing, please report that as well.
 
-The expected behaviour of FatFs is to not include `.` and `..` as entries when
-iterating over the entries of a directory. This is different than under
-devkitARM, and it's a behaviour that may be added in the future.
+## 3a. Note about readdir() compatibility
 
-Also, `readdir()` returns a `struct dirent` pointer with the field `d_type`.
+`readdir()` returns a `struct dirent` pointer with the field `d_type`.
 This field can be used to determine if an entry is a directory or a file. I've
 seen that some programs use it like this:
 
@@ -169,14 +149,41 @@ else if (cur->d_type == DT_REG)
     printf("This is a file\n");
 ```
 
-## 6. Touch screen and libnds keyboard
+## 4. Integer versions of stdio.h functions
+
+The `newlib` C library provides faster and smaller integer versions of `stdio.h`
+functions, such as `iprintf()` or `siscanf()`. These are not provided by
+`picolibc`. Replace any calls to them by the standard names of the functions:
+`printf()`, `sscanf()`, etc.
+
+In `newlib`, including both `iprintf()` and `printf()` in the same codebase led
+to including both versions of the relevant `stdio.h` functions, unnecessarily
+increasing code size. `picolibc` opts for a different approach - it allows you
+to decide, project-wide, if you want to use integer-only or float-compatible
+versions of the `printf()` and `scanf()` functions.
+
+By default, the build of `picolibc` of BlocksDS makes `printf()`, `sscanf()` and
+similar functions floats and doubles. This is done to increase compatibility
+with any pre-existing code, but it increases the size of the final binaries.
+It is possible to switch to integer-only versions of the functions, and save
+that additional space, by adding the following line to the `LDFLAGS` of your
+Makefile:
+
+```make
+LDFLAGS := [all other options go here] \
+    -Wl,--defsym=vfprintf=__i_vfprintf -Wl,--defsym=vfscanf=__i_vfscanf
+```
+
+For more information, please read [the relevant picolibc documentation](https://github.com/picolibc/picolibc/blob/main/doc/printf.md).
+
+## 5. libnds touch screen and keyboard handling
 
 `scanKeys()` updates the internal state of the key handling code. This is then
-used by `keysHeld()`, `keysDown()` and `keysHeld()`.
+used by `keysHeld()` and `keysDown()`.
 
-BlocksDS also requires the user to call `scanKeys()` before any of the following
-functions: `touchRead()`, `keyboardGetChar()`, `keyboardUpdate()` and the
-deprecated `touchReadXY()`.
+However, BlocksDS also requires the user to call `scanKeys()` before any of the
+following functions: `touchRead()`, `keyboardGetChar()`, `keyboardUpdate()` and
+the deprecated `touchReadXY()`.
 
 This is unlikely to be a problem in most projects, as the normal thing to do is
 to both scan the keys and read the touchscreen status, not just read the
