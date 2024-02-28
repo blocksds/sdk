@@ -8,7 +8,8 @@
 #include <stdio.h>
 #include <sys/stat.h>
 
-#include <fatfs.h>
+#include <fat.h>
+#include <filesystem.h>
 #include <nds.h>
 
 #include <nds/arm9/dldi.h>

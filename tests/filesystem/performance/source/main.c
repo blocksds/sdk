@@ -9,7 +9,7 @@
 //#include <errno.h>
 #include <stdio.h>
 
-#include <fatfs.h>
+#include <filesystem.h>
 #include <nds.h>
 
 #include <nds/arm9/dldi.h>
@@ -45,7 +45,6 @@ int main(int argc, char **argv)
         perror("nitroFSInit()");
         goto exit;
     }
-
 
     chdir("nitro:/");
 

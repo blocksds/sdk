@@ -7,7 +7,7 @@
 #include <errno.h>
 #include <stdio.h>
 
-#include <fatfs.h>
+#include <fat.h>
 #include <nds.h>
 
 #include <nds/arm9/dldi.h>

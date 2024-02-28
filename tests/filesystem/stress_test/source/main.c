@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <time.h>
 
-#include <fatfs.h>
+#include <filesystem.h>
 #include <nds.h>
 
 #include <nds/arm9/dldi.h>
