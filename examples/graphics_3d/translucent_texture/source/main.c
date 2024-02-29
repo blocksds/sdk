@@ -43,13 +43,11 @@ int main(int argc, char **argv)
     glGenTextures(2, &textureID[0]);
 
     glBindTexture(0, textureID[0]);
-    glTexImage2D(0, 0, GL_RGB, TEXTURE_SIZE_128, TEXTURE_SIZE_128, 0,
-                 TEXGEN_TEXCOORD, (u8 *)neonBitmap);
+    glTexImage2D(0, 0, GL_RGBA, 128, 128, 0, TEXGEN_TEXCOORD, neonBitmap);
 
     glBindTexture(0, textureID[1]);
-    glTexImage2D(0, 0, GL_RGB8_A5, TEXTURE_SIZE_128, TEXTURE_SIZE_128, 0,
-                 TEXGEN_TEXCOORD, (u8 *)neon2Bitmap);
-    glColorTableEXT(0, 0, 8, 0, 0, (u16 *)neon2Pal);
+    glTexImage2D(0, 0, GL_RGB8_A5, 128, 128, 0, TEXGEN_TEXCOORD, neon2Bitmap);
+    glColorTableEXT(0, 0, 8, 0, 0, neon2Pal);
 
     // Setup matrices
     glMatrixMode(GL_PROJECTION);

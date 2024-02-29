@@ -76,16 +76,10 @@ int main(int argc, char **argv)
         wait_forever();
     }
 
-    if ((header.gfxWidth != 128) || (header.gfxHeight != 128))
-    {
-        printf("Texture size needs to be 128x128");
-        wait_forever();
-    }
-
     // Load texture
     glGenTextures(1, &textureID);
     glBindTexture(0, textureID);
-    glTexImage2D(0, 0, GL_RGB, TEXTURE_SIZE_128 , TEXTURE_SIZE_128, 0,
+    glTexImage2D(0, 0, GL_RGBA, header.gfxWidth , header.gfxHeight, 0,
                  TEXGEN_TEXCOORD, gfxDst);
 
     glMatrixMode(GL_PROJECTION);
@@ -153,13 +147,13 @@ int main(int argc, char **argv)
 
         glBegin(GL_QUADS);
 
-            GFX_TEX_COORD = (TEXTURE_PACK(0, inttot16(128)));
+            GFX_TEX_COORD = (TEXTURE_PACK(0, inttot16(header.gfxHeight)));
             glVertex3v16(floattov16(-1), floattov16(-1), 0);
 
-            GFX_TEX_COORD = (TEXTURE_PACK(inttot16(128),inttot16(128)));
+            GFX_TEX_COORD = (TEXTURE_PACK(inttot16(header.gfxWidth),inttot16(header.gfxHeight)));
             glVertex3v16(floattov16(1), floattov16(-1), 0);
 
-            GFX_TEX_COORD = (TEXTURE_PACK(inttot16(128), 0));
+            GFX_TEX_COORD = (TEXTURE_PACK(inttot16(header.gfxWidth), 0));
             glVertex3v16(floattov16(1), floattov16(1), 0);
 
             GFX_TEX_COORD = (TEXTURE_PACK(0,0));
