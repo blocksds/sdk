@@ -40,7 +40,7 @@ system, and no features are unavailable.
   The file that is required for this is `BOOT.NDS`.
 
 - Download `ndsmall.bin` from [DarkFader's website](https://www.darkfader.net/ds/).
-  A copy is also provided [here](/ndsmall.bin).
+  A copy is also provided [here](../../ndsmall.bin).
 
 - Download `scsd_moon.dldi` from
   [this DLDI archive](https://github.com/DS-Homebrew/DLDI/blob/master/prebuilts/scsd_moon.dldi).
