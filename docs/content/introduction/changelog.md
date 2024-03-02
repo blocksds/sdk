@@ -2,7 +2,7 @@
 title: 'Changelog'
 ---
 
-## Version X.X.X (2024-XX-XX)
+## Version 0.14.0 (2024-03-02)
 
 - libnds:
 
