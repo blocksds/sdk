@@ -4,10 +4,68 @@ title: 'Changelog'
 
 ## Version X.X.X (2024-XX-XX)
 
+- libnds:
+
+  - The GRF loading functions have been modified to be actually useful. In some
+    cases it wasn't possible to infer the size of some data chunks of the file
+    (it was impossible to calculate the size of a tileset, for example). The new
+    functions break compatibility with the old ones, but this change was
+    required.
+  - Added `glTexSizeToEnum()` to convert sizes in pixels to `GL_TEX_SIZE_ENUM`
+    values. Also, the funciton `glTexImage2D()` now accepts sizes in pixels as
+    well as `GL_TEX_SIZE_ENUM` values.
+  - Added a function to return the default drive (`sd:` in the case of DSi,
+    `fat:` in the case of a DS).
+  - FatFs has been moved to an external repository (wf-fatfs) which is included
+    in libnds as a submodule. The documentation of FatFs has been removed from
+    this repository.
+  - Added some missing 3D polygon attribute definitions.
+  - Fixed the return type of `swiSHA1Verify()`.
+  - The `fatfs.h` header has been removed, it is redundant.
+
 - SDK:
 
-  - Refactor documentation. It now uses Hugo, and it is available as a static
-    website.
+  - Refactor documentation.
+    - It now uses Hugo, and it is available as a static website.
+    - Some old sections have been updated.
+    - The documentation of all libraries has been integrated with the
+      documentation of BlocksDS so that everything is linked.
+    - Document how to use Slot-2 flashcards with BlocksDS applications.
+    - Reword devkitARM porting guide.
+    - A doxygen theme has been applied to the documentation of all the libraries
+      used by BlocksDS.
+
+  - Add lots of examples:
+    - 3D and 2D graphics.
+    - DSWifi.
+    - How to use multiple DSP binaries in the same application
+    - General NitroFS usage in an application (such as loading music for LibXM7
+      or graphics to be used as 2D backgrounds or sprites).
+    - DSi SHA1 functions.
+    - Hardware timers.
+    - Video capture (render to texture, dual screen 3D, save screenshot as PNG).
+    - More text console examples.
+
+  - Small change to makefiles that modifies the destination folder of build
+    artifacts.
+
+- LibXM7:
+
+  - It now uses timer 0 instead of timer 1, so that Maxmod and LibXM7 use the
+    same timer and it's easier to switch libraries.
+  - The documentation has been improved.
+
+- DSWifi:
+
+   - WEP modes have been documented.
+   - The prototypes of some functions have been cleaned up.
+   - The documentation has been improved.
+
+- Maxmod:
+
+   - The return type of `mmEffectCancel()` has been fixed.
+   - Some definitions have been turned into enums.
+   - `inline` functions in headers have been turned into `static inline.`
 
 ## Version 0.13.0 (2024-02-01)
 
