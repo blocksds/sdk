@@ -80,8 +80,14 @@ Mirrors allow us to do clever things with the MPU:
   to one of the mirrors as cached memory, and to a different mirror as uncached
   memory.
 
-Even without a MPU, mirrors can be useful in the ARM7:
+Even without an MPU, mirrors can be useful:
 
+- The BIOS exception vector address as well as the pointer to the top of
+  exception stack is stored at the
+  [end of main RAM](https://github.com/blocksds/libnds/blob/43714cdc0cbcedf2a3014da3793f7b09d2fe386e/include/nds/arm9/exceptions.h#L23-L27).
+  We could calculate the right address of the end of the RAM for all DS models,
+  but it's easier to access it at the last mirror of main RAM right before
+  0x3000000, so that it's the same address in all models.
 - Shared WRAM is found at 0x3000000, but it is mirrored up to 0x3800000, where
   ARM7 WRAM starts. This means that it is possible to use the last mirror of
   shared WRAM and the first mirror of ARM7 WRAM as one contiguous memory block.
@@ -90,7 +96,7 @@ The regions of the address space that are cached in libnds are the ARM9 BIOS,
 and main RAM. ITCM and DTCM aren't supposed to be cached.
 
 If you want to know all the details of the MPU setup, you can check the
-[code in libnds](https://github.com/blocksds/libnds/blob/master/source/arm9/system/mpu_setup.s),
+[code in libnds](https://github.com/blocksds/libnds/blob/43714cdc0cbcedf2a3014da3793f7b09d2fe386e/source/arm9/system/mpu_setup.s),
 which is fairly well documented.
 
 Note that slot 2 memory is normally uncached, but libnds provides helpers to use
@@ -272,8 +278,10 @@ is the same.
 However, 3D texture data, texture palette, and extended sprite/background
 palettes are different. It isn't possible for the CPU and the graphics engines
 to access them at the same time. For that reason, it is needed to copy data to
-them while they are in LCDC mode. For example, for texture data and texture
-palettes:
+them while they are in LCDC mode. This mode maps VRAM to the CPU, but the
+graphics engines can't access VRAM.
+
+For example, to load texture data and texture palettes, map the banks as LCDC:
 
 ```c
 vramSetBankA(VRAM_A_LCD);
