@@ -128,10 +128,18 @@ Debugger DSi consoles are very unusual, so they aren't a real concern. However,
 DSi debugger unit. Because of this, it is interesting to support the full 32 MB
 of RAM.
 
-The last few KBs of main RAM are reserved by libnds to be used as
-inter-CPU-communication region (IPC) between the ARM7 and ARM9. You should only
-access them through uncached mirrors. If not, you may forget that the ARM7 can't
-see the ARM9 cache, and you may not send/receive data when you expect it.
+The last few KBs of main RAM are reserved by libnds to be used for different
+purposes:
+
+- As a (mostly) deprecated inter-CPU-communication region (IPC) between the
+  ARM7 and ARM9. You should only access them through uncached mirrors. If not,
+  you may forget that the ARM7 can't see the ARM9 cache, and you may not send
+  or receive data when you expect it.
+- As the location for the loader to store `argv` when booting a NDS homebrew ROM
+  (at address 0x02FFFE70, check the code
+  [here](https://github.com/blocksds/sdk/blob/e5a03d0940fffe6585786bddac4700d24a814f8d/sys/crts/ds_arm9_crt0.s#L141).
+- This region can also contain information about how to exit the NDS application
+  and return to the loader.
 
 Note that, if both CPUs are accessing main RAM at the same time, there will be
 penalties that will delay accesses. Ideally, ARM9 and ARM7 should use different
@@ -143,6 +151,7 @@ normally enough.
 One last comment about the DSi additional 16 MB of RAM. Register `SCFG_EXT`
 allows the developer to set the limit of main RAM. It allows you to map 4, 16 or
 32 MB of RAM to the adddress space:
+
 - 4 MB: Used as DS compatibility mode, the other 12 MB will be mirrors of the
   first 4 MB instead of more RAM.
 - 16 MB: Normal setting.
