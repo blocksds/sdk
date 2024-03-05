@@ -96,9 +96,37 @@ patcher. Most flashcards do this automatically.
 Filesystem access works in several emulators. The following ones have been
 tested:
 
-- DeSmuMe: The ROM needs to be DLDI patched, it only runs in DS mode.
+- melonDS: The ROM runs in DS/DSi mode.
 - no$gba: The ROM runs in DSi mode. A FAT image needs to be used.
-- melonDS: The ROM runs in DSi mode. A FAT image needs to be used.
+- DeSmuMe: The ROM needs to be DLDI patched, it only runs in DS mode.
+
+### melonDS
+
+melonDS supports both DLDI in DS/DSi modes, and the internal SD in DSi mode.
+
+It supports using a folder as a base for the SD of the DSi, or for a DLDI device
+for DS.
+
+Open "Emu settings". The "DSi mode" and "DLDI" tabs let you select the folders
+to use as root of the filesystems (or the filesystem images to be used, if you
+prefer that).
+
+### no$gba
+
+no$gba supports DSi mode. You must generate a FAT filesystem image with
+`tools/imgbuild`. The sample `Makefile` of the provided templates have a
+target that lets you do this automatically. Open the `Makefile` and set the
+variables `SDROOT` and `SDIMAGE`. To build the image, run:
+
+```bash
+make sdimage
+```
+
+no$gba requires that the image is called `DSi-1.sd` and is located in the same
+directory as no$gba. Set `SDIMAGE` to `<path-to-folder>/DSi-1.sd` to avoid
+renaming the file all the time.
+
+Then, open no$gba as normal.
 
 ### DeSmuMe
 
@@ -119,27 +147,3 @@ through the command line, run it like this:
 ```bash
 desmume --slot1=R4 --slot1-fat-dir=<path-to-folder> <path-to-rom>.nds
 ```
-
-### no$gba
-
-no$gba supports DSi mode. You must generate a FAT filesystem image with
-`tools/imgbuild`. The sample `Makefile` of the provided templates have a
-target that lets you do this automatically. Open the `Makefile` and set the
-variables `SDROOT` and `SDIMAGE`. To build the image, run:
-
-```bash
-make sdimage
-```
-
-no$gba requires that the image is called `DSi-1.sd` and is located in the same
-directory as no$gba. Set `SDIMAGE` to `<path-to-folder>/DSi-1.sd` to avoid
-renaming the file all the time.
-
-Then, open no$gba as normal.
-
-### melonDS
-
-melonDS supports both DLDI in DS/DSi modes, and the internal SD in DSi mode.
-Follow the same steps as for no$gba to generate a filesystem image, and name it
-however you want. Then, open "Emu settings". The "DSi mode" and "DLDI" tabs let
-you select the filesystem images to be used.
