@@ -6,8 +6,6 @@
 //
 //     dd bs=1024 count=2048 < /dev/urandom > random.bin
 
-// Note: Currently this example only works on emulators, not DSi or flashcards.
-
 #include <stdio.h>
 
 #include <filesystem.h>
