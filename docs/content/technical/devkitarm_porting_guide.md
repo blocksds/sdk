@@ -48,9 +48,13 @@ AUDIODIRS   := audio
 NITROFSDIR  := nitrofs
 ```
 
-Important note: `SOURCEDIRS` searches all directories recursively. If you don't
+Important notes:
+
+- `SOURCEDIRS` searches all directories recursively. If you don't
 like this behaviour, go to the `SOURCES_S`, `SOURCES_C` and `SOURCES_CPP` lines
 and add `-maxdepth 1` to the `find` command.
+- Paths to directories that are outside of the root of the project is not 
+supported.
 
 Note that `TARGET` is not part of this group. The top of the Makefile has this
 other group of variables that you can also set to your own values:
