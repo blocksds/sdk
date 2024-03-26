@@ -50,6 +50,7 @@ DLDI	:= $(NAME).dldi
 PREFIX		:= $(ARM_NONE_EABI_PATH)arm-none-eabi-
 CC		:= $(PREFIX)gcc
 CXX		:= $(PREFIX)g++
+LD		:= $(PREFIX)gcc
 OBJDUMP		:= $(PREFIX)objdump
 OBJCOPY		:= $(PREFIX)objcopy
 MKDIR		:= mkdir
@@ -90,10 +91,8 @@ endif
 WARNFLAGS	:= -Wall
 
 ifeq ($(SOURCES_CPP),)
-	LD	:= $(CC)
 	LIBS	+= -lc
 else
-	LD	:= $(CXX)
 	LIBS	+= -lstdc++ -lc
 endif
 
