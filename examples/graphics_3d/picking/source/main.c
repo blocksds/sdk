@@ -252,6 +252,8 @@ int main(int argc, char *argv[])
         // Wait for everything to be drawn before starting on the next frame
         glFlush(0);
 
+        swiWaitForVBlank();
+
         if (keys & KEY_START)
             break;
     }
