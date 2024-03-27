@@ -19,27 +19,33 @@
 
 // Test virtual functions with derived classes
 
+unsigned int virtual_test_flags = 0;
+
 class base
 {
 public:
     base()
     {
         printf("constructor: base class\n");
+        virtual_test_flags |= BIT(0);
     }
 
     ~base()
     {
         printf("destructor: base class\n");
+        virtual_test_flags |= BIT(1);
     }
 
     virtual void print()
     {
         printf("print: base class\n");
+        virtual_test_flags |= BIT(2);
     }
 
     void show()
     {
         printf("show: base class\n");
+        virtual_test_flags |= BIT(3);
     }
 };
 
@@ -49,25 +55,29 @@ public:
     derived()
     {
         printf("constructor: derived class\n");
+        virtual_test_flags |= BIT(4);
     }
 
     ~derived()
     {
         printf("destructor: derived class\n");
+        virtual_test_flags |= BIT(5);
     }
 
     void print()
     {
         printf("print: derived class\n");
+        virtual_test_flags |= BIT(6);
     }
 
     void show()
     {
         printf("show: derived class\n");
+        virtual_test_flags |= BIT(7);
     }
 };
 
-void virtual_functions_test(void)
+void virtual_functions_test_inner(void)
 {
     base *bptr;
     derived d;
@@ -78,6 +88,20 @@ void virtual_functions_test(void)
 
     // Non-virtual function, binded at compile time
     bptr->show();
+}
+
+bool virtual_functions_test(void)
+{
+    virtual_functions_test_inner();
+    printf("Flags: %X\n", virtual_test_flags);
+
+    if (virtual_test_flags != 0x7B)
+    {
+        printf("%s() failed\n", __func__);
+        return false;
+    }
+
+    return true;
 }
 
 // ------------------------------------------------------------------
@@ -97,31 +121,54 @@ public:
 
 global_initializer my_global_initializer;
 
-void global_constructor_test(void)
+bool global_constructor_test(void)
 {
     if (global_var == 0x1234)
+    {
         printf("global constructor OK\n");
+        return true;
+    }
     else
+    {
         printf("global constructor FAIL\n");
+        return false;
+    }
 }
 
 // ------------------------------------------------------------------
 
-void vector_test(void)
+bool vector_test(void)
 {
     std::vector<int> my_vector{123, 12, 6, 234, 6};
     my_vector.push_back(55);
 
-    for(auto i : my_vector)
+    bool ok = true;
+    int expected[] = {123, 12, 6, 234, 6, 55};
+
+    int counter = 0;
+    for (auto i : my_vector)
     {
-        printf("%i ", i);
+        if (i != expected[counter])
+        {
+            printf("%s(): Value %d (Exp: %d)\n", __func__, i, expected[counter]);
+            ok = false;
+        }
+
+        counter++;
     }
-    printf("\n");
+
+    if (counter != 6)
+    {
+        printf("%s(): Counter %d (Exp: 6)\n", __func__, counter);
+        return false;
+    }
+
+    return ok;
 }
 
 // ------------------------------------------------------------------
 
-void string_test(void)
+bool string_test(void)
 {
     std::string hello = "hello";
     std::string world = "world";
@@ -130,17 +177,25 @@ void string_test(void)
 
     printf("%s ", greeting.c_str());
     printf("\n");
+
+    return (strcmp(greeting.c_str(), "[std::string] hello world!") == 0);
 }
 
 // ------------------------------------------------------------------
 
-void new_test(void)
+bool new_test(void)
 {
     float *p = new float[]{1.5, 2, 3.1};
 
     printf("new: %.2f %.2f %.2f\n", p[0], p[1], p[2]);
 
+    bool ok = false;
+    if (p != NULL)
+        ok = true;
+
     delete[] p;
+
+    return ok;
 }
 
 // ------------------------------------------------------------------
@@ -201,12 +256,13 @@ void fcat(const char *path)
     free(buffer);
 }
 
-void filesystem_test(void)
+bool filesystem_test(void)
 {
     // Using C++ functions
 
     std::cout << "Opening 'file.txt'...\n";
 
+    std::string contents = "";
     std::string line;
     std::ifstream myfile("file.txt");
     if (myfile.is_open())
@@ -214,7 +270,9 @@ void filesystem_test(void)
         std::cout << "Read file: [";
 
         while (getline(myfile, line))
-            std::cout << line << '\n';
+            contents += line + "\n";
+
+        std::cout << contents;
         myfile.close();
 
         std::cout << "]\n";
@@ -224,11 +282,17 @@ void filesystem_test(void)
         std::cout << "Failed to open";
     }
 
+    bool ok = false;
+    if (strcmp(contents.c_str(), "This is a test!\n") == 0)
+        ok = true;
+
     // Using C functions
 
     std::cout << "Opening 'file.txt'...\n";
 
     fcat("file.txt");
+
+    return ok;
 }
 
 // ------------------------------------------------------------------
@@ -248,12 +312,25 @@ int main(int argc, char *argv[])
 
     // Run some C++ tests
 
-    virtual_functions_test();
-    global_constructor_test();
-    vector_test();
-    string_test();
-    new_test();
-    filesystem_test();
+    if (!virtual_functions_test())
+        goto exit;
+
+    if (!global_constructor_test())
+        goto exit;
+
+    if (!vector_test())
+        goto exit;
+
+    if (!string_test())
+        goto exit;
+
+    if (!new_test())
+        goto exit;
+
+    if (!filesystem_test())
+        goto exit;
+
+    printf("All tests passed!\n");
 
 exit:
     printf("\n\n");
