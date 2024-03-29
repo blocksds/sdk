@@ -2,6 +2,40 @@
 title: 'Changelog'
 ---
 
+## version X.X.X (2024-03-29)
+
+- libnds:
+
+  - Fix C++ builds (there was a missing cast from enum to int, and the Makefile
+    was using the wrong program to link binaries).
+  - Optimize some videoGl functions (compile them as ARM instead of Thumb to
+    take advantage of the faster multiplication instructions).
+  - Fix bug in `readdir()`.
+  - Implement `__retarget_lock_*()` family of functions to allow libc functions
+    to work in a multithreaded environment.
+  - Make `glCallList()` take a `void` pointer instead of `u32`.
+  - Add checks to NWRAM functions to see if MBK1-MBK5 are writable.
+  - Don't remap NWRAM-A when starting the DSP (only B and C are needed).
+  - Fix swiUnpackBits().
+  - Fix some casts to respect "const".
+  - Fix some warnings.
+  - Improve some documentation comments.
+  - Deprecate typedef `fp` (the name is too short!) and `PUnpackStruct`.
+  - Add missing files to the Doxygen documentation.
+
+- SDK:
+
+  - Add tests (3D object picking, 3D toon shading, building 3D display lists).
+  - Improve C++ test to prevent regressions like during the last few versions.
+  - Document memory map of the DS.
+  - Add note about the Makefiles of BlocksDS not supporting paths outisde of the
+    root folder of the project (thanks, @lifehackerhansol).
+  - Fix linking C++ projects in default makefiles.
+
+- maxmod:
+
+  - Fix return type of `mmEffectCancel()` in ARM9 code.
+
 ## Version 0.14.0 (2024-03-02)
 
 - libnds:
