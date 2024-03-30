@@ -105,7 +105,7 @@ int main(int argc, char **argv)
         printf("\x1b[2J");
 
         // Print some controls
-        printf("PAD:    Rotate triangle\n");
+        printf("PAD:    Rotate quad\n");
         printf("START:  Exit to loader\n");
         printf("\n");
 
