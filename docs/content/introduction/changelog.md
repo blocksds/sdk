@@ -2,7 +2,7 @@
 title: 'Changelog'
 ---
 
-## version X.X.X (2024-03-29)
+## version 1.0.0 (2024-03-30)
 
 - libnds:
 
@@ -30,7 +30,7 @@ title: 'Changelog'
     console windows with the default console API).
   - Improve C++ test to prevent regressions like during the last few versions.
   - Document memory map of the DS.
-  - Add note about the Makefiles of BlocksDS not supporting paths outisde of the
+  - Add note about the Makefiles of BlocksDS not supporting paths outside of the
     root folder of the project (thanks, @lifehackerhansol).
   - Fix linking C++ projects in default makefiles.
 
