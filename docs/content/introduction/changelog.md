@@ -16,7 +16,7 @@ title: 'Changelog'
   - Make `glCallList()` take a `void` pointer instead of `u32`.
   - Add checks to NWRAM functions to see if MBK1-MBK5 are writable.
   - Don't remap NWRAM-A when starting the DSP (only B and C are needed).
-  - Fix swiUnpackBits().
+  - Fix `swiUnpackBits()`.
   - Fix some casts to respect "const".
   - Fix some warnings.
   - Improve some documentation comments.
@@ -26,7 +26,8 @@ title: 'Changelog'
 - SDK:
 
   - Add examples (3D object picking, 3D toon shading, building 3D display lists,
-    3D volumetric shadows, compressed textures, orthogonal projections).
+    3D volumetric shadows, compressed textures, orthogonal projections, using
+    console windows with the default console API).
   - Improve C++ test to prevent regressions like during the last few versions.
   - Document memory map of the DS.
   - Add note about the Makefiles of BlocksDS not supporting paths outisde of the
