@@ -26,7 +26,7 @@ title: 'Changelog'
 - SDK:
 
   - Add examples (3D object picking, 3D toon shading, building 3D display lists,
-    3D volumetric shadows).
+    3D volumetric shadows, compressed textures, orthogonal projections).
   - Improve C++ test to prevent regressions like during the last few versions.
   - Document memory map of the DS.
   - Add note about the Makefiles of BlocksDS not supporting paths outisde of the
