@@ -8,7 +8,7 @@ title: 'Changelog'
 
   - Fix C++ builds (there was a missing cast from enum to int, and the Makefile
     was using the wrong program to link binaries).
-  - Optimize some videoGl functions (compile them as ARM instead of Thumb to
+  - Optimize some videoGL functions (compile them as ARM instead of Thumb to
     take advantage of the faster multiplication instructions).
   - Fix bug in `readdir()`.
   - Implement `__retarget_lock_*()` family of functions to allow libc functions
