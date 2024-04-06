@@ -12,7 +12,7 @@ set -x
 
 if [ ! -d themes/hugo-geekdoc ]; then
     mkdir -p themes/hugo-geekdoc
-    curl -L https://github.com/thegeeklab/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C themes/hugo-geekdoc/ --strip-components=1
+    wget https://github.com/thegeeklab/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C themes/hugo-geekdoc/ --strip-components=1
 fi
 
 hugo --cleanDestinationDir --baseURL https://blocksds.github.io/docs/

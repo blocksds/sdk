@@ -19,7 +19,7 @@ The documentation of the libraries included in BlocksDS is built with
 
   ```bash
   cd docs
-  curl -L https://github.com/thegeeklab/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C themes/hugo-geekdoc/ --strip-components=1
+  wget https://github.com/thegeeklab/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C themes/hugo-geekdoc/ --strip-components=1
   ```
 
 ## Testing the documentation of BlocksDS
