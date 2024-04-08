@@ -1,0 +1,2 @@
+# 16 bpp, bitmap, set alpha bit to 1, not compressed
+-gB16 -gb -gT!
