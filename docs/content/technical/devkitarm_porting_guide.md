@@ -167,18 +167,18 @@ to decide, project-wide, if you want to use integer-only or float-compatible
 versions of the `printf()` and `scanf()` functions.
 
 By default, the build of `picolibc` of BlocksDS makes `printf()`, `sscanf()` and
-similar functions floats and doubles. This is done to increase compatibility
-with any pre-existing code, but it increases the size of the final binaries.
-It is possible to switch to integer-only versions of the functions, and save
-that additional space, by adding the following line to the `LDFLAGS` of your
-Makefile:
+similar functions support float and double conversions. This is done to maintain
+compatibility with existing code (and the C standard), but it increases the size
+of the final binaries. It is possible to switch to integer-only versions of the
+functions by adding the following line to the `DEFINES` of your Makefile:
 
 ```make
-LDFLAGS := [all other options go here] \
-    -Wl,--defsym=vfprintf=__i_vfprintf -Wl,--defsym=vfscanf=__i_vfscanf
+DEFINES := [all other options go here] \
+    -DPICOLIBC_LONG_LONG_PRINTF_SCANF
 ```
 
-For more information, please read [the relevant picolibc documentation](https://github.com/picolibc/picolibc/blob/main/doc/printf.md).
+There are additional variants available, depending on the codebase's specific
+requirements. For more information, please read [the relevant picolibc documentation](https://github.com/picolibc/picolibc/blob/main/doc/printf.md).
 
 ## 5. libnds touch screen and keyboard handling
 
