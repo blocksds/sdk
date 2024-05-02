@@ -2,7 +2,24 @@
 title: 'Changelog'
 ---
 
-## version 1.0.0 (2024-03-30)
+## Version DEV (2024-05-??)
+
+- libnds:
+
+  - Add `keyboardExit()` function to deinitialize keyboard structures.
+  - Add `realpath()` implementation.
+  - Adjust `keyboardInit()` to only link the default keyboard if no custom
+    keyboard is being used.
+  - Fix `getcwd()` result when called in the root NitroFS directory.
+  - Fix Slot-1 card reads not being aligned to 512 bytes.
+  - Minor allocation/string handling bugfixes.
+
+- SDK:
+
+  - Add examples (paletted textures, rotation backgrounds, 16-bit backgrounds,
+    sprites in sub screen, FAT file attributes).
+
+## Version 1.0.0 (2024-03-30)
 
 - libnds:
 
