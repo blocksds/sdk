@@ -13,11 +13,14 @@ title: 'Changelog'
   - Fix `getcwd()` result when called in the root NitroFS directory.
   - Fix Slot-1 card reads not being aligned to 512 bytes.
   - Minor allocation/string handling bugfixes.
+  - Fix some memory allocation issues found by GCC 14.
 
 - SDK:
 
   - Add examples (paletted textures, rotation backgrounds, 16-bit backgrounds,
     sprites in sub screen, FAT file attributes).
+  - Add tests for `realpath()`.
+  - Fix warnings found by GCC 14 in examples.
 
 ## Version 1.0.0 (2024-03-30)
 
