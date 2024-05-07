@@ -216,7 +216,7 @@ int main(int argc, char **argv)
             printf(". ");
 
             // Save RGB data as PNG file.
-            char imgName[32];
+            char imgName[64];
             sprintf(imgName, "/DCIM/100DSI00/IMG_%04d.PNG", getImageNumber());
             stbi_write_png(imgName, 640, 480, 3, rgb, 640 * 3);
             free(rgb);
