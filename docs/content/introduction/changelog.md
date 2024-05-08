@@ -2,7 +2,7 @@
 title: 'Changelog'
 ---
 
-## Version DEV (2024-05-??)
+## Version 1.1.0 (2024-05-08
 
 - libnds:
 
@@ -18,7 +18,7 @@ title: 'Changelog'
 - SDK:
 
   - Add examples (paletted textures, rotation backgrounds, 16-bit backgrounds,
-    sprites in sub screen, FAT file attributes).
+    sprites in sub screen, FAT file attributes, GL2D usage).
   - Add tests for `realpath()`.
   - Fix warnings found by GCC 14 in examples.
 
