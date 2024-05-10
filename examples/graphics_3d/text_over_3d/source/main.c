@@ -67,8 +67,16 @@ int main(int argc, char **argv)
 {
     videoSetMode(MODE_0_3D);
 
+    // libnds sets up VRAM banks A, B, C and D to some default values at boot.
+    // We need to unset the default settings to prevent conflicts with VRAM F.
+    // Normally VRAM A and B are always used for textures, so there isn't any
+    // conflict when you setup VRAM F for main engine BG VRAM. However, this
+    // example doesn't use textures, so let's unset all primary banks to prevent
+    // conflicts.
+    vramSetPrimaryBanks(VRAM_A_LCD, VRAM_B_LCD, VRAM_C_LCD, VRAM_D_LCD);
+
     // Allocate some VRAM to be used for backgrounds in the main engine
-    vramSetBankH(VRAM_F_MAIN_BG_0x06000000);
+    vramSetBankF(VRAM_F_MAIN_BG_0x06000000);
 
     // Setup layer 1 as console layer
     consoleInit(NULL, 1, BgType_Text4bpp, BgSize_T_256x256, 7, 0, true, true);
