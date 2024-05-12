@@ -23,9 +23,25 @@ int main(int argc, char **argv)
 
     videoSetMode(MODE_0_3D);
 
+    // Setup some memory to be used for textures and for texture palettes
     vramSetBankA(VRAM_A_TEXTURE);
     vramSetBankE(VRAM_E_TEX_PALETTE);
 
+    // A tile set is formed by several images of the same size that start at the
+    // top left corner. It increses to the right in the top row until the end of
+    // the texture is reached, then it continues to the second row.
+    //
+    // When all the images are put together they form a bitmap with some
+    // dimensions. The dimensions can be whatever is required for that specific
+    // sprite, with no restrictions.
+    //
+    // However, the GPU of the DS requires textures to have sizes that are power
+    // of two. When you have a bitmap with dimensions that aren't a power of
+    // two, padding needs to be added to the bottom and to the right to fill the
+    // image up to a valid size.
+    //
+    // Note that if you leave enough space on the right of the texture for a new
+    // image, even if there aren't graphics there, it will count.
     int character_texture_id =
         glLoadTileSet(character,    // Pointer to glImage array
                       22,           // Sprite width
@@ -74,7 +90,7 @@ int main(int argc, char **argv)
         // Set up GL2D for 2D mode
         glBegin2D();
 
-            // Fill screen
+            // Fill screen with a gradient
             glBoxFilledGradient(0, 0,
                                 screen_width - 1, screen_height - 1,
                                 RGB15(31, 0, 0),
@@ -82,17 +98,18 @@ int main(int argc, char **argv)
                                 RGB15(31, 0, 31),
                                 RGB15(0, 31, 31));
 
-            // Draw sprite frames
+            // Draw sprite frames individually
             glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE | POLY_ID(0));
             glColor(RGB15(31, 31, 31));
 
-            for (unsigned int i = 0; i < 6; i++)
+            for (int i = 0; i < 6; i++)
             {
-                unsigned int x = i * 24;
-                unsigned int y = i * 5;
+                int x = i * 24;
+                int y = i * 5;
                 glSprite(x, y, GL_FLIP_NONE, &character[i]);
             }
 
+            // Draw animated sprite
             glSprite(200, 0, GL_FLIP_NONE, &character[frame]);
 
             // Animate (change animation frame every 10 frames)
@@ -105,6 +122,12 @@ int main(int argc, char **argv)
                 if (frame == 6)
                     frame = 0;
             }
+
+            // Draw a rotated and scaled sprite
+            glSpriteRotateScaleXY(40, 150, // Position
+                    32767 / 8, // Rotation = 45 degrees (full circle / 8)
+                    floattof32(1.2), floattof32(0.8), // Scale X and Y
+                    GL_FLIP_NONE, &character[0]);
 
         glEnd2D();
 
