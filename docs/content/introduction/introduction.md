@@ -49,8 +49,9 @@ This is an SDK to develop applications for Nintendo DS in C or C++.
   **ndsabi**, a fork of [agbabi](https://github.com/felixjones/agbabi) by
   felixjones.
 
-  Also, `argv[]` is may be provided by the environment so that the program
-  knows where it's running from, and any arguments, if any, passed to it.
+  Also, `argv` may be provided by the environment so that programs know where
+  they are running from (the path of the NDS file is provided in `argv[0]`), and
+  any arguments pased to it if any.
 
 - It is possible to access the filesystem of DLDI devices (like the SD card of
   flashcards), the SD slot of the DSi, and the filesystem embedded in a NDS ROM
