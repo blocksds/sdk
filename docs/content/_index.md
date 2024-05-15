@@ -2,7 +2,7 @@
 title: 'BlocksDS Documentation'
 ---
 
-Welcome to the documentation of BlocksDS.
+Welcome to the documentation of BlocksDS, an SDK for the Nintendo DS.
 
 This is an [introduction](./introduction/introduction) to the SDK.
 
@@ -17,7 +17,8 @@ check the following links:
   - [Library documentation](./libnds/index.html)
   - [Examples](https://github.com/blocksds/sdk/tree/master/examples)
 
-- **maxmod**: Music player that can play MOD, S3M, XM, IT and WAV files.
+- **maxmod**: Music player that can play MOD, S3M, XM, IT and WAV files. It can
+  use hardware or software mixing, and it runs on the ARM7.
 
   - [Library documentation](./maxmod/index.html)
   - [Examples](https://github.com/blocksds/sdk/tree/master/examples/audio)
