@@ -28,3 +28,6 @@
 [submodule "libs/libteak"]
 	path = libs/libteak
 	url = https://github.com/blocksds/libteak
+[submodule "tools/squeezer"]
+	path = tools/squeezer
+	url = https://github.com/blocksds/squeezer

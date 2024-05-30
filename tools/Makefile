@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2023
+# SPDX-FileContributor: Antonio Niño Díaz, 2023-2024
 
 STRIP		:= -s
 BINMODE		:= 755
@@ -9,9 +9,10 @@ RM		:= rm -rf
 MAKE		:= make
 INSTALL		:= install
 
-.PHONY: bin2c clean dldipatch dlditool grit install mkfatimg mmutil ndstool teaktool
+.PHONY: bin2c clean dldipatch dlditool grit install mkfatimg mmutil ndstool \
+	squeezer teaktool
 
-all: bin2c dldipatch dlditool grit mkfatimg mmutil ndstool teaktool
+all: bin2c dldipatch dlditool grit mkfatimg mmutil ndstool squeezer teaktool
 
 bin2c:
 	$(MAKE) -C bin2c
@@ -34,6 +35,9 @@ mmutil:
 ndstool:
 	$(MAKE) -C ndstool
 
+squeezer:
+	$(MAKE) -C squeezer
+
 teaktool:
 	$(MAKE) -C teaktool
 
@@ -53,6 +57,7 @@ install: all
 	$(MAKE) -C mkfatimg install INSTALLDIR=$(INSTALLDIR_ABS)/mkfatimg
 	$(MAKE) -C mmutil install INSTALLDIR=$(INSTALLDIR_ABS)/mmutil
 	$(MAKE) -C ndstool install INSTALLDIR=$(INSTALLDIR_ABS)/ndstool
+	$(MAKE) -C squeezer install INSTALLDIR=$(INSTALLDIR_ABS)/squeezer
 	$(MAKE) -C teaktool install INSTALLDIR=$(INSTALLDIR_ABS)/teaktool
 
 clean:
@@ -63,4 +68,5 @@ clean:
 	$(MAKE) -C mkfatimg clean
 	$(MAKE) -C mmutil clean
 	$(MAKE) -C ndstool clean
+	$(MAKE) -C squeezer clean
 	$(MAKE) -C teaktool clean
