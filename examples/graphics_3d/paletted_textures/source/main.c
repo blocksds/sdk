@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     vramSetBankA(VRAM_A_TEXTURE);
     vramSetBankF(VRAM_F_TEX_PALETTE);
 
-    // Load textures
+    // Generate IDs for two textures
     glGenTextures(2, &textureID[0]);
 
     // Load texture once while setting color 0 as transparent
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
                  TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT, ballBitmap);
     glColorTableEXT(0, 0, ballPalLen / 2, 0, 0, ballPal);
 
-    // Load texture once but this time don't set color 0 as transparent
+    // Load the same texture but this time don't set color 0 as transparent
     glBindTexture(0, textureID[1]);
     glTexImage2D(0, 0, GL_RGB256, 32, 32, 0, TEXGEN_TEXCOORD, ballBitmap);
     glColorTableEXT(0, 0, ballPalLen / 2, 0, 0, ballPal);
