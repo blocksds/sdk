@@ -53,6 +53,13 @@ int main(int argc, char **argv)
                         atlas_texturePal,     // Pointer to texture palette data
                         atlas_textureBitmap); // Pointer to texture data
 
+    if (ruins_texture_id < 0)
+        printf("Failed to load texture: %d\n", ruins_texture_id);
+
+    // Print some controls
+    printf("START:  Exit to loader\n");
+    printf("\n");
+
     int delay = 0;
     int frame = 0;
 
@@ -60,16 +67,6 @@ int main(int argc, char **argv)
     {
         // Synchronize game loop to the screen refresh
         swiWaitForVBlank();
-
-        // Print some text in the demo console
-        // -----------------------------------
-
-        // Clear console
-        printf("\x1b[2J");
-
-        // Print some controls
-        printf("START:  Exit to loader\n");
-        printf("\n");
 
         // Handle user input
         // -----------------
