@@ -12,3 +12,11 @@ Then build the example as usual:
 ```sh
 make
 ```
+
+Originally, GL2D expected the user to use Texture Packer by Relminator
+(http://rel.phatcode.net/junk.php?id=106). This tool is Windows-only, and it
+isn't written in C so it would add more dependencies to BlocksDS (BlocksDS
+requires all tools to be buildable by the user as a rule).
+
+This example uses squeezerw (https://github.com/huxingyi/squeezer) instead. It
+has been forked to export C and H files in a format similar to Texture Packer.
