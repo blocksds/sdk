@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 
     if (palDst == NULL)
     {
-        printf("No graphics found in GRF file");
+        printf("No palette found in GRF file");
         wait_forever();
     }
 
