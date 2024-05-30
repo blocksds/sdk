@@ -3,6 +3,8 @@
 #ifndef ATLAS_H__
 #define ATLAS_H__
 
+#include <stdint.h>
+
 #define ATLAS_BITMAP_WIDTH   256
 #define ATLAS_BITMAP_HEIGHT  256
 #define ATLAS_NUM_IMAGES     7
@@ -15,6 +17,6 @@
 #define ATLAS_6_png 5
 #define ATLAS_7_png 6
 
-extern const unsigned int ATLAS_texcoords[];
+extern const uint16_t ATLAS_texcoords[];
 
 #endif // ATLAS_H__
