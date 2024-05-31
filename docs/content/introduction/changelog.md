@@ -2,6 +2,25 @@
 title: 'Changelog'
 ---
 
+## Version DEV (2024-??-??)
+
+- libnds:
+
+  - Add `hw_sqrtf()` - a hardware-accelerated alternative to `sqrtf()`.
+  - Fix `swiSwitchToGBAMode()`.
+  - Improve documentation of RTC structs.
+  - Improve GL2D error checking.
+  - Modify GL2D sprite sets to use `uint16_t` arrays for texture
+    coordinates.
+
+- SDK:
+
+  - Add GL2D sprite examples.
+  - Add new tool: squeezer - used for generating packed textures for GL2D
+    sprite sets.
+  - Add tests for `hw_sqrtf()`.
+  - Fix VRAM bank setup in "text over 3D" example.
+
 ## Version 1.1.0 (2024-05-08)
 
 - libnds:
