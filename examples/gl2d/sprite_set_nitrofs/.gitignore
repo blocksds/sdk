@@ -1,0 +1,8 @@
+__pycache__/
+graph.png
+*.nds
+*.sav
+build/
+.ninja_deps
+.ninja_log
+*.ninja
