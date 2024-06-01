@@ -17,7 +17,7 @@ arm9.generate_elf()
 
 nds = NdsRom(
     binaries=[arm9, nitrofs],
-    game_title='GL2D: FS: Sprite sets',
+    game_title='GL2D NitroFS spriteset',
 )
 nds.generate_nds()
 
