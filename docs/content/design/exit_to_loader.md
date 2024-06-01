@@ -1,6 +1,6 @@
 ---
 title: 'Exit to loader protocol'
-weight: 40
+weight: 10
 ---
 
 ## 1. Introduction
@@ -8,7 +8,7 @@ weight: 40
 Normally, the only way to exit a DS application is to switch the console off and
 turn it on again. It can get annoying to do this if you're, for example, testing
 many applications. `libnds` supports a protocol that allows an application
-loader (such as the menu of a flashcard) to setup an exit routine that allows
+loader (such as the menu of a flashcart) to setup an exit routine that allows
 the application to return to the loader. This is needed because the DS doesn't
 have an OS, so the protocol is managed manually.
 

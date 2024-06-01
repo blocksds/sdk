@@ -1,6 +1,6 @@
 ---
 title: 'Memory map'
-weight: 25
+weight: 20
 ---
 
 ## 1. Introduction

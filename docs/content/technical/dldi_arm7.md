@@ -6,13 +6,13 @@ weight: 30
 ## 1. Introduction
 
 DLDI (Dynamically Linked Disc Interface) is an interface designed for homebrew
-projects to be able to access the memory of flashcards (usually micro SD cards)
+projects to be able to access the memory of flashcarts (usually micro SD cards)
 in a standardized way. https://www.chishm.com/DLDI/
 
 In short, when you build an application, the DLDI stub is added to your
 application. Then you and your users have to patch your application with the
-DLDI driver your flashcards. Most flashcards patch homebrew NDS ROMs, so
-normally you don't need to worry about it, it just works. Some old flashcards
+DLDI driver your flashcarts. Most flashcarts patch homebrew NDS ROMs, so
+normally you don't need to worry about it, it just works. Some old flashcarts
 (specially slot-2 flashcarts) don't support this, so you have to patch ROMs
 yourself. DeSmuME doesn't autopatch ROMS, for example, while melonDS does.
 
@@ -35,9 +35,9 @@ supported, there is no way to do asynchronous reads yet. For this, a cooperative
 multithreading scheduler is needed. This has a high priority in the to-do list
 of this SDK.
 
-## 3. Supported flashcards
+## 3. Supported flashcarts
 
-The main drawback of this approach is that not all flashcards support this. Some
+The main drawback of this approach is that not all flashcarts support this. Some
 DLDI drivers have been built for the ARM9 and will crash in the ARM7, for
 example. This is why DLDI in ARM7 isn't enforced. The current code supports
 using DLDI from both ARM9 and ARM7 without rebuilding the application.
@@ -74,14 +74,14 @@ dldiSetMode(DLDI_MODE_ARM9); // or DLDI_MODE_AUTODETECT or DLDI_MODE_ARM7
 DLDI_MODE dldi_mode = dldiGetMode(void);
 ```
 
-## 6. Supported flashcards
+## 6. Supported flashcarts
 
-This is a list of flashcards that have been reported to work. Please, test your
-flashcard using
+This is a list of flashcarts that have been reported to work. Please, test your
+flashcart using
 [this test](https://github.com/blocksds/sdk/tree/master/tests/filesystem/dldi_arm9_arm7)
 and report your findings.
 
-Flashcard       | ARM9 | ARM7 | Notes
+flashcart       | ARM9 | ARM7 | Notes
 ----------------|------|------|------
 Acekard 2i      | Yes  | Yes  |
 SuperCard DSTWO | Yes  | Yes  |
