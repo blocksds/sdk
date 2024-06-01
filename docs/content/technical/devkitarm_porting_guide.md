@@ -232,6 +232,7 @@ code. For example, a snippet of assembly as follows:
 ```asm
    .global myFunction
 myFunction:
+   // code
 ```
 
 should be updated to read as follows:
@@ -240,9 +241,18 @@ should be updated to read as follows:
    .global myFunction
    .type myFunction, %function
 myFunction:
+   // code
 ```
 
-The important part is the addition of the `.type` annotation.
+The important part is the addition of the `.type` annotation. Alternatively,
+the `BEGIN_ASM_FUNC` macro may be used:
+
+```asm
+#include <nds/asminc.h>
+
+BEGIN_ASM_FUNC myFunction
+   // code
+```
 
 ### Legacy register names
 
