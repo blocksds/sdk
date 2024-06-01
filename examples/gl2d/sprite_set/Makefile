@@ -6,8 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= gl2d_sprites
-GAME_TITLE	:= GL2D sprites
+NAME		:= gl2d_sprite_set
+GAME_TITLE	:= GL2D sprite set
 
 # Source code paths
 
