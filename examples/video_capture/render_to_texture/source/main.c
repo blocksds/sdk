@@ -146,17 +146,6 @@ int main(int argc, char *argv[])
 
     consoleInit(NULL, 1, BgType_Text4bpp, BgSize_T_256x256, 15, 0, false, true);
 
-    printf("     RTT Demo by AntonioND\n");
-    printf("\n");
-    printf("    http://www.skylyrac.net\n");
-    printf("\n");
-    printf("\n");
-    printf("\n");
-    printf("A/B:   Scale small cube\n");
-    printf("PAD:   Rotate small cube\n");
-    printf("START: Exit to loader");
-    printf("\x1b[23;0HThanks to DiscoStew. ;)");
-
     glInit();
 
     glEnable(GL_TEXTURE_2D | GL_ANTIALIAS);
@@ -170,8 +159,13 @@ int main(int argc, char *argv[])
 
     glGenTextures(1, &textureID);
     glBindTexture(0, textureID);
-    glTexImage2D(0, 0, GL_RGB, TEXTURE_SIZE_128, TEXTURE_SIZE_128, 0,
-                 TEXGEN_TEXCOORD, neonBitmap);
+    if (glTexImage2D(0, 0, GL_RGB, TEXTURE_SIZE_128, TEXTURE_SIZE_128, 0,
+                     TEXGEN_TEXCOORD, neonBitmap) == 0)
+    {
+        printf("Failed to load texture\n");
+        while (1)
+            swiWaitForVBlank();
+    }
 
     glMatrixMode(GL_TEXTURE);
     glLoadIdentity();
@@ -185,6 +179,17 @@ int main(int argc, char *argv[])
 
     glLight(0, RGB15(31, 31, 31),
             floattov10(-0.6), floattov10(-0.6), floattov10(-0.6));
+
+    printf("     RTT Demo by AntonioND\n");
+    printf("\n");
+    printf("    http://www.skylyrac.net\n");
+    printf("\n");
+    printf("\n");
+    printf("\n");
+    printf("A/B:   Scale small cube\n");
+    printf("PAD:   Rotate small cube\n");
+    printf("START: Exit to loader");
+    printf("\x1b[23;0HThanks to DiscoStew. ;)");
 
     int frame = 0;
     float rx = 30, ry = 0;

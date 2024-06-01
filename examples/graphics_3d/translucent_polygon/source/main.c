@@ -43,10 +43,20 @@ int main(int argc, char **argv)
     glGenTextures(2, &textureID[0]);
 
     glBindTexture(0, textureID[0]);
-    glTexImage2D(0, 0, GL_RGBA, 128, 128, 0, TEXGEN_TEXCOORD, neonBitmap);
+    if (glTexImage2D(0, 0, GL_RGBA, 128, 128, 0, TEXGEN_TEXCOORD, neonBitmap) == 0)
+    {
+        printf("Failed to load texture 1\n");
+        while (1)
+            swiWaitForVBlank();
+    }
 
     glBindTexture(0, textureID[1]);
-    glTexImage2D(0, 0, GL_RGBA, 128, 128, 0, TEXGEN_TEXCOORD, neon2Bitmap);
+    if (glTexImage2D(0, 0, GL_RGBA, 128, 128, 0, TEXGEN_TEXCOORD, neon2Bitmap) == 0)
+    {
+        printf("Failed to load texture 2\n");
+        while (1)
+            swiWaitForVBlank();
+    }
 
     // Setup matrices
     glMatrixMode(GL_PROJECTION);

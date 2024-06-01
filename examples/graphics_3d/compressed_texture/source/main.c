@@ -10,6 +10,20 @@
 #include "neon_pal_bin.h"
 #include "neon_idx_bin.h"
 
+__attribute__((noreturn)) void wait_forever(void)
+{
+    printf("Press START to exit.");
+
+    while (1)
+    {
+        swiWaitForVBlank();
+
+        scanKeys();
+        if (keysHeld() & KEY_START)
+            exit(1);
+    }
+}
+
 int main(int argc, char **argv)
 {
     int textureID;
@@ -55,8 +69,16 @@ int main(int argc, char **argv)
         memcpy(buffer, neon_tex_bin, neon_tex_bin_size);
         memcpy(buffer + neon_tex_bin_size, neon_idx_bin, neon_idx_bin_size);
 
-        glTexImage2D(0, 0, GL_COMPRESSED, 128, 128, 0, TEXGEN_TEXCOORD, buffer);
-        glColorTableEXT(0, 0, neon_pal_bin_size / 2, 0, 0, (uint16_t *)neon_pal_bin);
+        if (glTexImage2D(0, 0, GL_COMPRESSED, 128, 128, 0, TEXGEN_TEXCOORD, buffer) == 0)
+        {
+            printf("Failed to load texture\n");
+            wait_forever();
+        }
+        if (glColorTableEXT(0, 0, neon_pal_bin_size / 2, 0, 0, neon_pal_bin) == 0)
+        {
+            printf("Failed to load palette\n");
+            wait_forever();
+        }
 
         free(buffer);
     }

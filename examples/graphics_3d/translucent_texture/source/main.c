@@ -10,6 +10,20 @@
 #include "neon.h"
 #include "neon2.h"
 
+__attribute__((noreturn)) void wait_forever(void)
+{
+    printf("Press START to exit.");
+
+    while (1)
+    {
+        swiWaitForVBlank();
+
+        scanKeys();
+        if (keysHeld() & KEY_START)
+            exit(1);
+    }
+}
+
 int main(int argc, char **argv)
 {
     int textureID[2];
@@ -43,11 +57,23 @@ int main(int argc, char **argv)
     glGenTextures(2, &textureID[0]);
 
     glBindTexture(0, textureID[0]);
-    glTexImage2D(0, 0, GL_RGBA, 128, 128, 0, TEXGEN_TEXCOORD, neonBitmap);
+    if (glTexImage2D(0, 0, GL_RGBA, 128, 128, 0, TEXGEN_TEXCOORD, neonBitmap) == 0)
+    {
+        printf("Failed to load texture 1\n");
+        wait_forever();
+    }
 
     glBindTexture(0, textureID[1]);
-    glTexImage2D(0, 0, GL_RGB8_A5, 128, 128, 0, TEXGEN_TEXCOORD, neon2Bitmap);
-    glColorTableEXT(0, 0, 8, 0, 0, neon2Pal);
+    if (glTexImage2D(0, 0, GL_RGB8_A5, 128, 128, 0, TEXGEN_TEXCOORD, neon2Bitmap) == 0)
+    {
+        printf("Failed to load texture 2\n");
+        wait_forever();
+    }
+    if (glColorTableEXT(0, 0, 8, 0, 0, neon2Pal) == 0)
+    {
+        printf("Failed to load palette 2\n");
+        wait_forever();
+    }
 
     // Setup matrices
     glMatrixMode(GL_PROJECTION);

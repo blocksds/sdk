@@ -221,8 +221,14 @@ int main(int argc, char *argv[])
 
     glGenTextures(1, &textureID);
     glBindTexture(0, textureID);
-    glTexImage2D(0, 0, GL_RGB, TEXTURE_SIZE_128, TEXTURE_SIZE_128, 0,
-                 TEXGEN_TEXCOORD, neonBitmap);
+    if (glTexImage2D(0, 0, GL_RGB, TEXTURE_SIZE_128, TEXTURE_SIZE_128, 0,
+                     TEXGEN_TEXCOORD, neonBitmap) == 0)
+    {
+        consoleDemoInit();
+        printf("Failed to load texture\n");
+        while (1)
+            swiWaitForVBlank();
+    }
 
     glMatrixMode(GL_TEXTURE);
     glLoadIdentity();
@@ -255,7 +261,8 @@ int main(int argc, char *argv[])
         if (keys & KEY_START)
             break;
 
-        // If the user presses A, wait in a loop until the button is released
+        // If the user presses A, wait in a loop until the button is released.
+        // This is a test to see that a framerate drop won't cause any issues.
         if (keys & KEY_A)
         {
             while (1)

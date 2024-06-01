@@ -39,7 +39,12 @@ int main(int argc, char **argv)
     // Load texture
     glGenTextures(1, &textureID);
     glBindTexture(0, textureID);
-    glTexImage2D(0, 0, GL_RGBA, 128 , 128, 0, TEXGEN_TEXCOORD, neonBitmap);
+    if (glTexImage2D(0, 0, GL_RGBA, 128, 128, 0, TEXGEN_TEXCOORD, neonBitmap) == 0)
+    {
+        printf("Failed to load texture\n");
+        while (1)
+            swiWaitForVBlank();
+    }
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();

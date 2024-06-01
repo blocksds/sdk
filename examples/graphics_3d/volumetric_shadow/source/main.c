@@ -125,9 +125,14 @@ int main(int argc, char *argv[])
     int texture;
     glGenTextures(1, &texture);
     glBindTexture(0, texture);
-    glTexImage2D(0, 0, GL_RGBA, 256, 256, 0,
-                 TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T,
-                 teapotBitmap);
+    if (glTexImage2D(0, 0, GL_RGBA, 256, 256, 0,
+                     TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T,
+                     teapotBitmap) == 0)
+    {
+        printf("Failed to load texture\n");
+        while (1)
+            swiWaitForVBlank();
+    }
 
     glMaterialShinyness();
 

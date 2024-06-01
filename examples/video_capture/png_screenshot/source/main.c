@@ -125,11 +125,6 @@ int main(int argc, char *argv[])
             swiWaitForVBlank();
     }
 
-    printf("A:      Capture 3D output\n");
-    printf("B:      Capture 3D+2D output\n");
-    printf("SELECT: Save to PNG\n");
-    printf("START:  Exit to loader\n");
-
     // Sub screen setup
     // ----------------
 
@@ -153,8 +148,13 @@ int main(int argc, char *argv[])
 
     glGenTextures(1, &textureID);
     glBindTexture(0, textureID);
-    glTexImage2D(0, 0, GL_RGB, TEXTURE_SIZE_128, TEXTURE_SIZE_128, 0,
-                 TEXGEN_TEXCOORD, neonBitmap);
+    if (glTexImage2D(0, 0, GL_RGB, TEXTURE_SIZE_128, TEXTURE_SIZE_128, 0,
+                     TEXGEN_TEXCOORD, neonBitmap) == 0)
+    {
+        printf("Failed to load texture\n");
+        while (1)
+            swiWaitForVBlank();
+    }
 
     glMatrixMode(GL_TEXTURE);
     glLoadIdentity();
@@ -168,6 +168,11 @@ int main(int argc, char *argv[])
 
     glLight(0, RGB15(31, 31, 31),
             floattov10(-0.6), floattov10(-0.6), floattov10(-0.6));
+
+    printf("A:      Capture 3D output\n");
+    printf("B:      Capture 3D+2D output\n");
+    printf("SELECT: Save to PNG\n");
+    printf("START:  Exit to loader\n");
 
     while (1)
     {
