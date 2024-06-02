@@ -105,7 +105,7 @@ title: 'Changelog'
     - Some old sections have been updated.
     - The documentation of all libraries has been integrated with the
       documentation of BlocksDS so that everything is linked.
-    - Document how to use Slot-2 flashcards with BlocksDS applications.
+    - Document how to use Slot-2 flashcarts with BlocksDS applications.
     - Reword devkitARM porting guide.
     - A doxygen theme has been applied to the documentation of all the libraries
       used by BlocksDS.

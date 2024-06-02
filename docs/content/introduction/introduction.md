@@ -54,7 +54,7 @@ This is an SDK to develop applications for Nintendo DS in C or C++.
   any arguments pased to it if any.
 
 - It is possible to access the filesystem of DLDI devices (like the SD card of
-  flashcards), the SD slot of the DSi, and the filesystem embedded in a NDS ROM
+  flashcarts), the SD slot of the DSi, and the filesystem embedded in a NDS ROM
   (NitroFS). Performance (particularly for reads) has been
   [optimized by asie](https://mk.asie.pl/notes/9m2fsvk1hp) a lot. This is partly
   thanks to using [FatFs](http://elm-chan.org/fsw/ff/00index_e.html), partly due
@@ -111,7 +111,7 @@ This is an SDK to develop applications for Nintendo DS in C or C++.
 
 - There is an API to access the DS cartridge ROM, as well as EEPROM chips in
   the cartridges that use it. It is also possible to access the filesystem of SD
-  cards used in flashcards.
+  cards used in flashcarts.
 
 - There is an API to read the state of the buttons and the touchscreen.
 

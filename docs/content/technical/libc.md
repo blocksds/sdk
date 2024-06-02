@@ -1,51 +1,42 @@
 ---
-title: 'libc port information'
+title: 'C/C++ support'
 weight: 0
 ---
 
 ## 1. Introduction
 
-BlocksDS has code to allow libc functions to work on NDS programs. The supported
-functions are described in this file. Note that they should only be used from
-ARM9 code, as they aren't supported from the ARM7.
+BlocksDS supports modern C/C++ standard libraries by providing the following
+libraries:
 
-## 2. argc and argv
+* [picolibc](https://github.com/picolibc/picolibc), an embedded-centric fork of
+  the Newlib C library;
+* [libstdc++](https://gcc.gnu.org/onlinedocs/libstdc++/), the GNU C++ library.
 
-For NDS and NDS Lite consoles that run ROMs from a flashcard, the loader needs
-to support the argv protocol of libnds. If so, `argv[0]` will hold the path of
-the NDS file in the SD card of the flashcard. The drive name is `fat:`. For
-example, a valid path is `fat:/path/to/rom.nds`.
+However, this support includes some platform-specific caveats.
 
-For DSi consoles loading ROMs from the internal SD card, `argv[0]` works in a
-similar way. It will hold the path to the NDS ROM in the internal SD card, which
-uses `sd:` as prefix. For example, `sd:/path/to/rom.nds`.
+## 2. POSIX I/O
 
-Note that it is possible to use a NDS flashcard on DSi. If the user loads the
-NDS ROM from a flashcard, `argv[0]` will point to the filesystem of the
-flashcard (`fat:`), not the internal SD card (`sd:`).
+BlocksDS provides POSIX standard I/O using the tinystdio library, which is part
+of picolibc. It supports most of the functionality mandated by the C standard,
+as well as some extensions.
 
-Other `argv` entries may be set as well, but this isn't a common occurrence.
+File I/O (`fopen`, `opendir`, etc.) is supported. Storage on cartridges and the
+DSi internal SD card can be accessed. A bundled read-only filesystem called
+NitroFS is also supported. For more information, check the [filesystem documentation](../filesystem).
 
-For more information, check [this](https://devkitpro.org/wiki/Homebrew_Menu).
+Console I/O (`stdin`, `stdout`) is supported; however, by default, no input or
+output is initialized:
 
-## 3. Filesystem
+* `stdout` can be redirected to the built-in libnds console by initializing the
+  console. This can be done using the `consoleInit()` or `consoleDemoInit()`
+  functions.
+* `stderr` can be redirected to the built-in libnds console or
+  a no$gba-compatible emulator debug output by using `consoleDebugInit()`.
 
-Functions like `fopen`, `opendir`, etc. For more information, check the
-[filesystem documentation](../filesystem).
-
-## 4. NitroFS
-
-NitroFS (`nitro:`) is supported, but the implementation is different than the
-one in `libfilesystem`. It should be 100% compatible with it. Please, report
-any bugs you may find with it.
-
-## 5. Text console (stdout, stderr, stdin)
-
-`stdout` and `stderr` can be redirected to the libnds console or to the no$gba
-debug console. They are unbuffered. When text is sent to them (by using
-`printf()` or `fprintf(stderr, ...)` it's always sent to the console.  The
-exceptions are ANSI escape sequences, which are buffered until the end of the
-sequence is received, and then sent to the console low level functions.
+Standard output is unbuffered. When text is sent to them (by using `printf()`
+or `fprintf(stderr, ...)` it's always sent to the console.  The exceptions
+are ANSI escape sequences, which are buffered until the end of the sequence
+is received, and then sent to the console low level functions.
 
 Remember that you can use `fflush(stdout)` or `fflush(stderr)` if buffering
 becomes an issue.
@@ -53,27 +44,45 @@ becomes an issue.
 For more information about ANSI escape sequences, check
 [this link](https://en.wikipedia.org/wiki/ANSI_escape_code).
 
-`stdin` is tied to the keyboard of libnds. When `sscanf(stdin, ...)` is called,
-for example, the keyboard of libnds is used as input device. Please, check the
-examples to see how to use it.
+* `stdin` is tied to the keyboard of libnds. When `sscanf(stdin, ...)` is called,
+for example, the keyboard of libnds is used as input device. For more information,
+see the relevant examples bundled with BlocksDS.
 
-## 6. Memory allocation
+## 3. argc and argv
 
-Functions like `malloc`, `calloc`, `memalign` and `free` work as usual.  They
+To provide correct argv information, the loader needs to support argv structure
+passing. This is not supported by certain legacy loaders; for more information,
+see our page on [legacy support](../legacy_support).
+
+Under compatible loading environment, `argv[0]` will hold the path of the .nds
+file. Other `argv` entries may be set as well, but this isn't a common
+occurrence.
+
+* For cartridges, the drive name used is `fat:` - for example, `fat:/homebrew/program.nds`.
+* For DSi consoles loading .nds files from the internal SD card, the drive
+  name used is `sd:` - for example, `sd:/homebrew/program.nds`.
+
+## 4. Dynamic heap allocation
+
+Functions like `malloc`, `calloc`, `memalign` and `free` are supported. They
 always return space from the main RAM region.
 
-## 7. Time
+## 5. Time
 
-`gettimeofday` and `time` are supported.
+`gettimeofday` and `time` are supported. Timezones are not handled in any
+particular manner, however.
 
-## 8. Exit
+## 6. Exit
 
 If the NDS ROM loader supports it, `exit` can be used to return to the loader.
 You can also return from `main()` to get the same effect.
 
-For more information, check [this document](../exit_to_loader).
+For more information, check [this document](../../design/exit_to_loader).
 
-## 9. Multithreading support
+In addition, `atexit` is supported for dynamically registering program exit
+handlers.
+
+## 7. Multithreading
 
 Functions like `fopen()` or `malloc()` need to be thread-safe, and picolibc uses
 locks to ensure that they are thread-safe. The implementation of the locking
@@ -84,7 +93,7 @@ In general, you don't need to worry about them. However, if there is an
 unexpected crash because of running the undefined instruction `0xEBAD`, it may
 mean that the locking functions have found a logic error.
 
-Printing an error message is very expensive: It is required to include a text
+Printing an error message is very expensive: it is required to include a text
 font as well as console handling functions. The locking functions simply have
 a [function](https://github.com/blocksds/libnds/blob/8e7ab8207dfb761cd9984719690ac0c318f2f1ca/source/common/libc/locks.c#L34)
 with an opcode that is defined to always be an undefined instruction in Thumb

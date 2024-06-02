@@ -1,6 +1,6 @@
 ---
 title: Legacy device/launcher support
-weight: 70
+weight: 50
 ---
 
 ROMs built with BlocksDS are designed first and foremost to support modern
@@ -81,7 +81,8 @@ be limited to appropriate, specialized use cases.
 
 ### Missing argv support
 
-The argv structure was added to libnds [in mid-2007](https://github.com/devkitPro/libnds/commit/34f30043ce8683d48194fa009fd788da691517de);
+The [argv structure](https://devkitpro.org/wiki/Homebrew_Menu) was added to libnds
+[in mid-2007](https://github.com/devkitPro/libnds/commit/34f30043ce8683d48194fa009fd788da691517de);
 this means that any launcher written before that date, as well as many launchers
 written after that date (including ones as recent as Unlaunch), do not support
 passing command-line arguments. Most notably, this impacts the NitroFS filesystem,

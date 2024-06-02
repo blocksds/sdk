@@ -1,12 +1,12 @@
 ---
 title: 'Filesystem support'
-weight: 20
+weight: 10
 ---
 
 ## 1. Introduction
 
 BlocksDS supports using standard C functions to access the filesystem. It is
-possible to use them to access both the SD cards of flashcards, and the internal
+possible to use them to access both the SD cards of flashcarts, and the internal
 SD slot of the DSi. This code is integrated in `libnds`, so you don't need to
 do anything special to use it.
 
@@ -30,11 +30,11 @@ int main(int argc, char *argv[])
 This function whether it's running on a regular DS or a DSi.
 
 - DS: It will try to use DLDI to initialize access to the SD card of the
-  flashcard. If it isn't possible it returns false. If it succeedes, it returns
+  flashcart. If it isn't possible it returns false. If it succeedes, it returns
   true.
 
 - DSi: It will try to initialize access to the internal SD slot, and the SD of
-  the flashcard. It will only return false if the internal slot of the DSi can't
+  the flashcart. It will only return false if the internal slot of the DSi can't
   be accessed, and it will return true if it can.
 
 The initial working directory is "fat:/" on the DS (DLDI), and "sd:/" on DSi.
@@ -65,9 +65,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-It is possible to call `nitroFSInit()` without `fatInitDefault()`, but it
-won't work on flashcarts, just emulators. Check
-[this example](https://github.com/blocksds/sdk/tree/master/examples/filesystem/nitrofs)
+Check [this example](https://github.com/blocksds/sdk/tree/master/examples/filesystem/nitrofs)
 to see how to use `NitroFS`.
 
 ## 2. Supported functions
@@ -88,8 +86,8 @@ specific function isn't supported, raise an issue to request it.
 
 ## 3. Running on hardware
 
-If your flashcard doesn't do it automatically, patch your ROM with the DLDI
-patcher. Most flashcards do this automatically.
+If your flashcart doesn't do it automatically, patch your ROM with the DLDI
+patcher. Most flashcarts do this automatically.
 
 ## 4. Running on emulators
 
