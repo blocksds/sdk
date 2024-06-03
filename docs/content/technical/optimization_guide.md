@@ -111,3 +111,28 @@ There are things which can be done to make the most out of filesystem I/O:
 ```c
     fatInitLookupCacheFile(file, 2 * 1024); /* 2 KB maximum lookup cache */
 ```
+
+## OpenGL-like API usage
+
+### Texture formats
+
+The `GL_RGB` texture format isn't actually supported by the hardware. When a
+texture is loaded with `glTexImage2D()` with format `GL_RGB`, it is actually
+converted to `GL_RGBA` internally by setting the alpha bit of all pixels to 1.
+This is pretty slow, and it isn't normally needed because any graphics
+conversion tool (such as `grit`) can set the alpha bit to 1 when the image is
+converted. None of the 3D examples of BlocksDS use `GL_RGB`. The ones that use
+`GL_RGBA` also show how to convert images the right way.
+
+Also, consider using other texture formats. `GL_RGBA` isn't a very efficient way
+to store textures. All other formats (the ones that use palettes) use a lot less
+memory. In many cases `GL_COMPRESSED` is the best format you can use (but
+converting images to this format is only currently supported by `ptexconv`).
+
+BlocksDS has examples of how to use all texture formats (except for `GL_RGB`,
+which works the same way as `GL_RGBA`, and is never used in order to not
+encourage new users to use it). Take a look at the examples for more details.
+
+Final note: The video capture circuit of the NDS sets the alpha bit to 1, so it
+isn't needed even if you want to use the saved image as a texture, or as a
+16-bit bitmap background. There is an example of how to render to a texture too.
