@@ -12,6 +12,10 @@ and enhancements to the SDK which are not listed here.
 
 ## Upgrading to BlocksDS 1.2.0
 
+* The `SOUND_FREQ` (ARM7) and `TIMER_FREQ` macros have been reworked to
+  provide the nearest frequency to the one requested by the user, rounded.
+  This changes their returned values in some cases; you may want to validate
+  your uses of these macros.
 * In `gl2d.h`, `glLoadSpriteSet` now expects an array of `uint16_t` integers
   for texture coordinates, rather than 32-bit `unsigned int`s. This has been done
   to reduce memory waste, as the coordinates always fit in a 16-bit integer.

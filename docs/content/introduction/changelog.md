@@ -2,24 +2,54 @@
 title: 'Changelog'
 ---
 
-## Version DEV (2024-??-??)
+## Version DEV (2024-06-??)
 
 - libnds:
 
+  - videoGL:
+
+    - Add `glGetColorTablePointer()` (returns pointer in VRAM to the palette
+      of a texture).
+    - Add `glGetTextureExtPointer()` (returns pointer in VRAM to the additional
+      texture data of `GL_COMPRESSED` textures).
+    - Fix allocation of `GL_COMPRESSED` textures when `VRAM_A` is not allocated
+      to the 3D engine.
+    - Fix crash in `glTexImage2D()` with no active texture.
+    - Fix error checking in `glColorTableEXT()` and `glTexImage2D()`.
+    - General code cleanup and improvements.
+    - Minor optimization to loading `GL_RGB` textures using `glTexImage2D()`.
+      Note that using this format is not recommended; see documentation for
+      additional details.
+
+  - GL2D:
+
+    - Improve error checking when loading textures.
+    - Modify sprite sets to use `uint16_t` arrays for texture
+      coordinates.
+
   - Add `hw_sqrtf()` - a hardware-accelerated alternative to `sqrtf()`.
+  - Add support for detecting stack smash canaries.
+    - As a result, the debug versions of libnds are now built with
+      the stack protector enabled.
+  - Add support for printing standard output to the debug console if
+    the on-display console is not initialized.
+  - Change `SOUND_FREQ` (ARM7) and `TIMER_FREQ` to always return the
+    correct frequency value, rounded to the nearest achievable one.
+    - This has been found in user research to be the most intuitive
+      default; if you'd like alternate options, please let us know.
   - Fix `swiSwitchToGBAMode()`.
   - Improve documentation of RTC structs.
-  - Improve GL2D error checking.
-  - Modify GL2D sprite sets to use `uint16_t` arrays for texture
-    coordinates.
 
 - SDK:
 
-  - Add GL2D sprite examples.
+  - Add error code checks to 3D engine examples.
+  - Add GL2D spriteset and tileset examples.
   - Add new tool: squeezer - used for generating packed textures for GL2D
     sprite sets.
   - Add tests for `hw_sqrtf()`.
+  - Avoid using `GL_RGB` and `TEXTURE_SIZE_n` defines in 3D engine examples.
   - Fix VRAM bank setup in "text over 3D" example.
+  - Improve timer example.
 
 ## Version 1.1.0 (2024-05-08)
 
