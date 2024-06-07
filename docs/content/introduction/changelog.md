@@ -20,6 +20,9 @@ title: 'Changelog'
     - Minor optimization to loading `GL_RGB` textures using `glTexImage2D()`.
       Note that using this format is not recommended; see documentation for
       additional details.
+    - `TEXTURE_SIZE_INVALID` has been added to GL_TEXTURE_SIZE_ENUM.
+    - `glTexImage2D()` now fails correctly when invalid sizes are used.
+    - Some minor comment improvements.
 
   - GL2D:
 
