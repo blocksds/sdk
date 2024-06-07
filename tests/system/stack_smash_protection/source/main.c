@@ -5,19 +5,25 @@
 #include <stdio.h>
 #include <nds.h>
 
-void function(void)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#pragma GCC diagnostic ignored "-Wstringop-overflow"
+
+void buggy_function(void)
 {
     char buffer[5];
     strcpy(buffer, "ABCDEFGHIJK");
     printf("%s\n",buffer);
 }
 
+#pragma GCC diagnostic pop
+
 int main(int argc, char *argv[])
 {
     defaultExceptionHandler();
 
     consoleDemoInit();
-    function();
+    buggy_function();
 
     printf("You shouldn't see this message.\n");
 
