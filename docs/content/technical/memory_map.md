@@ -6,7 +6,7 @@ weight: 20
 ## 1. Introduction
 
 The DS has several RAM regions that are distributed across its address space.
-In most cases you don't need to worry about the details, as libnds is setup in a
+In most cases you don't need to worry about the details, as libnds is set up in a
 way that covers most use-cases. All you normally need to worry about is how to
 allocate VRAM to be used by the 2D and 3D engines. However, in some cases it may
 be needed to understand how everything works.
@@ -36,7 +36,7 @@ Address   | Size       | Description
 0x0000000 | 16 KB      | ARM7 BIOS
 0x2000000 | 4 MB       | Main RAM (8 MB in debugger consoles)
 0x3000000 | 0/16/32 KB | Shared WRAM
-0x3800000 | 64 KB      | WRAM (64KB)
+0x3800000 | 64 KB      | ARM7 WRAM (64KB)
 0x4000000 | -          | I/O registers
 0x6000000 | -          | VRAM allocated as Work RAM to the ARM7
 0x8000000 | 32 MB      | GBA slot ROM/RAM
@@ -46,11 +46,10 @@ Address   | Size       | Description
 
 - ARM7 BIOS is 64 KB instead of 16 KB.
 - ARM9 BIOS is 64 KB instead of 32 KB.
-- Main RAM is 16 MB instead.
-- There are 800 KB of Shared WRAM instead of 32 KB.
+- Main RAM is quadrupled to 16 MB (32 MB in debugger consoles).
+- An additional 768 KB of WRAM is provided, referred to as NWRAM.
 - The GBA slot ROM and RAM areas are filled with 0xFF.
 - At 0xC000000 there is a mirror of main RAM.
-- At 0xD000000 there can be 16 MB extra of RAM in a debug DSi model.
 
 ## 3. Memory Protection Unit (MPU)
 
@@ -105,6 +104,8 @@ desired.
 
 ## 4. Main RAM
 
+### 4.1. Configuration
+
 The size and location of main RAM changes depending on the console model. All of
 them have main RAM starting at address 0x2000000, this table shows the
 differences:
@@ -118,28 +119,42 @@ Debugger DSi | 16+16 MB | 0xC000000
 
 All mirrors are uncached in libnds.
 
+On the DSi, the register `SCFG_EXT` allows the developer to set the limit of
+main RAM. It allows you to map 4, 16 or 32 MB of RAM to the adddress space:
+
+- 4 MB: Used as DS compatibility mode, the other 12 MB will be mirrors of the
+  first 4 MB instead of more RAM.
+- 16 MB: Normal setting.
+- 32 MB: On a DSi debugger, it will expose the additional 16 MB of RAM. On a
+  retail DSi, the additional 16 MB will be a mirror of the first 16 MB.
+
 You may have realized that the debugger DSi model doesn't have enough space at
 0x2000000-0x3000000 for the full 32 MB of RAM, only for 16 MB. Unfortunately,
 the additional 16 MB can only be accessed at 0xD000000. This means that,
-according to the setup of libnds, they are uncached.
+according to the setup of libnds, this area is uncached.
 
 Debugger DSi consoles are very unusual, so they aren't a real concern. However,
 3DS consoles in DSi mode can access the full 32 MB that would correspond to a
 DSi debugger unit. Because of this, it is interesting to support the full 32 MB
 of RAM.
 
-The last few KBs of main RAM are reserved by libnds to be used for different
-purposes:
+### 4.2. Reserved areas
 
-- As a (mostly) deprecated inter-CPU-communication region (IPC) between the
-  ARM7 and ARM9. You should only access them through uncached mirrors. If not,
-  you may forget that the ARM7 can't see the ARM9 cache, and you may not send
-  or receive data when you expect it.
-- As the location for the loader to store `argv` when booting a NDS homebrew ROM
-  (at address 0x02FFFE70, check the code
-  [here](https://github.com/blocksds/sdk/blob/e5a03d0940fffe6585786bddac4700d24a814f8d/sys/crts/ds_arm9_crt0.s#L141).
-- This region can also contain information about how to exit the NDS application
-  and return to the loader.
+The last 48 KB of main RAM is reserved by libnds and/or contains data provided by
+the .nds loader:
+
+Address   | Description
+----------|---------------------------------------------------------
+0x2FF0000 | libnds shadows this area with DTCM, making it inaccessible through this address.
+0x2FF4000 | [devkitARM bootstub structure](https://github.com/blocksds/libnds/blob/7d131d933ebab8eecf1c28a4eeb2107257f09e14/include/nds/system.h#L451-L458). Used for implementing the [exit to loader protocol](../../design/exit_to_loader/).
+0x2FFE000 | DSi only: .nds header - 0x1000 bytes.
+0x2FFF000 | libnds ARM9/ARM7 internal IPC region. (Mostly) deprecated.
+0x2FFFC80 | DS/DSi: user settings loaded from flash memory.
+0x2FFFD9C | DS/DSi: ARM9 exception vector, as well as top of stack.
+0x2FFFE00 | DS/DSi: .nds header - 0x160 bytes on DSi, 0x170 bytes on NDS.
+0x2FFFE70 | [devkitARM argv structure](https://github.com/blocksds/libnds/blob/7d131d933ebab8eecf1c28a4eeb2107257f09e14/include/nds/system.h#L435-L447). Used for implementing argument passing.
+
+### 4.3. Caveats
 
 Note that, if both CPUs are accessing main RAM at the same time, there will be
 penalties that will delay accesses. Ideally, ARM9 and ARM7 should use different
@@ -147,16 +162,6 @@ memory regions so that this doesn't happen. That's why the ARM7 normally only
 uses ARM7 WRAM and Shared WRAM (which is always mapped to the ARM7 by libnds).
 This way the ARM7 has access to 96 KB of WRAM, which isn't much, but it's
 normally enough.
-
-One last comment about the DSi additional 16 MB of RAM. Register `SCFG_EXT`
-allows the developer to set the limit of main RAM. It allows you to map 4, 16 or
-32 MB of RAM to the adddress space:
-
-- 4 MB: Used as DS compatibility mode, the other 12 MB will be mirrors of the
-  first 4 MB instead of more RAM.
-- 16 MB: Normal setting.
-- 32 MB: On a DSi debugger, it will expose the additional 16 MB of RAM. In a
-  retail DSi, the additional 16 MB will be a mirror of the first 16 MB.
 
 ## 5. ITCM and DTCM
 
