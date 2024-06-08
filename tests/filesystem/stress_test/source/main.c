@@ -64,10 +64,11 @@ void scan_dir(const char *path)
 
         if (strlen(cur->d_name) == 0)
             break;
-	if (!strcmp(cur->d_name, ".") || !strcmp(cur->d_name, ".."))
+        if (!strcmp(cur->d_name, ".") || !strcmp(cur->d_name, ".."))
             continue;
 
-        char full_name[512];
+        // This is a bit big, let's allocate it on the heap
+        static char full_name[1024];
         snprintf(full_name, sizeof(full_name), "%s/%s", path, cur->d_name);
 
         if (cur->d_type == DT_DIR)
