@@ -3,6 +3,7 @@
 // SPDX-FileContributor: Antonio Niño Díaz, 2024
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <nds.h>
 
@@ -430,6 +431,262 @@ void do_compressed_texture_tests(void)
 
 // -----------------------------------------------------------------------------
 
+struct
+{
+    bool allocated;
+    int value;
+    size_t size;
+    GL_TEXTURE_TYPE_ENUM format;
+}
+texture_state[NUM_TEXTURES];
+
+bool verify_range(void *base, size_t size, uint8_t reference)
+{
+    uint32_t old_abcd = vramSetPrimaryBanks(VRAM_A_LCD, VRAM_B_LCD,
+                                            VRAM_C_LCD, VRAM_D_LCD);
+    uint8_t old_e = VRAM_E_CR;
+    uint8_t old_f = VRAM_F_CR;
+    vramSetBankE(VRAM_E_LCD);
+    vramSetBankF(VRAM_F_LCD);
+
+    // Compare four bytes simultaneously
+    size /= 4;
+    uint32_t *p = base;
+    uint32_t ref_value =
+        ((uint32_t)reference << 24) | ((uint32_t)reference << 16) |
+        ((uint32_t)reference << 8) | ((uint32_t)reference);
+
+    bool ok = true;
+    for (size_t i = 0; i < size; i++)
+    {
+        if (p[i] != ref_value)
+        {
+            printf("\n");
+            printf("p[%d] = %lX (ref %lX)\n", i, p[i], ref_value);
+            ok = false;
+            break;
+        }
+    }
+
+    vramRestorePrimaryBanks(old_abcd);
+    vramSetBankE(old_e);
+    vramSetBankF(old_f);
+
+    return ok;
+}
+
+void verify_texture(int index)
+{
+    GL_TEXTURE_TYPE_ENUM format = texture_state[index].format;
+    size_t size = texture_state[index].size;
+    uint8_t reference_value = texture_state[index].value;
+
+    size_t size_ext = 0;
+    if (format == GL_COMPRESSED)
+    {
+        size_ext = size / 3;
+        size = size - size_ext;
+    }
+
+    // Verify texture
+
+    void *tex = glGetTexturePointer(textureID[index]);
+
+    if (!verify_range(tex, size, reference_value))
+    {
+        printf("%d: Failed to verify range\n", __LINE__);
+        wait_forever();
+    }
+
+    if (format == GL_COMPRESSED)
+    {
+        void *tex_ext = glGetTextureExtPointer(textureID[index]);
+
+        if (!verify_range(tex_ext, size_ext, reference_value))
+        {
+            printf("%d: Failed to verify range\n", __LINE__);
+            wait_forever();
+        }
+    }
+
+    // Check if we need to verify the palette or not
+    if ((format == GL_RGBA) || (format == GL_RGB))
+        return;
+
+    int num_colors = 0;
+    if (format == GL_RGB4)
+        num_colors = 4;
+    else if (format == GL_RGB16)
+        num_colors = 16;
+    else if (format == GL_RGB256)
+        num_colors = 256;
+    else if (format == GL_RGB32_A3)
+        num_colors = 32;
+    else if (format == GL_RGB8_A5)
+        num_colors = 8;
+    else if (format == GL_COMPRESSED)
+        num_colors = 128; // Arbitrary value, this isn't a fixed value
+
+    void *pal = glGetColorTablePointer(textureID[index]);
+
+    if (!verify_range(pal, num_colors * 2, reference_value))
+    {
+        printf("%d: Failed to verify range\n", __LINE__);
+        wait_forever();
+    }
+}
+
+void allocate_random_texture(bool gl_compressed_allowed)
+{
+    for (int i = 0; i < NUM_TEXTURES; i++)
+    {
+        if (texture_state[i].allocated)
+            continue;
+
+        glBindTexture(0, textureID[i]);
+
+        int value = rand() & 0xFF;
+        size_t dimension = 64 << (rand() & 3);
+
+        GL_TEXTURE_TYPE_ENUM format = (rand() & 7) + 1;
+
+        // Ignore GL_RGB format, it's the same as GL_RGBA but the reference
+        // value won't work because the texture is modified when it is loaded.
+        if (format == GL_RGB)
+            format = GL_RGBA;
+
+        if (!gl_compressed_allowed && (format == GL_COMPRESSED))
+            format = GL_RGB256;
+
+        int ret = allocate_texture(i, value, dimension, format);
+        if (ret != 0) // On failure, retry at least until we get to the end
+            continue;
+
+        texture_state[i].allocated = true;
+        texture_state[i].value = value;
+        texture_state[i].format = format;
+        texture_state[i].size = texture_size(dimension, format);
+
+        // Verify that the VRAM data matches the reference after allocating
+
+        verify_texture(i);
+
+        break;
+    }
+}
+
+void free_random_texture(void)
+{
+    // Start trying to delete textures from a random index, not always from 0
+    int offset = rand() % NUM_TEXTURES;
+
+    for (int i = 0; i < NUM_TEXTURES; i++)
+    {
+        int index = (i + offset) % NUM_TEXTURES;
+
+        if (!texture_state[index].allocated)
+            continue;
+
+        glBindTexture(0, textureID[index]);
+
+        // Verify that the texture hasn't been corrupted before deleting it
+
+        verify_texture(index);
+
+        // Free the texture
+
+        int ret = free_texture(index, texture_state[index].format);
+        if (ret != 0) // On failure, retry at least until we get to the end
+            continue;
+
+        texture_state[index].allocated = false;
+
+        break;
+    }
+}
+
+void do_allocation_stress_test_internal(bool gl_compressed_allowed)
+{
+    // Make sure to test that VRAM has the right values after allocating every
+    // new texture and right before deleting it!
+
+    for (int iterations = 0; iterations < 100; iterations++)
+    {
+        int action = rand() & 15;
+
+        if (action == 0) // Allocate all textures
+        {
+            printf("#");
+            for (int i = 0; i < NUM_TEXTURES; i++)
+                allocate_random_texture(gl_compressed_allowed);
+        }
+        else if (action == 1) // Free all textures
+        {
+            printf("_");
+            for (int i = 0; i < NUM_TEXTURES; i++)
+                free_random_texture();
+        }
+        else if (action & 1)
+        {
+            printf("+");
+            allocate_random_texture(gl_compressed_allowed);
+        }
+        else
+        {
+            printf("-");
+            free_random_texture();
+        }
+    }
+
+    printf("\n");
+}
+
+void do_allocation_stress_test(void)
+{
+    printf("Stress test\n");
+    printf("===========\n");
+    printf("\n");
+
+    // We need to run this test with different VRAM configurations. Some of the
+    // combinations allow GL_COMPRESSED format, some don't. VRAM B is always
+    // needed, and one of VRAM A or C at least.
+
+    vramSetPrimaryBanks(VRAM_A_TEXTURE, VRAM_B_TEXTURE, VRAM_C_TEXTURE, VRAM_D_TEXTURE);
+    vramSetBankE(VRAM_E_TEX_PALETTE);
+    vramSetBankF(VRAM_F_TEX_PALETTE);
+    do_allocation_stress_test_internal(true);
+
+    vramSetPrimaryBanks(VRAM_A_TEXTURE, VRAM_B_TEXTURE, VRAM_C_LCD, VRAM_D_LCD);
+    vramSetBankE(VRAM_E_TEX_PALETTE);
+    vramSetBankF(VRAM_F_LCD);
+    do_allocation_stress_test_internal(true);
+
+    vramSetPrimaryBanks(VRAM_A_TEXTURE, VRAM_B_LCD, VRAM_C_TEXTURE, VRAM_D_TEXTURE);
+    vramSetBankE(VRAM_E_LCD);
+    vramSetBankF(VRAM_F_TEX_PALETTE);
+    do_allocation_stress_test_internal(false);
+
+    vramSetPrimaryBanks(VRAM_A_LCD, VRAM_B_TEXTURE, VRAM_C_TEXTURE, VRAM_D_TEXTURE);
+    vramSetBankE(VRAM_E_LCD);
+    vramSetBankF(VRAM_F_TEX_PALETTE);
+    do_allocation_stress_test_internal(true);
+
+    vramSetPrimaryBanks(VRAM_A_LCD, VRAM_B_TEXTURE, VRAM_C_LCD, VRAM_D_TEXTURE);
+    vramSetBankE(VRAM_E_LCD);
+    vramSetBankF(VRAM_F_TEX_PALETTE);
+    do_allocation_stress_test_internal(false);
+
+    vramSetPrimaryBanks(VRAM_A_LCD, VRAM_B_LCD, VRAM_C_TEXTURE, VRAM_D_TEXTURE);
+    vramSetBankE(VRAM_E_TEX_PALETTE);
+    vramSetBankF(VRAM_F_TEX_PALETTE);
+    do_allocation_stress_test_internal(false);
+
+    printf("SUCCESS\n");
+    printf("\n");
+}
+
+// -----------------------------------------------------------------------------
+
 int main(int argc, char **argv)
 {
     memset(tex_buffer, 0, sizeof(tex_buffer));
@@ -451,6 +708,8 @@ int main(int argc, char **argv)
     do_colortableext_tests();
 
     do_compressed_texture_tests();
+
+    do_allocation_stress_test();
 
     glDeleteTextures(NUM_TEXTURES, &textureID[0]);
 
