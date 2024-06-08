@@ -2,7 +2,7 @@
 title: 'Changelog'
 ---
 
-## Version DEV (2024-06-??)
+## Version 1.2.0 (2024-06-08)
 
 - libnds:
 
