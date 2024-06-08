@@ -31,6 +31,8 @@ title: 'Changelog'
       coordinates.
 
   - Add `hw_sqrtf()` - a hardware-accelerated alternative to `sqrtf()`.
+  - Small optimizations to functions that use the hardware accelerators of
+    division and square root.
   - Add support for detecting stack smash canaries.
     - As a result, the debug versions of libnds are now built with
       the stack protector enabled.
@@ -47,12 +49,14 @@ title: 'Changelog'
 
   - Add error code checks to 3D engine examples.
   - Add GL2D spriteset and tileset examples.
-  - Add new tool: squeezer - used for generating packed textures for GL2D
-    sprite sets.
+  - Add new tool: squeezer (by @huxingyi), used for generating packed textures
+    for GL2D sprite sets. It has been forked to easily export formats used by
+    GL2D instead of generic formats.
   - Add tests for `hw_sqrtf()`.
   - Avoid using `GL_RGB` and `TEXTURE_SIZE_n` defines in 3D engine examples.
   - Fix VRAM bank setup in "text over 3D" example.
   - Improve timer example.
+  - Add a test for the videoGL functions that allocate textures and palettes.
 
 ## Version 1.1.0 (2024-05-08)
 
