@@ -221,6 +221,36 @@ stuck on legacy, buggier and less reliable versions of toolchains. These issues
 also need to be resolved before updating to BlocksDS. Some known issues and their
 remedies are documented here; note that this list is not exhaustive.
 
+### ARM7 changes
+
+In libnds, while the ARM9 initializes console hardware in a separate function
+called before `main()`, the ARM7 does so as part of its code. Over time, these
+initializations have been modified. Not adhering to them can cause issues - for
+example, a missing `touchInit();` can lead to the touch screen not functioning
+as expected.
+
+When updating old homebrew with custom ARM7 binaries, it is recommended to study
+the latest version of [the default ARM7 binary](https://github.com/blocksds/sdk/tree/master/sys/default_arm7)
+to apply any necessary changes.
+
+### Replacing IPC with FIFO
+
+Many old libnds-based homebrew extend the `TransferRegion` memory area to facilitate
+communication between the ARM9 and ARM7 CPUs. With the introducion of the FIFO
+message queue system, this approach is discouraged for message/command passing.
+For sharing buffers, one can use the FIFO system to send pointers to main RAM.
+
+### Legacy register names
+
+Old versions of libnds used alternate name defines for the DS console's memory
+mapped registers. They are primarily distinguished by not having the `REG_`
+prefix; for example, `SUB_BLEND_CR` has been replaced by `REG_BLDCNT_SUB`
+in newer versions.
+
+A translation table is provided in `#include <nds/registers_alt.h>`; this can
+be used as a stopgap to compile the project and update all uses of legacy
+register names.
+
 ### New assembly function definition syntax
 
 For ARM/Thumb interwork (calling ARM functions from Thumb and vice versa) to work
@@ -254,19 +284,26 @@ BEGIN_ASM_FUNC myFunction
    // code
 ```
 
-### Legacy register names
+### Memory layout changes
 
-Old versions of libnds used alternate name defines for the DS console's memory
-mapped registers. They are primarily distinguished by not having the `REG_`
-prefix; for example, `SUB_BLEND_CR` has been replaced by `REG_BLDCNT_SUB`
-in newer versions.
+Hardcoding areas at the end of RAM at `0x27FFFFF` is not compatible with
+the DSi, as it has more than 8 MB of RAM. Using `0x2FFFFFF` works on both
+DS and DSi consoles. Likewise, operations like using `| 0x400000` or
+`| 0x800000` to mark uncached variants of cached addresses should be
+replaced with the `memUncached()` helper or by using cached pointers
+alongside cache flushing/invalidation functions to ensure the ARM7
+can see the changes; these transformations are different in DS and
+DSi modes.
 
-A translation table is provided in `#include <nds/registers_alt.h>`; this can
-be used as a stopgap to compile the project and update all uses of legacy
-register names.
+Note that, as all accesses omit the ARM9 cache on the ARM7 CPU, it is
+recommended to send pointers to it which have not been processed by
+`memUncached()`.
 
 ### Other changes
 
+* `irqInit()` is now called on the ARM9 CPU before `main()`. As the FIFO
+  system registers its own IRQ handlers, and `irqInit()` clears them,
+  extraneous calls to it should be removed.
 * `DIR_ITER*`, `diropen`, `dirnext` and `dirclose` are non-standard libfat
   extensions; they should be replaced by `DIR*`, `opendir`, `readdir` and
   `closedir`, respectively.
