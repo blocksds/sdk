@@ -178,6 +178,12 @@ ITCM is similarly fast, and it is used by libnds for time-sensitive code like
 exception handlers. Developers may use the remaining space for anything they
 like.
 
+Something very important to consider is that only the ARM9 sees ITCM and DTCM.
+The ARM7 can't see them, so you can't use them to share data between CPUs. Also,
+the DMA doesn't see ITCM or DTCM, so you can't use it to copy data when the
+source or destination is in ITCM or DTCM, you will have to use a regular CPU
+copy.
+
 ITCM can't be remapped, but the 32 KB of ITCM are mirrored from 0x0000000 to
 0x2000000. It is important to allow the CPU to access the first few KB of ITCM
 at address 0x0000000 because that's where the CPU expects the exception vectors,
