@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
               0.0, 1.0, 0.0); // Up
 
     // Setup the light
-    glLight(0, RGB15(31, 31, 31) , 0, floattov10(-1.0), 0);
+    glLight(0, RGB15(31, 31, 31), 0, floattov10(-1.0), 0);
 
     while (1)
     {
