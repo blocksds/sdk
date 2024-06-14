@@ -88,12 +88,6 @@ _start:
     ldr     r4, =__itcm_end
     bl      CopyMemCheck
 
-    // Copy reserved vectors area (ITCM section) from LMA to VMA
-    ldr     r1, =__vectors_lma
-    ldr     r2, =__vectors_start
-    ldr     r4, =__vectors_end
-    bl      CopyMemCheck
-
     // Copy DTCM from LMA to VMA
     ldr     r1, =__dtcm_lma
     ldr     r2, =__dtcm_start
