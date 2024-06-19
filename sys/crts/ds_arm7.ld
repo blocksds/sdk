@@ -4,6 +4,17 @@ OUTPUT_FORMAT("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 OUTPUT_ARCH(arm)
 ENTRY(_start)
 
+/* User-configurable symbols. */
+
+/* The size, in bytes, of the reserved section at the end of IWRAM. */
+/* Traditionally, ARM7 reserves 0x40 bytes here. */
+PROVIDE(__iwram_reserved_size = 0x40);
+
+/* ARM supervisor (SWI calls) stack size. */
+PROVIDE(__svc_stack_size = 0x100);
+
+/* ARM interrupt handler stack size. */
+PROVIDE(__irq_stack_size = 0x100);
 
 PHDRS {
 	crt0  PT_LOAD FLAGS(7);
@@ -22,11 +33,11 @@ MEMORY {
 }
 
 __iwram_start	=	ORIGIN(iwram);
-__iwram_top	=	ORIGIN(iwram)+ LENGTH(iwram);
+__iwram_top	=	ORIGIN(iwram) + LENGTH(iwram);
 
-__sp_irq	=	__iwram_top - 0x100;
-__sp_svc	=	__sp_irq - 0x100;
-__sp_usr	=	__sp_svc - 0x100;
+__sp_irq	=	__iwram_top - __iwram_reserved_size;
+__sp_svc	=	__sp_irq - __irq_stack_size;
+__sp_usr	=	__sp_svc - __svc_stack_size;
 
 __irq_flags	=	0x04000000 - 8;
 __irq_flagsaux	=	0x04000000 - 0x40;

@@ -4,6 +4,21 @@ OUTPUT_FORMAT("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 OUTPUT_ARCH(arm)
 ENTRY(_start)
 
+/* User-configurable symbols. */
+
+/* DLDI driver area size. */
+PROVIDE(__dldi_size = 16384);
+
+/* The size, in bytes, of the reserved section at the end of DTCM. */
+/* Traditionally, ARM9 reserves 0x40 bytes here. */
+PROVIDE(__dtcm_reserved_size = 0x40);
+
+/* ARM supervisor (SWI calls) stack size. */
+PROVIDE(__svc_stack_size = 0x100);
+
+/* ARM interrupt handler stack size. */
+PROVIDE(__irq_stack_size = 0x100);
+
 __ewram_end	=	ORIGIN(ewram) + LENGTH(ewram);
 __eheap_end	=	ORIGIN(ewram) + LENGTH(ewram);
 
@@ -11,15 +26,16 @@ __dtcm_top	=	ORIGIN(dtcm) + LENGTH(dtcm);
 __irq_flags	=	__dtcm_top - 0x08;
 __irq_vector	=	__dtcm_top - 0x04;
 
-__sp_svc	=	__dtcm_top - 0x100;
-__sp_irq	=	__sp_svc - 0x100;
-__sp_usr	=	__sp_irq - 0x100;
+__sp_svc	=	__dtcm_top - __dtcm_reserved_size;
+__sp_irq	=	__sp_svc - __svc_stack_size;
+__sp_usr	=	__sp_irq - __irq_stack_size;
+
+__dldi_log2_size = LOG2CEIL(__dldi_size + 1) - 1;
 
 PHDRS {
 	main    PT_LOAD FLAGS(7);
 	dtcm    PT_LOAD FLAGS(7);
 	itcm    PT_LOAD FLAGS(7);
-	vectors PT_LOAD FLAGS(7);
 	twl     PT_LOAD FLAGS(0x100007);
 }
 
@@ -38,8 +54,6 @@ SECTIONS
 	/* Create DLDI driver area. It should be zero-byte if DLDI code
 	   is not present, but set to an user-provided size if it is
            present. */
-	PROVIDE(__dldi_size = 16384);
-	__dldi_log2_size = LOG2CEIL(__dldi_size + 1) - 1;
 	.dldi :
 	{
 		__dldi_start = .;
@@ -61,9 +75,9 @@ SECTIONS
 
 	.text :   /* ALIGN (4): */
 	{
-		*(EXCLUDE_FILE(*.itcm* *.vectors* *.twl*) .text)
-		*(EXCLUDE_FILE(*.itcm* *.vectors* *.twl*) .stub)
-		*(EXCLUDE_FILE(*.itcm* *.vectors* *.twl*) .text.*)
+		*(EXCLUDE_FILE(*.itcm* *.twl*) .text)
+		*(EXCLUDE_FILE(*.itcm* *.twl*) .stub)
+		*(EXCLUDE_FILE(*.itcm* *.twl*) .text.*)
 		/* .gnu.warning sections are handled specially by elf32.em.  */
 		*(EXCLUDE_FILE(*.twl*) .gnu.warning)
 		*(EXCLUDE_FILE(*.twl*) .gnu.linkonce.t*)
@@ -216,6 +230,10 @@ SECTIONS
 	{
 		__itcm_lma = LOADADDR(.itcm);
 		__itcm_start = ABSOLUTE(.);
+
+		/* Vectors must be placed at the beginning of ITCM. */
+		KEEP(*(.vectors .vectors.*))
+
 		*(.itcm)
 		*(.itcm.*)
 		*.itcm*(.text .stub .text.*)
@@ -223,15 +241,6 @@ SECTIONS
 		__itcm_end = ABSOLUTE(.);
 	} >itcm AT>ewram :itcm = 0xff
 
-	.vectors :
-	{
-		__vectors_lma = LOADADDR(.vectors);
-		__vectors_start = ABSOLUTE(.);
-		KEEP(*(.vectors .vectors.*))
-		. = ALIGN(4);
-		__vectors_end = ABSOLUTE(.);
-	} >vectors AT>ewram :vectors = 0xff
-	
 	.sbss __dtcm_end (NOLOAD): 
 	{
 		__sbss_start = ABSOLUTE(.);
@@ -264,7 +273,7 @@ SECTIONS
 
 	__tls_size = __tls_end - __tls_start ;
 
-	.twl __end__ : AT(MAX(0x2400000,MAX(__end__,LOADADDR(.vectors)+SIZEOF(.vectors))))
+	.twl __end__ : AT(MAX(0x2400000,__end__))
 	{
 		__arm9i_lma__ = LOADADDR(.twl);
 		__arm9i_start__ = ABSOLUTE(.);
