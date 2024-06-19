@@ -2,6 +2,93 @@
 title: 'Changelog'
 ---
 
+## Version DEV (2024-??-??)
+
+- libnds:
+
+  - New touchscreen driver:
+
+    - The touchscreen driver has been rewritten from the ground up.
+    - A new routine for filtering measurements is now used for both TSC (NTR)
+      and CDC (TWL) touch inputs. This should provide more accurate results,
+      particularly on more worn down displays and screen protectors. More
+      testing is required, however.
+    - On TSC (NTR), `tscMeasure()` now uses the 16-clock-per-conversion method
+      to speed up measurement readouts.
+    - The duration of the critical (interrupt-blocking) section of the touch
+      driver has been reduced, and the TSC (NTR) driver has had its performance
+      optimized on top of that compared to 1.2.0 and below.
+    - On the ARM7 side, `touchApplyCalibration` and `touchReadData` have been
+      added to allow more granular access to the touchscreen driver's logic.
+    - As these commands were only intended for TSC (NTR), `touchRead` and
+      `touchReadTemperature` were moved to a new header, `tsc.h`, and renamed
+      to `tscRead` and `tscReadTemperature` respectively.
+
+  - Interrupt handling:
+
+    - The interrupt dispatcher has been optimized to use `O(1)` as opposed
+      to `O(n)` lookups. This is always faster on ARM9, and faster for
+      more than 2-3 defined IRQ handlers on ARM7, which is the common
+      scenario.
+    - Fixed a bug where `irqClearAUX()` would disable the non-auxillary
+      interrupt of the same bit mask on ARM7.
+    - Fixed behaviour in setting and clearing of multiple interrupt
+      handlers at a time (bit masks with more than one bit set). Now,
+      setting multiple bits at once with `irqSet()` or `irqClear()` acts
+      the same as setting one bit at a time.
+
+  - Memory usage:
+
+    - ITCM use has been reduced by about 320-380 bytes, depending on your
+      codebase's use of libnds.
+    - DTCM use has been reduced by 192 bytes - the size of the
+      reserved section at the end of memory is now 64 bytes by default
+      and can be controlled with the `__dtcm_reserved_size` linker
+      symbol.
+    - ARM7 IWRAM use has been reduced by 192 bytes - the size of the
+      reserved section at the end of memory is now 64 bytes by default
+      and can be controlled with the `__iwram_reserved_size` linker
+      symbol.
+    - The size of the supervisor and IRQ stack can now be controlled by
+      defining the `__svc_stack_size` and `__irq_stack_size` linker
+      symbols.
+
+  - Code refactoring:
+
+    - `RTC_CR`, `RTC_CR8` and `HALT_CR` have been renamed to `REG_RTCCNT`,
+      `REG_RTCCNT8` and `REG_HALTCNT`, respectively.
+    - GL2D now uses existing `videoGL.h` helpers instead of reimplementing
+      its own copies.
+    - Many fields and functions have been documented, including firmware
+      flash commands, DLDI driver structures. 
+    - Missing `DMA_START` constants have been added.
+    - The constants used in `tscReadTemperature` have been documented.
+    - `SerialWaitBusy` has been renamed to `spiWaitBusy`.
+
+  - Other:
+
+    - ARM7 SPI bus helper functions have been added: `spiExchange`,
+      `spiRead` and `spiWrite`.
+    - Decompression of Huffman-compressed data has been implemented.
+      To faciliate this, `decompressStreamStruct()` has been added.
+    - `glCallList()` and `cardStartTransfer()` now use the safe helper
+      function `dmaSetParams()`.
+    - wf-fatfs has been updated, bringing minor performance improvements
+      to directory lookups.
+
+- SDK:
+
+  - Examples:
+
+    - Added an 8-bit bitmap background loading example.
+    - Added a BIOS decompression example.
+    - Added a NitroFS paletted texture loading example.
+    - Added a touch input test, and two examples.
+
+  - The BlocksDS SDK now depends on the `wf-nnpack` package, which provides
+    standalone, command-line compressors for the decompression methods
+    supported by the console's BIOS.
+
 ## Version 1.2.0 (2024-06-08)
 
 - libnds:
@@ -30,20 +117,22 @@ title: 'Changelog'
     - Modify sprite sets to use `uint16_t` arrays for texture
       coordinates.
 
-  - Add `hw_sqrtf()` - a hardware-accelerated alternative to `sqrtf()`.
-  - Small optimizations to functions that use the hardware accelerators of
-    division and square root.
-  - Add support for detecting stack smash canaries.
-    - As a result, the debug versions of libnds are now built with
-      the stack protector enabled.
-  - Add support for printing standard output to the debug console if
-    the on-display console is not initialized.
-  - Change `SOUND_FREQ` (ARM7) and `TIMER_FREQ` to always return the
-    correct frequency value, rounded to the nearest achievable one.
-    - This has been found in user research to be the most intuitive
-      default; if you'd like alternate options, please let us know.
-  - Fix `swiSwitchToGBAMode()`.
-  - Improve documentation of RTC structs.
+  - Other:
+
+    - Add `hw_sqrtf()` - a hardware-accelerated alternative to `sqrtf()`.
+    - Small optimizations to functions that use the hardware accelerators of
+      division and square root.
+    - Add support for detecting stack smash canaries.
+      - As a result, the debug versions of libnds are now built with
+        the stack protector enabled.
+    - Add support for printing standard output to the debug console if
+      the on-display console is not initialized.
+    - Change `SOUND_FREQ` (ARM7) and `TIMER_FREQ` to always return the
+      correct frequency value, rounded to the nearest achievable one.
+      - This has been found in user research to be the most intuitive
+        default; if you'd like alternate options, please let us know.
+    - Fix `swiSwitchToGBAMode()`.
+    - Improve documentation of RTC structs.
 
 - SDK:
 

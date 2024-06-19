@@ -10,6 +10,20 @@ to implement. These are documented here.
 Please refer to the changelog for a full list of changes, including additions
 and enhancements to the SDK which are not listed here.
 
+## Upgrading to BlocksDS 1.3.0
+
+* As these commands were only intended for TSC (NTR), `touchRead` and
+  `touchReadTemperature` were moved to a new header, `tsc.h`, and renamed
+  to `tscRead` and `tscReadTemperature` respectively.
+* In a similar fashion, `cdcTouchRead` is no longer available - it has
+  been replaced by `cdcTouchReadData` which exposes all samples read;
+  however, it is recommended to use `touchReadData` which supports both
+  TSC (NTR) and CDC (TWL).
+* Some macro and function names have been changed:
+  - `RTC_CR`, `RTC_CR8` and `HALT_CR` have been renamed to `REG_RTCCNT`,
+    `REG_RTCCNT8` and `REG_HALTCNT`, respectively.
+  - `SerialWaitBusy` has been renamed to `spiWaitBusy`.
+
 ## Upgrading to BlocksDS 1.2.0
 
 * The `SOUND_FREQ` (ARM7) and `TIMER_FREQ` macros have been reworked to
