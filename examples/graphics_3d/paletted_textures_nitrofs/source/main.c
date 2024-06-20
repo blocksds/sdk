@@ -63,61 +63,63 @@ int main(int argc, char **argv)
     // Generate IDs for two textures
     glGenTextures(2, &textureID[0]);
 
-    void *gfxDst = NULL;
-    void *palDst = NULL;
-    GRFHeader header = { 0 };
-    GRFError err = grfLoadPath("grit/ball_png.grf", &header, &gfxDst, NULL,
-                               NULL, NULL, &palDst, NULL);
-    if (err != GRF_NO_ERROR)
     {
-        printf("Couldn't load GRF file: %d", err);
-        wait_forever();
-    }
+        void *gfxDst = NULL;
+        void *palDst = NULL;
+        GRFHeader header = { 0 };
+        GRFError err = grfLoadPath("grit/ball_png.grf", &header, &gfxDst, NULL,
+                                   NULL, NULL, &palDst, NULL);
+        if (err != GRF_NO_ERROR)
+        {
+            printf("Couldn't load GRF file: %d", err);
+            wait_forever();
+        }
 
-    if (gfxDst == NULL)
-    {
-        printf("No graphics found in GRF file");
-        wait_forever();
-    }
+        if (gfxDst == NULL)
+        {
+            printf("No graphics found in GRF file");
+            wait_forever();
+        }
 
-    if (palDst == NULL)
-    {
-        printf("No palette found in GRF file");
-        wait_forever();
-    }
+        if (palDst == NULL)
+        {
+            printf("No palette found in GRF file");
+            wait_forever();
+        }
 
-    if (header.gfxAttr != 8)
-    {
-        printf("Invalid format in GRF file");
-        wait_forever();
-    }
+        if (header.gfxAttr != 8)
+        {
+            printf("Invalid format in GRF file");
+            wait_forever();
+        }
 
-    // Load texture once while setting color 0 as transparent
-    glBindTexture(0, textureID[0]);
-    if (glTexImage2D(0, 0, GL_RGB256, header.gfxWidth, header.gfxHeight, 0,
-                     TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT, gfxDst) == 0)
-    {
-        printf("Failed to load texture 1\n");
-        wait_forever();
-    }
-    if (glColorTableEXT(0, 0, header.palAttr, 0, 0, palDst) == 0)
-    {
-        printf("Failed to load palette 1\n");
-        wait_forever();
-    }
+        // Load texture once while setting color 0 as transparent
+        glBindTexture(0, textureID[0]);
+        if (glTexImage2D(0, 0, GL_RGB256, header.gfxWidth, header.gfxHeight, 0,
+                         TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT, gfxDst) == 0)
+        {
+            printf("Failed to load texture 1\n");
+            wait_forever();
+        }
+        if (glColorTableEXT(0, 0, header.palAttr, 0, 0, palDst) == 0)
+        {
+            printf("Failed to load palette 1\n");
+            wait_forever();
+        }
 
-    // Load the same texture but this time don't set color 0 as transparent
-    glBindTexture(0, textureID[1]);
-    if (glTexImage2D(0, 0, GL_RGB256, header.gfxWidth, header.gfxHeight, 0,
-                     TEXGEN_TEXCOORD, gfxDst) == 0)
-    {
-        printf("Failed to load texture 2\n");
-        wait_forever();
-    }
-    if (glColorTableEXT(0, 0, header.palAttr, 0, 0, palDst) == 0)
-    {
-        printf("Failed to load palette 2\n");
-        wait_forever();
+        // Load the same texture but this time don't set color 0 as transparent
+        glBindTexture(0, textureID[1]);
+        if (glTexImage2D(0, 0, GL_RGB256, header.gfxWidth, header.gfxHeight, 0,
+                         TEXGEN_TEXCOORD, gfxDst) == 0)
+        {
+            printf("Failed to load texture 2\n");
+            wait_forever();
+        }
+        if (glColorTableEXT(0, 0, header.palAttr, 0, 0, palDst) == 0)
+        {
+            printf("Failed to load palette 2\n");
+            wait_forever();
+        }
     }
 
     // Setup matrices
@@ -212,6 +214,8 @@ int main(int argc, char **argv)
 
         glFlush(0);
     }
+
+    glDeleteTextures(2, &textureID[0]);
 
     return 0;
 }

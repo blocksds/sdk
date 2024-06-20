@@ -37,45 +37,51 @@ int main(int argc, char *argv[])
 
     oamEnable(&oamMain);
 
-    void *gfxDst = NULL;
-    void *palDst = NULL;
-    size_t gfxSize, palSize;
-    GRFHeader header = { 0 };
-    GRFError err = grfLoadPath("grit/ball_png.grf", &header, &gfxDst, &gfxSize,
-                               NULL, NULL, &palDst, &palSize);
-    if (err != GRF_NO_ERROR)
+    u16 *gfx;
     {
-        printf("Couldn't load GRF file: %d", err);
-        wait_forever();
+        void *gfxDst = NULL;
+        void *palDst = NULL;
+        size_t gfxSize, palSize;
+        GRFHeader header = { 0 };
+        GRFError err = grfLoadPath("grit/ball_png.grf", &header, &gfxDst, &gfxSize,
+                                   NULL, NULL, &palDst, &palSize);
+        if (err != GRF_NO_ERROR)
+        {
+            printf("Couldn't load GRF file: %d", err);
+            wait_forever();
+        }
+
+        if (gfxDst == NULL)
+        {
+            printf("No graphics found in GRF file");
+            wait_forever();
+        }
+
+        if (palDst == NULL)
+        {
+            printf("No palette found in GRF file");
+            wait_forever();
+        }
+
+        if (header.gfxAttr != 8)
+        {
+            printf("Invalid format in GRF file");
+            wait_forever();
+        }
+
+        // Flush cache so that we can use DMA to copy the data to VRAM
+        DC_FlushAll();
+
+        // Allocate space for the tiles and copy them there
+        gfx = oamAllocateGfx(&oamMain, SpriteSize_32x32, SpriteColorFormat_256Color);
+        dmaCopy(gfxDst, gfx, gfxSize);
+
+        // Copy palette
+        dmaCopy(palDst, SPRITE_PALETTE, palSize);
+
+        free(gfxDst);
+        free(palDst);
     }
-
-    if (gfxDst == NULL)
-    {
-        printf("No graphics found in GRF file");
-        wait_forever();
-    }
-
-    if (palDst == NULL)
-    {
-        printf("No palette found in GRF file");
-        wait_forever();
-    }
-
-    if (header.gfxAttr != 8)
-    {
-        printf("Invalid format in GRF file");
-        wait_forever();
-    }
-
-    // Flush cache so that we can use DMA to copy the data to VRAM
-    DC_FlushAll();
-
-    // Allocate space for the tiles and copy them there
-    u16 *gfx = oamAllocateGfx(&oamMain, SpriteSize_32x32, SpriteColorFormat_256Color);
-    dmaCopy(gfxDst, gfx, gfxSize);
-
-    // Copy palette
-    dmaCopy(palDst, SPRITE_PALETTE, palSize);
 
     oamSet(&oamMain, 0,
            100, 50, // X, Y

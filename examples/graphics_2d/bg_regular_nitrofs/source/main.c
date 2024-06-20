@@ -33,51 +33,54 @@ int main(int argc, char *argv[])
         wait_forever();
     }
 
-    void *gfxDst = NULL;
-    size_t gfxSize, mapSize, palSize;
-    void *mapDst = NULL;
-    void *palDst = NULL;
-    GRFHeader header = { 0 };
-    GRFError err = grfLoadPath("grit/city_png.grf", &header, &gfxDst, &gfxSize,
-                               &mapDst, &mapSize, &palDst, &palSize);
-    if (err != GRF_NO_ERROR)
+    int bg;
     {
-        printf("Couldn't load GRF file: %d", err);
-        wait_forever();
+        void *gfxDst = NULL;
+        size_t gfxSize, mapSize, palSize;
+        void *mapDst = NULL;
+        void *palDst = NULL;
+        GRFHeader header = { 0 };
+        GRFError err = grfLoadPath("grit/city_png.grf", &header, &gfxDst, &gfxSize,
+                                   &mapDst, &mapSize, &palDst, &palSize);
+        if (err != GRF_NO_ERROR)
+        {
+            printf("Couldn't load GRF file: %d", err);
+            wait_forever();
+        }
+
+        if (gfxDst == NULL)
+        {
+            printf("No graphics found in GRF file");
+            wait_forever();
+        }
+
+        if (mapDst == NULL)
+        {
+            printf("No map found in GRF file");
+            wait_forever();
+        }
+
+        if (palDst == NULL)
+        {
+            printf("No palette found in GRF file");
+            wait_forever();
+        }
+
+        if (header.gfxAttr != 8)
+        {
+            printf("Invalid format in GRF file");
+            wait_forever();
+        }
+
+        bg = bgInit(0, BgType_Text8bpp, BgSize_T_256x256, 0, 1);
+
+        // Flush cache so that we can use DMA to copy the data to VRAM
+        DC_FlushAll();
+
+        dmaCopy(gfxDst, bgGetGfxPtr(bg), gfxSize);
+        dmaCopy(mapDst, bgGetMapPtr(bg), mapSize);
+        dmaCopy(palDst, BG_PALETTE, palSize);
     }
-
-    if (gfxDst == NULL)
-    {
-        printf("No graphics found in GRF file");
-        wait_forever();
-    }
-
-    if (mapDst == NULL)
-    {
-        printf("No map found in GRF file");
-        wait_forever();
-    }
-
-    if (palDst == NULL)
-    {
-        printf("No palette found in GRF file");
-        wait_forever();
-    }
-
-    if (header.gfxAttr != 8)
-    {
-        printf("Invalid format in GRF file");
-        wait_forever();
-    }
-
-    int bg = bgInit(0, BgType_Text8bpp, BgSize_T_256x256, 0, 1);
-
-    // Flush cache so that we can use DMA to copy the data to VRAM
-    DC_FlushAll();
-
-    dmaCopy(gfxDst, bgGetGfxPtr(bg), gfxSize);
-    dmaCopy(mapDst, bgGetMapPtr(bg), mapSize);
-    dmaCopy(palDst, BG_PALETTE, palSize);
 
     printf("PAD:   Scroll background\n");
     printf("START: Exit to loader\n");

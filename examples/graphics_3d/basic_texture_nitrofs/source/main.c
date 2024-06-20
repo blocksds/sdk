@@ -54,36 +54,40 @@ int main(int argc, char **argv)
     // Setup some VRAM as memory for textures
     vramSetBankA(VRAM_A_TEXTURE);
 
-    void *gfxDst = NULL;
     GRFHeader header = { 0 };
-    GRFError err = grfLoadPath("grit/neon_png.grf", &header, &gfxDst, NULL,
-                               NULL, NULL, NULL, NULL);
-    if (err != GRF_NO_ERROR)
     {
-        printf("Couldn't load GRF file: %d", err);
-        wait_forever();
-    }
+        void *gfxDst = NULL;
+        GRFError err = grfLoadPath("grit/neon_png.grf", &header, &gfxDst, NULL,
+                                   NULL, NULL, NULL, NULL);
+        if (err != GRF_NO_ERROR)
+        {
+            printf("Couldn't load GRF file: %d", err);
+            wait_forever();
+        }
 
-    if (gfxDst == NULL)
-    {
-        printf("No graphics found in GRF file");
-        wait_forever();
-    }
+        if (gfxDst == NULL)
+        {
+            printf("No graphics found in GRF file");
+            wait_forever();
+        }
 
-    if (header.gfxAttr != 16)
-    {
-        printf("Invalid format in GRF file");
-        wait_forever();
-    }
+        if (header.gfxAttr != 16)
+        {
+            printf("Invalid format in GRF file");
+            wait_forever();
+        }
 
-    // Load texture
-    glGenTextures(1, &textureID);
-    glBindTexture(0, textureID);
-    if (glTexImage2D(0, 0, GL_RGBA, header.gfxWidth, header.gfxHeight, 0,
-                     TEXGEN_TEXCOORD, gfxDst) == 0)
-    {
-        printf("Failed to load texture\n");
-        wait_forever();
+        // Load texture
+        glGenTextures(1, &textureID);
+        glBindTexture(0, textureID);
+        if (glTexImage2D(0, 0, GL_RGBA, header.gfxWidth, header.gfxHeight, 0,
+                         TEXGEN_TEXCOORD, gfxDst) == 0)
+        {
+            printf("Failed to load texture\n");
+            wait_forever();
+        }
+
+        free(gfxDst);
     }
 
     glMatrixMode(GL_PROJECTION);
@@ -169,6 +173,8 @@ int main(int argc, char **argv)
 
         glFlush(0);
     }
+
+    glDeleteTextures(1, &textureID);
 
     return 0;
 }

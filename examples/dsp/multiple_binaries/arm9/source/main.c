@@ -173,5 +173,7 @@ int main(int argc, char **argv)
         printf("REP: %u %d %d\n", rep0, rep1, rep2);
     }
 
+    free(tlf_from_nitrofs);
+
     return 0;
 }

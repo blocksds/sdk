@@ -252,5 +252,7 @@ int main(int argc, char *argv[])
         glFlush(0);
     }
 
+    glDeleteTextures(1, &textureID);
+
     return 0;
 }

@@ -343,5 +343,7 @@ int main(int argc, char *argv[])
         frame ^= 1;
     }
 
+    glDeleteTextures(1, &textureID);
+
     return 0;
 }

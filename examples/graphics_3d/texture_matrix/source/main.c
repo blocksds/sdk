@@ -27,9 +27,9 @@ int main(int argc, char *argv[])
     glClearPolyID(0);
     glClearDepth(0x7FFF);
 
-    int texture;
-    glGenTextures(1, &texture);
-    glBindTexture(0, texture);
+    int textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(0, textureID);
     if (glTexImage2D(0, 0, GL_RGBA, 256, 256, 0,
                      TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T,
                      teapotBitmap) == 0)
@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
 
         glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_FORMAT_LIGHT0 | POLY_MODULATION);
 
-        glBindTexture(0, texture);
+        glBindTexture(0, textureID);
 
         // Draw regular models
 
@@ -129,6 +129,8 @@ int main(int argc, char *argv[])
 
         glFlush(0);
     }
+
+    glDeleteTextures(1, &textureID);
 
     return 0;
 }
