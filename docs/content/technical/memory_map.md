@@ -203,7 +203,18 @@ because the ARM7 WRAM is so small, libnds allocates all of it to the ARM7 in a
 way that the 32 KB of shared WRAM go right before the 64 KB of ARM7 WRAM, for a
 total of 96 KB of WRAM.
 
-### 6.1. DSi Shared WRAM (NWRAM)
+### 6.1. Reserved areas
+
+The last 64 bytes of ARM7 WRAM is reserved for the NDS BIOS:
+
+Address   | Description
+----------|---------------------------------------------------------
+0x380FFC0 | BIOS auxillary (DSi-specific) IRQ acknowledgement
+0x380FFDC | ARM7 exception vector, as well as top of stack.
+0x380FFF8 | BIOS IRQ acknowledgement
+0x380FFFC | BIOS IRQ handler access
+
+### 6.2. DSi Shared WRAM (NWRAM)
 
 The DSi introduces 3 new banks of WRAM (libnds calls it NWRAM). Each one of the
 banks (A, B and C) are 256 KB in size. Each bank is divided in 32 KB slots that

@@ -69,8 +69,13 @@ title: 'Changelog'
 
     - ARM7 SPI bus helper functions have been added: `spiExchange`,
       `spiRead` and `spiWrite`.
+    - `consoleLoadFont()` has been cleaned up. Note that the
+      `convertSingleColor` option has been removed, as 1bpp fonts are now
+      supported.
     - Decompression of Huffman-compressed data has been implemented.
       To faciliate this, `decompressStreamStruct()` has been added.
+    - Decompression utility functions are now available in both the
+      ARM9 and ARM7 build of libnds.
     - `glCallList()` and `cardStartTransfer()` now use the safe helper
       function `dmaSetParams()`.
     - wf-fatfs has been updated, bringing minor performance improvements
@@ -81,6 +86,7 @@ title: 'Changelog'
   - Examples:
 
     - Added an 8-bit bitmap background loading example.
+    - Added an example of combining 3D, 2D sprite, and 2D background display.
     - Added a BIOS decompression example.
     - Added a NitroFS paletted texture loading example.
     - Added a touch input test, and two examples.
