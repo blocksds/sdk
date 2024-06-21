@@ -21,7 +21,6 @@ ConsoleFont customFont = {
     .bpp = 1,
     .asciiOffset = 0,
     .numChars = 128,
-    .convertSingleColor = true
 };
 
 int main(int argc, char **argv)
@@ -34,7 +33,7 @@ int main(int argc, char **argv)
     printf("\x1b[2J");
 
     for (int i = 0; i < 256; i++)
-        printf("\x1b[%d;%dH%c", i/32, i%32, i);
+        printf("\x1b[%d;%dH%c", i / 32, i % 32, i);
 
     printf("\x1b[23;0HPress START to exit to loader");
 
