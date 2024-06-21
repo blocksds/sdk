@@ -48,7 +48,6 @@ int main(int argc, char **argv)
 
     // Copy palette
     dmaCopy(ballPal, SPRITE_PALETTE, ballPalLen);
-    dmaCopy(ballPal, SPRITE_PALETTE_SUB, ballPalLen);
 
     oamSet(&oamMain, 0,
            100, 50, // X, Y
