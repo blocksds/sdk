@@ -1,0 +1,2 @@
+# 8 bpp bitmap texture, Huffman compression
+-gB8 -gb -gx -gTFF00FF -gzh
