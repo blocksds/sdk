@@ -11,7 +11,8 @@ ARM_NONE_EABI_PATH	?= $(WONDERFUL_TOOLCHAIN)/toolchain/gcc-arm-none-eabi/bin/
 # User config
 # ===========
 
-NAME		:= dldi
+BLOCKSDS_VERSION	:= 10300
+NAME			:= dldi
 
 # Source code paths
 # -----------------
@@ -79,6 +80,10 @@ SOURCES_CPP	:= $(shell find -L $(SOURCEDIRS) -name "*.cpp")
 
 # Compiler and linker flags
 # -------------------------
+
+ifneq ($(BLOCKSDS_VERSION),)
+DEFINES		+= -D_BLOCKSDS_STRICT_=$(BLOCKSDS_VERSION)
+endif
 
 ifeq ($(DLDI_ARM9),1)
 	ARCH	:= -mthumb -mcpu=arm946e-s+nofp

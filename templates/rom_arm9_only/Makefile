@@ -11,12 +11,14 @@ ARM_NONE_EABI_PATH	?= $(WONDERFUL_TOOLCHAIN)/toolchain/gcc-arm-none-eabi/bin/
 # User config
 # ===========
 
-NAME		:= template_arm9
+BLOCKSDS_VERSION	:= 10300
 
-GAME_TITLE	:= ARM9 only template
-GAME_SUBTITLE	:= Built with BlocksDS
-GAME_AUTHOR	:= github.com/blocksds/sdk
-GAME_ICON	:= icon.bmp
+NAME			:= template_arm9
+
+GAME_TITLE		:= ARM9 only template
+GAME_SUBTITLE		:= Built with BlocksDS
+GAME_AUTHOR		:= github.com/blocksds/sdk
+GAME_ICON		:= icon.bmp
 
 # DLDI and internal SD slot of DSi
 # --------------------------------
@@ -110,6 +112,10 @@ SOURCES_CPP	:= $(shell find -L $(SOURCEDIRS) -name "*.cpp")
 
 # Compiler and linker flags
 # -------------------------
+
+ifneq ($(BLOCKSDS_VERSION),)
+DEFINES		+= -D_BLOCKSDS_STRICT_=$(BLOCKSDS_VERSION)
+endif
 
 ARCH		:= -mthumb -mcpu=arm946e-s+nofp
 

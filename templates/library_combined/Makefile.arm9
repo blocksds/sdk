@@ -8,6 +8,11 @@ export BLOCKSDSEXT		?= /opt/blocksds/external
 export WONDERFUL_TOOLCHAIN	?= /opt/wonderful
 ARM_NONE_EABI_PATH	?= $(WONDERFUL_TOOLCHAIN)/toolchain/gcc-arm-none-eabi/bin/
 
+# User config
+# ===========
+
+BLOCKSDS_VERSION	:= 10300
+
 # Source code paths
 # -----------------
 
@@ -70,6 +75,10 @@ SOURCES_CPP	:= $(shell find -L $(SOURCEDIRS) -name "*.cpp")
 
 # Compiler and linker flags
 # -------------------------
+
+ifneq ($(BLOCKSDS_VERSION),)
+DEFINES		+= -D_BLOCKSDS_STRICT_=$(BLOCKSDS_VERSION)
+endif
 
 ARCH		:= -mthumb -mcpu=arm946e-s+nofp
 

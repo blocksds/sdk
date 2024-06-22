@@ -8,6 +8,11 @@ export BLOCKSDSEXT		?= /opt/blocksds/external
 export WONDERFUL_TOOLCHAIN	?= /opt/wonderful
 LLVM_TEAK_PATH		?= $(WONDERFUL_TOOLCHAIN)/toolchain/llvm-teak/bin/
 
+# User config
+# ===========
+
+BLOCKSDS_VERSION	:= 10300
+
 # Source code paths
 # -----------------
 
@@ -72,6 +77,10 @@ SOURCES_CPP	:= $(shell find -L $(SOURCEDIRS) -name "*.cpp")
 
 # Compiler and linker flags
 # -------------------------
+
+ifneq ($(BLOCKSDS_VERSION),)
+DEFINES		+= -D_BLOCKSDS_STRICT_=$(BLOCKSDS_VERSION)
+endif
 
 DEFINES		+= -D__NDS__ -DTEAK
 
