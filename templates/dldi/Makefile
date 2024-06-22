@@ -82,7 +82,7 @@ SOURCES_CPP	:= $(shell find -L $(SOURCEDIRS) -name "*.cpp")
 # -------------------------
 
 ifneq ($(BLOCKSDS_VERSION),)
-DEFINES		+= -D_BLOCKSDS_STRICT_=$(BLOCKSDS_VERSION)
+DEFINES		+= -DBLOCKSDS_STRICT=$(BLOCKSDS_VERSION)
 endif
 
 ifeq ($(DLDI_ARM9),1)
