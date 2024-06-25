@@ -9,8 +9,8 @@
 
 int main(int argc, char *argv[])
 {
-    videoSetMode(MODE_0_2D | DISPLAY_SPR_1D_LAYOUT | DISPLAY_SPR_ACTIVE);
-    videoSetModeSub(MODE_0_2D | DISPLAY_SPR_1D_LAYOUT | DISPLAY_SPR_ACTIVE);
+    videoSetMode(MODE_0_2D);
+    videoSetModeSub(MODE_0_2D);
 
     vramSetPrimaryBanks(VRAM_A_MAIN_SPRITE, VRAM_B_LCD, VRAM_C_LCD,
                         VRAM_D_SUB_SPRITE);
@@ -19,9 +19,6 @@ int main(int argc, char *argv[])
 
     oamInit(&oamMain, SpriteMapping_1D_32, false);
     oamInit(&oamSub, SpriteMapping_1D_32, false);
-
-    oamEnable(&oamMain);
-    oamEnable(&oamSub);
 
     // Allocate space for the tiles and copy them there
     u16 *gfxMain = oamAllocateGfx(&oamMain, SpriteSize_32x32, SpriteColorFormat_256Color);
