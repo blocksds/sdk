@@ -189,7 +189,7 @@ void load_sprites_bitmap(void)
         40, // Index
         192, 120, // X, Y
         0, // Priority
-        8, // Palette index, but it is the alpha value of bitmap sprites
+        15, // Palette index, but it is the alpha value of bitmap sprites
         size, format, gfxBmpMain,
         -1, false, false, false, false, false);
 
@@ -205,7 +205,7 @@ void load_sprites_bitmap(void)
         40, // Index
         192, 120, // X, Y
         0, // Priority
-        8, // Palette index, but it is the alpha value of bitmap sprites
+        15, // Palette index, but it is the alpha value of bitmap sprites
         size, format, gfxBmpSub,
         -1, false, false, false, false, false);
 }

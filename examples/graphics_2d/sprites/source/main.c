@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
            0, // Priority
            0, // Palette index
            SpriteSize_32x32, SpriteColorFormat_256Color, // Size, format
-           gfxMain,  // Graphics offset
+           gfxSub,  // Graphics offset
            -1, // Affine index
            false, // Double size
            false, // Hide
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
            0, // Priority
            0, // Palette index
            SpriteSize_32x32, SpriteColorFormat_256Color, // Size, format
-           gfxMain,  // Graphics offset
+           gfxSub,  // Graphics offset
            -1, // Affine index
            false, // Double size
            false, // Hide
