@@ -249,6 +249,7 @@ int main(int argc, char *argv[])
     vramSetBankI(VRAM_I_LCD);
 
     // Initialize sprites without extended palettes
+    // Note that we need to use the right sprite mapping for bitmap sprites
     oamInit(&oamMain, SpriteMapping_Bmp_1D_128, false);
     oamInit(&oamSub, SpriteMapping_Bmp_1D_128, false);
 
@@ -307,6 +308,7 @@ int main(int argc, char *argv[])
     vramSetBankI(VRAM_I_SUB_SPRITE_EXT_PALETTE);
 
     // Re-initialize sprites with extended palettes active
+    // Note that we need to use the right sprite mapping for bitmap sprites
     oamInit(&oamMain, SpriteMapping_Bmp_1D_128, true);
     oamInit(&oamSub, SpriteMapping_Bmp_1D_128, true);
 
