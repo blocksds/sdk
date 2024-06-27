@@ -1,0 +1,2 @@
+# 8 bpp, tiles, export map, palette 7, not compressed
+-gB8 -gt -m -mp7 -gTFF00FF
