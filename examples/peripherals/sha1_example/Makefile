@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= sha1_example
+NAME		:= periph_sha1_example
 GAME_TITLE	:= SHA1 example
+GAME_SUBTITLE	:= Peripherals
 
 # Source code paths
 

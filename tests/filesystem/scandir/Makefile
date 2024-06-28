@@ -6,7 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= filesystem_scandir
+NAME		:= tests_fs_scandir
 GAME_TITLE	:= SD scandir() example
+GAME_SUBTITLE	:= Tests: Filesystem
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

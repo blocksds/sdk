@@ -6,7 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= mpu_regions
+NAME		:= tests_sys_mpu_regions
 GAME_TITLE	:= MPU Regions
+GAME_SUBTITLE	:= Tests: System
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

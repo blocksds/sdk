@@ -8,6 +8,7 @@ BLOCKSDS	?= /opt/blocksds/core
 
 NAME		:= bios_decompress
 GAME_TITLE	:= Decompress with BIOS
+GAME_SUBTITLE	:= Compression
 
 # Source code paths
 # -----------------

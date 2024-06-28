@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= 2d_and_3d
-GAME_TITLE	:= 2D and 3D
+NAME		:= 3d_with_2d
+GAME_TITLE	:= Simultaneous 2D and 3D
+GAME_SUBTITLE	:= 3D graphics
 
 # Source code paths
 # -----------------

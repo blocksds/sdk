@@ -6,7 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= hw_math
+NAME		:= tests_sys_hw_math
 GAME_TITLE	:= Hardware Math routines
+GAME_SUBTITLE	:= Tests: System
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

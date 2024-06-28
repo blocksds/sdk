@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2023
+# SPDX-FileContributor: Antonio Niño Díaz, 2023-2024
 
 # Having python3 as a hard dependency of BlocksDS just for this test is a bad
 # idea. The Makefile of the parent folder will try to build this test because it
@@ -17,8 +17,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= filesystem_stress_test
+NAME		:= tests_fs_stress
 GAME_TITLE	:= Filesystem stress test
+GAME_SUBTITLE	:= Tests: Filesystem
 
 # Source code paths
 

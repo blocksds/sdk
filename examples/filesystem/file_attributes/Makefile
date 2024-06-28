@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= file_attributes
+NAME		:= fs_file_attributes
 GAME_TITLE	:= NitroFS+FAT attributes
+GAME_SUBTITLE	:= Filesystem
 
 # Source code paths
 

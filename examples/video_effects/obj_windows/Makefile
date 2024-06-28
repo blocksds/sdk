@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= obj_window
-GAME_TITLE	:= Effects: OBJ window
+NAME		:= effects_obj_window
+GAME_TITLE	:= OBJ window
+GAME_SUBTITLE	:= Video effects
 
 # Source code paths
 # -----------------

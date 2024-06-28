@@ -8,8 +8,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 NAME		:= libxm7_nitrofs_example
 
-GAME_TITLE	:= LibXM7 + NitroFS example
-GAME_SUBTITLE	:= how to use LibXM7
+GAME_TITLE	:= NitroFS example
+GAME_SUBTITLE	:= LibXM7
 GAME_AUTHOR	:= (sverx, 2009-01-07)
 
 # Source code paths

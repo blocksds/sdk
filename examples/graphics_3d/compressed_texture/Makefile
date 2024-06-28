@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= compressed_texture
+NAME		:= 3d_compressed_texture
 GAME_TITLE	:= Compressed texture
+GAME_SUBTITLE	:= 3D graphics
 
 # Source code paths
 

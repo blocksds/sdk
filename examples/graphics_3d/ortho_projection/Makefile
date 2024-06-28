@@ -6,7 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= ortho_projection
+NAME		:= 3d_ortho_projection
 GAME_TITLE	:= Orthogonal projection
+GAME_SUBTITLE	:= 3D graphics
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

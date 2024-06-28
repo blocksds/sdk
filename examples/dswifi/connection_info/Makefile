@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= connection_info
+NAME		:= dswifi_connection_info
 GAME_TITLE	:= Connection information
+GAME_SUBTITLE	:= DSWiFi
 
 # Libraries
 # ---------

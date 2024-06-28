@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= translucent_polygon
-GAME_TITLE	:= Translucent 3D polygon
+NAME		:= 3d_translucent_polygon
+GAME_TITLE	:= Translucent polygon
+GAME_SUBTITLE	:= 3D graphics
 
 # Source code paths
 

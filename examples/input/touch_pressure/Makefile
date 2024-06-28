@@ -6,7 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= touch_pressure
+NAME		:= input_touch_pressure
 GAME_TITLE	:= Touch pressure example
+GAME_SUBTITLE	:= Input
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

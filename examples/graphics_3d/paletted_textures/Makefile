@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= paletted_textures
-GAME_TITLE	:= Paletted 3D textures
+NAME		:= 3d_paletted_textures
+GAME_TITLE	:= Paletted textures
+GAME_SUBTITLE	:= 3D graphics
 
 # Source code paths
 

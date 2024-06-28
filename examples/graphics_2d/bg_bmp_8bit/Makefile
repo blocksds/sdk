@@ -7,7 +7,8 @@ BLOCKSDS	?= /opt/blocksds/core
 # User config
 
 NAME		:= bg_bmp_8bit
-GAME_TITLE	:= Background Bitmap 8 bit
+GAME_TITLE	:= Bitmap 8 bit
+GAME_SUBTITLE	:= 2D graphics: BGs
 
 # Source code paths
 # -----------------

@@ -6,7 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= texture_allocation
+NAME		:= tests_graphics_texture_alloc
 GAME_TITLE	:= Texure allocation tests
+GAME_SUBTITLE	:= Tests: Graphics
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

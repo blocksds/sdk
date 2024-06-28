@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= basic_texture
-GAME_TITLE	:= 3D texture
+NAME		:= 3d_basic_texture
+GAME_TITLE	:= Basic texture
+GAME_SUBTITLE	:= 3D graphics
 
 # Source code paths
 

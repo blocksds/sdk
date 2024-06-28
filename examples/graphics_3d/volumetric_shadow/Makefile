@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= volumetric_shadow
+NAME		:= 3d_volumetric_shadow
 GAME_TITLE	:= Volumetric Shadow
+GAME_SUBTITLE	:= 3D graphics
 
 # Source code paths
 

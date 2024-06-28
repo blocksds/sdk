@@ -6,7 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= profiling
+NAME		:= time_profiling
 GAME_TITLE	:= Profiling
+GAME_SUBTITLE	:= Time
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

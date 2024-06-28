@@ -1,13 +1,14 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2023
+# SPDX-FileContributor: Antonio Niño Díaz, 2023-2024
 
 BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
 NAME		:= maxmod_nitrofs
-GAME_TITLE	:= Maxmod NitroFS example
+GAME_TITLE	:= NitroFS example
+GAME_SUBTITLE	:= Maxmod
 
 # Source code paths
 

@@ -6,7 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= touch_input
+NAME		:= input_touch
 GAME_TITLE	:= Touch input demo
+GAME_SUBTITLE	:= Input
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

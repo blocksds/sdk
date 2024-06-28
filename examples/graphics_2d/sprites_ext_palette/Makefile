@@ -7,7 +7,8 @@ BLOCKSDS	?= /opt/blocksds/core
 # User config
 
 NAME		:= sprites_ext_palette
-GAME_TITLE	:= Sprites ext. palette
+GAME_TITLE	:= Extended palettes
+GAME_SUBTITLE	:= 2D graphics: Sprites
 
 # Source code paths
 # -----------------

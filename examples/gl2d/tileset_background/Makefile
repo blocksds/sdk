@@ -7,7 +7,8 @@ BLOCKSDS	?= /opt/blocksds/core
 # User config
 
 NAME		:= gl2d_tileset_background
-GAME_TITLE	:= GL2D: Tileset BG
+GAME_TITLE	:= Tileset BG
+GAME_SUBTITLE	:= GL2D
 
 # Source code paths
 

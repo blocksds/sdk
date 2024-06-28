@@ -19,7 +19,8 @@ arm9.generate_elf()
 
 nds = NdsRom(
     binaries=[arm9, nitrofs],
-    game_title='Demo: Invaders',
+    game_title='Invaders',
+    game_subtitle='Demo',
 )
 nds.generate_nds()
 

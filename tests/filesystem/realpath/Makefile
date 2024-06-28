@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= realpath
+NAME		:= tests_fs_realpath
 GAME_TITLE	:= realpath() test
+GAME_SUBTITLE	:= Tests: Filesystem
 
 # Source code paths
 

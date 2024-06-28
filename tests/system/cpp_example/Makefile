@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= cpp_example
+NAME		:= tests_sys_cpp_example
 GAME_TITLE	:= C++ example
+GAME_SUBTITLE	:= Tests: System
 
 # Source code paths
 

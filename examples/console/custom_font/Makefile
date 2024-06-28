@@ -1,13 +1,14 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2023
+# SPDX-FileContributor: Antonio Niño Díaz, 2023-2024
 
 BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= custom_font
+NAME		:= console_custom_font
 GAME_TITLE	:= Custom font
+GAME_SUBTITLE	:= Console
 
 # Source code paths
 # -----------------

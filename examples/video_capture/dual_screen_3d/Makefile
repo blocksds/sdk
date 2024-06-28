@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= dual_screen_3d
+NAME		:= cap_dual_screen_3d
 GAME_TITLE	:= Dual Screen 3D
+GAME_SUBTITLE	:= Video capture
 
 # Source code paths
 

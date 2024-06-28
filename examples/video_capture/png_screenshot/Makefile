@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= png_capture
+NAME		:= cap_png_capture
 GAME_TITLE	:= PNG Capture
+GAME_SUBTITLE	:= Video capture
 
 # Source code paths
 

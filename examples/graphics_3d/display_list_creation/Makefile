@@ -6,7 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= display_list_creation
+NAME		:= 3d_display_list_creation
 GAME_TITLE	:= Display list
+GAME_SUBTITLE	:= 3D graphics
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

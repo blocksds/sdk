@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= simple_capture
+NAME		:= cap_simple_capture
 GAME_TITLE	:= Simple Capture
+GAME_SUBTITLE	:= Video capture
 
 # Source code paths
 

@@ -7,6 +7,7 @@ BLOCKSDS	?= /opt/blocksds/core
 # User config
 
 NAME		:= console_windows
-GAME_TITLE	:= Console windows
+GAME_TITLE	:= Text windows
+GAME_SUBTITLE	:= Console
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= toon_shading
+NAME		:= 3d_toon_shading
 GAME_TITLE	:= Toon shading
+GAME_SUBTITLE	:= 3D graphics
 
 # Source code paths
 

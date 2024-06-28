@@ -7,7 +7,8 @@ BLOCKSDS	?= /opt/blocksds/core
 # User config
 
 NAME		:= sprites_bitmap
-GAME_TITLE	:= Sprites: Bitmap
+GAME_TITLE	:= Bitmap sprites
+GAME_SUBTITLE	:= 2D graphics: Sprites
 
 # Source code paths
 # -----------------

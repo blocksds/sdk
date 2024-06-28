@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= picking
+NAME		:= 3d_picking
 GAME_TITLE	:= Picking
+GAME_SUBTITLE	:= 3D graphics
 
 # Source code paths
 

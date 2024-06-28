@@ -6,7 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= box_test
+NAME		:= 3d_box_test
 GAME_TITLE	:= Box Test
+GAME_SUBTITLE	:= 3D graphics
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= get_website
+NAME		:= dswifi_get_website
 GAME_TITLE	:= Get website
+GAME_SUBTITLE	:= DSWiFi
 
 # Libraries
 # ---------

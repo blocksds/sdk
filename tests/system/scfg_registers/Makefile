@@ -6,7 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= scfg_registers
+NAME		:= tests_sys_scfg_registers
 GAME_TITLE	:= SCFG Registers
+GAME_SUBTITLE	:= Tests: System
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9arm7/Makefile

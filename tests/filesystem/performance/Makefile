@@ -1,13 +1,14 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2023
+# SPDX-FileContributor: Antonio Niño Díaz, 2023-2024
 
 BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= filesystem_performance
+NAME		:= tests_fs_performance
 GAME_TITLE	:= SD performance test
+GAME_SUBTITLE	:= Tests: Filesystem
 
 # Source code paths
 

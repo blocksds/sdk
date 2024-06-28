@@ -6,7 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= maths_coprocessor
+NAME		:= periph_maths_coprocessor
 GAME_TITLE	:= Maths Coprocessor
+GAME_SUBTITLE	:= Peripherals
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

@@ -6,7 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= dldi_arm7_arm9
+NAME		:= test_fs_dldi_arm7_arm9
 GAME_TITLE	:= DLDI ARM7 or ARM9 test
+GAME_SUBTITLE	:= Tests: Filesystem
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

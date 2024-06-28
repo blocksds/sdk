@@ -6,7 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= swi_calls
+NAME		:= tests_sys_swi_calls
 GAME_TITLE	:= SWI calls test
+GAME_SUBTITLE	:= Tests: System
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

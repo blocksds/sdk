@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= list_access_points
+NAME		:= dswifi_list_access_points
 GAME_TITLE	:= List Access Points
+GAME_SUBTITLE	:= DSWiFi
 
 # Libraries
 # ---------

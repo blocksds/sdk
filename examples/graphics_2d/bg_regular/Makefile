@@ -7,7 +7,8 @@ BLOCKSDS	?= /opt/blocksds/core
 # User config
 
 NAME		:= bg_regular
-GAME_TITLE	:= Background Regular
+GAME_TITLE	:= Regular background
+GAME_SUBTITLE	:= 2D graphics: BGs
 
 # Source code paths
 # -----------------

@@ -7,7 +7,8 @@ BLOCKSDS	?= /opt/blocksds/core
 # User config
 
 NAME		:= bg_rotation
-GAME_TITLE	:= Background Rotation
+GAME_TITLE	:= Rotation background
+GAME_SUBTITLE	:= 2D graphics: BGs
 
 # Source code paths
 # -----------------

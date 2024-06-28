@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= render_to_texture
+NAME		:= cap_render_to_texture
 GAME_TITLE	:= Render To Texture
+GAME_SUBTITLE	:= Video capture
 
 # Source code paths
 

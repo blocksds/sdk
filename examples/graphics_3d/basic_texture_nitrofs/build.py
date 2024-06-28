@@ -17,7 +17,8 @@ arm9.generate_elf()
 
 nds = NdsRom(
     binaries=[arm9, nitrofs],
-    game_title='3D texture + NitroFS',
+    game_title='Texture + NitroFS',
+    game_subtitle='3D graphics',
 )
 nds.generate_nds()
 

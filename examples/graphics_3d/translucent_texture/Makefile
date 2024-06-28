@@ -6,8 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= translucent_texture
-GAME_TITLE	:= Translucent 3D texture
+NAME		:= 3d_translucent_texture
+GAME_TITLE	:= Translucent texture
+GAME_SUBTITLE	:= 3D graphics
 
 # Source code paths
 

@@ -7,7 +7,8 @@ BLOCKSDS	?= /opt/blocksds/core
 # User config
 
 NAME		:= bg_ext_palette
-GAME_TITLE	:= Background ext. palettes
+GAME_TITLE	:= Extended palettes
+GAME_SUBTITLE	:= 2D graphics: BGs
 
 # Source code paths
 # -----------------

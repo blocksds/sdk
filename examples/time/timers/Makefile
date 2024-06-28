@@ -6,7 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= timers
+NAME		:= time_timers
 GAME_TITLE	:= Timers
+GAME_SUBTITLE	:= Time
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

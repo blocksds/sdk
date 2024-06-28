@@ -31,6 +31,7 @@ arm9.generate_elf()
 nds = NdsRom(
     binaries=[teak1, teak2, arm9, nitrofs],
     game_title='Multiple DSP binaries',
+    game_subtitle='DSP',
 )
 nds.generate_nds()
 

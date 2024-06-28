@@ -1,13 +1,14 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2023
+# SPDX-FileContributor: Antonio Niño Díaz, 2023-2024
 
 BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= async_loading
-GAME_TITLE	:= SD asynchronous loading
+NAME		:= fs_async_loading
+GAME_TITLE	:= SD async loading
+GAME_SUBTITLE	:= Filesystem
 
 # Source code paths
 
