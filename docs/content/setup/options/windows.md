@@ -10,21 +10,14 @@ If you want to use it in WSL, follow the instructions for Linux instead.
    the instructions in this link:
    https://wonderful.asie.pl/docs/getting-started/#windows-via-msys2
 
-1. Now, install the ARM toolchain of Wonderful Toolchains, as well as the
-   BlocksDS packages.
+1. Install the ARM toolchain of Wonderful Toolchain and the tool `make`:
 
    ```bash
    wf-pacman -Syu
-   wf-pacman -S toolchain-gcc-arm-none-eabi
+   wf-pacman -S toolchain-gcc-arm-none-eabi make
    ```
 
-   Install the following if you plan to develop binaries for the DSP of the DSi:
-
-   ```bash
-   wf-pacman -S toolchain-llvm-teak-llvm
-   ```
-
-   For the latest stable version of BlocksDS, run:
+   Now, install BlocksDS itself. For the latest stable version of BlocksDS, run:
 
    ```bash
    wf-pacman -S thirdparty-blocksds-toolchain
@@ -36,7 +29,8 @@ If you want to use it in WSL, follow the instructions for Linux instead.
    wf-pacman -S thirdparty-blocksds-docs
    ```
 
-   For the latest unstable version, install the following packages instead:
+   For the latest unstable version, install the following packages instead of
+   the previous ones:
 
    ```bash
    wf-pacman -S thirdparty-blocksds-git-toolchain \
