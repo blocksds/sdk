@@ -1,0 +1,21 @@
+# BlocksDS SDK examples: 3D graphics
+
+This folder contains examples of how to use the 3D features of the DS with
+libnds.
+
+- `2d_and_3d`: Combines 2D sprites and background with the 3D output.
+- `basic_texture`: Loads a 16 bpp texture from the ARM9 binary.
+- `basic_texture_nitrofs`: Loads a 16 bpp texture from NitroFS.
+- `box_test`: Uses the box test to detect if a cube is displayed on the screen.
+- `compressed_texture`: Loads a compressed/Tex4x4 texture from the ARM9 binary.
+- `display_list_creation`: Manually creates a display list and uses it.
+- `ortho_projection`: It uses an orthogonal projection instead of perspective.
+- `paletted_textures`: It loads paletted textures from the ARM9 binary.
+- `paletted_textures_nitrofs`: It loads paletted textures from NitroFS.
+- `picking`: How to detecti if a 3D object is being pressed in the touch screen.
+- `text_over_3d`: How to display the libnds console over the 3D output.
+- `texture_matrix`: How to use the texture matrix to achieve special effects.
+- `toon_shading`: How to achieve a toon shading effect.
+- `translucent_polygon`: How to draw translucent polygons (alpha per polygon).
+- `translucent_texture`: How to use translucent textures (alpha per pixel).
+- `volumetric_shadow`: How to display hardware accelerated volumetric shadows.
