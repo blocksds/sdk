@@ -59,9 +59,9 @@ int main(int argc, char *argv[])
             angle += 1 << 4;
 
         if (keys_held & KEY_SELECT)
-            scale += 1 << 4;
+            scale += 1 << 3;
         else if (keys_held & KEY_START)
-            scale -= 1 << 4;
+            scale -= 1 << 3;
 
         if (keys_held & KEY_X)
             cy--;
