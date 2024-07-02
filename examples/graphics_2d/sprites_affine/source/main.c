@@ -128,5 +128,8 @@ int main(int argc, char *argv[])
             break;
     }
 
+    oamFreeGfx(&oamMain, gfxMain);
+    oamFreeGfx(&oamSub, gfxSub);
+
     return 0;
 }

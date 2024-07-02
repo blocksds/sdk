@@ -84,5 +84,7 @@ int main(int argc, char *argv[])
             break;
     }
 
+    oamFreeGfx(&oamMain, gfxMain);
+
     return 0;
 }

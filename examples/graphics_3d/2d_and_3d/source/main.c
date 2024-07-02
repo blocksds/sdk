@@ -231,6 +231,8 @@ int main(int argc, char **argv)
 
     glDeleteTextures(1, &textureID);
 
+    oamFreeGfx(&oamMain, gfxMain);
+
     return 0;
 }
 
