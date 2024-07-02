@@ -17,19 +17,19 @@ check the following links:
   - [Library documentation](./libnds/index.html)
   - [Examples](https://github.com/blocksds/sdk/tree/master/examples)
 
-- **maxmod**: Music player that can play MOD, S3M, XM, IT and WAV files. It can
+- **Maxmod**: Music player that can play MOD, S3M, XM, IT and WAV files. It can
   use hardware or software mixing, and it runs on the ARM7.
 
   - [Library documentation](./maxmod/index.html)
   - [Examples](https://github.com/blocksds/sdk/tree/master/examples/audio)
 
-- **libxm7**: Hardware-accelerated player of XM and MOD music files that runs
+- **LibXM7**: Hardware-accelerated player of XM and MOD music files that runs
   on the ARM7.
 
   - [Library documentation](./libxm7/index.html)
   - [Examples](https://github.com/blocksds/sdk/tree/master/examples/audio)
 
-- **dswifi**: Library to use the WiFi hardware of the NDS. It has no support for
+- **DSWiFi**: Library to use the WiFi hardware of the NDS. It has no support for
   the WiFi improvements of the DSi.
 
   - [Library documentation](./dswifi/index.html)

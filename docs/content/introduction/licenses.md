@@ -7,7 +7,7 @@ This document enumerates the components provided by BlocksDS and their licenses.
 This is useful if you want to release a binary built with BlocksDS and you
 aren't sure about what copyright notices you need to add.
 
-## dswifi
+## DSWiFi
 
 This is used in the default ARM7 binary.
 
@@ -33,7 +33,7 @@ notice required:
 Copyright © 2019-2022 Keith Packard
 ```
 
-## libxm7
+## LibXM7
 
 This is only used if the user explicitly links it.
 
@@ -43,7 +43,7 @@ MIT license. Copyright notice required:
 Copyright (C) 2018 sverx
 ```
 
-## maxmod
+## Maxmod
 
 This is used in the default ARM7 binary.
 

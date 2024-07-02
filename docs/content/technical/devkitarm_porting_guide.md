@@ -89,7 +89,7 @@ LIBDIRS := $(BLOCKSDS)/libs/dswifi \
            $(BLOCKSDS)/libs/libnds
 ```
 
-You can remove the dswifi or maxmod libraries if you aren't using them.
+You can remove the DSWiFi or Maxmod libraries if you aren't using them.
 
 The reason for this additional complexity with `LIBS` and `LIBDIRS` is to allow
 the user as much flexibility as possible when mixing and matching libraries.

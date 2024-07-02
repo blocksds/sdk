@@ -205,7 +205,7 @@ title: 'Changelog'
     root folder of the project (thanks, @lifehackerhansol).
   - Fix linking C++ projects in default makefiles.
 
-- maxmod:
+- Maxmod:
 
   - Fix return type of `mmEffectCancel()` in ARM9 code.
 
@@ -325,7 +325,7 @@ title: 'Changelog'
   - Fixed palette size calculation for DS textures.
   - Improvements to error messages.
 
-- libxm7:
+- LibXM7:
 
   - Make types `XM7_XMModuleHeader_Type` and `XM7_MODModuleHeader_Type`
     private. Developers consider their MOD/XM files as a typeless blob of data,
@@ -389,7 +389,7 @@ title: 'Changelog'
   - Improved error handling in Teak DSP code execution helpers.
   - The Teak DSP is now powered off before loading a DSP binary.
 
-- dswifi:
+- DSWiFi:
 
   - Reduced memory usage, especially while Wi-Fi is not initialized.
 
@@ -605,7 +605,7 @@ title: 'Changelog'
 
 ## Version 0.9.1 (2023-10-19)
 
-- Revert changes in maxmod that duplicated some symbols.
+- Revert changes in Maxmod that duplicated some symbols.
 
 ## Version 0.9.0 (2023-10-18)
 
@@ -797,7 +797,7 @@ title: 'Changelog'
 - SDK:
 
   - Defined a default location for BlocksDS: `/opt/blocksds/`
-  - libxm7 has been integrated as a core library.
+  - LibXM7 has been integrated as a core library.
   - Use mkfatimg (distributed with FatFs) instead of `imgbuild.sh` to reduce
     the number of dependencies.
   - Fixed mmutil target in Makefiles in parallel builds.
@@ -900,7 +900,7 @@ First beta release of BlocksDS. Features:
 
 - SDK:
 
-  - Supports libnds, maxmod, dswifi.
+  - Supports libnds, Maxmod, DSWiFi.
   - Supports a lot of the standard C library.
   - Very early support of the standard C++ library.
   - Supports DLDI, DSi SD slot and NitroFAT (open source alternative of NitroFS)
