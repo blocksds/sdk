@@ -6,7 +6,7 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= hblank_scroll
+NAME		:= effects_hblank_scroll
 GAME_TITLE	:= HBL scroll
 GAME_SUBTITLE	:= Video effects
 
