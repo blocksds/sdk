@@ -19,7 +19,7 @@ __attribute__((noreturn)) void wait_forever(void)
 
 int main(int argc, char *argv[])
 {
-    videoSetMode(MODE_0_2D | DISPLAY_SPR_1D_LAYOUT | DISPLAY_SPR_ACTIVE);
+    videoSetMode(MODE_0_2D);
 
     vramSetPrimaryBanks(VRAM_A_MAIN_SPRITE, VRAM_B_LCD, VRAM_C_LCD, VRAM_D_LCD);
 

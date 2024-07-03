@@ -13,8 +13,8 @@
 
 int main(int argc, char **argv)
 {
-    // Enable 3D and sprites
-    videoSetMode(MODE_0_3D | DISPLAY_SPR_1D_LAYOUT | DISPLAY_SPR_ACTIVE);
+    // Enable 3D
+    videoSetMode(MODE_0_3D);
 
     // Setup some VRAM as memory for main engine background, main engine
     // sprites, and 3D textures.
