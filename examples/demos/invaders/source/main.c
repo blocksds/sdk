@@ -298,7 +298,6 @@ int main(int argc, char *argv[])
     {
         swiWaitForVBlank();
 
-        //bgSetScroll(3, x, y); TODO
         bgUpdate();
 
         scanKeys();
