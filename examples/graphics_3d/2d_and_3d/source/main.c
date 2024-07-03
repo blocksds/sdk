@@ -29,7 +29,7 @@ int main(int argc, char **argv)
     // ===================
 
     int bg = bgInit(2, BgType_Text8bpp, BgSize_T_256x256, 0, 4);
-    bgSetPriority(2, 2);
+    bgSetPriority(bg, 2);
 
     dmaCopy(cityTiles, bgGetGfxPtr(bg), cityTilesLen);
     dmaCopy(cityMap, bgGetMapPtr(bg), cityMapLen);
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
         // Synchronize game loop to the screen refresh
         swiWaitForVBlank();
 
-        bgSetScroll(2, bg_x, bg_y);
+        bgSetScroll(bg, bg_x, bg_y);
         bgUpdate();
 
         oamSetXY(&oamMain, 1, spr_x, spr_y);

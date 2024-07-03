@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     {
         swiWaitForVBlank();
 
-        bgSetScroll(0, x, y);
+        bgSetScroll(bg, x, y);
 
         bgUpdate();
 
