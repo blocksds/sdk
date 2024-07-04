@@ -14,8 +14,6 @@ int main(int argc, char **argv)
 {
     videoSetMode(MODE_0_2D);
 
-    // Setup some VRAM as memory for main engine background, main engine
-    // sprites, and 3D textures.
     vramSetPrimaryBanks(VRAM_A_MAIN_BG, VRAM_B_MAIN_SPRITE,
                         VRAM_C_LCD, VRAM_D_LCD);
 
@@ -53,7 +51,7 @@ int main(int argc, char **argv)
            0, // Priority
            0, // Palette index
            SpriteSize_32x32, SpriteColorFormat_256Color, // Size, format
-           gfxMain,  // Graphics offset
+           gfxMain, // Graphics offset
            -1, // Affine index
            false, // Double size
            false, // Hide
@@ -65,7 +63,7 @@ int main(int argc, char **argv)
            0, // Priority
            0, // Palette index
            SpriteSize_32x32, SpriteColorFormat_256Color, // Size, format
-           gfxMain,  // Graphics offset
+           gfxMain, // Graphics offset
            -1, // Affine index
            false, // Double size
            false, // Hide
