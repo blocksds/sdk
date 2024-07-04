@@ -1,0 +1,7 @@
+The image of this example is derived from:
+
+Name:    MV Platformer Male (32x64)
+License: CC0-1.0
+Author:  MoikMellah
+
+https://opengameart.org/content/mv-platformer-male-32x64
