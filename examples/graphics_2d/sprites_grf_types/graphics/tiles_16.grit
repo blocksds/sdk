@@ -1,2 +1,2 @@
 # 4 bpp, tiles, limit palette to 16 colors, not compressed
--gB4 -gt -ps0 -pn16
+-gB4 -gt -ps0 -pn16 -m!
