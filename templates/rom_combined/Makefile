@@ -94,7 +94,7 @@ $(ROM): arm9 arm7
 	$(V)$(BLOCKSDS)/tools/ndstool/ndstool -c $@ \
 		-7 build/arm7.elf -9 build/arm9.elf \
 		-b $(GAME_ICON) "$(GAME_FULL_TITLE)" \
-		$(NDSTOOL_FAT)
+		$(NDSTOOL_ARGS)
 
 sdimage:
 	@echo "  MKFATIMG $(SDIMAGE) $(SDROOT)"
