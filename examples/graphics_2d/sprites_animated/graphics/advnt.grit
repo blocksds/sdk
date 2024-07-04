@@ -1,0 +1,2 @@
+# 8 bpp, tiles, not compressed, set magenta as alpha color
+-gB8 -gt -gTFF00FF -m!
