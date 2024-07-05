@@ -2,7 +2,7 @@
 title: 'Changelog'
 ---
 
-## Version DEV (2024-??-??)
+## Version 1.3.0 (2024-07-??)
 
 - libnds:
 
@@ -53,6 +53,23 @@ title: 'Changelog'
       defining the `__svc_stack_size` and `__irq_stack_size` linker
       symbols.
 
+  - Graphics:
+
+    - A new function has been added to set the object mode (regular, bitmap,
+      window, blended): oamSetBlendMode()
+    - A new function has been added to get a SpriteSize entry from the size of a
+      sprite in pixels: `oamDimensionsToSize()`. Also, `SpriteSize_Invalid` has
+      been introduced to represent dimensions that aren't valid 2D sprite sizes.
+    - New definitions have been added for the bit fields of the `BLDALPHA` and
+      `BLDY` registers.
+    - The following functions now return error codes: `glBindTexture()`,
+      `glAssignColorTable()`, `glGetColorTableParameterEXT()`, and
+      `glTexParameter()`, making it easier to handle errors gracefully when
+      using them.
+    - There has been a big refactor in videoGL to handle allocation errors
+      gracefully (or at least crash with an assertion if the code can't recover
+      from the error).
+
   - Code refactoring:
 
     - `RTC_CR`, `RTC_CR8` and `HALT_CR` have been renamed to `REG_RTCCNT`,
@@ -60,10 +77,11 @@ title: 'Changelog'
     - GL2D now uses existing `videoGL.h` helpers instead of reimplementing
       its own copies.
     - Many fields and functions have been documented, including firmware
-      flash commands, DLDI driver structures. 
+      flash commands, DLDI driver structures.
     - Missing `DMA_START` constants have been added.
     - The constants used in `tscReadTemperature` have been documented.
     - `SerialWaitBusy` has been renamed to `spiWaitBusy`.
+    - `oamSetGfx()` has been moved away from the header to fix C++ builds.
 
   - Other:
 
@@ -80,20 +98,56 @@ title: 'Changelog'
       function `dmaSetParams()`.
     - wf-fatfs has been updated, bringing minor performance improvements
       to directory lookups.
+    - The magic numbers used to represent MPU memory regions have been replaced
+      by definitions.
+    - A missing include has been added to `grf.h`.
 
 - SDK:
 
-  - Examples:
+  - New examples:
 
     - Added an 8-bit bitmap background loading example.
     - Added an example of combining 3D, 2D sprite, and 2D background display.
+    - Added an example of loading sprites of all graphics types from GRF files.
+    - Added an example of loading bitmap sprites.
+    - Added an example of loading and using affine sprites.
+    - Added examples of using regular windows and windows using objects as mask.
+    - Added examples of using extended palettes for sprites and backgrounds.
+    - Added an example of using a text console in an extended affine background.
+    - Added an example of using the mosaic effect in sprites and backgrounds.
+    - Added an example of animating 2D sprites by updating frames in real time
+      or by pre-loading all frames to VRAM from the start.
+    - Added an example of using 2D alpha blending and fade effects.
     - Added a BIOS decompression example.
     - Added a NitroFS paletted texture loading example.
     - Added a touch input test, and two examples.
+    - Added an example of creating graphics effects using the horizontal
+      blanking interrupt.
+    - Added a sample minigame based on Space Invaders.
 
+  - Changes to examples:
+
+    - OAM memory and textures is now freed in all examples that allocate them.
+      While this isn't needed in examples as short as ours, it's good practice
+      to show developers how to free resources when they aren't needed anymore.
+    - The names of the ROMs and the titles and subtitles in the ROM header have
+      been modified to make them consistent across all examples.
+    - Background IDs returned by `bgInit()` are now used instead of hardcoded
+      layer numbers.
+    - `videoSetMode()` is no longer used to enable sprites or to set sprite
+      mapping modes, that should be done by the `libnds` sprite API.
+    - Tilemaps are now explicitly excluded from grit generation in all the grit
+      files that are used to convert sprites.
+
+  - The combined ARM7+ARM9 ROM template had broken NitroFS generation code. It
+    has been fixed.
   - The BlocksDS SDK now depends on the `wf-nnpack` package, which provides
     standalone, command-line compressors for the decompression methods
     supported by the console's BIOS.
+  - The code style of `libteak` and `DSWiFi` has been changed using
+    `clang-format` to improve readability.
+  - The Teak LLVM toolchain is no longer mentioned in the Windows setup
+    instructions, as it is not available there.
 
 ## Version 1.2.0 (2024-06-08)
 
