@@ -56,7 +56,7 @@ title: 'Changelog'
   - Graphics:
 
     - A new function has been added to set the object mode (regular, bitmap,
-      window, blended): oamSetBlendMode()
+      window, blended): `oamSetBlendMode()`.
     - A new function has been added to get a SpriteSize entry from the size of a
       sprite in pixels: `oamDimensionsToSize()`. Also, `SpriteSize_Invalid` has
       been introduced to represent dimensions that aren't valid 2D sprite sizes.
