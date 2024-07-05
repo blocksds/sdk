@@ -320,3 +320,8 @@ recommended to send pointers to it which have not been processed by
 * `DIR_ITER*`, `diropen`, `dirnext` and `dirclose` are non-standard libfat
   extensions; they should be replaced by `DIR*`, `opendir`, `readdir` and
   `closedir`, respectively.
+* GCC 10 and above default to `-fno-common`, which can cause issues if multiple
+  global variables with the same name are defined in the same project
+  without using `extern`. More information is available [here](https://gcc.gnu.org/gcc-10/porting_to.html).
+* GCC 14 and above consider as errors some situations which were previously treated as warnings,
+  such as implicit function definitions. More information is available [here](https://gcc.gnu.org/gcc-14/porting_to.html).
