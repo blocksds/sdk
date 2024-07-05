@@ -126,7 +126,7 @@ This is an SDK to develop applications for Nintendo DS in C or C++.
 - WiFi support isn't complete. It is possible to connect to Access Points with
   the library DS WiFi, but it doesn't support DS to DS WiFi communications.
 
-- **ndstool** suuports creating NDS ROMs and define a ROM icon and banner text
+- **ndstool** supports creating NDS ROMs and define a ROM icon and banner text
   (in multiple languages!).
 
 ### 2.3 Supported DSi features

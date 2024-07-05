@@ -105,8 +105,6 @@ its C library `newlib` through the `devoptab` interface. These are devkitPro's
 additions, and are not replicated in BlocksDS.
 
 Instead, BlocksDS uses the `picolibc` C library's "tiny" stdio implementation.
-In addition, to cut down on RAM and code size, it omits the `devoptab` interface.
-AS most homebrew does not modify the device list, this should not affect them.
 It also uses a modified version of [Elm's FatFS library](http://elm-chan.org/fsw/ff/00index_e.html)
 in place of libfat, as well as a custom implementation of NitroFS.
 
@@ -121,14 +119,23 @@ using `libfat` and `libfilesystem`:
 #include <filesystem.h>
 ```
 
-They provide `fatInitDefault()` and `nitroFSInit()`. They should be compatible
-with the ones in the original libraries.
-
-Beyond the limitations listed above, filesystem support should work identically.
+Beyond the limitations listed below, filesystem support should work identically.
 Please report any behaviour that isn't the same. If any other functionality your
 homebrew program requires is missing, please report that as well.
 
-## 3a. Note about readdir() compatibility
+## 3a. NitroFS compatibility
+
+Some minor implementation differences exist between `libfilesystem` and BlocksDS's
+implementation:
+
+* In BlocksDS, NitroFS files can only be opened for reading. This means that, for example,
+  `fopen("nitro:/file.dat", "rb+");` will always fail, as the `rb+` mode allows writing.
+* While the behaviour of `nitroFSInit(NULL);` is identical, for non-`NULL` arguments,
+  the provided value is now treated as an *input* path to the .nds file, as opposed to
+  an *output* base path. To retrieve the base path, it is required to use the
+  `fatGetDefaultCwd()` function instead.
+
+## 3b. readdir() compatibility
 
 `readdir()` returns a `struct dirent` pointer with the field `d_type`.
 This field can be used to determine if an entry is a directory or a file. I've
@@ -152,6 +159,12 @@ if (cur->d_type == DT_DIR)
 else if (cur->d_type == DT_REG)
     printf("This is a file\n");
 ```
+
+## 3c. Other differences
+
+* To cut down on RAM, code size and complexity, BlocksDS omits the `devoptab`
+  interface. As homebrew does not generally need to modify the device list,
+  this should not affect them.
 
 ## 4. Integer versions of stdio.h functions
 
