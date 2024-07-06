@@ -139,18 +139,35 @@ title: 'Changelog'
     - Tilemaps are now explicitly excluded from grit generation in all the grit
       files that are used to convert sprites.
 
-  - The combined ARM7+ARM9 ROM template had broken NitroFS generation code. It
-    has been fixed.
-  - The BlocksDS SDK now depends on the `wf-nnpack` package, which provides
-    standalone, command-line compressors for the decompression methods
-    supported by the console's BIOS.
-  - The code style of `libteak` and `DSWiFi` has been changed using
-    `clang-format` to improve readability.
-  - The Teak LLVM toolchain is no longer mentioned in the Windows setup
-    instructions, as it is not available there.
-  - The documentation ahs been updated with new notes about migrating from
-    devkitARM and from older versions of GCC.
-  - A few minor bugfixes in grit.
+  - grit:
+
+    - Fixed reading data from assembly files as input.
+    - Fixed uninitialized memory use when loading a picture with an odd width.
+
+  - picolibc:
+
+    - The bundled version of picolibc has been updated.
+    - Added an implementation of `funopen`.
+    - Added bounds checking to `asctime_r` and `ctime_r`.
+    - Added implementations of `fgetpos` and `fsetpos`.
+    - Added stub implementations for POSIX unlocked file functions.
+    - Fixed `fgetwc` and `fputwc` not setting the file stream to wide
+      orientation.
+    - Fixed `regex.h` not being usable when compiling C++ code.
+
+  - Other:
+
+    - Fixed NitroFS generation in the combined ARM7+ARM9 ROM template.
+    - The BlocksDS SDK now depends on the `wf-nnpack` package, which provides
+      standalone, command-line compressors for the decompression methods
+      supported by the console's BIOS.
+    - The code style of `libteak` and `DSWiFi` has been changed using
+      `clang-format` to improve readability.
+    - The documentation has been updated with additional notes about migrating
+      from older and current versions of devkitARM, covering further potential
+      issues.
+    - The Teak LLVM toolchain is no longer mentioned in the Windows setup
+      instructions, as it is not available there.
 
 ## Version 1.2.0 (2024-06-08)
 
