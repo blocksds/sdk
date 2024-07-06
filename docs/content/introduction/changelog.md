@@ -148,6 +148,9 @@ title: 'Changelog'
     `clang-format` to improve readability.
   - The Teak LLVM toolchain is no longer mentioned in the Windows setup
     instructions, as it is not available there.
+  - The documentation ahs been updated with new notes about migrating from
+    devkitARM and from older versions of GCC.
+  - A few minor bugfixes in grit.
 
 ## Version 1.2.0 (2024-06-08)
 
