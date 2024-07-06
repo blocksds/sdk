@@ -10,8 +10,8 @@ FROM ubuntu:23.04 AS base-cross-compiler
 ARG BRANCH=master
 
 # Set locale for iconv, used by ndstool
-ENV LANG C.UTF-8
-ENV LC_ALL C.UTF-8
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
@@ -23,7 +23,7 @@ RUN cd /opt/wonderful/ && \
     tar xzvf wf-bootstrap-x86_64.tar.gz && \
     rm wf-bootstrap-x86_64.tar.gz
 
-ENV PATH /opt/wonderful/bin:$PATH
+ENV PATH=/opt/wonderful/bin:$PATH
 
 # TODO: This is a workaround for pacman that generates the file /etc/mtab. Maybe
 # there is a better way to fix it.
