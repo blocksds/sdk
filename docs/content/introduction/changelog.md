@@ -1,5 +1,6 @@
 ---
 title: 'Changelog'
+weight: -20
 ---
 
 ## Version 1.3.0 (2024-07-??)

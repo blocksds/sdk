@@ -9,6 +9,8 @@ This is an [introduction](./introduction/introduction) to the SDK.
 If you're looking for information on how to install BlocksDS, check the
 [instructions](./setup/options).
 
+If you're looking for support, check [this page](./introduction/support).
+
 If you're looking for documentation about specific libraries of BlocksDS,
 check the following links:
 
