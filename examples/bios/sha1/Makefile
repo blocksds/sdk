@@ -6,9 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= periph_sha1_example
+NAME		:= bios_sha1
 GAME_TITLE	:= SHA1 example
-GAME_SUBTITLE	:= Peripherals
+GAME_SUBTITLE	:= BIOS
 
 # Source code paths
 
