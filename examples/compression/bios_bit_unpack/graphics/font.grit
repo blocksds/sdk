@@ -1,0 +1,2 @@
+# 1 bpp, tile, set black as transparent color, not compressed, no palette
+-gB1 -gt -gT000000 -m! -p!
