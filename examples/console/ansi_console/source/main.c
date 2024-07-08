@@ -5,6 +5,7 @@
 // Information about ANSI escape codes:
 //
 //     https://en.wikipedia.org/wiki/ANSI_escape_code#CSI_(Control_Sequence_Introducer)_sequences
+//
 // Check the source code of the console in libnds to check which codes are
 // supported and which ones are not: source/arm9/console.c
 
@@ -37,7 +38,7 @@ int main(int argc, char **argv)
     // Print colored text
     printf("\x1b[14;4H");
 
-    // Colors (30 to 37): Black, Red, Green, Yellow, BLue, Magenta, Cyan, White
+    // Colors (30 to 37): Black, Red, Green, Yellow, Blue, Magenta, Cyan, White
     // Setting intensity to 1 will make them brighter.
     char c = 'A';
     for (int intensity = 0; intensity < 2; intensity++)
