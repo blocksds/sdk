@@ -5,6 +5,7 @@ libraries included in BlocksDS. The folders contain examples that relate to one
 specific area:
 
 - `audio`: Audio libraries such as Maxmod and LibXM7.
+- `bios`: How to use the services provided by the BIOS.
 - `compression`: Decompressing data included in your application.
 - `console`: How to use features of the text console of libnds.
 - `cothread`: How to use the co-operative multithreading library of libnds.
