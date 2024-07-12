@@ -10,11 +10,11 @@ If you want to use it in WSL, follow the instructions for Linux instead.
    the instructions in this link:
    https://wonderful.asie.pl/docs/getting-started/#windows-via-msys2
 
-1. Install the ARM toolchain of Wonderful Toolchain and the tool `make`:
+1. Install the ARM toolchain of Wonderful Toolchain:
 
    ```bash
    wf-pacman -Syu
-   wf-pacman -S toolchain-gcc-arm-none-eabi make
+   wf-pacman -S toolchain-gcc-arm-none-eabi
    ```
 
    Now, install BlocksDS itself. For the latest stable version of BlocksDS, run:
