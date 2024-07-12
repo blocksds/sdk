@@ -25,8 +25,9 @@ int main(int argc, char **argv)
             break;
     }
 
-    // Write data to NULL to cause an exception
-    *(uint32_t *)NULL = 0xDEAD;
+    // Write data to an unmapped address to cause an exception
+    // (The compiler can detect NULL being used here)
+    *(uint32_t *)(0x00004000) = 0xDEAD;
 
     printf("Exception handling failed!\n");
     printf("Is this in an emulator?\n");
