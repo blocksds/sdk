@@ -1,21 +1,18 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2023-2024
+# SPDX-FileContributor: Michele Di Giorgio, 2024
 
 BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= maxmod_nitrofs
-GAME_TITLE	:= NitroFS example
+NAME		:= maxmod_audio_modes
+GAME_TITLE	:= Audio modes
 GAME_SUBTITLE	:= Maxmod
 
 # Source code paths
 
 AUDIODIRS	:= audio
-# When a directory is added to NITROFSDIR, the Makefile rules will save the
-# soundbank to that directory instead of the build directory.
-NITROFSDIR	:= nitrofs
 
 # Libraries
 

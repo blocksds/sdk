@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: CC0-1.0
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2023
+// SPDX-FileContributor: Michele Di Giorgio, 2024
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -28,8 +29,8 @@ int main(int argc, char **argv)
     mmLoad(MOD_PARALLAX_80599);
     mmLoad(MOD_LASSE_HAEN_PYYKIT);
 
-    printf("maxmod example\n");
-    printf("==============\n");
+    printf("maxmod basic sounds example\n");
+    printf("===========================\n");
     printf("\n");
     printf("X: haen pyykit by Lasse\n");
     printf("Y: Parallax Glacier by Raina\n");
