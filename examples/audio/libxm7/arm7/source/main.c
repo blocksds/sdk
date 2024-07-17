@@ -52,8 +52,6 @@ int main(int argc, char *argv[])
     touchInit();
 
     irqInit();
-    irqSet(IRQ_VBLANK, vblank_handler);
-
     fifoInit();
 
     installWifiFIFO();
@@ -70,6 +68,8 @@ int main(int argc, char *argv[])
     // frequently.
     initClockIRQTimer(3);
 
+    // Now that the FIFO is setup we can start sending input data to the ARM9.
+    irqSet(IRQ_VBLANK, vblank_handler);
     irqEnable(IRQ_VBLANK);
 
     // Initialize libxm7. It uses timer 1 internally.
