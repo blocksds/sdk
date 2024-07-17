@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     irqSet(IRQ_VBLANK, vblank_handler);
     irqEnable(IRQ_VBLANK);
 
-    // Initialize libxm7. It uses timer 1 internally.
+    // Initialize libxm7. It uses timer 0 internally.
     XM7_Initialize();
     // Setup the FIFO handler for libXM7
     fifoSetValue32Handler(FIFO_XM7, XM7_Value32Handler, 0);
