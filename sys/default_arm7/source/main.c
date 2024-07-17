@@ -46,11 +46,11 @@ int main(int argc, char *argv[])
 
     fifoInit();
 
-    installWifiFIFO();
     installSoundFIFO();
+    installSystemFIFO(); // Sleep mode, storage, firmware...
+    installWifiFIFO();
     if (isDSiMode())
         installCameraFIFO();
-    installSystemFIFO(); // Sleep mode, storage, firmware...
 
     // Initialize Maxmod. It uses timer 0 internally.
     mmInstall(FIFO_MAXMOD);
