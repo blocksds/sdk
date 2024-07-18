@@ -23,13 +23,13 @@ check the following links:
   use hardware or software mixing, and it runs on the ARM7.
 
   - [Library documentation](./maxmod/index.html)
-  - [Examples](https://github.com/blocksds/sdk/tree/master/examples/audio)
+  - [Examples](https://github.com/blocksds/sdk/tree/master/examples/maxmod)
 
 - **LibXM7**: Hardware-accelerated player of XM and MOD music files that runs
   on the ARM7.
 
   - [Library documentation](./libxm7/index.html)
-  - [Examples](https://github.com/blocksds/sdk/tree/master/examples/audio)
+  - [Examples](https://github.com/blocksds/sdk/tree/master/examples/libxm7)
 
 - **DSWiFi**: Library to use the WiFi hardware of the NDS. It has no support for
   the WiFi improvements of the DSi.

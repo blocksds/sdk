@@ -4,7 +4,6 @@ This folder contains several examples of how to use the features of the
 libraries included in BlocksDS. The folders contain examples that relate to one
 specific area:
 
-- `audio`: Audio libraries such as Maxmod and LibXM7.
 - `bios`: How to use the services provided by the BIOS.
 - `compression`: Decompressing data included in your application.
 - `console`: How to use features of the text console of libnds.
@@ -19,6 +18,8 @@ specific area:
 - `graphics_3d`: 3D graphics features of the DS (alone or alongside 2D graphics).
 - `input`: How to get input data from the user (keyboard, keys, touch screen).
 - `ipc`: Transfer of information between the ARM9 and the ARM7.
+- `libxm7`: How to use the features of LibXM7.
+- `maxmod`: How to use the features of Maxmod.
 - `peripherals`: Using integrated, Slot-1 and Slot-2 peripherals.
 - `time`: How to use timers and the RTC.
 - `video_capture`: Capturing the main engine graphics output and using it later.
