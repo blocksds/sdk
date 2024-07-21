@@ -13,6 +13,7 @@ libnds.
 - `paletted_textures`: It loads paletted textures from the ARM9 binary.
 - `paletted_textures_nitrofs`: It loads paletted textures from NitroFS.
 - `picking`: How to detecti if a 3D object is being pressed in the touch screen.
+- `point_light`: How to implement fake spot lights using directional lights.
 - `text_over_3d`: How to display the libnds console over the 3D output.
 - `texture_matrix`: How to use the texture matrix to achieve special effects.
 - `toon_shading`: How to achieve a toon shading effect.
