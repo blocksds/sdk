@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     glClearDepth(0x7FFF);
 
     // Setup the camera
-    gluLookAt(0.0, 0.0, 4.0,  // Camera possition
+    gluLookAt(0.0, 0.0, 4.0,  // Camera position
               0.0, 0.0, 0.0,  // Look at
               0.0, 1.0, 0.0); // Up
 
