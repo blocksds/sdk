@@ -2,13 +2,18 @@
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2024
 
-// Dual screen 3D example.
+// Two-pass 3D example. This example uses the video capture hardware to increase
+// the number of polygons that can be drawn on one screen. It shows one way of
+// doing it. It draws the left and right halves of the screen in different
+// passes. It requires special perspective textures on both halves, but that's
+// the only unusual thing to take care of. Both halves have full Z-buffer
+// support, so it isn't needed to sort polygons before sending them to the GPU.
 //
-// This method of doing dual screen 3D is stable. That means that even if there
-// is a framerate drop, the screens won't flicker, like it happens with other
-// systems of dual screen 3D. To test this, hold button A to trap the CPU in a
-// loop until it is released. The images will stay static, but they will remain
-// stable on their right screens.
+// Other methods of doing two-pass 3D are to draw the far polygons first, and
+// then the near polygons on top. The problem is that the Z-buffer is lost
+// between the two passes.
+//
+// Note that in both cases the framerate will be reduced to 30 FPS.
 
 #include <stdio.h>
 
@@ -153,57 +158,58 @@ void DrawGouraudCube(void)
     glEnd();
 }
 
-void SetupSprites(void)
+int textureID;
+float rx = 30, ry = 0;
+float rotateX = 45.0;
+float rotateY = 45.0;
+
+void DrawScene(void)
 {
-    SpriteEntry *Sprites = calloc(128, sizeof(SpriteEntry));
-    if (Sprites == NULL)
+    gluLookAt(0.0, 0.0, 1.0,    // Camera position
+              0.0, 0.0, 0.0,    // Look at
+              0.0, 1.0, 0.0);   // Up
+
+    glPushMatrix();
     {
-        consoleDemoInit();
-        printf("Failed to allocate memory!");
-        while (1)
-            swiWaitForVBlank();
+        // Move cube left and away from the camera
+        glTranslate3f32(floattof32(-0.5), 0, floattof32(-1));
+
+        glRotateX(rx);
+        glRotateY(ry);
+
+        glBindTexture(0, textureID);
+
+        DrawTexturedCube();
     }
+    glPopMatrix(1);
 
-    // Setup a grid of bitmap sprites to form a background
-
-    // Reset sprites
-    for (int i = 0; i < 128; i++)
-        Sprites[i].attribute[0] = ATTR0_DISABLED;
-
-    int i = 0;
-    for (int y = 0; y < 3; y++)
+    glPushMatrix();
     {
-        for (int x = 0; x < 4; x++)
-        {
-            Sprites[i].attribute[0] = ATTR0_BMP | ATTR0_SQUARE | (64 * y);
-            Sprites[i].attribute[1] = ATTR1_SIZE_64 | (64 * x);
-            Sprites[i].attribute[2] = ATTR2_ALPHA(1) | (8 * 32 * y) | (8 * x);
-            i++;
-        }
+        // Move cube right and away from the camera
+        glTranslate3f32(floattof32(0.5), 0, floattof32(-1));
+
+        glRotateX(rotateX);
+        glRotateY(rotateY);
+
+        // Deactivate texture
+        glBindTexture(0, 0);
+
+        DrawGouraudCube();
     }
-
-    DC_FlushRange(Sprites, sizeof(SpriteEntry) * 128);
-
-    dmaCopy(Sprites, OAM_SUB, 128 * sizeof(SpriteEntry));
-
-    free(Sprites);
+    glPopMatrix(1);
 }
 
 int main(int argc, char *argv[])
 {
-    int textureID;
-
     powerOn(POWER_ALL);
 
-    SetupSprites();
-
-    REG_BG2CNT_SUB = BG_BMP16_256x256;
-    REG_BG2PA_SUB = 1 << 8;
-    REG_BG2PB_SUB = 0;
-    REG_BG2PC_SUB = 0;
-    REG_BG2PD_SUB = 1 << 8;
-    REG_BG2X_SUB = 0;
-    REG_BG2Y_SUB = 0;
+    REG_BG2CNT = BG_BMP16_256x256;
+    REG_BG2PA = 1 << 8;
+    REG_BG2PB = 0;
+    REG_BG2PC = 0;
+    REG_BG2PD = 1 << 8;
+    REG_BG2X = 0;
+    REG_BG2Y = 0;
 
     videoSetMode(0);
     videoSetModeSub(0);
@@ -243,9 +249,8 @@ int main(int argc, char *argv[])
             floattov10(-0.6), floattov10(-0.6), floattov10(-0.6));
 
     int frame = 0;
-    float rx = 30, ry = 0;
-    float rotateX = 45.0;
-    float rotateY = 45.0;
+
+    bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
 
     while (1)
     {
@@ -260,19 +265,6 @@ int main(int argc, char *argv[])
         if (keys & KEY_START)
             break;
 
-        // If the user presses A, wait in a loop until the button is released.
-        // This is a test to see that a framerate drop won't cause any issues.
-        if (keys & KEY_A)
-        {
-            while (1)
-            {
-                swiWaitForVBlank();
-                scanKeys();
-                if (!(keysHeld() & KEY_A))
-                    break;
-            }
-        }
-
         rx += 1;
         ry += 1;
 
@@ -281,13 +273,13 @@ int main(int argc, char *argv[])
 
         if (frame & 1)
         {
-            lcdMainOnTop();
-
-            videoSetMode(MODE_FB2);
-            videoSetModeSub(MODE_0_2D | DISPLAY_SPR_ACTIVE | DISPLAY_SPR_2D_BMP_256);
+            videoSetMode(MODE_5_3D | DISPLAY_BG2_ACTIVE);
 
             vramSetBankC(VRAM_C_LCD);
-            vramSetBankD(VRAM_D_SUB_SPRITE_0x06600000);
+            vramSetBankD(VRAM_D_MAIN_BG_0x06000000);
+
+            bgSetPriority(2, 1);
+            bgSetPriority(0, 0);
 
             REG_DISPCAPCNT =
                 // Destination is VRAM_C
@@ -301,46 +293,36 @@ int main(int argc, char *argv[])
                 // Enable capture
                 DCAP_ENABLE;
 
-            glViewport(0, 0, 255, 191);
+            glViewport(0, 0, 127, 191);
 
-            // Scene with Gouraud cube
-            // -----------------------
+            // Non-transparent scene (bottom)
+            // ------------------------------
+
+            // Blue background
+            glClearColor(7, 7, 20, 31);
 
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            gluPerspective(70, 256.0 / 192.0, 0.1, 40);
+
+            glFrustumf32(-128 * 3, 0 * 3, 96 * 3, -96 * 3,
+                         floattof32(0.1), floattof32(40));
 
             glMatrixMode(GL_MODELVIEW);
             glLoadIdentity();
 
-            // Blue background
-            glClearColor(7, 20, 7, 31);
-
-            gluLookAt(0.0, 0.0, 1.0,    // Camera position
-                      0.0, 0.0, 0.0,    // Look at
-                      0.0, 1.0, 0.0);   // Up
-
-            // Move cube away from the camera
-            glTranslate3f32(0, 0, floattof32(-1));
-
-            glRotateX(rx);
-            glRotateY(ry);
-
-            glBindTexture(0, textureID);
-
-            DrawTexturedCube();
+            DrawScene();
 
             glFlush(0);
         }
         else
         {
-            lcdMainOnBottom();
+            videoSetMode(MODE_5_3D | DISPLAY_BG2_ACTIVE);
 
-            videoSetMode(MODE_FB3);
-            videoSetModeSub(MODE_5_2D | DISPLAY_BG2_ACTIVE);
-
-            vramSetBankC(VRAM_C_SUB_BG_0x06200000);
+            vramSetBankC(VRAM_C_MAIN_BG_0x06000000);
             vramSetBankD(VRAM_D_LCD);
+
+            bgSetPriority(2, 0);
+            bgSetPriority(0, 1);
 
             REG_DISPCAPCNT =
                 // Destination is VRAM_D
@@ -354,35 +336,24 @@ int main(int argc, char *argv[])
                 // Enable capture
                 DCAP_ENABLE;
 
-            glViewport(0, 0, 255, 191);
+            glViewport(128, 0, 255, 191);
 
-            // Scene without Gouraud cube
-            // --------------------------
+            // Transparent scene (top)
+            // -----------------------
+
+            // Transparent background
+            glClearColor(0, 0, 0, 0);
 
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            gluPerspective(70, 256.0 / 192.0, 0.1, 40);
+
+            glFrustumf32(0 * 3, 128 * 3, 96 * 3, -96 * 3,
+                         floattof32(0.1), floattof32(40));
 
             glMatrixMode(GL_MODELVIEW);
             glLoadIdentity();
 
-            // Blue background
-            glClearColor(7, 7, 20, 31);
-
-            gluLookAt(0.0, 0.0, 1.0,    // Camera position
-                      0.0, 0.0, 0.0,    // Look at
-                      0.0, 1.0, 0.0);   // Up
-
-            // Move cube away from the camera
-            glTranslate3f32(0, 0, floattof32(-1));
-
-            glRotateX(rotateX);
-            glRotateY(rotateY);
-
-            // Deactivate texture
-            glBindTexture(0, 0);
-
-            DrawGouraudCube();
+            DrawScene();
 
             glFlush(0);
         }
