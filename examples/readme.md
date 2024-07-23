@@ -4,6 +4,7 @@ This folder contains several examples of how to use the features of the
 libraries included in BlocksDS. The folders contain examples that relate to one
 specific area:
 
+- `audio`: How to use the audio functions of libnds (without external libraries).
 - `bios`: How to use the services provided by the BIOS.
 - `compression`: Decompressing data included in your application.
 - `console`: How to use features of the text console of libnds.
