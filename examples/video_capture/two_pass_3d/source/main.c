@@ -211,9 +211,6 @@ int main(int argc, char *argv[])
     REG_BG2X = 0;
     REG_BG2Y = 0;
 
-    videoSetMode(0);
-    videoSetModeSub(0);
-
     glInit();
 
     glEnable(GL_TEXTURE_2D | GL_ANTIALIAS);
