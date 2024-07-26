@@ -24,6 +24,13 @@ typedef enum
     ScreenModeCount
 } screenMode;
 
+typedef enum
+{
+    LatchOnHold,
+    LatchOnPress,
+    LatchOnCount
+} latchOn;
+
 void rolling_buffer_add(u16 x, u16 y)
 {
     rolling_buffer_x[rolling_buffer_pos] = x;
@@ -43,6 +50,7 @@ int main(int argc, char **argv)
     uint16_t keys_down, keys_held;
     touchPosition touch_pos;
     screenMode screen_mode = ScreenModeRaw;
+    latchOn latch_on = LatchOnHold;
 
     rolling_buffer_reset();
 
@@ -64,8 +72,11 @@ int main(int argc, char **argv)
         keys_down = keysDown();
         keys_held = keysHeld();
 
-        // If pen down, update touch input.
-        if (keys_held & KEY_TOUCH)
+        bool touch_cond = false;
+        if (latch_on == LatchOnHold) touch_cond = keys_held & KEY_TOUCH;
+        if (latch_on == LatchOnPress) touch_cond = keys_down & KEY_TOUCH;
+
+        if (touch_cond)
             touchRead(&touch_pos);
 
         // Print touch position information to console.
@@ -74,9 +85,12 @@ int main(int argc, char **argv)
         if (screen_mode == ScreenModeRaw) printf("Screen mode: Raw input\n");
         if (screen_mode == ScreenModeAdj) printf("Screen mode: Adjusted input\n");
         if (screen_mode == ScreenModePressure) printf("Screen mode: Pressure\n");
-        printf("\x1b[37;0mPress LEFT/RIGHT to switch\n\nPress START+SELECT to exit\n\n");
+        printf("\x1b[37;0mPress LEFT/RIGHT to switch\n\n");
+        if (latch_on == LatchOnHold) printf("Latch on: Hold\n");
+        if (latch_on == LatchOnPress) printf("Latch on: Press\n");
+        printf("\x1b[37;0mPress UP/DOWN to switch\n\nPress START+SELECT to exit\n\n");
 
-        if (keys_held & KEY_TOUCH)
+        if (touch_cond)
             printf("\x1b[32;1m");
         else
             printf("\x1b[31;1m");
@@ -100,11 +114,20 @@ int main(int argc, char **argv)
             rolling_buffer_reset();
             screen_mode = (screen_mode + 1) % ScreenModeCount;
         }
+        if (keys_down & KEY_UP)
+        {
+            rolling_buffer_reset();
+            latch_on = (latch_on > 0 ? latch_on : LatchOnCount) - 1;
+        }
+        if (keys_down & KEY_DOWN)
+        {
+            rolling_buffer_reset();
+            latch_on = (latch_on + 1) % LatchOnCount;
+        }
 
         // Update rolling buffer.
         if (keys_held & KEY_TOUCH)
         {
-            touchRead(&touch_pos);
             if (screen_mode == ScreenModeRaw) rolling_buffer_add(touch_pos.rawx, touch_pos.rawy);
             if (screen_mode == ScreenModeAdj) rolling_buffer_add(touch_pos.px, touch_pos.py);
         }
