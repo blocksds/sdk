@@ -3,6 +3,57 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version 1.3.1 (2024-07-27)
+
+- libnds:
+
+  - Added memory barriers to libnds functions which remap user-accessible
+    memory.
+  - `consolePrintChar()` has been exposed in the public API. Coupled with
+    internal refactors, this allows using the built-in console without
+    pulling in printf/scanf as a dependency.
+  - Fixed function parameters and improved parameters for BIOS RSA functions.
+  - Fixed potential memory corruption when `micStopRecording()` was called
+    twice.
+  - Fixed regression in new touchscreen driver on CDC (TWL).
+  - Improved documentation for the BIOS CRC-16 calculation function.
+  - Minor optimizations to videoGL and console code.
+
+- SDK:
+
+  - New examples:
+
+    - Added a 3D billboard drawing example.
+    - Added a 3D spot lights example.
+    - Added a 3D two-pass rendering example.
+    - Added a BIOS bit unpacking example.
+    - Added a BIOS CRC-16 calculation example.
+    - Added a BIOS RSA decruption example.
+    - Added a microphone recording example.
+    - Added a Maxmod audio modes example.
+    - Added a Maxmod reverb example.
+    - Fixed a regression in the exception handler example.
+
+  - picolibc:
+
+    - The bundled version of picolibc has been updated.
+    - Added an implementation of `posix_memalign()`.
+    - Added support for `%a` and `%A` formats in `scanf()`.
+    - Fixed `freopen()` not resetting the unget buffer.
+    - Fixed hexadecimal string conversion in `strtod()`, `strtof()` and
+      `strtold()`.
+    - Fixed `lgammal()` corrupting the application-defined `signgam`
+      value.
+    - Fixed potential issue when calling `fclose()` more than once.
+    - Fixed `printf()` rounding issues for `%a` and `%f` formats.
+    - General header cleanups have been performed.
+
+  - Other:
+
+    - Expanded the touch input test to allow sampling input on initial pen
+      press only, as opposed to every frame while the pen is touching the
+      display.
+
 ## Version 1.3.0 (2024-07-06)
 
 - libnds:
