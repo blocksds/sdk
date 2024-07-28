@@ -39,7 +39,7 @@ If you want to use it in WSL, follow the instructions for Linux instead.
 
 1. (Optional step) You can also install some third party libraries like
    [NightFox’s Lib](https://github.com/knightfox75/nds_nflib) and
-   [Nitro Engine](https://github.com/AntonioND/nitro-engine>) using
+   [Nitro Engine](https://github.com/AntonioND/nitro-engine) using
    `wf-pacman`:
 
    ```bash
