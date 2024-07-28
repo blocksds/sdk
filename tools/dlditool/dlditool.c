@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #define DLDITOOL_VERSION "1.26"
 
@@ -23,10 +24,6 @@
 #endif
 
 #include <sys/stat.h>
-
-#ifndef bool
- typedef enum {false = 0, true = !0} bool;
-#endif
 
 typedef int32_t addr_t;
 typedef unsigned char data_t;
