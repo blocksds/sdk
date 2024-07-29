@@ -10,11 +10,13 @@ libnds.
 - `box_test`: Uses the box test to detect if a cube is displayed on the screen.
 - `compressed_texture`: Loads a compressed/Tex4x4 texture from the ARM9 binary.
 - `display_list_creation`: Manually creates a display list and uses it.
+- `fog`: How to use hardware fog.
 - `ortho_projection`: It uses an orthogonal projection instead of perspective.
 - `paletted_textures`: It loads paletted textures from the ARM9 binary.
 - `paletted_textures_nitrofs`: It loads paletted textures from NitroFS.
 - `picking`: How to detecti if a 3D object is being pressed in the touch screen.
 - `point_light`: How to implement fake spot lights using directional lights.
+- `sort_translucent_objects`: How to sort and draw translucent objects.
 - `text_over_3d`: How to display the libnds console over the 3D output.
 - `texture_matrix`: How to use the texture matrix to achieve special effects.
 - `toon_shading`: How to achieve a toon shading effect.
