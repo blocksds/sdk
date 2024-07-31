@@ -8,5 +8,6 @@ BLOCKSDS	?= /opt/blocksds/core
 
 NAME		:= audio_microphone
 GAME_TITLE	:= Microphone demo
+GAME_SUBTITLE	:= Audio
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile
