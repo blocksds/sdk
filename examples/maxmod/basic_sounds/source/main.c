@@ -34,10 +34,14 @@ int main(int argc, char **argv)
     printf("\n");
     printf("X: haen pyykit by Lasse\n");
     printf("Y: Parallax Glacier by Raina\n");
+    printf("A: Play explosion SFX\n");
     printf("\n");
     printf("B: Stop song\n");
     printf("\n");
     printf("START: Return to loader\n");
+
+    // Load sound effects
+    mmLoadEffect(SFX_FIRE_EXPLOSION);
 
     soundEnable();
 
@@ -59,6 +63,9 @@ int main(int argc, char **argv)
                 playing = false;
             }
         }
+
+        if (keys_down & KEY_A)
+            mmEffect(SFX_FIRE_EXPLOSION);
 
         if (keys_down & KEY_X)
         {

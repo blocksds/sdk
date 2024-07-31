@@ -76,7 +76,7 @@ int main(int argc, char **argv)
     // load the module
     mmLoad(MOD_JOINT_PEOPLE);
 
-    // load sound effects
+    // Load sound effects
     mmLoadEffect(SFX_FIRE_EXPLOSION);
 
     // Start playing module
