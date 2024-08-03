@@ -224,7 +224,45 @@ Also, if you understand assembly language, you can try to use the rest of the
 information on the screen to try to understand what the code was doing when it
 crashed.
 
-## 7. GDB with melonDS
+## 7. Stack overflows
+
+A very common bug found while developing DS applications is stack overflows.
+BlocksDS places the user stack starting at the top address of DTCM. DTCM is a
+very fast memory region, so it's very useful to keep your stack here so that
+your program runs generally fast.
+
+However, this memory region is small (16 KiB) and the start of DTCM may contain
+variables that you have asked the compiler to place in DTCM. This means that, in
+practice, your stack isn't that big.
+
+You should be very careful and avoid allocating big arrays in structs. This is
+especially true if your code is running in an interrupt handler. `printf()` uses
+a lot of stack to work, so it can be a cause for crashes.
+
+You should allocate anything bigger than one or two KBs on the heap with
+`malloc()` or similar functions.
+
+You can read more about how memory is used in BlocksDS in
+[this document](../../technical/memory_map).
+
+Other types of stack overflows happen when you, for example, allocate an array
+on the stack by declaring it at the top of a function, and you have a loop that
+writes into that array, but it goes over the end of the array.
+
+It is possible to detect this kind of bugs by using the stack protector of the
+compiler. Normally it is disabled because it increases the code footprint, but
+you can enable it by editing your Makefile and adding `-fstack-protector-strong`
+to your `CFLAGS` and switching from using `-lnds9` in `LIBS` to using `-lnds9d`.
+
+If the stack protection code detects stack corruption, libnds will cause an
+exception to crash the game in a controlled way. You can then check the value of
+`lr` in the exception handler screen to see where the exception was triggered
+from.
+
+Check [this example](https://github.com/blocksds/sdk/tree/master/tests/system/stack_smash_protection)
+to see it in action.
+
+## 8. GDB with melonDS
 
 melonDS has a GDB stub, so you can connect to it and debug your programs with
 any command line or GUI tool that supports the GDB protocol
