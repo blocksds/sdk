@@ -100,7 +100,7 @@ fprintf(stderr, "Frame: %%frame%%\n");
 
 More information [here](https://problemkaputt.de/gbatek.htm#debugmessages).
 
-## 4. sassert() and debug builds of libnds
+## 4. assert(), sassert() and debug builds of libnds
 
 libnds has a release and a debug build. The difference is whether assertions are
 enabled or not.
@@ -110,10 +110,15 @@ libc. It uses it internally in many places to detect problems like setting up
 backgrounds with invalid parameters, or using values outside of their valid
 ranges.
 
+Also, it is possible to use the standard `assert()` function of libc. If the
+expression fails on the ARM9, it will stop the program and print an error
+message on the screen. On the ARM7 it will print a message to the no$gba/melonDS
+console and stop execution.
+
 It's always a good idea to use this function in your code to warn the developer
 about problems that need to be fixed, but that can't happen during normal
 execution of the program. For errors that may happen during normal execution of
-the program (like running out of RAM or VRAM) you shouldn't use `sassert()`. You
+the program (like running out of RAM or VRAM) you shouldn't use `assert()`. You
 should never check the return value of `malloc()` with it, for example. You can
 use it to check that the background layer you are using is between 0 and 3.
 
