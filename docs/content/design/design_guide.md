@@ -94,7 +94,7 @@ a function called `sbrk()`. This function needs to get information from
 `libnds` to work. The glue code between `picolibc` and `libnds` is in
 `libnds`, in `source/arm9/libc`.
 
-The extent of this support is documented in [this document](../libc).
+The extent of this support is documented in [this document](../../technical/libc).
 
 The reason to keep this as a separate library, instead of adding it to
 `picolibc` as a target, is to make updating `picolibc` mostly independent
@@ -103,8 +103,8 @@ from refactors in `libnds`.
 ## 5. Filesystem support
 
 This section will describe how the filesystem support has been implemented in
-libnds. Check [this document](../filesystem) if you're interested in the C
-standard functions that are supported.
+libnds. Check [this document](../../technical/filesystem) if you're interested
+in the C standard functions that are supported.
 
 Filesystem support requires 3 things:
 
@@ -206,5 +206,5 @@ a file operation is performed, prohibiting the use of multithreading.
 
 As a workaround, BlocksDS supports moving DLDI execution to the ARM7 sub
 CPU; this should be compatible with many, but not all cartridges. Feel free
-to read [this document](../dldi_arm7) for more information.
+to read [this document](../../technical/dldi_arm7) for more information.
 

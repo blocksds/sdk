@@ -52,7 +52,7 @@ see the relevant examples bundled with BlocksDS.
 
 To provide correct argv information, the loader needs to support argv structure
 passing. This is not supported by certain legacy loaders; for more information,
-see our page on [legacy support](../legacy_support).
+see our page on [legacy support](../../usage/legacy_support).
 
 Under compatible loading environment, `argv[0]` will hold the path of the .nds
 file. Other `argv` entries may be set as well, but this isn't a common

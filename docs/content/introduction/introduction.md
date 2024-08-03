@@ -23,7 +23,7 @@ This is an SDK to develop applications for Nintendo DS in C or C++.
   [this guide](../../technical/devkitarm_porting_guide) for more details.
 
 - To document as much of the SDK as possible. For detailed information about the
-  design of BlocksDS, check [this document](../../technical/design_guide).
+  design of BlocksDS, check [this document](../../design/design_guide).
 
 - To ensure that the licensing status of all the code is correct and that the
   licenses used are all FOSS. This SDK is made from the work of many others that
