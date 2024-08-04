@@ -25,7 +25,7 @@ typedef struct {
 
 int main(int argc, char *argv[])
 {
-    printf("Teak tool " PACKAGE_VERSION " - %s\n", __DATE__);
+    printf("Teak tool " PACKAGE_VERSION "\n");
 
     const char *in_file = NULL;
     const char *out_file = NULL;
