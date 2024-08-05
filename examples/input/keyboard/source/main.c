@@ -16,7 +16,7 @@ int main(int argc, char **argv)
     // Load demo keyboard
     keyboardDemoInit();
 
-    // Load graphics to VRAM and display it
+    // Load graphics to VRAM and display it on the screen
     keyboardShow();
 
     char string[50];

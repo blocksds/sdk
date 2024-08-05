@@ -1,0 +1,16 @@
+-W3
+
+# 16 bpp format
+-gB4
+
+# Export map
+-m
+
+# Compress with LZSS
+-gzl
+
+# Use at most 16 colors
+-pe16
+
+# Set black as the transparent color
+-gT000000
