@@ -6,8 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= input_keyboard
-GAME_TITLE	:= Keyboard example
-GAME_SUBTITLE	:= Input
+NAME		:= keyboard_default
+GAME_TITLE	:= Default keyboard
+GAME_SUBTITLE	:= Keyboard
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

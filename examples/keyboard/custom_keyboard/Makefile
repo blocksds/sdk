@@ -6,9 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= input_custom_keyboard
+NAME		:= keyboard_custom
 GAME_TITLE	:= Custom keyboard
-GAME_SUBTITLE	:= Input
+GAME_SUBTITLE	:= Keyboard
 
 # Source code paths
 

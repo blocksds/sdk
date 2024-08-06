@@ -6,8 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= input_stdin
+NAME		:= keyboard_stdin
 GAME_TITLE	:= stdin test
-GAME_SUBTITLE	:= Input
+GAME_SUBTITLE	:= Keyboard
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile
