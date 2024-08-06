@@ -28,7 +28,7 @@ weight: -20
     - Added a 3D two-pass rendering example.
     - Added a BIOS bit unpacking example.
     - Added a BIOS CRC-16 calculation example.
-    - Added a BIOS RSA decruption example.
+    - Added a BIOS RSA decryption example.
     - Added a microphone recording example.
     - Added a Maxmod audio modes example.
     - Added a Maxmod reverb example.
