@@ -3,6 +3,66 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version DEV (2024-XX-XX)
+
+- libnds:
+
+  - Make custom keyboards work. This seems to have never worked because libnds
+    overwrote the custom keyboard struct with the default keyboard struct.
+  - Keyboard struct fields have been refactored. Some field sizes are now
+    smaller, some fields are now const. The order has been changed to reduce
+    padding between fields and save even more RAM.
+  - Ensure that the keyboard is always initialized to the right state with
+    `keyboardShow()`. This lets you make a keyboard start in uppercase or
+    lowercase state depending on your preferences.
+  - Prevent keyboard functions from hanging if no keyboard is actually visible.
+  - Add helper to tell the GPU to apply fog to the clear buffer.
+  - Flush RAM before copying console graphics to VRAM.
+  - Implement `assert()` in the ARM9 and ARM7. In the ARM9 it works like
+    `sassert()`, in the ARM7 it prints a no$gba debug message.
+  - Clarify some comments about decompression routines of the BIOS.
+
+- dswifi:
+
+  - Stop generating `dswifi_version.h` as part of the build process.
+  - Some warnings have been fixed.
+
+- LibXM7:
+
+  - Fix a crash when unloading MOD files.
+
+- ndstool:
+
+  - FIx NitroFS filesystem corruption when no banner is generated.
+
+- grit:
+
+  - Fix `libplum` build error with LLVM.
+
+- mmutil:
+
+  - Fix some incorrect types.
+
+- SDK:
+
+  - New examples:
+
+    - Using fog in a 3D scene.
+    - Sorting 3D translucent objects based on their distance to the camera and
+      drawing them in the correct order.
+    - How to use maxmod song events.
+    - How to use the sound API of libnds to play PSG, noise and PCM audio.
+    - How to use custom keyboards with libnds.
+    - The basic Maxmod example now also shows how to play sound effects.
+
+  - Other:
+
+    - Add page to the documentation about how to debug programs with libnds.
+    - dlditool: Use `stdbool.h` instead of a custom boolean type.
+    - Doxygen comments have been reorganized in all repositories so that they
+      are uniform across all the codebase.
+    - All Doxyfiles have been updated.
+
 ## Version 1.3.1 (2024-07-26)
 
 - libnds:
