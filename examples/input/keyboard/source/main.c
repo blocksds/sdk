@@ -13,10 +13,10 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
-    // Load demo keyboard
+    // Initialize demo keyboard and load graphics to VRAM
     keyboardDemoInit();
 
-    // Load graphics to VRAM and display it on the screen
+    // Show keyboard on the screen
     keyboardShow();
 
     char string[50];

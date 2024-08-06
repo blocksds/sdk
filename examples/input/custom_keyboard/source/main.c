@@ -59,7 +59,7 @@ static const s16 SimpleKbdUpper[] =
     DVK_DOWN, DVK_RIGHT, DVK_RIGHT
 };
 
-static KeyMap capsLock =
+static const KeyMap capsLock =
 {
     .mapDataPressed = keyboardGfxMap + 32 * 20,
     .mapDataReleased = keyboardGfxMap,
@@ -68,7 +68,7 @@ static KeyMap capsLock =
     .height = 5
 };
 
-static KeyMap lowerCase =
+static const KeyMap lowerCase =
 {
     .mapDataPressed = keyboardGfxMap + 32 * 30,
     .mapDataReleased = keyboardGfxMap + 32 * 10,
@@ -77,16 +77,18 @@ static KeyMap lowerCase =
     .height = 5
 };
 
-static Keyboard customKeyboard =
+static const Keyboard customKeyboard =
 {
+    .scrollSpeed = 3,
+
     .grid_width = 8,   // Grid width
     .grid_height = 16, // Grid height
 
     // By setting the initial state to uppercase, and marking the keyboard as
     // shifted, the first character will be uppercase and the next ones will be
     // lowercase, like with modern smartphone keyboards.
-    .state = Upper,
     .shifted = true,
+    .state = Upper,
 
     .mappings = {
         &lowerCase, // keymap for lowercase
@@ -100,7 +102,7 @@ static Keyboard customKeyboard =
     .palette = keyboardGfxPal,       // palette
     .paletteLen = keyboardGfxPalLen, // size of palette
     .tileOffset = 0,                 // tile offset
-    .scrollSpeed = 3,                // scroll speed
+
     .OnKeyPressed = NULL,            // keypress callback
     .OnKeyReleased = NULL,           // key release callback
 };
@@ -116,7 +118,7 @@ int main(int argc, char **argv)
     // keyboard.
     lcdMainOnBottom();
 
-    // Load custom keyboard
+    // Initialize the keyboard and load its graphics
     keyboardInit(&customKeyboard,
                  3,                // Background layer to use
                  BgType_Text4bpp,  // 16 color palette format
@@ -125,9 +127,6 @@ int main(int argc, char **argv)
                  0,                // Tile base
                  true,             // Display it on the main screen
                  true);            // Load graphics to VRAM
-
-    // Load graphics to VRAM and display it on the screen
-    keyboardShow();
 
     char string[50];
     string[0] = '\0';
@@ -138,14 +137,28 @@ int main(int argc, char **argv)
         swiWaitForVBlank();
 
         scanKeys();
+        uint16_t keys_down = keysDown();
 
         // Clear console
-        printf("\x1b[2J");
+        consoleClear();
 
-        printf("\x1b[0;0HPress START to exit to loader");
-        printf("\x1b[2;0HCustom keyboard test. Space: %zu chars",
-               sizeof(string) - 1);
+        printf("START: Exit to loader\n");
+        printf("A:     Show keyboard\n");
+        printf("B:     Hide keyboard\n");
+        printf("\n");
+        printf("Total space: %zu chars", sizeof(string) - 1);
+        printf("\n");
+        printf("[%s]\n", string);
+        printf("Length: %d\n", strlen(string));
 
+        if (keys_down & KEY_A)
+            keyboardShow();
+
+        if (keys_down & KEY_B)
+            keyboardHide();
+
+        // keyboardUpdate() returns -1 if there is no active keyboard, or if the
+        // keyboard is hidden.
         int16_t c = keyboardUpdate();
         if (c != -1)
         {
@@ -169,10 +182,7 @@ int main(int argc, char **argv)
             }
         }
 
-        printf("\x1b[5;0H[%s]\n", string);
-        printf("Length: %d\n", strlen(string));
-
-        if (keysDown() & KEY_START)
+        if (keys_down & KEY_START)
             break;
     }
 

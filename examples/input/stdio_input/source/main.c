@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
-    // Load demo keyboard
+    // Initialize demo keyboard and load graphics to VRAM
     Keyboard *kbd = keyboardDemoInit();
     kbd->OnKeyPressed = on_key_pressed;
 
@@ -46,6 +46,8 @@ int main(int argc, char **argv)
         if (keys & KEY_SELECT)
         {
             printf("\x1b[9;0HName: ");
+            // This will show the keyboard, wait for the user to input a string,
+            // and return when the user presses "return".
             scanf("%255s", string);
         }
 
