@@ -22,8 +22,15 @@ int main(int argc, char **argv)
 
     consoleSelect(&bottomScreen);
 
-    printf("\x1b[2J"); // Clear console
-    printf("Printing on the bottom screen\n");
+    // Use bright green
+    consoleSetColor(&bottomScreen, CONSOLE_GREEN, true);
+
+    printf("Printing on the bottom screen\n\n");
+
+    printf("Cursor: ");
+    int x, y;
+    consoleGetCursor(&bottomScreen, &x, &y);
+    printf("(%d, %d)", x, y);
 
     consoleSelect(&topScreen);
 
