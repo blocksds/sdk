@@ -35,7 +35,7 @@ int main(int argc, char **argv)
     // Move cursor right: [deltaxC
     printf("\x1b[5CColumn 20");
 
-    // Print colored text
+    // Move cursor to a specific location to start printing colored text
     printf("\x1b[14;4H");
 
     // Colors (30 to 37): Black, Red, Green, Yellow, Blue, Magenta, Cyan, White
