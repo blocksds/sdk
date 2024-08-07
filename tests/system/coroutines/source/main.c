@@ -23,7 +23,8 @@ int entrypoint_coro(__ndsabi_coro_t *coro, void *arg)
 
     while (count > 0)
     {
-        printf("\x1b[%d;%d;H%5d", y, x, count);
+        consoleSetCursor(NULL, x, y);
+        printf("%5d", count);
         fflush(stdout);
         __ndsabi_coro_yield(coro, COROUTINE_IN_PROGRESS);
         count--;
@@ -67,7 +68,8 @@ int main(int argc, char **argv)
             int ret = __ndsabi_coro_resume(&(coro[i]));
             if (cur->joined)
             {
-                printf("\x1b[%d;%d;H%s", y, x, (ret == i) ? "OK   " : "FAIL ");
+                consoleSetCursor(NULL, x, y);
+                printf("%s", (ret == i) ? "OK   " : "FAIL ");
                 fflush(stdout);
             }
             else if (ret != COROUTINE_IN_PROGRESS)
@@ -76,7 +78,8 @@ int main(int argc, char **argv)
                 // the coroutine.
                 cur->joined = 1;
 
-                printf("\x1b[%d;%d;H%s", y, x,  "ERROR");
+                consoleSetCursor(NULL, x, y);
+                printf("%s", "ERROR");
                 fflush(stdout);
             }
         }
@@ -85,7 +88,8 @@ int main(int argc, char **argv)
             break;
     }
 
-    printf("\x1b[18;0HPress START to exit to loader\n");
+    consoleSetCursor(NULL, 0, 18);
+    printf("Press START to exit to loader\n");
 
     while (1)
     {

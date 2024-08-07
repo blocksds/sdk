@@ -82,7 +82,8 @@ void dir_list(void)
 
     closedir(dirp);
 
-    printf("\x1b[23;0HNum entries: %d ", num_entries);
+    consoleSetCursor(NULL, 0, 23);
+    printf("Num entries: %d ", num_entries);
 
     wait_press_button_a();
 

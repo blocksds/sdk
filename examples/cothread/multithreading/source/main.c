@@ -24,14 +24,17 @@ int entrypoint_thread(void *arg)
     register char *stack_ptr asm("sp");
 
     consoleSelect(&topScreen);
-    printf("\x1b[%d;%d;H%X", y, x, (unsigned int)stack_ptr);
+    consoleSetCursor(NULL, x, y);
+
+    printf("%X", (unsigned int)stack_ptr);
 
     int count = (1 + index) * 50;
 
     while (count > 0)
     {
         consoleSelect(&bottomScreen);
-        printf("\x1b[%d;%d;H%5d", y, x, count);
+        consoleSetCursor(NULL, x, y);
+        printf("%5d", count);
         fflush(stdout);
         cothread_yield();
         count--;
@@ -47,13 +50,15 @@ int entrypoint_thread_detached(void *arg)
     for (int i = 0; i < 1000; i++)
     {
         consoleSelect(&bottomScreen);
-        printf("\x1b[23;0;H%5d", count + i);
+        consoleSetCursor(NULL, 0, 23);
+        printf("%5d", count + i);
         fflush(stdout);
         cothread_yield();
     }
 
     consoleSelect(&bottomScreen);
-    printf("\x1b[23;0;HDone    ");
+    consoleSetCursor(NULL, 0, 23);
+    printf("Done    ");
     fflush(stdout);
 
     return 0;
@@ -103,7 +108,8 @@ int main(int argc, char **argv)
                 int y = (i / 4);
 
                 consoleSelect(&bottomScreen);
-                printf("\x1b[%d;%d;H%s", y, x, (ret == i) ? "OK   " : "FAIL ");
+                consoleSetCursor(NULL, x, y);
+                printf("%s", (ret == i) ? "OK   " : "FAIL ");
                 fflush(stdout);
             }
             else
@@ -117,7 +123,8 @@ int main(int argc, char **argv)
     }
 
     consoleSelect(&bottomScreen);
-    printf("\x1b[18;0HPress START to exit to loader\n");
+    consoleSetCursor(NULL, 0, 18);
+    printf("Press START to exit to loader\n");
 
     while (1)
     {

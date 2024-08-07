@@ -31,8 +31,9 @@ int main(int argc, char **argv)
 
         consoleClear();
 
-        printf("\x1b[0;0HPress START to exit to loader");
-        printf("\x1b[2;0HKeyboard test. Space: %zu chars", sizeof(string) - 1);
+        printf("Press START to exit to loader\n");
+        printf("\n");
+        printf("Keyboard test. Space: %zu chars\n", sizeof(string) - 1);
 
         int16_t c = keyboardUpdate();
         if (c != -1)
@@ -57,7 +58,8 @@ int main(int argc, char **argv)
             }
         }
 
-        printf("\x1b[5;0H[%s]\n", string);
+        printf("\n");
+        printf("[%s]\n", string);
         printf("Length: %d\n", strlen(string));
 
         if (keysDown() & KEY_START)

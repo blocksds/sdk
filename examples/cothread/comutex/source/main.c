@@ -51,13 +51,14 @@ int main(int argc, char **argv)
     cothread_create(entrypoint_consumer, NULL, 0, COTHREAD_DETACHED);
     cothread_create(entrypoint_producer, NULL, 0, COTHREAD_DETACHED);
 
-    printf("\x1b[18;0HPress START to exit to loader\n");
+    consoleSetCursor(NULL, 0, 18);
+    printf("Press START to exit to loader\n");
 
     while (1)
     {
         cothread_yield_irq(IRQ_VBLANK);
 
-        printf("\x1b[0;0H");
+        consoleSetCursor(NULL, 0, 0);
         printf("Count:          %10d\n", count);
         printf("Total produced: %10d\n", total_produced);
         printf("Total consumed: %10d\n", total_consumed);

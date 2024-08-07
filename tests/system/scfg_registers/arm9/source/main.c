@@ -35,7 +35,8 @@ void print_scfg_a7rom_a9rom(uint8_t scfg_a7rom, uint8_t scfg_a9rom)
     printf("1. DSi BIOS:                 %d\n", scfg_a7rom & BIT(1) ? 0 : 1);
     printf("2. Access to console ID:     %d\n", scfg_a7rom & BIT(2) ? 0 : 1);
 
-    printf("\x1b[21;0HPress A to continue\n");
+    consoleSetCursor(NULL, 0, 21);
+    printf("Press A to continue\n");
     printf("\n");
     printf("Press START to exit");
 }
@@ -88,7 +89,8 @@ void print_scfg_ext7(uint32_t scfg_ext7)
     printf("30. Undocumented:            %d\n", scfg_ext7 & BIT(30) ? 1 : 0);
     printf("31. Access SCFG/MBK:         %d\n", scfg_ext7 & BIT(31) ? 1 : 0);
 
-    printf("\x1b[21;0HPress A to continue\n");
+    consoleSetCursor(NULL, 0, 21);
+    printf("Press A to continue\n");
     printf("\n");
     printf("Press START to exit");
 }
@@ -141,7 +143,8 @@ void print_scfg_ext9(uint32_t scfg_ext9)
     printf("30. Undocumented:            %d\n", scfg_ext9 & BIT(30) ? 1 : 0);
     printf("31. Access SCFG/MBK:         %d\n", scfg_ext9 & BIT(31) ? 1 : 0);
 
-    printf("\x1b[21;0HPress A to continue\n");
+    consoleSetCursor(NULL, 0, 23);
+    printf("Press A to continue\n");
     printf("\n");
     printf("Press START to exit");
 }

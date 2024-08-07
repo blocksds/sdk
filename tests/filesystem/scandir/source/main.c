@@ -56,7 +56,8 @@ void dir_list(void)
         printf("%d - %s%s\n", i, list[i]->d_name,
                (list[i]->d_type == DT_DIR) ? "/" : " ");
 
-    printf("\x1b[23;0HNum entries: %d ", list_count);
+    consoleSetCursor(NULL, 0, 23);
+    printf("Num entries: %d ", list_count);
 
     for (int i = 0; i < list_count; i++)
         free(list[i]);

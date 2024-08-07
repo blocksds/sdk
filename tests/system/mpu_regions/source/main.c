@@ -168,7 +168,8 @@ int main(int argc, char **argv)
         printf("\n");
     }
 
-    printf("\x1b[23;0HPress START to exit to loader");
+    consoleSetCursor(NULL, 0, 23);
+    printf("Press START to exit to loader");
 
     while (1)
     {

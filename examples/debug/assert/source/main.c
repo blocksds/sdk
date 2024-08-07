@@ -30,7 +30,8 @@ int main(int argc, char **argv)
     printf("If you're reading this message,\n"
            "assertions are disabled.");
 
-    printf("\x1b[23;0HPress START to exit to loader");
+    consoleSetCursor(NULL, 0, 23);
+    printf("Press START to exit to loader");
 
     while (1)
     {

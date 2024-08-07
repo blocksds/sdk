@@ -36,8 +36,10 @@ int main(int argc, char **argv)
         loop_count++;
         cothread_yield_irq(IRQ_VBLANK);
 
-        printf("\x1b[0;6;H%5d", irq_frame_count);
-        printf("\x1b[1;6;H%5d", loop_count);
+        consoleSetCursor(NULL, 6, 0);
+        printf("%5d", irq_frame_count);
+        consoleSetCursor(NULL, 6, 1);
+        printf("%5d", loop_count);
 
         scanKeys();
 

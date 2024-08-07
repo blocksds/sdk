@@ -188,7 +188,9 @@ int main(int argc, char *argv[])
     printf("A/B:   Scale small cube\n");
     printf("PAD:   Rotate small cube\n");
     printf("START: Exit to loader");
-    printf("\x1b[23;0HThanks to DiscoStew. ;)");
+
+    consoleSetCursor(NULL, 0, 23);
+    printf("Thanks to DiscoStew. ;)");
 
     int frame = 0;
     float rx = 30, ry = 0;

@@ -35,16 +35,20 @@ int main(int argc, char **argv)
 
         consoleClear();
 
-        printf("\x1b[0;0HPress START to exit to loader");
-        printf("\x1b[2;0HPress SELECT to input name");
-        printf("\x1b[3;0HSpace: %zu chars", sizeof(string) - 1);
+        printf("Press START to exit to loader\n");
+        printf("\n");
+        printf("Press SELECT to input name\n");
+        printf("Space: %zu chars\n", sizeof(string) - 1);
 
-        printf("\x1b[5;0H[%s]\n", string);
+        printf("[%s]\n", string);
         printf("Length: %d\n", strlen(string));
 
         if (keys & KEY_SELECT)
         {
-            printf("\x1b[9;0HName: ");
+            printf("\n");
+            printf("\n");
+            printf("\n");
+            printf("Name: ");
             // This will show the keyboard, wait for the user to input a string,
             // and return when the user presses "return".
             scanf("%255s", string);

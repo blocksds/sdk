@@ -41,7 +41,10 @@ int main(int argc, char **argv)
     consoleClear();
 
     for (int i = 0; i < 256; i++)
-        printf("\x1b[%d;%dH%c", i / 32, i % 32, i);
+    {
+        consoleSetCursor(NULL, i % 32, i / 32);
+        printf("%c", i);
+    }
 
     printf("ABXY:  Move rotation center\n");
     printf("PAD:   Scroll background\n");
