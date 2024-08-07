@@ -96,8 +96,7 @@ int main(int argc, char **argv)
         // Print some text in the demo console
         // -----------------------------------
 
-        // Clear console
-        printf("\x1b[2J");
+        consoleClear();
 
         // Print current time
         char str[100];
@@ -146,7 +145,8 @@ int main(int argc, char **argv)
 
         if (keys & KEY_SELECT)
         {
-            printf("\x1b[12;1HType your name: ");
+            consoleSetCursor(NULL, 1, 12);
+            printf("Type your name: ");
             scanf("%255s", name);
         }
 
