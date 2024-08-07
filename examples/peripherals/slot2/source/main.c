@@ -70,7 +70,9 @@ int main(int argc, char **argv)
                 setRumble(rumble);
             }
 
-            printf("\x1b[32D\x1b[K"); // Clear line
+            // Go to the start of the line (it will stop at X=0)
+            consoleAddToCursor(NULL, -32, 0);
+            printf("\x1b[K"); // Clear line
 
             if (peripheralSlot2GetSupportMask() & SLOT2_PERIPHERAL_GYRO_GPIO)
             {

@@ -60,12 +60,14 @@ int main(int argc, char **argv)
             3, 6, 9, 12, 15, 18
         };
         printf("New time:\n\n");
-        printf("\x1b[%dC^\n", coord_x[sel]);
+        consoleAddToCursor(NULL, coord_x[sel], 0);
+        printf("^\n");
         printf("%02u-%02u-%02u %02u:%02u:%02u\n",
                rtc_time_and_date.year + 2000, rtc_time_and_date.month,
                rtc_time_and_date.day, rtc_time_and_date.hours,
                rtc_time_and_date.minutes, rtc_time_and_date.seconds);
-        printf("\x1b[%dCv\n", coord_x[sel]);
+        consoleAddToCursor(NULL, coord_x[sel], 0);
+        printf("v\n");
         printf("\n");
 
         // Print general information
