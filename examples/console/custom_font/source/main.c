@@ -15,7 +15,7 @@
 #include <custom_font.h>
 
 ConsoleFont customFont = {
-    .gfx = (u16 *)custom_fontTiles,
+    .gfx = custom_fontTiles,
     .pal = NULL,
     .numColors = 0,
     .bpp = 1,
