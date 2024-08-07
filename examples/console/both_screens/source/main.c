@@ -23,7 +23,7 @@ int main(int argc, char **argv)
     consoleSelect(&bottomScreen);
 
     // Use bright green
-    consoleSetColor(&bottomScreen, CONSOLE_GREEN, true);
+    consoleSetColor(&bottomScreen, CONSOLE_LIGHT_GREEN);
 
     printf("Printing on the bottom screen\n\n");
 
