@@ -7,20 +7,57 @@ weight: -20
 
 - libnds:
 
-  - Make custom keyboards work. This seems to have never worked because libnds
-    overwrote the custom keyboard struct with the default keyboard struct.
-  - Keyboard struct fields have been refactored. Some field sizes are now
-    smaller, some fields are now const. The order has been changed to reduce
-    padding between fields and save even more RAM.
-  - Ensure that the keyboard is always initialized to the right state with
-    `keyboardShow()`. This lets you make a keyboard start in uppercase or
-    lowercase state depending on your preferences.
-  - Prevent keyboard functions from hanging if no keyboard is actually visible.
-  - Add helper to tell the GPU to apply fog to the clear buffer.
-  - Flush RAM before copying console graphics to VRAM.
-  - Implement `assert()` in the ARM9 and ARM7. In the ARM9 it works like
-    `sassert()`, in the ARM7 it prints a no$gba debug message.
-  - Clarify some comments about decompression routines of the BIOS.
+  - Console:
+
+    - Fix 'D' ANSI escape code, which was broken in version 1.3.1.
+    - Document console struct fields. Some of them are only meant to be used by
+      libnds, which has been documented.
+    - The size of some fields in the console struct has been reduced, and the
+      fields have been reordered to reduce padding in the struct. Some fields
+      were unused, and they have been removed.
+    - Now it's possible to specify the 16-color palette to be used when loading
+      custom fonts with their own palette.
+    - `fontCharOffset` now works, which means that it is possible to specify
+      that a font should be loaded after another font, so that two fonts can use
+      the same tile block and save VRAM.
+    - In order to be able to specify the palette and the `fontCharOffset`, a new
+      function has been created: `consoleInitEx()`.
+    - Mark the defaultConsole struct as const. It is needed to keep that data
+      untouched because the user may initialize the default console several
+      times in a program, and it's important to be able to return to the right
+      initial state.
+    - Some variables have been made private.
+    - When a character outside of the character set of the font is printed, a
+      space is now printed instead. Previously, it printed tiles outside of the
+      font, which could result in garbage being printed on the screen.
+    - New functions have been added to control the console without using awkward
+      ANSI escape sequences: `consoleSetCursor()`, `consoleGetCursor()`,
+      `consoleAddToCursor()` and `consoleSetColor()`.
+
+  - Keyboard:
+
+    - Make custom keyboards work. This seems to have never worked because libnds
+      overwrote the custom keyboard struct with the default keyboard struct.
+    - Keyboard struct fields have been refactored. Some field sizes are now
+      smaller, some fields are now const. The order has been changed to reduce
+      padding between fields and save even more RAM.
+    - Ensure that the keyboard is always initialized to the right state with
+      `keyboardShow()`. This lets you make a keyboard start in uppercase or
+      lowercase state depending on your preferences.
+    - Prevent keyboard functions from hanging if no keyboard is actually
+      visible.
+
+  - Other:
+
+    - Add helper to tell the GPU to apply fog to the clear buffer.
+    - Flush RAM before copying console graphics to VRAM.
+    - Implement `assert()` in the ARM9 and ARM7. In the ARM9 it works like
+      `sassert()`, in the ARM7 it prints a no$gba debug message.
+    - Clarify some comments about decompression routines of the BIOS.
+    - Stop using ANSI escape sequences everywhere. Use direct console API
+      functions instead, which are more self-explanatory.
+    - The functions `sysGetCartOwner()` and `sysGetCardOwner()` have been added
+      to be able to check the CPU owner of the Slot-1 and Slot-2 buses.
 
 - dswifi:
 
@@ -33,7 +70,7 @@ weight: -20
 
 - ndstool:
 
-  - FIx NitroFS filesystem corruption when no banner is generated.
+  - Fix NitroFS filesystem corruption when no banner is generated.
 
 - grit:
 
@@ -53,7 +90,15 @@ weight: -20
     - How to use maxmod song events.
     - How to use the sound API of libnds to play PSG, noise and PCM audio.
     - How to use custom keyboards with libnds.
+
+  - Changes to examples:
+
     - The basic Maxmod example now also shows how to play sound effects.
+    - The example that loads custom fonts with the libnds console has been
+      improved to load 2 fonts with custom 16-color graphics on one screen and
+      one font with 256-color graphics on the other one.
+    - Examples and test now don't use ANSI escape sequences. This makes the code
+      a lot harder to understand.
 
   - Other:
 
