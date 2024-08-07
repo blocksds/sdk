@@ -1,0 +1,7 @@
+This font is a modified version of:
+
+Name: ASCII Bitmap Font "futuristic"
+Author: domsson
+License: CC0
+Link: https://opengameart.org/content/ascii-bitmap-font-futuristic
+

@@ -1,0 +1,6 @@
+This font is a modified version of:
+
+Name: ASCII Bitmap Font "cellphone"
+Author: domsson
+License: CC0
+Link: https://opengameart.org/content/ascii-bitmap-font-cellphone

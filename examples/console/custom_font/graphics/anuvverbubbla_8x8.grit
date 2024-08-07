@@ -1,0 +1,15 @@
+# 8 BPP
+-gB8
+
+# Generate a tileset
+-g
+
+# Don't optimize repeated tiles, and don't generate a tilemap
+-mR!
+-m!
+
+# Generate a palette
+-p
+
+# Black is transparent
+-gT000000

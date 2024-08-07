@@ -1,5 +1,5 @@
-# 1bpp
--gB1
+# 4 BPP
+-gB4
 
 # Generate a tileset
 -g
@@ -8,8 +8,9 @@
 -mR!
 -m!
 
-# Don't generate a palette
--p!
+# Generate a 16 color palette
+-p
+-pe16
 
 # Black is transparent
 -gT000000

@@ -1,0 +1,16 @@
+# 4 BPP
+-gB4
+
+# Generate a tileset
+-g
+
+# Don't optimize repeated tiles, and don't generate a tilemap
+-mR!
+-m!
+
+# Generate a 16 color palette
+-p
+-pe16
+
+# Black is transparent
+-gT000000
