@@ -85,20 +85,23 @@ int main(int argc, char **argv)
         if (screen_mode == ScreenModeRaw) printf("Screen mode: Raw input\n");
         if (screen_mode == ScreenModeAdj) printf("Screen mode: Adjusted input\n");
         if (screen_mode == ScreenModePressure) printf("Screen mode: Pressure\n");
-        printf("\x1b[37;0mPress LEFT/RIGHT to switch\n\n");
+
+        consoleSetColor(NULL, CONSOLE_LIGHT_GRAY);
+        printf("Press LEFT/RIGHT to switch\n\n");
         if (latch_on == LatchOnHold) printf("Latch on: Hold\n");
         if (latch_on == LatchOnPress) printf("Latch on: Press\n");
-        printf("\x1b[37;0mPress UP/DOWN to switch\n\nPress START+SELECT to exit\n\n");
+        consoleSetColor(NULL, CONSOLE_LIGHT_GRAY);
+        printf("Press UP/DOWN to switch\n\nPress START+SELECT to exit\n\n");
 
         if (touch_cond)
-            printf("\x1b[32;1m");
+            consoleSetColor(NULL, CONSOLE_LIGHT_GREEN);
         else
-            printf("\x1b[31;1m");
+            consoleSetColor(NULL, CONSOLE_LIGHT_RED);
 
         printf("Raw coords: [%d, %d]\n", touch_pos.rawx, touch_pos.rawy);
         printf("Adj coords: [%d, %d]\n", touch_pos.px, touch_pos.py);
         printf("Touch Z1Z2: [%d, %d]\n", touch_pos.z1, touch_pos.z2);
-        printf("\x1b[39;0m");
+        consoleSetColor(NULL, CONSOLE_DEFAULT);
 
         // Handle key presses.
         if ((keys_held & (KEY_START | KEY_SELECT)) == (KEY_START | KEY_SELECT))
@@ -151,10 +154,13 @@ int main(int argc, char **argv)
                 u32 tosend = touch_pos.rawx * ((touch_pos.z2 * 4096 / touch_pos.z1) - 4096);
                 float pressure = (float) maxPressure / (float) tosend * maxRadius;
 
-                printf("\n\x1b[33;1m");
-                printf("Resistance: %lu\n\x1b[33;0m            %08lX\x1b[33;1m\n", tosend, tosend);
+                consoleSetColor(NULL, CONSOLE_LIGHT_YELLOW);
+                printf("Resistance: %lu\n", tosend);
+                consoleSetColor(NULL, CONSOLE_YELLOW);
+                printf("            %08lX\n", tosend);
+                consoleSetColor(NULL, CONSOLE_LIGHT_YELLOW);
                 printf("Pressure:   %f\n", pressure);
-                printf("\x1b[39;0m");
+                consoleSetColor(NULL, CONSOLE_DEFAULT);
 
                 if (!isinf(pressure) && pressure > 0)
                 {

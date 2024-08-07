@@ -44,13 +44,13 @@ int main(int argc, char **argv)
         printf("Touch input example\nPress START+SELECT to exit\n\n");
 
         if (keys_held & KEY_TOUCH)
-            printf("\x1b[32;1m");
+            consoleSetColor(NULL, CONSOLE_LIGHT_GREEN);
         else
-            printf("\x1b[31;1m");
+            consoleSetColor(NULL, CONSOLE_LIGHT_RED);
 
         printf("Raw coords: [%d, %d]\n", touch_pos.rawx, touch_pos.rawy);
         printf("Adjusted coords: [%d, %d]\n", touch_pos.px, touch_pos.py);
-        printf("\x1b[39;0m");
+        consoleSetColor(NULL, CONSOLE_DEFAULT);
 
         // Draw a square on the bottom screen where the user is touching.
         glBegin2D();

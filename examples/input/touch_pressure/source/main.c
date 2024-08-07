@@ -42,14 +42,14 @@ int main(int argc, char **argv)
         printf("Touch pressure example\nPress START+SELECT to exit\n\n");
 
         if (keys_held & KEY_TOUCH)
-            printf("\x1b[32;1m");
+            consoleSetColor(NULL, CONSOLE_LIGHT_GREEN);
         else
-            printf("\x1b[31;1m");
+            consoleSetColor(NULL, CONSOLE_LIGHT_RED);
 
         printf("Raw coords: [%d, %d]\n", touch_pos.rawx, touch_pos.rawy);
         printf("Adj coords: [%d, %d]\n", touch_pos.px, touch_pos.py);
         printf("Touch Z1Z2: [%d, %d]\n", touch_pos.z1, touch_pos.z2);
-        printf("\x1b[39;0m");
+        consoleSetColor(NULL, CONSOLE_DEFAULT);
 
         glBegin2D();
 
@@ -70,10 +70,14 @@ int main(int argc, char **argv)
             u32 resistance = touch_pos.rawx * ((touch_pos.z2 * 4096 / touch_pos.z1) - 4096);
             pressure = (float) maxPressure / (float) resistance * maxRadius;
 
-            printf("\n\x1b[33;1m");
-            printf("Resistance: %lu\n\x1b[33;0m            %08lX\x1b[33;1m\n", resistance, resistance);
+            printf("\n");
+            consoleSetColor(NULL, CONSOLE_LIGHT_YELLOW);
+            printf("Resistance: %lu\n", resistance);
+            consoleSetColor(NULL, CONSOLE_YELLOW);
+            printf("            %08lX\n", resistance);
+            consoleSetColor(NULL, CONSOLE_LIGHT_YELLOW);
             printf("Pressure:   %f\n", pressure);
-            printf("\x1b[39;0m");
+            consoleSetColor(NULL, CONSOLE_DEFAULT);
         }
 
         // Draw consecutive boxes to reflect pressure measurement.
