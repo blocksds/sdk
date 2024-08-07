@@ -78,7 +78,8 @@ int main(int argc, char **argv)
             soundMicPowerOff();
         }
 
-        printf("\x1b[2J"); // Clear console
+        consoleClear();
+
         printf("X: Record\n");
         printf("A: Play\n");
         printf("\n");

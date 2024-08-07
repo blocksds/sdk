@@ -90,7 +90,7 @@ int main(int argc, char **argv)
                 read_size++;
         }
 
-        printf("\x1b[2J"); // Clear console
+        consoleClear();
 
         // Clear destination buffer in DSP memory
         dspFifoSend(DSP_PCFG_MEMSEL_DATA, &zero, true,

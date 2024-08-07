@@ -38,8 +38,6 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
-    printf("\x1b[2J"); // Clear console
-
     // Initialize the Slot-2 peripheral.
     if (!peripheralSlot2Init(SLOT2_PERIPHERAL_EXTRAM))
     {

@@ -44,7 +44,7 @@ int main(int argc, char **argv)
         if (keys & KEY_START)
             break;
 
-        printf("\x1b[2J"); // Clear console
+        consoleClear();
 
         // Heartbeat counter
 

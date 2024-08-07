@@ -37,7 +37,7 @@ void wait_forever(void)
 
 void dir_list(void)
 {
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     char *cwd = getcwd(NULL, 0);
     printf("path: %s\n", cwd);
@@ -86,7 +86,7 @@ void dir_list(void)
 
     wait_press_button_a();
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 }
 
 void fcat(const char *path)
@@ -157,8 +157,6 @@ int main(int argc, char **argv)
     consoleInit(&bottomScreen, 3,BgType_Text4bpp, BgSize_T_256x256, 31, 0, false, true);
 
     consoleSelect(&topScreen);
-
-    printf("\x1b[2J"); // Clear console
 
     printf("DLDI name:\n");
     printf("%s\n", io_dldi_data->friendlyName);
@@ -297,7 +295,7 @@ int main(int argc, char **argv)
     // Use stat() on a directory and a file and see the results.
 
     {
-        printf("\x1b[2J"); // Clear console
+        consoleClear();
 
         struct stat st;
         if (stat("d1", &st) != 0)
@@ -340,8 +338,7 @@ int main(int argc, char **argv)
     }
     wait_press_button_a();
 
-    // Clear console
-    printf("\x1b[2J");
+    consoleClear();
     printf("All test passed!\n");
     printf("\n");
     printf("Press START to exit to loader\n");

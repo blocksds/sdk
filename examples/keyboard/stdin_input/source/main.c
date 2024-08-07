@@ -33,8 +33,7 @@ int main(int argc, char **argv)
 
         uint16_t keys = keysDown();
 
-        // Clear console
-        printf("\x1b[2J");
+        consoleClear();
 
         printf("\x1b[0;0HPress START to exit to loader");
         printf("\x1b[2;0HPress SELECT to input name");

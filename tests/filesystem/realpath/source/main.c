@@ -95,8 +95,6 @@ int main(int argc, char **argv)
 
     consoleSelect(&topScreen);
 
-    printf("\x1b[2J"); // Clear console
-
     printf("DLDI name:\n");
     printf("%s\n", io_dldi_data->friendlyName);
     printf("\n");
@@ -132,7 +130,7 @@ int main(int argc, char **argv)
     // Do most of the tests with nitroFS so that they work in all emulators
     // --------------------------------------------------------------------
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     printf("[*] NitroFS\n");
     printf("\n");

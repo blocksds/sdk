@@ -12,8 +12,6 @@ int main(int argc, char **argv)
 
     consoleDemoInit();
 
-    // Clear console
-    printf("\x1b[2J");
     printf("Press A to trigger an exception\n");
 
     while (1)

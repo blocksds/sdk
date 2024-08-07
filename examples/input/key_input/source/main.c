@@ -20,8 +20,7 @@ int main(int argc, char **argv)
         uint16_t keys_held = keysHeld();
         uint16_t keys_up = keysUp();
 
-        // Clear console
-        printf("\x1b[2J");
+        consoleClear();
 
         printf("Press START+SELECT to exit\n\n");
 

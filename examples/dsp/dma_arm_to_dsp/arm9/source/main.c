@@ -98,7 +98,7 @@ int main(int argc, char **argv)
             offset -= 2;
         offset &= 255;
 
-        printf("\x1b[2J"); // Clear console
+        consoleClear();
 
         printf("Up/Down:    Size %u words\n", transfer_size);
         printf("Left/Right: DMA ch %u (!= 0)\n", dma_channel);

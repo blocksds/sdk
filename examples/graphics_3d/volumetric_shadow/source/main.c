@@ -150,8 +150,7 @@ int main(int argc, char *argv[])
     glLoadIdentity();
     gluPerspective(60, 256.0 / 192.0, 0.1, 20);
 
-    printf("\x1b[0;0H"
-           "ABXY:    Rotate\n"
+    printf("ABXY:    Rotate\n"
            "Pad:     Move\n"
            "SELECT:  Show edges of shadow\n"
            "START:   Exit to loader\n");

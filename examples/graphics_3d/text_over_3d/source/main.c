@@ -120,8 +120,7 @@ int main(int argc, char **argv)
         // Print some text in the demo console
         // -----------------------------------
 
-        // Clear console
-        printf("\x1b[2J");
+        consoleClear();
 
         printf("Text console over 3D\n");
         printf("\n");

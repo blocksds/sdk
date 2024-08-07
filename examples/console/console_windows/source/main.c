@@ -28,7 +28,6 @@ int main(int argc, char **argv)
 
     consoleSelect(&bottomScreen);
 
-    printf("\x1b[2J"); // Clear console
     printf("Printing on the bottom screen in a small window\n");
 
     consoleSelect(&topScreen);

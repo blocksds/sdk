@@ -10,9 +10,6 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
-    // Clear console
-    printf("\x1b[2J");
-
     // This example shows that you can leave the divider hardware running
     // asynchronously, start a square root, and eventually get the result of the
     // division.

@@ -70,8 +70,6 @@ int main(int argc, char **argv)
 
     consoleSelect(&topScreen);
 
-    printf("\x1b[2J"); // Clear console
-
     printf("DLDI name:\n");
     printf("%s\n", io_dldi_data->friendlyName);
     printf("\n");
@@ -106,7 +104,7 @@ int main(int argc, char **argv)
 
     // List the contents in a folder in NitroFS
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     printf("NitroFS\n");
     printf("=======\n");
@@ -123,7 +121,7 @@ int main(int argc, char **argv)
 
     wait_press_button_a();
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     printf("FAT (DLDI)\n");
     printf("==========\n");
@@ -153,7 +151,7 @@ int main(int argc, char **argv)
 
     wait_press_button_a();
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     printf("SD (DSi)\n");
     printf("========\n");
@@ -183,8 +181,7 @@ int main(int argc, char **argv)
 
     wait_press_button_a();
 
-    // Clear console
-    printf("\x1b[2J");
+    consoleClear();
     printf("Tests finished!\n");
     printf("\n");
     printf("Press START to exit to loader\n");

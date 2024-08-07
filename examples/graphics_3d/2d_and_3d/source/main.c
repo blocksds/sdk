@@ -133,8 +133,7 @@ int main(int argc, char **argv)
         // Print some text in the demo console
         // -----------------------------------
 
-        // Clear console
-        printf("\x1b[2J");
+        consoleClear();
 
         // Print some controls
         printf("R + PAD: Rotate quad\n");

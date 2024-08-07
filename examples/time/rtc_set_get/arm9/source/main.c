@@ -44,7 +44,7 @@ int main(int argc, char **argv)
     {
         swiWaitForVBlank();
 
-        printf("\x1b[2J"); // Clear console
+        consoleClear();
 
         // Print current time
         char str[100];

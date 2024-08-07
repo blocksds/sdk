@@ -38,7 +38,7 @@ void wait_forever(void)
 
 void dir_list(void)
 {
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     printf("path: %s\n", getcwd(NULL, 0));
     printf("\n");
@@ -75,8 +75,6 @@ int main(int argc, char **argv)
     consoleInit(&bottomScreen, 3,BgType_Text4bpp, BgSize_T_256x256, 31, 0, false, true);
 
     consoleSelect(&topScreen);
-
-    printf("\x1b[2J"); // Clear console
 
     printf("DLDI name:\n");
     printf("%s\n", io_dldi_data->friendlyName);

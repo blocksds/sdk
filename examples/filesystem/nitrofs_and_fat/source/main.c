@@ -38,8 +38,6 @@ void wait_forever(void)
 
 void dir_list(void)
 {
-    //printf("\x1b[2J"); // Clear console
-
     char *cwd = getcwd(NULL, 0);
     printf("path: %s\n", cwd);
     free(cwd);
@@ -93,7 +91,7 @@ void dir_list(void)
 
     wait_press_button_a();
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 }
 
 int main(int argc, char **argv)
@@ -108,8 +106,6 @@ int main(int argc, char **argv)
     consoleInit(&bottomScreen, 3,BgType_Text4bpp, BgSize_T_256x256, 31, 0, false, true);
 
     consoleSelect(&topScreen);
-
-    printf("\x1b[2J"); // Clear console
 
     printf("DLDI name:\n");
     printf("%s\n", io_dldi_data->friendlyName);
@@ -145,7 +141,7 @@ int main(int argc, char **argv)
 
     // List the contents in a folder in NitroFS
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     printf("NitroFS\n");
     printf("=======\n");
@@ -164,7 +160,7 @@ int main(int argc, char **argv)
 
     // List the contents in the root folder of the FAT filesystem (flashcard)
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     printf("FAT (DLDI)\n");
     printf("==========\n");
@@ -183,7 +179,7 @@ int main(int argc, char **argv)
 
     // List the contents in the root folder of the DSi SD card
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     printf("SD (DSi)\n");
     printf("========\n");
@@ -200,8 +196,7 @@ int main(int argc, char **argv)
         wait_press_button_a();
     }
 
-    // Clear console
-    printf("\x1b[2J");
+    consoleClear();
     printf("Tests finished!\n");
     printf("\n");
     printf("Press START to exit to loader\n");

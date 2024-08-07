@@ -29,8 +29,7 @@ int main(int argc, char **argv)
 
         scanKeys();
 
-        // Clear console
-        printf("\x1b[2J");
+        consoleClear();
 
         printf("\x1b[0;0HPress START to exit to loader");
         printf("\x1b[2;0HKeyboard test. Space: %zu chars", sizeof(string) - 1);

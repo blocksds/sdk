@@ -20,7 +20,6 @@ int main(int argc, char **argv)
     // stderr are redirected to the libnds console.
     consoleDebugInit(DebugDevice_NOCASH);
 
-    printf("\x1b[2J"); // Clear console
     printf("Check the debug console of\n"
            "no$gba of both ARM9 and ARM7\n"
            "to see the debug messages.\n"

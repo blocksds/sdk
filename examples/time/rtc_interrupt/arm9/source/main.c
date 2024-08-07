@@ -24,8 +24,7 @@ int main(int argc, char **argv)
         // Synchronize game loop to the screen refresh
         swiWaitForVBlank();
 
-        // Clear console
-        printf("\x1b[2J");
+        consoleClear();
 
         // Print current time
         char str[100];

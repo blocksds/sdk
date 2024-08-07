@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 
     while (!exit)
     {
-        printf("\x1b[2J"); // Clear console
+        consoleClear();
         printf("Slot-2 example\n");
         printf("==============\n");
         printf("\n");

@@ -11,8 +11,6 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
-    // Clear console
-    printf("\x1b[2J");
     printf("Raw command line\n");
     printf("----------------\n");
     printf("\n");

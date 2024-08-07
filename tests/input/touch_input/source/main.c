@@ -80,7 +80,7 @@ int main(int argc, char **argv)
             touchRead(&touch_pos);
 
         // Print touch position information to console.
-        printf("\x1b[2J");
+        consoleClear();
         printf("Touch screen test code\n\n");
         if (screen_mode == ScreenModeRaw) printf("Screen mode: Raw input\n");
         if (screen_mode == ScreenModeAdj) printf("Screen mode: Adjusted input\n");

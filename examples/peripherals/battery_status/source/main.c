@@ -18,8 +18,7 @@ int main(int argc, char **argv)
         uint32_t battery_level = value & 0xF;
         uint32_t charger_connected = value & BIT(7);
 
-        // Clear console
-        printf("\x1b[2J");
+        consoleClear();
         printf("Current charge level: %" PRIu32 "\n", battery_level);
         printf("Charger connected: %s\n", charger_connected ? "Yes" : "No");
         printf("\n");

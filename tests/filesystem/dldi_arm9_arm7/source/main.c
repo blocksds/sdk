@@ -52,8 +52,6 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
-    printf("\x1b[2J"); // Clear console
-
     printf("DLDI name:\n%s\n\n", io_dldi_data->friendlyName);
     printf("DSi mode: %d\n\n", isDSiMode());
 

@@ -40,7 +40,7 @@ int main(int argc, char **argv)
             touchRead(&touch_pos);
 
         // Print touch position information to console.
-        printf("\x1b[2J");
+        consoleClear();
         printf("Touch input example\nPress START+SELECT to exit\n\n");
 
         if (keys_held & KEY_TOUCH)

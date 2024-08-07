@@ -144,7 +144,7 @@ int main(int argc, char **argv)
     {
         cothread_yield_irq(IRQ_VBLANK);
 
-        printf("\x1b[2J"); // Clear console
+        consoleClear();
 
         for (uint32_t ch = FIFO_USER_01; ch <= FIFO_USER_08; ch++)
         {

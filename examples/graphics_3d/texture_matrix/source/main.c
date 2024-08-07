@@ -55,8 +55,7 @@ int main(int argc, char *argv[])
     glLoadIdentity();
     gluPerspective(60, 256.0 / 192.0, 0.1, 20);
 
-    printf("\x1b[0;0H"
-           "ABXY:    Move texture\n"
+    printf("ABXY:    Move texture\n"
            "Pad:     Rotate\n"
            "START:   Exit to loader\n");
 

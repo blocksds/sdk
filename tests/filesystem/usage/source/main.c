@@ -37,7 +37,7 @@ void wait_forever(void)
 
 void dir_list(void)
 {
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     printf("path: %s\n", getcwd(NULL, 0));
     printf("\n");
@@ -84,7 +84,7 @@ void dir_list(void)
 
     wait_press_button_a();
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 }
 
 void fcat(const char *path)
@@ -156,7 +156,7 @@ int main(int argc, char **argv)
 
     consoleSelect(&topScreen);
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     printf("DLDI name:\n");
     printf("%s\n", io_dldi_data->friendlyName);
@@ -385,7 +385,7 @@ int main(int argc, char **argv)
     // Use stat() on a directory and a file and see the results.
 
     {
-        printf("\x1b[2J"); // Clear console
+        consoleClear();
 
         struct stat st;
         if (stat("d1", &st) != 0)
@@ -413,7 +413,7 @@ int main(int argc, char **argv)
     // Try to create a folder with a name that is used by a file. Then, create
     // a new folder and move a file to it.
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     {
         if (mkdir("f1.txt", S_IRWXU | S_IRWXG | S_IRWXO) == 0)
@@ -493,8 +493,7 @@ int main(int argc, char **argv)
     }
     wait_press_button_a();
 
-    // Clear console
-    printf("\x1b[2J");
+    consoleClear();
     printf("All test passed!\n");
     printf("\n");
     printf("Press START to exit to loader\n");

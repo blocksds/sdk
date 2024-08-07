@@ -27,9 +27,6 @@ int main(int argc, char **argv)
 
     consoleDemoInit();
 
-    // Clear console
-    printf("\x1b[2J");
-
     printf("If you're reading this message,\n"
            "assertions are disabled.");
 

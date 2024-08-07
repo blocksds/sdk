@@ -110,7 +110,7 @@ int main(int argc, char **argv)
                 frequency_right++;
         }
 
-        printf("\x1b[2J"); // Clear console
+        consoleClear();
 
         printf("L/R: Sound ratio:\n");
         printf("\n");

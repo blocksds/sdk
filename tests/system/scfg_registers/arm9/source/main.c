@@ -16,7 +16,7 @@ void print_scfg_a7rom_a9rom(uint8_t scfg_a7rom, uint8_t scfg_a9rom)
 {
     consoleSelect(&topScreen);
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     printf("SCFG_A9ROM : 0x%02X\n", scfg_a9rom);
     printf("-----------------\n");
@@ -27,7 +27,7 @@ void print_scfg_a7rom_a9rom(uint8_t scfg_a7rom, uint8_t scfg_a9rom)
 
     consoleSelect(&bottomScreen);
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     printf("SCFG_A7ROM : 0x%02X\n", scfg_a7rom);
     printf("-----------------\n");
@@ -44,7 +44,7 @@ void print_scfg_ext7(uint32_t scfg_ext7)
 {
     consoleSelect(&topScreen);
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     printf("SCFG_EXT7 : 0x%08lX\n", scfg_ext7);
     printf("----------------------\n");
@@ -74,7 +74,7 @@ void print_scfg_ext7(uint32_t scfg_ext7)
 
     consoleSelect(&bottomScreen);
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     printf("21. Access SNDEXCNT:         %d\n", scfg_ext7 & BIT(21) ? 1 : 0);
     printf("22. Access I2C:              %d\n", scfg_ext7 & BIT(22) ? 1 : 0);
@@ -97,7 +97,7 @@ void print_scfg_ext9(uint32_t scfg_ext9)
 {
     consoleSelect(&topScreen);
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     printf("SCFG_EXT9 : 0x%08lX\n", scfg_ext9);
     printf("----------------------\n");
@@ -127,7 +127,7 @@ void print_scfg_ext9(uint32_t scfg_ext9)
 
     consoleSelect(&bottomScreen);
 
-    printf("\x1b[2J"); // Clear console
+    consoleClear();
 
     printf("21. Undocumented:            %d\n", scfg_ext9 & BIT(21) ? 1 : 0);
     printf("22. Undocumented:            %d\n", scfg_ext9 & BIT(22) ? 1 : 0);

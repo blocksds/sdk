@@ -32,8 +32,6 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
-    printf("\x1b[2J"); // Clear console
-
     printf("DLDI name:\n");
     printf("%s\n", io_dldi_data->friendlyName);
     printf("\n");

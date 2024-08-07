@@ -10,9 +10,6 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
-    // Clear console
-    printf("\x1b[2J");
-
     printf("swiDivide(2000, 7): %d\n", swiDivide(2000, 7));
     printf("swiRemainder(2000, 7): %d\n", swiRemainder(2000, 7));
     int result, remainder;
