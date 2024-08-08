@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version 1.4.0 (2024-08-XX)
+## Version 1.4.0 (2024-08-08)
 
 - libnds:
 
@@ -49,6 +49,8 @@ weight: -20
 
   - Other:
 
+    - Fix crash when calling `peripheralSlot2InitDefault()` in a DSi retail
+      unit. This didn't happen in DS, or in debugger DSi units.
     - Add helper to tell the GPU to apply fog to the clear buffer.
     - Flush RAM before copying console graphics to VRAM.
     - Implement `assert()` in the ARM9 and ARM7. In the ARM9 it works like
@@ -89,7 +91,8 @@ weight: -20
     - Using fog in a 3D scene.
     - Sorting 3D translucent objects based on their distance to the camera and
       drawing them in the correct order.
-    - How to use maxmod song events.
+    - How to use Maxmod song events.
+    - How to stream a WAV file from the filesystem using Maxmod.
     - How to use the sound API of libnds to play PSG, noise and PCM audio.
     - How to use custom keyboards with libnds.
 
