@@ -6,6 +6,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <sys/stat.h>
+#include <time.h>
 #include <utime.h>
 
 #include <nds.h>
