@@ -8,24 +8,24 @@
 
 #include <libxm7.h>
 
-// XM module by Lasse. Obtained from the original libxm7 example by sverx
+// haen pyykit by Lasse. Obtained from the original LibXM7 example by sverx
 #include <lasse_haen_pyykit_xm_bin.h>
 
 // Parallax Glacier by Raina:
 // http://modarchive.org/index.php?request=view_by_moduleid&query=163194
 #include <parallax_80599_xm_bin.h>
 
-// Assign FIFO_USER_07 channel to libxm7
-#define FIFO_XM7 (FIFO_USER_07)
+// Assign FIFO_USER_07 channel to LibXM7
+#define FIFO_LIBXM7 FIFO_USER_07
 
 void song_start(XM7_ModuleManager_Type *module)
 {
-    fifoSendValue32(FIFO_XM7, (u32)module);
+    fifoSendValue32(FIFO_LIBXM7, (u32)module);
 }
 
 void song_stop(void)
 {
-    fifoSendValue32(FIFO_XM7, 0);
+    fifoSendValue32(FIFO_LIBXM7, 0);
 }
 
 // You can also allocate this with malloc()
@@ -35,7 +35,7 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
-    printf("libXM7 example\n");
+    printf("LibXM7 example\n");
     printf("==============\n");
     printf("\n");
     printf("X: haen pyykit by Lasse\n");
@@ -52,18 +52,22 @@ int main(int argc, char **argv)
     res = XM7_LoadXM(&module[0], lasse_haen_pyykit_xm_bin);
     if (res != 0)
     {
-        printf("libxm7 error (module 0): 0x%04x\n", res);
+        printf("LibXM7 error (module 0): 0x%04x\n", res);
         songs_loaded = false;
     }
 
     res = XM7_LoadXM(&module[1], parallax_80599_xm_bin);
     if (res != 0)
     {
-        printf("libxm7 error (module 1): 0x%04x\n", res);
+        printf("LibXM7 error (module 1): 0x%04x\n", res);
         songs_loaded = false;
     }
 
-    // Ensure that the ARM7 can see the libxm7 initialized data
+    // Depending on the MOD or XM file you're playing, you may need to adjust
+    // the replay style. Check the documentation for more details.
+    //XM7_SetReplayStyle(&modules[0], XM7_REPLAY_STYLE_MOD_PLAYER);
+
+    // Ensure that the ARM7 can see the LibXM7 initialized data
     DC_FlushAll();
 
     soundEnable();

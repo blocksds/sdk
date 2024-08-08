@@ -9,8 +9,8 @@
 #include <libxm7.h>
 #include <nds.h>
 
-// Assign FIFO_USER_07 channel to libxm7
-#define FIFO_XM7    (FIFO_USER_07)
+// Assign FIFO_USER_07 channel to LibXM7
+#define FIFO_LIBXM7 FIFO_USER_07
 
 volatile bool exit_loop = false;
 
@@ -72,10 +72,10 @@ int main(int argc, char *argv[])
     irqSet(IRQ_VBLANK, vblank_handler);
     irqEnable(IRQ_VBLANK);
 
-    // Initialize libxm7. It uses timer 0 internally.
+    // Initialize LibXM7. It uses timer 0 internally.
     XM7_Initialize();
-    // Setup the FIFO handler for libXM7
-    fifoSetValue32Handler(FIFO_XM7, XM7_Value32Handler, 0);
+    // Setup the FIFO handler for LibXM7
+    fifoSetValue32Handler(FIFO_LIBXM7, XM7_Value32Handler, 0);
 
     while (!exit_loop)
     {
