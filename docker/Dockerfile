@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Zlib
 #
-# Copyright (c) 2023 Antonio Niño Díaz
+# Copyright (c) 2023-2024 Antonio Niño Díaz
 
 # Base image with build tools and the ARM cross compiler
 # ======================================================
@@ -30,8 +30,9 @@ ENV PATH=/opt/wonderful/bin:$PATH
 RUN cd etc && \
     ln -sf ../proc/self/mounts mtab
 
+# Install ARM toolchain in both images
 RUN wf-pacman -Syu --noconfirm && \
-    wf-pacman -S --noconfirm toolchain-gcc-arm-none-eabi toolchain-llvm-teak-llvm
+    wf-pacman -S --noconfirm toolchain-gcc-arm-none-eabi
 
 # Full development image
 # ======================
@@ -42,8 +43,13 @@ RUN wf-pacman -Syu --noconfirm && \
 
 FROM base-cross-compiler AS blocksds-dev
 
+# Install host GCC so that we can build the host tools. This isn't needed in the
+# slim image because it gets the pre-built binaries.
 RUN apt-get install -y --no-install-recommends \
         build-essential
+
+# Install Teak toolchain only in the dev image
+RUN wf-pacman -S --noconfirm toolchain-llvm-teak-llvm
 
 WORKDIR /opt/
 RUN git clone --recurse-submodules https://github.com/blocksds/sdk.git \
