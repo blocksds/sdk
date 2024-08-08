@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version DEV (2024-XX-XX)
+## Version 1.4.0 (2024-08-XX)
 
 - libnds:
 
@@ -58,8 +58,10 @@ weight: -20
       functions instead, which are more self-explanatory.
     - The functions `sysGetCartOwner()` and `sysGetCardOwner()` have been added
       to be able to check the CPU owner of the Slot-1 and Slot-2 buses.
+    - Add documentation to some functions without it, and fix some Doxygen
+      comments.
 
-- dswifi:
+- DSWiFi:
 
   - Stop generating `dswifi_version.h` as part of the build process.
   - Some warnings have been fixed.
