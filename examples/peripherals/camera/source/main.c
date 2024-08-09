@@ -25,10 +25,21 @@ static inline int clamp(int val, int min, int max)
     return val < min ? min : (val > max) ? max : val;
 }
 
-#define YUV_TO_R(Y, Cr) clamp(Y + Cr + (Cr >> 2) + (Cr >> 3) + (Cr >> 5), 0, 0xFF)
-#define YUV_TO_G(Y, Cb, Cr) \
-    clamp(Y - ((Cb >> 2) + (Cb >> 4) + (Cb >> 5)) - ((Cr >> 1) + (Cr >> 3) + (Cr >> 4) + (Cr >> 5)), 0, 0xFF)
-#define YUV_TO_B(Y, Cb) clamp(Y + Cb + (Cb >> 1) + (Cb >> 2) + (Cb >> 6), 0, 0xFF)
+static inline int yuv_to_r(int Y, int Cr)
+{
+    return clamp(Y + Cr + (Cr >> 2) + (Cr >> 3) + (Cr >> 5), 0, 0xFF);
+}
+
+static inline int yuv_to_g(int Y, int Cb, int Cr)
+{
+    int G = Y - ((Cb >> 2) + (Cb >> 4) + (Cb >> 5)) - ((Cr >> 1) + (Cr >> 3) + (Cr >> 4) + (Cr >> 5));
+    return clamp(G, 0, 0xFF);
+}
+
+static inline int yuv_to_b(int Y, int Cb)
+{
+    return clamp(Y + Cb + (Cb >> 1) + (Cb >> 2) + (Cb >> 6), 0, 0xFF);
+}
 
 ITCM_CODE
 static void convertYuv422ToRgb(u16 *yuv, u8 *rgb, int width, int height)
@@ -47,13 +58,13 @@ static void convertYuv422ToRgb(u16 *yuv, u8 *rgb, int width, int height)
 
             u8 *dst = rgb + py * (width * 3) + px * 3;
             // First pixel R, G, B
-            dst[0] = YUV_TO_R(Y1, Cr);
-            dst[1] = YUV_TO_G(Y1, Cb, Cr);
-            dst[2] = YUV_TO_B(Y1, Cb);
+            dst[0] = yuv_to_r(Y1, Cr);
+            dst[1] = yuv_to_g(Y1, Cb, Cr);
+            dst[2] = yuv_to_b(Y1, Cb);
             // Second pixel R, G, B
-            dst[3] = YUV_TO_R(Y2, Cr);
-            dst[4] = YUV_TO_G(Y2, Cb, Cr);
-            dst[5] = YUV_TO_B(Y2, Cb);
+            dst[3] = yuv_to_r(Y2, Cr);
+            dst[4] = yuv_to_g(Y2, Cb, Cr);
+            dst[5] = yuv_to_b(Y2, Cb);
         }
     }
 }
@@ -105,9 +116,11 @@ int main(int argc, char **argv)
 {
     // Set up console
     consoleDemoInit();
+
+    // Setup main screen as a 16-bit framebuffer
     vramSetBankA(VRAM_A_MAIN_BG);
     videoSetMode(MODE_5_2D);
-    int bg3Main = bgInit(3, BgType_Bmp16, BgSize_B16_256x256, 1, 0);
+    int bg3Main = bgInit(3, BgType_Bmp16, BgSize_B16_256x256, true, false);
 
     printf("Camera Test\n");
 
@@ -118,9 +131,9 @@ int main(int argc, char **argv)
     }
 
     bool fatInited = fatInitDefault();
-    if(fatInited)
+    if (fatInited)
     {
-        mkdir("/DCIM", 0777);
+        mkdir("/DCIM", 0777); // Octal values
         mkdir("/DCIM/100DSI00", 0777);
     }
     else
@@ -155,7 +168,7 @@ int main(int argc, char **argv)
         {
             swiWaitForVBlank();
             // If no preview transfer ongoing, start a new preview transfer.
-            if(!ndmaBusy(CAMERA_NDMA_CHANNEL) || !cameraTransferActive())
+            if (!ndmaBusy(CAMERA_NDMA_CHANNEL) || !cameraTransferActive())
             {
                 cameraStartTransfer(bgGetGfxPtr(bg3Main),
                                     MCUREG_APT_SEQ_CMD_PREVIEW,
@@ -183,7 +196,7 @@ int main(int argc, char **argv)
             printf("Swapped to %s camera\n",
                    camera == CAMERA_INNER ? "inner" : "outer");
         }
-        else if(fatInited && (pressed & (KEY_L | KEY_R)))
+        else if (fatInited && (pressed & (KEY_L | KEY_R)))
         {
             printf("Capturing... ");
 
@@ -223,7 +236,7 @@ int main(int argc, char **argv)
 
             printf("Done!\nSaved to:\n%s\n\n", imgName);
         }
-        else if(pressed & KEY_START)
+        else if (pressed & KEY_START)
         {
             while (ndmaBusy(CAMERA_NDMA_CHANNEL))
                 swiWaitForVBlank();
