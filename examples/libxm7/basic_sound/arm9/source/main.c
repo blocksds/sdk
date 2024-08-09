@@ -2,17 +2,20 @@
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2023
 
-#include <nds.h>
 #include <stdbool.h>
 #include <stdio.h>
 
 #include <libxm7.h>
+#include <nds.h>
 
-// haen pyykit by Lasse. Obtained from the original LibXM7 example by sverx
+// Title: haen pyykit
+// Author: Lasse
+// Source: Obtained from the original LibXM7 example by sverx.
 #include <lasse_haen_pyykit_xm_bin.h>
 
-// Parallax Glacier by Raina:
-// http://modarchive.org/index.php?request=view_by_moduleid&query=163194
+// Title: Parallax Glacier
+// Author: Raina
+// Source http://modarchive.org/index.php?request=view_by_moduleid&query=163194
 #include <parallax_80599_xm_bin.h>
 
 // Assign FIFO_USER_07 channel to LibXM7

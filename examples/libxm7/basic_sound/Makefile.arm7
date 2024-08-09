@@ -6,7 +6,7 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # Libraries
 
-LIBS		:= -lnds7 -ldswifi7 -lxm77 -lc
+LIBS		:= -lnds7 -ldswifi7 -lxm77
 LIBDIRS		:= $(BLOCKSDS)/libs/libnds \
 		   $(BLOCKSDS)/libs/dswifi \
 		   $(BLOCKSDS)/libs/libxm7

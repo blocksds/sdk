@@ -6,7 +6,7 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # Libraries
 
-LIBS		:= -lnds9 -lxm79 -lc
+LIBS		:= -lnds9 -lxm79
 LIBDIRS		:= $(BLOCKSDS)/libs/libxm7 \
 		   $(BLOCKSDS)/libs/libnds
 

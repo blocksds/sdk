@@ -10,9 +10,8 @@ BINDIRS		:= arm9/data
 
 # Libraries
 
-LIBS		:= -lnds9 -lxm79 -lc
+LIBS		:= -lnds9 -lxm79
 LIBDIRS		:= $(BLOCKSDS)/libs/libxm7 \
 		   $(BLOCKSDS)/libs/libnds
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9arm7/Makefile.arm9
-

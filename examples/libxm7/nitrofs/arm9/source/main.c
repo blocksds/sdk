@@ -2,12 +2,12 @@
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2023-2024
 
-#include <nds.h>
 #include <stdbool.h>
 #include <stdio.h>
 
 #include <filesystem.h>
 #include <libxm7.h>
+#include <nds.h>
 
 // List of songs used in this example:
 //
