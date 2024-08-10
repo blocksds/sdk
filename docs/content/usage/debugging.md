@@ -262,10 +262,13 @@ from.
 Check [this example](https://github.com/blocksds/sdk/tree/master/tests/system/stack_smash_protection)
 to see it in action.
 
-## 8. GDB with melonDS
+## 8. GDB with melonDS and DeSmuME
 
-melonDS has experimental support for GDB, so you can connect to it and debug
-your programs with any command line or GUI tool that supports GDB.
+### 8.1 Introduction
+
+DeSmuME has support for GDB. MelonDS also has (experimental) support for GDB.
+You can use this to connect to the emulator from a debugger and debug your
+programs with any command line or GUI tool that supports GDB.
 
 You need a version of GDB that supports the 32 bit ARM architecture, like
 `gdb-multiarch`. If you're in Ubuntu, you can install it with:
@@ -274,6 +277,21 @@ You need a version of GDB that supports the 32 bit ARM architecture, like
 sudo apt install gdb-multiarch
 ```
 
+### 8.2 DeSmuME
+
+Start DeSmuME from the command line like this to start GDB and tell the emulator
+which ports to use for the GDB server:
+
+```
+desmume --arm9gdb 3333 --arm7gdb 3334 your_project.nds
+```
+
+You can start GDB in one core or in both of them.
+
+Emulation will start stopped so that you can debug your program from the start.
+
+### 8.3 melonDS
+
 In melonDS, go to: "Config" > "Emu settings" > "Devtools"
 
 From there, make sure that "Enable GDB stub" is checked.
@@ -281,6 +299,8 @@ From there, make sure that "Enable GDB stub" is checked.
 You can decide to start the debugging session from the start of the program by
 checking "Break on startup". If you don't check it, the emulator will run until
 GDB connects to it.
+
+### 8.4 Connecting from GDB
 
 If you're using a graphical debugger, you will need to point it to the elf file
 of your program. Check the `build` folder after building your program. If your
@@ -306,7 +326,8 @@ melonDS GUI):
 target remote localhost:3333
 ```
 
-If you used the "Break on startup" option, type:
+If you are using DeSmuME or you used the "Break on startup" option in melonDS,
+type:
 ```
 run
 ```
