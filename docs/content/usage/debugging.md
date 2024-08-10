@@ -264,8 +264,60 @@ to see it in action.
 
 ## 8. GDB with melonDS
 
-melonDS has a GDB stub, so you can connect to it and debug your programs with
-any command line or GUI tool that supports the GDB protocol
+melonDS has experimental support for GDB, so you can connect to it and debug
+your programs with any command line or GUI tool that supports GDB.
 
-This section needs to be expanded in the future to add more information of how
-to use it.
+You need a version of GDB that supports the 32 bit ARM architecture, like
+`gdb-multiarch`. If you're in Ubuntu, you can install it with:
+
+```
+sudo apt install gdb-multiarch
+```
+
+In melonDS, go to: "Config" > "Emu settings" > "Devtools"
+
+From there, make sure that "Enable GDB stub" is checked.
+
+You can decide to start the debugging session from the start of the program by
+checking "Break on startup". If you don't check it, the emulator will run until
+GDB connects to it.
+
+If you're using a graphical debugger, you will need to point it to the elf file
+of your program. Check the `build` folder after building your program. If your
+program is an ARM9-only program, there will only be one elf file there, which
+has the symbols for the ARM9. If your program is a combined ARM7+ARM9 program,
+you will see two elf files, one for each CPU.
+
+If you want to debug the ARM7 in an ARM9-only project, the elf file that you
+need to use is in `$(BLOCKSDS)/sys/default_arm7/arm7.elf`.
+
+You will need a different GDB session for each CPU you want to debug (open GDB
+once per CPU).
+
+If you're using the command line version of GDB, you can load the elf file with:
+
+```
+file build/your_project.elf
+```
+
+Then, connect to the emulator with this (use the correct port specified in the
+melonDS GUI):
+```
+target remote localhost:3333
+```
+
+If you used the "Break on startup" option, type:
+```
+run
+```
+
+If you haven't used that option, GDB will stop the emulation when it connects.
+To resume it, type:
+```
+continue
+```
+
+You can exit GDB with:
+```
+exit
+```
