@@ -108,7 +108,11 @@ int verify_md5_file(char *path)
 
     md5Finalize(&ctx);
 
-    fclose(f);
+    if (fclose(f) != 0)
+    {
+        perror("fclose");
+        return 0;
+    }
 
     // Generate string with the md5 hash
 

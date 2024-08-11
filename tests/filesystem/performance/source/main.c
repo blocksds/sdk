@@ -122,7 +122,11 @@ int main(int argc, char **argv)
     }
     printf("\n");
 
-    fclose(f);
+    if (fclose(f) != 0)
+    {
+        perror("fclose");
+        goto exit;
+    }
 
     printf("\n");
     printf("Time: %llu ticks\n", ticks);

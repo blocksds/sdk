@@ -47,6 +47,9 @@ void *load_file(const char *path)
         return NULL;
     }
 
+    if (fclose(file) != 0)
+        return NULL;
+
     return buffer;
 }
 

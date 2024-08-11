@@ -270,7 +270,7 @@ int main(int argc, char **argv)
         }
     }
 
-    // Try opening files in all possible modes. Only 'r' should fail
+    // Try opening files in all possible modes. Only 'r' and 'r+' should fail
 
     {
         FILE *f;
@@ -290,16 +290,52 @@ int main(int argc, char **argv)
         }
 
         f = fopen("w.txt", "w");
-        fclose(f);
+        if (f == NULL)
+        {
+            printf("failed to open w.txt");
+            wait_forever();
+        }
+        if (fclose(f) != 0)
+        {
+            printf("failed to close w.txt");
+            wait_forever();
+        }
 
         f = fopen("w+.txt", "w+");
-        fclose(f);
+        if (f == NULL)
+        {
+            printf("failed to open w+.txt");
+            wait_forever();
+        }
+        if (fclose(f) != 0)
+        {
+            printf("failed to close w+.txt");
+            wait_forever();
+        }
 
         f = fopen("a.txt", "a");
-        fclose(f);
+        if (f == NULL)
+        {
+            printf("failed to open a.txt");
+            wait_forever();
+        }
+        if (fclose(f) != 0)
+        {
+            printf("failed to close a.txt");
+            wait_forever();
+        }
 
         f = fopen("a+.txt", "a+");
-        fclose(f);
+        if (f == NULL)
+        {
+            printf("failed to open a+.txt");
+            wait_forever();
+        }
+        if (fclose(f) != 0)
+        {
+            printf("failed to close a+.txt");
+            wait_forever();
+        }
 
         dir_list();
     }

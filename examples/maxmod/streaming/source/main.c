@@ -131,7 +131,7 @@ int main(int argc, char **argv)
 
     WAVHeader_t wavHeader = { 0 };
     if (fread(&wavHeader, 1, sizeof(WAVHeader_t), wavFile) == 0) {
-        printf("fread() failed!\n");
+        perror("fread");
         waitForever();
     }
     if (checkWAVHeader(wavHeader) != 0) {
@@ -171,9 +171,14 @@ int main(int argc, char **argv)
             break;
     }
 
-    soundDisable();
     mmStreamClose();
-    fclose(wavFile);
+
+    if (fclose(wavFile) != 0) {
+        perror("fclose");
+        waitForever();
+    }
+
+    soundDisable();
 
     return 0;
 }
