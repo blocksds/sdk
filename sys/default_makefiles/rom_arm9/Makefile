@@ -57,12 +57,12 @@ DUMP		:= build/$(NAME).dump
 MAP		:= build/$(NAME).map
 ROM		:= $(NAME).nds
 
-# If NITROFSDIR is set, the output of mmutil will be placed in that directory
+# If NITROFSDIR is set, the soundbank created by mmutil will be saved to NitroFS
 SOUNDBANKINFODIR	:= $(BUILDDIR)/maxmod
 ifeq ($(strip $(NITROFSDIR)),)
     SOUNDBANKDIR	:= $(BUILDDIR)/maxmod
 else
-    SOUNDBANKDIR	:= $(NITROFSDIR)
+    SOUNDBANKDIR	:= $(BUILDDIR)/maxmod_nitrofs
 endif
 
 # Tools
@@ -178,6 +178,10 @@ ifneq ($(strip $(NITROFSDIR)),)
 # Additional arguments for ndstool
 NDSTOOL_ARGS	:= -d $(NITROFSDIR)
 
+ifneq ($(SOURCES_AUDIO),)
+    NDSTOOL_ARGS	+= -d $(SOUNDBANKDIR)
+endif
+
 # Make the NDS ROM depend on the filesystem only if it is needed
 $(ROM): $(NITROFSDIR)
 endif
@@ -208,8 +212,7 @@ dump: $(DUMP)
 
 clean:
 	@echo "  CLEAN"
-	$(V)$(RM) $(ROM) $(DUMP) build $(SDIMAGE) \
-		$(SOUNDBANKDIR)/soundbank.bin
+	$(V)$(RM) $(ROM) $(DUMP) build $(SDIMAGE)
 
 sdimage:
 	@echo "  MKFATIMG $(SDIMAGE) $(SDROOT)"
@@ -265,7 +268,8 @@ ifneq ($(SOURCES_AUDIO),)
 
 $(SOUNDBANKINFODIR)/soundbank.h: $(SOURCES_AUDIO)
 	@echo "  MMUTIL  $^"
-	@$(MKDIR) -p $(@D)
+	@$(MKDIR) -p $(SOUNDBANKDIR)
+	@$(MKDIR) -p $(SOUNDBANKINFODIR)
 	@$(BLOCKSDS)/tools/mmutil/mmutil $^ -d \
 		-o$(SOUNDBANKDIR)/soundbank.bin -h$(SOUNDBANKINFODIR)/soundbank.h
 
