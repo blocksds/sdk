@@ -162,6 +162,13 @@ You can enable it by calling this function, preferably right at the start of
 defaultExceptionHandler();
 ```
 
+If you are using the debug build of libnds, this exception handler is setup by
+default, so you don't need to call this function. However, you need to call it
+in release builds.
+
+Release builds have a much basic exception handler that will only print an error
+message on the screen, with no additional information.
+
 The exception handler is used whenever:
 
 - The CPU tries to execute an `undefined instruction`.
@@ -187,6 +194,13 @@ The exception handler is used whenever:
 
   Normally this error means that you have a pointer that doesn't point to valid
   memory and you have tried to access it.
+
+- There is a critical internal error in libnds.
+
+  In some situations it is possible that libnds detects an error that the code
+  can't recover from. In this kind of cases, the exception handler will be
+  shown with an error message appropriate for the situation (like "Stack
+  corruption").
 
 Check [this example](https://github.com/blocksds/sdk/tree/master/examples/debug/exception_handler)
 to see it in action. Note that this will only work in melonDS and on hardware.
