@@ -1,2 +1,2 @@
-# 8 bit texture bitmap, set black as transparent color
--gx -gb -gB8 -gT000000
+# 8 bit texture bitmap, set black as transparent color, Huffman compression
+-gx -gb -gB8 -gT000000 -gzh

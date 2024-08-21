@@ -1,2 +1,2 @@
-# 8 bpp, tiles, not compressed
--gB8 -gt -m!
+# 8 bpp, tiles, Huffman compression
+-gB8 -gt -m! -gzh

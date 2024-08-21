@@ -22,6 +22,7 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
                                &palGrf, &palSize);
     if (err != GRF_NO_ERROR)
     {
+        printf("grferr: %d\n", err);
         ret = -2;
         goto exit;
     }

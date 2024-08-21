@@ -26,25 +26,25 @@ void load_grf_8_bit_texture(const char *path)
                                &palDst, &palSize);
     if (err != GRF_NO_ERROR)
     {
-        printf("Couldn't load GRF file: %d", err);
+        printf("Couldn't load GRF file: %d\n%s", err, path);
         wait_forever();
     }
 
     if (gfxDst == NULL)
     {
-        printf("No graphics found in GRF file");
+        printf("No graphics found in GRF file:\n%s", path);
         wait_forever();
     }
 
     if (palDst == NULL)
     {
-        printf("No palette found in GRF file");
+        printf("No palette found in GRF file:\n%s", path);
         wait_forever();
     }
 
     if (header.gfxAttr != 8)
     {
-        printf("Invalid format in GRF file");
+        printf("Invalid format in GRF file:\n%s", path);
         wait_forever();
     }
 
@@ -53,12 +53,12 @@ void load_grf_8_bit_texture(const char *path)
                         TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT,
                         gfxDst) == 0)
     {
-        printf("Failed to load texture 1\n");
+        printf("Failed to load texture 1:\n%s", path);
         wait_forever();
     }
     if (glColorTableEXT(0, 0, header.palAttr, 0, 0, palDst) == 0)
     {
-        printf("Failed to load palette 1\n");
+        printf("Failed to load palette 1:\n%s", path);
         wait_forever();
     }
 }

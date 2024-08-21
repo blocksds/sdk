@@ -1,2 +1,2 @@
-# 8 bpp, tiles, not compressed
--gB8 -gt -m!
+# 8 bpp, tiles. Tiles compressed with RLE, palette compressed with LZ77
+-gB8 -gt -gzr -m! -p -pzl

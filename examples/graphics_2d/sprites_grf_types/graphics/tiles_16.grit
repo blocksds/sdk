@@ -1,2 +1,3 @@
-# 4 bpp, tiles, limit palette to 16 colors, not compressed
--gB4 -gt -ps0 -pn16 -m!
+# 4 bpp, tiles, limit palette to 16 colors. Tiles compressed with Huffman,
+# palette not compressed.
+-gB4 -gt -gzh -ps0 -pn16 -pz! -m!
