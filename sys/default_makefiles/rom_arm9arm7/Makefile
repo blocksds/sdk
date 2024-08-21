@@ -19,9 +19,9 @@ GAME_ICON	?= $(BLOCKSDS)/sys/icon.bmp
 # --------------------------------
 
 # Root folder of the SD image
-SDROOT		:= sdroot
+SDROOT		?= sdroot
 # Name of the generated image it "DSi-1.sd" for no$gba in DSi mode
-SDIMAGE		:= image.bin
+SDIMAGE		?= image.bin
 
 # Source code paths
 # -----------------
