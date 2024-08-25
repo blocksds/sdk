@@ -9,6 +9,15 @@ RM		:= rm -rf
 MAKE		:= make
 INSTALL		:= install
 
+# Verbose flag
+# ------------
+
+ifeq ($(VERBOSE),1)
+V		:=
+else
+V		:= @
+endif
+
 .PHONY: bin2c clean dldipatch dlditool grit install mkfatimg mmutil ndstool \
 	squeezer teaktool
 
