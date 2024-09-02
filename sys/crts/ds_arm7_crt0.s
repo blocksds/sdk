@@ -13,9 +13,8 @@
 
 _start:
 
-    mov     r0, #0x04000000 // IME = 0
-    mov     r1, #0
-    str     r1, [r0, #0x208]
+    mov     r0, #0x04000000 // IME = 0;
+    str     r0, [r0, #0x208]
 
     mov     r0, #0x12       // Switch to IRQ Mode
     msr     cpsr, r0
@@ -45,8 +44,8 @@ _start:
     ldr     r1, [r0]
     add     r1, r1, r0
     ldr     r2, =__arm7_start__
-    ldr     r4, =__arm7_end__
-    bl      CopyMemCheck
+    ldr     r3, =__arm7_size__
+    bl      CopyMem
 
 #else
 
@@ -55,8 +54,7 @@ _start:
 #endif
 
     ldr     r0, =__bss_start__  // Clear BSS section to 0x00
-    ldr     r1, =__bss_end__
-    sub     r1, r1, r0
+    ldr     r1, =__bss_size__
     bl      ClearMem
 
     cmp     r10, #1             // r10 contains SCFG_A9ROM
@@ -69,12 +67,11 @@ _start:
     ldr     r1, =0x02ffe1d8     // Get ARM7i LMA from header
     ldr     r1, [r1]
     ldr     r2, =__arm7i_start__
-    ldr     r4, =__arm7i_end__
-    bl      CopyMemCheck
+    ldr     r3, =__arm7i_size__
+    bl      CopyMem
 
     ldr     r0, =__twl_bss_start__  // Clear TWL BSS section to 0x00
-    ldr     r1, =__twl_bss_end__
-    sub     r1, r1, r0
+    ldr     r1, =__twl_bss_size__
     bl      ClearMem
 
 #endif
@@ -173,22 +170,6 @@ ClrLoop:
     subs    r1, r1, #4
     bne     ClrLoop
     bx      lr
-
-// -----------------------------------------------------------------------------
-// Copy memory if length
-//  r1 = Source Address
-//  r2 = Dest Address
-//  r4 = Dest Address + Length (if length is zero, it returns right away)
-// -----------------------------------------------------------------------------
-
-CopyMemCheck:
-
-    cmp     r1, r2
-    bxeq    lr
-
-    sub     r3, r4, r2  // Is there any data to copy?
-
-    // Fallthrough
 
 // -----------------------------------------------------------------------------
 // Copy memory

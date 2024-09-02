@@ -85,14 +85,14 @@ _start:
     // Copy ITCM from LMA to VMA
     ldr     r1, =__itcm_lma
     ldr     r2, =__itcm_start
-    ldr     r4, =__itcm_end
-    bl      CopyMemCheck
+    ldr     r3, =__itcm_size
+    bl      CopyMem
 
     // Copy DTCM from LMA to VMA
     ldr     r1, =__dtcm_lma
     ldr     r2, =__dtcm_start
-    ldr     r4, =__dtcm_end
-    bl      CopyMemCheck
+    ldr     r3, =__dtcm_size
+    bl      CopyMem
 
     cmp     r11, #1
     ldrne   r10, =__end__       // (DS mode) heap start
@@ -100,13 +100,11 @@ _start:
     bl      checkARGV           // Check and process argv trickery
 
     ldr     r0, =__bss_start__  // Clear BSS section
-    ldr     r1, =__bss_end__
-    sub     r1, r1, r0
+    ldr     r1, =__bss_size__
     bl      ClearMem
 
     ldr     r0, =__sbss_start   // Clear SBSS section
-    ldr     r1, =__sbss_end
-    sub     r1, r1, r0
+    ldr     r1, =__sbss_size
     bl      ClearMem
 
     ldr     r9, =__debugger_unit // Set DS/DSi debugger flag
@@ -123,12 +121,11 @@ _start:
 
     ldr     r2, =__arm9i_start__
     cmp     r1, r2              // Skip copy if LMA=VMA
-    ldrne   r4, =__arm9i_end__
-    blne    CopyMemCheck
+    ldrne   r3, =__arm9i_size__
+    blne    CopyMem
 
     ldr     r0, =__twl_bss_start__  // Clear TWL BSS section
-    ldr     r1, =__twl_bss_end__
-    sub     r1, r1, r0
+    ldr     r1, =__twl_bss_size__
     bl      ClearMem
 
 NotTWL:
@@ -240,19 +237,6 @@ ClrLoop:
     bne     ClrLoop
 
     bx      lr
-
-// -----------------------------------------------------------------------------
-// Copy memory if length    != 0
-//  r1 = Source Address
-//  r2 = Dest Address
-//  r4 = Dest Address + Length (if length is zero, it returns right away)
-// -----------------------------------------------------------------------------
-
-CopyMemCheck:
-
-    sub     r3, r4, r2  // Is there any data to copy?
-
-    // Fallthrough
 
 // -----------------------------------------------------------------------------
 // Copy memory
