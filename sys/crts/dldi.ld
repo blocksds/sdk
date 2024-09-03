@@ -149,7 +149,7 @@ SECTIONS
         __bss_start__ = ABSOLUTE(.);
         *(.dynbss)
         *(.gnu.linkonce.b*)
-        *(.bss* .gnu.linkonce.b*)
+        *(.bss*)
         *(COMMON)
         /* Place .noinit symbols in BSS for DLDI. */
         /* This is so that they're covered by the DLDI header's reserved BSS area. */
