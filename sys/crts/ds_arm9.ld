@@ -39,17 +39,17 @@ ASSERT((__usr_stack_size & 3) == 0, "__usr_stack_size must be a multiple of 4");
 __ewram_end	=	ORIGIN(ewram) + LENGTH(ewram);
 __eheap_end	=	ORIGIN(ewram) + LENGTH(ewram);
 
-__dtcm_top	=	ORIGIN(dtcm) + LENGTH(dtcm);
+__dtcm_start	=	ORIGIN(dtcm); /* Start of DTCM area. Must point to the beginning of DTCM memory. */
+__dtcm_top	=	ORIGIN(dtcm) + LENGTH(dtcm); /* Top of DTCM area. */
 __irq_flags	=	__dtcm_top - 0x08;
-__irq_vector =	__dtcm_top - 0x04;
+__irq_vector	=	__dtcm_top - 0x04;
 
-__dtcm_stack_top = __dtcm_top - __dtcm_data_size;
-__sp_svc	=	__dtcm_stack_top - __dtcm_reserved_size;
-__sp_irq	=	__sp_svc - __svc_stack_size;
-__sp_usr	=	__sp_irq - __irq_stack_size;
+__sp_svc	=	__dtcm_top - __dtcm_reserved_size; /* Top of SVC mode stack. */
+__sp_irq	=	__sp_svc - __svc_stack_size; /* Top of IRQ mode stack. */
+__sp_usr	=	__sp_irq - __irq_stack_size - __dtcm_data_size; /* Top of user stack. */
 
-__dtcm_data_start = __dtcm_data_size > 0 ? __sp_usr : ORIGIN(dtcm);
-__dtcm_data_top = __dtcm_data_size > 0 ? __dtcm_top : __sp_usr - __usr_stack_size;
+__dtcm_data_start = __dtcm_data_size > 0 ? __sp_usr : ORIGIN(dtcm); /* Start of DTCM data section. */
+__dtcm_data_top = __dtcm_data_size > 0 ? __sp_irq - __irq_stack_size : __sp_usr - __usr_stack_size; /* Top of DTCM data section. */
 
 __dldi_log2_size = LOG2CEIL(__dldi_size + 1) - 1;
 
@@ -247,7 +247,6 @@ SECTIONS
     .dtcm __dtcm_data_start :
     {
         __dtcm_lma = LOADADDR(.dtcm);
-        __dtcm_start = ABSOLUTE(.);
         *(.dtcm)
         *(.dtcm.*)
         . = ALIGN(4);
@@ -274,6 +273,7 @@ SECTIONS
         __sbss_start = ABSOLUTE(.);
         __sbss_start__ = ABSOLUTE(.);
         *(.sbss)
+        *(.sbss.*)
         . = ALIGN(4);    /* REQUIRED. LD is flaky without it. */
         __sbss_end = ABSOLUTE(.);
     } >dtcm :NONE
@@ -356,7 +356,7 @@ SECTIONS
     } :NONE
 
     HIDDEN(__itcm_size = __itcm_end - __itcm_start);
-    HIDDEN(__dtcm_size = __dtcm_end - __dtcm_start);
+    HIDDEN(__dtcm_data_size = __dtcm_end - __dtcm_data_start);
     HIDDEN(__arm9i_size__ = __arm9i_end__ - __arm9i_start__);
     HIDDEN(__bss_size__ = __bss_end__ - __bss_start__);
     HIDDEN(__sbss_size = __sbss_end - __sbss_start);
