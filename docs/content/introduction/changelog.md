@@ -3,6 +3,85 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version DEV (????-??-??)
+
+- libnds:
+
+  - Exception handling:
+
+    - Add trivial crash handler to inform the user of unrecoverable error
+      conditions, such as stack corruptions with stack smash protection
+      enabled.
+    - Add trivial release exception handler to inform the user of data aborts
+      and other exception conditions even in release builds. This is enabled
+      by default; this implementation omits stack and register dumps, making
+      the `.nds` size increase negligible.
+    - Tweak default exception handler to use a darker red for the background.
+
+  - Filesystem:
+
+    - Fix using Slot-2 direct access on `.nds` files over 32 MB. In particular,
+      this fixes accessing large NitroFS filesystems under NO$GBA.
+
+  - GRF loader:
+
+    - Improve performance by using fast `memcpy()` over `swiCopy()`.
+    - Rework loader to only read requested chunks from the filesystem,
+      as opposed to reading all chunks and filtering them at a later stage.
+
+  - Sound:
+
+    - Add functions to play PSG, noise and sound samples on specific channels.
+    - Add `soundCaptureStart` and `soundCaptureStop` high-level helpers for
+      the sound capture functionality.
+
+  - Other:
+
+    - Add additional error checks to NitroFS and GRF functions.
+    - Add unused result warnings to functions which can cause memory leaks if
+      their result is not deallocated.
+    - Document high-level DSi camera functions.
+    - Fix console 'K' ANSI escape code not clearing characters on the line.
+
+- SDK:
+
+  - New examples:
+
+    - Add ANSI escape code tests.
+    - Add sound capture example.
+
+  - Changes to examples:
+
+    - Add `.MOD` files to LibXM7 examples.
+    - Add missing `fclose()` error checks.
+    - Adjust examples using GRF files to showcase the loader's built-in
+      asset decompression functionality.
+    - Clean up camera and LibXM7 examples.
+
+  - picolibc:
+
+    - Add support for C11 Annex K functions (`_s`-suffixed functions).
+    - Deprecate BSD-specific `<sys/tree.h>`.
+    - Fix handling `NaN` in `scanf()` and `strtod()`.
+    - Fix return values for `glob()`.
+    - Fix the `FD_ZERO()` macro.
+    - Initial support for POSIX.1-2024 in header files.
+    - Other minor header file cleanups.
+    - Replace `<_ansi.h>` with `<sys/cdefs.h>`.
+
+  - Other:
+
+    - Fix support for placing the Maxmod soundbank file in the NitroFS
+      file system.
+    - Make the SD card root directory configurable in default Makefile
+      templates.
+    - Remove Teak LLVM from the `-slim` Docker image. Most people don't need
+      this toolchain, as it is in a highly experimental and unmaintained
+      state; in addition, removing it from the image does not prevent people
+      from installing it on top, but significantly reduces the download size
+      for everyone else.
+    - Remove usage of `__DATE__` in teaktool.
+
 ## Version 1.4.0 (2024-08-08)
 
 - libnds:
