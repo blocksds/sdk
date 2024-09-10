@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version DEV (????-??-??)
+## Version 1.5.0 (2024-09-10)
 
 - libnds:
 
@@ -42,6 +42,7 @@ weight: -20
       their result is not deallocated.
     - Document high-level DSi camera functions.
     - Fix console 'K' ANSI escape code not clearing characters on the line.
+    - Fix includes for the latest picolibc commits.
 
 - SDK:
 
