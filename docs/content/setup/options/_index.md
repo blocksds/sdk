@@ -31,3 +31,16 @@ you want to always use the cutting edge version of BlocksDS. This is only
 available in Linux-like environment.
 
 Follow the instructions [here](from_source).
+
+## macOS
+
+macOS is not officially supported at this time, as BlocksDS's development team
+lacks the hardware necessary to maintain and validate BlocksDS builds for the
+platform. In addition, the Wonderful toolchain is only officially available
+on Windows- and Linux-based platforms. For the time being, it should be
+possible to make use of the Docker images on this platform, as described
+above.
+
+As an alternative, the [devkitARM toolchain](https://devkitpro.org/) provides
+active support for macOS, allowing for development of homebrew software on
+this operation system.
