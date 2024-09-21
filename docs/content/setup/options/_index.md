@@ -39,7 +39,8 @@ lacks the hardware necessary to maintain and validate BlocksDS builds for the
 platform. In addition, the Wonderful toolchain is only officially available
 on Windows- and Linux-based platforms. For the time being, it should be
 possible to make use of the Docker images on this platform, as described
-above.
+above. We're looking for help to add this support, you can see more information
+[here](https://github.com/blocksds/sdk/issues/205).
 
 As an alternative, the [devkitARM toolchain](https://devkitpro.org/) provides
 active support for macOS, allowing for development of homebrew software on
