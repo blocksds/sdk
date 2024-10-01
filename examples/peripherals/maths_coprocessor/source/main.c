@@ -2,6 +2,7 @@
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2024
 
+#include <inttypes.h>
 #include <stdio.h>
 
 #include <nds.h>
