@@ -356,7 +356,7 @@ SECTIONS
     } :NONE
 
     HIDDEN(__itcm_size = __itcm_end - __itcm_start);
-    HIDDEN(__dtcm_data_size = __dtcm_end - __dtcm_data_start);
+    HIDDEN(__dtcm_size = __dtcm_end - __dtcm_data_start);
     HIDDEN(__arm9i_size__ = __arm9i_end__ - __arm9i_start__);
     HIDDEN(__bss_size__ = __bss_end__ - __bss_start__);
     HIDDEN(__sbss_size = __sbss_end - __sbss_start);

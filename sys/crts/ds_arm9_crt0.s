@@ -91,7 +91,7 @@ _start:
     // Copy DTCM from LMA to VMA
     ldr     r1, =__dtcm_lma
     ldr     r2, =__dtcm_data_start
-    ldr     r3, =__dtcm_data_size
+    ldr     r3, =__dtcm_size
     bl      CopyMem
 
     cmp     r11, #1
