@@ -54,5 +54,5 @@ If you want to use it in WSL, follow the instructions for Linux instead.
    ```
 
 1. Run Wonderful Toolchain Shell from the Start menu. This shell has predefined
-   environment variables to ensure that `BLOCKSDS` projects can be built. If you
-   don't, `BLOCKSDS` won't be set to the right path.
+   environment variables to ensure that BlocksDS projects can be built. If you
+   don't, the environment variable `BLOCKSDS` won't be set to the right path.
