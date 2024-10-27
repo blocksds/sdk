@@ -15,3 +15,7 @@ useful.
 
 Note that there aren't any Discord invitations here because they sometimes
 change. You can find the invitation [in this link](https://gbadev.net).
+
+If you don't like Discord, or you can't use it for some reason, most of the
+channels in the gbadev discord are bridged to IRC. For more information, check
+[this link](https://gbadev.net/chat.html).
