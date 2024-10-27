@@ -76,3 +76,11 @@ right away.
    ```bash
    wf-pacman -Syu
    ```
+
+1. Now you can try to build one of the BlocksDS examples. They are available at
+   path `/opt/wonderful/thirdparty/blocksds/core/examples/`. From there, for
+   example, go to `graphics_3d/volumetric_shadow` and type `make`. This will
+   generate a NDS ROM that you can try with an emulator or a flashcart.
+
+   You can also try one of the open source projects made with BlocksDS that are
+   listed [here](https://github.com/blocksds/awesome-blocksds).

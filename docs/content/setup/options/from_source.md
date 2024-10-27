@@ -84,3 +84,11 @@ you want to always use the cutting edge version of BlocksDS.
 
       You can avoid exporting `BLOCKSDS` every time by adding it to your
       `.bashrc`, `.zshenv` or similar.
+
+1. Now you can try to build one of the BlocksDS examples. They are available in
+   folder `examples` in the root of the repository. From there, for example, go
+   to `graphics_3d/volumetric_shadow` and type `make`. This will generate a NDS
+   ROM that you can try with an emulator or a flashcart.
+
+   You can also try one of the open source projects made with BlocksDS that are
+   listed [here](https://github.com/blocksds/awesome-blocksds).
