@@ -147,8 +147,8 @@ to keep track of the changes in BlocksDS and to update your makefiles
 accordingly.
 
 The best way to understand how BlocksDS invokes `gcc` is to build a ROM that
-uses one of the default makefiles of (located
-[here](https://github.com/blocksds/sdk/tree/master/sys/default_makefiles/).
+uses one of the default makefiles (located
+[here](https://github.com/blocksds/sdk/tree/master/sys/default_makefiles/)).
 If you build the binary with `make V=` instead of just `make`, the makefile will
 print the exact commands used at every step of the build process. You will be
 able to see which libraries are used, which compiler options are used, etc.
