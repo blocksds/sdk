@@ -53,7 +53,7 @@ For more information about how BlocksDS uses the DS memory map check
 This `elf` file is very useful even after the ROM is built. It can be used with
 binutils, for example, to analyse which functions are the biggest ones in your
 program (with `nm --size-sort file.elf`). It can also be used to debug games in
-emulators that support `gdb`, like melonDS and DesMuMe.
+emulators that support `gdb`, like melonDS and DeSmuMe.
 
 The DSi complicates all of this a bit more. The DSi has 16 MiB of RAM, while a
 regular DS only has 4 MiB. It's very useful for any DSi-compatible game to be

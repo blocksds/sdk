@@ -5,6 +5,32 @@ weight: 30
 
 ## General questions
 
+### I've just installed BlocksDS, now what?
+
+The first step is to build one of the examples included with BlocksDS. If you
+have installed the `thirdparty-blocksds-docs` package with `wf-pacman`, the
+examples are located in `/opt/wonderful/thirdparty/blocksds/core/examples/`.
+From there, for example, go to `graphics_3d/volumetric_shadow` and type make.
+This will generate a NDS ROM that you can try with an emulator or a flashcart.
+
+You can also try one of the open source projects made with BlocksDS that are
+listed [here](https://github.com/blocksds/awesome-blocksds).
+
+Unfortunately, there isn't any tutorial on how to develop NDS applications or
+games from scratch. Your best bet is to take a look at the examples and to ask
+other developers if you get stuck. Check the "getting support" section of the
+documentation [here](../../introduction/support).
+
+You can also check the online mirror of the documentation of all libraries
+included in BlocksDS [here](../../).
+
+If `libnds` is too low-level for you, you can check high-level libraries like
+[Nitro Engine](https://github.com/AntonioND/nitro-engine) or
+[NightFox’s Lib](https://github.com/knightfox75/nds_nflib). They don't have
+official tutorials either, but they also come with lots of examples you can use
+as reference, and it may be easier to get started with NDS development with
+them.
+
 ### Where can I find information on how to do low-level NDS development?
 
 The main resources are GBATEK and the GBATEK addendums:
@@ -14,7 +40,10 @@ The main resources are GBATEK and the GBATEK addendums:
 
 ### What emulators are recommended to test my code?
 
-This is documented [here](../debugging).
+The recommended emulators are [melonDS](https://melonds.kuribo64.net/),
+[DeSmuMe](https://github.com/TASEmulators/desmume/releases) and
+[no$gba](https://problemkaputt.de/gba.htm). There is more information about
+debugging NDS programs [here](../debugging).
 
 ### When I load my game on my flashcart, it doesn't find NitroFS files.
 
@@ -88,7 +117,7 @@ ELF files are a standard format used by open source toolchains for applications.
 They are very flexible. With them it's possible to define parts of the code that
 are only loaded in DSi mode, and ignored in DS mode, for example. They are also
 supported by debuggers, so it is possible to use `gdb` with emulators like
-melonDS and DesMuMe to debug your games.
+melonDS and DeSmuMe to debug your games.
 
 There is more information [here](../../technical/build_process).
 
