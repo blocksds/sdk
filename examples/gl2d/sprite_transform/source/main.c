@@ -80,15 +80,16 @@ int main(int argc, char **argv)
         printf("Failed to load texture 2: %d\n", texture_id[2]);
 
     // Print some controls
-    printf("L/R: Rotate\n");
+    printf("L/R:     Rotate\n");
     printf("Up/Down: Scale up/down\n");
-    printf("A/B: Flip horizontal/vertical\n");
-    printf("SELECT: Reset transformation\n");
+    printf("A/B:   Flip horizontal/vertical\n");
+    printf("X:     Set scale to 100%%\n");
+    printf("Y:     Set scale to 200%%\n");
     printf("START: Exit to loader\n");
     printf("\n");
 
     s32 angle = 0;
-    s32 scale = 1 << 12;
+    s32 scale = 2 << 12;
     int flipmode = GL_FLIP_NONE;
 
     while (1)
@@ -121,10 +122,16 @@ int main(int argc, char **argv)
         if (keys_down & KEY_B)
             flipmode ^= GL_FLIP_V;
 
-        if (keys & KEY_SELECT)
+        if (keys & KEY_X)
         {
             angle = 0;
             scale = 1 << 12;
+            flipmode = GL_FLIP_NONE;
+        }
+        if (keys & KEY_Y)
+        {
+            angle = 0;
+            scale = 2 << 12;
             flipmode = GL_FLIP_NONE;
         }
 
