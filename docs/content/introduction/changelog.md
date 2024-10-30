@@ -3,6 +3,63 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version DEV (2024-11-XX)
+
+- libnds:
+
+  - In `initSystem()`, fix video register clearing ranges and remove redundant
+    VRAM configuration.
+  - Cleanup code (stop using magic numbers, remove duplicated code) of EEPROM
+    and NDS Motion. Some bugs of the NDS Motion driver have been fixed.
+  - The GRF "HDR" RIFF chunk has been deprecated and it has been replaced by
+    a new chunk called "HDRX", which is exactly the same, but it includes a
+    version field so that it is future-proof.
+  - Fix Boktai 1 solar sensor detection.
+  - Fix off-by-one errors when drawing textures with GL2D when the textures
+    aren't flipped.
+  - Reorganize GL2D setup code to reduce code duplication.
+  - Fix some issues that prevented LLVM from building the library. Add missing
+    arguments to UDF instructions in the codebase. Add some explicit casts. Use
+    `inttypes.h` definitions in `printf()` instead of explicit size modifiers.
+    Fix undefined behaviour warnings due to left shifts of signed integers.
+
+- grit:
+
+  - Update GRF export code to match the new format used by libnds.
+
+- ndstool:
+
+  - Use `git describe` output as version string instead of a hardcoded outdated
+    version number.
+
+- SDK:
+
+  - Upgrade crt0s and linkerscripts:
+
+    - It is now possible to place DTCM variables and data at the end of DTCM
+      instead of the beggining (which means the stack can grow downwards without
+      affecting the variables at the beginning of DTCM). This is done by setting
+      the value of the new symbol `__dtcm_data_size` to a non-zero value.
+    - User-configurable symbol `__shared_wram_size` has been added.
+    - There are assertions to check that the user-defined sizes are valid.
+    - Support for `.noinit` sections has been added.
+    - Some missing FSF copyright notices have been added.
+    - Some optimizations to the crt0 to precalculate data at link time instead
+      of runtime.
+
+  - Update documentation:
+
+     - Document build process of NDS ROMs.
+     - Add a FAQ to the documentation.
+     - Add IRC channels to the support channels page.
+     - Add notes about what to do after installing BlocksDS.
+
+  - Add NDS Motion card example.
+  - Add example of scaling and rotating GL2D sprites.
+  - Include `inttypes.h` in some examples that require it after an update of
+    picolibc.
+  - Credit all known contributors to all repositories of BlocksDS.
+
 ## Version 1.5.0 (2024-09-10)
 
 - libnds:
