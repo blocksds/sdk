@@ -41,5 +41,5 @@ docker build --target blocksds-slim --tag blocksds:slim \
              --build-arg BRANCH=$BRANCH --platform $PLATFORM .
 docker tag blocksds:slim skylyrac/blocksds:slim-$VERSION
 
-#docker push skylyrac/blocksds:dev-$VERSION
-#docker push skylyrac/blocksds:slim-$VERSION
+docker push skylyrac/blocksds:dev-$VERSION
+docker push skylyrac/blocksds:slim-$VERSION
