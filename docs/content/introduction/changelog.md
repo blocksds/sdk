@@ -3,15 +3,24 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version DEV (2024-11-XX)
+## Version 1.6.1 (2024-11-03)
+
+- libnds:
+
+  - Filesystem:
+
+    - Fixed a bug involving incorrect reads of recently written sectors.
+
+## Version 1.6.0 (2024-11-03)
 
 - libnds:
 
   - Peripherals:
 
-    - Clean up the DS Motion Card/Pak driver, and fix some miscellanous bugs. Note
-      that the driver still does not work on DSi consoles, but it should no longer
-      crash on them.
+    - Add support for the "retail" (ATTiny-based) Motion Pack accelerometer
+      to the DS Motion Card/Pak driver.
+    - Clean up the DS Motion Card/Pak driver.
+    - Fix the DS Motion Card driver not working on DSi consoles.
     - Fix the solar sensor not being detected on Boktai 1 cartridges.
     - Fix `peripheralSlot2SolarScanFast()` not working correctly.
 
@@ -23,6 +32,7 @@ weight: -20
 
   - Other:
 
+    - Fix return types and improve performance of integer square root helpers.
     - In `initSystem()`, fix video register clearing ranges and remove redundant
       VRAM configuration.
     - The GRF "HDR" RIFF chunk has been deprecated and it has been replaced by
@@ -31,7 +41,7 @@ weight: -20
     - Fix some issues that prevented LLVM from building the library. Add missing
       arguments to UDF instructions in the codebase. Add some explicit casts. Use
       `inttypes.h` definitions in `printf()` instead of explicit size modifiers.
-      Fix undefined behaviour warnings due to left shifts of signed integers.
+    - Fix undefined behaviour warnings due to left shifts of signed integers.
 
 - grit:
 
@@ -58,6 +68,11 @@ weight: -20
     - Support for `.noinit` sections has been added.
     - Missing copyright notices have been added to linker scripts.
     - Minor cleanups and adjustments have been done to the crt0 code.
+
+  - picolibc:
+
+    - Add implementation of `<uchar.h>`.
+    - Improve `powf()` accuracy.
 
   - Documentation:
 
