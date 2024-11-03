@@ -1,5 +1,5 @@
 ---
-title: Frequently Asked Questions
+title: Frequently asked questions
 weight: 30
 ---
 
@@ -31,9 +31,10 @@ official tutorials either, but they also come with lots of examples you can use
 as reference, and it may be easier to get started with NDS development with
 them.
 
-### Where can I find information on how to do low-level NDS development?
+### Where can I find low-level NDS hardware documentation?
 
-The main resources are GBATEK and the GBATEK addendums:
+The main resource is GBATEK; some additional details are documented in the
+GBATEK addendum:
 
 - https://problemkaputt.de/gbatek.htm
 - https://melonds.kuribo64.net/board/thread.php?id=13
@@ -45,34 +46,36 @@ The recommended emulators are [melonDS](https://melonds.kuribo64.net/),
 [no$gba](https://problemkaputt.de/gba.htm). There is more information about
 debugging NDS programs [here](../debugging).
 
-### When I load my game on my flashcart, it doesn't find NitroFS files.
+### When I load my game on my flashcart, it cannot find NitroFS files.
 
 For NitroFS to work, the NDS ROM needs to know where the ROM itself is located.
+On emulators, this can be done by using the official cartridge access protocol;
+however, flash cartridges tend to not implement those commands.
 
-On emulators, this is easy: The ROM is accessed with official NDS cartridge
-commands.
+Flashcarts traditionally provide a DLDI driver, which allows access to its SD/CF
+card or built-in flash storage, including the `.nds` file on said storage. It is
+common for modern flashcart software to automatically patch homebrew with the
+correct driver. However, this by itself doesn't give the homebrew program
+information on *where* the right `.nds` file is.
 
-On flashcarts we need to use the right DLDI driver to read from the SD card of
-the flaschard, but we also need to know where the NDS ROM file is located in the
-filesystem. The loader of homebrew NDS ROMs needs to patch the ROMs with the
-right DLDI driver, and it needs to pass the absolute path to the ROM in the
-filesystem.
+On DSi consoles, we have a similar issue: while the driver for the DSi's SD card
+slot is included in homebrew software, we don't always know where the file is
+located.
 
-On DSi we have a similar issue: we always have the driver to read
-from the SD card slot of the DSi, but we don't know where the file is located.
+To solve this problem, the `argv` protocol was defined as a way to pass arguments
+to the homebrew program. Unfortunately, many old loaders don't support this
+protocol; first, make sure you're running on the newest firmware for your
+flashcart.
 
-To solve this problem, the `argv` protocol was created. Unfortunately, many old
-loaders don't support this protocol. You can try to get a firmware update for
-your flashcart and try again. If that doesn't work, you can use the NDS Homebrew
-Menu: https://github.com/devkitPro/nds-hb-menu/releases
+A good way to avoid this problem altogether is to use the [NDS Homebrew Menu](https://github.com/devkitPro/nds-hb-menu/releases),
+which is capable of correctly launching modern homebrew.
 
-Download the zip archive and copy `BOOT.NDS` to your flashcart. You can rename
-this file to a name that you can remember. Once you have it in your flashcart,
-use your flashcart firmware to boot NDS Homebrew Menu, and load the original NDS
-ROM with it. NDS Homebrew Menu will make sure that the loaded ROM receives the
-information it needs.
+Download the `.zip` archive and copy `BOOT.NDS` to your SD card/storage. You can
+rename this file to a name that you can remember. Once you have it on the cartridge,
+launch the Homebrew Menu, then launch your homebrew program with it. NDS Homebrew
+Menu will make sure that the loaded ROM receives the information it needs.
 
-## Unsupported hardware
+## Feature support
 
 ### How well is Wi-Fi supported?
 
@@ -108,6 +111,62 @@ https://www.embecosm.com/2017/04/18/non-8-bit-char-support-in-clang-and-llvm/
 Related issues:
 
 - https://github.com/blocksds/sdk/issues/93
+
+### How well is the DSi camera supported?
+
+Initial support exists for the DSi's built-in cameras. However, the Aptina chip
+features many configuration features, for which no high-level functions are
+currently provided.
+
+Related issues:
+
+- https://github.com/blocksds/sdk/issues/41
+
+### Which external peripherals are supported?
+
+BlocksDS provides built-in libraries for a variety of external peripherals:
+
+- [Slot-2 RAM cartridges](https://blocksds.github.io/docs/libnds/slot2_8h.html)
+
+  - Memory Expansion Pak
+  - Most other cartridges
+
+- [Slot-2 gyroscope](https://blocksds.github.io/docs/libnds/slot2gyro_8h.html)
+
+  - GBA WarioWare
+
+- [Slot-2 rumble](https://blocksds.github.io/docs/libnds/rumble_8h.html)
+
+  - GBA WarioWare, Drill Dozer
+  - DS Rumble Pak
+  - Many other cartridges
+
+- [Slot-2 solar sensor](https://blocksds.github.io/docs/libnds/slot2solar_8h.html)
+
+  - GBA Boktai 1, 2, 3
+
+- [Slot-2 tilt sensor](https://blocksds.github.io/docs/libnds/slot2tilt_8h.html)
+
+  - GBA Yoshi, Koro Koro Puzzle
+
+- [DS Motion Card](https://blocksds.github.io/docs/libnds/ndsmotion_8h.html)
+
+  - DS Motion Card
+  - DS Motion Pak
+  - Motion Pack (bundled with Tony Hawk Motion)
+  - Other cartridges
+
+- [Slot-2 Easy Piano](https://blocksds.github.io/docs/libnds/piano_8h.html)
+
+- [Slot-2 Guitar Grip](https://blocksds.github.io/docs/libnds/guitarGrip_8h.html)
+
+- [Slot-2 Taito DS Paddle Controller](https://blocksds.github.io/docs/libnds/paddle_8h.html)
+
+Additional peripheral support is provided by third-party libraries:
+
+- dserial: [Slot-1 serial card](https://github.com/asiekierka/dserial)
+
+- nrio-usb: [Slot-2 USB interface](https://github.com/asiekierka/nrio-usb-examples/)
 
 ## Build process
 

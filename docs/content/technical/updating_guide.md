@@ -15,11 +15,14 @@ and enhancements to the SDK which are not listed here.
 * General changes:
 
   * The `ConsoleFont` struct no longer takes a `convertSingleColor`
-    argument. For 4bpp uses, it is recommended to instead provide 1bpp
-    font tile data, which will be automatically unpacked to use
-    color indices 0 and 15. Another option is to manually ensure that
-    the tile uses color indices 0 and 15 (or 0 and 255 for 8bpp
-    graphics).
+    argument.
+
+    * It is recommended to instead provide 1bpp font tile data, which
+      will be automatically unpacked to use color indices 0 and 15.
+      To generate a 1bpp font, you can use grit with the `-gB1` argument;
+      see [default_font.grit](https://github.com/blocksds/libnds/blob/f3b609b3099f256502cd241b8519ecc59e4f68a6/graphics/default_font.grit) for an example.
+    * Alternatively, you can ensure that the font tiles use color indices
+      0 and 15 (or 0 and 255 for 8bpp graphics) explicitly.
 
 * ARM7-specific changes:
 
