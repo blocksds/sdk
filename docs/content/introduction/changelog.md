@@ -10,8 +10,6 @@ weight: -20
   - Filesystem:
 
     - Fixed a bug involving incorrect reads of recently written sectors.
-    - Minor optimizations to read/write performance, particularly for
-      reads to unaligned buffers.
 
 ## Version 1.6.0 (2024-11-03)
 
