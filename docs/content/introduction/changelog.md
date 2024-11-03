@@ -33,7 +33,7 @@ weight: -20
     - Fix some issues that prevented LLVM from building the library. Add missing
       arguments to UDF instructions in the codebase. Add some explicit casts. Use
       `inttypes.h` definitions in `printf()` instead of explicit size modifiers.
-      Fix undefined behaviour warnings due to left shifts of signed integers.
+    - Fix undefined behaviour warnings due to left shifts of signed integers.
 
 - grit:
 
