@@ -12,11 +12,11 @@ int main(int argc, char *argv[])
     // Mode 5 lets you use layers 2 and 3 as a bitmap
     videoSetMode(MODE_5_2D);
 
-    // The screen is 256x192 pixels. A 16-bit bitmap that size requires 96 KB
-    // (256 x 192 x 2 / 1024). Each VRAM bank is 128 KB, so we need two banks to
+    // The screen is 256x192 pixels. A 8-bit bitmap that size requires 48 KB
+    // (256 x 192 / 1024). Each VRAM bank is 128 KB, so we need one bank to
     // have a double buffer setup.
-    vramSetPrimaryBanks(VRAM_A_MAIN_BG_0x06000000, VRAM_B_MAIN_BG_0x06020000,
-                        VRAM_C_LCD, VRAM_D_LCD);
+    vramSetPrimaryBanks(VRAM_A_MAIN_BG_0x06000000, VRAM_B_LCD, VRAM_C_LCD,
+                        VRAM_D_LCD);
 
     int bg = bgInit(2, BgType_Bmp8, BgSize_B8_256x256, 0, 0);
 
@@ -40,11 +40,11 @@ int main(int argc, char *argv[])
         uint16_t *backbuffer = bgGetGfxPtr(bg);
 
         // Bitmap base 0 is at offset 0 (start of VRAM A) and bitmap base 8 is
-        // at offset 128 KB (8 * 128 * 128 B) (start of VRAM B).
-        if (bgGetMapBase(bg) == 8)
+        // at offset 64 KB (4 * 128 * 128 B) (middle of VRAM A).
+        if (bgGetMapBase(bg) == 4)
             bgSetMapBase(bg, 0);
         else
-            bgSetMapBase(bg, 8);
+            bgSetMapBase(bg, 4);
 
         // Draw scene. Copy background image and draw a square on top of it.
         dmaCopy(cityBitmap, backbuffer, cityBitmapLen);
