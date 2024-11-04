@@ -3,13 +3,33 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version 1.6.1 (2024-11-03)
+## Version 1.6.2 (2024-11-04)
 
 - libnds:
 
   - Filesystem:
 
     - Fixed a bug involving incorrect reads of recently written sectors.
+
+- SDK:
+
+  - Changes to examples:
+
+    - Clean the 8-bit double-buffered bitmap example.
+
+  - Other:
+
+    - Improve FAQ and updating guide.
+
+## Version 1.6.1 (2024-11-03)
+
+- libnds:
+
+  - Filesystem:
+
+    - This version was supposed to include a fix for a bug involving incorrect
+      reads of recently written sectors, but the submodule wasn't updated
+      correctly so the fix was left out.
 
 ## Version 1.6.0 (2024-11-03)
 
