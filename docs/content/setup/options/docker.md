@@ -4,91 +4,78 @@ title: 'Docker'
 
 ## 1. Introduction
 
-If you're not familiar with Docker, in short, it lets you create containers with
-predefined images. Containers are something similar to a virtual machine. An
-image is just the contents of the hard drive of that virtual machine.
+This is a short and simplified explanation of Docker in case you aren't familiar
+with it.
 
-It is very easy to share folders between the docker container and the host. That
-way you can share your code with the container, build your code from the
-container, and see the results in the host (so that you can test the result on
-an emulator or copy it to a flashcart!).
+Docker is a program that lets you run containers (like small virtual machines)
+on your computer. The creator of a Docker container defines the contents of that
+container, and the user of that container receives the exact same contents.
+This solves compatibility issues because of differences between the computers of
+the developer and the user.
 
-The images are available here: https://hub.docker.com/r/skylyrac/blocksds
+You can have containers running Linux programs on Windows or macOS, so it is
+possible to use a Linux BlocksDS installation on Windows or macOS this way.
 
-## 2. Setup
+It is very easy to share folders from your computer with a container. That way
+you can share the folder with your code (which is in a regular folder in your
+computer) with the container. Then, you build the code from the container. The
+result will be visible right away from outside of the container.  Then you can
+test the result on an emulator or copy it to a flashcart!
 
-First, install Docker: https://docs.docker.com/get-docker/ You may need to
-reboot after the installation.
+The way you are expected to work with containers is to open your favourite code
+editor in your operating system, and to open a terminal window with the Docker
+image. You can edit the code as usual, switch to the Docker terminal window,
+type `make` to build the code, and see the results in your operating system.
 
-Then, pick your image:
+To install Docker, check this link: https://docs.docker.com/get-docker/
 
-- `blocksds-dev`: For developers that want to improve BlocksDS.
-- `blocksds-slim`: For developers that just want to focus on NDS development.
+You may need to reboot after the installation.
 
-`blocksds-slim` is smaller, so it is the recommended image.
+Note: A more advanced usage of containers are automated builds. Any computer
+using the same container will have the exact same programs installed in that
+container, so they should all be able to build the code without compatibility
+issues. This means that you can use GitHub pipelines, for example, to
+automatically generate a build of your project whenever a new patch is pushed to
+the repository.
 
-Both images have all the pre-built SDK, and you don't need to setup any
-environment variable or anything.
+## 2. BlocksDS container images
 
-### Slim image
+There are two different official images:
 
-Run the following command to get the image:
+- `blocksds-slim`: (Recommended) Smaller image. For developers that just want to
+  focus on developing NDS programs but don't want to modify BlocksDS.
+- `blocksds-dev`: For developers that want to improve BlocksDS. It contains the
+  same contents as the slim version, plus all the tools and code required to
+  modify BlocksDS (the git repository of BlocksDS is in `/opt/blocksds/sdk/`).
+
+Both images have the SDK ready to be used. You don't need to setup any
+environment variable or anything else.
+
+## 3. Downloading the pre-built images
+
+The official BlocksDS container images are available
+[here](https://hub.docker.com/r/skylyrac/blocksds).
+
+Run one of the two following commands to get your desired image:
 
 ```bash
 docker image pull skylyrac/blocksds:slim-latest
 ```
 
-First, clone this repository to get the templates:
+or
 
-```bash
-git clone https://github.com/blocksds/sdk
-```
-
-Write down the path to the templates. Open a shell inside the container and
-share the folder with the templates:
-
-```bash
-docker run --rm -v /path/to/your/code:/work -it --entrypoint bash \
-    skylyrac/blocksds:slim-latest
-```
-
-The part of the command that shares a folder is `-v /path/to/your/code:/work`.
-This example will share the path `/path/to/your/code` from the host and show
-it in `/work` inside the container.
-
-To update the image, simply run the previous `docker image pull` command
-again.
-
-### Development image
-
-Run the following command to get the image:
 
 ```bash
 docker image pull skylyrac/blocksds:dev-latest
 ```
 
-To open a shell inside it, run:
-
-```bash
-docker run --rm -v /path/to/your/code:/work -it --entrypoint bash \
-    skylyrac/blocksds:dev-latest
-```
-
-The full git repository of BlocksDS is in `/opt/blocksds/sdk/`.
-
-## 3. Uninstall the images
-
-If you have installed Docker just for this, you can run the following command to
-remove all docker images available in your PC:
-
-```bash
-docker system prune -a
-```
+You will need to run the same commands whenver you want to update the image.
 
 ## 4. Build images locally
 
-From the `docker` folder of this repository run one of the two following
-commands, depending on the image you want to build:
+If you don't want to get the pre-built images, you can build them yourself.
+Open a terminal in the `docker` folder of this repository run one of the two
+following commands, depending on the image you want to build:
 
 Development image:
 
@@ -99,5 +86,88 @@ docker build --target blocksds-dev --tag blocksds:dev .
 Slim image:
 
 ```bash
-docker build --target blocksds-slim --tag blocksds:dev .
+docker build --target blocksds-slim --tag blocksds:slim .
+```
+
+You will need to run the same commands whenver you want to update the image.
+
+## 5. How to use the containers
+
+All instructions from now on will use the slim image, but they work the same way
+on the dev version.
+
+We're going to build one of the templates of the SDK as a test.
+
+First, clone this repository to get the templates:
+
+```bash
+git clone https://github.com/blocksds/sdk
+```
+
+Go to the folder that contains the template:
+
+```bash
+cd sdk/templates/rom_arm9_only
+```
+
+Check the full path to this folder, you will need it in the next step.
+
+Now, open a different terminal window and run the following command to start the
+BlocksDS Docker container. The command will also share a the folder of your
+computer with the template. This folder will appear in path `/work` inside the
+Docker container terminal.
+
+- For pre-built images:
+
+    ```bash
+    docker run --rm -v /path/in/your/pc/sdk/templates/rom_arm9_only:/work \
+        -it --entrypoint bash skylyrac/blocksds:slim-latest
+    ```
+
+- For locally built images:
+
+    ```bash
+    docker run --rm -v /path/in/your/pc/sdk/templates/rom_arm9_only:/work \
+        -it --entrypoint bash blocksds:slim
+    ```
+
+Explanation:
+
+- `--rm` removes any stopped instance of this container that may be already
+  present on your computer.
+
+- `-it` asks Docker to start an interactive terminal window
+
+- The argument that shares a folder is `-v`. The first half of the argument
+  (before `:` is the path on the host computer. The second part is the
+  destination path inside the container.
+
+- `--entrypoint bash` tells Docker to run `bash` when the container starts, so
+  that you can run commands inside the container.
+
+- The last argument is the name of the Docker image you want to use.
+
+Now, inside the container terminal, run:
+
+```bash
+cd /work
+make
+```
+
+This should build a NDS ROM. Check the folder in your operating system and the
+ROM should be there.
+
+You can close the container by running:
+
+```bash
+exit
+```
+
+## 6. Uninstall the images
+
+If you have installed Docker just for this, you can run the following command to
+remove all docker images available in your PC:
+
+```bash
+docker system prune -a
 ```
