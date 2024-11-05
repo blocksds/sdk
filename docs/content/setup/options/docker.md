@@ -85,11 +85,12 @@ commands, depending on the image, architecture (or architectures) and branch you
 want to build:
 
 ```bash
+TARGET="blocksds-slim" # Or "blocksds-dev"
 TAG_NAME="blocksds:slim" # Or "blocksds:dev"
 BRANCH="master"
 PLATFORM="linux/amd64,linux/arm64" # Or "linux/amd64", or "linux/arm64"
 
-docker build --target blocksds-dev --tag $TAG_NAME \
+docker build --target $TARGET --tag $TAG_NAME \
         --build-arg BRANCH=$BRANCH --platform $PLATFORM .
 ```
 
