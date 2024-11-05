@@ -25,16 +25,20 @@ if [ -z $BRANCH ]; then
     fi
 fi
 
+if [ -z $PLATFORM ]; then
+    PLATFORM="linux/amd64,linux/arm64"
+fi
 
 echo "VERSION = $VERSION"
 echo "BRANCH = $BRANCH"
+echo "PLATFORM = $PLATFORM"
 
 docker build --target blocksds-dev --tag blocksds:dev \
-             --build-arg BRANCH=$BRANCH .
+             --build-arg BRANCH=$BRANCH --platform $PLATFORM .
 docker tag blocksds:dev skylyrac/blocksds:dev-$VERSION
 
 docker build --target blocksds-slim --tag blocksds:slim \
-             --build-arg BRANCH=$BRANCH .
+             --build-arg BRANCH=$BRANCH --platform $PLATFORM .
 docker tag blocksds:slim skylyrac/blocksds:slim-$VERSION
 
 docker push skylyrac/blocksds:dev-$VERSION

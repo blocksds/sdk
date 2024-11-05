@@ -9,6 +9,9 @@ FROM ubuntu:23.04 AS base-cross-compiler
 
 ARG BRANCH=master
 
+# Set TARGETARCH e.g. amd64, arm64, riscv64.
+ARG TARGETARCH
+
 # Set locale for iconv, used by ndstool
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
@@ -19,9 +22,13 @@ RUN apt-get update && apt-get upgrade -y && \
 
 RUN mkdir -p /opt/wonderful/
 ADD https://wonderful.asie.pl/bootstrap/wf-bootstrap-x86_64.tar.gz /opt/wonderful/
+ADD https://wonderful.asie.pl/bootstrap/wf-bootstrap-aarch64.tar.gz /opt/wonderful/
+# Note that the downloads are cached; no impact if it's a multi-platform build.
+# Needed because Docker's TARGETARCH doesn't match Linux's `uname -m` format.
+
 RUN cd /opt/wonderful/ && \
-    tar xzvf wf-bootstrap-x86_64.tar.gz && \
-    rm wf-bootstrap-x86_64.tar.gz
+    tar xzvf wf-bootstrap-$(uname -m).tar.gz && \
+    rm wf-bootstrap-*.tar.gz
 
 ENV PATH=/opt/wonderful/bin:$PATH
 
@@ -49,7 +56,8 @@ RUN apt-get install -y --no-install-recommends \
         build-essential
 
 # Install Teak toolchain only in the dev image
-RUN wf-pacman -S --noconfirm toolchain-llvm-teak-llvm
+RUN if [ $TARGETARCH = "amd64" ]; then \
+        wf-pacman -S --noconfirm toolchain-llvm-teak-llvm; fi
 
 WORKDIR /opt/
 RUN git clone --recurse-submodules https://github.com/blocksds/sdk.git \
