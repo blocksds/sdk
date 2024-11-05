@@ -51,6 +51,8 @@ There are two different official images:
 Both images have the SDK ready to be used. You don't need to setup any
 environment variable or anything else.
 
+The images are available on architectures amd64 and arm64.
+
 ## 3. Downloading the pre-built images
 
 The official BlocksDS container images are available
@@ -73,20 +75,22 @@ You will need to run the same commands whenver you want to update the image.
 
 ## 4. Build images locally
 
-If you don't want to get the pre-built images, you can build them yourself.
-Open a terminal in the `docker` folder of this repository run one of the two
-following commands, depending on the image you want to build:
+If you don't want to get the pre-built images, you can build them yourself. You
+have the option to build the image for your platform, or a multi-platform image.
+For a multi-platform image you need to follow the instructions in
+[this page](https://docs.docker.com/desktop/containerd/#build-multi-platform-images).
 
-Development image:
-
-```bash
-docker build --target blocksds-dev --tag blocksds:dev .
-```
-
-Slim image:
+Open a terminal in the `docker` folder of this repository run the following
+commands, depending on the image, architecture (or architectures) and branch you
+want to build:
 
 ```bash
-docker build --target blocksds-slim --tag blocksds:slim .
+TAG_NAME="blocksds:slim" # Or "blocksds:dev"
+BRANCH="master"
+PLATFORM="linux/amd64,linux/arm64" # Or "linux/amd64", or "linux/arm64"
+
+docker build --target blocksds-dev --tag $TAG_NAME \
+        --build-arg BRANCH=$BRANCH --platform $PLATFORM .
 ```
 
 You will need to run the same commands whenver you want to update the image.
