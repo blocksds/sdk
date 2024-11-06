@@ -47,11 +47,14 @@ support BlocksDS and can be installed in `/opt/blocksds/external`.
 ## 3. Keeping multiple versions of BlocksDS
 
 You may keep multiple versions of this SDK in your PC. The location of the
-active SDK is stored in the environment variables `BLOCKSDS` and `BLOCKSDSEXT`,
-so all you need to do is to change their values and point to the version of the
-SDK you want to use.
+active SDK is expected to be in the environment variables `BLOCKSDS` and
+`BLOCKSDSEXT`, so all you need to do is to change their values and point to the
+version of the SDK you want to use.
 
-By default, the paths are assumed to be `/opt/blocksds/core/` and
-`/opt/blocksds/external/`. The first one is used for core BlocksDS libraries
-and tools, and it is managed by BlocksDS. The second one is left for users to
-freely install third party libraries and tools.
+`BLOCKSDS` is used for core BlocksDS libraries and tools, and it is managed by
+BlocksDS. `BLOCKSDSEXT` is left for users to freely install third party
+libraries and tools.
+
+If they aren't set the default makefiles assume that the paths are
+`/opt/blocksds/core/` and `/opt/blocksds/external/`. Other tools should assume
+imitate this behaviour.
