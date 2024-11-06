@@ -69,6 +69,13 @@ RUN BLOCKSDS=$PWD make install -j`nproc` VERBOSE=1 && \
 
 WORKDIR /work/
 
+# Add some envirnoment variables explicitly for third-party tools that don't
+# default to their "official" paths when they aren't set. This needs to be set
+# after the SDK is built.
+ENV BLOCKSDS=/opt/blocksds/core
+ENV BLOCKSDSEXT=/opt/blocksds/external
+ENV WONDERFUL_TOOLCHAIN=/opt/wonderful
+
 # Slim image
 # ==========
 #
@@ -80,3 +87,7 @@ FROM base-cross-compiler AS blocksds-slim
 COPY --from=blocksds-dev /opt/blocksds/ /opt/blocksds/
 
 WORKDIR /work/
+
+ENV BLOCKSDS=/opt/blocksds/core
+ENV BLOCKSDSEXT=/opt/blocksds/external
+ENV WONDERFUL_TOOLCHAIN=/opt/wonderful
