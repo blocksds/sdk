@@ -79,7 +79,7 @@ _start:
 NotTWL:
 
     // Initialize TLS of the main thread
-    ldr     r3, =__tls_start
+    ldr     r0, =__tls_start
     bl      init_tls
 
     ldr     r3, =__libc_init_array  // global constructors

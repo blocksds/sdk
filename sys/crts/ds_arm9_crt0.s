@@ -143,11 +143,17 @@ NotTWL:
     sub     r8, r8, #0xc000
     str     r8, [r1]
 
+    // Initialize libnds
     push    {r0}
-    ldr     r3, =initSystem         // System initialisation
+    ldr     r3, =initSystem
     blx     r3
 
-    ldr     r3, =__libc_init_array  // Global constructors
+    // Initialize TLS of the main thread
+    ldr     r0, =__tls_start
+    bl      init_tls
+
+    // Initialize global constructors
+    ldr     r3, =__libc_init_array 
     blx     r3
 
     pop     {r0}
