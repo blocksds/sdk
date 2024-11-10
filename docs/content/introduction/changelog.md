@@ -3,6 +3,41 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version DEV (2024-??-??)
+
+- libnds:
+
+  - Add compile-time warnings about unused result values to various library
+    methods.
+  - Ensure `nitroFSInit()` checks for successful FAT initialization.
+  - Protect the alternate vector base region (`0x0000000` onwards)
+    from writing and, if said base is not explicitly eanbled, reading.
+    This allows catching null pointer accesses at runtime as data aborts.
+
+- SDK:
+
+  - crt0:
+
+    - Fix thread-local storage not being initialized properly during
+      global constructor initialization.
+    - Fix thread-local storage not being initialized at all on ARM7.
+
+  - picolibc:
+
+    - Add `memset_explicit()`.
+    - Improve wctype compatibility.
+    - Update ctype case conversion table to Unicode 15.1.0 .
+
+  - Other:
+
+    - Add regression test for `setVectorBase()`.
+    - Modify templates to use toolchain `gcc-ar` over host `ar` for
+      packaging libraries; this ensures correct operation on systems
+      without `binutils` installed, as well as when building libraries
+      with link-time optimized objects.
+    - Update ARM assembly code to always use UAL syntax.
+    - Update official Docker image to Ubuntu 24.04.
+
 ## Version 1.6.2 (2024-11-04)
 
 - libnds:
