@@ -5,7 +5,7 @@
 # Base image with build tools and the ARM cross compiler
 # ======================================================
 
-FROM ubuntu:23.04 AS base-cross-compiler
+FROM ubuntu:24.04 AS base-cross-compiler
 
 ARG BRANCH=master
 
