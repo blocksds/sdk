@@ -26,7 +26,12 @@ weight: -20
 
     - Add `memset_explicit()`.
     - Improve wctype compatibility.
-    - Update ctype case conversion table to Unicode 15.1.0 .
+    - Update ctype case conversion table to Unicode 15.1.0.
+
+  - Toolchain:
+
+    - Update binutils to 2.43.1.
+    - The alternate `gold` linker is no longer shipped with the toolchain.
 
   - Other:
 
