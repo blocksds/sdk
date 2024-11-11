@@ -11,7 +11,7 @@ weight: -20
     methods.
   - Ensure `nitroFSInit()` checks for successful FAT initialization.
   - Protect the alternate vector base region (`0x0000000` onwards)
-    from writing and, if said base is not explicitly eanbled, reading.
+    from writing and, if said base is not explicitly enabled, reading.
     This allows catching null pointer accesses at runtime as data aborts.
 
 - SDK:
