@@ -1,0 +1,14 @@
+# 8-bit depth
+-gB8
+
+# Bitmap image
+-gb
+
+# Disbale transparency
+-gT!
+
+# Warning/log level 3
+-W3
+
+# Symbol name
+-s gestures
