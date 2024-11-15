@@ -1,0 +1,66 @@
+name: Build Pacman package
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    name: Build Pacman packages (Linux)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [x86_64, aarch64]
+    steps:
+      # + avoid recursive clone, as submodules are cloned again by makepkg
+      - name: Clone project
+        uses: actions/checkout@v4
+
+      - name: Setup Alpine Linux
+        uses: jirutka/setup-alpine@v1
+        with:
+          branch: v3.20
+          arch: ${{ matrix.arch }}
+          packages: >
+            build-base
+            fakeroot
+            git
+            pacman
+            pacman-makepkg
+            curl
+            wget
+            xz
+            zstd
+            sudo
+            coreutils
+            sed
+            patchelf
+
+      - name: Install Wonderful
+        run: |
+          sudo sh -c "mkdir /opt/wonderful && cd /opt/wonderful && curl https://wonderful.asie.pl/bootstrap/wf-bootstrap-${{ matrix.arch }}.tar.gz | tar xzvf -"
+        shell: alpine.sh --root {0}
+
+      # + remove CheckSpace, as it doesn't work in chroot without providing mount point data
+      # + do so twice, as wf-pacman might upgrade wf-pacman
+      # + ensure system makepkg outputs .tar.xz files
+      - name: Install prerequisites (Wonderful)
+        run: |
+          sed -i -e 's/CheckSpace//' /opt/wonderful/etc/pacman.conf
+          /opt/wonderful/bin/wf-pacman -Syu --noconfirm wonderful-base wf-pacman-dev
+          sed -i -e 's/CheckSpace//' /opt/wonderful/etc/pacman.conf
+          sed -E -i -e "s/PKGEXT=.+/PKGEXT='.pkg.tar.xz'/g" /etc/makepkg.conf
+        shell: alpine.sh --root {0}
+
+      - name: Build package
+        run: |
+           cd ${{ github.workspace }}/pacman && /opt/wonderful/bin/wf-makepkg -s --noconfirm
+        shell: alpine.sh {0}
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Pacman packages (Linux, ${{ matrix.arch }})
+          path: ${{ github.workspace }}/pacman/*.pkg.tar.xz
+

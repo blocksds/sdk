@@ -1,0 +1,88 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023, 2024
+
+pkgname=(blocksds-toolchain blocksds-docs)
+source=("blocksds::git+file://`pwd`/..")
+sha256sums=('SKIP')
+groups=(blocksds)
+pkgver=1.6.3
+pkgrel=1
+epoch=
+pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
+arch=("x86_64" "aarch64")
+url="https://github.com/blocksds/sdk"
+license=("complex")
+depends=(
+	runtime-gcc-libs
+	runtime-musl
+	toolchain-gcc-arm-none-eabi-binutils
+	toolchain-gcc-arm-none-eabi-gcc-libs
+	toolchain-gcc-arm-none-eabi-gcc
+	toolchain-gcc-arm-none-eabi-picolibc-generic
+	toolchain-gcc-arm-none-eabi-libstdcxx-picolibc
+)
+makedepends=(
+	runtime-musl-dev
+)
+optdepends=(
+	'toolchain-gcc-arm-none-eabi-extra: additional libraries'
+)
+replaces=(thirdparty-blocksds-toolchain thirdparty-blocksds-git-toolchain)
+options=('!strip')
+
+. "/opt/wonderful/lib/wf-pacman/runtime-env-vars.sh"
+
+if [ "$WF_HOST_OS" == "linux" ]; then
+	if [ "$CARCH" == "x86_64" ]; then
+		makedepends+=(toolchain-llvm-teak-llvm )
+		optdepends+=('toolchain-llvm-teak-llvm: Teak DSP build support')
+	fi
+fi
+
+prepare() {
+	cd "blocksds"
+	git submodule update --init --recursive
+
+	wf_disable_host_build
+
+	if [ "$WF_HOST_OS" == "windows" ]; then
+		# patch ndstool to link iconv explicitly
+		sed -i -e 's/$(LIBS)/$(LIBS) -liconv/' tools/ndstool/Makefile
+	fi
+}
+
+build() {
+	wf_use_toolchain gcc-arm-none-eabi arm-none-eabi
+
+	cd "blocksds"
+	BLOCKSDS=`pwd` make
+}
+
+package_blocksds-toolchain() {
+	cd "blocksds"
+	mkdir -p "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core
+
+	BLOCKSDS=`pwd` INSTALLDIR="$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core make -j1 install
+
+	# patch compiled executables to use /opt/wonderful dynamic linker
+	find "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core/tools -executable -type f -print0 |
+		while IFS= read -r -d '' i; do
+			# this will fail on statically-linked grit; consume the error
+			wf_runtime_patchelf "$i" || true
+		done
+}
+
+package_blocksds-docs() {
+	depends=(blocksds-toolchain)
+	optdepends=()
+	replaces=(thirdparty-blocksds-docs thirdparty-blocksds-git-docs)
+
+	cd "blocksds"
+
+	mkdir -p "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core
+	cp -aR docs "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core || true
+	cp -aR examples "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core || true
+	cp -aR templates "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core || true
+	cp -aR tests "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core || true
+}
