@@ -10,6 +10,7 @@ jobs:
     name: Build Pacman packages (Linux)
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         arch: [x86_64, aarch64]
     steps:
@@ -26,10 +27,9 @@ jobs:
             build-base
             fakeroot
             git
-            pacman
-            pacman-makepkg
             curl
-            wget
+            bash
+            libarchive-tools
             xz
             zstd
             sudo
@@ -42,20 +42,16 @@ jobs:
           sudo sh -c "mkdir /opt/wonderful && cd /opt/wonderful && curl https://wonderful.asie.pl/bootstrap/wf-bootstrap-${{ matrix.arch }}.tar.gz | tar xzvf -"
         shell: alpine.sh --root {0}
 
-      # + remove CheckSpace, as it doesn't work in chroot without providing mount point data
-      # + do so twice, as wf-pacman might upgrade wf-pacman
-      # + ensure system makepkg outputs .tar.xz files
       - name: Install prerequisites (Wonderful)
         run: |
-          sed -i -e 's/CheckSpace//' /opt/wonderful/etc/pacman.conf
-          /opt/wonderful/bin/wf-pacman -Syu --noconfirm wonderful-base wf-pacman-dev
-          sed -i -e 's/CheckSpace//' /opt/wonderful/etc/pacman.conf
-          sed -E -i -e "s/PKGEXT=.+/PKGEXT='.pkg.tar.xz'/g" /etc/makepkg.conf
+          /opt/wonderful/bin/wf-pacman -Syu --noconfirm wonderful-base
         shell: alpine.sh --root {0}
 
+      # FIXME: The first launch of fakeroot via wf-makepkg seems to emit a SIGUSR1 in this environment.
+      # Thankfully, executing it again picks up right where it left off.
       - name: Build package
         run: |
-           cd ${{ github.workspace }}/pacman && /opt/wonderful/bin/wf-makepkg -s --noconfirm
+           cd ${{ github.workspace }}/pacman && export PATH=/opt/wonderful/bin:$PATH && ( wf-makepkg -s --noconfirm || true ) && wf-makepkg -s --noconfirm
         shell: alpine.sh {0}
 
       - name: Archive artifacts
