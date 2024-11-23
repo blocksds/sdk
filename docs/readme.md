@@ -59,6 +59,7 @@ all repositories of BlocksDS. Note that this sets the base URL of the
 documentation to `https://blocksds.github.io/docs/`, so this script isn't useful
 for non-maintainers.
 
-Then, it updates the folder `blocksds-docs` (which should contain the
-[docs repository](https://github.com/blocksds/docs), it creates a new commit,
-and pushes it.
+Then, maintainers can call `publish-docs.sh` to update the folder
+`blocksds-docs` (which should contain the
+[docs repository](https://github.com/blocksds/docs). It creates a new commit
+with the current documentation and pushes it as a new commit.
