@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2023
+# SPDX-FileContributor: Antonio Niño Díaz, 2023-2024
 
 # Tools
 # -----
@@ -8,7 +8,7 @@
 STRIP		:= -s
 BINMODE		:= 755
 
-CC		:= gcc
+HOSTCC		?= gcc
 CP		:= cp
 RM		:= rm -rf
 INSTALL		:= install
@@ -30,7 +30,7 @@ endif
 all: dlditool
 
 dlditool: dlditool.c
-	$(V)$(CC) -Wall -Wextra -std=gnu11 -O3 -o $@ $<
+	$(V)$(HOSTCC) -Wall -Wextra -std=gnu11 -O3 -o $@ $<
 
 clean:
 	rm -rf dlditool

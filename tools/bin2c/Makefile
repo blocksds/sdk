@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2023
+# SPDX-FileContributor: Antonio Niño Díaz, 2023-2024
 
 # Tools
 # -----
@@ -8,7 +8,7 @@
 STRIP		:= -s
 BINMODE		:= 755
 
-CC		:= gcc
+HOSTCC		?= gcc
 CP		:= cp
 RM		:= rm -rf
 INSTALL		:= install
@@ -30,10 +30,12 @@ endif
 all: bin2c
 
 bin2c: bin2c.c
-	$(V)$(CC) -Wall -Wextra -std=gnu11 -Wformat-truncation=0 -O3 -o $@ $<
+	@echo "  HOSTCC  $<"
+	$(V)$(HOSTCC) -Wall -Wextra -std=gnu11 -Wformat-truncation=0 -O3 -o $@ $<
 
 clean:
-	rm -rf bin2c
+	@echo "  CLEAN  "
+	$(V)rm -rf bin2c
 
 INSTALLDIR	?= /opt/blocksds/core/tools/bin2c
 INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
