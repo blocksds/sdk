@@ -54,8 +54,8 @@ extern void st_word (BYTE* ptr, WORD val);		/* Store a 2-byte word in little-end
 extern void st_dword (BYTE* ptr, DWORD val);	/* Store a 4-byte word in little-endian */
 
 
-BYTE *RamDisk;		/* Poiter to the RAM disk */
-DWORD RamDiskSize;	/* Size of RAM disk in unit of sector */
+uint8_t *RamDisk;	/* Poiter to the RAM disk */
+size_t RamDiskSize;	/* Size of RAM disk in unit of sector */
 
 static int verbose = 0;
 
@@ -63,9 +63,9 @@ static FATFS FatFs;
 static FIL DstFile;
 static FILE *SrcFile;
 static char SrcPath[512], DstPath[512];
-static BYTE Buff[4096];
-static UINT Dirs, Files;
-static QWORD TotalFilesSize;
+static uint8_t Buff[4096];
+static unsigned int Dirs, Files;
+static size_t TotalFilesSize;
 
 int treesize(void)
 {
@@ -99,7 +99,7 @@ int treesize(void)
 			}
 		} else {	/* The item is a file */
 			if (verbose)
-				printf("File: %s (%zu bytes)\n", SrcPath, statbuf.st_size);
+				printf("File: %s (%zu bytes)\n", SrcPath, (size_t)statbuf.st_size);
 			TotalFilesSize += statbuf.st_size;
 		}
 	}
@@ -182,9 +182,9 @@ end:
 
 int main (int argc, char* argv[])
 {
-	UINT csz;
+	unsigned int csz;
 	FILE *fout;
-	DWORD wb, szvol;
+	size_t wb, szvol;
 	DIRff dir;
 	int ai = 1, truncation = 0;
 	const char *outfile;
@@ -366,7 +366,7 @@ int main (int argc, char* argv[])
 		return 4;
 	}
 
-	printf("\n%u files and %u directories in the %uKiB of FAT volume.\n", Files, Dirs, szvol / 1024);
+	printf("\n%u files and %u directories in the %zuKiB of FAT volume.\n", Files, Dirs, szvol / 1024);
 
 	return 0;
 }
