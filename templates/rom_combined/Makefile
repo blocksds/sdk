@@ -26,7 +26,7 @@ SDIMAGE		:= image.bin
 # Source code paths
 # -----------------
 
-# A single directory that is the root of NitroFS:
+# List of folders to combine into the root of NitroFS:
 NITROFSDIR	:=
 
 # Tools

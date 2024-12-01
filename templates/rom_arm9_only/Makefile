@@ -34,7 +34,7 @@ INCLUDEDIRS	:=
 GFXDIRS		:= graphics
 BINDIRS		:= data
 AUDIODIRS	:= audio
-# A single directory that is the root of NitroFS:
+# List of folders to combine into the root of NitroFS:
 NITROFSDIR	:=
 
 # Defines passed to all files
