@@ -7,7 +7,7 @@
 // - MM_MODE_B, Interpolated mixing mode
 // - MM_MODE_C, Extended mixing mode
 //
-// Check https://blocksds.github.io/docs/maxmod/group__nds__arm9__init.html
+// Check https://blocksds.skylyrac.net/docs/maxmod/group__nds__arm9__init.html
 // for more information about the available modes.
 //
 // - Parallax Glacier by Raina

@@ -56,8 +56,8 @@ The output will be generated in the `docs/html` folder.
 
 The script `build-docs.sh` downloads the theme and builds the documentation of
 all repositories of BlocksDS. Note that this sets the base URL of the
-documentation to `https://blocksds.github.io/docs/`, so this script isn't useful
-for non-maintainers.
+documentation to `https://blocksds.skylyrac.net/docs/`, so this script isn't
+useful for non-maintainers.
 
 Then, maintainers can call `publish-docs.sh` to update the folder
 `blocksds-docs` (which should contain the

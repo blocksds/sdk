@@ -126,41 +126,41 @@ Related issues:
 
 BlocksDS provides built-in libraries for a variety of external peripherals:
 
-- [Slot-2 RAM cartridges](https://blocksds.github.io/docs/libnds/slot2_8h.html)
+- [Slot-2 RAM cartridges](https://blocksds.skylyrac.net/docs/libnds/slot2_8h.html)
 
   - Memory Expansion Pak
   - Most other cartridges
 
-- [Slot-2 gyroscope](https://blocksds.github.io/docs/libnds/slot2gyro_8h.html)
+- [Slot-2 gyroscope](https://blocksds.skylyrac.net/docs/libnds/slot2gyro_8h.html)
 
   - GBA WarioWare
 
-- [Slot-2 rumble](https://blocksds.github.io/docs/libnds/rumble_8h.html)
+- [Slot-2 rumble](https://blocksds.skylyrac.net/docs/libnds/rumble_8h.html)
 
   - GBA WarioWare, Drill Dozer
   - DS Rumble Pak
   - Many other cartridges
 
-- [Slot-2 solar sensor](https://blocksds.github.io/docs/libnds/slot2solar_8h.html)
+- [Slot-2 solar sensor](https://blocksds.skylyrac.net/docs/libnds/slot2solar_8h.html)
 
   - GBA Boktai 1, 2, 3
 
-- [Slot-2 tilt sensor](https://blocksds.github.io/docs/libnds/slot2tilt_8h.html)
+- [Slot-2 tilt sensor](https://blocksds.skylyrac.net/docs/libnds/slot2tilt_8h.html)
 
   - GBA Yoshi, Koro Koro Puzzle
 
-- [DS Motion Card](https://blocksds.github.io/docs/libnds/ndsmotion_8h.html)
+- [DS Motion Card](https://blocksds.skylyrac.net/docs/libnds/ndsmotion_8h.html)
 
   - DS Motion Card
   - DS Motion Pak
   - Motion Pack (bundled with Tony Hawk Motion)
   - Other cartridges
 
-- [Slot-2 Easy Piano](https://blocksds.github.io/docs/libnds/piano_8h.html)
+- [Slot-2 Easy Piano](https://blocksds.skylyrac.net/docs/libnds/piano_8h.html)
 
-- [Slot-2 Guitar Grip](https://blocksds.github.io/docs/libnds/guitarGrip_8h.html)
+- [Slot-2 Guitar Grip](https://blocksds.skylyrac.net/docs/libnds/guitarGrip_8h.html)
 
-- [Slot-2 Taito DS Paddle Controller](https://blocksds.github.io/docs/libnds/paddle_8h.html)
+- [Slot-2 Taito DS Paddle Controller](https://blocksds.skylyrac.net/docs/libnds/paddle_8h.html)
 
 Additional peripheral support is provided by third-party libraries:
 

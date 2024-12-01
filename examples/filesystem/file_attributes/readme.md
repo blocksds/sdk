@@ -8,5 +8,5 @@ website: https://devkitpro.org/wiki/Homebrew_Menu
 
 ## Running on emulators
 
-Check the [documentation](https://blocksds.github.io/docs/technical/filesystem)
+Check the [documentation](https://blocksds.skylyrac.net/docs/technical/filesystem)
 for more information.

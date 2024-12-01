@@ -1,6 +1,6 @@
 languageCode = 'en-us'
 
-#baseURL = "https://blocksds.github.io/docs/"
+#baseURL = "https://blocksds.skylyrac.net/docs/"
 baseURL = "http://localhost"
 title = "BlocksDS"
 theme = "hugo-geekdoc"

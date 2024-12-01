@@ -26,5 +26,5 @@ SD root
 
 ## Running on emulators
 
-Check the [filesystem documentation](https://blocksds.github.io/docs/technical/filesystem/)
+Check the [filesystem documentation](https://blocksds.skylyrac.net/docs/technical/filesystem/)
 for more information.
