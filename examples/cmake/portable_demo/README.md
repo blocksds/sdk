@@ -1,6 +1,7 @@
 ## Portable Demo
 
-This project provides an example application that builds for both NDS and POSIX (computer) platforms.
+This project provides an example application that builds for both NDS and POSIX
+(computer) platforms.
 
 ### Usage
 
@@ -11,6 +12,9 @@ cd build/POSIX
 cmake ../..
 make
 ```
+
+To build an executable for NDS, ensure that the environment variables `BLOCKSDS`
+and `WONDERFUL_TOOLCHAIN` are set.
 
 To build an executable for NDS:
 ```
@@ -28,4 +32,5 @@ cmake ../.. -DCMAKE_TOOLCHAIN_FILE=$BLOCKSDS/cmake/BlocksDSi.cmake
 make
 ```
 
-Note that such an executable may violate the NDS ROM specifications and fail to load in some environments.
+Note that such an executable may violate the NDS ROM specifications and fail to
+load in some environments.

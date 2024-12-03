@@ -7,6 +7,7 @@ specific area:
 - `audio`: How to use the audio functions of libnds (without external libraries).
 - `bios`: How to use the services provided by the BIOS.
 - `compression`: Decompressing data included in your application.
+- `cmake`: How to use CMake to build projects using BlocksDS.
 - `console`: How to use features of the text console of libnds.
 - `cothread`: How to use the co-operative multithreading library of libnds.
 - `debug`: How to enable and use some debug features of libnds.
