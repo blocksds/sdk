@@ -6,7 +6,7 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= gesture_recognition
+NAME		:= input_gesture_recognition
 GAME_TITLE	:= Gesture recognition demo
 GAME_SUBTITLE	:= Input
 
