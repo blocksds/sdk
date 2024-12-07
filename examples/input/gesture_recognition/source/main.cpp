@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: CC0-1.0
 //
 // SPDX-FileContributor: Michele Di Giorgio, 2024
+// SPDX-FileContributor: Antonio Niño Díaz, 2024
 //
 // Gesture recognition example that use the $N Multistroke Recognizer from:
 //
@@ -31,37 +32,45 @@
 Point stroke[SCREEN_WIDTH*SCREEN_HEIGHT];
 u16   screen[SCREEN_HEIGHT][SCREEN_WIDTH];
 
-// Low priority channel for background image
-static int DMA_CHANNEL = 3;
+static int reference_bg;
 
 void initBackground()
 {
-    //  Set up affine background 2 on main as a 8-bit color background.
-    REG_BG2CNT = BG_BMP8_128x128 |
-                 BG_BMP_BASE(8) | // The starting place in memory
-                 BG_PRIORITY(2);  // A higher priority
+    reference_bg = bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
+}
 
-    /*  Set the affine transformation matrix for the main screen background 3
-     *  to be the identity matrix.
-     */
-    REG_BG2PA = 1 << 8;
-    REG_BG2PB = 0;
-    REG_BG2PC = 0;
-    REG_BG2PD = 1 << 8;
+void showBackground()
+{
+    bgShow(reference_bg);
+}
 
-    //  Place main screen background 2 at the bottom.
-    REG_BG2X = 0;
-    REG_BG2Y = 100;
+void hideBackground()
+{
+    bgHide(reference_bg);
+}
+
+void scrollBackground(int x, int y)
+{
+    uint16_t *fb = bgGetMapPtr(reference_bg);
+
+    for (int j = 0; j < 104; j++)
+    {
+        for (int i = 0; i < 256; i++)
+        {
+            fb[256 * j + i] = ((uint16_t *)gesturesBitmap)[650 * (j + y) + i + x];
+        }
+    }
 }
 
 void printGestures()
 {
     glBegin2D();
+
     // Draw a square on the bottom screen to highlight the stroke.
     glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE | POLY_ID(0));
 
     for (u16 i = 0; i < SCREEN_HEIGHT; ++i) {
-        for (u16 j = 0; j < SCREEN_WIDTH; ++j)
+        for (u16 j = 0; j < SCREEN_WIDTH; ++j) {
             if (screen[i][j]) {
                 glBoxFilled(
                     i - TOUCH_BOX_RADIUS,
@@ -71,6 +80,7 @@ void printGestures()
                     RGB8(146, 77, 200) | 0x8000
                 );
             }
+        }
     }
     glEnd2D();
 }
@@ -89,27 +99,35 @@ int main(int argc, char **argv)
     // Initialize display:
     // - sub screen (top): console output
     // - main screen (bottom): GL2D graphics
-    consoleDemoInit();
     lcdSwap();
 
-    vramSetPrimaryBanks(VRAM_A_MAIN_BG_0x06000000, VRAM_B_MAIN_BG_0x06020000,
+    videoSetMode(MODE_5_3D);
+
+    vramSetPrimaryBanks(VRAM_A_MAIN_BG_0x06000000, VRAM_B_LCD,
                         VRAM_C_SUB_BG_0x06200000, VRAM_D_LCD);
-    videoSetMode(MODE_0_3D |
-                 DISPLAY_BG2_ACTIVE);
+
+    consoleDemoInit();
+
     glScreen2D();
+
+    // Make the 3D layer transparent (alpha = 0) to see the reference image
+    // under the 3D layer.
+    glClearColor(0, 0, 0, 0);
 
     printf("Gesture recognition example\n");
     printf("===========================\n");
     printf("\n");
     printf("A: Recognize the current gesture\n");
+    printf("B: Show/Hide reference images\n");
+    printf("Left/Right: Scroll reference\n");
+    printf("\n");
     printf("START: Return to loader\n");
-    printf("Use touch screen to draw. Number of strokes has to be the same:\n");
-
-    // Display template gestures as a background image
-    dmaCopyHalfWords(DMA_CHANNEL,
-                     gesturesBitmap,
-                     (uint16 *)BG_BMP_RAM(0),
-                     gesturesBitmapLen);
+    printf("\n");
+    printf("Use touch screen to draw. The\n");
+    printf("number of strokes has to be the\n");
+    printf("same as in the image.\n");
+    printf("\n");
+    printf("\n");
 
     initBackground();
 
@@ -119,6 +137,12 @@ int main(int argc, char **argv)
 
     u16 clear = 1;
     clearGestures();
+
+    showBackground();
+
+    bool show_reference = true;
+    int x = 0;
+    scrollBackground(x, 0);
 
     while (1)
     {
@@ -152,6 +176,30 @@ int main(int argc, char **argv)
                 addGesture(ndrec, stroke, strokeLength);
                 strokeLength = 0;
             }
+        }
+
+        if (keys_down & KEY_B)
+        {
+            show_reference = !show_reference;
+            if (show_reference)
+                showBackground();
+            else
+                hideBackground();
+        }
+
+        if (keys_held & KEY_LEFT)
+        {
+            x -= 4;
+            if (x < 0)
+                x = 0;
+            scrollBackground(x, 0);
+        }
+        else if (keys_held & KEY_RIGHT)
+        {
+            x += 4;
+            if (x > (650 - 256))
+                x = 650 - 256;
+            scrollBackground(x, 0);
         }
 
         if (keys_down & KEY_A) {
