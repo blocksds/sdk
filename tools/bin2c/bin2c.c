@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2014, 2019-2020, 2023
+// SPDX-FileContributor: Antonio Niño Díaz, 2014, 2019-2020, 2023-2024
 
 #include <ctype.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -53,8 +54,16 @@ void file_load(const char *path, void **buffer, size_t *size)
 }
 
 // Converts a file name to an array name and output file names
-void generate_transformed_name(const char *path, const char *dir_out)
+void generate_transformed_name(const char *_path, const char *dir_out,
+                               bool save_ext)
 {
+    char *path = strdup(_path);
+    if (path == NULL)
+    {
+        fprintf(stderr, "Can't allocate memory");
+        exit(1);
+    }
+
     int len = strlen(path);
 
     int start = 0;
@@ -65,6 +74,19 @@ void generate_transformed_name(const char *path, const char *dir_out)
         {
             start = i + 1;
             break;
+        }
+    }
+
+    // Remove extension from final names if requested
+    if (!save_ext)
+    {
+        for (int i = len - 1; i > start; i--)
+        {
+            if (path[i] == '.')
+            {
+                path[i] = '\0';
+                break;
+            }
         }
     }
 
@@ -126,6 +148,15 @@ void generate_transformed_name(const char *path, const char *dir_out)
                 out_array_name[i] = '_';
         }
     }
+
+    free(path);
+}
+
+void print_help(const char *path)
+{
+    fprintf(stderr, "Invalid arguments.\n"
+                    "Usage: %s [--noext] file_in folder_out\n", path);
+    exit(1);
 }
 
 int main(int argc, char **argv)
@@ -133,19 +164,37 @@ int main(int argc, char **argv)
     void *file = NULL;
     size_t size;
 
-    if (argc < 3)
-    {
-        fprintf(stderr, "Invalid arguments.\n"
-                        "Usage: %s [file_in] [folder_out]\n", argv[0]);
-        return 1;
-    }
+    if (argc < 2)
+        print_help(argv[0]);
 
-    const char *path_in = argv[1];
-    const char *dir_out = argv[2];
+    bool save_ext;
+    const char *path_in;
+    const char *dir_out;
+
+    if (strcmp(argv[1], "--noext") == 0)
+    {
+        save_ext = false;
+
+        if (argc < 4)
+            print_help(argv[0]);
+
+        path_in = argv[2];
+        dir_out = argv[3];
+    }
+    else
+    {
+        save_ext = true;
+
+        if (argc < 3)
+            print_help(argv[0]);
+
+        path_in = argv[1];
+        dir_out = argv[2];
+    }
 
     file_load(path_in, &file, &size);
 
-    generate_transformed_name(path_in, dir_out);
+    generate_transformed_name(path_in, dir_out, save_ext);
 
     FILE *fc = fopen(c_file_name, "w");
     if (fc == NULL)
