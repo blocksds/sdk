@@ -50,7 +50,8 @@ Copyright (c) 2008, Mukunda Johnson (mukunda@maxmod.org)
 
 This is always used unless you tell the compiler to not link libc at all.
 
-Take a look at `COPYING.picolibc` in the `picolibc` folder.
+Take a look at `COPYING.picolibc` in the `picolibc` repository
+[here](https://github.com/WonderfulToolchain/wf-picolibc/blob/wonderful/COPYING.picolibc).
 
 ## libstdc++
 
