@@ -26,13 +26,6 @@ Zlib license. No copyright notice required in binary distributions.
 FatFs uses a custom BSD/MIT/ISC-like license that doesn't require attribution in
 binary files either.
 
-Some files (`picolib`) module are licensed under the BSD-3-Clause. Copyright
-notice required:
-
-```
-Copyright © 2019-2022 Keith Packard
-```
-
 ## LibXM7
 
 This is only used if the user explicitly links it.
