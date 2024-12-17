@@ -19,7 +19,7 @@ BINDIRS		:=
 # Defines passed to all files
 # ---------------------------
 
-DEFINES		:=
+DEFINES		:= -DSAMPLE_DEFINE -DSAMPLE_DEFINE_WITH_VALUE=123
 
 # Libraries
 # ---------
