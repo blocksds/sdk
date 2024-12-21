@@ -10,4 +10,4 @@ NAME		:= debug_exception_handler
 GAME_TITLE	:= Exception handler test
 GAME_SUBTITLE	:= Debug
 
-include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile
+include $(BLOCKSDS)/sys/default_makefiles/rom_arm9arm7/Makefile
