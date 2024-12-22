@@ -47,6 +47,7 @@ Additional contributions to the BlocksDS-provided version of libnds have been pr
 
 - asie
 - Di Giorgio, Michele
+- ds-sloth
 - Epicpkmn11
 - GalaxyShard
 - Kurz, Dominik (Kuratius)

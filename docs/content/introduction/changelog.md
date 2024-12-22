@@ -3,14 +3,28 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version DEV (????-??-??)
+## Version 1.7.0 (2024-12-XX)
 
 - libnds:
 
+  - An exception handler has been added to the ARM7. This one is a lot less
+    useful than the ARM9 one because it's only called on undefined instructions
+    and internal libnds errors.
   - Add `dldiRelocate()`, which allows relocating a DLDI driver to a different
     memory address.
   - Fix DLDI memory pointers not being relocated for non-BSS/noinit areas.
   - Update FatFs to R0.15a.
+  - `glColorSubTableEXT()` now supports allocating empty palettes by passing a
+    NULL pointer in the `table` argument. This is a small compatibility break
+    because this used to free the palette. However, the old behaviour stays as
+    long as `width` is 0. In most cases, `table` would be NULL and `width` would
+    be 0, so this change is only a problem in unusual cases.
+  - Disable MPU safely before calling the exit-to-loader ARM9 hook in case the
+    hook doesn't do it properly.
+
+- maxmod:
+
+  - Remove non-standard `.struct` directives.
 
 - SDK:
 
@@ -18,6 +32,55 @@ weight: -20
 
     - Add `asnprintf()` and `vasnprintf()`, matching newlib.
     - Fix memory leak in `asprintf()` and `vasprintf()`.
+
+  - Docker:
+
+    - curl has been added to both the development and slim images.
+
+  - pacman:
+
+    - The pacman server of BlocksDS is now independent from Wonderful Toolchain.
+
+      - The repository with the package build files is now in the BlocksDS
+        GitHub organization in this URL: https://github.com/blocksds/packages
+      - BlocksDS still uses Wonderful Toolchain as source for the compiler and
+        the standard C and C++ libraries. It will keep using wf-pacman for the
+        forseeable future as well.
+      - Special thanks to asie for all his help.
+
+    - The GitHub pipeline of the SDK repository has been removed and added to
+      the packages repository.
+
+  - Documentation:
+
+    - Some outdated licensing information has been updated.
+    - The docs generation script has been split into a script that generates it
+      and a script that pushes the built documentation to the repository.
+    - The updating guide has been updated for versions between 1.3.0 and 1.7.0.
+
+  - Examples:
+
+    - New example of gesture recognition using the $N Multistroke Recognizer.
+    - New example of how to use CMake to build a project with BlocksDS.
+    - Update the exception handler example to also support triggering ARM7
+      exceptions.
+
+  - Other:
+
+    - BlocksDS now has a dedicated URL (https://blocksds.skylyrac.net/) which
+      means that it doesn't rely on GitHub URLs anymore. This main page
+      redirects to the documentation, GitHub organization, and a NDS homebrew
+      development manual.
+    - A new prototype CMake build system has been added to the repository.
+    - `CC` makefile variables have been renamed to `HOSTCC` when they refer to
+      building host tools. This will make it possible to overwrite the host
+      toolchain without also overwriting the ARM toolchain.
+    - Use standard C types and fix includes in mkfatimg.
+    - bin2c now has an option (`--noext`) that lets it export files excluding
+      the extension from the name, the way some very old homebrew projects
+      expect it.
+    - Some sample defines have been added to the makefiles of the templates to
+      clarify its syntax.
 
 ## Version 1.6.3 (2024-11-11)
 
@@ -252,8 +315,8 @@ weight: -20
   - Console:
 
     - Fix 'D' ANSI escape code, which was broken in version 1.3.1.
-    - Document console struct fields. Some of them are only meant to be used by
-      libnds, which has been documented.
+    - Document PrintConsole struct fields. Some of them are only meant to be
+      used by libnds, which has been documented.
     - The size of some fields in the console struct has been reduced, and the
       fields have been reordered to reduce padding in the struct. Some fields
       were unused, and they have been removed.

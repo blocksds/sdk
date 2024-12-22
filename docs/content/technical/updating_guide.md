@@ -10,6 +10,32 @@ to implement. These are documented here.
 Please refer to the changelog for a full list of changes, including additions
 and enhancements to the SDK which are not listed here.
 
+## Upgrading to BlocksDS 1.7.0
+
+* `glColorSubTableEXT()` now supports allocating empty palettes by passing a
+  NULL pointer in the `table` argument. This is a small compatibility break
+  because this used to free the palette. However, the old behaviour stays as
+  long as `width` is 0. In most cases, `table` would be NULL and `width` would
+  be 0, so this change is only a problem in unusual cases.
+
+## Upgrading to BlocksDS 1.6.0
+
+* The GRF format has been slightly modified. This has been done to add a version
+  field to the header. The GRF functions of libnds have been updated as well as
+  grit, so you will have to rebuild your GRF files and update any GRF loader
+  that you have implemented.
+
+## Upgrading to BlocksDS 1.4.0
+
+* Custom libnds keyboards now work. This seems to have never worked because
+  libnds overwrote the custom keyboard struct with the default keyboard struct.
+  Keyboard struct fields have been refactored. Some field sizes are now smaller,
+  some fields are now const. The order has been changed to reduce padding
+  between fields and save even more RAM. In order to see how to use custom
+  keyboards, please, check the examples.
+* Some fields of the `PrintConsole` have been modified to reduce the size of the
+  struct. Please, check the examples to get more information.
+
 ## Upgrading to BlocksDS 1.3.0
 
 * General changes:
