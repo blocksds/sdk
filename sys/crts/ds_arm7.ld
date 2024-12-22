@@ -37,7 +37,7 @@ PHDRS {
 
 MEMORY {
     ewram : ORIGIN = 0x02380000, LENGTH = 12M - 512K
-    iwram : ORIGIN = 0x03800000 - __shared_wram_size, LENGTH = 65536 + __shared_wram_size	
+    iwram : ORIGIN = 0x03800000 - __shared_wram_size, LENGTH = 65536 + __shared_wram_size
 
     twl_ewram : ORIGIN = 0x02e80000, LENGTH = 512K - 64K
     twl_iwram : ORIGIN = 0x03000000, LENGTH = 256K
