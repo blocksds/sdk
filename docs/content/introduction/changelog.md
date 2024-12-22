@@ -3,6 +3,22 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version DEV (????-??-??)
+
+- libnds:
+
+  - Add `dldiRelocate()`, which allows relocating a DLDI driver to a different
+    memory address.
+  - Fix DLDI memory pointers not being relocated for non-BSS/noinit areas.
+  - Update FatFs to R0.15a.
+
+- SDK:
+
+  - picolibc:
+
+    - Add `asnprintf()` and `vasnprintf()`, matching newlib.
+    - Fix memory leak in `asprintf()` and `vasprintf()`.
+
 ## Version 1.6.3 (2024-11-11)
 
 - libnds:
