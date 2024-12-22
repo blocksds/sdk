@@ -5,9 +5,12 @@ weight: 60
 
 ## 1. Introduction
 
-In most cases, porting devkitARM projects to BlocksDS should be relatively easy.
-BlocksDS includes most of the NDS functionality provided by devkitARM. For simple
-projects, only minor changes should be required.
+This guide applies to projects that don't use Calico or devkitARM's libnds 2.0.
+Migrating projects that use Calico is outside of scope for BlocksDS.
+
+For older devkitARM projects, porting them projects to BlocksDS should be
+relatively easy. BlocksDS includes most of the NDS functionality provided by
+devkitARM. For simple projects, only minor changes should be required.
 
 ## 2. New build system
 
