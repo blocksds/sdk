@@ -55,6 +55,8 @@ weight: -20
         wf-pacman -Syu
         ```
 
+    - New libraries are now available as pacman packages (µLibrary, libwoopsi,
+      dsmi) as well as the tool ptexconv.
     - The GitHub pipeline of the SDK repository has been removed and added to
       the packages repository.
 
