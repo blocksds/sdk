@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version 1.7.0 (2024-12-XX)
+## Version 1.7.0 (2024-12-23)
 
 - libnds:
 
@@ -36,6 +36,7 @@ weight: -20
   - Docker:
 
     - curl has been added to both the development and slim images.
+    - Add new BlocksDS pacman repository during setup.
 
   - pacman:
 
@@ -59,6 +60,8 @@ weight: -20
 
   - Documentation:
 
+    - Update documentation with the instructions to use the new pacman
+      repository.
     - Some outdated licensing information has been updated.
     - The docs generation script has been split into a script that generates it
       and a script that pushes the built documentation to the repository.
