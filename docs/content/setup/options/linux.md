@@ -10,6 +10,13 @@ right away.
    Follow the instructions in this link:
    https://wonderful.asie.pl/docs/getting-started/#linux
 
+1. Add the BlocksDS repository to `wf-pacman`:
+
+   ```bash
+   wf-pacman -Sy wf-tools
+   wf-config repo enable blocksds
+   ```
+
 1. Now, install the ARM toolchain of Wonderful Toolchains, as well as the
    BlocksDS packages.
 
@@ -25,23 +32,16 @@ right away.
    wf-pacman -S toolchain-llvm-teak-llvm
    ```
 
-   For the latest stable version of BlocksDS, run:
+   Now, install BlocksDS itself:
 
    ```bash
-   wf-pacman -S thirdparty-blocksds-toolchain
+   wf-pacman -S blocksds-toolchain
    ```
 
    To install the documentation and examples you can install:
 
    ```bash
-   wf-pacman -S thirdparty-blocksds-docs
-   ```
-
-   For the latest unstable version, install the following packages instead:
-
-   ```bash
-   wf-pacman -S thirdparty-blocksds-git-toolchain \
-                thirdparty-blocksds-git-docs
+   wf-pacman -S blocksds-docs
    ```
 
 1. (Optional step) You can also install some third party libraries like
@@ -50,8 +50,13 @@ right away.
    `wf-pacman`:
 
    ```bash
-   wf-pacman -S thirdparty-blocksds-nflib \
-                thirdparty-blocksds-nitroengine
+   wf-pacman -S blocksds-nflib blocksds-nitroengine
+   ```
+
+   You can get a full list of packages by running:
+
+   ```bash
+   wf-pacman -Sl
    ```
 
 1. `wf-pacman` installs BlocksDS in `/opt/wonderful/thirdparty/blocksds/`.

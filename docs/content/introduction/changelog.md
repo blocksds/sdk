@@ -47,6 +47,12 @@ weight: -20
         the standard C and C++ libraries. It will keep using wf-pacman for the
         forseeable future as well.
       - Special thanks to asie for all his help.
+      - Updating old installations requires the user to run the following
+        command twice instead of once:
+
+        ```bash
+        wf-pacman -Syu
+        ```
 
     - The GitHub pipeline of the SDK repository has been removed and added to
       the packages repository.

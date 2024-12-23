@@ -10,6 +10,13 @@ If you want to use it in WSL, follow the instructions for Linux instead.
    the instructions in this link:
    https://wonderful.asie.pl/docs/getting-started/#windows-via-msys2
 
+1. Add the BlocksDS repository to `wf-pacman`:
+
+   ```bash
+   wf-pacman -Sy wf-tools
+   wf-config repo enable blocksds
+   ```
+
 1. Install the ARM toolchain of Wonderful Toolchain:
 
    ```bash
@@ -17,24 +24,16 @@ If you want to use it in WSL, follow the instructions for Linux instead.
    wf-pacman -S toolchain-gcc-arm-none-eabi
    ```
 
-   Now, install BlocksDS itself. For the latest stable version of BlocksDS, run:
+   Now, install BlocksDS itself:
 
    ```bash
-   wf-pacman -S thirdparty-blocksds-toolchain
+   wf-pacman -S blocksds-toolchain
    ```
 
    To install the documentation and examples you can install:
 
    ```bash
-   wf-pacman -S thirdparty-blocksds-docs
-   ```
-
-   For the latest unstable version, install the following packages instead of
-   the previous ones:
-
-   ```bash
-   wf-pacman -S thirdparty-blocksds-git-toolchain \
-                thirdparty-blocksds-git-docs
+   wf-pacman -S blocksds-docs
    ```
 
 1. (Optional step) You can also install some third party libraries like
@@ -43,8 +42,13 @@ If you want to use it in WSL, follow the instructions for Linux instead.
    `wf-pacman`:
 
    ```bash
-   wf-pacman -S thirdparty-blocksds-nflib \
-                thirdparty-blocksds-nitroengine
+   wf-pacman -S blocksds-nflib blocksds-nitroengine
+   ```
+
+   You can get a full list of packages by running:
+
+   ```bash
+   wf-pacman -Sl
    ```
 
 1. Whenever you need to update the SDK, run:
