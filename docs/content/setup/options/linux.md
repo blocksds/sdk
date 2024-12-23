@@ -15,7 +15,7 @@ right away.
    ```bash
    export PATH=/opt/wonderful/bin:$PATH
 
-   wf-pacman -Sy wf-tools
+   wf-pacman -Syu wf-tools
    wf-config repo enable blocksds
    wf-pacman -Syu
    ```

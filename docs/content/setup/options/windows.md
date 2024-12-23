@@ -13,7 +13,7 @@ If you want to use it in WSL, follow the instructions for Linux instead.
 1. Add the BlocksDS repository to `wf-pacman`:
 
    ```bash
-   wf-pacman -Sy wf-tools
+   wf-pacman -Syu wf-tools
    wf-config repo enable blocksds
    wf-pacman -Syu
    ```
