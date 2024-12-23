@@ -39,6 +39,8 @@ RUN cd etc && \
 
 # Install ARM toolchain in both images
 RUN wf-pacman -Syu --noconfirm && \
+    wf-pacman -Sy wf-tools --noconfirm && \
+    wf-config repo enable blocksds && \
     wf-pacman -S --noconfirm toolchain-gcc-arm-none-eabi
 
 # Full development image
