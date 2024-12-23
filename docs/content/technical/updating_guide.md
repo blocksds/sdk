@@ -17,8 +17,14 @@ and enhancements to the SDK which are not listed here.
   because this used to free the palette. However, the old behaviour stays as
   long as `width` is 0. In most cases, `table` would be NULL and `width` would
   be 0, so this change is only a problem in unusual cases.
-* Upgrading from previous installations of BlocksDS requires running the command
-  ``wf-pacman -Syu`` twice instead of once.
+* Upgrading from previous installations of BlocksDS requires running the
+  following commands:
+
+  ```bash
+  wf-pacman -Sy wf-pacman
+  wf-pacman -Syu
+  wf-pacman -Syu
+  ```
 
 ## Upgrading to BlocksDS 1.6.0
 

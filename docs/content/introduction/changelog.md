@@ -49,9 +49,11 @@ weight: -20
         forseeable future as well.
       - Special thanks to asie for all his help.
       - Updating old installations requires the user to run the following
-        command twice instead of once:
+        commands:
 
         ```bash
+        wf-pacman -Sy wf-pacman
+        wf-pacman -Syu
         wf-pacman -Syu
         ```
 
