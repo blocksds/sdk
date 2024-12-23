@@ -62,3 +62,13 @@ If you want to use it in WSL, follow the instructions for Linux instead.
 
    You can also try one of the open source projects made with BlocksDS that are
    listed [here](https://github.com/blocksds/awesome-blocksds).
+
+   If you get an error like "command not found: make", you need to install it
+   from the packages of your system:
+
+   ```bash
+   pacman -S make
+   ```
+
+   If you want to know how to debug your programs, check the guide
+   [here](../../../usage/debugging).
