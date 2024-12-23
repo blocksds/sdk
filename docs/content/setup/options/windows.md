@@ -15,16 +15,10 @@ If you want to use it in WSL, follow the instructions for Linux instead.
    ```bash
    wf-pacman -Sy wf-tools
    wf-config repo enable blocksds
-   ```
-
-1. Install the ARM toolchain of Wonderful Toolchain:
-
-   ```bash
    wf-pacman -Syu
-   wf-pacman -S toolchain-gcc-arm-none-eabi
    ```
 
-   Now, install BlocksDS itself:
+1. Now, install the ARM toolchain of Wonderful Toolchains, as well as BlocksDS:
 
    ```bash
    wf-pacman -S blocksds-toolchain

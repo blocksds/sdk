@@ -13,26 +13,14 @@ right away.
 1. Add the BlocksDS repository to `wf-pacman`:
 
    ```bash
+   export PATH=/opt/wonderful/bin:$PATH
+
    wf-pacman -Sy wf-tools
    wf-config repo enable blocksds
-   ```
-
-1. Now, install the ARM toolchain of Wonderful Toolchains, as well as the
-   BlocksDS packages.
-
-   ```bash
-   export PATH=/opt/wonderful/bin:$PATH
    wf-pacman -Syu
-   wf-pacman -S toolchain-gcc-arm-none-eabi
    ```
 
-   Install the following if you plan to develop binaries for the DSP of the DSi:
-
-   ```bash
-   wf-pacman -S toolchain-llvm-teak-llvm
-   ```
-
-   Now, install BlocksDS itself:
+1. Now, install the ARM toolchain of Wonderful Toolchains, as well as BlocksDS:
 
    ```bash
    wf-pacman -S blocksds-toolchain
@@ -42,6 +30,12 @@ right away.
 
    ```bash
    wf-pacman -S blocksds-docs
+   ```
+
+   Install the following if you plan to develop binaries for the DSP of the DSi:
+
+   ```bash
+   wf-pacman -S toolchain-llvm-teak-llvm
    ```
 
 1. (Optional step) You can also install some third party libraries like
