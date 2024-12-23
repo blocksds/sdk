@@ -162,12 +162,19 @@ You can enable it by calling this function, preferably right at the start of
 defaultExceptionHandler();
 ```
 
-If you are using the debug build of libnds, this exception handler is setup by
-default, so you don't need to call this function. However, you need to call it
-in release builds.
+For the ARM9, if you are using the debug build of libnds, this exception handler
+is setup by default, so you don't need to call this function. However, you need
+to call it in release builds. Release builds by default have a much basic
+exception handler that will only print an error message on the screen, with no
+additional information.
 
-Release builds have a much basic exception handler that will only print an error
-message on the screen, with no additional information.
+For the ARM7, the exception handler must be enabled by hand in all builds. This
+means that you need a combined ARM7+ARM9 project if you want to use it. This is
+done because the ARM7 has a lot less space for code than the ARM9 (and normally
+developers focus on the ARM9 only) so there isn't a good reason to add unused
+code to all ARM7 binaries for just a small percentage of users. If you want to
+enable the debug handler, call ``defaultExceptionHandler()``, just like in the
+ARM9.
 
 The exception handler is used whenever:
 
@@ -179,7 +186,7 @@ The exception handler is used whenever:
   libnds sometimes deliberately executes an undefined instruction to crash in a
   controlled way.
 
-- The CPU tries to access memory that is protected (`data abort`).
+- The CPU tries to access memory that is protected (`data abort`) (ARM9 only).
 
   This happens because libnds setups the MPU (Memory Protection Unit) in a way
   that only lets the CPU access addresses where there is actual memory. The
@@ -194,6 +201,9 @@ The exception handler is used whenever:
 
   Normally this error means that you have a pointer that doesn't point to valid
   memory and you have tried to access it.
+
+  Note that the ARM7 doesn't have an MPU and this kind of exception can never be
+  triggered.
 
 - There is a critical internal error in libnds.
 
