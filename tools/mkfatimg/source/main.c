@@ -226,7 +226,7 @@ int main (int argc, char* argv[])
 	TotalFilesSize = 0;
 	strcpy(SrcPath, SrcPathArg);
 	treesize();
-	printf("Total size of files: %lu bytes\n", TotalFilesSize);
+	printf("Total size of files: %zu bytes\n", TotalFilesSize);
 
 	/* If the user hasn't set the size, use an image size of 40% the total of
 	 * the sizes of all files. */
