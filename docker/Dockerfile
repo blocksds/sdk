@@ -37,60 +37,40 @@ ENV PATH=/opt/wonderful/bin:$PATH
 RUN cd etc && \
     ln -sf ../proc/self/mounts mtab
 
-# Install ARM toolchain in both images
+# Install SDK, then clear the package cache
 RUN wf-pacman -Syu --noconfirm && \
     wf-pacman -Syu --noconfirm wf-tools && \
     wf-config repo enable blocksds && \
     wf-pacman -Syu --noconfirm && \
-    wf-pacman -S --noconfirm toolchain-gcc-arm-none-eabi
+    wf-pacman -S --noconfirm blocksds-toolchain
 
-# Full development image
-# ======================
-#
-# Image that contains all the code and the build results. This can be used to
-# develop applications with BlocksDS, or to develop the components of BlocksDS
-# itself.
+# Setup the environment variables for a wf-pacman installation
+ENV BLOCKSDS=/opt/wonderful/thirdparty/blocksds/core
+ENV BLOCKSDSEXT=/opt/wonderful/thirdparty/blocksds/external
+ENV WONDERFUL_TOOLCHAIN=/opt/wonderful
+
+# Use /work/ as working directory of this container.
+WORKDIR /work/
+
+# Development image
+# =================
+
+# This image contains all the packages provided by BlocksDS.
 
 FROM base-cross-compiler AS blocksds-dev
 
-# Install host GCC so that we can build the host tools. This isn't needed in the
-# slim image because it gets the pre-built binaries.
-RUN apt-get install -y --no-install-recommends \
-        build-essential
+# Install all additional BlocksDS packages
+RUN wf-pacman -S --noconfirm blocksds-default blocksds-extra
 
 # Install Teak toolchain only in the dev image
 RUN if [ $TARGETARCH = "amd64" ]; then \
-        wf-pacman -S --noconfirm toolchain-llvm-teak-llvm; fi
-
-WORKDIR /opt/
-RUN git clone --recurse-submodules https://github.com/blocksds/sdk.git \
-              --branch $BRANCH
-
-WORKDIR /opt/sdk/
-RUN BLOCKSDS=$PWD make install -j`nproc` VERBOSE=1 && \
-    mkdir /opt/blocksds/external
-
-WORKDIR /work/
-
-# Add some envirnoment variables explicitly for third-party tools that don't
-# default to their "official" paths when they aren't set. This needs to be set
-# after the SDK is built.
-ENV BLOCKSDS=/opt/blocksds/core
-ENV BLOCKSDSEXT=/opt/blocksds/external
-ENV WONDERFUL_TOOLCHAIN=/opt/wonderful
+        wf-pacman -S --noconfirm toolchain-llvm-teak-llvm ; \
+    fi
 
 # Slim image
 # ==========
-#
-# Minimalistic image with the bare minimum tools to build NDS programs with
-# BlocksDS. The source code of BlocksDS isn't included.
+
+# This image only contains the base SDK without examples. This is useful for
+# pipelines that need to be as fast as possible.
 
 FROM base-cross-compiler AS blocksds-slim
-
-COPY --from=blocksds-dev /opt/blocksds/ /opt/blocksds/
-
-WORKDIR /work/
-
-ENV BLOCKSDS=/opt/blocksds/core
-ENV BLOCKSDSEXT=/opt/blocksds/external
-ENV WONDERFUL_TOOLCHAIN=/opt/wonderful
