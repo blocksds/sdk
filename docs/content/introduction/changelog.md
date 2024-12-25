@@ -3,6 +3,36 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version 1.7.1 (2024-12-25)
+
+- libnds:
+
+  - Fixed a bug where some assembly functions would be removed by the linker.
+    This happened when a function is supposed to fall through the following one,
+    but it is in a different section. If this other section isn't referenced
+    anywhere, the linker would remove it.
+  - A new system to send formatted text messages from the ARM7 to the ARM9 has
+    been implemented. This works by using a ring buffer in main RAM that is
+    allocated from the ARM9, so the user can adjust its size easily. This is
+    still being tested and it may change.
+
+- SDK:
+
+  - Docker:
+
+    - Install BlocksDS from pacman packages instead of building it from source.
+      This will make it easier to install other third-party packages. It won't
+      be needed to build them from source and install them, you will be able to
+      simply install the package.
+
+  - Documentation:
+
+    - Update setup instructions.
+
+  - Examples:
+
+    - New example of how to use the ARM7 console to print text on the screen.
+
 ## Version 1.7.0 (2024-12-23)
 
 - libnds:
