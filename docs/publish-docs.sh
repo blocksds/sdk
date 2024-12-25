@@ -5,6 +5,9 @@
 # Make sure that you have a folder called "blocksds-docs" at the same level as
 # your sdk repository folder.
 
+set -e
+set -x
+
 rm -rf ../../blocksds-docs/*
 mv -v public/* ../../blocksds-docs/
 
