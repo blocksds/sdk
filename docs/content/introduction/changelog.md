@@ -23,7 +23,9 @@ weight: -20
     - Install BlocksDS from pacman packages instead of building it from source.
       This will make it easier to install other third-party packages. It won't
       be needed to build them from source and install them, you will be able to
-      simply install the package.
+      simply install the package. The slim image only has the
+      `blocksds-toolchain` package, the dev image has all the `blocksds-*`
+      packages.
 
   - Documentation:
 
