@@ -47,7 +47,7 @@ void bit_unpack_1bpp(void)
         fontTilesLen, // Source size, in bytes
         1, // Source bit depth
         4, // Destination bit depth
-        0  // Add zero to all non-zero converted values.
+        0 | BIOS_UNPACK_OFFSET_ADD_NON_ZERO // Add zero to all non-zero converted values.
     };
     swiUnpackBits(fontTiles, gfx_data, &unpackSettings);
 
@@ -57,7 +57,7 @@ void bit_unpack_1bpp(void)
         fontTilesLen, // Source size, in bytes
         1, // Source bit depth
         4, // Destination bit depth
-        1  // Add one to all non-zero converted values.
+        1 | BIOS_UNPACK_OFFSET_ADD_NON_ZERO // Add one to all non-zero converted values.
     };
     swiUnpackBits(fontTiles, gfx_data + (FONT_TILE_COUNT * 32 / 2), &unpackSettings);
 
@@ -67,7 +67,7 @@ void bit_unpack_1bpp(void)
         fontTilesLen, // Source size, in bytes
         1, // Source bit depth
         4, // Destination bit depth
-        1 | (1 << 31) // Add one to all converted values.
+        1 | BIOS_UNPACK_OFFSET_ADD_ALWAYS // Add one to all converted values.
     };
     swiUnpackBits(fontTiles, gfx_data + 2 * (FONT_TILE_COUNT * 32 / 2), &unpackSettings);
 }
@@ -120,7 +120,7 @@ void bit_unpack_4bpp(void)
         ball_redTilesLen, // Source size, in bytes
         4, // Source bit depth
         8, // Destination bit depth
-        ball_red_pal_offset | (1 << 31) // Add ball_red_pal_offset to all converted values.
+        ball_red_pal_offset | BIOS_UNPACK_OFFSET_ADD_ALWAYS // Add ball_red_pal_offset to all converted values.
     };
     swiUnpackBits(ball_redTiles, gfx_data + (ball_red_gfx_offset * 64 / 2), &unpackSettings);
 
@@ -135,7 +135,7 @@ void bit_unpack_4bpp(void)
         ball_greenTilesLen, // Source size, in bytes
         4, // Source bit depth
         8, // Destination bit depth
-        ball_green_pal_offset | (1 << 31) // Add ball_green_pal_offset to all converted values.
+        ball_green_pal_offset | BIOS_UNPACK_OFFSET_ADD_ALWAYS // Add ball_green_pal_offset to all converted values.
     };
     swiUnpackBits(ball_greenTiles, gfx_data + (ball_green_gfx_offset * 64 / 2), &unpackSettings);
 }
