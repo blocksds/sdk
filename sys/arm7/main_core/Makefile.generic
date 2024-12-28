@@ -8,6 +8,7 @@ export BLOCKSDSEXT	?= /opt/blocksds/external
 export WONDERFUL_TOOLCHAIN ?= /opt/wonderful
 ARM_NONE_EABI_PATH	?= $(WONDERFUL_TOOLCHAIN)/toolchain/gcc-arm-none-eabi/bin/
 
+
 # Source code paths
 # -----------------
 
@@ -22,19 +23,26 @@ DEFINES		:=
 # Libraries
 # ---------
 
-LIBS		:= -ldswifi7 -lmm7 -lnds7
-LIBDIRS		:= $(BLOCKSDS)/libs/dswifi \
-		   $(BLOCKSDS)/libs/maxmod \
-		   $(BLOCKSDS)/libs/libnds
+USE_DSWIFI ?= 0
+USE_MAXMOD ?= 0
+USE_LIBXM7 ?= 0
+
+LIBS		:= -lnds7
+LIBDIRS		:= $(BLOCKSDS)/libs/libnds
 
 # Build artifacts
 # -----------------
 
-BUILDDIR	:= build
-NAME		:= arm7
-ELF		:= $(NAME).elf
-DUMP		:= $(NAME).dump
-MAP		:= build/$(NAME).map
+NAME		?= arm7
+ifeq ($(NAME),arm7)
+	BUILDDIR 	:= build
+	ELF 		:= arm7.elf
+else
+	BUILDDIR	:= build/$(NAME)
+	ELF		:= arm7_$(NAME).elf
+endif
+DUMP		:= $(BUILDDIR)/$(NAME).dump
+MAP		:= $(BUILDDIR)/$(NAME).map
 
 # Tools
 # -----
@@ -46,7 +54,6 @@ OBJDUMP		:= $(PREFIX)objdump
 MKDIR		:= mkdir
 RM		:= rm -rf
 CP		:= cp
-INSTALL		:= install
 
 # Verbose flag
 # ------------
@@ -55,6 +62,25 @@ ifeq ($(VERBOSE),1)
 V		:=
 else
 V		:= @
+endif
+
+# Conditional compilation
+# -----------------------
+
+ifeq ($(USE_DSWIFI),1)
+	DEFINES += -DUSE_DSWIFI=1
+	LIBS += -ldswifi7
+	LIBDIRS += $(BLOCKSDS)/libs/dswifi
+endif
+ifeq ($(USE_MAXMOD),1)
+	DEFINES += -DUSE_MAXMOD=1
+	LIBS += -lmm7
+	LIBDIRS += $(BLOCKSDS)/libs/maxmod
+endif
+ifeq ($(USE_LIBXM7),1)
+	DEFINES += -DUSE_LIBXM7=1
+	LIBS += -lxm77
+	LIBDIRS += $(BLOCKSDS)/libs/libxm7
 endif
 
 # Source files
@@ -71,7 +97,7 @@ ARCH		:= -mthumb -mcpu=arm7tdmi
 
 SPECS		:= $(BLOCKSDS)/sys/crts/ds_arm7.specs
 
-WARNFLAGS	:= -Wall
+WARNFLAGS	:= -Wall -Wextra -Wpedantic
 
 ifeq ($(SOURCES_CPP),)
 	LD	:= $(CC)
@@ -86,15 +112,15 @@ INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path)) \
 
 LIBDIRSFLAGS	:= $(foreach path,$(LIBDIRS),-L$(path)/lib)
 
-ASFLAGS		+= -x assembler-with-cpp $(INCLUDEFLAGS) \
+ASFLAGS		+= -x assembler-with-cpp $(INCLUDEFLAGS) $(DEFINES) \
 		   $(ARCH) -ffunction-sections -fdata-sections \
 		   -specs=$(SPECS)
 
-CFLAGS		+= -std=gnu11 $(WARNFLAGS) $(INCLUDEFLAGS) \
+CFLAGS		+= -std=gnu11 $(WARNFLAGS) $(INCLUDEFLAGS) $(DEFINES) \
 		   $(ARCH) -O2 -ffunction-sections -fdata-sections \
 		   -specs=$(SPECS)
 
-CXXFLAGS	+= -std=gnu++14 $(WARNFLAGS) $(INCLUDEFLAGS) \
+CXXFLAGS	+= -std=gnu++14 $(WARNFLAGS) $(INCLUDEFLAGS) $(DEFINES) \
 		   $(ARCH) -O2 -ffunction-sections -fdata-sections \
 		   -fno-exceptions -fno-rtti \
 		   -specs=$(SPECS)
@@ -131,16 +157,6 @@ dump: $(DUMP)
 clean:
 	@echo "  CLEAN"
 	$(V)$(RM) $(ELF) $(DUMP) $(MAP) $(BUILDDIR)
-
-INSTALLDIR	?= /opt/blocksds/core/sys/default_arm7
-INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
-
-install: all
-	@echo "  INSTALL $(INSTALLDIR_ABS)"
-	@test $(INSTALLDIR_ABS)
-	$(V)$(RM) $(INSTALLDIR_ABS)
-	$(V)$(INSTALL) -d $(INSTALLDIR_ABS)
-	$(V)$(CP) -r arm7.elf COPYING $(INSTALLDIR_ABS)
 
 # Rules
 # -----
