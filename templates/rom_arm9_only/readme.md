@@ -2,8 +2,8 @@
 
 ## 1. Introduction
 
-This template contains code to build a project with custom ARM9 and the default
-ARM7 provided by BlocksDS SDK.
+This template contains code to build a project with custom ARM9 and an ARM7
+provided by BlocksDS SDK.
 
 Build it with the following command:
 
