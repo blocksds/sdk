@@ -7,6 +7,187 @@
 
 #include <nds.h>
 
+#define TEST_SIZE (1000)
+
+//
+
+
+ARM_CODE int32_t wiki_isqrt32(int32_t n) {
+    //source is the wikipedia article on methods of computing square roots
+    //https://en.m.wikipedia.org/wiki/Methods_of_computing_square_roots
+    //which gives the original source as  
+    //Square root by abacus algorithm, Martin Guy @ UKC, June 1985.
+    //From a book on programming abaci by Mr C. Woo.
+    assert( n >= 0);
+
+    // X_(n+1)
+    int32_t x = n;
+
+    // c_n
+    int32_t c = 0;
+
+    // d_n which starts at the highest power of four <= n
+    int32_t d = 1 << 30; // The second-to-top bit is set.
+                         // Same as ((unsigned) INT32_MAX + 1) / 2.
+    while (d > n) {
+        d >>= 2;
+    }
+
+    // for dₙ … d₀
+    while (d != 0) {
+        if (x >= c + d) {      // if X_(m+1) ≥ Y_m then a_m = 2^m
+            x -= c + d;        // X_m = X_(m+1) - Y_m
+            c = (c >> 1) + d;  // c_(m-1) = c_m/2 + d_m (a_m is 2^m)
+        }
+        else {
+            c >>= 1;           // c_(m-1) = c_m/2      (aₘ is 0)
+        }
+        d >>= 2;               // d_(m-1) = d_m/4
+    }
+    return c;                  // c_(-1)
+}
+
+
+ARM_CODE int32_t wiki_isqrt64(int64_t n) {
+    //source is the wikipedia article on methods of computing square roots
+    //which gives the source as  
+    //Square root by abacus algorithm, Martin Guy @ UKC, June 1985.
+    //From a book on programming abaci by Mr C. Woo.
+    //assert(("sqrt input should be non-negative", n > 0));
+
+    // X_(n+1)
+    int64_t x = n;
+
+    // c_n
+    int64_t c = 0;
+
+    // d_n which starts at the highest power of four <= n
+    int64_t d = ((uint64_t)1 )<< 62; // The second-to-top bit is set.
+                         // Same as ((unsigned) INT32_MAX + 1) / 2.
+    while (d > n) {
+        d >>= 2;
+    }
+
+    // for dₙ … d₀
+    while (d != 0) {
+        if (x >= c + d) {      // if X_(m+1) ≥ Y_m then a_m = 2^m
+            x -= c + d;        // X_m = X_(m+1) - Y_m
+            c = (c >> 1) + d;  // c_(m-1) = c_m/2 + d_m (a_m is 2^m)
+        }
+        else {
+            c >>= 1;           // c_(m-1) = c_m/2      (aₘ is 0)
+        }
+        d >>= 2;               // d_(m-1) = d_m/4
+    }
+    return c;                  // c_(-1)
+}
+
+
+
+
+
+
+ARM_CODE int32_t isqrt64(int64_t x) {
+    // https://rosettacode.org/wiki/Isqrt_(integer_square_root)_of_X
+    // these are slower than the wikipedia example
+    int64_t q = 1, r = 0;
+    while (q <= x) {
+        q <<= 2;
+    }
+    while (q > 1) {
+        int64_t t;
+        q >>= 2;
+        t = x - r - q;
+        r >>= 1;
+        if (t >= 0) {
+            x = t;
+            r += q;
+        }
+    }
+    return r;
+}
+
+
+
+ARM_CODE int32_t isqrt32(int32_t x) {
+    // https://rosettacode.org/wiki/Isqrt_(integer_square_root)_of_X
+    //slower than the wikipedia example
+    int32_t q = 1, r = 0;
+    while (q <= x) {
+        q <<= 2;
+    }
+    while (q > 1) {
+        int32_t t;
+        q >>= 2;
+        t = x - r - q;
+        r >>= 1;
+        if (t >= 0) {
+            x = t;
+            r += q;
+        }
+    }
+    return r;
+}
+
+
+
+
+
+static inline void slow_sqrt64(uint64_t a)
+{
+    // this starts a sqare root and also sets the mode beforehand
+    // any writes to CNT and PARAM registers will restart the square root
+    // so this will start one and then restart it when the second write happens
+    REG_SQRTCNT = SQRT_64;
+    REG_SQRT_PARAM = a;
+}
+
+
+static inline void fast_sqrt64(uint64_t a)
+{
+    //this writes the parameter and then immediately checks if it is already in the correct mode
+    //for applications that do not change the mode often this can 5-10% faster.
+    REG_SQRT_PARAM = a;
+
+    if ((REG_SQRTCNT & SQRT_MODE_MASK) != SQRT_64)
+        REG_SQRTCNT = SQRT_64;
+}
+
+
+static inline void slow_sqrt32(uint32_t a)
+{
+    // this starts a sqare root and also sets the mode beforehand
+    // any writes to CNT and PARAM registers will restart the square root
+    // so this will start one and then restart it when the second write happens
+    //which is not optimal
+    REG_SQRTCNT = SQRT_32;
+    REG_SQRT_PARAM_L = a;
+}
+
+
+
+static inline void fast_sqrt32(uint32_t a)
+{
+    //this writes the parameter and then immediately checks if it is already in the correct mode
+    //for applications that do not change the mode often this can 5-10% faster.
+    REG_SQRT_PARAM_L = a;
+
+    if ((REG_SQRTCNT & SQRT_MODE_MASK) != SQRT_32)
+        REG_SQRTCNT = SQRT_32;
+}
+
+static inline int32_t sqrt_result(void)
+{
+    while (REG_SQRTCNT & SQRT_BUSY);
+
+    return REG_SQRT_RESULT;
+}
+
+
+
+
+
+
 #define FLOAT_FORM(s, e, m)     (((s) << 31) | ((e) << 23) | ((m) << 0))
 
 // This is the encoding used in ARM CPUs
@@ -37,6 +218,11 @@ __attribute__((noreturn)) void wait_forever(void)
     }
 }
 
+volatile float vf;
+
+volatile uint32_t vu;
+
+
 int main(int argc, char **argv)
 {
     consoleDemoInit();
@@ -48,6 +234,8 @@ int main(int argc, char **argv)
     printf("sNaN: 0x%08lX\n", signaling_nan);
     printf("qNaN: 0x%08lX\n", quiet_nan);
     printf("\n");
+
+
 
     // Test for correctness
     // --------------------
@@ -207,7 +395,6 @@ int main(int argc, char **argv)
 
     // Profile code
     // ------------
-
     uint32_t sw_iterations = 0;
     uint32_t sw_time = 0;
     {
@@ -218,7 +405,7 @@ int main(int argc, char **argv)
             // Write to a volatile register to prevent the compiler from
             // optimizing out the operation (it doesn't have any side-effect, so
             // the compiler would probably remove it without the write).
-            TIMER3_CR = sqrtf(f);
+            vf = sqrtf(f);
             sw_time += cpuEndTiming();
         }
     }
@@ -230,13 +417,270 @@ int main(int argc, char **argv)
         {
             hw_iterations++;
             cpuStartTiming(0);
-            TIMER3_CR = hw_sqrtf(f);
+            vf = hw_sqrtf(f);
             hw_time += cpuEndTiming();
         }
     }
 
     printf("SW time: %lu (%lu per op)\n", sw_time, sw_time / sw_iterations);
     printf("HW time: %lu (%lu per op)\n", hw_time, hw_time / hw_iterations);
+
+
+
+    printf("SELECT: Test integer SQRT\n");
+
+    while (1)
+    {
+        swiWaitForVBlank();
+
+        scanKeys();
+
+        if (keysHeld() & KEY_SELECT)
+            break;
+    }
+
+
+
+        {
+                uint32_t sw_iterations = 0;
+                uint32_t sw_time = 0;
+
+                cpuStartTiming(0); // This uses timers 0 and 1
+
+                for (int i = 0; i< TEST_SIZE; ++i)
+                {
+                    sw_iterations++;
+                    // Write to a volatile register to prevent the compiler from
+                    // optimizing out the operation (it doesn't have any side-effect, so
+                    // the compiler would probably remove it without the write).
+                    vu = wiki_isqrt32(i<<16);
+
+                }
+
+                sw_time += cpuEndTiming();
+                printf("wiki soft sqrt32 time: %lu (%lu per op)\n", sw_time, sw_time / sw_iterations);
+
+          }
+
+
+        {
+                uint32_t sw_iterations = 0;
+                uint32_t sw_time = 0;
+
+                cpuStartTiming(0); // This uses timers 0 and 1
+
+                for (int i = 0; i< TEST_SIZE; ++i)
+                {
+                    sw_iterations++;
+                    // Write to a volatile register to prevent the compiler from
+                    // optimizing out the operation (it doesn't have any side-effect, so
+                    // the compiler would probably remove it without the write).
+                    vu = isqrt32(i<<16);
+
+                }
+
+                sw_time += cpuEndTiming();
+                printf("rosetta soft sqrt32 time: %lu (%lu per op)\n", sw_time, sw_time / sw_iterations);
+
+          }
+
+
+
+
+    {
+            uint32_t sw_iterations = 0;
+            uint32_t sw_time = 0;
+
+           cpuStartTiming(0); // This uses timers 0 and 1
+
+           for (uint32_t i = 0; i< TEST_SIZE; ++i)
+           {
+
+                sw_iterations++;
+                // Write to a volatile register to prevent the compiler from
+                // optimizing out the operation (it doesn't have any side-effect, so
+                // the compiler would probably remove it without the write).
+                slow_sqrt32(i);
+                vu = sqrt_result();
+
+           }
+
+           sw_time += cpuEndTiming();
+
+           printf("slow_sqrt32 time: %lu (%lu per op)\n", sw_time, sw_time / sw_iterations);
+    }
+
+
+    {
+
+            uint32_t sw_iterations = 0;
+            uint32_t sw_time = 0;
+
+           cpuStartTiming(0); // This uses timers 0 and 1
+
+           for (uint32_t i = 0; i< TEST_SIZE; ++i)
+           {
+                sw_iterations++;
+                // Write to a volatile register to prevent the compiler from
+                // optimizing out the operation (it doesn't have any side-effect, so
+                // the compiler would probably remove it without the write).
+                fast_sqrt32(i);
+                vu = sqrt_result();
+
+           }
+
+            sw_time += cpuEndTiming();
+
+            printf("Fast sqrt32 time: %lu (%lu per op)\n", sw_time, sw_time / sw_iterations);
+    }
+
+
+    {
+
+            uint32_t sw_iterations = 0;
+            uint32_t sw_time = 0;
+
+           cpuStartTiming(0); // This uses timers 0 and 1
+
+           for (uint32_t i = 0; i< TEST_SIZE; ++i)
+           {
+
+                sw_iterations++;
+                // Write to a volatile register to prevent the compiler from
+                // optimizing out the operation (it doesn't have any side-effect, so
+                // the compiler would probably remove it without the write).
+                sqrt32_asynch(i);
+                vu = sqrt32_result();
+
+           }
+
+            sw_time += cpuEndTiming();
+
+            printf("BlocksDS sqrt32 time: %lu (%lu per op)\n", sw_time, sw_time / sw_iterations);
+    }
+
+
+    {
+           uint32_t sw_iterations = 0;
+           uint32_t sw_time = 0;
+
+           cpuStartTiming(0); // This uses timers 0 and 1
+
+           for (uint32_t i = 0; i< TEST_SIZE; ++i)
+           {
+
+                sw_iterations++;
+                // Write to a volatile register to prevent the compiler from
+                // optimizing out the operation (it doesn't have any side-effect, so
+                // the compiler would probably remove it without the write).
+                vu = wiki_isqrt64( (((uint64_t )i)<<32)| i );
+
+           }
+
+            sw_time += cpuEndTiming();
+
+            printf("soft sqrt64 time: %lu (%lu per op)\n", sw_time, sw_time / sw_iterations);
+    }
+
+
+    {
+           uint32_t sw_iterations = 0;
+           uint32_t sw_time = 0;
+
+           cpuStartTiming(0); // This uses timers 0 and 1
+
+           for (uint32_t i = 0; i< TEST_SIZE; ++i)
+           {
+
+                sw_iterations++;
+                // Write to a volatile register to prevent the compiler from
+                // optimizing out the operation (it doesn't have any side-effect, so
+                // the compiler would probably remove it without the write).
+                vu = isqrt64( (((uint64_t )i)<<32)| i );
+
+           }
+
+            sw_time += cpuEndTiming();
+
+            printf("rosetta soft sqrt64 time: %lu (%lu per op)\n", sw_time, sw_time / sw_iterations);
+    }
+
+
+
+    {
+            uint32_t sw_iterations = 0;
+            uint32_t sw_time = 0;
+
+            cpuStartTiming(0); // This uses timers 0 and 1
+
+            for (uint32_t i = 0; i< TEST_SIZE; ++i)
+            {
+
+                sw_iterations++;
+                // Write to a volatile register to prevent the compiler from
+                // optimizing out the operation (it doesn't have any side-effect, so
+                // the compiler would probably remove it without the write).
+                slow_sqrt64( (((uint64_t )i)<<32)| i );
+                vu = sqrt64_result();
+
+
+             }
+
+            sw_time += cpuEndTiming();
+
+            printf("slow_sqrt64 time: %lu (%lu per op)\n", sw_time, sw_time / sw_iterations);
+    }
+    {
+            uint32_t sw_iterations = 0;
+            uint32_t sw_time = 0;
+
+            cpuStartTiming(0); // This uses timers 0 and 1
+
+            for (uint32_t i = 0; i< TEST_SIZE; ++i)
+            {
+
+                sw_iterations++;
+                // Write to a volatile register to prevent the compiler from
+                // optimizing out the operation (it doesn't have any side-effect, so
+                // the compiler would probably remove it without the write).
+                fast_sqrt64( (((uint64_t )i)<<32)| i );
+                vu = sqrt_result();
+
+
+            }
+
+            sw_time += cpuEndTiming();
+
+            printf("Fast sqrt64 time: %lu (%lu per op)\n", sw_time, sw_time / sw_iterations);
+    }
+
+
+
+
+    {
+            uint32_t sw_iterations = 0;
+            uint32_t sw_time = 0;
+
+            cpuStartTiming(0); // This uses timers 0 and 1
+
+            for (uint32_t i = 0; i< TEST_SIZE; ++i)
+            {
+
+                sw_iterations++;
+                // Write to a volatile register to prevent the compiler from
+                // optimizing out the operation (it doesn't have any side-effect, so
+                // the compiler would probably remove it without the write).
+                sqrt64_asynch( (((uint64_t )i)<<32)| i );
+                vu = sqrt64_result();
+
+
+            }
+
+            sw_time += cpuEndTiming();
+
+            printf("BlocksDS sqrt64 time: %lu (%lu per op)\n", sw_time, sw_time / sw_iterations);
+    }
+
 
     printf("\n");
 
