@@ -3,6 +3,49 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version 1.7.2 (2025-01-07)
+
+- libnds:
+
+  - Fix compilation error due to incorrect names of slot-2 rumble functions.
+  - Add debug assertions to check that `cothread_yield_irq()` is never called
+    with interrupts disabled (when `IME` is 0).
+  - Small optimization in `cothread_yield_irq()` wait loop on the ARM9.
+  - Add helper constants for `swiUnpackBits()`.
+  - Implement `getBatteryLevel()` on the ARM7 to mirror the ARM9 implementation.
+  - Add function to check if FatFs cache has been initialized or not.
+  - Fix code to read official cartridges from the ARM7. The previous code wasn't
+    able to read data when the destination was in the stack (DTCM isn't visible
+    by the ARM7).
+  - Add error checks on the ARM7 to crash if DLDI is used before being setup.
+  - Fix undefined C behaviour with some left shifts.
+  - Add missing system include to ARM7 console header.
+
+- SDK:
+
+  - ARM7:
+
+    - Restructure default ARM7 code to allow for multiple built-in ARM7 cores.
+      Add `ARM7ELF` to the default makefiles to easily select the ARM7 core.
+      Thanks, @GalaxyShard.
+
+  - Documentation:
+
+    - Document the new pre-built ARM7 cores.
+
+  - Examples:
+
+    - Use the new pre-built ARM7 core in LibXM7 examples instead of custom ARM7
+      cores.
+    - Update the BIOS bit unpack example to use the new constants introduced to
+      libnds.
+
+  - Other:
+
+    - In the makefiles of DSWiFi, LibXM7 and Maxmod use `ar` from the ARM
+      toolchain rather than the host to build the library.
+    - Improve scripts to release new SDK versions.
+
 ## Version 1.7.1 (2024-12-25)
 
 - libnds:
