@@ -18,8 +18,6 @@ GAME_SUBTITLE	?= Built with BlocksDS
 GAME_AUTHOR	?= github.com/blocksds/sdk
 GAME_ICON	?= $(BLOCKSDS)/sys/icon.bmp
 
-ARM7ELF		?= $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi_maxmod.elf
-
 # DLDI and internal SD slot of DSi
 # --------------------------------
 
@@ -46,6 +44,8 @@ DEFINES		?=
 
 # Libraries
 # ---------
+
+ARM7ELF		?= $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi_maxmod.elf
 
 LIBS		?= -lnds9
 LIBDIRS		+= $(BLOCKSDS)/libs/libnds
