@@ -7,7 +7,30 @@ weight: 0
 
 This is just a list of tips and notes about how to use BlocksDS.
 
-## 2. Section annotations in filenames
+## 2. Default ARM7 cores
+
+Most projects need some sort of audio and WiFi support on the ARM7, but they
+don't need any custom code. BlocksDS provides a few ARM7 cores with different
+combinations of libraries:
+
+- DSWiFi + Maxmod (Selected by default in all ARM9-only projects)
+- DSWiFi + LibXM7
+- Maxmod
+- LibXM7
+- DSWiFi
+
+They are all installed to `$BLOCKSDS/sys/arm7/main_core/*.elf`. If you want to
+select a different core, edit the path of `ARM7ELF` in your Makefile to select
+the right one.
+
+There is also `$BLOCKSDS/sys/default_arm7/arm7.elf`, which is kept there for
+backwards compatibility with older Makefiles. This is the same as the DSWiFi +
+Maxmod core.
+
+Remember to give credit correctly according to the libraries you have present in
+the ARM7, even if you aren't using them!
+
+## 3. Section annotations in filenames
 
 Some projects require specific functions or variables to be placed in specific
 memory regions. Some functions may also need to be compiled as ARM instead of
@@ -36,7 +59,7 @@ BEGIN_ASM_FUNC my_function itcm
     bx  lr
 ```
 
-## 3. Using alternative memory layouts
+## 4. Using alternative memory layouts
 
 ### ARM7 options
 

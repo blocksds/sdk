@@ -75,4 +75,11 @@ Mozilla Public License v2.0. No copyright notice required.
 
 This is used in any project that doesn't include source code for an ARM7 binary.
 
-Zlib license. No copyright notice required in binary distributions.
+The core itself is licensed under the Zlib license. No copyright notice required
+in binary distributions.
+
+However, the default ARM7 core uses DSWiFi and Maxmod, so you need to give
+credit according to their licenses. Other ARM7 cores use other combinations of
+libraries. For example, some use LibXM7 instead of Maxmod, and some don't use
+DSWiFi at all. You need to only give credit for the libraries present in your
+core.
