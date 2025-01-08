@@ -13,6 +13,9 @@ echo ""
 VERSION=$NEW_VERSION bash scripts/tag-version-all-repos.sh
 
 echo ""
+echo "[***] Run documentation workflow from here:"
+echo "[***] https://github.com/blocksds/docs/actions/workflows/build.yml"
+echo ""
 echo "[***] Update blocksds/packages repository manually"
 echo "[***] Wait for the pipeline to finish, then press ENTER"
 echo ""
@@ -27,11 +30,3 @@ cd docker
 
 VERSION=latest BRANCH=$NEW_VERSION bash build-docker.sh
 VERSION=$NEW_VERSION BRANCH=$NEW_VERSION bash build-docker.sh
-
-echo ""
-echo "[***] Building documentation"
-echo ""
-
-cd ../docs
-bash build-docs.sh
-bash publish-docs.sh
