@@ -18,6 +18,7 @@ combinations of libraries:
 - Maxmod
 - LibXM7
 - DSWiFi
+- Minimal (Only libnds)
 
 They are all installed to `$BLOCKSDS/sys/arm7/main_core/*.elf`. If you want to
 select a different core, edit the path of `ARM7ELF` in your Makefile to select
