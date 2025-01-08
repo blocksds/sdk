@@ -237,6 +237,23 @@ stuck on legacy, buggier and less reliable versions of toolchains. These issues
 also need to be resolved before updating to BlocksDS. Some known issues and their
 remedies are documented here; note that this list is not exhaustive.
 
+### Removed functions
+
+During its history, many libnds functions have been removed and replaced by new
+ones. For example, `glIdentity()` was removed in favour of `glLoadIdentity()`.
+Functions like `glTexLoadPal()` were removed and replaced by a completely new
+system.
+
+In some cases it may be useful to check the old code of libnds, the one
+that predates the devkitPro repository. It can help explain how removed
+functions used to work, for example. The original history can be obtained from
+its [project page in SourceForge](https://sourceforge.net/projects/ndslib/).
+This repository contains most of the history of the library before the creation
+of the devkitPro git repository.
+
+There is a also a version of the CVS repository converted to git
+[in this GitHub repository](https://github.com/AntonioND/ndslib-archive/).
+
 ### ARM7 changes
 
 In libnds, while the ARM9 initializes console hardware in a separate function
