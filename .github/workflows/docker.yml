@@ -1,0 +1,111 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Antonio Niño Díaz, 2025
+
+name: Docker images
+
+on:
+  workflow_dispatch:
+    inputs:
+      # - If "latest" is used, the current master branch will be built and
+      #   pushed as "{dev,slim}-latest". This is useful to create new
+      #   "latest" images in between releases of BlocksDS.
+      #
+      # - If a version tag is used, the specified tag will be built,
+      #   and it will be pushed as "{dev,slim}-{tag,latest}". This is useful to
+      #   build the Docker images after tagging a new version of BlocksDS.
+      new_version:
+        description: 'Tag of version to build or "latest"'
+        required: true
+        default: 'latest'
+  #repository_dispatch:
+  #  types: [build_docker_event]
+
+permissions:
+  contents: read
+
+jobs:
+
+  generate_images:
+    name: Generate images
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+
+    steps:
+      - name: Clone project
+        uses: actions/checkout@v4
+        with:
+          ref: 'master'
+          submodules: 'false'
+          fetch-depth: 0
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # dev images
+
+      - name: Build and push (dev, tag)
+        uses: docker/build-push-action@v6
+        if: ${{ github.event.inputs.new_version != 'latest' }}
+        with:
+          context: docker # Folder with the Dockerfile
+          target: blocksds-dev
+          build-args: |
+            BRANCH=${{ github.event.inputs.new_version }}
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            skylyrac/blocksds:dev-${{ github.event.inputs.new_version }}
+            skylyrac/blocksds:dev-latest
+
+      - name: Build and push (dev, latest)
+        uses: docker/build-push-action@v6
+        if: ${{ github.event.inputs.new_version == 'latest' }}
+        with:
+          context: docker # Folder with the Dockerfile
+          target: blocksds-dev
+          build-args: |
+            BRANCH=master
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            skylyrac/blocksds:dev-latest
+
+      # slim images
+
+      - name: Build and push (slim, tag)
+        uses: docker/build-push-action@v6
+        if: ${{ github.event.inputs.new_version != 'latest' }}
+        with:
+          context: docker # Folder with the Dockerfile
+          target: blocksds-slim
+          build-args: |
+            BRANCH=${{ github.event.inputs.new_version }}
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            skylyrac/blocksds:slim-${{ github.event.inputs.new_version }}
+            skylyrac/blocksds:slim-latest
+
+      - name: Build and push (slim, latest)
+        uses: docker/build-push-action@v6
+        if: ${{ github.event.inputs.new_version == 'latest' }}
+        with:
+          context: docker # Folder with the Dockerfile
+          target: blocksds-slim
+          build-args: |
+            BRANCH=master
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            skylyrac/blocksds:slim-latest
