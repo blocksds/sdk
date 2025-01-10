@@ -3,9 +3,17 @@
 # This script is used to generate the Docker images and upload them to Docker
 # Hub. It is only meant to be used by maintainers of the images.
 #
-# It is possible to overwrite the version by invoking the script like this:
+# Build master branch of the SDK and publish it as "latest":
 #
-#     VERSION=v0.1 sh build-docker.sh
+#     bash build-docker.sh
+#
+# Build tag "v1.6.3" of the SDK and publish it as "latest":
+#
+#     VERSION=latest BRANCH=v1.6.3 bash build-docker.sh
+#
+# Build tag "v1.6.3" of the SDK and publish it as "v1.6.3":
+#
+#     VERSION=v1.6.3 BRANCH=v1.6.3 bash build-docker.sh
 #
 # It is also possible to specify a branch or tag with, for example,
 # "BRANCH=v0.11.0". If VERSION is set to "latest" branch will default to
