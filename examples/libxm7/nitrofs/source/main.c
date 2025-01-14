@@ -143,6 +143,8 @@ void song_nitrofs_stop_and_free(void)
 
     free(module_manager);
     free(file_buffer);
+
+    file_buffer = NULL;
 }
 
 void song_nitrofs_load_and_play(const char *path)
