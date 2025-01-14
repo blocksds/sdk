@@ -55,10 +55,15 @@ If you want to use it in WSL, follow the instructions for Linux instead.
    environment variables to ensure that BlocksDS projects can be built. If you
    don't, the environment variable `BLOCKSDS` won't be set to the right path.
 
-1. Now you can try to build one of the BlocksDS examples. They are available at
-   path `/opt/wonderful/thirdparty/blocksds/core/examples/`. From there, for
-   example, go to `graphics_3d/volumetric_shadow` and type `make`. This will
-   generate a NDS ROM that you can try with an emulator or a flashcart.
+1. Now you can try to build one of the BlocksDS examples. From the shell, run:
+
+   ```bash
+   cd /opt/wonderful/thirdparty/blocksds/core/examples/
+   ```
+
+   From there, for example, go to `graphics_3d/volumetric_shadow` and type
+   `make`. This will generate a NDS ROM that you can try with an emulator or a
+   flashcart.
 
    You can also try one of the open source projects made with BlocksDS that are
    listed [here](https://github.com/blocksds/awesome-blocksds).
