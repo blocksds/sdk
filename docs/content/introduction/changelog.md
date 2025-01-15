@@ -3,6 +3,55 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version DEV (2025-XX-XX)
+
+- libnds:
+
+  - Use custom version of `swiSoftReset()` instead of instruction `swi #0` to
+    prevent crashes on DSi mode, where `swi #0` isn't implemented.
+  - `swi*()` functions that don't actually use `swi` instructions (because of
+    bugs in the implementation in the BIOS) have been documented.
+  - `nitroFSInit()` now sets `errno` correctly if there is no NitroFS filesystem
+    in the ROM.
+  - The DSi mode checks of `soundExtSetFrequencyTWL()` have been moved out of
+    `twl` sections so that this function can be safely called even in DS mode
+    (even if it doesn't have any effect).
+  - Calling `irqSet(flags, NULL)` or `irqSetAUX(flags, NULL)` is now safe.
+    Previously, this would cause `NULL` to be used as interrupt handler instead
+    of disabling the interrupt handler as expected.
+  - The type `IntFn` has been deprecated in favour of `VoidFn`. Even the
+    `interrupts.h` header didn't use `IntFn`, it was only used internally in
+    `interrupts.c`.
+
+- SDK:
+
+  - Docker:
+
+    - The Docker images are now built in a GitHub Actions pipeline in the SDK
+      repository instead of locally in the computers of the developers.
+
+  - Examples:
+
+    - In the LibXM7 example that uses NitroFS, set pointer to `NULL` when it
+      stops being used so that the program keeps track of whether songs are
+      playing or not. This fixes a crash when trying to start a song after
+      stopping a song.
+
+  - Documentation:
+
+    - Document the release process for new BlocksDS versions.
+    - Document the existence minimal ARM7 core.
+    - Remove references to scripts related to the release process used before
+      using GitHub Actions.
+    - Add link to `ndslib-archive` repository so that it can be used as
+      reference to understand old NDS homebrew source code.
+    - Clarify how to build examples in the setup instructions.
+
+  - Other:
+
+    - Use the right system header in `dldipatch` to fix a compiler warning.
+    - PAlib is now available as a pacman package: `blocksds-palib`
+
 ## Version 1.7.2 (2025-01-07)
 
 - libnds:
