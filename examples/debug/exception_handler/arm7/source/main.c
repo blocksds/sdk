@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     readUserSettings();
 
     // Stop LED blinking
-    ledBlink(0);
+    ledBlink(LED_ALWAYS_ON);
 
     // Using the calibration values read from the firmware with
     // readUserSettings(), calculate some internal values to convert raw
