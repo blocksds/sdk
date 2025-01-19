@@ -157,6 +157,15 @@ weight: -20
     - Add `asnprintf()` and `vasnprintf()`, matching newlib.
     - Fix memory leak in `asprintf()` and `vasprintf()`.
 
+  - ndstool:
+
+    - Add a default icon for new `.nds` files, preventing the generation of invalid
+      banners.
+    - Add support for extracting static `.nds` icons as `.bmp` files.
+    - Allow specifying `-bt` without a language ID.
+    - Fix the `-n` (latency) argument being a no-op, add corresponding `-n1` argument.
+    - Fix the `-fh` (fix header CRC) command not working with TWL-enhanced `.nds` files.
+
   - Docker:
 
     - curl has been added to both the development and slim images.
