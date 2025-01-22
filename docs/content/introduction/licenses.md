@@ -3,9 +3,18 @@ title: 'Licenses'
 weight: 0
 ---
 
-This document enumerates the components provided by BlocksDS and their licenses.
-This is useful if you want to release a binary built with BlocksDS and you
-aren't sure about what copyright notices you need to add.
+This document enumerates the components which are part of a BlocksDS toolchain
+and their licenses. This is useful if you want to release a binary built with
+BlocksDS and you aren't sure about what copyright notices you need to add.
+
+Note that this document **does not constitute legal advice**. It is a simplified
+enumeration of project licenses, not a grant of licensing terms in its own right.
+In no event will the BlocksDS project or its authors be held liable for any
+damages arising from errors or mistakes in this information.
+
+# Distributed by BlocksDS
+
+These libraries are present in the BlocksDS source tree.
 
 ## DSWiFi
 
@@ -46,30 +55,15 @@ ISC license. Copyright notice required:
 Copyright (c) 2008, Mukunda Johnson (mukunda@maxmod.org)
 ```
 
-## picolibc
-
-This is always used unless you tell the compiler to not link libc at all.
-
-Take a look at `COPYING.picolibc` in the `picolibc` repository
-[here](https://github.com/WonderfulToolchain/wf-picolibc/blob/wonderful/COPYING.picolibc).
-
-## libstdc++
-
-This is used in any C++ program or program that is linked with a C++ library.
-
-It uses license GPL 3.0 with an exception for any program compiled with GCC.
-That means that, as long as you use GCC as your compiler, you can license your
-compiled application under any license you want, or make it closed source. If
-you use any other compiler, you need to license your application under the
-GPL 3.0.
-
-https://www.gnu.org/licenses/gcc-exception-3.1.en.html
-
 ## crts
 
-This is always used unless the user selects different ones.
+This code is used in any program unless the user explicitly provides an alternative.
 
-Mozilla Public License v2.0. No copyright notice required.
+[Mozilla Public License v2.0](https://www.mozilla.org/en-US/MPL/2.0/).
+
+> You must inform recipients that the Source Code Form of the Covered Software is governed by the terms of this License, and how they can obtain a copy of this License.
+
+The source code for crts is available [here](https://github.com/blocksds/sdk/tree/master/sys/crts).
 
 ## default\_arm7
 
@@ -83,3 +77,50 @@ credit according to their licenses. Other ARM7 cores use other combinations of
 libraries. For example, some use LibXM7 instead of Maxmod, and some don't use
 DSWiFi at all. You need to only give credit for the libraries present in your
 core.
+
+# Distributed by the toolchain
+
+These libraries are not present in the BlocksDS source tree or packages,
+but are used when creating a BlocksDS application.
+
+## picolibc
+
+This library is always used unless you tell the compiler to not link libc at all.
+
+picolibc is a fork of newlib licensed under a variety of MIT- and BSD-like licenses.
+Citing [the README](https://github.com/picolibc/picolibc/blob/main/README.md):
+
+> While much of the code comes from Newlib, none of the GPL-related bits used to build
+> the library are left in the repository, so all of the source code uses BSD-like licenses,
+> a mixture of 2- and 3- clause BSD itself and a variety of other (mostly older) licenses
+> with similar terms.
+
+For more information, take a look at `COPYING.picolibc` in the `picolibc` repository
+[here](https://github.com/WonderfulToolchain/wf-picolibc/blob/wonderful/COPYING.picolibc).
+
+## libstdc++
+
+This library is used, by default, in any C++ program or program that is linked with
+a C++ library, unless you tell the compiler to not link default libraries
+at all.
+
+It uses the GPL 3.0 license with a runtime library exception. This exception
+allows libstdc++ to be used in non-GPL-licensed binaries without infringing
+on the license; citing the FAQ:
+
+> The special exception permits use of the library in proprietary applications.
+
+> [...] what restrictions are there on programs that use the library? None.
+
+One notable exception is using proprietary forks of GCC or proprietary tools
+which process GCC's intermediary code; however, neither of these actions are
+done by a standard BlocksDS configuration.
+
+For more information, read [the license terms of the exception](https://www.gnu.org/licenses/gcc-exception-3.1.en.html).
+
+## libgcc
+
+This library is used, by default, in any program compiled with GCC.
+
+It uses the GPL 3.0 with the same [runtime library exception](https://github.com/gcc-mirror/gcc/blob/master/COPYING.RUNTIME)
+as libstdc++.
