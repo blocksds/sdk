@@ -20,10 +20,12 @@ These libraries are present in the BlocksDS source tree.
 
 This is used in the default ARM7 binary.
 
-MIT license. Copyright notice required:
+MIT license. You must include the following copyright notice with your program,
+as well as the MIT license terms:
 
 ```
 Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org
+Copyright (C) 2025 Antonio Niño Díaz
 ```
 
 ## libnds
@@ -39,7 +41,8 @@ binary files either.
 
 This is only used if the user explicitly links it.
 
-MIT license. Copyright notice required:
+MIT license. You must include the following copyright notice with your program,
+as well as the MIT license terms:
 
 ```
 Copyright (C) 2018 sverx
@@ -49,7 +52,7 @@ Copyright (C) 2018 sverx
 
 This is used in the default ARM7 binary.
 
-ISC license. Copyright notice required:
+ISC license. You must include the following copyright notice with your program:
 
 ```
 Copyright (c) 2008, Mukunda Johnson (mukunda@maxmod.org)
