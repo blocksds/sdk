@@ -154,17 +154,23 @@ function(nds_create_rom target)
     if (NOT DEFINED NDSTOOL_NAME)
         set(NDSTOOL_NAME "${CMAKE_PROJECT_NAME}")
     endif()
-
     if (NOT DEFINED NDSTOOL_SUBTITLE AND DEFINED NDSTOOL_SUBTITLE1)
         set(NDSTOOL_SUBTITLE "${NDSTOOL_SUBTITLE1}")
-    elseif (NOT DEFINED NDSTOOL_SUBTITLE)
-        set(NDSTOOL_SUBTITLE "Built with BlocksDS")
     endif()
-
     if (NOT DEFINED NDSTOOL_AUTHOR AND DEFINED NDSTOOL_SUBTITLE2)
         set(NDSTOOL_AUTHOR "${NDSTOOL_SUBTITLE2}")
-    elseif (NOT DEFINED NDSTOOL_AUTHOR)
-        set(NDSTOOL_AUTHOR "github.com/blocksds/sdk")
+    endif()
+
+    if (NOT DEFINED NDSTOOL_SUBTITLE AND NOT DEFINED NDSTOOL_AUTHOR)
+        set(NDSTOOL_FULL_TITLE "${NDSTOOL_NAME}\;Built with BlocksDS\;github.com/blocksds/sdk")
+    else()
+        set(NDSTOOL_FULL_TITLE "${NDSTOOL_NAME}")
+        if(DEFINED NDSTOOL_SUBTITLE)
+            set(NDSTOOL_FULL_TITLE "${NDSTOOL_FULL_TITLE}\;${NDSTOOL_SUBTITLE}")
+        endif()
+        if(DEFINED NDSTOOL_AUTHOR)
+            set(NDSTOOL_FULL_TITLE "${NDSTOOL_FULL_TITLE}\;${NDSTOOL_AUTHOR}")
+        endif()
     endif()
 
 
@@ -194,7 +200,7 @@ function(nds_create_rom target)
         -9 "$<TARGET_FILE:${target}>"
         -7 "${NDSTOOL_ARM7}"
         -b "${NDSTOOL_ICON}"
-        "${NDSTOOL_NAME}\;${NDSTOOL_SUBTITLE}\;${NDSTOOL_AUTHOR}")
+        "${NDSTOOL_FULL_TITLE}")
 
     if (DEFINED NDSTOOL_FLAGS)
         list(APPEND NDSTOOL_ARGS ${NDSTOOL_FLAGS})
