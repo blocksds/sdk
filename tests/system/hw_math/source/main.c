@@ -527,7 +527,7 @@ int main(int argc, char **argv)
                     errors+=1;
                 }
             }
-            printf("found %lu errors \n" , errors);
+            printf("found %llu errors \n" , errors);
         }
     }
 
