@@ -512,7 +512,7 @@ int main(int argc, char **argv)
     }
 
     if (bruteforce){
-        printf("Testing asm sqrt correctness.");
+        printf("Testing asm sqrt correctness. \n");
         {
             uint64_t errors=0;
             for (uint64_t i = 0; i<  ((uint64_t)1u<<32  ); ++i)
