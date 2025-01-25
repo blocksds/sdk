@@ -492,8 +492,8 @@ int main(int argc, char **argv)
     }
 
     printf("SELECT: Brute force test all possible 32-bit integer inputs\n");
-    printf("This may take several hours.");
-    printf("START: Skip test\n");
+    printf("This may take several hours. \n");
+    printf("START: Skip test. A: Run test.\n");
     bruteforce=0;
     while (1)
     {
@@ -501,7 +501,7 @@ int main(int argc, char **argv)
 
         scanKeys();
 
-        if (keysHeld() & KEY_SELECT)
+        if (keysHeld() & KEY_A)
             {
             bruteforce=1;
             break;
