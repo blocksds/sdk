@@ -325,6 +325,7 @@ int main(int argc, char **argv)
         printf("HW time: %lu (%lu per op)\n", hw_time, hw_time / hw_iterations);
     
     }
+
     printf("SELECT: Test inverse SQRT\n");
     while (1)
     {
@@ -335,6 +336,56 @@ int main(int argc, char **argv)
         if (keysHeld() & KEY_SELECT)
             break;
     }
+
+    {
+        printf("Testing Inf\n");
+        fint val;
+        val.u = positive_inf;
+
+        fint sw, hw;
+        sw.f = 1.0f/sqrtf(val.f);
+        hw.f = hw_rsqrtf_asm(val.f);
+
+        uint32_t sw_int = sw.u;
+        uint32_t hw_int = hw.u;
+
+        if (sw_int != hw_int)
+        {
+            printf("sqrt(0x%08lX)\n", val.u);
+            printf("  got:      0x%08lX\n", hw_int);
+            printf("  expected: 0x%08lX\n", sw_int);
+            printf("\n");
+        }
+
+
+
+    }
+
+
+    {
+        printf("Testing NaN\n");
+        fint val;
+        val.u = quiet_nan;
+
+        fint sw, hw;
+        sw.f = 1.0f/sqrtf(val.f);
+        hw.f = hw_rsqrtf_asm(val.f);
+
+        uint32_t sw_int = sw.u;
+        uint32_t hw_int = hw.u;
+
+        if (sw_int != hw_int)
+        {
+            printf("sqrt(0x%08lX)\n", val.u);
+            printf("  got:      0x%08lX\n", hw_int);
+            printf("  expected: 0x%08lX\n", sw_int);
+            printf("\n");
+        }
+
+
+
+    }
+
 
     {
         uint32_t asm_rsqrt_iterations = 0;
@@ -367,7 +418,7 @@ int main(int argc, char **argv)
     }
 
     {
-        printf("Testing sqrt for correctness \n");
+        printf("Testing inverse sqrt for correctness \n");
         uint64_t iterations = 0;
         for (float f = (FLT_MIN * 1.1); f < (FLT_MAX * 0.9); f *= 1.001)
         {
@@ -493,7 +544,7 @@ int main(int argc, char **argv)
 
     printf("SELECT: Brute force test all possible 32-bit integer inputs\n");
     printf("This may take several hours. \n");
-    printf("START: Skip test. A: Run test.\n");
+    printf("A: Run test. B: Skip test. \n");
     bruteforce=0;
     while (1)
     {
@@ -506,7 +557,7 @@ int main(int argc, char **argv)
             bruteforce=1;
             break;
             }
-        if (keysHeld() & KEY_START)
+        if (keysHeld() & KEY_B)
             break;
 
     }
