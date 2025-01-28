@@ -158,12 +158,16 @@ int main(int argc, char *argv[])
             password[0] = '\0';
             scanf("%s", password);
 
-            if (strlen(password) == 13)
+            size_t len = strlen(password);
+            if (password[len - 1] == '\n')
+                password[len - 1] = '\0';
+
+            if (len == 13)
                 wepmode = WEPMODE_128BIT;
-            else if (strlen(password) == 5)
+            else if (len == 5)
                 wepmode = WEPMODE_40BIT;
             else
-                printf("Invalid key length!\n");
+                printf("Invalid key length! [%s] %zu\n", password, len);
 
             if (wepmode != WEPMODE_NONE)
                 break;
