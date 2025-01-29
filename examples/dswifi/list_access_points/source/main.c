@@ -69,8 +69,8 @@ void access_point_selection_menu(void)
             else if (ap.flags & WFLAG_APDATA_WEP)
                 security = "WEP";
 
-            printf("%s %.28s\n", i == chosen ? "->" : "  ",  ap.ssid);
-            printf("   Key: %s | Ch: %d | RSSI: %u\n", security, ap.channel, ap.rssi);
+            printf("%s [%.26s]\n", i == chosen ? "->" : "  ",  ap.ssid);
+            printf("   Key %s | Ch %d | RSSI %u\n", security, ap.channel, ap.rssi);
             printf("\n");
 
             if (i == chosen)
@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
     if (host)
         printf("IP: %s\n", inet_ntoa(*(struct in_addr *)host->h_addr_list[0]));
     else
-        printf("Could not IP\n");
+        printf("Could not get IP\n");
 
     if (Wifi_DisconnectAP() != 0)
         printf("Error: Wifi_DisconnectAP()\n");
