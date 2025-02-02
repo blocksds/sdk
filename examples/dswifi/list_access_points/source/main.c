@@ -63,14 +63,15 @@ void access_point_selection_menu(void)
             Wifi_AccessPoint ap;
             Wifi_GetAPData(i, &ap);
 
-            const char *security = "No ";
+            const char *security = "Open";
             if (ap.flags & WFLAG_APDATA_WPA)
-                security = "WPA";
+                security = "WPA ";
             else if (ap.flags & WFLAG_APDATA_WEP)
-                security = "WEP";
+                security = "WEP ";
 
-            printf("%s [%.26s]\n", i == chosen ? "->" : "  ",  ap.ssid);
-            printf("   Key %s | Ch %d | RSSI %u\n", security, ap.channel, ap.rssi);
+            printf("%s [%.24s] %s\n", i == chosen ? "->" : "  ", ap.ssid,
+                ap.flags & WFLAG_APDATA_ADHOC ? "*" : "");
+            printf("   %s | Ch %2d | RSSI %u\n", security, ap.channel, ap.rssi);
             printf("\n");
 
             if (i == chosen)
