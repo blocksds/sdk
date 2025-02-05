@@ -115,8 +115,7 @@ int main(int argc, char *argv[])
 
     consoleSelect(&topScreen);
 
-    printf("Connecting to WiFi using\n");
-    printf("firmware settings...\n");
+    printf("Initializing WiFi...\n");
 
     if (!Wifi_InitDefault(INIT_ONLY))
     {
@@ -125,6 +124,7 @@ int main(int argc, char *argv[])
     }
 
     printf("WiFi initialized!\n");
+    printf("\n");
 
     consoleSelect(&bottomScreen);
 
