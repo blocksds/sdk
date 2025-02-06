@@ -57,7 +57,7 @@ void getHttp(const char *url, const char *path)
     if (connect(my_socket, (struct sockaddr *)&sain, sizeof(sain)) == -1)
     {
         perror("connect()");
-        close(my_socket);
+        closesocket(my_socket);
         return;
     }
 
@@ -67,7 +67,7 @@ void getHttp(const char *url, const char *path)
     if (send(my_socket, request_text, strlen(request_text), 0) == -1)
     {
         perror("send()");
-        close(my_socket);
+        closesocket(my_socket);
         return;
     }
 
@@ -82,7 +82,7 @@ void getHttp(const char *url, const char *path)
     if (rc < 0)
     {
         perror("ioctl()");
-        close(my_socket);
+        closesocket(my_socket);
         return;
     }
 
