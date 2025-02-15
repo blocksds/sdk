@@ -12,8 +12,8 @@ and enhancements to the SDK which are not listed here.
 
 ## Upgrading to BlocksDS 1.7.0
 
-* `glColorSubTableEXT()` now supports allocating empty palettes by passing a
-  NULL pointer in the `table` argument. This is a small compatibility break
+* `glColorTableEXT()` now supports allocating empty palettes by passing a
+  `NULL` pointer in the `table` argument. This is a small compatibility break
   because this used to free the palette. However, the old behaviour stays as
   long as `width` is 0. In most cases, `table` would be NULL and `width` would
   be 0, so this change is only a problem in unusual cases.
