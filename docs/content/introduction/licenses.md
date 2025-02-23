@@ -25,6 +25,7 @@ as well as the MIT license terms:
 
 ```
 Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org
+Copyright (c) 2006-2018 Dave Murphy (WinterMute)
 Copyright (C) 2025 Antonio Niño Díaz
 ```
 
