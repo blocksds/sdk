@@ -23,11 +23,18 @@ DEFINES		:=
 # Libraries
 # ---------
 
+# When set to 1, it will pick debug versions of libraries that provide them
+DEBUG_LIBS ?= 0
+
 USE_DSWIFI ?= 0
 USE_MAXMOD ?= 0
 USE_LIBXM7 ?= 0
 
-LIBS		:= -lnds7
+ifeq ($(DEBUG_LIBS),1)
+    LIBS		:= -lnds7d
+else
+    LIBS		:= -lnds7
+endif
 LIBDIRS		:= $(BLOCKSDS)/libs/libnds
 
 # Build artifacts
@@ -69,7 +76,11 @@ endif
 
 ifeq ($(USE_DSWIFI),1)
     DEFINES += -DUSE_DSWIFI=1
-    LIBS += -ldswifi7
+    ifeq ($(DEBUG_LIBS),1)
+        LIBS += -ldswifi7d
+    else
+        LIBS += -ldswifi7
+    endif
     LIBDIRS += $(BLOCKSDS)/libs/dswifi
 endif
 ifeq ($(USE_MAXMOD),1)

@@ -35,33 +35,62 @@ clean:
 minimal:
 	@+$(MAKE) -f Makefile.generic --no-print-directory \
 		  NAME=minimal
+	@+$(MAKE) -f Makefile.generic --no-print-directory \
+		  NAME=minimal_debug \
+		  DEBUG_LIBS=1
 
 dswifi:
 	@+$(MAKE) -f Makefile.generic --no-print-directory \
 		  NAME=dswifi \
 		  USE_DSWIFI=1
+	@+$(MAKE) -f Makefile.generic --no-print-directory \
+		  NAME=dswifi_debug \
+		  USE_DSWIFI=1 \
+		  DEBUG_LIBS=1
 
 maxmod:
 	@+$(MAKE) -f Makefile.generic --no-print-directory \
 		  NAME=maxmod \
 		  USE_MAXMOD=1
+	@+$(MAKE) -f Makefile.generic --no-print-directory \
+		  NAME=maxmod_debug \
+		  USE_MAXMOD=1 \
+		  DEBUG_LIBS=1
+
 
 libxm7:
 	@+$(MAKE) -f Makefile.generic --no-print-directory \
 		  NAME=libxm7 \
 		  USE_LIBXM7=1
+	@+$(MAKE) -f Makefile.generic --no-print-directory \
+		  NAME=libxm7_debug \
+		  USE_LIBXM7=1 \
+		  DEBUG_LIBS=1
+
 
 dswifi_maxmod:
 	@+$(MAKE) -f Makefile.generic --no-print-directory \
 		  NAME=dswifi_maxmod \
 		  USE_DSWIFI=1 \
 		  USE_MAXMOD=1
+	@+$(MAKE) -f Makefile.generic --no-print-directory \
+		  NAME=dswifi_maxmod_debug \
+		  USE_DSWIFI=1 \
+		  USE_MAXMOD=1 \
+		  DEBUG_LIBS=1
+
 
 dswifi_libxm7:
 	@+$(MAKE) -f Makefile.generic --no-print-directory \
 		  NAME=dswifi_libxm7 \
 		  USE_DSWIFI=1 \
 		  USE_LIBXM7=1
+	@+$(MAKE) -f Makefile.generic --no-print-directory \
+		  NAME=dswifi_libxm7_debug \
+		  USE_DSWIFI=1 \
+		  USE_LIBXM7=1 \
+		  DEBUG_LIBS=1
+
 
 INSTALLDIR	?= /opt/blocksds/core/sys/arm7/main_core
 INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
