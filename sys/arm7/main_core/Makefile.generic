@@ -35,11 +35,11 @@ LIBDIRS		:= $(BLOCKSDS)/libs/libnds
 
 NAME		?= arm7
 ifeq ($(NAME),arm7)
-	BUILDDIR 	:= build
-	ELF 		:= arm7.elf
+    BUILDDIR 	:= build
+    ELF 		:= arm7.elf
 else
-	BUILDDIR	:= build/$(NAME)
-	ELF		:= arm7_$(NAME).elf
+    BUILDDIR	:= build/$(NAME)
+    ELF		:= arm7_$(NAME).elf
 endif
 DUMP		:= $(BUILDDIR)/$(NAME).dump
 MAP		:= $(BUILDDIR)/$(NAME).map
@@ -68,19 +68,19 @@ endif
 # -----------------------
 
 ifeq ($(USE_DSWIFI),1)
-	DEFINES += -DUSE_DSWIFI=1
-	LIBS += -ldswifi7
-	LIBDIRS += $(BLOCKSDS)/libs/dswifi
+    DEFINES += -DUSE_DSWIFI=1
+    LIBS += -ldswifi7
+    LIBDIRS += $(BLOCKSDS)/libs/dswifi
 endif
 ifeq ($(USE_MAXMOD),1)
-	DEFINES += -DUSE_MAXMOD=1
-	LIBS += -lmm7
-	LIBDIRS += $(BLOCKSDS)/libs/maxmod
+    DEFINES += -DUSE_MAXMOD=1
+    LIBS += -lmm7
+    LIBDIRS += $(BLOCKSDS)/libs/maxmod
 endif
 ifeq ($(USE_LIBXM7),1)
-	DEFINES += -DUSE_LIBXM7=1
-	LIBS += -lxm77
-	LIBDIRS += $(BLOCKSDS)/libs/libxm7
+    DEFINES += -DUSE_LIBXM7=1
+    LIBS += -lxm77
+    LIBDIRS += $(BLOCKSDS)/libs/libxm7
 endif
 
 # Source files
@@ -100,11 +100,11 @@ SPECS		:= $(BLOCKSDS)/sys/crts/ds_arm7.specs
 WARNFLAGS	:= -Wall -Wextra -Wpedantic
 
 ifeq ($(SOURCES_CPP),)
-	LD	:= $(CC)
-	LIBS	+= -lc
+    LD	:= $(CC)
+    LIBS	+= -lc
 else
-	LD	:= $(CXX)
-	LIBS	+= -lstdc++ -lc
+    LD	:= $(CXX)
+    LIBS	+= -lstdc++ -lc
 endif
 
 INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path)) \
