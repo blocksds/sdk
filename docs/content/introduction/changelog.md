@@ -83,16 +83,26 @@ weight: -20
   - Examples:
 
     - New DSWifi examples have been added, including local multiplayer examples.
+    - The WEP password input in the AP list example has been improved. The
+      output of the example has also been improved.
+    - The "get website" example now uses socket-related functions the way DSWifi
+      expects them (`closesocket()` instead of `close()`).
+    - The templates and examples now use the new LED defines.
 
   - Documentation:
 
     - The documentation of DSWifi now explains how to use the Internet and local
       multiplayer modes, as well as how the library works internally.
+    - The licensing requirements of some libraries (picolibc, libstdc++) has
+      been clarified by @asiekierka.
 
   - Other:
 
     - New debug ARM7 cores have been added. They use the debug versions of
       libnds and DSWifi.
+    - The CMake build system now uses a linker group for the standard libraries
+      to prevent linking errors due to circular dependencies. Also, banner title
+      formation has been improved.
 
 ## Version 1.7.3 (2025-01-15)
 
