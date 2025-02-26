@@ -3,6 +3,97 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version 1.8.0 (2025-02-XX)
+
+- libnds:
+
+  - videoGL now tracks the number of textures using a palettes correctly.
+    Previously, palettes would be deleted even when there were textures using
+    them. @sillysagiri
+  - `scanf()` has been fixed so that it doesn't record modifier keys on the
+    output string.
+  - Fix `readFirmware()` and `writeFirmware()` on the ARM9. They would silently
+    fail when the source or destination buffer wasn't in main RAM (for example,
+    when the buffer was in the stack in DTCM) because the ARM7 can't access
+    other memory regions. Now, the functions will allocate temporary buffers to
+    transfer data between the ARM7 and ARM9. Also, now they use a mutex so that
+    they are thread-safe.
+  - FatFs has been updated to version R0.15ap1.
+  - The values used by `ledBlink()` have been documented as an enum.
+  - There's a new define for the WiFi hardware in `REG_POWERCNT`.
+  - There are new definitions for GRF files to specify background types.
+  - `consoleVprintf()` is now exposed on the ARM7.
+  - In the GRF struct there used to be a byte of padding in the struct that
+    wasn't documented. It has now been explicitly documented as padding.
+  - A helper has been added to check if a buffer is inside of main RAM.
+  - Some unused internal FIFO command names have been removed.
+
+- DSWifi:
+
+  - Local multiplayer support has been added (NiFi). One DS acts as a
+    multiplayer host (Access Point) and the other consoles connect to it.
+  - The old operation mode has been renamed "Internet mode". It is possible to
+    switch between Internet and local multiplayer modes depending on the needs
+    of the application.
+  - Scan mode now works differently. In Internet mode it shows all Access
+    Points. In local multiplayer mode it only lists multiplayer hosts, in
+    Internet mode the behaviour remains unchanged.
+  - CMD/REPLY packet transmit support has been added to the library. This is a
+    way to transfer data between a host and many clients more efficiently.
+    However, regular data packets can still be sent between multiplayer clients
+    and the host if the CMD/REPLY system isn't adequate for the application.
+  - Beacon packet transmission is now properly supported and documented. The
+    packets advertise the number of players currently connected to a host DS and
+    whether the host accepts new connections or not. It also shows the game ID
+    defined by the user, which is used to identify the right AP for a game.
+  - When connecting to an Access Point, DSWifi is now honest about the transfer
+    rates supported by the DS. If the AP rejects the connection, it will retry
+    with all the rates defined in the IEEE 802.11b standard (even though only
+    the first 2 out of the 4 are supported), which helps the AP accept the DS.
+  - Many new multiplayer-related functions have been added to the library.
+  - New documentation has been added, which explains how the library works
+    internally, and how to use DSWifi in Internet and local multiplayer mode.
+  - Huge refactor of ARM7 code and the corresponding ARM9 code that communicates
+    with the ARM7. sgIP has been largely untouched. The code has been split into
+    several files, and there is now a clearer split between sgIP and the rest of
+    DSWifi.
+  - The helper functions to read the firmware and to set the LED blink status
+    have been removed. Now DSWifi calls the libnds functions instead.
+  - Functions have been documented, IEEE 802.11 frame formats have been
+    documented.
+  - There are new defines for hardware registers based on GBATEK, and new
+    defines for the fields in the hardware registers that are in used. The
+    [melonDS forums](https://melonds.kuribo64.net/board/thread.php?id=34) have a
+    lot of information that has also been used as source when documenting
+    register fields (like `W_RXFILTER` and `W_RXFILTER2`).
+  - Debug messages have been added to the ARM7 code of the library. They are
+    only available in debug builds.
+  - WEP password usage has been documented. It wasn't clear how to use Hex/ASCII
+    passwords.
+  - Some unused fields of the `WifiData` struct have been removed.
+  - Private definitions have been removed from public headers.
+
+- grit:
+
+  - Update GRF export code to use the new background type definitions proposed
+    by @Garhoogin in [ptexconv](https://github.com/Garhoogin/ptexconv/issues/3).
+
+- SDK
+
+  - Examples:
+
+    - New DSWifi examples have been added, including local multiplayer examples.
+
+  - Documentation:
+
+    - The documentation of DSWifi now explains how to use the Internet and local
+      multiplayer modes, as well as how the library works internally.
+
+  - Other:
+
+    - New debug ARM7 cores have been added. They use the debug versions of
+      libnds and DSWifi.
+
 ## Version 1.7.3 (2025-01-15)
 
 - libnds:
