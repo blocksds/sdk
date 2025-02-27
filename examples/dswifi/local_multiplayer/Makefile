@@ -7,12 +7,12 @@ BLOCKSDS	?= /opt/blocksds/core
 # User config
 
 ifeq ($(DEBUG),1)
-    NAME	:= dswifi_full_ap_demo_debug
+    NAME	:= dswifi_local_multiplayer_debug
 else
-    NAME	:= dswifi_full_ap_demo
+    NAME	:= dswifi_local_multiplayer
 endif
 
-GAME_TITLE	:= Full AP demo
+GAME_TITLE	:= Local multiplayer demo
 GAME_SUBTITLE	:= DSWiFi
 
 # Libraries

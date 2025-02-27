@@ -7,3 +7,4 @@ This folder contains examples of how to use DSWiFi.
 - `full_ap_demo`: Shows how to do everything related to APs in an interactive way.
 - `full_ap_demo_debug`: How to show DSWifi debug messages with `full_ap_demo`.
 - `list_access_points`: It lists all visible APs and lets you connect to them.
+- `local_multiplayer`: Simple demo of local multiplayer.
