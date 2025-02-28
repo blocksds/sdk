@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version 1.8.0 (2025-02-XX)
+## Version 1.8.0 (2025-02-28)
 
 - libnds:
 
@@ -82,7 +82,9 @@ weight: -20
 
   - Examples:
 
-    - New DSWifi examples have been added, including local multiplayer examples.
+    - New DSWifi examples have been added, including local multiplayer examples
+      that show how to send CMD/REPLY packets and regular data frames of
+      arbitrary sizes.
     - The WEP password input in the AP list example has been improved. The
       output of the example has also been improved.
     - The "get website" example now uses socket-related functions the way DSWifi
