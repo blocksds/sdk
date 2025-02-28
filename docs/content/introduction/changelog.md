@@ -64,8 +64,8 @@ weight: -20
   - There are new defines for hardware registers based on GBATEK, and new
     defines for the fields in the hardware registers that are in used. The
     [melonDS forums](https://melonds.kuribo64.net/board/thread.php?id=34) have a
-    lot of information that has also been used as source when documenting
-    register fields (like `W_RXFILTER` and `W_RXFILTER2`).
+    lot of information (by @Arisotura) that has also been used as source when
+    documenting register fields (like `W_RXFILTER` and `W_RXFILTER2`).
   - Debug messages have been added to the ARM7 code of the library. They are
     only available in debug builds.
   - WEP password usage has been documented. It wasn't clear how to use Hex/ASCII
