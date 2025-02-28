@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2024-2025
+// SPDX-FileContributor: Antonio Niño Díaz, 2025
 
-// This example shows how to use CMD/REPLY commands in an application using
-// local multiplayer communications.
+// This example shows how to combine CMD/REPLY multiplayer packets alongisde
+// regular data packets of arbitrary size.
 
 #include <stdio.h>
 
@@ -22,155 +22,112 @@ static PrintConsole bottomScreen;
 
 static Wifi_AccessPoint AccessPoint;
 
-// Global game state
-// =================
-
-#define MAX_CLIENTS 7
-
 typedef struct {
-    u8 x, y;
-} player_info;
-
-typedef struct {
-    // This is set to 1 when the game has started, it's kept as 0 while the host
-    // waits for new clients to be connected.
-    u8 has_started;
-
-    // Bit 0 is set to 1 when the host is connected (always). Bits 1 to 7 are
-    // set to 1 if a client with that AID is connected. The maximum number of
-    // clients allowed is MAX_CLIENTS (7).
-    u8 player_mask;
-
-    // Information of all Clients plus host
-    player_info player[WIFI_MAX_MULTIPLAYER_CLIENTS + 1];
-} game_info;
-
-volatile game_info game;
-
-void ResetGameState(void)
-{
-    game.has_started = 0;
-    game.player_mask = BIT(0); // The host is always enabled
-
-    for (int i = 0; i < WIFI_MAX_MULTIPLAYER_CLIENTS + 1; i++)
-    {
-        game.player[i].x = 255;
-        game.player[i].y = 255;
-    }
-}
-
-void RenderGameState(void)
-{
-    for (int i = 0; i < WIFI_MAX_MULTIPLAYER_CLIENTS + 1; i++)
-    {
-        if (!(game.player_mask & BIT(i)))
-            continue;
-
-        if ((game.player[i].x == 255) && (game.player[i].y == 255))
-            continue;
-
-        consoleSetCursor(NULL, game.player[i].x / 8, game.player[i].y / 8);
-        printf("%d", i);
-    }
-}
-
-// Host to client packets
-// ======================
-
-typedef struct {
-    u8 has_started;
-    u8 player_mask;
-    player_info player[WIFI_MAX_MULTIPLAYER_CLIENTS + 1];
+    u32 count;
 } pkt_host_to_client;
 
-void SendHostStateToClients(void)
+typedef struct {
+    u32 uncount;
+} pkt_client_to_host;
+
+pkt_host_to_client host_packet;
+
+void SendMultiplayerCmdFrame(void)
 {
-    pkt_host_to_client host_packet;
-
-    host_packet.has_started = game.has_started;
-    host_packet.player_mask = game.player_mask;
-
-    for (int i = 0; i < WIFI_MAX_MULTIPLAYER_CLIENTS + 1; i++)
-    {
-        if (game.player_mask & BIT(i))
-        {
-            host_packet.player[i].x = game.player[i].x;
-            host_packet.player[i].y = game.player[i].y;
-        }
-        else
-        {
-            host_packet.player[i].x = 255;
-            host_packet.player[i].y = 255;
-        }
-    }
-
+    host_packet.count++;
     Wifi_MultiplayerHostCmdTxFrame(&host_packet, sizeof(host_packet));
+}
+
+pkt_client_to_host client_packet;
+
+void PrepareMultiplayerReplyFrame(void)
+{
+    client_packet.uncount--;
+    Wifi_MultiplayerClientReplyTxFrame(&client_packet, sizeof(client_packet));
 }
 
 void FromHostPacketHandler(Wifi_MPPacketType type, int base, int len)
 {
-    if (len < sizeof(pkt_host_to_client))
+    consoleSelect(&topScreen);
+
+    printf("[H] ");
+
+    if (type == WIFI_MPTYPE_CMD)
     {
-        // TODO: This shouldn't have happened!
-        return;
+        printf("C: ");
+
+        pkt_host_to_client packet;
+
+        if (len == sizeof(packet))
+        {
+            Wifi_RxRawReadPacket(base, sizeof(packet), &packet);
+            printf("%08X", (unsigned int)packet.count);
+        }
+    }
+    else if (type == WIFI_MPTYPE_DATA)
+    {
+        printf("D: ");
+
+        for (int i = 0; i < len; i += 2)
+        {
+            u16 data;
+            Wifi_RxRawReadPacket(base + i, sizeof(data), &data);
+
+            printf("%c", data & 0xFF);
+            if ((len - i) > 1)
+                printf("%c", (data >> 8) & 0xFF);
+        }
     }
 
-    if (type != WIFI_MPTYPE_CMD)
-        return;
+    printf("\n");
 
-    // Save information received from the client into the global state struct
-    pkt_host_to_client packet;
-    Wifi_RxRawReadPacket(base, sizeof(packet), (void *)&packet);
-
-    for (int i = 0; i < WIFI_MAX_MULTIPLAYER_CLIENTS + 1; i++)
-    {
-        game.player[i].x = packet.player[i].x;
-        game.player[i].y = packet.player[i].y;
-    }
-
-    game.player_mask = packet.player_mask;
-    game.has_started = packet.has_started;
+    consoleSelect(&bottomScreen);
 }
-
-// Client to host packets
-// ======================
-
-typedef struct {
-    u8 x, y;
-} pkt_client_to_host;
 
 void FromClientPacketHandler(Wifi_MPPacketType type, int aid, int base, int len)
 {
-    if (len < sizeof(pkt_client_to_host))
+    consoleSelect(&topScreen);
+
+    printf("[C %d] ", aid);
+
+    if (type == WIFI_MPTYPE_REPLY)
     {
-        // TODO: This shouldn't have happened!
-        return;
+        printf("C: ");
+
+        pkt_client_to_host packet;
+
+        if (len == sizeof(packet))
+        {
+            Wifi_RxRawReadPacket(base, sizeof(packet), &packet);
+            printf("%08X", (unsigned int)packet.uncount);
+        }
+    }
+    else if (type == WIFI_MPTYPE_DATA)
+    {
+        printf("D: ");
+
+        for (int i = 0; i < len; i += 2)
+        {
+            u16 data;
+            Wifi_RxRawReadPacket(base + i, sizeof(data), &data);
+
+            printf("%c", data & 0xFF);
+            if ((len - i) > 1)
+                printf("%c", (data >> 8) & 0xFF);
+        }
     }
 
-    if (type != WIFI_MPTYPE_REPLY)
-        return;
+    printf("\n");
 
-    // Save information received from the client into the global state struct
-    pkt_client_to_host packet;
-    Wifi_RxRawReadPacket(base, sizeof(packet), (void *)&packet);
-
-    game.player[aid].x = packet.x;
-    game.player[aid].y = packet.y;
-
-    game.player_mask |= BIT(aid);
+    consoleSelect(&bottomScreen);
 }
 
-// Game code
-// =========
-
-void HostMode(void)
+void host_mode(void)
 {
     consoleSelect(&topScreen);
 
-    Wifi_MultiplayerHostMode(MAX_CLIENTS, sizeof(pkt_host_to_client),
+    Wifi_MultiplayerHostMode(15, sizeof(pkt_host_to_client),
                              sizeof(pkt_client_to_host));
-
-    ResetGameState();
 
     Wifi_MultiplayerFromClientSetPacketHandler(FromClientPacketHandler);
 
@@ -190,91 +147,74 @@ void HostMode(void)
     printf("Host ready!\n");
 
     consoleSelect(&bottomScreen);
-    consoleClear();
 
     while (1)
     {
         swiWaitForVBlank();
 
-        scanKeys();
-
-        u16 keys_down = keysDown();
-
         consoleClear();
-        printf("RIGHT: Channel 11\n");
-        printf("LEFT:  Channel 1\n");
-        printf("A:     Start game\n");
+
+        printf("RIGHT:   Channel 10\n");
+        printf("LEFT:    Channel 1\n");
+        printf("B:       Reject new clients\n");
+        printf("A:       Allow new clients\n");
+        printf("START:   Leave host mode\n");
+        printf("R:       Kick AID 1\n");
+        printf("DOWN/UP: Send text to client 1\n");
+        printf("\n");
         printf("\n");
 
-        if (keys_down & KEY_RIGHT)
-            Wifi_SetChannel(11);
-        if (keys_down & KEY_LEFT)
-            Wifi_SetChannel(1);
-
-        if (keys_down & KEY_A)
-            break;
-
-        int num_clients = Wifi_MultiplayerGetNumClients();
-        u16 players_mask = Wifi_MultiplayerGetClientMask();
-        printf("Num clients: %d (mask 0x%02X)\n", num_clients, players_mask);
-        printf("\n");
-
-        // Print all client information. This normally isn't needed, all you
-        // need is the mask of AIDs.
-        Wifi_ConnectedClient client[15];
-        num_clients = Wifi_MultiplayerGetClients(15, &(client[0]));
-
-        for (int i = 0; i < num_clients; i++)
         {
-            printf("%d (%d) %04X:%04X:%04X\n", client[i].association_id,
-                   client[i].state, client[i].macaddr[0], client[i].macaddr[1],
-                   client[i].macaddr[2]);
+            int num_clients = Wifi_MultiplayerGetNumClients();
+            u16 mask = Wifi_MultiplayerGetClientMask();
+
+            printf("Num clients: %d (%02X)\n", num_clients, mask);
+            printf("\n");
+
+            Wifi_ConnectedClient client[15];
+            num_clients = Wifi_MultiplayerGetClients(15, &(client[0]));
+
+            for (int i = 0; i < num_clients; i++)
+            {
+                printf("%d (%d) %04X:%04X:%04X\n", client[i].association_id,
+                    client[i].state, client[i].macaddr[0], client[i].macaddr[1],
+                    client[i].macaddr[2]);
+            }
         }
-    }
-
-    // The game is starting now, prevent new users from connecting
-    Wifi_MultiplayerAllowNewClients(false);
-    game.has_started = 1;
-
-    while (1)
-    {
-        swiWaitForVBlank();
-
-        SendHostStateToClients();
-
-        consoleClear();
-
-        printf("START: Leave host mode\n");
-        printf("R:     Kick client with AID 1\n");
-        printf("TOUCH: Move object\n");
-        printf("\n");
-
-        int num_clients = Wifi_MultiplayerGetNumClients();
-        u16 players_mask = Wifi_MultiplayerGetClientMask();
-        printf("Num clients: %d (mask 0x%02X)\n", num_clients, players_mask);
-        printf("\n");
-
-        RenderGameState();
 
         scanKeys();
 
         u16 keys_down = keysDown();
-        u16 keys_held = keysHeld();
 
         if (keys_down & KEY_START)
             break;
 
-        if (keys_held & KEY_TOUCH)
-        {
-            touchPosition touch_pos;
-            touchRead(&touch_pos);
+        if (keys_down & KEY_RIGHT)
+            Wifi_SetChannel(10);
+        if (keys_down & KEY_LEFT)
+            Wifi_SetChannel(1);
 
-            game.player[0].x = touch_pos.px;
-            game.player[0].y = touch_pos.py;
-        }
+        if (keys_down & KEY_B)
+            Wifi_MultiplayerAllowNewClients(false);
+        if (keys_down & KEY_A)
+            Wifi_MultiplayerAllowNewClients(true);
 
+        if (keys_down & KEY_L)
+            SendMultiplayerCmdFrame();
         if (keys_down & KEY_R)
             Wifi_MultiplayerKickClientByAID(1);
+
+        if (keys_down & KEY_DOWN)
+        {
+            const char *str = "Host message";
+            Wifi_MultiplayerHostToClientDataTxFrame(1, str, strlen(str));
+        }
+
+        if (keys_down & KEY_UP)
+        {
+            const char *str = "Another host message";
+            Wifi_MultiplayerHostToClientDataTxFrame(1, str, strlen(str));
+        }
     }
 
     Wifi_IdleMode();
@@ -286,7 +226,7 @@ void HostMode(void)
     printf("Left host mode\n");
 }
 
-bool AccessPointSelectionMenu(void)
+bool access_point_selection_menu(void)
 {
     consoleSelect(&topScreen);
 
@@ -346,8 +286,6 @@ bool AccessPointSelectionMenu(void)
             Wifi_AccessPoint ap;
             Wifi_GetAPData(i, &ap);
 
-            // DSWifi host access points don't use any encryption
-
             const char *security = "Open";
             if (ap.flags & WFLAG_APDATA_WPA)
                 security = "WPA ";
@@ -380,12 +318,12 @@ bool AccessPointSelectionMenu(void)
     consoleClear();
 }
 
-void ClientMode(void)
+void client_mode(void)
 {
     printf("Start client mode\n");
 
 connect:
-    if (!AccessPointSelectionMenu())
+    if (!access_point_selection_menu())
         goto end;
 
     consoleSelect(&topScreen);
@@ -445,63 +383,28 @@ connect:
             break;
     }
 
+    printf("\n");
     printf("Connected to host!\n");
-
-    ResetGameState();
-
-    consoleSelect(&bottomScreen);
-    consoleClear();
-
-    printf("Waiting for the game to start\n");
+    printf("\n");
     printf("START: Disconnect\n");
-
-    while (game.has_started == 0)
-    {
-        swiWaitForVBlank();
-
-        scanKeys();
-
-        u16 keys_down = keysDown();
-        if (keys_down & KEY_START)
-            goto end;
-    }
-
-    consoleSelect(&topScreen);
-    printf("Game started!\n");
-
-    consoleSelect(&bottomScreen);
+    printf("Y:     Prepare REPLY message\n");
+    printf("X:     Send text to host\n");
 
     while (1)
     {
         swiWaitForVBlank();
-
-        consoleClear();
-        printf("START: Disconnect\n");
-        printf("TOUCH: Move object\n");
-
-        RenderGameState();
-
         scanKeys();
-
-        u16 keys_down = keysDown();
-        u16 keys_held = keysHeld();
-
-        if (keys_down & KEY_START)
+        u16 keys = keysDown();
+        if (keys & KEY_START)
             break;
 
-        if (keys_held & KEY_TOUCH)
+        if (keys & KEY_Y)
+            PrepareMultiplayerReplyFrame();
+
+        if (keys & KEY_X)
         {
-            // Prepare new packet to be sent to the host with the current touch
-            // screen coordinates.
-
-            touchPosition touch_pos;
-            touchRead(&touch_pos);
-
-            pkt_client_to_host packet;
-            packet.x = touch_pos.px;
-            packet.y = touch_pos.py;
-
-            Wifi_MultiplayerClientReplyTxFrame(&packet, sizeof(packet));
+            const char *msg = "This is a message";
+            Wifi_MultiplayerClientToHostDataTxFrame(msg, strlen(msg));
         }
     }
 
@@ -514,6 +417,8 @@ end:
 
 int main(int argc, char *argv[])
 {
+    defaultExceptionHandler();
+
     videoSetMode(MODE_0_2D);
     videoSetModeSub(MODE_0_2D);
 
@@ -554,12 +459,12 @@ int main(int argc, char *argv[])
 
             if (keys & KEY_X)
             {
-                HostMode();
+                host_mode();
                 break;
             }
             if (keys & KEY_Y)
             {
-                ClientMode();
+                client_mode();
                 break;
             }
         }
