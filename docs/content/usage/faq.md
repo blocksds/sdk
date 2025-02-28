@@ -81,8 +81,8 @@ Menu will make sure that the loaded ROM receives the information it needs.
 
 Wi-Fi support in BlocksDS is currently limited. It comes with `DSWiFi`, a
 library that provides Wi-Fi support. However, it only supports the Wi-Fi
-hardware of the Nintendo DS, not the one DSi. It can only run on a DSi in the
-backwards compatibility mode where it acts like a regular DS (so it doesn't
+hardware of the Nintendo DS, not the one of the DSi. It can only run on a DSi in
+the backwards compatibility mode where it acts like a regular DS (so it doesn't
 support access points with WPA encryption).
 
 DSWifi supports connecting to an access point with your DS, even using the
