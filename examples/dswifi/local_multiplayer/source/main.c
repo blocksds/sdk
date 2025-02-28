@@ -351,6 +351,8 @@ bool AccessPointSelectionMenu(void)
             else if (ap.flags & WFLAG_APDATA_WEP)
                 security = "WEP ";
 
+            // An "O" means that the AP allows new connections, an "X" means it
+            // doesn't accept any new connection.
             printf("%s [%.24s] %s\n", i == chosen ? "->" : "  ", ap.ssid,
                 ap.flags & WFLAG_APDATA_ADHOC ? "*" : "");
             printf("   %s | Ch %2d | RSSI %u\n", security, ap.channel, ap.rssi);
