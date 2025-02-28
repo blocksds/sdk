@@ -80,19 +80,20 @@ Menu will make sure that the loaded ROM receives the information it needs.
 ### How well is Wi-Fi supported?
 
 Wi-Fi support in BlocksDS is currently limited. It comes with `DSWiFi`, a
-library that provides Wi-Fi support. However, it doesn't support DS-to-DS
-direct communications or the new DSi-only features.
+library that provides Wi-Fi support. However, it only supports the Wi-Fi
+hardware of the Nintendo DS, not the one DSi. It can only run on a DSi in the
+backwards compatibility mode where it acts like a regular DS (so it doesn't
+support access points with WPA encryption).
 
-It supports connecting to an access point with your DS, even using the access
-points configured in the firmware of the DS.
+DSWifi supports connecting to an access point with your DS, even using the
+access points configured in the firmware of the DS. It also supports local
+multiplayer between multiple DS consoles without an access point.
 
-Adding support for this involves a lot of effort, which is the main reason why
-there is no support for it at the moment.
+Adding support for the DSi features is an ongoing effort.
 
-Related issues:
+Related issue:
 
 - https://github.com/blocksds/sdk/issues/61
-- https://github.com/blocksds/sdk/issues/64
 
 ### How well is the Teak DSP supported?
 
