@@ -354,19 +354,22 @@ bool AccessPointSelectionMenu(void)
             else if (ap.flags & WFLAG_APDATA_WEP)
                 security = "WEP ";
 
-            // An "O" means that the AP allows new connections, an "X" means it
-            // doesn't accept any new connection.
+            if (ap.nintendo.allows_connections)
+                consoleSetColor(&bottomScreen, CONSOLE_DEFAULT);
+            else
+                consoleSetColor(&bottomScreen, CONSOLE_LIGHT_RED);
+
             printf("%s [%.24s] %s\n", i == chosen ? "->" : "  ", ap.ssid,
                 ap.flags & WFLAG_APDATA_ADHOC ? "*" : "");
             printf("   %s | Ch %2d | RSSI %u\n", security, ap.channel, ap.rssi);
-            printf("   Players %d/%d %s | %08X\n", ap.nintendo.players_current,
-                   ap.nintendo.players_max,
-                   ap.nintendo.allows_connections ? "O" : "X",
-                   (unsigned int)ap.nintendo.game_id);
+            printf("   Players %d/%d | %08X\n", ap.nintendo.players_current,
+                   ap.nintendo.players_max, (unsigned int)ap.nintendo.game_id);
             printf("\n");
 
             if (i == chosen)
                 Wifi_GetAPData(chosen, &AccessPoint);
+
+            consoleSetColor(&bottomScreen, CONSOLE_DEFAULT);
         }
 
         // Currently, multiplayer networks are open
