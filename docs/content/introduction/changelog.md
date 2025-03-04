@@ -3,6 +3,30 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version DEV (2025-XX-XX)
+
+- libnds:
+
+  - Added `swiIntrWaitAUX()` for the ARM7.
+  - The Doxygen documentation of interrupt functions has been fixed.
+
+- DSWifi:
+
+  - Add way to get the RSSI of the AP we're connected to. It can be done by
+    calling `Wifi_GetData(WIFIGETDATA_RSSI)`.
+  - Some minor documentation fixes.
+
+- SDK:
+
+  - Examples:
+
+    - In DSWifi examples, print multiplayer access points in color red when they
+      aren't accepting new connections.
+
+  - Other:
+
+    - The R4RF DLDI driver included in the SDK has been updated.
+
 ## Version 1.8.0 (2025-02-28)
 
 - libnds:
