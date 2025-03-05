@@ -333,11 +333,11 @@ bool AccessPointSelectionMenu(void)
         if (chosen >= count)
             chosen = count - 1;
 
-        int first = chosen - 4;
+        int first = chosen - 1;
         if (first < 0)
             first = 0;
 
-        int last = first + 5;
+        int last = first + 3;
         if (last >= count)
             last = count - 1;
 
@@ -345,6 +345,15 @@ bool AccessPointSelectionMenu(void)
         {
             Wifi_AccessPoint ap;
             Wifi_GetAPData(i, &ap);
+
+            // Note that the libnds console can only print ASCII characters. If
+            // the name uses characters outside of that character set, printf()
+            // won't be able to print them.
+            char name[10 * 4 + 1];
+            int ret = utf16_to_utf8(name, sizeof(name), ap.nintendo.name,
+                                    ap.nintendo.name_len * 2);
+            if (ret <= 0)
+                name[0] = '\0';
 
             // DSWifi host access points don't use any encryption
 
@@ -361,9 +370,10 @@ bool AccessPointSelectionMenu(void)
 
             printf("%s [%.24s] %s\n", i == chosen ? "->" : "  ", ap.ssid,
                 ap.flags & WFLAG_APDATA_ADHOC ? "*" : "");
-            printf("   %s | Ch %2d | RSSI %u\n", security, ap.channel, ap.rssi);
+            printf("   Name: [%.19s]\n", name);
             printf("   Players %d/%d | %08X\n", ap.nintendo.players_current,
                    ap.nintendo.players_max, (unsigned int)ap.nintendo.game_id);
+            printf("   %s | Ch %2d | RSSI %u\n", security, ap.channel, ap.rssi);
             printf("\n");
 
             if (i == chosen)
