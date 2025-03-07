@@ -78,6 +78,26 @@ _start:
 
 NotTWL:
 
+    // Setup heap limits
+
+    // In DS mode, the heap is located in iwram. In DSi mode, in twl_iwram.
+    // There isn't any special handling required, unlike the ARM9.
+
+    cmp     r10, #1            // Check if we are in DS or DSi mode
+
+    // r0 = heap start
+    ldrne   r0, =__end__
+    ldreq   r0, =__twl_end__
+
+    // r1 = heap end
+    ldrne   r1, =(0x03800000 + 64 * 1024) // End of iwram
+    ldreq   r1, =(0x03000000 + 256 * 1024) // End of twl_iwram
+
+    ldr     r2, =fake_heap_start
+    str     r0, [r2]
+    ldr     r2, =fake_heap_end
+    str     r1, [r2]
+
     // Initialize TLS of the main thread
     ldr     r0, =__tls_start
     bl      init_tls
