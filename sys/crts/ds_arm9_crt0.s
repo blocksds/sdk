@@ -32,9 +32,9 @@ _start:
     mov     sp, r1
 
     // This sets r7 to 1 if the console is a debugger unit, 0 if it is a retail
-    // unit. It also sets r8 to the end address of RAM for that DS model. The
-    // values need to be saved until after the RAM contents have been cleared so
-    // that they are saved to __dsimode and __debugger_unit.
+    // unit. It also sets r8 to the end address of cached RAM for that DS model.
+    // The values need to be saved until after the RAM contents have been
+    // cleared so that they are saved to __dsimode and __debugger_unit.
     ldr     r3, =__libnds_mpu_setup
     blx     r3
 
@@ -129,19 +129,33 @@ _start:
     bl      ClearMem
 
 NotTWL:
-    .equ    _libnds_argv, 0x02FFFE70
+
+    // Setup heap limits
+
+    // argv is passed to homebrew programs in an address at the end of main RAM
+    // (_libnds_argv in this file, __system_argv in libnds). This is parsed,
+    // turned into an array of strings, and copied to the start of the heap by
+    // build_argv() in libnds.
+    //
+    // The heap must start after this. If a valid argv has been found, libnds
+    // will have set __system_argv.endARGV to the end of the memory used by
+    // argv, so we set fake_heap_start to that address.
+    //
+    // If no valid argv is found, the endARGV pointer is zero. In that case, the
+    // heap starts at __end__ or __twl_end__.
+
+    .equ    _libnds_argv, 0x02FFFE70 // __system_argv in libnds
     ldr     r0, =_libnds_argv
 
-    // Reset heap base
-    ldr     r2, [r0, #20]           // newheap base
+    ldr     r2, [r0, #20]   // __system_argv.endARGV
     cmp     r2, #0
-    moveq   r2, r10
-    ldr     r1, =fake_heap_start    // Set heap start
+    moveq   r2, r10         // r10 is __end__ or __twl_end__ (see code above)
+    ldr     r1, =fake_heap_start
     str     r2, [r1]
 
-    ldr     r1, =fake_heap_end      // Set heap end
-    sub     r8, r8, #0xc000
-    str     r8, [r1]
+    ldr     r1, =fake_heap_end
+    sub     r8, r8, 0xc000  // r8 = end of cached RAM (see __libnds_mpu_setup)
+    str     r8, [r1]        // Reserve 48 KB for IPC and bootstub
 
     // Initialize libnds
     push    {r0}
@@ -169,7 +183,9 @@ NotTWL:
     ldr     lr, =__libnds_exit      // Jump to user code
     bx      r3
 
-    // Reference __secure_area__ so it isn't discarded by the garbage collector
+    // The instruction right after this comment is never used, it's just a
+    // reference to __secure_area__ so that it isn't discarded by the garbage
+    // collector of the linker.
     ldr     r0, =__secure_area__
 
 // -----------------------------------------------------------------------------
