@@ -218,7 +218,6 @@ SECTIONS
         *(.noinit .noinit.* .gnu.linkonce.n.*)
         . = ALIGN(4);    /* REQUIRED. LD is flaky without it. */
         __noinit_end = ABSOLUTE(.);
-        __end__ = ABSOLUTE(.);
     } >iwram
 
     /* Space reserved for the thread local storage of main() */
