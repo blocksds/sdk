@@ -57,7 +57,7 @@ PHDRS {
     main    PT_LOAD FLAGS(7);
     dtcm    PT_LOAD FLAGS(7);
     itcm    PT_LOAD FLAGS(7);
-    twl     PT_LOAD FLAGS(0x100007);
+    twl     PT_LOAD FLAGS(0x100007); /* (DSi flag for ndstool | 7) */
 }
 
 SECTIONS

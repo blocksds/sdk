@@ -32,7 +32,7 @@ ASSERT((__irq_stack_size & 3) == 0, "__irq_stack_size must be a multiple of 4");
 PHDRS {
     crt0  PT_LOAD FLAGS(7);
     arm7  PT_LOAD FLAGS(7);
-    arm7i PT_LOAD FLAGS(0x100007);
+    arm7i PT_LOAD FLAGS(0x100007); /* (DSi flag for ndstool | 7) */
 }
 
 MEMORY {
