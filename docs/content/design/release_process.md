@@ -61,9 +61,9 @@ built. Also, you can build the documentation at any point in between releases
 ### 2.6 Build Docker images
 
 **Wait until the packages are built**, the repository is updated, and the
-workflow has finished successfully. Then, run the following workflow specifying
-the version tag that you have decided to use. That will build and push the
-Docker images: [Link](https://github.com/blocksds/sdk/actions/workflows/docker.yml)
+workflow has finished successfully. Then, run the following workflow **with the
+version tag that you have decided to use**. That will build and push the Docker
+images: [Link](https://github.com/blocksds/sdk/actions/workflows/docker.yml)
 
 This workflow uses the packages build right before, that's why you need to wait
 for that workflow to be finished.
