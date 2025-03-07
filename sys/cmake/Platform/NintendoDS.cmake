@@ -17,7 +17,11 @@ set(STANDARD_INCLUDE_DIRECTORIES "${BLOCKSDS}/libs/dswifi/include" "${BLOCKSDS}/
 set(ARCH_FLAGS "-march=armv5te -mcpu=arm946e-s+nofp -mtune=arm946e-s")
 set(STANDARD_FLAGS  "-ffunction-sections -fdata-sections -D__NDS__ -DARM9")
 set(LINKER_FLAGS  "-L${BLOCKSDS}/libs/dswifi/lib -L{BLOCKSDS}/libs/libteak/lib -L${BLOCKSDS}/libs/libxm7/lib -L${BLOCKSDS}/libs/maxmod/lib -L${BLOCKSDS}/libs/libnds/lib")
-set(STANDARD_LIBRARIES "-Wl,--start-group -lnds9 -lstdc++ -lc -Wl,--end-group")
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(STANDARD_LIBRARIES "-Wl,--start-group -lnds9d -lstdc++ -lc -Wl,--end-group")
+else()
+    set(STANDARD_LIBRARIES "-Wl,--start-group -lnds9 -lstdc++ -lc -Wl,--end-group")
+endif()
 
 if(NDS_DSI_EXCLUSIVE)
     set(LINKER_FLAGS "${LINKER_FLAGS} -specs=${BLOCKSDS}/sys/crts/dsi_arm9.specs")
