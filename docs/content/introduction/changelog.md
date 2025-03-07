@@ -28,7 +28,7 @@ weight: -20
     `Wifi_AccessPoint` struct so that clients can see it. This name can be
     replaced by any string defined by the developer if required.
   - Add way to get the RSSI of the AP we're connected to. It can be done by
-    calling `Wifi_GetData(WIFIGETDATA_RSSI)`.
+    calling `Wifi_GetData(WIFIGETDATA_RSSI)`. @Snowshoe
   - Always include `ASSOCSTATUS_STRINGS` array in builds. It used to be removed
     in builds without sgIP.
   - Some minor documentation fixes.
