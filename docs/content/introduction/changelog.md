@@ -3,29 +3,65 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version DEV (2025-XX-XX)
+## Version 1.8.1 (2025-03-07)
 
 - libnds:
 
+  - Add a helper to convert UTF-16LE text (like the firmware player name and
+    message) to UTF-8.
+  - Modify `assert()` on the ARM7 to send the information to the ARM9 instead of
+    displaying it on the no$gba console.
   - Added `swiIntrWaitAUX()` for the ARM7.
   - The Doxygen documentation of interrupt functions has been fixed.
+  - The documentation of the firmware personal data has been improved with a
+    warning saying that the struct may not be initialized right af the beginning
+    of `main()` on the ARM9.
+  - Always use `fake_heap_start` and `fake_heap_end` in `sbrk()`.
+  - Some assertions in the timer functions were missing checks for values lower
+    than zero, this has been fixed.
+  - All instances of `sassert()` in common ARM7 and ARM9 code have been replaced
+    by `assert()`.
 
 - DSWifi:
 
+  - Add player name information to beacon packets, and add it to the
+    `Wifi_AccessPoint` struct so that clients can see it. This name can be
+    replaced by any string defined by the developer if required.
   - Add way to get the RSSI of the AP we're connected to. It can be done by
     calling `Wifi_GetData(WIFIGETDATA_RSSI)`.
+  - Always include `ASSOCSTATUS_STRINGS` array in builds. It used to be removed
+    in builds without sgIP.
   - Some minor documentation fixes.
+
+- grit:
+
+  - Update documentation (command line interface and changelog).
+  - Let the build system define the version string compiled in the binary.
 
 - SDK:
 
   - Examples:
 
     - In DSWifi examples, print multiplayer access points in color red when they
-      aren't accepting new connections.
+      aren't accepting new connections. Also, display the player name provided
+      by the beacon frames.
+    - There's a new test to verify that `sbrk()` works correctly in both the
+      ARM7 and ARM9.
+    - Update the asserts example to show that asserts that happen in the ARM7
+      are sent to the ARM9 and displayed on the screen.
+
+  - Documentation:
+
+    - Document flag used for "twl" sections in ndstool and the linkerscripts.
 
   - Other:
 
+    - Remove duplicated `__end__` entries in ARM7 linkerscript files.
+    - The fake heap pointers are now setup on the ARM7, not only the ARM9.
+    - The fake heap limit setup has been documented.
     - The R4RF DLDI driver included in the SDK has been updated.
+    - Update CMake build system to link the debug version of libnds in debug
+      builds.
 
 ## Version 1.8.0 (2025-02-28)
 
