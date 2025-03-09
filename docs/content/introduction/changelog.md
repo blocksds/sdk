@@ -3,6 +3,17 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version DEV (????-??-??)
+
+- libnds:
+
+  - Deallocate memory reserved for the FAT file system cache if `fatInit()`
+    fails.
+  - Extend `statvfs()` to return the `ST_RDONLY` flag for read-only media.
+  - File system operations should now return `EROFS` for read-only DLDI
+    drivers.
+  - Fix potential issues involving FAT file system cache initialization.
+
 ## Version 1.8.1 (2025-03-07)
 
 - libnds:
