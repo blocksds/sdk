@@ -179,7 +179,7 @@ Elf32_Ehdr *elf_load(const char *path)
         else if (shdr->sh_type == SHT_STRTAB)
             printf("STRTAB");
         else
-            printf("%0X", (unsigned int)shdr->sh_type);
+            printf("%X", (unsigned int)shdr->sh_type);
 
         printf("\n");
     }
