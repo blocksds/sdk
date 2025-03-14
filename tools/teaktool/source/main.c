@@ -76,6 +76,8 @@ int main(int argc, char *argv[])
     int read_sections = 0;
 
     Elf32_Ehdr *hdr = elf_load(in_file);
+    if (hdr == NULL)
+        return -1;
 
     printf("Looking for loadable sections:\n");
 
