@@ -14,6 +14,7 @@ specific area:
 - `demos`: Simple "completed" games, designed to be used as reference.
 - `dsp`: Examples of how to use the DSP of the DSi.
 - `dswifi`: DSWiFi library features.
+- `dynamic_libs`: How to load dynamic libraries with libnds.
 - `filesystem`: How to access the 3 filesystems of the DS/DSi.
 - `gl2d`: How to use the GL2D library for 2D graphics with the 3D hardware.
 - `graphics_2d`: 2D graphics features of the DS.
