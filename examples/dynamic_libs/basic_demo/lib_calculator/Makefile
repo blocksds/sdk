@@ -73,9 +73,8 @@ SOURCES_CPP	:= $(shell find -L $(SOURCEDIRS) -name "*.cpp")
 # -------------------------
 
 ARCH		:= -mthumb -mcpu=arm946e-s+nofp
-#ARCH		:= -mthumb -mcpu=arm7tdmi
 
-SPECS		:= $(BLOCKSDS)/sys/crts/ds_arm9.specs
+SPECS		:= $(BLOCKSDS)/sys/crts/ds_arm9_dsl.specs
 
 WARNFLAGS	:= -Wall
 
@@ -84,16 +83,16 @@ INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path)) \
 
 ASFLAGS		+= -x assembler-with-cpp $(DEFINES) $(INCLUDEFLAGS) \
 		   $(ARCH) -ffunction-sections -fdata-sections \
-		   -fvisibility=hidden #-specs=$(SPECS)
+		   -fvisibility=hidden -specs=$(SPECS)
 
 CFLAGS		+= -std=gnu17 $(WARNFLAGS) $(DEFINES) $(INCLUDEFLAGS) \
 		   $(ARCH) -O2 -ffunction-sections -fdata-sections \
-		   -fvisibility=hidden #-specs=$(SPECS)
+		   -fvisibility=hidden -specs=$(SPECS)
 
 CXXFLAGS	+= -std=gnu++17 $(WARNFLAGS) $(DEFINES) $(INCLUDEFLAGS) \
 		   $(ARCH) -O2 -ffunction-sections -fdata-sections \
 		   -fno-exceptions -fno-rtti \
-		   -fvisibility=hidden #-specs=$(SPECS)
+		   -fvisibility=hidden -specs=$(SPECS)
 
 # Intermediate build files
 # ------------------------

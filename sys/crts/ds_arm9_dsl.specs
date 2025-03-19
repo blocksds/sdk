@@ -1,0 +1,20 @@
+%include <picolibc.specs>
+
+%rename cc1plus blocksds_cc1plus
+%rename cpp blocksds_cpp
+%rename link blocksds_link
+
+*cpp:
+-D__NDS__ -D__BLOCKSDS__ -DARM9 %(blocksds_cpp)
+
+*cc1_cpu:
+-mcpu=arm946e-s+nofp
+
+*cc1plus:
+%(cpp) %(blocksds_cc1plus)
+
+*link:
+%(blocksds_link) --no-warn-rwx-segments --use-blx
+
+*lib:
+%(libgcc)
