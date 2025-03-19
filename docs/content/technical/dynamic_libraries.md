@@ -19,6 +19,9 @@ This system makes it possible to have NDS ROMs with a lot of code that doesn't
 fit in RAM, or with external plugins that can be developed by users and loaded
 from the SD card of their flashcard or DSi slot.
 
+If you want to jump right to the code, check the examples
+[here](https://github.com/blocksds/sdk/tree/master/examples/dynamic_libs).
+
 The system used by BlocksDS is heavily inspired by the one used by
 [libdragon](https://github.com/DragonMinded/libdragon/). There is more
 information about the system in the libdragon
@@ -57,6 +60,8 @@ binary, the library won't be able to divide integers!
 Converting the ELF file to DSL is a process that involves reading all the
 sections and symbols from the ELF file and removing all information that isn't
 required to be loaded by libnds. This is done purely as a memory saving step.
+[`dsltool`](https://github.com/blocksds/sdk/tree/master/tools/dsltool) is the
+tool in charge of this process.
 
 A DSL file contains a list of sections and a list of symbols. The sections are
 defined as "progbits" (code and variables with initial data), "nobits"
@@ -112,6 +117,9 @@ to that symbol so that the main binary can use it.
 
 Once the main binary is done with the library, it can call `dlclose()` to free
 the memory used by it.
+
+You can find the code of the functions in this file in
+[libnds](https://github.com/blocksds/libnds/blob/master/source/arm9/dlfcn.c).
 
 ## 5. Advantages over overlays
 
