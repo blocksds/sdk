@@ -150,8 +150,9 @@ the debugger so that you can get an idea of what it is capable of.
 ## 6. Exception handler
 
 libnds comes with an exception handler that can help you debug some crashes in
-your program. It appears as a red screen that says "Guru Meditation Error!"
-followed by a lot of information:
+your program. It appears as a red screen that says "ARM9/ARM7 Guru Meditation
+Error!" followed by a lot of information. This is information about the state
+the CPU was in when the crash happened:
 
 ![Exception handler](../exception_handler.png "Exception handler")
 
@@ -225,7 +226,7 @@ terminal. For example:
 
 ```sh
 /opt/wonderful/toolchain/gcc-arm-none-eabi/bin/arm-none-eabi-addr2line \
-    -e build/debug_exception_handler.elf -a 0x2001252
+    -e build/debug_exception_handler.elf -a 0x2001280
 ```
 
 Another option (that can be more useful!) is to use `objdump` to generate a text
