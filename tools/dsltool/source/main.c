@@ -309,11 +309,7 @@ int main(int argc, char *argv[])
     if (fwrite(&header, sizeof(dsl_header), 1, f_dsl) != 1)
     {
         printf("Failed to write DSL header\n");
-        free(hdr);
-        main_binary_free();
-        fclose(f_dsl);
-        remove(out_file);
-        return -1;
+        goto error;
     }
 
     // Check relocations to see that there are unsupported types
@@ -332,11 +328,7 @@ int main(int argc, char *argv[])
     if (progbits_index == -1)
     {
         printf("Can't find progbits section to apply relocations\n");
-        free(hdr);
-        main_binary_free();
-        fclose(f_dsl);
-        remove(out_file);
-        return -1;
+        goto error;
     }
 
     for (int i = 0; i < read_sections; i++)
@@ -360,11 +352,7 @@ int main(int argc, char *argv[])
                 (type != R_ARM_CALL))
             {
                 printf("Invalid relocation. Index %zu. Type %u\n", r, type);
-                free(hdr);
-                main_binary_free();
-                fclose(f_dsl);
-                remove(out_file);
-                return -1;
+                goto error;
             }
 
             sym_set_as_used(symbol_index);
@@ -393,11 +381,7 @@ int main(int argc, char *argv[])
             if (new_index == -1)
             {
                 printf("Failed to translate index for relocation %zu\n", r);
-                free(hdr);
-                main_binary_free();
-                fclose(f_dsl);
-                remove(out_file);
-                return -1;
+                goto error;
             }
 
             rel[r].r_offset = offset;
@@ -442,11 +426,7 @@ int main(int argc, char *argv[])
         if (fwrite(&section_header, sizeof(dsl_section_header), 1, f_dsl) != 1)
         {
             printf("Failed to write DSL header for section %d\n", i);
-            free(hdr);
-            main_binary_free();
-            fclose(f_dsl);
-            remove(out_file);
-            return -1;
+            goto error;
         }
     }
 
@@ -465,11 +445,7 @@ int main(int argc, char *argv[])
             if (fwrite(sections[i].data, sections[i].size, 1, f_dsl) != 1)
             {
                 printf("Failed to write DSL data for section %d\n", i);
-                free(hdr);
-                main_binary_free();
-                fclose(f_dsl);
-                remove(out_file);
-                return -1;
+                goto error;
             }
         }
         else if (sections[i].type == DSL_SEGMENT_RELOCATIONS)
@@ -479,11 +455,7 @@ int main(int argc, char *argv[])
             if (fwrite(sections[i].data, sections[i].size, 1, f_dsl) != 1)
             {
                 printf("Failed to write DSL data for section %d\n", i);
-                free(hdr);
-                main_binary_free();
-                fclose(f_dsl);
-                remove(out_file);
-                return -1;
+                goto error;
             }
         }
     }
@@ -495,11 +467,7 @@ int main(int argc, char *argv[])
     if (sym_table_save_to_file(f_dsl) != 0)
     {
         printf("Failed to save symbol table!\n");
-        free(hdr);
-        main_binary_free();
-        fclose(f_dsl);
-        remove(out_file);
-        return -1;
+        goto error;
     }
 
     sym_clear_table();
@@ -515,4 +483,11 @@ int main(int argc, char *argv[])
     main_binary_free();
 
     return 0;
+
+error:
+    free(hdr);
+    main_binary_free();
+    fclose(f_dsl);
+    remove(out_file);
+    return -1;
 }
