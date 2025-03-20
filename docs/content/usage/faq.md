@@ -75,6 +75,44 @@ rename this file to a name that you can remember. Once you have it on the cartri
 launch the Homebrew Menu, then launch your homebrew program with it. NDS Homebrew
 Menu will make sure that the loaded ROM receives the information it needs.
 
+### Is libnds an outdated library?
+
+Short answer: No. BlocksDS considers libnds a core library of the SDK, and it
+receives regular updates and support.
+
+Long answer: The version of libnds included in BlocksDS has received support
+since the first release of BlocksDS in 2023. Most of the problems it had before
+the creation of BlocksDS have been resolved or mitigated. Some bugs that were
+over ten years old have been fixed. Others may remain, but the library is
+actively being maintained as part of the BlocksDS SDK. Even if the function
+names are the same, there have been a lot of internal changes to add new
+features and fix bugs. Many parts of the code have been documented properly
+(MPU setup, reset to loader protocol...). So no, libnds can't be considered an
+outdated library.
+
+The reality is that libnds is a library with 20 years of history. It started its
+life as ndslib in 2005, it was renamed to libnds, and it has had contributions
+by dozens of people since then. There hasn't a big push to uniformize coding
+style or naming conventions for most of its life. BlocksDS has uniformized the
+coding style, but things like function names aren't easily changed (any change
+has the potential to break someone's code). This may make it feel a bit weird or
+outdated, but it's rare to find projects that are this old and don't have
+similar issues.
+
+Another way to see it is that libnds has 20 years of people using it, reporting
+bugs and adding features. This is very valuable, and it's a bad idea to drop it
+in favour of a new library just because the names of some functions don't follow
+the same convention as the names of a different function. You would have the
+same problem if you decide to use any two libraries you find online (for
+example, SDL and libcurl).
+
+BlocksDS is developed with the idea that it's important to not break the
+projects of people already using it, so the old names need to remain available.
+Maintaining two sets of functions to do the same thing takes a lot of work, and
+it isn't a very productive way to use the limited time that the developers of
+BlocksDS have. Incremental changes that makes the library better is great
+because they help every current and future user of the library.
+
 ## Feature support
 
 ### How well is Wi-Fi supported?
