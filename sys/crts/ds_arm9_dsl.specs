@@ -14,7 +14,7 @@
 %(cpp) %(blocksds_cc1plus)
 
 *link:
-%(blocksds_link) --no-warn-rwx-segments --use-blx
+%(blocksds_link) -T %:getenv(BLOCKSDS /sys/crts/dsl.ld) --no-warn-rwx-segments --use-blx
 
 *lib:
 %(libgcc)

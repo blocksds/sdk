@@ -32,6 +32,8 @@ LIBDIRS		:=
 NAME		:= calculator
 BUILDDIR	:= build/$(NAME)
 LIBRARY		:= $(NAME).elf
+DUMP		:= build/$(NAME).dump
+MAP		:= build/$(NAME).map
 
 # Tools
 # -----
@@ -39,10 +41,10 @@ LIBRARY		:= $(NAME).elf
 PREFIX		:= $(ARM_NONE_EABI_PATH)arm-none-eabi-
 CC		:= $(PREFIX)gcc
 CXX		:= $(PREFIX)g++
-AR		:= $(PREFIX)gcc-ar
+LD		:= $(PREFIX)gcc
+OBJDUMP		:= $(PREFIX)objdump
 MKDIR		:= mkdir
 RM		:= rm -rf
-CP		:= cp
 
 # Verbose flag
 # ------------
@@ -94,6 +96,10 @@ CXXFLAGS	+= -std=gnu++17 $(WARNFLAGS) $(DEFINES) $(INCLUDEFLAGS) \
 		   -fno-exceptions -fno-rtti \
 		   -fvisibility=hidden -specs=$(SPECS)
 
+LDFLAGS		+= $(ARCH) $(LIBDIRSFLAGS) -Wl,-Map,$(MAP) $(DEFINES) \
+		   -nostdlib -Wl,--start-group $(LIBS) -Wl,--end-group -specs=$(SPECS) \
+		   -Wl,--emit-relocs -Wl,--unresolved-symbols=ignore-all -Wl,--nmagic
+
 # Intermediate build files
 # ------------------------
 
@@ -114,16 +120,19 @@ DEPS		:= $(OBJS:.o=.d)
 # Targets
 # -------
 
-.PHONY: all clean
+.PHONY: all clean dump
 
 all: $(LIBRARY)
 
 $(LIBRARY): $(OBJS)
 	@echo "  LD      $@"
-	@$(MKDIR) -p $(@D)
-	$(V)$(CC) -nostdlib \
-		-Wl,--emit-relocs -Wl,--unresolved-symbols=ignore-all -Wl,--nmagic \
-		-T $(BLOCKSDS)/sys/crts/dsl.ld -o $@ $(OBJS)
+	$(V)$(LD) -o $@ $(OBJS) $(LDFLAGS)
+
+$(DUMP): $(LIBRARY)
+	@echo "  OBJDUMP $@"
+	$(V)$(OBJDUMP) -h -C -Ssr $< > $@
+
+dump: $(DUMP)
 
 clean:
 	@echo "  CLEAN"
