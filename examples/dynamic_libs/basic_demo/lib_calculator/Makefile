@@ -123,7 +123,7 @@ $(LIBRARY): $(OBJS)
 	@$(MKDIR) -p $(@D)
 	$(V)$(CC) -nostdlib \
 		-Wl,--emit-relocs -Wl,--unresolved-symbols=ignore-all -Wl,--nmagic \
-		-T dsl.ld -o $@ $(OBJS)
+		-T $(BLOCKSDS)/sys/crts/dsl.ld -o $@ $(OBJS)
 
 clean:
 	@echo "  CLEAN"
