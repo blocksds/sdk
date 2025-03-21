@@ -18,10 +18,11 @@ else
 V		:= @
 endif
 
-.PHONY: bin2c clean dldipatch dlditool grit install mkfatimg mmutil ndstool \
-	squeezer teaktool
+.PHONY: bin2c clean dldipatch dlditool dsltool grit install mkfatimg mmutil \
+	ndstool squeezer teaktool
 
-all: bin2c dldipatch dlditool grit mkfatimg mmutil ndstool squeezer teaktool
+all: bin2c dldipatch dlditool dsltool grit mkfatimg mmutil ndstool squeezer \
+	teaktool
 
 bin2c:
 	$(MAKE) -C bin2c
@@ -34,6 +35,9 @@ dlditool:
 
 dldipatch:
 	$(MAKE) -C dldipatch
+
+dsltool:
+	$(MAKE) -C dsltool
 
 mkfatimg:
 	$(MAKE) -C mkfatimg
@@ -62,6 +66,7 @@ install: all
 	$(INSTALL) $(STRIP) -m $(BINMODE) dldipatch/dldipatch $(INSTALLDIR_ABS)/dldipatch/
 	$(MAKE) -C bin2c install INSTALLDIR=$(INSTALLDIR_ABS)/bin2c
 	$(MAKE) -C dlditool install INSTALLDIR=$(INSTALLDIR_ABS)/dlditool
+	$(MAKE) -C dsltool install INSTALLDIR=$(INSTALLDIR_ABS)/dsltool
 	$(MAKE) -C grit install INSTALLDIR=$(INSTALLDIR_ABS)/grit
 	$(MAKE) -C mkfatimg install INSTALLDIR=$(INSTALLDIR_ABS)/mkfatimg
 	$(MAKE) -C mmutil install INSTALLDIR=$(INSTALLDIR_ABS)/mmutil
@@ -73,6 +78,7 @@ clean:
 	$(MAKE) -C bin2c clean
 	$(MAKE) -C dldipatch clean
 	$(MAKE) -C dlditool clean
+	$(MAKE) -C dsltool clean
 	$(MAKE) -C grit clean
 	$(MAKE) -C mkfatimg clean
 	$(MAKE) -C mmutil clean
