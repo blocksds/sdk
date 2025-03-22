@@ -331,6 +331,8 @@ int main(int argc, char *argv[])
         goto error;
     }
 
+    bool symbols_cleared = false;
+
     for (int i = 0; i < read_sections; i++)
     {
         if (sections[i].type != DSL_SEGMENT_RELOCATIONS)
@@ -366,6 +368,8 @@ int main(int argc, char *argv[])
 
         sym_sort_table();
 
+        symbols_cleared = true;
+
         sym_print_table();
 
         // Now save each relocation replacing the symbol index by the new
@@ -387,6 +391,17 @@ int main(int argc, char *argv[])
             rel[r].r_offset = offset;
             rel[r].r_info  = type | (new_index << 8);
         }
+    }
+
+    if (!symbols_cleared)
+    {
+        sym_clear_unused();
+
+        printf("Sorting symbol table...\n");
+
+        sym_sort_table();
+
+        sym_print_table();
     }
 
     // Write section headers
