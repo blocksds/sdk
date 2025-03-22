@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 
     printf("Loading library...\n");
 
-    void *h = dlopen("calculator.dsl", RTLD_NOW | RTLD_LOCAL);
+    void *h = dlopen("dsl/calculator.dsl", RTLD_NOW | RTLD_LOCAL);
     const char *err = dlerror();
     if (err != NULL)
     {
