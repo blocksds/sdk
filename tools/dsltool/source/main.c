@@ -9,6 +9,7 @@
 
 #include "elf.h"
 #include "dsl.h"
+#include "log.h"
 #include "main_binary.h"
 #include "sym_table.h"
 
@@ -22,7 +23,13 @@
 
 void usage(void)
 {
-    printf("Usage: dsltool -i input.elf -o output.dsl [-m main_binary.elf]\n");
+    INFO("Usage: dsltool -i input.elf -o output.dsl [-m main_binary.elf] [-v]\n"
+         "\n"
+         "  -i input.elf       ELF file of the dynamic library.\n"
+         "  -o output.dsl      Path to DSL file to be created.\n"
+         "  -m main_binary.elf Optional main binary ELF file to resolve symbols\n"
+         "  -v                 Enable verbose logging\n"
+    );
 }
 
 typedef struct {
@@ -36,9 +43,9 @@ typedef struct {
 
 int main(int argc, char *argv[])
 {
-    printf("dsltool " PACKAGE_VERSION "\n");
-    printf("=============\n");
-    printf("\n");
+    INFO("dsltool " PACKAGE_VERSION "\n"
+         "=============\n"
+    );
 
     const char *in_file = NULL;
     const char *out_file = NULL;
@@ -69,9 +76,13 @@ int main(int argc, char *argv[])
             usage();
             return 0;
         }
+        else if (strcmp(argv[i], "-v") == 0)
+        {
+            set_log_level(LOG_VERBOSE);
+        }
         else
         {
-            printf("Unknown argument: %s\n", argv[i]);
+            ERROR("Unknown argument: %s\n", argv[i]);
             usage();
             return -1;
         }
@@ -79,26 +90,26 @@ int main(int argc, char *argv[])
 
     if (in_file == NULL)
     {
-        printf("No input file provided\n");
+        ERROR("No input file provided\n");
         usage();
         return -1;
     }
 
     if (out_file == NULL)
     {
-        printf("No output file provided\n");
+        ERROR("No output file provided\n");
         usage();
         return -1;
     }
 
-    printf("\n");
-    printf("Loading main ELF\n");
-    printf("----------------\n");
-    printf("\n");
+    VERBOSE("\n"
+            "Loading main ELF\n"
+            "----------------\n"
+            "\n");
 
     if (main_binary_file == NULL)
     {
-        printf("No ELF provided. Skipping.\n");
+        INFO("No main binary ELF provided. Skipping.\n");
     }
     else
     {
@@ -106,10 +117,10 @@ int main(int argc, char *argv[])
         main_binary_load(main_binary_file);
     }
 
-    printf("\n");
-    printf("Loading ELF file\n");
-    printf("----------------\n");
-    printf("\n");
+    VERBOSE("\n"
+            "Loading ELF file\n"
+            "----------------\n"
+            "\n");
 
     // Storage for all read sections
     elf_section_info sections[MAX_SECTIONS];
@@ -118,12 +129,12 @@ int main(int argc, char *argv[])
     Elf32_Ehdr *hdr = elf_load(in_file);
     if (hdr == NULL)
     {
-        printf("Failed to open: %s\n", in_file);
+        ERROR("Failed to open: %s\n", in_file);
         main_binary_free();
         return -1;
     }
 
-    printf("Looking for sections to include in DSL:\n");
+    VERBOSE("Looking for sections to include in DSL:\n");
 
     uint32_t max_address = 0;
 
@@ -167,8 +178,8 @@ int main(int argc, char *argv[])
         else //if (type == DSL_SEGMENT_NOBITS)
             data = NULL;
 
-        printf("Section %s: 0x%04zX (0x%zX bytes) | Type %d\n",
-               name, address, size, type);
+        VERBOSE("Section %s: 0x%04zX (0x%zX bytes) | Type %d\n",
+                name, address, size, type);
 
         sections[read_sections].address = address;
         sections[read_sections].size = size;
@@ -182,12 +193,12 @@ int main(int argc, char *argv[])
         read_sections++;
     }
 
-    printf("Address space size: 0x%X\n", max_address);
+    INFO("Address space size: 0x%X\n", max_address);
 
-    printf("\n");
-    printf("Generating symbol table\n");
-    printf("-----------------------\n");
-    printf("\n");
+    VERBOSE("\n"
+            "Generating symbol table\n"
+            "-----------------------\n"
+            "\n");
 
     int symtab_index = -1;
     int strtab_index = -1;
@@ -208,7 +219,7 @@ int main(int argc, char *argv[])
 
         if (strcmp(name, ".strtab") == 0)
         {
-            printf(".strtab section: %d\n", i);
+            VERBOSE(".strtab section: %d\n", i);
             strtab_index = i;
         }
     }
@@ -230,14 +241,14 @@ int main(int argc, char *argv[])
         if (strcmp(name, ".symtab") != 0)
             continue;
 
-        printf(".symtab section: %d\n", i);
+        VERBOSE(".symtab section: %d\n", i);
 
         symtab_index = i;
 
         const Elf32_Sym *sym = elf_section_data(hdr, symtab_index);
         size_t sym_num = size / sizeof(Elf32_Sym);
 
-        printf("Total number of symbols: %zu\n", sym_num);
+        VERBOSE("Total number of symbols: %zu\n", sym_num);
 
         for (size_t s = 0; s < sym_num; s++, sym++)
         {
@@ -273,24 +284,24 @@ int main(int argc, char *argv[])
 
             bool unknown = (type == STT_NOTYPE);
 
-            printf("%zu: \"%s\" = %u%s%s\n", s, name, sym->st_value,
-                   public ? " [Public]" : "", unknown ? " [Unknown]": "");
+            VERBOSE("%zu: \"%s\" = %u%s%s\n", s, name, sym->st_value,
+                    public ? " [Public]" : "", unknown ? " [Unknown]": "");
 
             sym_add_to_table(name, sym->st_value, public, unknown);
         }
     }
 
-    printf("\n");
-    printf("Generating DSL file\n");
-    printf("-------------------\n");
-    printf("\n");
+    VERBOSE("\n"
+            "Generating DSL file\n"
+            "-------------------\n"
+            "\n");
 
-    printf("Opening: %s\n", out_file);
+    INFO("Creating file: %s\n", out_file);
 
     FILE *f_dsl = fopen(out_file, "wb");
     if (f_dsl == NULL)
     {
-        printf("Failed to open output file: %s\n", out_file);
+        ERROR("Failed to open output file: %s\n", out_file);
         free(hdr);
         main_binary_free();
         return -1;
@@ -308,7 +319,7 @@ int main(int argc, char *argv[])
 
     if (fwrite(&header, sizeof(dsl_header), 1, f_dsl) != 1)
     {
-        printf("Failed to write DSL header\n");
+        ERROR("Failed to write DSL header\n");
         goto error;
     }
 
@@ -327,7 +338,7 @@ int main(int argc, char *argv[])
 
     if (progbits_index == -1)
     {
-        printf("Can't find progbits section to apply relocations\n");
+        ERROR("Can't find progbits section to apply relocations\n");
         goto error;
     }
 
@@ -338,7 +349,7 @@ int main(int argc, char *argv[])
         if (sections[i].type != DSL_SEGMENT_RELOCATIONS)
             continue;
 
-        printf("Checking relocations\n");
+        VERBOSE("Checking relocations\n");
 
         Elf32_Rel *rel = sections[i].data;
         size_t num_rel = sections[i].size / sizeof(Elf32_Rel);
@@ -353,7 +364,7 @@ int main(int argc, char *argv[])
             if ((type != R_ARM_ABS32) && (type != R_ARM_THM_CALL) &&
                 (type != R_ARM_CALL))
             {
-                printf("Invalid relocation. Index %zu. Type %u\n", r, type);
+                ERROR("Invalid relocation. Index %zu. Type %u\n", r, type);
                 goto error;
             }
 
@@ -364,7 +375,7 @@ int main(int argc, char *argv[])
 
         sym_clear_unused();
 
-        printf("Sorting symbol table...\n");
+        VERBOSE("Sorting symbol table...\n");
 
         sym_sort_table();
 
@@ -384,7 +395,7 @@ int main(int argc, char *argv[])
             int new_index = sym_get_sym_index_by_old_index(old_symbol_index);
             if (new_index == -1)
             {
-                printf("Failed to translate index for relocation %zu\n", r);
+                ERROR("Failed to translate index for relocation %zu\n", r);
                 goto error;
             }
 
@@ -397,7 +408,7 @@ int main(int argc, char *argv[])
     {
         sym_clear_unused();
 
-        printf("Sorting symbol table...\n");
+        VERBOSE("Sorting symbol table...\n");
 
         sym_sort_table();
 
@@ -406,7 +417,7 @@ int main(int argc, char *argv[])
 
     // Write section headers
 
-    printf("Writing %d sections\n", read_sections);
+    VERBOSE("Writing %d sections\n", read_sections);
 
     unsigned int full_header_size =
         sizeof(dsl_header) + sizeof(dsl_section_header) * read_sections;
@@ -428,19 +439,19 @@ int main(int argc, char *argv[])
 
         if (sections[i].type != DSL_SEGMENT_NOBITS)
         {
-            printf("Section %d: offset 0x%X, 0x%X bytes\n",
+            VERBOSE("Section %d: offset 0x%X, 0x%X bytes\n",
                    i, offset, sections[i].size);
 
             current_section_offset += sections[i].size;
         }
         else
         {
-            printf("Section %d: nobits, 0x%X bytes\n", i, sections[i].size);
+            VERBOSE("Section %d: nobits, 0x%X bytes\n", i, sections[i].size);
         }
 
         if (fwrite(&section_header, sizeof(dsl_section_header), 1, f_dsl) != 1)
         {
-            printf("Failed to write DSL header for section %d\n", i);
+            ERROR("Failed to write DSL header for section %d\n", i);
             goto error;
         }
     }
@@ -455,21 +466,21 @@ int main(int argc, char *argv[])
         }
         else if (sections[i].type == DSL_SEGMENT_PROGBITS)
         {
-            printf("Writing data of section %d (progbits)\n", i);
+            VERBOSE("Writing data of section %d (progbits)\n", i);
 
             if (fwrite(sections[i].data, sections[i].size, 1, f_dsl) != 1)
             {
-                printf("Failed to write DSL data for section %d\n", i);
+                ERROR("Failed to write DSL data for section %d\n", i);
                 goto error;
             }
         }
         else if (sections[i].type == DSL_SEGMENT_RELOCATIONS)
         {
-            printf("Writing data of section %d (relocations)\n", i);
+            VERBOSE("Writing data of section %d (relocations)\n", i);
 
             if (fwrite(sections[i].data, sections[i].size, 1, f_dsl) != 1)
             {
-                printf("Failed to write DSL data for section %d\n", i);
+                ERROR("Failed to write DSL data for section %d\n", i);
                 goto error;
             }
         }
@@ -477,11 +488,11 @@ int main(int argc, char *argv[])
 
     // Save symbol table to file
 
-    printf("Saving symbol table...\n");
+    VERBOSE("Saving symbol table...\n");
 
     if (sym_table_save_to_file(f_dsl) != 0)
     {
-        printf("Failed to save symbol table!\n");
+        ERROR("Failed to save symbol table!\n");
         goto error;
     }
 
@@ -489,10 +500,10 @@ int main(int argc, char *argv[])
 
     fclose(f_dsl);
 
-    printf("\n");
-    printf("Freeing ELF files\n");
-    printf("-----------------\n");
-    printf("\n");
+    VERBOSE("\n"
+            "Freeing ELF files\n"
+            "-----------------\n"
+            "\n");
 
     free(hdr);
     main_binary_free();

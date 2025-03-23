@@ -9,6 +9,7 @@
 #include <string.h>
 
 #include "dsl.h"
+#include "log.h"
 #include "main_binary.h"
 
 typedef struct {
@@ -121,13 +122,12 @@ void sym_print_table(void)
 {
     elf_symbol_info *sym = elf_symbols;
 
-    printf("Symbol table (%zu entries)\n", elf_symbols_num);
+    VERBOSE("Symbol table (%zu entries)\n", elf_symbols_num);
 
     for (size_t i = 0; i < elf_symbols_num; i++, sym++)
     {
-        printf("%zu: \"%s\" = %u%s%s\n", i, sym->name, sym->value,
-               sym->public ? " [Public]" : "",
-               sym->unknown ? " [Unknown]" : "");
+        VERBOSE("%zu: \"%s\" = %u%s%s\n", i, sym->name, sym->value,
+                sym->public ? " [Public]" : "", sym->unknown ? " [Unknown]" : "");
     }
 }
 
@@ -140,7 +140,7 @@ int sym_table_save_to_file(FILE *f)
 
     if (fwrite(&header, sizeof(dsl_symbol_table), 1, f) != 1)
     {
-        printf("Failed to write DSL header\n");
+        ERROR("Failed to write DSL header\n");
         return -1;
     }
 
@@ -164,25 +164,26 @@ int sym_table_save_to_file(FILE *f)
         if (elf_symbols[i].unknown)
         {
             const char *sym_name = sym_get_name(i);
-            printf("Unknown symbol [%s]\n", sym_name);
+            VERBOSE("Unknown symbol [%s]\n", sym_name);
 
             // Look for the symbol in the main binary
             if (!main_binary_is_loaded())
             {
-                printf("No main binary provided. Can't resolve address.\n");
+                ERROR("No main binary provided. Can't resolve address for [%s]\n",
+                      sym_name);
                 return -1;
             }
 
-            printf("Searching main binary...\n");
+            VERBOSE("Searching main binary...\n");
 
             uint32_t sym_addr = main_binary_get_symbol_value(sym_name);
             if (sym_addr == UINT32_MAX)
             {
-                printf("Symbol not found.\n");
+                ERROR("Symbol not found: [%s]\n", sym_name);
                 return -1;
             }
 
-            printf("Symbol found: 0x%08X\n", sym_addr);
+            VERBOSE("Symbol found: 0x%08X\n", sym_addr);
 
             sym.value = sym_addr;
             sym.attributes |= DSL_SYMBOL_MAIN_BINARY;
@@ -193,7 +194,7 @@ int sym_table_save_to_file(FILE *f)
 
         if (fwrite(&sym, sizeof(dsl_symbol), 1, f) != 1)
         {
-            printf("Failed to write symbol %zu\n", i);
+            ERROR("Failed to write symbol %zu: [%s]\n", i, elf_symbols[i].name);
             return -1;
         }
     }
@@ -205,7 +206,7 @@ int sym_table_save_to_file(FILE *f)
 
         if (fwrite(name, 1, len, f) != len)
         {
-            printf("Failed to write symbol name %zu\n", i);
+            ERROR("Failed to write symbol name %zu: [%s]\n", i, elf_symbols[i].name);
             return -1;
         }
     }

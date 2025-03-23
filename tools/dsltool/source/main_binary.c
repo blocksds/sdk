@@ -9,6 +9,7 @@
 #include <string.h>
 
 #include "elf.h"
+#include "log.h"
 
 static Elf32_Ehdr *hdr = NULL;
 
@@ -22,7 +23,7 @@ int main_binary_load(const char *path)
     hdr = elf_load(path);
     if (hdr == NULL)
     {
-        printf("Failed to open: %s\n", path);
+        ERROR("Failed to open: %s\n", path);
         return -1;
     }
 
@@ -53,12 +54,12 @@ int main_binary_load(const char *path)
 
     if ((symtab_index == -1) || (strtab_index == -1))
     {
-        printf("Can't find strab or symtab\n");
+        ERROR("Can't find strab or symtab\n");
         free(hdr);
         return -1;
     }
 
-    printf("Found %zu symbols\n", symtab_size / sizeof(Elf32_Sym));
+    VERBOSE("Found %zu symbols\n", symtab_size / sizeof(Elf32_Sym));
 
     return 0;
 }
