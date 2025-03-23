@@ -44,8 +44,6 @@ int main(int argc, char **argv)
         wait_forever();
     }
 
-    // Use bright green
-
     printf("Loading libraries...\n");
 
     void *h_calculator = dlopen("dsl/calculator.dsl", RTLD_NOW | RTLD_LOCAL);
