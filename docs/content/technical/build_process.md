@@ -138,7 +138,7 @@ authors, but it's not mandatory.
 Because of all the custom `gcc` options required to build NDS binaries
 correctly, it is possible that new options are required after `gcc` updates, or
 old options need to be removed, etc. Most of the options can be modified in the
-makefile of a BlocksDS project. However, sme of this is hidden from the user in
+makefile of a BlocksDS project. However, some of this is hidden from the user in
 `specs` files located [here](https://github.com/blocksds/sdk/tree/master/sys/crts).
 This is done purely for end user convenience and to reduce the amount of
 breaking changes to user project Makefiles. You can skip the `specs` files and
