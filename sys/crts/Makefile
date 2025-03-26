@@ -36,7 +36,7 @@ endif
 
 INCLUDEFLAGS	:= $(foreach path,$(LIBDIRS),-I$(path)/include)
 
-ASFLAGS		:= -x assembler-with-cpp
+ASFLAGS		:= -g -x assembler-with-cpp
 ARCHARM7	:= -mcpu=arm7tdmi
 ARCHARM9	:= -mcpu=arm946e-s+nofp
 
