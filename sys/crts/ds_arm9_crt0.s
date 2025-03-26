@@ -157,20 +157,9 @@ NotTWL:
     sub     r8, r8, 0xc000  // r8 = end of cached RAM (see __libnds_mpu_setup)
     str     r8, [r1]        // Reserve 48 KB for IPC and bootstub
 
-    // Initialize libnds
-    push    {r0}
-    ldr     r3, =initSystem
-    blx     r3
-
-    // Initialize TLS of the main thread
-    ldr     r0, =__tls_start
-    bl      init_tls
-
-    // Initialize global constructors
-    ldr     r3, =__libc_init_array 
-    blx     r3
-
-    pop     {r0}
+    // We need to do some additional initialization, but that needs to happen
+    // after a valid thread context is setup. Check cothread_start() for more
+    // information.
 
     ldr     r1, [r0,#16]    // argv
     ldr     r0, [r0,#12]    // argc
