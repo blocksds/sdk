@@ -3,16 +3,83 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version DEV (????-??-??)
+## Version 1.9.0 (2025-03-26)
 
 - libnds:
 
+  - Add initial helpers to load dynamic libraries with `dlfcn.h` functions. Note
+    that this is still experimental. `dlopen()`, `dlsym()`, `dlerror()` and
+    `dlclose()` are supported.
+  - Fixed global C++ constructors that require libnds and the cothread scheduler
+    to be initialized. Some functions previously called from the crt0 have been
+    moved to `cothread_main()`, which runs after there is a valid multithreading
+    environment.
   - Deallocate memory reserved for the FAT file system cache if `fatInit()`
     fails.
   - Extend `statvfs()` to return the `ST_RDONLY` flag for read-only media.
   - File system operations should now return `EROFS` for read-only DLDI
     drivers.
+  - Made `libndsCrash()` public.
   - Fix potential issues involving FAT file system cache initialization.
+  - Add some checks to libc system call functions like `open()`.
+
+- DSWifi:
+
+  - Fix `ioctl(FIONREAD, x)`, which used to return `EINVAL` even when it
+    succeeded.
+  - Remove Access Points from the list of availabled APs after enough time has
+    passed without receiving any beacon packet from them. `Wifi_GetData()` and
+    `Wifi_GetAPData()` have been updated to work with the changed system.
+  - The array that specifies the order in which channels are scanned has been
+    modified so that each channel is scanned the same number of times. This
+    makes it easier to determine which APs to remove from the list of APs
+    because we aren't prioritizing APs from any channel. Also, scan mode now
+    always start with channel 1.
+  - Old RSSI values of APs are now discarded instead of being used to average
+    the value of the RSSI. This doesn't really affect how the values behave in
+    real life that much, so this change saves memory with no noticeable change
+    in the behaviour of the library.
+  - Return error on timeouts when writing to baseband chip.
+  - Add error checks when initializing RF chip.
+  - Print debug message if the ARM7 TX queue is full when the library tries to
+    add a new packet to it.
+  - Some documentation improvements.
+
+- dsltool:
+
+  - Introduced tool to the repository. This tool is used to convert dynamic
+    libraries in ELF format to DSL format, which is similar to ELF, but
+    simplified. This DSL format can be loaded by libnds with `dlopen()`.
+
+- teaktool:
+
+  - Ensure that ELF files are loaded correctly instead of crashing if they
+    aren't loaded and the pointer is NULL.
+  - Fix format in a printf.
+
+- SDK:
+
+  - Documentation:
+
+    - The new dynamic library system has been documented in the main
+      documentation of BlocksDS.
+
+  - Examples:
+
+    - Three new examples have been added to show how to use the new dynamic
+      library system.
+
+  - crts:
+
+    - Some initialization has been moved away from the crt0 of the ARM9 to
+      libnds to fix global C++ constructors that require libnds and the cothread
+      scheduler to be initialized.
+    - A new linkerscript to build dynamic libraries has been added.
+
+  - Other:
+
+    - Libraries are now built with debug symbols (`-g`) to help debug
+      applications made with them.
 
 ## Version 1.8.1 (2025-03-07)
 
