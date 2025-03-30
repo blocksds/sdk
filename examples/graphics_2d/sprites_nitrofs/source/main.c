@@ -43,8 +43,9 @@ int main(int argc, char *argv[])
         void *palDst = NULL;
         size_t gfxSize, palSize;
         GRFHeader header = { 0 };
-        GRFError err = grfLoadPath("grit/ball_png.grf", &header, &gfxDst, &gfxSize,
-                                   NULL, NULL, &palDst, &palSize);
+        GRFError err = grfLoadPath("grit/statue_png.grf", &header,
+                                   &gfxDst, &gfxSize, NULL, NULL,
+                                   &palDst, &palSize);
         if (err != GRF_NO_ERROR)
         {
             printf("Couldn't load GRF file: %d", err);
@@ -73,7 +74,7 @@ int main(int argc, char *argv[])
         DC_FlushAll();
 
         // Allocate space for the tiles and copy them there
-        gfx = oamAllocateGfx(&oamMain, SpriteSize_32x32, SpriteColorFormat_256Color);
+        gfx = oamAllocateGfx(&oamMain, SpriteSize_64x64, SpriteColorFormat_256Color);
         dmaCopy(gfxDst, gfx, gfxSize);
 
         // Copy palette
@@ -87,7 +88,7 @@ int main(int argc, char *argv[])
            100, 50, // X, Y
            0, // Priority
            0, // Palette index
-           SpriteSize_32x32, SpriteColorFormat_256Color, // Size, format
+           SpriteSize_64x64, SpriteColorFormat_256Color, // Size, format
            gfx,  // Graphics offset
            -1, // Affine index
            false, // Double size
@@ -99,7 +100,7 @@ int main(int argc, char *argv[])
            150, 70, // X, Y
            0, // Priority
            0, // Palette index
-           SpriteSize_32x32, SpriteColorFormat_256Color, // Size, format
+           SpriteSize_64x64, SpriteColorFormat_256Color, // Size, format
            gfx,  // Graphics offset
            -1, // Affine index
            false, // Double size
