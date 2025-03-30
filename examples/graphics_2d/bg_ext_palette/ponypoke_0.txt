@@ -1,0 +1,8 @@
+Image obtained from: https://opengameart.org/content/whispers-of-avalon-grassland-tileset
+
+Original readme
+===============
+
+A tileset developed for Whispers of Avalon
+
+Licenses: CC-BY 3.0, GPL 3.0, GPL 2.0

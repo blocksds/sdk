@@ -40,8 +40,9 @@ int main(int argc, char *argv[])
         void *mapDst = NULL;
         void *palDst = NULL;
         GRFHeader header = { 0 };
-        GRFError err = grfLoadPath("grit/city_png.grf", &header, &gfxDst, &gfxSize,
-                                   &mapDst, &mapSize, &palDst, &palSize);
+        GRFError err = grfLoadPath("grit/forest_town_png.grf", &header,
+                                   &gfxDst, &gfxSize, &mapDst, &mapSize,
+                                   &palDst, &palSize);
         if (err != GRF_NO_ERROR)
         {
             printf("Couldn't load GRF file: %d", err);
@@ -85,7 +86,7 @@ int main(int argc, char *argv[])
     printf("PAD:   Scroll background\n");
     printf("START: Exit to loader\n");
 
-    int x = 150, y = 70;
+    int x = 0, y = 0;
 
     while (1)
     {
