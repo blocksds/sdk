@@ -267,7 +267,7 @@ understand! From this point, it's easier.
 Bitmap modes are ideal to display images that don't follow any grid-like
 pattern. Check [`examples/graphics_2d/bg_bmp_8bit`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_bmp_8bit):
 
-![8-bit bitmap background](../bg_types_bmp_8bit.png "8-bit bitmap background")
+![8-bit bitmap background](../bg_types_bmp_8bits.png "8-bit bitmap background")
 
 The first important thing to mention are the instructions passed to grit:
 
@@ -348,7 +348,7 @@ for regular games. It's ideal for photos, for example.
 
 Check [`examples/graphics_2d/bg_bmp_16bit`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_bmp_16bit):
 
-![16-bit bitmap background](../bg_types_bmp_16bit.png "16-bit bitmap background")
+![16-bit bitmap background](../bg_types_bmp_16bits.png "16-bit bitmap background")
 
 This is how you convert graphics for this format:
 
