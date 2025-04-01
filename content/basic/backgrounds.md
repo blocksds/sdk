@@ -31,18 +31,26 @@ Mode | Layer 0 | Layer 1 | Layer 2  | Layer 3
 
 - **Regular**: Tiled backgrounds. Up to 1024 tiles in total. Tiles can be
   flipped vertically or horizontally. Each tile can use a different palette.
+  Valid sizes: 256x256, 512x256, 256x512, 512x512 pixels.
 
 - **Affine**: Tiled backgrounds that can be rotated and scaled. Limited to 256
   tiles in total, and they can only use one 256-color palette. Tiles can't be
-  flipped or rotated.
+  flipped or rotated.  Valid sizes: 128x128, 256x256, 512x512 and 1024x1024
+  pixels.
 
 - **Extended**: This can be configured as a bitmap backgrounds (with a 256-color
   palette or direct-color) or an affine background. If set as an affine
   background, it can have up to 1024 tiles which can be flipped horizontally and
   vertically, and each tile can have a different palette.
 
+  Valid sizes:
+
+  - Extended affine: 128x128, 256x256, 512x512 and 1024x1024.
+  - 256-color bitmap: 128x128. 256x256, 512x256, 256x512, 512x512
+  - Direct-color bitmap: 128x128. 256x256, 512x256, 256x512 and 512x512.
+
 - **Large**: 256-color bitmap that can be rotated and scaled and use all 512 KB
-  of the for main VRAM banks for the bitmap.
+  of the for main VRAM banks for the bitmap. Valid sizes: 1024x512 and 512x1024.
 
 The only difference between the main and sub engines is that mode 6 isn't
 available in the sub engine.
