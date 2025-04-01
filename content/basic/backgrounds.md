@@ -406,7 +406,65 @@ banks, though. Check `examples/graphics_2d/bg_bmp_16bit` for more details. The
 idea is the same as with 8-bit double buffering setups, but reserving more space
 for each buffer.
 
-## 9. Background priorities
+## 9. Displaying large 256-color bitmap backgrounds
+
+This mode is just a larger 256-color bitmap backgrounds than the ones explained
+before. Note that only the main engine can be set in this mode.
+
+Check [`examples/graphics_2d/bg_bmp_8bit_large`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_bmp_8bit_large):
+
+![Large 8-bit bitmap background](../bg_types_bmp_8bits_large.png "Large 8-bit bitmap background")
+
+The instructions passed to grit are the same as with regular 8-bit backgrounds:
+
+```
+# 8 bpp, bitmap, set magenta as transparent color, not compressed
+-gB8 -gb -gTFF00FF
+```
+
+The code to load this is a bit different:
+
+```c
+#include <nds.h>
+
+#include "manga_bg.h"
+
+int main(int argc, char *argv[])
+{
+    // With mode 6 only layer 2 is available, and it's a large 256-color bitmap
+    videoSetMode(MODE_6_2D);
+
+    // Video mode 6 is designed to display a large bitmap stored in all primary
+    // VRAM banks: 128 KB * 4 = 512 KB in total.
+    vramSetPrimaryBanks(VRAM_A_MAIN_BG_0x06000000,
+                        VRAM_B_MAIN_BG_0x06020000,
+                        VRAM_C_MAIN_BG_0x06040000,
+                        VRAM_D_MAIN_BG_0x06060000);
+
+    // Valid sizes are 1024x512 and 512x1024
+    int bg = bgInit(2, BgType_Bmp8, BgSize_B8_1024x512, 0, 0);
+
+    // Load the palette and the bitmap
+    dmaCopy(manga_bgPal, BG_PALETTE, manga_bgPalLen);
+    dmaCopy(manga_bgBitmap, bgGetGfxPtr(bg), manga_bgBitmapLen);
+
+    // Wait forever
+    while (1)
+        swiWaitForVBlank();
+}
+```
+
+You can rotate it, scale it and scroll it (remember to call `bgUpdate()`
+afterwards).
+
+One trick that you can use is that, if you don't need the full size of the
+bitmap, you can use VRAM banks for other things, and it will work. For example,
+if you want a 1024x256 background you can assign VRAM A and B as main engine
+background RAM, tell `bgInit()` that you want a 1024x512 bitmap, and the 2D
+engine will only be able to use those banks for the bitmap. You'll be free to
+use VRAM C and D for other things.
+
+## 10. Background priorities
 
 The last thing to mention in this super long chapter is that you can change the
 priorities of all background layers on the screen. The table with the video
