@@ -1,0 +1,83 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Antonio Niño Díaz, 2025
+
+name: Tutorial
+
+on:
+  push:
+    branches:
+      - 'master'
+    paths-ignore:
+      - '**.md'
+  workflow_dispatch:
+  repository_dispatch:
+    types: [run_build]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  packages: write
+
+jobs:
+
+  generate_website:
+    name: Generate website
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+
+    steps:
+      - name: Clone project
+        uses: actions/checkout@v4
+        with:
+          repository: 'blocksds/tutorial'
+          ref: 'master'
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install sudo wget
+
+          echo ""
+          echo "[***] Installing Hugo"
+          echo ""
+
+          wget https://github.com/gohugoio/hugo/releases/download/v0.140.2/hugo_extended_0.140.2_linux-amd64.tar.gz
+          tar -xf hugo_extended_0.140.2_linux-amd64.tar.gz
+          sudo mv hugo /usr/bin
+
+          hugo version
+
+      - name: Build tutorial
+        run: |
+          bash build-docs.sh
+
+          # Create tarball with everything to upload to GitHub pages
+          cd public
+          tar -cvf ../repo.tar ./*
+
+      - name: Upload repo artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-pages
+          path: repo.tar
+          if-no-files-found: error
+
+  publish_repo:
+    name: Publish website with GitHub pages
+    if: contains(github.ref,'refs/heads/master')
+    needs: [generate_website]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
