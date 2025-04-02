@@ -148,7 +148,7 @@ Address   | Description
 0x2FF0000 | libnds shadows this area with DTCM, making it inaccessible through this address.
 0x2FF4000 | [devkitARM bootstub structure](https://github.com/blocksds/libnds/blob/7d131d933ebab8eecf1c28a4eeb2107257f09e14/include/nds/system.h#L451-L458). Used for implementing the [exit to loader protocol](../../design/exit_to_loader/).
 0x2FFE000 | DSi only: .nds header - 0x1000 bytes.
-0x2FFF000 | libnds ARM9/ARM7 internal IPC region. (Mostly) deprecated.
+0x2FFF000 | libnds ARM9/ARM7 internal IPC region.
 0x2FFFC80 | DS/DSi: user settings loaded from flash memory.
 0x2FFFD9C | DS/DSi: ARM9 exception vector, as well as top of stack.
 0x2FFFE00 | DS/DSi: .nds header - 0x160 bytes on DSi, 0x170 bytes on NDS.
@@ -185,12 +185,14 @@ source or destination is in ITCM or DTCM, you will have to use a regular CPU
 copy.
 
 ITCM can't be remapped, but the 32 KB of ITCM are mirrored from 0x0000000 to
-0x2000000. It is important to allow the CPU to access the first few KB of ITCM
-at address 0x0000000 because that's where the CPU expects the exception vectors,
-but address 0x0000000 is very inconvenient from the point of view of
-development. Normally, NULL doesn't point to valid memory. It would be better to
-not use any pointer that is too close to NULL. That's why libnds sets up the MPU
-so that ITCM is accessed at address 0x1000000.
+0x2000000. It's a good idea to leave the region at 0x0000000 inaccessible so
+that any NULL pointer that is dereferenced causes a data abort. That's why
+libnds sets up the MPU so that ITCM is accessed at address 0x1000000. It
+traps NULL pointer dereferences and it makes ITCM addresses more recognizable.
+
+However, it's important to have the option for the CPU to access ITCM at address
+0x0000000 because users are allowed to setup a custom exception handler there.
+Access to this region is enabled if you call `setVectorBase()`.
 
 ## 6. ARM7 WRAM and Shared WRAM
 
