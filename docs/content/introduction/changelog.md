@@ -3,6 +3,52 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version 1.9.1 (2025-04-03)
+
+- libnds:
+
+  - A new function has been added to reduce the heap space from the end of RAM:
+    `reduceHeapSize()`.
+  - The sprite mapping enums have been simplified by removing a part of the
+    value that wasn't used by anything.
+  - A few documentation improvements in backgrounds, sprites and FIFO
+    definitions.
+
+- SDK:
+
+  - Documentation:
+
+    - The memory map documentation has been updated.
+
+  - Examples:
+
+    - The images used in 2D sprites and backgrounds examples have been improved.
+    - A new example has been added to show how to use main engine video mode 6.
+    - A new example has been added to show how to use extended affine
+      backgrounds. There was only an example of how to use regular affine
+      backgrounds.
+    - The example of sprites that use extended palettes has been updated to use
+      multiple palettes per engine instead of just one.
+
+  - Tests:
+
+    - A new test has been added to check the bounds of the heap compared to the
+      bounds of DTCM. It also checks if `reduceHeapSize()`, `malloc()` and
+      `free()` interact the right way.
+
+  - crts:
+
+    - A very old bug has been fixed where the heap end in DSi mode would allow
+      malloc() to allocate memory inside DTCM (which is used by the stack, and
+      would corrupt it). Thanks to @ds-sloth for the initial report that
+      resulted in finding the bug.
+
+  - Other:
+
+    - A new tutorial for BlocksDS has been started. It's available
+      [here](https://blocksds.skylyrac.net/tutorial/), and the source code is
+      available [here](https://github.com/blocksds/tutorial).
+
 ## Version 1.9.0 (2025-03-26)
 
 - libnds:
