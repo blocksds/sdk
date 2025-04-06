@@ -35,7 +35,7 @@ Mode | Layer 0 | Layer 1 | Layer 2  | Layer 3
 
 - **Affine**: Tiled backgrounds that can be rotated and scaled. Limited to 256
   tiles in total, and they can only use one 256-color palette. Tiles can't be
-  flipped or rotated.  Valid sizes: 128x128, 256x256, 512x512 and 1024x1024
+  flipped or rotated. Valid sizes: 128x128, 256x256, 512x512 and 1024x1024
   pixels.
 
 - **Extended**: This can be configured as a bitmap backgrounds (with a 256-color
