@@ -10,6 +10,9 @@ in C. If not, you should first learn the basics of C programming.
 The tutorial focuses on practical examples and it should be easy to follow but,
 if you need help, check the [support page](./introduction/support).
 
+If you want to get low-level information on how the hardware works, check
+[GBATEK](https://problemkaputt.de/gbatek.htm).
+
 The text of this tutorial is licensed under the license
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Any code in
 this tutorial is licensed under the
