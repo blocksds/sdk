@@ -17,8 +17,8 @@ int main(int argc, char *argv[])
 
     consoleDemoInit();
 
-    oamInit(&oamMain, SpriteMapping_1D_32, false);
-    oamInit(&oamSub, SpriteMapping_1D_32, false);
+    oamInit(&oamMain, SpriteMapping_1D_128, false);
+    oamInit(&oamSub, SpriteMapping_1D_128, false);
 
     // Allocate space for the tiles and copy them there
     u16 *gfxMain = oamAllocateGfx(&oamMain, SpriteSize_64x64, SpriteColorFormat_256Color);
