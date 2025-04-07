@@ -7,3 +7,4 @@ This folder contains examples of how to use Maxmod.
 - `nitrofs`: Use Maxmod to play music and SFXs stored in NitroFS.
 - `reverb`: Use Maxmod to play music with reverb effects.
 - `song_event`: How to use song effects to trigger events in your code.
+- `streaming`: Streams a WAV file from the filesystem.
