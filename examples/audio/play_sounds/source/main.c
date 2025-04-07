@@ -14,10 +14,12 @@
 
 int main(int argc, char **argv)
 {
+    // Make sure that the sound engine on the ARM7 is initialized
     soundEnable();
 
     consoleDemoInit();
 
+    // Variables to hold the channels being used by the sounds
     int ch_psg = -1;
     int ch_wav = -1;
     int ch_noise = 1;
@@ -40,32 +42,49 @@ int main(int argc, char **argv)
 
         if (keys_down & KEY_A)
         {
+            // Stop sound if it's already active
             if (ch_psg != -1)
                 soundKill(ch_psg);
 
-            ch_psg = soundPlayPSG(DutyCycle_50, 440 + rand() % 256, 127, 64);
+            ch_psg = soundPlayPSG(
+                    DutyCycle_50,       // Duty cycle
+                    440 + rand() % 256, // Random freq between 440 and 696 Hz
+                    127,                // Volume: Max
+                    64);                // Panning: Center
         }
 
         if (keys_down & KEY_Y)
         {
+            // Stop sound if it's already active
             if (ch_wav != -1)
                 soundKill(ch_wav);
 
-            ch_wav = soundPlaySample(nature_raw_bin, SoundFormat_16Bit,
-                                     nature_raw_bin_size, 11025, 127, 64,
-                                     false, 0);
+            ch_wav = soundPlaySample(nature_raw_bin, // Pointer to sample
+                        SoundFormat_16Bit,           // Format: Signed 16 bits
+                        nature_raw_bin_size,         // Size in bytes of the sample
+                        11025, // Frequency in Hz
+                        127,   // Volume: Max
+                        64,    // Panning: Center
+                        false, // Disable looping
+                        0);    // Loop start point (not used here)
         }
 
         if (keys_down & KEY_X)
         {
+            // Stop sound if it's already active
             if (ch_noise != -1)
                 soundKill(ch_noise);
 
-            ch_noise = soundPlayNoise(700 + rand() % 256, 127, 64);
+            ch_noise = soundPlayNoise(
+                    700 + rand() % 256, // Random freq between 700 and 956 Hz
+                    127,                // Volume: Max
+                    64);                // Panning: Center
         }
 
         if (keys_down & KEY_B)
         {
+            // Stop any sound that is active
+
             if (ch_psg != -1)
                 soundKill(ch_psg);
             ch_psg = -1;
