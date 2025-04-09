@@ -123,8 +123,8 @@ This is an SDK to develop applications for Nintendo DS in C or C++.
 
 - It is possible to read and set the date and time of the RTC clock.
 
-- WiFi support isn't complete. It is possible to connect to Access Points with
-  the library DS WiFi, but it doesn't support DS to DS WiFi communications.
+- It is possible to connect to WiFi Access Points and perform DS to DS WiFi
+  communications with the DS WiFi library.
 
 - **ndstool** supports creating NDS ROMs and define a ROM icon and banner text
   (in multiple languages!).
