@@ -1,12 +1,7 @@
 // SPDX-License-Identiier: CC0-1.0
 //
 // SPDX-FileContributor: Michele Di Giorgio, 2024
-
-// Example usage of maxmod reverb.
-//
-// - Parallax Glacier by Raina
-//
-// http://modarchive.org/index.php?request=view_by_moduleid&query=163194
+// SPDX-FileContributor: Antonio Niño Díaz, 2025
 
 #include <maxmod9.h>
 #include <nds.h>
@@ -31,7 +26,8 @@ int initReverb()
                                                     samplingRate,
                                                     reverbDelayLeft);
     uint8_t *bufferLeft = (uint8_t *)malloc(bufferLeftLen * 4);
-    if (bufferLeft == NULL) {
+    if (bufferLeft == NULL)
+    {
         printf("Not enough memory to allocate left channel buffer\n");
         return 1;
     }
@@ -40,7 +36,8 @@ int initReverb()
                                                      samplingRate,
                                                      reverbDelayRight);
     uint8_t *bufferRight = (uint8_t *)malloc(bufferRightLen * 4);
-    if (bufferRight == NULL) {
+    if (bufferRight == NULL)
+    {
         printf("Not enough memory to allocate right channel buffer\n");
         return 1;
     }
@@ -73,12 +70,13 @@ int main(int argc, char **argv)
 
     mmInitDefaultMem((mm_addr)soundbank_bin);
 
-    mmLoad(MOD_PARALLAX_80599);
+    mmLoad(MOD_JOINT_PEOPLE);
 
     printf("maxmod reverb example\n");
     printf("=====================\n");
     printf("\n");
-    printf("A: Toggle reverb\n");
+    printf("A: Enable reverb\n");
+    printf("B: Disable reverb\n");
     printf("\n");
     printf("START: Return to loader\n");
 
@@ -90,12 +88,12 @@ int main(int argc, char **argv)
 
     soundEnable();
 
-    mmStart(MOD_PARALLAX_80599, MM_PLAY_LOOP);
-    mmSetModuleTempo(800);
+    mmStart(MOD_JOINT_PEOPLE, MM_PLAY_LOOP);
 
     bool reverbOn = false;
 
-    while (1) {
+    while (1)
+    {
         swiWaitForVBlank();
 
         scanKeys();
@@ -105,12 +103,19 @@ int main(int argc, char **argv)
         if (keys_down & KEY_START)
             break;
 
-        if (keys_down & KEY_A) {
-            if (!reverbOn) {
+        if (keys_down & KEY_A)
+        {
+            if (!reverbOn)
+            {
                 mmReverbStart(MMRC_BOTH);
                 reverbOn = true;
             }
-            else {
+        }
+
+        if (keys_down & KEY_B)
+        {
+            if (reverbOn)
+            {
                 mmReverbStop(MMRC_BOTH);
                 reverbOn = false;
             }
