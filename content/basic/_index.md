@@ -1,4 +1,4 @@
 ---
-weight: -30
+weight: 0
 title: 'Basic'
 ---
