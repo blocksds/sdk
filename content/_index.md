@@ -10,6 +10,9 @@ in C. If not, you should first learn the basics of C programming.
 The tutorial focuses on practical examples and it should be easy to follow but,
 if you need help, check the [support page](./introduction/support).
 
+You can find the documentation of BlocksDS and its libraries in the following
+[link](https://blocksds.skylyrac.net/docs/).
+
 If you want to get low-level information on how the hardware works, check
 [GBATEK](https://problemkaputt.de/gbatek.htm).
 
