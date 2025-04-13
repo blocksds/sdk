@@ -16,6 +16,9 @@ You can find the documentation of BlocksDS and its libraries in the following
 If you want to get low-level information on how the hardware works, check
 [GBATEK](https://problemkaputt.de/gbatek.htm).
 
+If you want to make any suggestions or submit fixes, you can check the
+repository of this tutorial [here](https://github.com/blocksds/tutorial).
+
 The text of this tutorial is licensed under the license
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Any code in
 this tutorial is licensed under the
