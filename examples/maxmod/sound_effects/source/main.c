@@ -39,9 +39,8 @@ int main(int argc, char **argv)
     printf("maxmod basic sounds example\n");
     printf("===========================\n");
     printf("\n");
-    printf("A: Play explosion SFX\n");
-    printf("\n");
-    printf("B: Stop song\n");
+    printf("A: Play short explosion SFX\n");
+    printf("B: Play continuous SFX\n");
     printf("\n");
     printf("START: Return to loader\n");
 
