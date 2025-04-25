@@ -3,6 +3,53 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version 1.10.0 (2025-04-25)
+
+- Maxmod:
+
+  - Most of the files of the library have been converted from assembly to C to
+    help people understand, maintain and improve the code. The remaining
+    assembly code is the software mixing code of the ARM7 (on both DS and GBA
+    modes) and the song player code (which is too big to convert in one go and
+    it will require more work in the future). Both the GBA and DS ports have
+    been tested.
+  - Some error checks have been added to code that didn't have it (like all code
+    using `fopen()`, `fread()` or `malloc()`.
+  - Code that allocates memory now uses `calloc()` instead of `malloc()` to
+    clear the buffer before using it.
+  - The unused Value32 FIFO handler code in the ARM7 has been removed.
+  - Cache management has been fixed. The cache handling functions of Maxmod were
+    incorrect, and they have been removed. Now Maxmod uses the functions of
+    libnds.
+  - IPC code that synchronized streaming between ARM7 and ARM9 has been
+    improved. Instead of using shared memory to synchronize CPUs, new FIFO
+    messages have been implemented. The old code required dangerous cache
+    management that could corrupt variables surounding the "ready" flag used by
+    the library.
+
+- SDK:
+
+  - Other:
+
+    - GCC has been updated to version 15.1.0 in Wonderful Toolchain. You can
+      check the release notes [here](https://gcc.gnu.org/gcc-15/changes.html).
+      An important addition is the support for `#embed`.
+    - picolibc has been updated to version 1.8.10 in Wonderful Toolchain. Check
+      the release notes [here](https://github.com/picolibc/picolibc/releases/tag/1.8.10).
+
+  - Examples:
+
+    - A new example of how to use sound effects with Maxmod has been added.
+    - The Maxmod streaming example has been fixed to not hang in DSi consoles or
+      DS consoles with DLDI running on the ARM7.
+    - The reverb Maxmod example has bee improved with a new song that makes the
+      effect more evident.
+    - The "sprites" example has been renamed to "sprites_regular" for clarity.
+      Also, 128 KB sprite mapping mode is now used in this example, as this is
+      what most developers would want in their own code.
+    - Some comments have been added to the libnds sound example.
+    - A missing example description has been added.
+
 ## Version 1.9.1 (2025-04-03)
 
 - libnds:
