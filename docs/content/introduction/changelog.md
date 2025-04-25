@@ -12,7 +12,7 @@ weight: -20
     assembly code is the software mixing code of the ARM7 (on both DS and GBA
     modes) and the song player code (which is too big to convert in one go and
     it will require more work in the future). Both the GBA and DS ports have
-    been tested.
+    been tested. Thanks to @Lorenzooone for all his work!
   - Some error checks have been added to code that didn't have it (like all code
     using `fopen()`, `fread()` or `malloc()`.
   - Code that allocates memory now uses `calloc()` instead of `malloc()` to
