@@ -3,6 +3,16 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version 1.10.1 (2025-04-26)
+
+- SDK:
+
+  - Other:
+
+    - Global initializers have been fixed for picolibc 1.8.10.
+    - Fix conflicting types when including `math.h` instead of `cmath` from C++
+      files.
+
 ## Version 1.10.0 (2025-04-25)
 
 - Maxmod:
