@@ -135,18 +135,18 @@ SECTIONS
        the linker would then create the section even if it turns out to
        be empty, which isn't pretty.  */
     . = ALIGN(32 / 8);
-    .preinit_array :
-    {
-        PROVIDE (__preinit_array_start = .);
-        KEEP (*(.preinit_array))
-        PROVIDE (__preinit_array_end = .);
-    } >ewram :main = 0xff
     .init_array :
     {
+        PROVIDE (__preinit_array_start = .);
+        PROVIDE (__bothinit_array_start = .);
+        KEEP (*(.preinit_array))
+        PROVIDE (__preinit_array_end = .);
+
         PROVIDE (__init_array_start = .);
         KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
         KEEP (*(.init_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .ctors))
         PROVIDE (__init_array_end = .);
+        PROVIDE (__bothinit_array_end = .);
     } >ewram :main = 0xff
     .fini_array :
     {

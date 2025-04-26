@@ -75,11 +75,13 @@ SECTIONS
 
     . = ALIGN(32 / 8);
     PROVIDE (__preinit_array_start = .);
+    PROVIDE (__bothinit_array_start = .);
     .preinit_array     : { KEEP (*(.preinit_array)) } >ddmem = 0xff
     PROVIDE (__preinit_array_end = .);
     PROVIDE (__init_array_start = .);
     .init_array     : { KEEP (*(.init_array)) } >ddmem = 0xff
     PROVIDE (__init_array_end = .);
+    PROVIDE (__bothinit_array_end = .);
     PROVIDE (__fini_array_start = .);
     .fini_array     : { KEEP (*(.fini_array)) } >ddmem = 0xff
     PROVIDE (__fini_array_end = .);
