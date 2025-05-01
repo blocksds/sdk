@@ -42,7 +42,7 @@ int main(int argc, char **argv)
         uint8_t rumble = 0;
 
         if (peripheralSlot2GetSupportMask() & SLOT2_PERIPHERAL_TILT)
-                peripheralSlot2TiltStart();
+            peripheralSlot2TiltStart();
 
         while (1)
         {
