@@ -59,6 +59,14 @@ void vblank_handler(void)
 
 int main(void)
 {
+#if defined(DEBUG_LIBS)
+    // The ARM9 exception handler can trap data aborts and undefined instruction
+    // exceptions. However, the ARM7 handler can only trap undefined
+    // instructions. When an exception happens, a message is sent to the ARM9 to
+    // display the crash information.
+    defaultExceptionHandler();
+#endif
+
     // Initialize sound hardware
     // Required for some functions within libnds
     enableSound();

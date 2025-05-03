@@ -31,6 +31,7 @@ USE_MAXMOD ?= 0
 USE_LIBXM7 ?= 0
 
 ifeq ($(DEBUG_LIBS),1)
+    DEFINES		+= -DDEBUG_LIBS=1
     LIBS		:= -lnds7d
 else
     LIBS		:= -lnds7
