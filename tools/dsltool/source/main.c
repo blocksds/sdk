@@ -359,7 +359,7 @@ int main(int argc, char *argv[])
         for (size_t r = 0; r < num_rel; r++)
         {
             uint8_t type = rel[r].r_info & 0xFF;
-            uint8_t symbol_index = rel[r].r_info >> 8;
+            int symbol_index = rel[r].r_info >> 8;
 
             if ((type != R_ARM_ABS32) && (type != R_ARM_THM_CALL) &&
                 (type != R_ARM_CALL))
@@ -390,7 +390,7 @@ int main(int argc, char *argv[])
         {
             uint32_t offset = rel[r].r_offset;
             uint8_t type = rel[r].r_info & 0xFF;
-            uint8_t old_symbol_index = rel[r].r_info >> 8;
+            int old_symbol_index = rel[r].r_info >> 8;
 
             int new_index = sym_get_sym_index_by_old_index(old_symbol_index);
             if (new_index == -1)
