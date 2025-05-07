@@ -75,7 +75,7 @@ typedef struct {
     uint32_t address;       ///< Address to load the section to
     uint32_t size;          ///< Size in bytes
     uint32_t data_offset;   ///< Offset of the file to the data of the section
-    uint8_t type;           ///< DSL_SEGMENT_CODE or DSL_SEGMENT_DATA
+    uint8_t type;           ///< One of the DSL_SEGMENT_* defines.
     uint8_t unused[3];      ///< Unused. Set to zero
 } dsl_section_header;
 
