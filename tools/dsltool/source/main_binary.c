@@ -84,7 +84,7 @@ uint32_t main_binary_get_symbol_value(const char *name)
         const char *sym_name;
 
         // Only save addresses of functions and objects, not sections
-        if ((type != STT_FUNC) && (type != STT_OBJECT))
+        if ((type != STT_FUNC) && (type != STT_OBJECT) && (type != STT_TLS))
             continue;
 
         sym_name = elf_get_string_strtab(hdr, strtab_index, sym->st_name);

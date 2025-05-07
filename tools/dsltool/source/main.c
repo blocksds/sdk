@@ -282,7 +282,10 @@ int main(int argc, char *argv[])
             if ((vis != STV_DEFAULT) && (vis != STV_EXPORTED))
                 public = false;
 
-            bool unknown = (type == STT_NOTYPE);
+            // Symbols without a type are unknown. However, any symbol in a TLS
+            // section must refer to the main binary as well, because a dynamic
+            // library can't have TLS sections with the current codebase.
+            bool unknown = (type == STT_NOTYPE) || (type == STT_TLS);
 
             VERBOSE("%zu: \"%s\" = %u%s%s\n", s, name, sym->st_value,
                     public ? " [Public]" : "", unknown ? " [Unknown]": "");
@@ -361,14 +364,16 @@ int main(int argc, char *argv[])
             uint8_t type = rel[r].r_info & 0xFF;
             uint8_t symbol_index = rel[r].r_info >> 8;
 
-            if ((type != R_ARM_ABS32) && (type != R_ARM_THM_CALL) &&
-                (type != R_ARM_CALL))
+            if ((type == R_ARM_ABS32) || (type == R_ARM_THM_CALL) ||
+                (type == R_ARM_CALL) || (type == R_ARM_TLS_LE32))
+            {
+                sym_set_as_used(symbol_index);
+            }
+            else
             {
                 ERROR("Invalid relocation. Index %zu. Type %u\n", r, type);
                 goto error;
             }
-
-            sym_set_as_used(symbol_index);
         }
 
         // Remove unused symbols and sort them by name
