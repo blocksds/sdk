@@ -365,7 +365,8 @@ int main(int argc, char *argv[])
             int symbol_index = rel[r].r_info >> 8;
 
             if ((type == R_ARM_ABS32) || (type == R_ARM_THM_CALL) ||
-                (type == R_ARM_CALL) || (type == R_ARM_TLS_LE32))
+                (type == R_ARM_CALL) || (type == R_ARM_TLS_LE32) ||
+                (type == R_ARM_JUMP24))
             {
                 sym_set_as_used(symbol_index);
             }
