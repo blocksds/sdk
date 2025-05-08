@@ -2,6 +2,7 @@
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2025
 
+#include <errno.h>
 #include <dlfcn.h>
 #include <stdio.h>
 
@@ -14,6 +15,14 @@ void wait_forever(void)
         swiWaitForVBlank();
 }
 
+__thread volatile int main_binary_tls_int;
+
+__attribute__((noinline)) ARM_CODE int main_binary_arm_function(int a, int b)
+{
+    return a + b;
+}
+
+typedef void (fnptrvoid)(void);
 typedef int (fnptr1int)(int);
 typedef int (fnptr2int)(int, int);
 
@@ -82,6 +91,24 @@ int main(int argc, char **argv)
     }
     printf("\n");
 
+    fnptrvoid *test_tls_symbols = dlsym(h, "test_tls_symbols");
+    printf("test_tls_symbols: %p\n", test_tls_symbols);
+    err = dlerror();
+    if (err != NULL)
+    {
+        printf("dlsym(test_tls_symbols): %s\n", err);
+        wait_forever();
+    }
+    fnptr2int *arm_tail_call = dlsym(h, "arm_tail_call");
+    printf("arm_tail_call: %p\n", arm_tail_call);
+    err = dlerror();
+    if (err != NULL)
+    {
+        printf("dlsym(arm_tail_call): %s\n", err);
+        wait_forever();
+    }
+    printf("\n");
+
     printf("Using library functions...\n");
     printf("\n");
     operation_set(0);
@@ -107,6 +134,14 @@ int main(int argc, char **argv)
     printf("Result = %d\n", res);
     printf("\n");
 
+    printf("Calling test_tls_symbols()...\n");
+    errno = 7654321;
+    main_binary_tls_int = 45678;
+    test_tls_symbols();
+    printf("\n");
+
+    printf("arm_tail_call(23, 12) = %d\n", arm_tail_call(23, 12));
+    printf("\n");
     // This should fail
     printf("Resolving private symbol...\n");
     void *ptr = dlsym(h, "op_add");
@@ -145,6 +180,12 @@ int main(int argc, char **argv)
         if (keysHeld() & KEY_START)
             break;
     }
+
+    // Ensure functions are included as part of the main binary.  Writing to
+    // REG_BLDY without enabling blending shouldn't have any effect, but it
+    // should force the compiler to not remove the code because it's a volatile
+    // pointer.
+    REG_BLDY = main_binary_arm_function(0, 0);
 
     return 0;
 }

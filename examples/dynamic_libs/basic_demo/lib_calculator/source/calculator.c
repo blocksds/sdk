@@ -2,6 +2,7 @@
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2025
 
+#include <errno.h>
 #include <stdio.h>
 #include <stddef.h>
 
@@ -17,7 +18,11 @@ typedef int (*fpointer)(int, int);
 
 fpointer operation_fn;
 
-__attribute__((noinline)) int add(int a, int b)
+// Some things that are present in the main binary
+extern __thread int main_binary_tls_int;
+int main_binary_arm_function(int a, int b);
+
+ARM_CODE __attribute__((noinline)) int add(int a, int b)
 {
     return a + b;
 }
@@ -96,4 +101,16 @@ ARM_CODE SYM_PUBLIC int operation_arm(int value)
            __func__, value, value, res);
 
     return res;
+}
+
+SYM_PUBLIC void test_tls_symbols(void)
+{
+    printf("  main_binary_tls_int = %d\n"
+           "  errno = %d\n",
+           main_binary_tls_int, errno);
+}
+
+ARM_CODE SYM_PUBLIC int arm_tail_call(int a, int b)
+{
+    __attribute__((musttail)) return main_binary_arm_function(a, b);
 }
