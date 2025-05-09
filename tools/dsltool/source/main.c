@@ -372,6 +372,8 @@ int main(int argc, char *argv[])
             }
             else
             {
+                // For more information, check the AAELF32 documentation:
+                // https://github.com/ARM-software/abi-aa/blob/4492d1570eb70c8fd146623e0db65b2d241f12e7/aaelf32/aaelf32.rst
                 ERROR("Invalid relocation. Index %zu. Type %u\n", r, type);
                 goto error;
             }
