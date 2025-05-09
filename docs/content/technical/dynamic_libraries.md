@@ -159,3 +159,6 @@ may be noticeable. If the functions are big, this cost won't be noticeable.
 
 - Libraries can't call functions from other libraries. This may be supported in
   the future.
+
+- Libraries may use thread-local variables from the main binary, but they can't
+  have their own thread-local variables.
