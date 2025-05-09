@@ -53,6 +53,7 @@ Additional contributions to the BlocksDS-provided version of libnds have been pr
 - Kurz, Dominik (Kuratius)
 - lifehackerhansol
 - Lorenzooone
+- Niño Díaz, Antonio
 - Veloz, Ivan
 
 In addition, the BlocksDS-provided version of libnds includes code developed by the following third parties:
@@ -62,20 +63,27 @@ In addition, the BlocksDS-provided version of libnds includes code developed by 
 - Gericom (Teak DSP)
 - profi200 (TMIO SD/MMC driver)
 
-# dswifi
+# DSWifi
 
 - Gamblore
 - Murphy, Dave (WinterMute)
+- Niño Díaz, Antonio
 - Quirk, Richard (richq)
 - Rak, Patrik
 - Stair, Stephen (sgstair)
 - Theall, Michael (mtheall)
 
+# Maxmod
+
+- maxmod: Johnson, Mukunda
+- Murphy, Dave (WinterMute)
+- Niño Díaz, Antonio
+- Lorenzooone
+
 # Other on-device libraries
 
 - crt0: fincs; Murphy, Dave (WinterMute); PoroCYon
-- libxm7: sverx
-- maxmod: Johnson, Mukunda
+- LibXM7: sverx
 
 # grit
 
@@ -86,6 +94,7 @@ In addition, the BlocksDS-provided version of libnds includes code developed by 
 - Jones, Felix
 - Massif
 - Murphy, Dave (WinterMute)
+- Niño Díaz, Antonio
 - nytpu
 - Pfau, Vicki (endrift)
 - Quirk, Richard (richq)
@@ -107,4 +116,3 @@ This project wouldn't have been possible without:
 - the GNU project, developers of [GCC](https://gcc.gnu.org/) and [make](https://www.gnu.org/software/make/) among others;
 - Keith Packard, the lead developer of [picolibc](https://github.com/picolibc/picolibc), itself based on Cygnus/Red Hat's [newlib](https://sourceware.org/newlib/);
 - many others!
-
