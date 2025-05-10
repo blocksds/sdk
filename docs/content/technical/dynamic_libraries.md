@@ -55,6 +55,14 @@ functions. For example, when the source code divides two integers, it calls
 `__aeabi_idiv()`, found in `libgcc`. If this function isn't already in the main
 binary, the library won't be able to divide integers!
 
+The last unusual option is `-Wl,--target1-abs`. Constructor pointers in the
+`init_array` generate relocations of type `R_ARM_TARGET1`. This can be
+interpreted as either `R_ARM_REL32` or `R_ARM_ABS32` depending on the target
+architecture. By default, `arm*-*-elf` and `arm*-*-eabi` use `rel` relocations,
+and only `arm*-*-symbianelf` uses `abs` relocations. To simplify libnds we can
+use the `--target1-abs` switch, which lets us not implement `R_ARM_REL32`. You
+can find more information [here](https://sourceware.org/binutils/docs/ld/ARM.html).
+
 ## 3. Converting ELF files to DSL
 
 Converting the ELF file to DSL is a process that involves reading all the
@@ -109,14 +117,30 @@ for progbits and nobits sections. Once sections are loaded, the symbols table is
 loaded. This table is required for `dlsym()` to work later too. Once all
 sections and symbols are loaded, relocation addresses are patched. In the end,
 the size of a dynamic library in RAM is the size of the progbits and nobits
-sections, plus the symbol table.
+sections, plus the symbol table. When everything is loaded, and relocations are
+handled, the global constructors of the library are called.
 
 When `dlsym()` is called, the symbol table is searched for that string. If the
 string is found, and the symbol is marked as public, it will return the address
 to that symbol so that the main binary can use it.
 
-Once the main binary is done with the library, it can call `dlclose()` to free
-the memory used by it.
+Note that to obtain pointers to C++ symbols with `dlsym()` you need to use the
+mangled names of the symbols. You can check the symbols of the name with:
+
+```sh
+readelf -a --wide path/to/library/library.elf
+```
+
+If you don't have `readelf` in your system, you can use the one from Wonderful
+Toolchain:
+
+```sh
+/opt/wonderful/toolchain/gcc-arm-none-eabi/arm-none-eabi/bin/readelf
+```
+
+Once the main binary is done with the library, it can call `dlclose()`. This
+will first call all global destructors of the library and then free all memory
+used by it.
 
 You can find the code of the functions in this file in
 [libnds](https://github.com/blocksds/libnds/blob/master/source/arm9/dlfcn.c).
