@@ -48,6 +48,15 @@ int sym_set_as_used(unsigned int index)
     return 0;
 }
 
+int sym_set_as_public(unsigned int index)
+{
+    if (index >= elf_symbols_num)
+        return -1;
+
+    elf_symbols[index].public = true;
+    return 0;
+}
+
 bool sym_is_unknown(unsigned int index)
 {
     if (index >= elf_symbols_num)
@@ -62,6 +71,23 @@ const char *sym_get_name(unsigned int index)
         return false;
 
     return elf_symbols[index].name;
+}
+
+int sym_get_index_from_name(const char *name)
+{
+    if (name == NULL)
+        return -1;
+
+    if (strlen(name) == 0)
+        return -1;
+
+    for (unsigned int i = 0; i < elf_symbols_num; i++)
+    {
+        if (strcmp(elf_symbols[i].name, name) == 0)
+            return i;
+    }
+
+    return -1;
 }
 
 int sym_get_sym_index_by_old_index(unsigned int index)
@@ -93,7 +119,7 @@ void sym_clear_unused(void)
         if (i >= elf_symbols_num)
             break;
 
-        if (elf_symbols[i].used)
+        if ((elf_symbols[i].used) || (elf_symbols[i].public))
         {
             i++;
             continue;
@@ -157,12 +183,16 @@ int sym_table_save_to_file(FILE *f)
         };
 
         if (elf_symbols[i].public)
-            sym.attributes |= DSL_SYMBOL_PUBLIC;
-
-        // Check if this symbol is unknown. If so, look for it in the main
-        // binary and edit the symbol to define the address.
-        if (elf_symbols[i].unknown)
         {
+            // If the symbol is public export it always without modifications.
+
+            sym.attributes |= DSL_SYMBOL_PUBLIC;
+        }
+        else if (elf_symbols[i].unknown)
+        {
+            // If this symbol is unknown look for it in the main binary and edit
+            // the symbol to define the address.
+
             const char *sym_name = sym_get_name(i);
             VERBOSE("Unknown symbol [%s]\n", sym_name);
 

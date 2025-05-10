@@ -11,6 +11,21 @@ SECTIONS
 {
     .progbits ALIGN(4) :
     {
+        __bothinit_array_start = .;
+        /* Start with the preinit array */
+        KEEP (*(.preinit_array))
+        /* Continue with the init array */
+        KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
+        KEEP (*(.init_array .ctors))
+        __bothinit_array_end = .;
+
+        /* End with the fini array */
+        __fini_array_start = .;
+        KEEP (*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
+        KEEP (*(.fini_array .dtors))
+        __fini_array_end = .;
+
+        /* Now, place all regular code and data */
         *(.text*);
         . = ALIGN(4);
         *(.rodata*);

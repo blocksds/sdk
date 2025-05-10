@@ -366,7 +366,7 @@ int main(int argc, char *argv[])
 
             if ((type == R_ARM_ABS32) || (type == R_ARM_THM_CALL) ||
                 (type == R_ARM_CALL) || (type == R_ARM_TLS_LE32) ||
-                (type == R_ARM_JUMP24))
+                (type == R_ARM_JUMP24) || (type == R_ARM_TARGET1))
             {
                 sym_set_as_used(symbol_index);
             }
@@ -377,6 +377,25 @@ int main(int argc, char *argv[])
                 ERROR("Invalid relocation. Index %zu. Type %u\n", r, type);
                 goto error;
             }
+        }
+
+        const char *ctors_dtors_names[] = {
+            "__bothinit_array_start",
+            "__bothinit_array_end",
+            "__fini_array_start",
+            "__fini_array_end",
+            NULL
+        };
+
+        for (int i = 0; ; i++)
+        {
+            const char *name = ctors_dtors_names[i];
+            if (name == NULL)
+                break;
+
+            int idx = sym_get_index_from_name(name);
+            VERBOSE("Marking symbol %d as public [%s]\n", idx, name);
+            sym_set_as_public(idx);
         }
 
         // Remove unused symbols and sort them by name

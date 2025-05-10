@@ -223,6 +223,7 @@ typedef struct {
 #define R_ARM_CALL          28
 #define R_ARM_JUMP24        29
 #define R_ARM_THM_JUMP24    30
+#define R_ARM_TARGET1       38
 #define R_ARM_TLS_IE32      107
 #define R_ARM_TLS_LE32      108
 

@@ -98,7 +98,8 @@ CXXFLAGS	+= -std=gnu++17 $(WARNFLAGS) $(DEFINES) $(INCLUDEFLAGS) \
 
 LDFLAGS		+= $(ARCH) $(LIBDIRSFLAGS) -Wl,-Map,$(MAP) $(DEFINES) \
 		   -nostdlib -Wl,--start-group $(LIBS) -Wl,--end-group -specs=$(SPECS) \
-		   -Wl,--emit-relocs -Wl,--unresolved-symbols=ignore-all -Wl,--nmagic
+		   -Wl,--emit-relocs -Wl,--unresolved-symbols=ignore-all -Wl,--nmagic \
+		   -Wl,--target1-abs
 
 # Intermediate build files
 # ------------------------
