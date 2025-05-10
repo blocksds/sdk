@@ -190,11 +190,6 @@ NotTWL:
     ldr     lr, =__libnds_exit      // Jump to user code
     bx      r3
 
-    // The instruction right after this comment is never used, it's just a
-    // reference to __secure_area__ so that it isn't discarded by the garbage
-    // collector of the linker.
-    ldr     r0, =__secure_area__
-
 // -----------------------------------------------------------------------------
 // Check for a commandline
 // -----------------------------------------------------------------------------
@@ -302,4 +297,15 @@ IPCSync:
 
     .align
     .pool
+
+// -----------------------------------------------------------------------------
+// Reference symbols
+// -----------------------------------------------------------------------------
+
+// The references below are never used by the code, they are symbols that the
+// garbage collector of the linker should never remove.
+
+    ldr     r0, =__secure_area__
+    .pool
+
     .end
