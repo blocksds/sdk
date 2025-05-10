@@ -89,8 +89,6 @@ int main(int argc, char **argv)
         printf("dlsym(operation_arm): %s\n", err);
         wait_forever();
     }
-    printf("\n");
-
     fnptrvoid *test_tls_symbols = dlsym(h, "test_tls_symbols");
     printf("test_tls_symbols: %p\n", test_tls_symbols);
     err = dlerror();
@@ -125,7 +123,6 @@ int main(int argc, char **argv)
     operation_set(5);
     printf("arr2[2] = 0x%X\n", operation_run(2, 0));
     printf("arr2[3] = 0x%X\n", operation_run(3, 0));
-    printf("\n");
 
     consoleSelect(&bottomScreen);
 

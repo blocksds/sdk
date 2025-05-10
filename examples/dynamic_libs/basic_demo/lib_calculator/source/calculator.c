@@ -114,3 +114,8 @@ ARM_CODE SYM_PUBLIC int arm_tail_call(int a, int b)
 {
     __attribute__((musttail)) return main_binary_arm_function(a, b);
 }
+
+__attribute__((constructor)) void c_constructor(void)
+{
+    printf("In C constructor!\n");
+}
