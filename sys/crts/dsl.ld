@@ -25,6 +25,10 @@ SECTIONS
         KEEP (*(.fini_array .dtors))
         __fini_array_end = .;
 
+        /* Each module must have its own instance of this symbol. */
+        PROVIDE_HIDDEN (__dso_handle = .);
+        LONG(0);
+
         /* Now, place all regular code and data */
         *(.text*);
         . = ALIGN(4);

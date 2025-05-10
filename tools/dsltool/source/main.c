@@ -287,6 +287,15 @@ int main(int argc, char *argv[])
             // library can't have TLS sections with the current codebase.
             bool unknown = (type == STT_NOTYPE) || (type == STT_TLS);
 
+            // Each module should have its own instance of this symbol. It is
+            // defined in the linker, so it is of STT_NOTYPE. This check makes
+            // sure it's handled correctly.
+            if (strcmp("__dso_handle", name) == 0)
+            {
+                public = false;
+                unknown = false;
+            }
+
             VERBOSE("%zu: \"%s\" = %u%s%s\n", s, name, sym->st_value,
                     public ? " [Public]" : "", unknown ? " [Unknown]": "");
 
