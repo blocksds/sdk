@@ -3,6 +3,66 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version 1.11.0 (2025-XX-XX)
+
+- libnds:
+
+  - Improve performance of camera driver significantly.
+  - Support using TLS symbols from the main binary in dynamic libraries.
+  - Support `R_ARM_JUMP24` relocation in dynamic libraries, which tends to be
+    used for tail function calls in ARM mode.
+  - Support global constructors and destructors in dynamic libraries. They are
+    called when libraries are loaded and unloaded.
+  - Add function to get the base address of a loaded dynamic library, which can
+    be used to load the ELF file at the right address when debugging the program
+    with GDB.
+  - Add defines to manually place variables in ITCM.
+  - The two variables placed in DTCM by the cothreads code have been moved to
+    ITCM to help the stack grow (they were being placed at the start of DTCM,
+    which stopped the stack from growing into main RAM).
+  - Fix `grfLoadMemEx()` and `grfLoadFileEx()` when passing `NULL` in `header`.
+  - A few improvements to `hw_sqrtf()`. @Kuratius
+  - Minor documentation fixes. @Kuratius
+  - Reintroduce list of copyright holders to the license file. @asiekierka
+  - Uniformize license headers and update the list of copyright holders in the
+    license file.
+
+- Maxmod:
+
+  - Fix some size definitions in the GBA public headers.
+  - Fix memory leaks when unloading modules. @ds-sloth
+  - A lot of assembly code has been converted to C, particularly code related to
+    the module player and effects handling.
+
+- mmutil:
+
+  - Add readme to repository.
+
+- SDK:
+
+  - dsltool:
+
+    - Support using TLS symbols from the main binary in dynamic libraries.
+    - Support `R_ARM_JUMP24` relocations.
+    - Support loading ELF files with more than 256 symbols. @jonko0493
+    - Add link to documentation about relocations.
+    - Support global constructors and destructors.
+    - Provide `__dso_handle` in all dynamic libraries.
+
+  - Examples:
+
+    - Add C constructor to basic dynamic library example and improve it in
+      general.
+    - Add example of using C++ dynamic libraries.
+
+  - Other:
+
+    - Document limitations of dynamic libraries and how to debug them.
+    - Enable default exception handler in the default debug ARM7 cores.
+    - Clarify hack used in the crt0 to reference some symbols and prevent the
+      garbage collector of the linker from removing it.
+
+
 ## Version 1.10.1 (2025-04-26)
 
 - SDK:
