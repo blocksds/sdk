@@ -169,7 +169,18 @@ through a pointer, so there is always the cost of an additional indirection
 compared to overlays. If the library is full of very small functions, this cost
 may be noticeable. If the functions are big, this cost won't be noticeable.
 
-## 5. Limitations
+## 6. Debugging dynamic libraries
+
+When you're in a GDB session, run the following command to load the symbols of
+the dynamic library:
+
+```
+add-symbol-file path/to/dynamic.elf -s .progbits <load_address>
+```
+
+You can obtain the address by calling the DS-specific function `dlmembase()`.
+
+## 7. Limitations
 
 - Libraries must use symbols that are present in the main binary. It isn't
   possible for a binary to use `malloc()` if the main binary doesn't use
