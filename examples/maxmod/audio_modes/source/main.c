@@ -37,6 +37,9 @@ int main(int argc, char **argv)
     printf("B: Interpolation mixing mode\n");
     printf("Y: Extended mixing\n");
     printf("\n");
+    printf("L: Start\n");
+    printf("R: Stop\n");
+    printf("\n");
     printf("START: Return to loader\n");
 
     soundEnable();
@@ -53,15 +56,17 @@ int main(int argc, char **argv)
         if (keys_down & KEY_START)
             break;
 
-        if (keys_down & KEY_A) {
+        if (keys_down & KEY_A)
             mmSelectMode(MM_MODE_A);
-        }
-        if (keys_down & KEY_B) {
+        if (keys_down & KEY_B)
             mmSelectMode(MM_MODE_B);
-        }
-        if (keys_down & KEY_Y) {
+        if (keys_down & KEY_Y)
             mmSelectMode(MM_MODE_C);
-        }
+
+        if (keys_down & KEY_L)
+            mmStart(MOD_PARALLAX_80599, MM_PLAY_LOOP);
+        if (keys_down & KEY_R)
+            mmStop();
     }
 
     mmStop();
