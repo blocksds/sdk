@@ -54,6 +54,7 @@ weight: -20
     - Add C constructor to basic dynamic library example and improve it in
       general.
     - Add example of using C++ dynamic libraries.
+    - Let user stop song in audio modes Maxmod example.
 
   - Other:
 
