@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version 1.11.0 (2025-XX-XX)
+## Version 1.11.0 (2025-05-29)
 
 - libnds:
 
@@ -13,9 +13,9 @@ weight: -20
     used for tail function calls in ARM mode.
   - Support global constructors and destructors in dynamic libraries. They are
     called when libraries are loaded and unloaded.
-  - Add function to get the base address of a loaded dynamic library, which can
-    be used to load the ELF file at the right address when debugging the program
-    with GDB.
+  - Add `dlmembase()` function to get the base address of a loaded dynamic
+    library, which can be used to load the ELF file at the right address when
+    debugging the program with GDB.
   - Add defines to manually place variables in ITCM.
   - The two variables placed in DTCM by the cothreads code have been moved to
     ITCM to help the stack grow (they were being placed at the start of DTCM,
@@ -33,6 +33,9 @@ weight: -20
   - Fix memory leaks when unloading modules. @ds-sloth
   - A lot of assembly code has been converted to C, particularly code related to
     the module player and effects handling.
+  - Fix bug when stopping the playback of a module. This caused noise to be
+    generated in the GBA port when a song was stopped.
+  - The DS programming guide has been fixed.
 
 - mmutil:
 
