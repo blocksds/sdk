@@ -8,10 +8,10 @@ weight: 30
 ### I've just installed BlocksDS, now what?
 
 The first step is to build one of the examples included with BlocksDS. If you
-have installed the `thirdparty-blocksds-docs` package with `wf-pacman`, the
-examples are located in `/opt/wonderful/thirdparty/blocksds/core/examples/`.
-From there, for example, go to `graphics_3d/volumetric_shadow` and type make.
-This will generate a NDS ROM that you can try with an emulator or a flashcart.
+have installed the `blocksds-docs` package with `wf-pacman`, the examples are
+located in `/opt/wonderful/thirdparty/blocksds/core/examples/`. From there, for
+example, go to `graphics_3d/volumetric_shadow` and type make. This will generate
+a NDS ROM that you can try with an emulator or a flashcart.
 
 You can also try one of the open source projects made with BlocksDS that are
 listed [here](https://github.com/blocksds/awesome-blocksds).
