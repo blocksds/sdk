@@ -250,6 +250,12 @@ this function to set the right compatibility settings to play the song:
 XM7_SetReplayStyle(&module, XM7_REPLAY_STYLE_MOD_PLAYER);
 ```
 
+LibXM7 uses as many hardware channels as required by the song. They are
+allocated starting from channel 15, then 14, etc. This means that if you have a
+song with 8 channels you will have hardware channels 0 to 7 available to use.
+You will learn how to use them to play sound effects in the next section of this
+chapter.
+
 Check the [documentation of LibXM7](https://blocksds.skylyrac.net/docs/libxm7/index.html)
 and the [examples](https://github.com/blocksds/sdk/tree/master/examples/libxm7)
 for more information.
