@@ -169,6 +169,8 @@ SECTIONS
         PROVIDE (__fini_array_start = .);
         KEEP (*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
         KEEP (*(.fini_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .dtors))
+        /* Required by pico-exitprocs.c. */
+        KEEP (*(.fini_array*))
         PROVIDE (__fini_array_end = .);
     } >iwram AT>ewram
 
