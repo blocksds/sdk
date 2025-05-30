@@ -67,24 +67,33 @@ SECTIONS
     .ARM.exidx   : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) } >ddmem
     __exidx_end = .;
 
-/*
- * Ensure the __preinit_array_start label is properly aligned.  We could instead
- * move the label definition inside the section, but the linker would then
- * create the section even if it turns out to be empty, which isn't pretty.
- */
-
+    /* Ensure the __preinit_array_start label is properly aligned.  We
+       could instead move the label definition inside the section, but
+       the linker would then create the section even if it turns out to
+       be empty, which isn't pretty.  */
     . = ALIGN(32 / 8);
-    PROVIDE (__preinit_array_start = .);
-    PROVIDE (__bothinit_array_start = .);
-    .preinit_array     : { KEEP (*(.preinit_array)) } >ddmem = 0xff
-    PROVIDE (__preinit_array_end = .);
-    PROVIDE (__init_array_start = .);
-    .init_array     : { KEEP (*(.init_array)) } >ddmem = 0xff
-    PROVIDE (__init_array_end = .);
-    PROVIDE (__bothinit_array_end = .);
-    PROVIDE (__fini_array_start = .);
-    .fini_array     : { KEEP (*(.fini_array)) } >ddmem = 0xff
-    PROVIDE (__fini_array_end = .);
+    .init_array :
+    {
+        PROVIDE (__preinit_array_start = .);
+        PROVIDE (__bothinit_array_start = .);
+        KEEP (*(.preinit_array))
+        PROVIDE (__preinit_array_end = .);
+
+        PROVIDE (__init_array_start = .);
+        KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
+        KEEP (*(.init_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .ctors))
+        PROVIDE (__init_array_end = .);
+        PROVIDE (__bothinit_array_end = .);
+    } >ddmem = 0xff
+    .fini_array :
+    {
+        PROVIDE (__fini_array_start = .);
+        KEEP (*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
+        KEEP (*(.fini_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .dtors))
+        /* Required by pico-exitprocs.c. */
+        KEEP (*(.fini_array*))
+        PROVIDE (__fini_array_end = .);
+    } >ddmem = 0xff
 
     .ctors :
     {

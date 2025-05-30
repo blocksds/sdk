@@ -23,6 +23,8 @@ SECTIONS
         __fini_array_start = .;
         KEEP (*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
         KEEP (*(.fini_array .dtors))
+        /* Required by pico-exitprocs.c. */
+        KEEP (*(.fini_array*))
         __fini_array_end = .;
 
         /* Each module must have its own instance of this symbol. */
