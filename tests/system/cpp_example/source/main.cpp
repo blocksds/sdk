@@ -117,6 +117,14 @@ public:
     {
         global_var = 0x1234;
     }
+
+    ~global_initializer(void)
+    {
+        printf("global destructor called!");
+
+        for (int i = 0; i < 120; i++)
+            swiWaitForVBlank();
+    }
 };
 
 global_initializer my_global_initializer;
