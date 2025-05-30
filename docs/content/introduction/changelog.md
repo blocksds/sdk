@@ -3,6 +3,21 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version 1.11.1 (2025-05-30)
+
+- libnds:
+
+  - Fix a bug that would crash the application if `__aeabi_atexit()` was called
+    when a dynamic library isn't being loaded.
+
+- SDK:
+
+  - Fix linker scripts to include the picolibc hook that calls all functions
+    registered with the `atexit()` family of functions. This also affected
+    global destructors, which weren't called at exit. @asiekierka
+  - Improve C++ example to test global destructors in addition to global
+    constructors.
+
 ## Version 1.11.0 (2025-05-29)
 
 - libnds:
