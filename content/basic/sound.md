@@ -105,16 +105,150 @@ with looping information. This isn't a very well-known feature of WAV files, but
 they can be saved with embedded loop data (RIFF chunk type `smpl`), which
 contains the starting point and end of the part that loops.
 
+It is possible to store the sound bank (with your sound effects and music) in
+the filesystem. This is required if your game grows too much and it can't fit in
+RAM. This system will be explained later in the tutorial.
+
 Check the [documentation of Maxmod](https://blocksds.skylyrac.net/docs/maxmod/index.html)
 and the [examples](https://github.com/blocksds/sdk/tree/master/examples/maxmod)
 for more information.
 
 ## 3. LibXM7
 
-LibXM7 is less powerful than Maxmod, but it has some very nice features that
-make it a serious alternative to Maxmod.
+LibXM7 is less powerful than Maxmod (it can only play XM and MOD files, and no
+sound effects), but it has a very big advantage over Maxmod: it can play
+unmodified XM and MOD files. However, this function is more manual than Maxmod,
+and you need to be more careful with it. If Maxmod does everything you need,
+it's probably better to stick to it.
 
-TODO: This section is a work in progress!
+There are a few examples of LibXM7 in the BlocksDS repository. This section is
+based on the following example:
+[`examples/libxm7/basic_sound`](https://github.com/blocksds/sdk/tree/master/examples/libxm7/basic_sound)
+
+The first thing to consider is that the default ARM7 core used by BlocksDS is
+built with Maxmod, not with LibXM7. If you want to use LibXM7 you will need to
+edit your Makefile and set the value of `ARM7ELF` to, for example, this:
+
+```
+ARM7ELF     := $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi_libxm7.elf
+```
+
+You will also need to link the right library on the ARM9 side:
+
+```
+LIBS        := -lnds9 -lxm79
+LIBDIRS     := $(BLOCKSDS)/libs/libxm7 \
+               $(BLOCKSDS)/libs/libnds
+```
+
+In order to include your XM and MOD files to your game, you'll need to rename
+them to have the `.bin` extension and add them to the `data` folder so that the
+Makefile detects them. This isn't ideal, and you'll learn in a future chapter
+how to load the files from the filesystem so that you don't need to worry about
+this.
+
+Make sure your Makefile has a line like this one:
+```
+BINDIRS     := data
+```
+Then, if you have a file called `parallax_80599.xm`, you need to rename it to
+`parallax_80599_xm.bin` and copy it to the `data` folder in your project
+directory. When the program is built, file `parallax_80599_xm_bin.h` will be
+generated, and you can include it to your project.
+
+First, include the library header and your songs:
+```c
+#include <libxm7.h>
+#include <nds.h>
+
+#include <parallax_80599_xm_bin.h>
+```
+
+Now, write two functions to communicate with the LibXM7 ARM7 core of BlocksDS.
+Note that LibXM7 doesn't provide any helper to communicate with the ARM7, you
+must implement them yourself:
+```c
+// Assign FIFO_USER_07 channel to LibXM7. This channel is the one used by the
+// ARM7 core of libnds.
+#define FIFO_LIBXM7 FIFO_USER_07
+
+void song_start(XM7_ModuleManager_Type *module)
+{
+    fifoSendValue32(FIFO_LIBXM7, (u32)module);
+}
+
+void song_stop(void)
+{
+    fifoSendValue32(FIFO_LIBXM7, 0);
+}
+```
+
+And now you can actually use the library:
+```c
+// You can also allocate this with malloc()
+static XM7_ModuleManager_Type module;
+
+int main(int argc, char **argv)
+{
+    consoleDemoInit();
+
+    // Load XM file and initialize the XM7_ModuleManager_Type struct
+    u16 res = XM7_LoadXM(&module, lasse_haen_pyykit_xm_bin);
+    if (res != 0)
+    {
+        printf("LibXM7 error: 0x%04x\n", res);
+        while (1)
+            swiWaitForVBlank();
+    }
+
+    // Depending on the MOD or XM file you're playing, you may need to adjust
+    // the replay style. Check the documentation for more details.
+    //XM7_SetReplayStyle(&modules[0], XM7_REPLAY_STYLE_MOD_PLAYER);
+
+    // Ensure that the ARM7 can see the LibXM7 initialized data
+    DC_FlushAll();
+
+    // Enable sound on the ARM7
+    soundEnable();
+
+    while (1)
+    {
+        swiWaitForVBlank();
+
+        scanKeys();
+        uint16_t keys_down = keysDown();
+
+        if (keys_down & KEY_B)
+            song_stop();
+        if (keys_down & KEY_X)
+            song_start(&module);
+
+        if (keys_down & KEY_START)
+            break;
+    }
+
+    XM7_UnloadXM(&module);
+
+    soundDisable();
+
+    return 0;
+}
+
+```
+
+Note that LibXM7 doesn't initialize the audio hardware automatically (same as
+Maxmod), so you need to call `soundEnable()` at some point.
+
+The workflow is similar to Maxmod: You load songs with `XM7_LoadXM()` or
+`XM7_LoadMOD()` (depending on your format), you clean the data cache of the ARM9
+by calling `DC_FlushAll()` (so that the ARM7 can see the updated data in RAM),
+and you're ready to call `song_start()`.
+
+Be careful with some songs, particularly in MOD format. You will need to call
+this function to set the right compatibility settings to play the song:
+```
+XM7_SetReplayStyle(&module, XM7_REPLAY_STYLE_MOD_PLAYER);
+```
 
 Check the [documentation of LibXM7](https://blocksds.skylyrac.net/docs/libxm7/index.html)
 and the [examples](https://github.com/blocksds/sdk/tree/master/examples/libxm7)
