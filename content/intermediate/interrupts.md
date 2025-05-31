@@ -76,9 +76,22 @@ In this example `vbl_handler()` will get called whenever the VBL interrupt
 happens, interrupting the main loop. It will increase the counter and return to
 the main loop. It will also allow `swiWaitForVBlank()` to finish.
 
-Note: You don't need to worry about it normally, but the ARM7 requires special
-handling. You must call `irqInit()` in your `main()` function if you want to use
-interrupts. The default ARM7 cores do it almost as soon as `main()` starts.
+It's important to consider that interrupt handlers usually can't be interrupted
+themselves. One very important use for vertical blanking handlers is to copy
+data to VRAM, update background scroll registers, update sprites, and generally
+do any changes to the video output. However, be careful about this. If you spend
+too much time copying data in this handler you may block other interrupts for
+too long. Check the nested interrupts section below to see how to work around
+this issue.
+
+Note: Normally you don't need to worry about it because you'll focus on ARM9
+code, but the ARM7 requires special handling regarding interrupts. You must call
+`irqInit()` in your `main()` function if you want to use interrupts. The default
+ARM7 cores do it almost as soon as `main()` starts. You can use their code as
+[reference](https://github.com/blocksds/sdk/blob/a94e81627ab26e741f7d48d49a071f8d2785585f/sys/arm7/main_core/source/main.c#L85).
+
+The ARM9 does this initialization in [`initSystem()`](https://github.com/blocksds/libnds/blob/01691665a5703a6c623421983df4e083de5d4f6e/source/arm9/system/initSystem.c#L64-L74),
+which is called by the system initialization code before `main()`.
 
 ## 3. Hardware timers
 
@@ -210,4 +223,96 @@ int main(int argc, char **argv)
 
 ## 5. Nested interrupts
 
-TODO: Section in progress
+As mentioned before, interrupt handlers can't be interrupted under normal
+circumstances. Normally, your interrupt handlers should be small so that they
+don't block the handling of other interrupts. However, this isn't possible in
+all cases. For example, the vertical blanking interrupt handler may need to
+copy new tiles to the background to animate some elements in the map. If you
+have a timer interrupt that is called very frequently, it's possible that one of
+the interrupts will have to wait for too long and break other part of the
+program.
+
+The way to fix this issue is to allow the interrupt handler to be interrupted.
+Let's see an example:
+
+```c
+void vbl_handler(void)
+{
+    // Update background registers
+    bgUpdate();
+
+    // Update sprites
+    oamUpdate(&oamMain);
+    oamUpdate(&oamSub);
+
+    // Allow interrupts from now on
+    REG_IME = 1;
+
+    // Copy background tiles
+    swiCopy(...);
+}
+
+void timer0_handler(void)
+{
+    // Do something very fast
+}
+
+int main(int argc, char **argv)
+{
+    irqSet(IRQ_VBLANK, vbl_handler);
+
+    // Timer 0 will be called 1000 times per second
+    timerStart(0, ClockDivider_1, timerFreqToTicks_1(1000), timer0_handler);
+
+    while (1)
+    {
+        swiWaitForVBlank();
+
+        // ...
+    }
+}
+```
+
+In this example the VBL handler has two parts. The first part does some quick
+actions like updating background registers and OAM, then enables nested
+interrupts, and finally copies a lot of data to VRAM, which will take some time.
+
+Note that even if you set `REG_IME` to 1 it will be set to 0 the next time any
+interrupt handler is called.
+
+Another important use of nested interrupts is audio mixing, but this isn't
+something you normally need to worry about. If you're curious about it, Maxmod
+is a good example of how it works:
+
+The timer 0 interrupt handler is configured [here](https://github.com/blocksds/maxmod/blob/4a81f0d8182deaffe84823d7cce759c2de60b4ce/source/ds/arm7/mm_main7.c#L183-L184).
+The implementation of the handler `mmFrame()` is [here](https://github.com/blocksds/maxmod/blob/4a81f0d8182deaffe84823d7cce759c2de60b4ce/source/ds/arm7/mm_main7.c#L216-L230):
+
+```c
+void mmFrame(void)
+{
+    if (mmIsInitialized())
+    {
+        mmMixerPre(); // critical timing
+        REG_IME = 1;
+        mmUpdateEffects(); // update sound effects
+        mmPulse(); // update module playback
+        mmMixerMix(); // update audio
+        mmSendUpdateToARM9();
+    }
+
+    mmProcessComms();
+}
+```
+
+You can see that `mmMixerPre()` is called right away, then interrupts are
+enabled, and finally other functions are called. The difference between
+`mmMixerPre()` and the others is that this particular function is in charge of
+swapping the audio buffers played back by the hardware. This needs to be done at
+exactly the right time or it will generate noticeable clicks in the audio
+output. However, `mmMixerMix()` can be very CPU-intensive: it can be setup to do
+audio mixing of several audio channels by software. It doesn't matter when it
+finishes as long as it finishes before the next time `mmFrame()` is called.
+
+Note that, in this case, the actual frequency of the timer is variable and it's
+setup in other parts of the code. We won't get to that here because it's not
+relevant for the handling of interrupts themselves.
