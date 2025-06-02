@@ -20,6 +20,7 @@ specific area:
 - `graphics_2d`: 2D graphics features of the DS.
 - `graphics_3d`: 3D graphics features of the DS (alone or alongside 2D graphics).
 - `input`: How to get input data from the user (keyboard, keys, touch screen).
+- `interrupts`: How to use hardware interrupts.
 - `ipc`: Transfer of information between the ARM9 and the ARM7.
 - `keyboard`: How to use the keyboard API of libnds.
 - `libxm7`: How to use the features of LibXM7.
