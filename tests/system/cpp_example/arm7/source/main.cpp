@@ -15,8 +15,6 @@
 
 #include <nds.h>
 
-#define printf consolePrintf
-
 // ------------------------------------------------------------------
 
 // Test virtual functions with derived classes
@@ -28,25 +26,25 @@ class base
 public:
     base()
     {
-        printf("constructor: base class\n");
+        consolePrintf("constructor: base class\n");
         virtual_test_flags |= BIT(0);
     }
 
     ~base()
     {
-        printf("destructor: base class\n");
+        consolePrintf("destructor: base class\n");
         virtual_test_flags |= BIT(1);
     }
 
     virtual void print()
     {
-        printf("print: base class\n");
+        consolePrintf("print: base class\n");
         virtual_test_flags |= BIT(2);
     }
 
     void show()
     {
-        printf("show: base class\n");
+        consolePrintf("show: base class\n");
         virtual_test_flags |= BIT(3);
     }
 };
@@ -56,25 +54,25 @@ class derived : public base
 public:
     derived()
     {
-        printf("constructor: derived class\n");
+        consolePrintf("constructor: derived class\n");
         virtual_test_flags |= BIT(4);
     }
 
     ~derived()
     {
-        printf("destructor: derived class\n");
+        consolePrintf("destructor: derived class\n");
         virtual_test_flags |= BIT(5);
     }
 
     void print()
     {
-        printf("print: derived class\n");
+        consolePrintf("print: derived class\n");
         virtual_test_flags |= BIT(6);
     }
 
     void show()
     {
-        printf("show: derived class\n");
+        consolePrintf("show: derived class\n");
         virtual_test_flags |= BIT(7);
     }
 };
@@ -95,11 +93,11 @@ void virtual_functions_test_inner(void)
 bool virtual_functions_test(void)
 {
     virtual_functions_test_inner();
-    printf("Flags: %x\n", virtual_test_flags);
+    consolePrintf("Flags: %x\n", virtual_test_flags);
 
     if (virtual_test_flags != 0x7B)
     {
-        printf("%s() failed\n", __func__);
+        consolePrintf("%s() failed\n", __func__);
         return false;
     }
 
@@ -122,7 +120,7 @@ public:
 
     ~global_initializer(void)
     {
-        printf("global destructor called!");
+        consolePrintf("global destructor called!");
 
         consoleFlush();
 
@@ -137,12 +135,12 @@ bool global_constructor_test(void)
 {
     if (global_var == 0x1234)
     {
-        printf("global constructor OK\n");
+        consolePrintf("global constructor OK\n");
         return true;
     }
     else
     {
-        printf("global constructor FAIL\n");
+        consolePrintf("global constructor FAIL\n");
         return false;
     }
 }
@@ -162,7 +160,7 @@ bool vector_test(void)
     {
         if (i != expected[counter])
         {
-            printf("%s(): Value %d (Exp: %d)\n", __func__, i, expected[counter]);
+            consolePrintf("%s(): Value %d (Exp: %d)\n", __func__, i, expected[counter]);
             ok = false;
         }
 
@@ -171,7 +169,7 @@ bool vector_test(void)
 
     if (counter != 6)
     {
-        printf("%s(): Counter %d (Exp: 6)\n", __func__, counter);
+        consolePrintf("%s(): Counter %d (Exp: 6)\n", __func__, counter);
         return false;
     }
 
@@ -187,8 +185,8 @@ bool string_test(void)
 
     std::string greeting = "[std::string] " + hello + " " + world + "!";
 
-    printf("%s ", greeting.c_str());
-    printf("\n");
+    consolePrintf("%s ", greeting.c_str());
+    consolePrintf("\n");
 
     return (strcmp(greeting.c_str(), "[std::string] hello world!") == 0);
 }
@@ -199,7 +197,7 @@ bool new_test(void)
 {
     int *p = new int[]{1, 2, 3};
 
-    printf("new: %d %d %d\n", p[0], p[1], p[2]);
+    consolePrintf("new: %d %d %d\n", p[0], p[1], p[2]);
 
     bool ok = false;
     if (p != NULL)
@@ -284,9 +282,9 @@ int main(int argc, char *argv[])
         passed = false;
 
     if (passed)
-        printf("All tests passed!\n");
+        consolePrintf("All tests passed!\n");
     else
-        printf("Some tests failed!\n");
+        consolePrintf("Some tests failed!\n");
 
     consolePrintf("\n\n");
     consolePrintf("SELECT: ARM7 exit to loader\n");
