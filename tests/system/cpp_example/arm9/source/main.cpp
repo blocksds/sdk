@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2023-2024
+// SPDX-FileContributor: Antonio Niño Díaz, 2023-2025
 
 // This example uses a few C++ features that hopefully test whether the
 // linkerscript and crt0 setup the C++ runtime correctly.
@@ -307,7 +307,35 @@ bool filesystem_test(void)
 
 int main(int argc, char *argv[])
 {
-    consoleDemoInit();
+    PrintConsole topScreen;
+    PrintConsole bottomScreen;
+
+    videoSetMode(MODE_0_2D);
+    videoSetModeSub(MODE_0_2D);
+
+    vramSetBankA(VRAM_A_MAIN_BG);
+    vramSetBankC(VRAM_C_SUB_BG);
+
+    consoleInit(&topScreen, 3, BgType_Text4bpp, BgSize_T_256x256, 31, 0, true, true);
+    consoleInit(&bottomScreen, 3, BgType_Text4bpp, BgSize_T_256x256, 31, 0, false, true);
+
+    // Setup ARM7 console
+    // ------------------
+
+    consoleSelect(&bottomScreen);
+
+    // Use bright green
+    consoleSetColor(&bottomScreen, CONSOLE_LIGHT_GRAY);
+
+    consoleArm7Setup(&bottomScreen, 2048);
+
+    // Switch back to the ARM9 console
+    // -------------------------------
+
+    consoleSelect(&topScreen);
+
+    printf("===== ARM9 =====\n");
+    //printf("Bottom screen: ARM7\n");
 
     bool init_ok = nitroFSInit(NULL);
     if (!init_ok)
