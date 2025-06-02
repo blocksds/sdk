@@ -124,6 +124,8 @@ public:
     {
         printf("global destructor called!");
 
+        consoleFlush();
+
         for (int i = 0; i < 120; i++)
             swiWaitForVBlank();
     }
@@ -286,11 +288,14 @@ int main(int argc, char *argv[])
     else
         printf("Some tests failed!\n");
 
+    consolePrintf("\n\n");
+    consolePrintf("SELECT: ARM7 exit to loader\n");
+
     consoleFlush();
 
     while (!exit_loop)
     {
-        const uint16_t key_mask = KEY_SELECT | KEY_START | KEY_L | KEY_R;
+        const uint16_t key_mask = KEY_SELECT;
         uint16_t keys_pressed = ~REG_KEYINPUT;
 
         if ((keys_pressed & key_mask) == key_mask)

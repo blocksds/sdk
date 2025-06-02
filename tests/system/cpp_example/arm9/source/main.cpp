@@ -370,7 +370,7 @@ int main(int argc, char *argv[])
 
 exit:
     printf("\n\n");
-    printf("START: Exit to loader\n");
+    printf("START: ARM9 exit to loader\n");
 
     while (1)
     {
