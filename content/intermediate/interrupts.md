@@ -221,7 +221,34 @@ int main(int argc, char **argv)
 }
 ```
 
-## 5. Nested interrupts
+## 5. Interrupt types
+
+There are several interrupt sources and they are different depending on the CPU.
+Some useful interrupts for a developer are:
+
+- `VBLANK`: Vertical blank mode has started.
+- `HBLANK`: Horizontal blank mode has started. This is useful to change scroll
+  registers or screen modes in between lines.
+- `VCOUNT`: The current scanline being drawn matches the value in `REG_VCOUNT`.
+  As opposed to the HBLANK interrupt, this one happens at the beginning of the
+  line, not after it is drawn.
+- `TIMER0` to `TIMER3`: Timer 0-3 has overflown.
+- `DMA0` to `DMA3`: The DMA channel has finished a copy.
+- `KEYS`: The specified key combination has been pressed.
+
+There are some interrupts only available on the ARM9:
+
+- `GEOMETRY_FIFO`: The GPU is now free to receive 3D commands.
+
+And some are only available on the ARM7:
+
+- `RTC`: Serial/RTC interrupts. Note that RTC interrupts aren't available on 3DS
+  consoles in DS/DSi mode.
+- `LID`: The lid has been opened.
+
+For more information, check [GBATEK](https://problemkaputt.de/gbatek.htm#dsinterrupts).
+
+## 6. Nested interrupts
 
 As mentioned before, interrupt handlers can't be interrupted under normal
 circumstances. Normally, your interrupt handlers should be small so that they
