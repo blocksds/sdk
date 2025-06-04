@@ -3,6 +3,25 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version DEV (2025-XX-XX)
+
+- libnds:
+
+  - Rename symbols of FatFs inside libnds so that users can have their own copy
+    of FatFs.
+
+- Maxmod:
+
+  - Fix Portamento + Volume Slide effect.
+
+- SDK:
+
+  - Examples:
+
+    - Add example of creating an FPS counter.
+    - Add example of how to use the VBL interrupt.
+    - Improve C++ example to also run on the ARM7.
+
 ## Version 1.11.1 (2025-05-30)
 
 - libnds:
