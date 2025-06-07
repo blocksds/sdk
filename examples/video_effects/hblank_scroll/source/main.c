@@ -2,7 +2,6 @@
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2024
 
-
 // This example sets up a horizontal blank interrupt handler and it uses it to
 // change the horizontal scroll of a background by changing the scroll values
 // after every line is drawn. This can be used to generate wave effects,
@@ -30,9 +29,8 @@ static void hblank_handler(void)
     REG_BG0HOFS = value;
     REG_BG2HOFS = -value;
 
-    // Note that writing to the scroll registers will overwrite the values
-    // writen by te user and replace them by the ones set in bgSetScroll() and
-    // bgUpdate().
+    // Note that writing to the scroll registers directly will overwrite the
+    // values writen by the user with bgSetScroll() and bgUpdate().
 }
 
 int main(int argc, char **argv)
