@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2024
+// SPDX-FileContributor: Antonio Niño Díaz, 2024-2025
 
 // This example sets up a horizontal blank interrupt handler and it uses it to
 // change the horizontal scroll of a background by changing the scroll values
@@ -22,10 +22,24 @@
 
 static int angle_offset = 0;
 
+static void vblank_handler(void)
+{
+    // Setup scroll for line 0 before it starts getting drawn.
+    int32_t value = sinLerp(degreesToAngle(angle_offset + 0)) >> 7;
+    REG_BG0HOFS = value;
+    REG_BG2HOFS = -value;
+}
+
 static void hblank_handler(void)
 {
-    // REG_VCOUNT always keeps the current line being drawn
-    int32_t value = sinLerp(degreesToAngle(angle_offset + REG_VCOUNT)) >> 7;
+    // Don't run during the VBL period
+    if (REG_VCOUNT >= 192)
+        return;
+
+    // REG_VCOUNT always keeps the current line being drawn. However, this
+    // interrupt handler only starts getting called after the first line is
+    // drawn, so we need to fix the scroll of line 0 in the VBL handler.
+    int32_t value = sinLerp(degreesToAngle(angle_offset + REG_VCOUNT + 1)) >> 7;
     REG_BG0HOFS = value;
     REG_BG2HOFS = -value;
 
@@ -35,9 +49,6 @@ static void hblank_handler(void)
 
 int main(int argc, char **argv)
 {
-    irqSet(IRQ_HBLANK, hblank_handler);
-    irqEnable(IRQ_HBLANK);
-
     // Enable 3D and sprites
     videoSetMode(MODE_0_3D);
 
@@ -94,6 +105,13 @@ int main(int argc, char **argv)
     gluLookAt(0.0, 0.0, 2.0,  // Position
               0.0, 0.0, 0.0,  // Look at
               0.0, 1.0, 0.0); // Up
+
+    // Start special efffect
+    // =====================
+
+    irqSet(IRQ_VBLANK, vblank_handler);
+    irqSet(IRQ_HBLANK, hblank_handler);
+    irqEnable(IRQ_HBLANK);
 
     // Setup done
     // ==========
