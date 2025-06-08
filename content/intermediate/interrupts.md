@@ -248,7 +248,69 @@ And some are only available on the ARM7:
 
 For more information, check [GBATEK](https://problemkaputt.de/gbatek.htm#dsinterrupts).
 
-## 6. Nested interrupts
+## 6. Video effects using interrupts
+
+We're going to see a practical example of how to use interrupts by creating a
+wave effect with the HBL interrupt. This section of the tutorial is based on the
+following example: [`examples/video_effects/hblank_scroll`](https://github.com/blocksds/sdk/tree/master/examples/video_effects/hblank_scroll).
+
+![IRQ scroll effect](../hblank_effect_irq.png "IRQ scroll effect")
+
+For this effect we are going to use the horizontal blanking interrupt. This
+interrupt is called after every line of the screen gets drawn. There's a bit of
+time of wait between the drawing process of each line, so we can run some code
+there to adjust the horizontal scroll of a background, for example, and we can
+create nice effects that way. You can read `REG_VCOUNT` during the HBL handler
+to see in which horizontal line you are and you can calculate the scroll based
+on that information.
+
+Note that the HBL interrupt is triggered after each line is drawn. This means
+that you need to set the scroll of line 0 in some other way. In this example
+we're using the VBL handler for that because we know it will be called after the
+whole frame is drawn, and before the next frame starts getting drawn:
+
+```c
+static int angle_offset = 0;
+
+static void vblank_handler(void)
+{
+    // Setup scroll for line 0 before it starts getting drawn.
+    int32_t value = sinLerp(degreesToAngle(angle_offset + 0)) >> 7;
+    REG_BG0HOFS = value;
+}
+
+static void hblank_handler(void)
+{
+    // Don't run during the VBL period
+    if (REG_VCOUNT >= 192)
+        return;
+
+    // REG_VCOUNT always keeps the current line being drawn. However, this
+    // interrupt handler only starts getting called after the first line is
+    // drawn, so we need to fix the scroll of line 0 in the VBL handler.
+    int32_t value = sinLerp(degreesToAngle(angle_offset + REG_VCOUNT + 1)) >> 7;
+    REG_BG0HOFS = value;
+}
+```
+
+When you're ready to enable the effect, call the following functions to setup
+the interrupt handlers and enable the HBL interrupt (the VBL interrupt is
+enabled by libnds by default):
+
+```c
+irqSet(IRQ_VBLANK, vblank_handler);
+irqSet(IRQ_HBLANK, hblank_handler);
+irqEnable(IRQ_HBLANK);
+```
+
+Unfortunately, this system requires a fair amount of CPU power. After each
+scanline is drawn, the global interrupt handler is executed. It isn't a big
+piece of code, and it runs from ITCM (so it is as fast as it can possibly be),
+but it still needs a lot more time to get to the user interrupt handler
+(`hblank_handler()` in the example), and that cost is paid every line. In the
+DMA chapter we'll see a more convenient way of doing this.
+
+## 7. Nested interrupts
 
 As mentioned before, interrupt handlers can't be interrupted under normal
 circumstances. Normally, your interrupt handlers should be small so that they
