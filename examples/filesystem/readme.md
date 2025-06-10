@@ -8,3 +8,4 @@ This folder contains examples of how to use the filesystems available on the DS
 - `file_attributes`: It shows how to access file attributes of FAT filesystems.
 - `nitrofs`: It shows how to access files and directories in NitroFS.
 - `nitrofs_and_fat`: It shows how to use all three filesystems at the same time.
+- `save_data`: It shows how to save data to the SD card and load it back.
