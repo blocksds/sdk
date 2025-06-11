@@ -25,7 +25,7 @@ int main(int argc, char **argv)
     printf("\n");
 
     extern char *fake_heap_end;
-    struct __bootstub *bootstub = (void *)fake_heap_end;
+    struct __bootstub *bootstub = __system_bootstub;
 
     printf("bootstub:      0x%X\n", (uintptr_t)bootstub);
     printf("fake_heap_end: 0x%X\n", (uintptr_t)fake_heap_end);
