@@ -408,3 +408,47 @@ NITROFSDIR	:= nitrofs
 ```
 
 Check the example here: [`examples/maxmod/nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/maxmod/nitrofs)
+
+## 8. Loading GRF files
+
+GRF is a format that can hold Nintendo DS graphics in all formats supported by
+the console. It was originally designed by Cearn, the author of **grit**. This
+format had some limitations in its original form, so it has been modified
+slightly in BlocksDS to be able to fully describe any kind of graphics type.
+
+However, this means that GRF files of BlocksDS and other versions of grit aren't
+compatible. They use different header identification strings so that loaders of
+this format can detect if they are using an incompatible file.
+
+In order to help developers, libnds has some definitions related to the GRF
+format. It also has some helper functions to load files. They can all be found
+in [this header](https://github.com/blocksds/libnds/blob/master/include/nds/arm9/grf.h).
+
+Essentially, GRF files are RIFF files that contain multiple chunks of data
+(palettes, tile maps, textures, etc). The header of the file specify the format
+and dimensions of the image data.
+
+This tutorial won't get into a lot of detail on how to load the files. However,
+BlocksDS has a few examples of how to use GRF files for multiple purposes. Note
+that they don't use Makefiles as build system, they use ArchitectDS because it
+supports creating GRF files and adding them to NitroFS using a PNG file as
+input. The Makefiles don't currently support this. Check the files `build.py` to
+see how they are configured to convert graphics into GRF files.
+
+- 2D sprites:
+
+  - [`examples/graphics_2d/sprites_grf_types`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/sprites_grf_types)
+  - [`examples/graphics_2d/sprites_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/sprites_nitrofs)
+
+- 2D backgrounds:
+
+  - [`examples/graphics_2d/bg_regular_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_regular_nitrofs)
+
+- 3D textures:
+
+  - [`examples/graphics_3d/basic_texture_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/basic_texture_nitrofs)
+  - [`examples/graphics_3d/paletted_textures_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/paletted_textures_nitrofs)
+
+- There's also a demo of how to create a simple game using GRF files:
+
+  - [`examples/demos/invaders`](https://github.com/blocksds/sdk/tree/master/examples/demos/invaders)
