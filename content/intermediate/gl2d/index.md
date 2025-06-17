@@ -219,6 +219,9 @@ images in the file. Note that the original version of squeezer doesn't support
 generating the C and H files used by GL2D, that's a feature added by the fork
 included in BlocksDS.
 
+Note: In the chapter about NitroFS will learn how to, instead of creating C/H
+files, we can create create files that are friendlier to use from a filesystem.
+
 Note that you still need to convert the PNG file with grit as usual. You need to
 convert it as a 3D texture, which is different than other modes:
 

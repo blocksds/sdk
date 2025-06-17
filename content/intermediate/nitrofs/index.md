@@ -452,3 +452,40 @@ see how they are configured to convert graphics into GRF files.
 - There's also a demo of how to create a simple game using GRF files:
 
   - [`examples/demos/invaders`](https://github.com/blocksds/sdk/tree/master/examples/demos/invaders)
+
+## 9. Using GL2D with NitroFS
+
+In the chapter about GL2D we learned how to merge a lot of images into a single
+big image plus a list of coordinates and sizes. The tool in charge of doing this
+is **squeezer**. However, in that chapter we learned how to generate a pair of
+C/H files. This isn't very useful if you want to keep your data in the
+filesystem and only load it when it's needed.
+
+Squeezer has a way to generate files with extension GUV (which stands for GL2D
+UVs): Instead of using `--outputH` and `--outputC`, you can use `--outputNitro`.
+
+GUV files have a small header:
+
+Field             | Size       | Notes
+------------------|------------|----------------------------------
+Magic             | `uint16_t` | Equal to `0x012D`
+Texture width     | `uint16_t` | In pixels.
+Texture height    | `uint16_t` | In pixels.
+Number of frames  | `uint16_t` | Number of sub-images in the file.
+
+Followed by an array of frames:
+
+Field   | Size
+--------|-----------
+X       | `uint16_t`
+Y       | `uint16_t`
+Width   | `uint16_t`
+Height  | `uint16_t`
+
+Once you load the file, the array of frames works the same way as the arrays in
+the C/H files generated with `--outputH` and `--outputC`. Check the following
+example: [`examples/gl2d/spriteset_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/gl2d/sprites_nitrofs)
+
+Note that this format doesn't contain the image itself, only the information
+about the sub-images. To store the actual texture you need to use, for example,
+a GRF file.
