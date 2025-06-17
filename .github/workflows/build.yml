@@ -8,8 +8,6 @@ on:
   push:
     branches:
       - 'master'
-    paths-ignore:
-      - '**.md'
   workflow_dispatch:
   repository_dispatch:
     types: [run_build]
