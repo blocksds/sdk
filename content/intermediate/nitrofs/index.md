@@ -484,7 +484,7 @@ Height  | `uint16_t`
 
 Once you load the file, the array of frames works the same way as the arrays in
 the C/H files generated with `--outputH` and `--outputC`. Check the following
-example: [`examples/gl2d/spriteset_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/gl2d/sprites_nitrofs)
+example: [`examples/gl2d/spriteset_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/gl2d/spriteset_nitrofs)
 
 Note that this format doesn't contain the image itself, only the information
 about the sub-images. To store the actual texture you need to use, for example,
