@@ -287,6 +287,18 @@ from.
 Check [this example](https://github.com/blocksds/sdk/tree/master/tests/system/stack_smash_protection)
 to see it in action.
 
+One easy way to check how much stack is used by your functions is to add
+`-fstack-usage` to `CFLAGS` in your makefile. This will generate files inside
+the `build` folder with `.su` extension. For example, for `main.c` it will
+generate `main.c.su`. THis file has a list of all functions defined in `main.c`
+with their stack usage in bytes. Unfortunately, it won't tell you the cumulative
+stack used by the call stack: if you have too many nested functions, you may be
+using a lot of stack even if each individual function doesn't use too much
+stack. The file also tells you if the stack usage is `static` (each call to the
+function takes the same amount of space) or `dynamic` (the function uses
+variable-length arrays or functions like `alloca()` that allocate memory on the
+stack).
+
 ## 8. GDB with melonDS and DeSmuME
 
 ### 8.1 Introduction
