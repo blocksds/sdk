@@ -3,12 +3,60 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version DEV (2025-XX-XX)
+## Version 1.12.0 (2025-XX-XX)
 
 - libnds:
 
   - Rename symbols of FatFs inside libnds so that users can have their own copy
     of FatFs.
+  - Improve `normalizef32()`: Fix normalization of large and small vectors and
+    optimize its performance. @Kuratius
+  - Fix base address of the bootstub struct.
+  - Clarify documentation about how `keysDownRepeat()` works.
+  - Move some key state handling to critical sections to prevent race
+    conditions.
+  - Fix implementation of `swiIntrWait()`.
+  - Improve FIFO communications code:
+
+    - In FIFO wait loops, don't discard current interrupts when calling
+      `swiIntrWait()`. If a FIFO interrupt has happened, exit the wait loop
+      right away.
+    - Fix some race conditions by moving some code and checks to critical
+      sections.
+    - Add some new definitions related to FIFO interrupts that are clearer than
+      the previous ones.
+    - Prevent deadlocks in some situations. For example, if the software RX
+      queue was almost full, the hardware RX queue is half emptied in the IRQ
+      handler, but it can't be completely emptied, the FIFO code would never
+      check the hardware RX queue again. There were similar situations with the
+      TX queue. The new code adds checks for the RX and TX hardware queues in
+      some other places (like `fifoCheck*()` or `fifoInternalSend()`) that are
+      likely to be executed in any potential user wait loop.
+    - The FIFO buffer has been renamed to global FIFO pool. The send and receive
+      queues have been renamed to RX and TX queues.
+    - Fix global pool corruption when the pool got filled with packets that
+      hadn't been handled. The code that allocates and frees blocks from the
+      pool can't handle the situation in which zero blocks are left, so the new
+      code makes sure that there is always at least one free block in the pool.
+    - The code has been documented, and things like the global pool of blocks
+      have been refactored to be much clearer.
+    - Unknown system FIFO commands will now crash the application instead of
+      being ignored.
+
+  - Improve cothread system:
+
+    - Show a crash message when trying to remove a nonexistent cothread context.
+    - Optimize `cothread_yield_irq()`.
+
+  - Refactor global IRQ handler:
+
+    - Remove the `irqDummy()` function, use `NULL` pointers instead.
+    - Use fewer cycles to exit the handler when there isn't an user interrupt
+      handler assigned to the interrupt.
+    - Optimize code that wakes up threads waiting for an interrupt, preventing
+      racen conditions.
+
+  - Compile `getHeap*()` functions on the ARM7 too. @asiekierka
 
 - Maxmod:
 
@@ -21,6 +69,20 @@ weight: -20
     - Add example of creating an FPS counter.
     - Add example of how to use the VBL interrupt.
     - Improve C++ example to also run on the ARM7.
+    - Add example of how to use DMA to do HBLANK scroll effects.
+    - Add example of how to save and load data from the filesystem.
+    - Improve `key_input` example to show the values returned by
+      `keysDownRepeat()`.
+
+  - Tests:
+
+    - The exit to loader test has been fixed (even though the exit code doesn't
+      work properly yet).
+    - Add a test to see how to exit CPU halt state with IRQs.
+    - Add a test to see the effect of deleting threads in different ways.
+    - Add a test to check that CPU contexts are preserved after returning from a
+      cothread yield.
+    - Some test folders have been moved around for clarity.
 
 ## Version 1.11.1 (2025-05-30)
 
