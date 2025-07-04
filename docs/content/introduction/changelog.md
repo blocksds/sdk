@@ -10,7 +10,7 @@ weight: -20
   - Rename symbols of FatFs inside libnds so that users can have their own copy
     of FatFs.
   - Improve `normalizef32()`: Fix normalization of large and small vectors and
-    optimize its performance. @Kuratius
+    optimize its performance. @Kuratius, @19tracks
   - Fix base address of the bootstub struct.
   - Clarify documentation about how `keysDownRepeat()` works.
   - Move some key state handling to critical sections to prevent race
@@ -82,6 +82,8 @@ weight: -20
     - Add a test to see the effect of deleting threads in different ways.
     - Add a test to check that CPU contexts are preserved after returning from a
       cothread yield.
+    - Add a test to check the behaviour of the FIFO handling code when the FIFO
+      hardware and software queues are full.
     - Some test folders have been moved around for clarity.
 
 ## Version 1.11.1 (2025-05-30)
