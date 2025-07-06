@@ -46,10 +46,6 @@ mm_word streamingCallback(mm_word length,
                           mm_addr dest,
                           mm_stream_formats format)
 {
-    // We need to enable interrupts so that filesystem functions work during an
-    // interrupt handler! By default, interrupt handlers can't be interrupted.
-    REG_IME = 1;
-
     // 16-bit, 2 channels (stereo), so we need to output 4 bytes for each word
     int res = fread(dest, 4, length, wavFile);
 
