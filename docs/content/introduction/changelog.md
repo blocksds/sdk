@@ -15,7 +15,11 @@ weight: -20
   - Clarify documentation about how `keysDownRepeat()` works.
   - Move some key state handling to critical sections to prevent race
     conditions.
-  - Fix implementation of `swiIntrWait()`.
+  - Fix implementation of `swiIntrWait()` on both CPUs. It has been rewritten in
+    C and moved to the common folder so that both CPUs use the same
+    implementation.
+  - Two defines have been added for `swiIntrWait()`: `INTRWAIT_KEEP_FLAGS` and
+    `INTRWAIT_CLEAR_FLAGS`.
   - Improve FIFO communications code:
 
     - In FIFO wait loops, don't discard current interrupts when calling
@@ -47,6 +51,13 @@ weight: -20
 
     - Show a crash message when trying to remove a nonexistent cothread context.
     - Optimize `cothread_yield_irq()`.
+    - Prevent `cothread_yield()`, `cothread_yield_irq()` and
+      `cothread_yield_irq_aux()` from inside  interrupt handlers. Instead of
+      yielding, `cothread_yield()` returns right away, and the others call
+      `swiIntrWait()` instead.
+    - Enable interrupts from `cothread_yield_irq()` and
+      `cothread_yield_irq_aux()`. This means that users won't have to do it
+      manually.
 
   - Refactor global IRQ handler:
 
