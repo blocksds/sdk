@@ -65,7 +65,7 @@ workflow has finished successfully. Then, run the following workflow **with the
 version tag that you have decided to use**. That will build and push the Docker
 images: [Link](https://github.com/blocksds/sdk/actions/workflows/docker.yml)
 
-This workflow uses the packages build right before, that's why you need to wait
+This workflow uses the packages built right before, that's why you need to wait
 for that workflow to be finished.
 
 Note that this workflow needs the `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN`
