@@ -22,9 +22,14 @@ weight: -20
     `INTRWAIT_CLEAR_FLAGS`.
   - Improve FIFO communications code:
 
-    - In FIFO wait loops, don't discard current interrupts when calling
+    - In FIFO wait loops, don't discard current interrupts flags when calling
       `swiIntrWait()`. If a FIFO interrupt has happened, exit the wait loop
       right away.
+    - In `fifoWait*()`, check `REG_IME` before calling `swiIntrWait()`. If
+      interrupts are disabled, skip the wait. `swiIntrWait()` enables interrupts
+      internally, and this may be an issue for code that relies on interrupts
+      being disabled. The only side-effect of not calling `swiIntrWait()` is
+      that the CPU won't be able to enter low-power mode.
     - Fix some race conditions by moving some code and checks to critical
       sections.
     - Add some new definitions related to FIFO interrupts that are clearer than
@@ -55,9 +60,7 @@ weight: -20
       `cothread_yield_irq_aux()` from inside  interrupt handlers. Instead of
       yielding, `cothread_yield()` returns right away, and the others call
       `swiIntrWait()` instead.
-    - Enable interrupts from `cothread_yield_irq()` and
-      `cothread_yield_irq_aux()`. This means that users won't have to do it
-      manually.
+    - `swiIntrWait()` is now only called if `REG_IME=1`. If not, it is skipped.
 
   - Refactor global IRQ handler:
 
@@ -77,6 +80,11 @@ weight: -20
 
   - Examples:
 
+    - Fix example of streaming audio with Maxmod. Instead of reading the file
+      from the Maxmod callback handler (which is inside an interrupt handler)
+      the example now keeps a circular buffer. The main loop writes new data
+      read from the file and the interrupt handler reads the data and sends it
+      to Maxmod.
     - Add example of creating an FPS counter.
     - Add example of how to use the VBL interrupt.
     - Improve C++ example to also run on the ARM7.
