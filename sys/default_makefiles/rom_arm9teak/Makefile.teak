@@ -97,7 +97,7 @@ CXXFLAGS	+= -std=gnu++17 $(WARNFLAGS) $(DEFINES) $(ARCH) \
 		    -integrated-as -nostdlib -ffreestanding -fno-builtin \
 		    -fno-rtti -fno-exceptions
 
-LDFLAGS		:= $(LIBDIRSFLAGS) \
+LDFLAGS		+= $(LIBDIRSFLAGS) \
 		   -Map $(MAP) -nostdlib \
 		   -T $(BLOCKSDS)/libs/libteak/teak.ld \
 		   --start-group $(LIBS) --end-group

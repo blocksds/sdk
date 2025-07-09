@@ -78,7 +78,7 @@ CFLAGS		+= -std=gnu11 $(WARNFLAGS_C) $(DEFINES) $(INCLUDEFLAGS) -O3
 
 CXXFLAGS	+= -std=gnu++14 $(WARNFLAGS_CXX) $(DEFINES) $(INCLUDEFLAGS) -O3
 
-LDFLAGS		:= $(LIBDIRSFLAGS) $(LIBS)
+LDFLAGS		+= $(LIBDIRSFLAGS) $(LIBS)
 
 # Intermediate build files
 # ------------------------
