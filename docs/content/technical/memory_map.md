@@ -168,7 +168,9 @@ normally enough.
 Because of how fast it is, DTCM is used for the stack of the ARM9. DTCM can be
 mapped anywhere, and libnds maps the 16 KB of DTCM at 0x2FF0000-0x2FF4000.
 Developers may use DTCM for their own variables, but that will reduce the amount
-of stack available, so be careful when doing that.
+of stack available, so be careful when doing that. Check the [usage notes](../usage_notes)
+of BlocksDS to know how to optimize the DTCM layout if you want to allocate your
+own variables there.
 
 You may notice that this overlaps with 16 KB of main RAM in DSi consoles. Yes,
 the main RAM that is hidden by DTCM can only be accessed through the uncached

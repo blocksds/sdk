@@ -60,7 +60,92 @@ BEGIN_ASM_FUNC my_function itcm
     bx  lr
 ```
 
-## 4. Using alternative memory layouts
+## 4. Optimizing DTCM usage
+
+Applications are loaded at the start of main RAM (code, data sections,
+statically-allocated variables, etc). All remaining space is used as heap for
+`malloc()` and similar functions.
+
+BlocksDS places the user stack in DTCM. It starts at the end of DTCM and it
+grows downwards.
+
+The result is something like this:
+
+    +-----------------------------------+--------------------------------------+
+    |             Main RAM              |               DTCM                   |
+    +-----+--------------------+--------+------------------------------+-------+
+    | App |        Heap        | Unused |           Unused             | Stack |
+    +-----+--------------------+--------+------------------------------+-------+
+
+In most cases the heap grows up to a certain address and all space after that
+remains unused. Similarly, the stack grows downwards up to a certain address and
+leaves some DTCM unused.
+
+This layout allows the stack to grow as much as needed, and even reach main RAM
+if DTCM isn't big enough. If this is something that your application expects,
+you should use `reduceHeapSize()` to block `picolibc` from using space at the
+end of main RAM for functions like `malloc()`. If you don't use this, it's
+possible that the stack will overwrite some memory allocated by `malloc()` if it
+grows too much. You can use `getHeapLimit()` to check the top of the memory
+space that will be used by `malloc()`. This is the result of blocking some space
+at the end of main RAM:
+
+    +-----------------------------------+--------------------------------------+
+    |             Main RAM              |               DTCM                   |
+    +-----+----------+--------+---------+---------+----------------------------+
+    | App |   Heap   | Unused | Blocked | Unused  |         Stack              |
+    +-----+----------+--------+---------+---------+----------------------------+
+
+However, if an application uses a lot of heap memory and stack it's possible
+that the stack and the heap overlap, so you still need to be careful.
+
+There is another problem.
+
+Users can also designate variables to be placed in DTCM. Normally they are
+placed at the start of DTCM like this:
+
+    +-----------------------------------+--------------------------------------+
+    |             Main RAM              |               DTCM                   |
+    +-----+--------------------+--------+---------------------+--------+-------+
+    | App |        Heap        | Unused | User DTCM variables | Unused | Stack |
+    +-----+--------------------+--------+---------------------+--------+-------+
+
+This means that the stack is now constrained by how much size is taken by
+user-defined DTCM variables. Ideally, we'd want the linker to place user DTCM
+variables at the end of DTCM and the stack right below them. However, the linker
+isn't able to allocate space in a section starting from the end.
+
+BlocksDS has a workaround: Letting the developer hardcode the size reserved for
+user DCTM variables. By hardcoding this size the linker can place them at the
+end of DTCM and have a much more useful memory layout:
+
+    +-----------------------------------+--------------------------------------+
+    |             Main RAM              |               DTCM                   |
+    +-----+--------------------+--------+--------+-------+---------------------+
+    | App |        Heap        | Unused | Unused | Stack | User DTCM variables |
+    +-----+--------------------+--------+--------+-------+---------------------+
+
+To do this you need to manually set the value of `__dtcm_data_size` to the right
+size for your application. There are two ways to set it:
+
+1. Edit your Makefile and the following to `LDFLAGS`:
+
+   ```
+   LDFLAGS := -Wl,--defsym,__dtcm_data_size=1024
+   ```
+
+2. Add a file to your project with the value of the symbol. For example, create
+   a file called `dtcm_size.s` with the following contents:
+
+   ```
+   .global __dtcm_data_size
+   .equ __dtcm_data_size, 1024
+   ```
+
+You can check [this test](https://github.com/blocksds/sdk/tree/master/tests/system/dtcm_fixed_size)
+to experiment with this value.
+
+## 5. Using alternative memory layouts
 
 ### ARM7 options
 
