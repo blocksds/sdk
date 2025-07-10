@@ -56,14 +56,16 @@ sense.
 
 ## 3. Potential problems with DMA
 
-- Some DMA copies can interrupt the CPU until the copy has finished. Interrupts
-  can't be handled while a DMA copy is active in this kind of situations.
-
 - The DMA can't access ITCM or DTCM memory, so you can't use it to copy data
   from or to those memory regions. This may confuse you if you have data stored
   in the stack (which is normally in DTCM) and you use DMA to copy it to a
   different location. However, this is a generally easy problem to detect and to
   fix (the copy simply won't happen).
+
+- DMA copies can interrupt the CPU until the copy has finished. Interrupts can't
+  be handled while a DMA copy is active in this kind of situations. The only way
+  the CPU won't be blocked is if it's running code from ITCM and reading data
+  from ITCM and DTCM.
 
 - A bigger problem is the cache. DMA can't access the caches, but the ARM9 uses
   the cache all the time. If you edit an array it will likely stay in the data
