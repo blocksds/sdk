@@ -17,7 +17,8 @@
 // In this test you can modify the size of the array "test_array" to see if the
 // test builds or not. You can also edit the Makefile to enable or remove the
 // value of __dtcm_data_size and see how that affects the allocation of the
-// array.
+// array. Another way to define this symbol is to define it in an assembly file.
+// Check `dtcm_size.s` to see how to do it.
 
 #include <stdio.h>
 
