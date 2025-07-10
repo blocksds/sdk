@@ -78,6 +78,11 @@ weight: -20
 
 - SDK:
 
+  - Documentation:
+
+    - Add a section to the "Usage notes" page about how to move the DTCM user
+      variables to the end of DTCM using the `__dtcm_data_size` symbol.
+
   - Examples:
 
     - Fix example of streaming audio with Maxmod. Instead of reading the file
@@ -104,6 +109,12 @@ weight: -20
     - Add a test to check the behaviour of the FIFO handling code when the FIFO
       hardware and software queues are full.
     - Some test folders have been moved around for clarity.
+    - Add test of using the `__dtcm_data_size` symbol.
+
+  - Other:
+
+    - Modify the default makefiles to allow the user to specify additional
+      `LDFLAGS` when including them.
 
 ## Version 1.11.1 (2025-05-30)
 
