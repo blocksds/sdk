@@ -1,7 +1,11 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2023
+# SPDX-FileContributor: Antonio Niño Díaz, 2023-2025
 
 BLOCKSDS	?= /opt/blocksds/core
+
+# The regular printf() with floating point support is very big. This disables
+# floating point support to save space.
+DEFINES		:= -DPICOLIBC_LONG_LONG_PRINTF_SCANF
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9arm7/Makefile.arm7
