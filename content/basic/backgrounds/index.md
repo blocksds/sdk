@@ -31,7 +31,8 @@ Mode | Layer 0 | Layer 1 | Layer 2  | Layer 3
 
 - **Regular**: Tiled backgrounds. Up to 1024 tiles in total. Tiles can be
   flipped vertically or horizontally. Each tile can use a different palette.
-  Valid sizes: 256x256, 512x256, 256x512, 512x512 pixels.
+  Valid sizes: 256x256, 512x256, 256x512, 512x512 pixels. There are two color
+  modes: one palette of 256 colors or 16 palettes of 16 colors each.
 
 - **Affine**: Tiled backgrounds that can be rotated and scaled. Limited to 256
   tiles in total, and they can only use one 256-color palette. Tiles can't be
@@ -62,12 +63,12 @@ chapters. Also, the 3D output replaces layer 0 regardless of the 2D video mode.
 ## 3. Displaying regular backgrounds
 
 We're finally going to see an example of displaying a regular background. You
-can open [`examples/graphics_2d/bg_regular`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_regular),
+can open [`examples/graphics_2d/bg_regular_8bit`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_regular_8bit),
 if you want to have a look at the code while reading this section. You can try
 to build the example first, the output should be something like this (which you
 can scroll with the D-Pad):
 
-![Regular background](bg_types_regular.png "Regular background")
+![Regular background 8 BPP](bg_types_regular_8bit.png "Regular background 8 BPP")
 
 Now, let's understand how the code works.
 
@@ -92,9 +93,10 @@ looks like this:
 -gB8 -gt -m
 ```
 
-`-gB8` tells grit to work in 8 bit per pixel mode (256 colors). `-gt` tells grit
-to create a tiled map. `-m` tells grit to also export the tile map. The palette
-is exported by default (you can request it explicitly with `-p`).
+`-gB8` tells grit to work in 8 bit per pixel mode. It will create one palette of
+256 colors. `-gt` tells grit to create a tiled map. `-m` tells grit to also
+export the tile map. The palette is exported by default (you can request it
+explicitly with `-p`).
 
 Now we need to see how to use the converted graphics. Each pair of `.png` and
 `.grit` files create a `.h` file that has to be included in the source code. In
@@ -139,10 +141,32 @@ int main(int argc, char *argv[])
 }
 ```
 
-The example `examples/graphics_2d/bg_regular` also shows you how to scroll the
-background with `bgSetScroll(bg, x, y)`. The most important thing to remember is
-that this function alone won't update the background, it will simply tell libnds
-to update the scroll to the right values the next time `bgUpdate()` is called.
+The example `examples/graphics_2d/bg_regular_8bit` also shows you how to scroll
+the background with `bgSetScroll(bg, x, y)`. The most important thing to
+remember is that this function alone won't update the background, it will simply
+tell libnds to update the scroll to the right values the next time `bgUpdate()`
+is called.
+
+To finish this section let's see how to create a background that uses 16
+palettes of 16 colors instead. You can open
+[`examples/graphics_2d/bg_regular_4bit`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_regular_4bit),
+
+![Regular background 4 BPP](bg_types_regular_4bit.png "Regular background 4 BPP")
+
+There are only two differences you need to check. The first one is the grit
+file:
+
+```sh
+# 4 bpp, tiles, export map, flat layout, not compressed
+-gt -gB4 -mR4 -mLf
+```
+
+And the second one is the way to setup the background (use `BgType_Text4bpp`
+instead of `BgType_Text8bpp`):
+
+```c
+int bg = bgInit(0, BgType_Text4bpp, BgSize_T_256x256, 0, 1);
+```
 
 ## 4. Tile bases and map bases
 
