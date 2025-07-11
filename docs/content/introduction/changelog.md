@@ -90,6 +90,9 @@ weight: -20
       the example now keeps a circular buffer. The main loop writes new data
       read from the file and the interrupt handler reads the data and sends it
       to Maxmod.
+    - Add example of displaying a 4 BPP tiled background. Rename the previous
+      `bg_regular` example to `bg_regular_8bit` to clarify that it loads a 8 BPP
+      tiled background.
     - Add example of creating an FPS counter.
     - Add example of how to use the VBL interrupt.
     - Improve C++ example to also run on the ARM7.
@@ -97,6 +100,9 @@ weight: -20
     - Add example of how to save and load data from the filesystem.
     - Improve `key_input` example to show the values returned by
       `keysDownRepeat()`.
+    - Fix build of the example that prints no$gba debug messages from both CPUs.
+      Floating point support has been removed from `printf()` on the ARM7 to
+      save space.
 
   - Tests:
 
