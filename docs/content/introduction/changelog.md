@@ -8,7 +8,7 @@ weight: -20
 - libnds:
 
   - Rename symbols of FatFs inside libnds so that users can have their own copy
-    of FatFs.
+    of FatFs. @asiekierka
   - Improve `normalizef32()`: Fix normalization of large and small vectors and
     optimize its performance. @Kuratius, @19tracks
   - Fix base address of the bootstub struct.
@@ -1832,7 +1832,7 @@ weight: -20
   - Before this version, repositories owned by third parties were added as
     submodules to the SDK repository. This can be a problem if the owner isn't
     responsive, changes name, deletes the repository... In order to avoid
-    issues, forks have been created under the BlocksDS organization.  It is
+    issues, forks have been created under the BlocksDS organization. It is
     expected to contribute to the original repositories and update the fork to
     stay in sync. Contributing to the forks is a last resort option.
 
