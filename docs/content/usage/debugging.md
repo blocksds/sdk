@@ -61,8 +61,8 @@ the messages in your code if they can happen from both CPUs).
 To use it, follow the instructions below.
 
 In the ARM7 the default behaviour is to send `stderr` messages to this console,
-so you don't need to do initialize anything. In the ARM9 you need to enable it
-by doing this:
+so you don't need to initialize anything. In the ARM9 you need to enable it by
+doing this:
 
 ```c
 // Redirect stderr to the no$gba debug console. By default both stdout and
