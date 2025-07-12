@@ -76,6 +76,14 @@ weight: -20
 
   - Fix Portamento + Volume Slide effect.
 
+- Grit:
+
+  - Crash if mode append is selected but it's not allowed due to other settings.
+    In the past, grit would just overwrite the invalid setting without warning
+    the user.
+  - Add note to the documentation about how it is better to reduce quality of
+    graphics before passing them to grit than to let grit reduce the quality.
+
 - SDK:
 
   - Documentation:
