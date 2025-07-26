@@ -33,9 +33,9 @@ int main(int argc, char **argv)
     printf("maxmod audio modes example\n");
     printf("==========================\n");
     printf("\n");
-    printf("A: Hardware mixing mode\n");
-    printf("B: Interpolation mixing mode\n");
-    printf("Y: Extended mixing\n");
+    printf("A: Hardware mixing (mode A)\n");
+    printf("B: Interpolated mixing (mode B)\n");
+    printf("Y: Extended mixing (mode C)\n");
     printf("\n");
     printf("L: Start\n");
     printf("R: Stop\n");
