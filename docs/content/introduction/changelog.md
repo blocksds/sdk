@@ -3,6 +3,73 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version 1.13.0 (2025-XX-XX)
+
+- libnds:
+
+  - The FatFs submodule link has been changed. If you want to update your
+    current clone of BlocksDS you will need to manually edit
+    `.git/modules/libs/libnds/modules/fatfs/config` and change the URL to
+    "blocksds" instead of "WonderfulToolchain". You can also do a fresh clone.
+  - videoGL functions now copy textures and palettes to VRAM using `memcpy()`
+    instead of DMA copies. This will allow interrupts to happen while the copy
+    is taking place instead of blocking the interrupts.
+  - FatFs has been updated to R0.16. Also, `stat()` now returns the actual
+    creation timestamp of the file instead of using the time of the last access
+    or modification. @asiekierka
+  - libnds now checks that TLS isn't used from IRQ handlers. This is only
+    checked in debug builds of libnds because it would affect performance of
+    some applications.
+  - Add support for compile-time evaluation of the `math.h` functions. @Kuratius
+  - `errno` handling has been fixed in `scandir()`. @shinyquagsire23
+  - Fix memory leak in `open()` when a file is failed to be opened.
+    @shinyquagsire23
+  - Return 0 as modification and access dates of NitroFS files instead of
+    leaving the fields uninitialized.
+  - Don't clear `errno` in `readdir()`. @asiekierka
+  - Some Doxygen comments with missing information have been completed.
+  - The internal function `vramGetBank()` has been improved with error checking.
+  - Some videoGL code has been documented.
+
+- Maxmod
+
+  - The port to C has been completed. The only code left in assembly is the one
+    that does software audio mixing on the GBA and the ARM7 of the DS. All of
+    the definitions to access structures from assembly code have been deleted
+    (except for the ones needed for the software mixing code).
+  - Some functions now return error codes instead of `void`: `mmInit()`,
+    `mmInitDefault()`, `mmInitDefaultMem()`, `mmLoad()`, `mmUnload()`,
+    `mmLoadEffect()` and `mmUnloadEffect()`.
+  - In the GBA port Maxmod can now be deinitialized with `mmEnd()`. This isn't
+    possible on DS yet.
+  - Helpers `mmGetModuleCount()` and `mmGetSampleCount()` have been added to get
+    the number of modules and samples available in the loaded sound bank. They
+    are available from both CPUs. Previously, it was only possible on the ARM9,
+    and only by accessing internal variables of Maxmod.
+  - The following functions now check if the provided ID is out of bounds:
+    `mmEffect()`, `mmEffectEx()`, `mmStart()`, `mmJingle()`, `mmLoad()`,
+    `mmUnload()`, `mmLoadEffect()` and `mmUnloadEffect()`.
+  - Several comments have been added to the code.
+  - The code now uses the struct definitions of the headers instead of using
+    magic numbers and assembly defines. Several variables have been modified to
+    use the right types (for example, instead of using a `void` pointer, they
+    use now pointers to the right type of struct).
+  - A small bug when handling module channel bflags has been fixed.
+
+- mmutil:
+
+  - Some magic numbers have been replaced by defines extracted from Maxmod.
+
+- DSWifi:
+
+  - Update instructions of how to enable debug output.
+
+- SDK:
+
+  - The documentation now has a note about symlinks not working with MinGW.
+  - The Maxmod example of switching audio modes has been improved with a more
+    clearer text output.
+
 ## Version 1.12.0 (2025-07-12)
 
 - libnds:
