@@ -272,7 +272,7 @@ $(SOUNDBANKINFODIR)/soundbank.h: $(SOURCES_AUDIO)
 	@echo "  MMUTIL  $^"
 	@$(MKDIR) -p $(SOUNDBANKDIR)
 	@$(MKDIR) -p $(SOUNDBANKINFODIR)
-	@$(BLOCKSDS)/tools/mmutil/mmutil $^ -d \
+	$(V)$(BLOCKSDS)/tools/mmutil/mmutil $^ -d \
 		-o$(SOUNDBANKDIR)/soundbank.bin -h$(SOUNDBANKINFODIR)/soundbank.h
 
 ifeq ($(strip $(NITROFSDIR)),)

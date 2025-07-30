@@ -204,7 +204,7 @@ $(BUILDDIR)/%.png.o $(BUILDDIR)/%.h : %.png %.grit
 $(SOUNDBANKDIR)/soundbank.h: $(SOURCES_AUDIO)
 	@echo "  MMUTIL  $^"
 	@$(MKDIR) -p $(@D)
-	@$(BLOCKSDS)/tools/mmutil/mmutil $^ -d \
+	$(V)$(BLOCKSDS)/tools/mmutil/mmutil $^ -d \
 		-o$(SOUNDBANKDIR)/soundbank.bin -h$(SOUNDBANKDIR)/soundbank.h
 
 $(SOUNDBANKDIR)/soundbank.c.o: $(SOUNDBANKDIR)/soundbank.h
