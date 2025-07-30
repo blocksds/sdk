@@ -59,6 +59,10 @@ weight: -20
 - mmutil:
 
   - Some magic numbers have been replaced by defines extracted from Maxmod.
+  - Some warnings have been fixed.
+  - The code has been reorganized. Variables now have reduced scopes instead of
+    having whole functions as their scope.
+  - The command to build NDS test ROMs has been fixed in the documentation.
 
 - DSWifi:
 
@@ -66,6 +70,7 @@ weight: -20
 
 - SDK:
 
+  - The default makefiles now print the mmutil command in verbose mode (`V=`).
   - The documentation now has a note about symlinks not working with MinGW.
   - The Maxmod example of switching audio modes has been improved with a more
     clearer text output.
