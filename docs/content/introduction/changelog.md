@@ -49,20 +49,32 @@ weight: -20
   - The following functions now check if the provided ID is out of bounds:
     `mmEffect()`, `mmEffectEx()`, `mmStart()`, `mmJingle()`, `mmLoad()`,
     `mmUnload()`, `mmLoadEffect()` and `mmUnloadEffect()`.
+  - All arrays have been marked as `const`. Some functions have been moved back
+    from IWRAM to ROM. This has no effect in the DS port, but it helps the GBA
+    port reduce IWRAM usage.
   - Several comments have been added to the code.
   - The code now uses the struct definitions of the headers instead of using
     magic numbers and assembly defines. Several variables have been modified to
     use the right types (for example, instead of using a `void` pointer, they
     use now pointers to the right type of struct).
   - A small bug when handling module channel bflags has been fixed.
+  - Fix the way in which the code that handles DCT accesses the instrument note
+    map. This is a bug carried on from the assembly code.
 
 - mmutil:
 
-  - Some magic numbers have been replaced by defines extracted from Maxmod.
+  - Some error checks have been added to prevent crashes if files can't be
+    opened or an output path isn't provided. The application will now exit
+    gracefully.
+  - Some magic numbers have been replaced by defines extracted from Maxmod. The
+    code has been documented a bit.
   - Some warnings have been fixed.
   - The code has been reorganized. Variables now have reduced scopes instead of
     having whole functions as their scope.
   - The command to build NDS test ROMs has been fixed in the documentation.
+  - The names of the temporary files created by the tool is no longer hardcoded.
+    This makes it possible to execute mmutil multiple times from the same folder
+    without conflicts.
 
 - DSWifi:
 
