@@ -27,6 +27,8 @@ weight: -20
   - Return 0 as modification and access dates of NitroFS files instead of
     leaving the fields uninitialized.
   - Don't clear `errno` in `readdir()`. @asiekierka
+  - Add new ARM7 audio defines that are less confusing than the previous ones.
+    They are now used in the audio helpers of libnds.
   - Some Doxygen comments with missing information have been completed.
   - The internal function `vramGetBank()` has been improved with error checking.
   - Some videoGL code has been documented.
@@ -60,6 +62,17 @@ weight: -20
   - A small bug when handling module channel bflags has been fixed.
   - Fix the way in which the code that handles DCT accesses the instrument note
     map. This is a bug carried on from the assembly code.
+  - `mmSetPosition()` is now available on the DS, not just the GBA.
+  - `mmJingleStart()` and `mmJingleStop()` have been implemented. They behave
+    like `mmStart()` and `mmStop()`, so now jingles can also be played in a loop
+    and they can be stopped at any point.
+  - `mmJinglePause()` and `mmJingleResume()` have been implemented.
+  - `mmJingleActive()` has been implemented.
+  - `mmPosition()`, `mmJingle()` and `mmActiveSub()` have been deprecated. Use
+    `mmSetPosition()`, `mmJingleStart()` and `mmJingleActive()` instead.
+  - In the documentation, create individual section for functions related to
+    jingles. Keeping them in a different page than the functions for the main
+    module means it's easier to see the limitations of jingles.
 
 - mmutil:
 
@@ -79,6 +92,10 @@ weight: -20
 - DSWifi:
 
   - Update instructions of how to enable debug output.
+
+- LibXM7:
+
+  - Use new libnds ARM7 audio defines.
 
 - SDK:
 
