@@ -82,10 +82,11 @@ weight: -20
     ARM9, which could cause channels to become permanently marked as "busy" on
     the ARM9 even if they were free on the ARM7.
   - `mmEffectCancel()` and `mmEffectCancelAll()` now work properly on DS.
+  - `mmEffectCancelAll()` can now stop released sound effects.
   - `mmEffectRelease()` now has a big warning in the documentation mentioning
-    that any effect that has been released can only be stopped by itself or by
-    another effect or module. It can't be stopped by `mmEffectCancel()` or
-    `mmEffectCancelAll()`.
+    that any effect that has been released can only be stopped by itself, by
+    another effect or module, or by `mmEffectCancelAll()`. It can't be stopped
+    by `mmEffectCancel()`.
   - A bug has been fixed where there could be memory corruption if a new active
     channel was requested but no more channels were available.
   - In the documentation, create individual section for functions related to
