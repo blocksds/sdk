@@ -70,6 +70,24 @@ weight: -20
   - `mmJingleActive()` has been implemented.
   - `mmPosition()`, `mmJingle()` and `mmActiveSub()` have been deprecated. Use
     `mmSetPosition()`, `mmJingleStart()` and `mmJingleActive()` instead.
+  - `mmGetPosition()` and `mmGetPositionRow()` have been implemented on the
+    ARM9. The ARM7 refreshes the position once per frame, so the tick counter
+    can easily skip values from the point of view of the ARM9. For that reason,
+    `mmGetPositionTick()` hasn't been implemented.
+  - Sound effect handling has been heavily refactored. The ARM7 code that
+    creates and reuses handles is now cleaner. The code that synchronizes the
+    state of the sound effects from the ARM7 to the ARM9 has been removed. Now,
+    the ARM9 sends messages to the ARM7 and it waits for the ARM7 to send the
+    resulting handle to the ARM9. The previous system generated handles on the
+    ARM9, which could cause channels to become permanently marked as "busy" on
+    the ARM9 even if they were free on the ARM7.
+  - `mmEffectCancel()` and `mmEffectCancelAll()` now work properly on DS.
+  - `mmEffectRelease()` now has a big warning in the documentation mentioning
+    that any effect that has been released can only be stopped by itself or by
+    another effect or module. It can't be stopped by `mmEffectCancel()` or
+    `mmEffectCancelAll()`.
+  - A bug has been fixed where there could be memory corruption if a new active
+    channel was requested but no more channels were available.
   - In the documentation, create individual section for functions related to
     jingles. Keeping them in a different page than the functions for the main
     module means it's easier to see the limitations of jingles.
