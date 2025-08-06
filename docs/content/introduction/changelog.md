@@ -92,6 +92,19 @@ weight: -20
   - In the documentation, create individual section for functions related to
     jingles. Keeping them in a different page than the functions for the main
     module means it's easier to see the limitations of jingles.
+  - Events of type `MMCB_SONGMESSAGE` now include the layer (`MM_MAIN` or
+    `MM_JINGLE`) as part of the data passed to the callback. This is a
+    compatibility break, but it's very unlikely that anyone is getting events
+    from a jingle, so it's very unlikely to break any project. Events are rarely
+    used, so the probability of ever finding a compatibility issue is almost 0.
+  - Fix a crash that would happen when playing modules or jingles with more
+    channels than allocated by Maxmod. Now, when Maxmod detects that the module
+    (or jingle) tries to use a channel that is outside of the limits, it will
+    just stop the song.
+  - `mmSetPatternEx()` has been implemented, which lets the caller specify the
+    new pattern order and row, not just the order like with `mmSetPattern()`.
+  - Build library with `-Os` instead of `-O2` in the ARM7 of the NDS to save
+    memory.
 
 - mmutil:
 
@@ -111,6 +124,7 @@ weight: -20
 - DSWifi:
 
   - Update instructions of how to enable debug output.
+  - Build library with `-Os` instead of `-O2` to save memory.
 
 - LibXM7:
 
