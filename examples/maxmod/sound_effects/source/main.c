@@ -41,6 +41,7 @@ int main(int argc, char **argv)
     printf("\n");
     printf("A: Play short explosion SFX\n");
     printf("B: Play continuous SFX\n");
+    printf("X: Cancel all SFXs\n");
     printf("\n");
     printf("START: Return to loader\n");
 
@@ -60,14 +61,20 @@ int main(int argc, char **argv)
             mm_sfxhand h = mmEffect(SFX_FIRE_EXPLOSION);
             mmEffectPanning(h, rand() & 255);
             mmEffectVolume(h, 96);
+            // Slow down the effect to 10% of the original speed
+            mmEffectRate(h, 1024 / 10);
         }
 
         if (keys_down & KEY_B)
         {
-            // Play a sound that can be interrupted if needed by other effects
+            // Play a sound and release it so that it can be interrupted if
+            // needed by other effects.
             mm_sfxhand h = mmEffect(SFX_NATURE);
             mmEffectRelease(h);
         }
+
+        if (keys_down & KEY_X)
+            mmEffectCancelAll();
 
         if (keys_down & KEY_START)
             break;
