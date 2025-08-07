@@ -34,9 +34,10 @@ int main(int argc, char **argv)
     printf("\n");
     printf("X: haen pyykit by Lasse\n");
     printf("Y: Parallax Glacier by Raina\n");
-    printf("A: Play explosion SFX\n");
-    printf("\n");
     printf("B: Stop song\n");
+    printf("LEFT: Go back by 20 rows in the song\n");
+    printf("\n");
+    printf("A: Play explosion SFX\n");
     printf("\n");
     printf("START: Return to loader\n");
 
@@ -51,9 +52,35 @@ int main(int argc, char **argv)
     {
         swiWaitForVBlank();
 
+        consoleSetCursor(NULL, 0, 15);
+        printf("Current position:\n"
+               "    Pattern: %u    \n"
+               "    Row:     %u    ",
+               mmGetPosition(), mmGetPositionRow());
+
         scanKeys();
 
         uint16_t keys_down = keysDown();
+
+        if (keys_down & KEY_LEFT)
+        {
+            // Go back by 20 rows. If this crosses a pattern, jump to the start
+            // of the previous pattern because we don't know how many rows there
+            // are in each pattern.
+            int pattern = mmGetPosition();
+            int row = mmGetPositionRow();
+
+            row -= 20;
+            if (row < 0)
+            {
+                pattern--;
+                row = 0;
+            }
+            if (pattern < 0)
+                pattern = 0;
+
+            mmSetPositionEx(pattern, row);
+        }
 
         if (keys_down & KEY_B)
         {
