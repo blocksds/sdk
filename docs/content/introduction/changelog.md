@@ -7,10 +7,8 @@ weight: -20
 
 - libnds:
 
-  - The FatFs submodule link has been changed. If you want to update your
-    current clone of BlocksDS you will need to manually edit
-    `.git/modules/libs/libnds/modules/fatfs/config` and change the URL to
-    "blocksds" instead of "WonderfulToolchain". You can also do a fresh clone.
+  - A new function to control the LCD backlight level has been implemented,
+    `systemSetBacklightLevel()`. It works on DS, DS Lite and DSi.
   - videoGL functions now copy textures and palettes to VRAM using `memcpy()`
     instead of DMA copies. This will allow interrupts to happen while the copy
     is taking place instead of blocking the interrupts.
@@ -29,6 +27,10 @@ weight: -20
   - Don't clear `errno` in `readdir()`. @asiekierka
   - Add new ARM7 audio defines that are less confusing than the previous ones.
     They are now used in the audio helpers of libnds.
+  - The FatFs submodule link has been changed. If you want to update your
+    current clone of BlocksDS you will need to manually edit
+    `.git/modules/libs/libnds/modules/fatfs/config` and change the URL to
+    "blocksds" instead of "WonderfulToolchain". You can also do a fresh clone.
   - Some Doxygen comments with missing information have been completed.
   - The internal function `vramGetBank()` has been improved with error checking.
   - Some videoGL code has been documented.
@@ -136,6 +138,8 @@ weight: -20
   - The documentation now has a note about symlinks not working with MinGW.
   - The Maxmod example of switching audio modes has been improved with a more
     clearer text output.
+  - An example has been added to show how to set the LCD brightness level on
+    different DS models.
 
 ## Version 1.12.0 (2025-07-12)
 
