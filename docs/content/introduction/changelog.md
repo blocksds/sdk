@@ -9,6 +9,8 @@ weight: -20
 
   - A new function to control the LCD backlight level has been implemented,
     `systemSetBacklightLevel()`. It works on DS, DS Lite and DSi.
+  - Add a helper to set the master sound volume from the ARM9 called
+    `soundSetMasterVolume()`.
   - videoGL functions now copy textures and palettes to VRAM using `memcpy()`
     instead of DMA copies. This will allow interrupts to happen while the copy
     is taking place instead of blocking the interrupts.
@@ -136,8 +138,7 @@ weight: -20
 
   - The default makefiles now print the mmutil command in verbose mode (`V=`).
   - The documentation now has a note about symlinks not working with MinGW.
-  - The Maxmod example of switching audio modes has been improved with a more
-    clearer text output.
+  - Some Maxmod examples have been improved.
   - An example has been added to show how to set the LCD brightness level on
     different DS models.
 
