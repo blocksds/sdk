@@ -35,7 +35,7 @@ int main(int argc, char **argv)
     printf("X: haen pyykit by Lasse\n");
     printf("Y: Parallax Glacier by Raina\n");
     printf("B: Stop song\n");
-    printf("LEFT: Go back by 20 rows in the song\n");
+    printf("LEFT: Go back by 20 rows\n");
     printf("\n");
     printf("A: Play explosion SFX\n");
     printf("\n");
