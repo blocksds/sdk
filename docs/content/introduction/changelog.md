@@ -3,6 +3,14 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version DEV (2025-XX-XX)
+
+- libnds:
+
+  - The detection of the official Slot-2 rumble pak (NTR-008) has been fixed. It
+    used to be detected as a SuperCard. Also, the rumble API of libnds is now
+    more flexible when detecting the type of activation of rumble. @asiekierka
+
 ## Version 1.13.0 (2025-08-11)
 
 - libnds:
@@ -138,7 +146,7 @@ weight: -20
 - SDK:
 
   - GCC has been updated to version 15.2.0 and binutils has been updated to
-    version 2.45.
+    version 2.45. @asiekierka
   - The default makefiles now print the mmutil command in verbose mode (`V=`).
   - The documentation now has a note about symlinks not working with MinGW.
   - Some Maxmod examples have been improved.
