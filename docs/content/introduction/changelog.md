@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version 1.13.0 (2025-XX-XX)
+## Version 1.13.0 (2025-08-11)
 
 - libnds:
 
@@ -28,7 +28,8 @@ weight: -20
     leaving the fields uninitialized.
   - Don't clear `errno` in `readdir()`. @asiekierka
   - Add new ARM7 audio defines that are less confusing than the previous ones.
-    They are now used in the audio helpers of libnds.
+    They are based on the names used by GBATEK. The audio helpers of libnds now
+    use the new defines.
   - The FatFs submodule link has been changed. If you want to update your
     current clone of BlocksDS you will need to manually edit
     `.git/modules/libs/libnds/modules/fatfs/config` and change the URL to
@@ -136,6 +137,8 @@ weight: -20
 
 - SDK:
 
+  - GCC has been updated to version 15.2.0 and binutils has been updated to
+    version 2.45.
   - The default makefiles now print the mmutil command in verbose mode (`V=`).
   - The documentation now has a note about symlinks not working with MinGW.
   - Some Maxmod examples have been improved.
