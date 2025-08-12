@@ -16,7 +16,7 @@ you want to always use the cutting edge version of BlocksDS.
    ```
 
 1. You will also need to install the ARM toolchain of Wonderful Toolchains.
-   Follow the instructions in this link but you skip step 5:
+   Follow the instructions in this link:
    https://wonderful.asie.pl/doc/general/getting-started/#linux
 
 1. Now, install the ARM toolchain of Wonderful Toolchains:
