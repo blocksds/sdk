@@ -4,4 +4,6 @@
 #this can be done with sudo bash Install_Linux.sh
 python tools/Orca.py
 export PATH=/opt/wonderful/bin:$PATH
-WONDERFUL_TOOLCHAIN=/opt/wonderful
+export WONDERFUL_TOOLCHAIN=/opt/wonderful
+
+echo "Install finished, but you may need to set the PATH for Wonderful Toolchain permanently"
