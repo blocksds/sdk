@@ -11,6 +11,18 @@ weight: -20
     used to be detected as a SuperCard. Also, the rumble API of libnds is now
     more flexible when detecting the type of activation of rumble. @asiekierka
 
+- Maxmod:
+
+  - Fix instruments with panning and pitch envelope enabled at the same time.
+    Previously, the panning envelope was used for the pitch envelope by mistake.
+  - On GBA now `mmInit()` and `mmInitDefault()` return error if the number of
+    requested channels is bigger than 32. This wasn't supported anyway, and it
+    would have silently failed if allowed.
+  - The memory used by the panning slide VCMD on XM modules was using the volume
+    slide memory when panning to the right (it used the right memory when
+    panning to the left).
+  - The memory entries used by effects and volume effects has been documented.
+
 ## Version 1.13.0 (2025-08-11)
 
 - libnds:
