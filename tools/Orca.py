@@ -1,72 +1,101 @@
 #idk, license or something
 # W3SLAV was x
 
-
-#this tool only works on x86 linux platforms for the time being (because Wonderful Toolchain doesn't support windows)
 import os
-
+import platform
+import argparse
 #urllib is only for downloading Wonderful Toolchain builds
 from urllib.request import urlretrieve
 
-#this is for simple "portable" option (no path exports and all files sent to single dir)
-import argparse
+
+cwd = os.getcwd()
+
+
 parser = argparse.ArgumentParser()
-parser.add_argument("--portable",action="store_true", help="build in portable mode")
+parser.add_argument("--portable",action="store_true", help="build in portable mode (LINUX)")
+parser.add_argument("--minimal",action="store_true", help="minimal install")
 args = parser.parse_args()
 
 
 print("OrcaBlocks Installer v1.0\n    -W3SLAV")
 
 is_portable = False
-
 if (args.portable==True):
     print("using portable mode")
     print("THIS MODE IS NOT RECOMMENDED FOR NORMAL USE")
     is_portable = True
 
 
-#pull from https://wonderful.asie.pl/bootstrap/wf-bootstrap-x86_64.tar.gz
-urlretrieve("https://wonderful.asie.pl/bootstrap/wf-bootstrap-x86_64.tar.gz", "wf-bootstrap-x86_64.tar.gz")
 
-#get current path for later
-#cwd = blocks sdk dir
-cwd = os.getcwd()
+
+#use msys if windows
+if (platform.system() == "Windows"):
+    env = os.environ
+    return (
+        "MSYSTEM" in env and
+        env["MSYSTEM"] in ("MSYS", "MINGW32", "MINGW64", "UCRT64", "CLANG64")
+    )
+    if is_msys2():
+        pacman_path = shutil.which("wf-pacman")
+        if not pacman_path:
+            exit()
+    else:
+        print("Not running inside MSYS2. Please Use MSYS2")
+        exit()
 
 if (is_portable==False):
-    #following the tutorial here:
-    os.system('mkdir /opt/wonderful')
-    os.system('chown -R $USER:$USER /opt/wonderful')
-    os.system('cd /opt/wonderful/')
-    os.system('tar xzvf '+cwd+'/wf-bootstrap-x86_64.tar.gz -C /opt/wonderful')
-    os.environ["PATH"] = "/opt/wonderful/bin:" + os.environ["PATH"]
-    os.environ["WONDERFUL_TOOLCHAIN"] = "/opt/wonderful"
-    os.system('cd /opt/wonderful/bin')
+#pull from https://wonderful.asie.pl/bootstrap/wf-bootstrap-x86_64.tar.gz
+    if (platform.system() == "Linux"):
+        urlretrieve("https://wonderful.asie.pl/bootstrap/wf-bootstrap-x86_64.tar.gz", "wf-bootstrap-x86_64.tar.gz")
+
+        #following the tutorial here:
+        os.system('mkdir /opt/wonderful')
+        os.system('chown -R $USER:$USER /opt/wonderful')
+        os.system('cd /opt/wonderful/')
+        os.system('tar xzvf '+cwd+'/wf-bootstrap-x86_64.tar.gz -C /opt/wonderful')
+        os.environ["PATH"] = "/opt/wonderful/bin:" + os.environ["PATH"]
+        os.environ["WONDERFUL_TOOLCHAIN"] = "/opt/wonderful"
+        os.system('cd /opt/wonderful/bin')
+        os.system('wf-pacman -Syu --noconfirm')
+        os.system('wf-pacman -S toolchain-gcc-arm-none-eabi --noconfirm')
+
+        print('finished installing Wonderful Toolchain\n beginning BlocksDS install')
+
+# THIS WILL RUN ON ALL PLATFORMS
+    os.system('wf-pacman -Syu wf-tools --noconfirm')
+    os.system('wf-config repo enable blocksds --noconfirm')
     os.system('wf-pacman -Syu --noconfirm')
-    os.system('wf-pacman -S toolchain-gcc-arm-none-eabi --noconfirm')
-
-    print('finished installing Wonderful Toolchain\n beginning BlocksDS install')
-
-
-    #start installing blocks
-    os.system('sudo mkdir /opt/blocksds/')
-    os.system('sudo chown $USER:$USER /opt/blocksds')
-    os.system('mkdir /opt/blocksds/external')
-    os.system('make install')
+    os.system('wf-pacman -S blocksds-toolchain')
+    # this will install docs as well V
+    if (args.minimal==False):
+        os.system('wf-pacman -S blocksds-docs')
+        os.system('wf-pacman -S toolchain-llvm-teak-llvm')
+        os.system('wf-pacman -S blocksds-nflib blocksds-nitroengine')
+    os.system('ln -s /opt/wonderful/thirdparty/blocksds /opt/blocksds')
 
 
+
+
+
+
+
+
+
+#LINUX/WSL ONLY VVVVV
 if (is_portable==True):
-    #build to "portable file" called portable.blocks
+    if (platform.system() == "Linux"):
+        #build to "portable file" called portable.blocks
 
-    os.system('mkdir portable.blocks')
-    os.system('cd portable.blocks')
-    os.system('tar xzvf '+cwd+'/wf-bootstrap-x86_64.tar.gz -C '+cwd+'/portable.blocks')
-    #VVV this needs Wonderful toolchain to make a few changes to how it searches for the config file, I will make an issue on github for this
-    os.system('cd '+cwd+'/portable.blocks/bin/ && ./wf-pacman -Syu')
-    os.system('cd '+cwd+'/portable.blocks/bin/ && ./wf-pacman -S toolchain-gcc-arm-none-eabi')
-    print("finished portable Wonderful Toolchain packing\nmoving on to Blocks...")
-
-    #build blocks to dir
-    os.system('BLOCKSDS=$PWD make INSTALLDIR=portable.blocks -j`nproc`')
+        os.system('mkdir portable.blocks')
+        os.system('cd portable.blocks')
+        if os.path.exists("/opt/wonderful"):
+            os.system('cp -r /opt/wonderful '+cwd+'/portable.blocks')
+            print("finished portable Wonderful Toolchain packing\nmoving on to Blocks...")
+        else:
+            print("building a portable copy requires having wf-pacman installed please install it by running this program without the '--portable' flag")
+            exit()
+        #build blocks to dir
+        os.system('BLOCKSDS=$PWD make INSTALLDIR=portable.blocks -j`nproc`')
 
 
 print("\nDone!\n")
