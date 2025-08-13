@@ -58,6 +58,12 @@ A NDS ROM is divided into:
   your ARM9 and ARM7 binaries. You need to load files into main RAM when you
   want to use them.
 
+If you're interested in using NitroFS for your game, check the build system
+[ArchitectDS](https://github.com/AntonioND/architectds). It has been designed
+specifically for the DS and it is capable of taking files like PNG, MOD, etc,
+convert them, and place them in NitroFS automatically. The default Makefiles of
+BlocksDS don't support this because of the complexity of the whole process.
+
 In practice, you'll need some graphics in your ARM9 binary. NitroFS can fail to
 start, and you will need to show some message to users about the reason for the
 error. The easiest thing you can do is to start the demo console of libnds and
