@@ -8,10 +8,17 @@ import subprocess
 #urllib is only for downloading Wonderful Toolchain builds
 from urllib.request import urlretrieve
 
+
+#add MSYS command mode check
+MSYS_MODE = False
+
 #error checking
 cwd = os.getcwd()
 def run(cmd):
-    subprocess.run(cmd, shell=True, check=True)
+    if (MYS_MODE==True):
+        subprocess.run("C:\msys64\usr\bin\bash.exe -lc "+cmd, shell=True, check=True)
+    else:
+        subprocess.run(cmd, shell=True, check=True)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--portable",action="store_true", help="build in portable mode (LINUX)")
@@ -45,12 +52,15 @@ if (platform.system() == "Windows"):
         urlretrieve("https://wonderful.asie.pl/bootstrap/wf-bootstrap-windows-x86_64.exe", "wf-installer.exe")
         run("wf-installer.exe /VERYSILENT /NORESTART")
 
+        MSYS_MODE = True
 
     else:
         pacman_path = shutil.which("wf-pacman")
         if not pacman_path:
             urlretrieve("https://wonderful.asie.pl/bootstrap/wf-bootstrap-windows-x86_64.exe", "wf-installer.exe")
             run("wf-installer.exe /VERYSILENT /NORESTART")
+
+            MSYS_MODE = True
 
 if (is_portable==False):
 #pull from https://wonderful.asie.pl/bootstrap/wf-bootstrap-x86_64.tar.gz
