@@ -76,7 +76,7 @@ if (is_portable==False):
         os.environ["WONDERFUL_TOOLCHAIN"] = "/opt/wonderful"
         run('cd /opt/wonderful/bin')
         run('wf-pacman -Syu --noconfirm')
-        run('wf-pacman -S toolchain-gcc-arm-none-eabi --noconfirm')
+        #run('wf-pacman -S toolchain-gcc-arm-none-eabi --noconfirm')
 
         print('finished installing Wonderful Toolchain\n beginning BlocksDS install')
 
