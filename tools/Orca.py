@@ -34,11 +34,23 @@ if (args.portable==True):
 if (platform.system() == "Windows"):
     env = os.environ
     if "MSYSTEM" not in os.environ:
-        print("Not running inside MSYS2. Please Use MSYS2")
-        exit()
-    pacman_path = shutil.which("wf-pacman")
-    if not pacman_path:
-        exit()
+        print("Not running inside MSYS2. Installing MSYS2 + WF-PACMAN + BLOCKS")
+
+        #this will need a good way to be set to latest always VV
+        urlretrieve("https://github.com/msys2/msys2-installer/releases/download/2025-06-22/msys2-x86_64-20250622.exe", "msys2_installer.exe")
+        #silent install based on: https://silentinstallhq.com/msys2-silent-install-how-to-guide/
+        run("msys2_installer.exe install --root C:\MSYS2 --confirm-command")
+
+        #install wf-pacman
+        urlretrieve("https://wonderful.asie.pl/bootstrap/wf-bootstrap-windows-x86_64.exe", "wf-installer.exe")
+        run("wf-installer.exe /VERYSILENT /NORESTART")
+
+
+    else:
+        pacman_path = shutil.which("wf-pacman")
+        if not pacman_path:
+            urlretrieve("https://wonderful.asie.pl/bootstrap/wf-bootstrap-windows-x86_64.exe", "wf-installer.exe")
+            run("wf-installer.exe /VERYSILENT /NORESTART")
 
 if (is_portable==False):
 #pull from https://wonderful.asie.pl/bootstrap/wf-bootstrap-x86_64.tar.gz
@@ -54,6 +66,7 @@ if (is_portable==False):
         os.environ["WONDERFUL_TOOLCHAIN"] = "/opt/wonderful"
         run('cd /opt/wonderful/bin')
         run('wf-pacman -Syu --noconfirm')
+        run('wf-pacman -S toolchain-gcc-arm-none-eabi --noconfirm')
 
         print('finished installing Wonderful Toolchain\n beginning BlocksDS install')
 
