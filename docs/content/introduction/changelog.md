@@ -10,6 +10,8 @@ weight: -20
   - The detection of the official Slot-2 rumble pak (NTR-008) has been fixed. It
     used to be detected as a SuperCard. Also, the rumble API of libnds is now
     more flexible when detecting the type of activation of rumble. @asiekierka
+  - The enum of IPC commands used by DSWiFi has been moved from libnds to DSWiFi
+    and made private.
 
 - Maxmod:
 
@@ -22,6 +24,36 @@ weight: -20
     slide memory when panning to the right (it used the right memory when
     panning to the left).
   - The memory entries used by effects and volume effects has been documented.
+  - The IPC command for the ARM9 `mmReverbConfigure()` function has been
+    simplified. It will now send all parameters in all cases, but this is what
+    users will be using in most cases. In exchange for this, the function
+    becomes a lot smaller and easier to maintain.
+  - Check a few TODO notes and fix them (or remove them if they didn't need any
+    work).
+
+- DSWiFi:
+
+  - The enum of IPC commands used by DSWiFi has been moved from libnds to DSWiFi
+    and made private. Some commands weren't used and they have been removed.
+  - `Wifi_InitDefault()` now takes an int as argument instead of a bool. This
+    lets the function get more flags in the future if they are implemented. Old
+    C code using true or false will still work.
+  - Lots of functions have been made private: Everything that has to do with
+    manual initialization and synchronization between CPUs. Making this code
+    private gives DSWiFi more flexibility to refactor the code.
+  - The initialization code of the library has been cleaned up and simplified.
+  - It is now possible to deinitialize DSWiFi with `Wifi_Deinit()`. This will
+    keep the sgIP memory pool still in the heap, but it will free all other
+    resources. sgIP can't be reinitialized safely at the moment.
+
+- mmutil:
+
+  - Change version number. Now it's set from the environment instead of a
+    hardcoded variable in the Makefile.
+
+- SDK:
+
+  - Use C23 and C++23 to build all the ARM libraries.
 
 ## Version 1.13.0 (2025-08-11)
 
