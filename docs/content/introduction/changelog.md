@@ -51,8 +51,11 @@ weight: -20
   - `Wifi_InitDefault()` now accepts flags `WIFI_INTERNET_AND_LOCAL` and
     `WIFI_LOCAL_ONLY`. It makes it possible to initialize DSWiFi without sgIP if
     the game isn't going to connect to the Internet. This saves over a 100 KBs
-    of RAM in games that only want to setup a local multiplayer game.
-
+    of RAM in games that only want to setup a local multiplayer game. DSWiFi can
+    be de-initialized and re-initialized in "local only" or "internet and local"
+    modes whenver your application requires it.
+  - Some static arrays used by sgIP are now allocated dynamically when the
+    library is initialized. They are also freed when it is de-initialized.
 
 - mmutil:
 
