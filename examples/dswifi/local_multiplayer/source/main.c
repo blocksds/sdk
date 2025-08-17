@@ -542,7 +542,7 @@ int main(int argc, char *argv[])
 
     printf("Initializing WiFi...\n");
 
-    if (!Wifi_InitDefault(INIT_ONLY))
+    if (!Wifi_InitDefault(INIT_ONLY | WIFI_LOCAL_ONLY))
     {
         printf("Can't initialize WiFi!\n");
         goto end;
