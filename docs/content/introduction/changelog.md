@@ -45,6 +45,14 @@ weight: -20
   - It is now possible to deinitialize DSWiFi with `Wifi_Deinit()`. This will
     keep the sgIP memory pool still in the heap, but it will free all other
     resources. sgIP can't be reinitialized safely at the moment.
+  - `Wifi_InitDefault()` now accepts flags `WIFI_DISABLE_LED` and
+    `WIFI_ENABLE_LED` to let DSWiFi know if it can control the LED blinking or
+    not. By default, the LED is controlled by DSWiFi.
+  - `Wifi_InitDefault()` now accepts flags `WIFI_INTERNET_AND_LOCAL` and
+    `WIFI_LOCAL_ONLY`. It makes it possible to initialize DSWiFi without sgIP if
+    the game isn't going to connect to the Internet. This saves over a 100 KBs
+    of RAM in games that only want to setup a local multiplayer game.
+
 
 - mmutil:
 
@@ -53,6 +61,8 @@ weight: -20
 
 - SDK:
 
+  - The local multiplayer example of DSWiFi now initializes DSWiFi without sgIP
+    so to save RAM.
   - Use C23 and C++23 to build all the ARM libraries.
 
 ## Version 1.13.0 (2025-08-11)
