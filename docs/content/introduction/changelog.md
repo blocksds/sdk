@@ -30,6 +30,11 @@ weight: -20
     becomes a lot smaller and easier to maintain.
   - Check a few TODO notes and fix them (or remove them if they didn't need any
     work).
+  - In the GBA port, move a function outside of IWRAM. This brings down IWRAM
+    usage to a size lower than the ASM version of Maxmod, and it doesn't affect
+    performance in a noticeable way. @aronson
+  - Remove `always_inline` attribute from some functions to fix a build error
+    with clang. @GalaxyShard
 
 - DSWiFi:
 
