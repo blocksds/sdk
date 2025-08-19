@@ -66,6 +66,12 @@ right away.
    1. Set your environment variables correctly:
 
       ```bash
+      source /opt/wonderful/bin/wf-env
+      ```
+
+      You can do it manually instead if you prefer:
+
+      ```bash
       export BLOCKSDS=/opt/wonderful/thirdparty/blocksds/core
       export BLOCKSDSEXT=/opt/wonderful/thirdparty/blocksds/external
       ```
