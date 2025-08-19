@@ -12,6 +12,13 @@ weight: -20
     more flexible when detecting the type of activation of rumble. @asiekierka
   - The enum of IPC commands used by DSWiFi has been moved from libnds to DSWiFi
     and made private.
+  - The system monitor of DS debugger units is now preserved during the startup
+    process of libnds. The last 512KB of RAM are reserved so that the heap can't
+    grow too much and overwrite them (they can be used again if the developer
+    manually calls `reduceHeapSize(0)`). Additionally, libnds won't setup an
+    exception handler if it detects a debugger unit. The developer has to do it
+    manually by calling `defaultExceptionHandler()`. Thanks @Gericom for the bug
+    report.
 
 - Maxmod:
 
@@ -58,7 +65,8 @@ weight: -20
     the game isn't going to connect to the Internet. This saves over a 100 KBs
     of RAM in games that only want to setup a local multiplayer game. DSWiFi can
     be de-initialized and re-initialized in "local only" or "internet and local"
-    modes whenver your application requires it.
+    modes whenver your application requires it. The documentation has been
+    updated to reflect the new improvements.
   - Some static arrays used by sgIP are now allocated dynamically when the
     library is initialized. They are also freed when it is de-initialized.
 
