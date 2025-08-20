@@ -56,7 +56,9 @@ This is used in the default ARM7 binary.
 ISC license. You must include the following copyright notice with your program:
 
 ```
-Copyright (c) 2008, Mukunda Johnson (mukunda@maxmod.org)
+Copyright (C) 2008-2009 Mukunda Johnson (mukunda@maxmod.org)
+Copyright (C) 2021-2025 Antonio Niño Díaz
+Copyright (C) 2023 Lorenzooone (lollo.lollo.rbiz@gmail.com)
 ```
 
 ## crts
