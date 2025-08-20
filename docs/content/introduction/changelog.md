@@ -88,6 +88,10 @@ weight: -20
   - The local multiplayer example of DSWiFi now initializes DSWiFi without sgIP
     so to save RAM.
   - Use C23 and C++23 to build all the ARM libraries.
+  - GCC has been patched to always build `__aeabi_lmul` in ARM mode, even for
+    Thumb targets. This always leads to smaller and faster 64-bit multiply
+    operations. @asiekierka
+  - picolibc has been updated with minor fixes to the `printf` function family.
 
 ## Version 1.13.0 (2025-08-11)
 
