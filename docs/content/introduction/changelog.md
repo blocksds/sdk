@@ -42,6 +42,14 @@ weight: -20
     performance in a noticeable way. @aronson
   - Remove `always_inline` attribute from some functions to fix a build error
     with clang. @GalaxyShard
+  - In DS mode, using Maxmod commands before initializing it will now show a
+    crash error. This is more informative than simply ignoring commands.
+  - A critical bug has been fixed on the ARM7. In some cases, it was possible
+    for the ARM7 message handler to be interrupted while editing the state
+    of the circular buffer. This would leave the buffer in an inconsistent state
+    and make the ARM7 treat uninitialized values in memory as legitimate ARM9
+    commands, causing crashes. Thanks to @pyramidensurfer for a test that
+    managed to reproduce the error reliably.
 
 - DSWiFi:
 
