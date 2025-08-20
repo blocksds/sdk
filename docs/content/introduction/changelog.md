@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version DEV (2025-XX-XX)
+## Version 1.13.1 (2025-08-20)
 
 - libnds:
 
@@ -50,6 +50,8 @@ weight: -20
     and make the ARM7 treat uninitialized values in memory as legitimate ARM9
     commands, causing crashes. Thanks to @pyramidensurfer for a test that
     managed to reproduce the error reliably.
+  - The ARM7 communications code is now built as Thumb instead of ARM to save
+    space.
 
 - DSWiFi:
 
@@ -82,6 +84,9 @@ weight: -20
 
   - Change version number. Now it's set from the environment instead of a
     hardcoded variable in the Makefile.
+  - Fix pattern flags when notes have non-empty volume. This bug was introduced
+    in version 1.12.0. Thanks @GValiente for the bug report and @asiekierka for
+    the help.
 
 - SDK:
 
