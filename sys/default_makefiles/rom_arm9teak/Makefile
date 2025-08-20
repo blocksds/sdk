@@ -58,7 +58,7 @@ ROM		:= $(NAME).nds
 # Targets
 # -------
 
-.PHONY: all clean arm9 dldipatch sdimage teak
+.PHONY: all clean dldipatch sdimage
 
 all: $(ROM)
 
@@ -69,11 +69,11 @@ clean:
 	$(V)$(RM) $(ROM) build $(SDIMAGE)
 	$(V)$(RM) arm9/data/teak_tlf.bin
 
-arm9: teak
+build/arm9.elf: build/teak.tlf
 	$(V)$(CP) build/teak.tlf arm9/data/teak_tlf.bin
 	$(V)$(MAKE) -f Makefile.arm9 --no-print-directory
 
-teak:
+build/teak.tlf:
 	$(V)$(MAKE) -f Makefile.teak --no-print-directory
 
 ifneq ($(strip $(NITROFSDIR)),)
@@ -91,7 +91,7 @@ else
     GAME_FULL_TITLE := $(GAME_TITLE);$(GAME_SUBTITLE);$(GAME_AUTHOR)
 endif
 
-$(ROM): arm9
+$(ROM): build/arm9.elf
 	@echo "  NDSTOOL $@"
 	$(V)$(BLOCKSDS)/tools/ndstool/ndstool -c $@ \
 		-7 $(ARM7ELF) -9 build/arm9.elf \

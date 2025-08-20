@@ -52,7 +52,7 @@ ROM		:= $(NAME).nds
 # Targets
 # -------
 
-.PHONY: all clean arm9 arm7 dldipatch sdimage
+.PHONY: all clean dldipatch sdimage
 
 all: $(ROM)
 
@@ -62,10 +62,10 @@ clean:
 	$(V)$(MAKE) -f Makefile.arm7 clean --no-print-directory
 	$(V)$(RM) $(ROM) build $(SDIMAGE)
 
-arm9:
+build/arm9.elf:
 	$(V)$(MAKE) -f Makefile.arm9 --no-print-directory
 
-arm7:
+build/arm7.elf:
 	$(V)$(MAKE) -f Makefile.arm7 --no-print-directory
 
 ifneq ($(strip $(NITROFSDIR)),)
@@ -83,7 +83,7 @@ else
     GAME_FULL_TITLE := $(GAME_TITLE);$(GAME_SUBTITLE);$(GAME_AUTHOR)
 endif
 
-$(ROM): arm9 arm7
+$(ROM): build/arm9.elf build/arm7.elf
 	@echo "  NDSTOOL $@"
 	$(V)$(BLOCKSDS)/tools/ndstool/ndstool -c $@ \
 		-7 build/arm7.elf -9 build/arm9.elf \
