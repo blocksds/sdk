@@ -3,6 +3,21 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version DEV (2025-XX-XX)
+
+- Maxmod:
+
+  - `mmPlayModule()` has been deprecated because its name is misleading and it
+    expects you to pass the address of the MAS file with an offset. The new
+    function `mmPlayMAS()` replaces it. It doesn't require the offset, and it
+    has a name more descriptive. `mmPlayMAS()` is also available in the ARM9,
+    not just the ARM7.
+
+- SDK:
+
+  - Add example of how to play MAS files with Maxmod manually without a
+    soundbank.
+
 ## Version 1.13.1 (2025-08-20)
 
 - libnds:
@@ -52,6 +67,8 @@ weight: -20
     managed to reproduce the error reliably.
   - The ARM7 communications code is now built as Thumb instead of ARM to save
     space.
+  - The GBA version of Maxmod is now built with a format of debug symbols that
+    no$gba can understand.
 
 - DSWiFi:
 
