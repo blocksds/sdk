@@ -116,7 +116,8 @@ plus the entry index multiplied by the size of an entry.
 A 128 bytes entry is equivalent to a 8x8 direct-color tile. A 256 bytes is
 equivalent to two tiles.
 
-In the sub video engine only use the mode with 128 KB of VRAM makes sense.
+In the sub video engine only the mode with 128 KB of VRAM makes sense because
+you can only assign up to 128 KB of VRAM for sprites.
 
 A simple rule to choose your mapping is to use the mode that lets you access as
 much memory as you have allocated for sprites and no more than that.
@@ -156,7 +157,7 @@ regular sprites in [`examples/graphics_2d/sprites_regular`](https://github.com/b
 ![Regular sprites](spr_types_regular.png "Regular sprites")
 
 The image has to be converted in a similar way as backgrounds, but we use `-m!`
-to tell grit that we don't need a map, just files.
+to tell grit that we don't need a map, just tiles.
 
 ```sh
 # 8 bpp, tiles, not compressed
