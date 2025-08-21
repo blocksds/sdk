@@ -123,7 +123,7 @@ of the buffer:
 ```c
 #include <stdio.h>
 
-bool file_load(const char *path, void **buffer, size_t *size_)
+bool file_load(const char *path, void **buffer, size_t *size)
 {
     // Open the file in read binary mode
     FILE *f = fopen(path, "rb");
@@ -172,8 +172,8 @@ bool file_load(const char *path, void **buffer, size_t *size_)
     }
 
     // Close file
-    res = fclose(f);
-    if (res != 0)
+    ret = fclose(f);
+    if (ret != 0)
     {
         perror("fclose");
         free(*buffer);
