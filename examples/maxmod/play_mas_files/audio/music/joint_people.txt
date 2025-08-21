@@ -1,0 +1,5 @@
+Name:    jointpeople
+Author:  Anadune & Floppy
+License: Mod Archive Distribution license
+
+https://modarchive.org/index.php?request=view_by_moduleid&query=115447
