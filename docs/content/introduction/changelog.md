@@ -12,11 +12,13 @@ weight: -20
     function `mmPlayMAS()` replaces it. It doesn't require the offset, and it
     has a name more descriptive. `mmPlayMAS()` is also available in the ARM9,
     not just the ARM7.
+  - Document some parts of the code.
 
 - SDK:
 
   - Add example of how to play MAS files with Maxmod manually without a
     soundbank.
+  - Allow building all examples and tests in parallel. @steveschnepp
 
 ## Version 1.13.1 (2025-08-20)
 
