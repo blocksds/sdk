@@ -2,20 +2,13 @@
 #
 # SPDX-FileContributor: Antonio Niño Díaz, 2023
 
-.PHONY: all clean
+SUBDIRS := $(shell find * -mindepth 1 -maxdepth 1 -name Makefile -printf '%h\n')
 
-MAKE	:= make
+.PHONY: all clean $(SUBDIRS)
 
-all:
-	@for i in `ls`; do \
-		if test -e $$i/Makefile ; then \
-			$(MAKE) -C $$i --no-print-directory || { exit 1;} \
-		fi; \
-	done;
+all: $(SUBDIRS)
 
-clean:
-	@for i in `ls`; do \
-		if test -e $$i/Makefile ; then \
-			$(MAKE) -C $$i clean --no-print-directory || { exit 1;} \
-		fi; \
-	done;
+clean: $(SUBDIRS)
+
+$(SUBDIRS):
+	@$(MAKE) -C $@ $(MAKECMDGOALS)

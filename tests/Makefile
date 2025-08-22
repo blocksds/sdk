@@ -2,24 +2,13 @@
 #
 # SPDX-FileContributor: Antonio Niño Díaz, 2023
 
-.PHONY: all clean
+SUBDIRS := $(shell find * -mindepth 1 -maxdepth 1 -name Makefile -printf '%h\n')
 
-MAKE	:= make
+.PHONY: all clean $(SUBDIRS)
 
-all:
-	@for i in `ls`; do \
-		if test -e $$i/Makefile ; then \
-			$(MAKE) -C $$i --no-print-directory || { exit 1;} \
-		fi; \
-	done;
-	@rm -fr build-all
-	@mkdir -p build-all
-	@find . -name "*.nds" -not -path build-all -exec cp -fv {} build-all \;
+all: $(SUBDIRS)
 
-clean:
-	@for i in `ls`; do \
-		if test -e $$i/Makefile ; then \
-			$(MAKE) -C $$i clean --no-print-directory || { exit 1;} \
-		fi; \
-	done;
-	@rm -fr build-all
+clean: $(SUBDIRS)
+
+$(SUBDIRS):
+	@$(MAKE) -C $@ $(MAKECMDGOALS)
