@@ -13,12 +13,16 @@ Most projects need some sort of audio and WiFi support on the ARM7, but they
 don't need any custom code. BlocksDS provides a few ARM7 cores with different
 combinations of libraries:
 
-- DSWiFi + Maxmod (Selected by default in all ARM9-only projects)
-- DSWiFi + LibXM7
-- Maxmod
-- LibXM7
-- DSWiFi
-- Minimal (Only libnds)
+| File                    | Usage           | Default
+| ---                     | ---             | --- |
+`arm7_dswifi.elf`         | DSWiFi          |
+`arm7_dswifi_libxm7.elf`  | DSWiFi + LibXM7 |
+`arm7_dswifi_maxmod.elf`  | DSWiFi + Maxmod | For ARM9 projects
+`arm7_libxm7.elf`         | LibXM7          |
+`arm7_maxmod.elf`         | Maxmod          |
+`arm7_minimal.elf`        | Only libnds     |
+
+Debug versions are also available, just add a `_debug` to the basename, such as  `arm7_dswifi_debug.elf` or `arm7_dswifi_libxm7_debug.elf`.
 
 They are all installed to `$BLOCKSDS/sys/arm7/main_core/*.elf`. If you want to
 select a different core, edit the path of `ARM7ELF` in your Makefile to select
