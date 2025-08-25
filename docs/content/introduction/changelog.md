@@ -5,6 +5,14 @@ weight: -20
 
 ## Version DEV (2025-XX-XX)
 
+- libnds:
+
+  - Improve accuracy of `dotf32()` and `crossf32()`. In ARM mode their
+    performance has increased. In Thumb mode `crossf32()` becomes a bit slower.
+  - Fix a bug that caused `rmdir()` to be unable to remove empty directories
+    (because they still contained entries `"."` and `".."`). Thanks to @edo9300
+    for the report and @asiekierka for the fix.
+
 - Maxmod:
 
   - `mmPlayModule()` has been deprecated because its name is misleading and it
