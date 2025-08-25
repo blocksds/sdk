@@ -20,7 +20,16 @@ weight: -20
     function `mmPlayMAS()` replaces it. It doesn't require the offset, and it
     has a name more descriptive. `mmPlayMAS()` is also available in the ARM9,
     not just the ARM7.
+  - Fix mode C mixer. Sounds didn't end until they were stopped manually, not
+    when they reached the end of their sample.
   - Document some parts of the code.
+
+- mmutil:
+
+  - Make the output less verbose by default.
+  - In MOD files, if a pattern uses an invalid instrument, the instrument is now
+    removed from the pattern before being exported. This prevents crashes on GBA
+    when playing songs with invalid instruments.
 
 - SDK:
 
