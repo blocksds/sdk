@@ -27,9 +27,15 @@ weight: -20
 - mmutil:
 
   - Make the output less verbose by default.
-  - In MOD files, if a pattern uses an invalid instrument, the instrument is now
-    removed from the pattern before being exported. This prevents crashes on GBA
-    when playing songs with invalid instruments.
+  - In module files, if a pattern uses an invalid instrument (with a sample of
+    length zero), the instrument is now removed from the pattern before being
+    exported. This prevents crashes on GBA when playing songs with invalid
+    instruments. A warning is printed for each instance of invalid instruments
+    being used.
+  - In module files with instrument note maps (supported by IT and XM) mmutil
+    now checks that the samples used in all note map entries are valid. If not,
+    a warning is printed and it is set to 0. The warning is only printed once
+    per sample per instrument.
 
 - SDK:
 
