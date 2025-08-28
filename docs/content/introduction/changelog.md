@@ -12,6 +12,8 @@ weight: -20
   - Fix a bug that caused `rmdir()` to be unable to remove empty directories
     (because they still contained entries `"."` and `".."`). Thanks to @edo9300
     for the report and @asiekierka for the fix.
+  - Added `fatGetVolumeLabel()` and `fatSetVolumeLabel()`. @asiekierka
+  - Added `SDMMC_getCidRaw()`. @edo9300
 
 - Maxmod:
 
@@ -22,6 +24,7 @@ weight: -20
     not just the ARM7.
   - Fix mode C mixer. Sounds didn't end until they were stopped manually, not
     when they reached the end of their sample.
+  - Some small optimizations. @GValiente
   - Document some parts of the code.
 
 - mmutil:
@@ -41,6 +44,7 @@ weight: -20
 
   - Add example of how to play MAS files with Maxmod manually without a
     soundbank.
+  - Add test of setting and getting filesystem labels.
   - Allow building all examples and tests in parallel. @steveschnepp
 
 ## Version 1.13.1 (2025-08-20)
