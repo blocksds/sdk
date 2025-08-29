@@ -39,6 +39,9 @@ weight: -20
     now checks that the samples used in all note map entries are valid. If not,
     a warning is printed and it is set to 0. The warning is only printed once
     per sample per instrument.
+  - Prevent mmutil from exporting more than 200 pattern orders for modules. The
+    MAS format is hardcoded to 200 pattern orders, so any module that has more
+    entries than that will be clamped and mmutil will print a warning.
 
 - SDK:
 
