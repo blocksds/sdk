@@ -13,7 +13,7 @@ Most projects need some sort of audio and WiFi support on the ARM7, but they
 don't need any custom code. BlocksDS provides a few ARM7 cores with different
 combinations of libraries:
 
-| File                    | Usage           | Default
+| File                    | Usage           | Notes
 | ---                     | ---             | --- |
 `arm7_dswifi.elf`         | DSWiFi          |
 `arm7_dswifi_libxm7.elf`  | DSWiFi + LibXM7 |
