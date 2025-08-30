@@ -17,7 +17,7 @@ combinations of libraries:
 | ---                     | ---             | --- |
 `arm7_dswifi.elf`         | DSWiFi          |
 `arm7_dswifi_libxm7.elf`  | DSWiFi + LibXM7 |
-`arm7_dswifi_maxmod.elf`  | DSWiFi + Maxmod | For ARM9 projects
+`arm7_dswifi_maxmod.elf`  | DSWiFi + Maxmod | Default core for AMR9 projects
 `arm7_libxm7.elf`         | LibXM7          |
 `arm7_maxmod.elf`         | Maxmod          |
 `arm7_minimal.elf`        | Only libnds     |
