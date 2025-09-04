@@ -8,12 +8,14 @@ weight: -20
 - libnds:
 
   - Improve accuracy of `dotf32()` and `crossf32()`. In ARM mode their
-    performance has increased. In Thumb mode `crossf32()` becomes a bit slower.
+    performance has increased. `crossf32()` is now always built as ARM.
+    @Kuratius
   - Fix a bug that caused `rmdir()` to be unable to remove empty directories
     (because they still contained entries `"."` and `".."`). Thanks to @edo9300
     for the report and @asiekierka for the fix.
   - Added `fatGetVolumeLabel()` and `fatSetVolumeLabel()`. @asiekierka
   - Added `SDMMC_getCidRaw()`. @edo9300
+  - Add basic counting semaphore helpers for the cothread module.
 
 - Maxmod:
 
