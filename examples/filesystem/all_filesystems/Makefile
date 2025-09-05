@@ -1,13 +1,13 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2023-2024
+# SPDX-FileContributor: Antonio Niño Díaz, 2023-2025
 
 BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= fs_nitrofs_and_fat
-GAME_TITLE	:= NitroFS+FAT
+NAME		:= fs_all_filesystems
+GAME_TITLE	:= All filesystems
 GAME_SUBTITLE	:= Filesystem
 
 # Source code paths

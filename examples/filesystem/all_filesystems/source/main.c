@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2023
+// SPDX-FileContributor: Antonio Niño Díaz, 2023-2025
 
 #include <dirent.h>
 
@@ -138,6 +138,13 @@ int main(int argc, char **argv)
         wait_forever();
     }
 
+    init_ok = nandInit(true);
+    if (!init_ok)
+    {
+        perror("nandInit()");
+        wait_forever();
+    }
+
     consoleSelect(&bottomScreen);
 
     // List the contents in a folder in NitroFS
@@ -187,6 +194,25 @@ int main(int argc, char **argv)
     printf("\n");
 
     if (chdir("sd:/") == 0)
+    {
+        dir_list();
+    }
+    else
+    {
+        printf("Failed to chdir()\n");
+        printf("\n");
+        wait_press_button_a();
+    }
+
+    // List the contents in the root folder of the DSi NAND
+
+    consoleClear();
+
+    printf("NAND (DSi)\n");
+    printf("==========\n");
+    printf("\n");
+
+    if (chdir("nand:/") == 0)
     {
         dir_list();
     }
