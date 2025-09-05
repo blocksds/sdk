@@ -7,6 +7,12 @@ weight: -20
 
 - libnds:
 
+  - Added a new driver to read the NAND filesystem using standard filesystem
+    functions (like `fopen()` and `fread()`). The NAND filesystem is normally mounted in
+    read-only mode, but developers can enable writing to it if required. This is
+    done so that the contents of NAND are protected by default. @edo9300
+  - Fix regression causing `keysDownRepeat()` not report keys on their first
+    press. @edo9300
   - Improve accuracy of `dotf32()` and `crossf32()`. In ARM mode their
     performance has increased. `crossf32()` is now always built as ARM.
     @Kuratius
@@ -16,6 +22,7 @@ weight: -20
   - Added `fatGetVolumeLabel()` and `fatSetVolumeLabel()`. @asiekierka
   - Added `SDMMC_getCidRaw()`. @edo9300
   - Add basic counting semaphore helpers for the cothread module.
+  - Replaced old FIFO IRQ defines by the new ones.
 
 - Maxmod:
 
@@ -49,6 +56,8 @@ weight: -20
 
   - Add example of how to play MAS files with Maxmod manually without a
     soundbank.
+  - Improve example `nitrofs_and_fat` to also display the contents of the NAND
+    filesystem. It has been renamed to `all_filesystems`.
   - Add test of setting and getting filesystem labels.
   - Allow building all examples and tests in parallel. @steveschnepp
 
