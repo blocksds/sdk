@@ -19,7 +19,7 @@ GAME_SUBTITLE	:= DSWiFi
 # ---------
 
 ifeq ($(DEBUG),1)
-    DEFINES := -DSGIP_DEBUG -DDSWIFI_LOGS
+    DEFINES := -DDSWIFI_LOGS
     ARM7ELF	:= $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi_debug.elf
     LIBS	:= -ldswifi9d -lnds9d
 else

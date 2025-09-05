@@ -14,33 +14,6 @@
 
 static Wifi_AccessPoint AccessPoint;
 
-// Set this to 1 if you want to see the debug output of DSWifi (but it's very
-// noisy, so be careful when doing it!)
-#if 0
-
-#include <stdarg.h>
-
-void sgIP_dbgprint(char *msg, ...)
-{
-    printf("SG: ");
-    va_list args;
-    va_start(args, msg);
-    vprintf(msg, args);
-    va_end(args);
-    printf("\n");
-}
-
-#else
-
-// This is only required when using debug builds of DSWifi on the ARM9
-
-void sgIP_dbgprint(char *msg, ...)
-{
-    // Do nothing
-}
-
-#endif
-
 // This function sends an HTTP request to the specified URL and prints the
 // response from the server.
 void getHttp(const char *url, const char *path)
@@ -100,9 +73,6 @@ void getHttp(const char *url, const char *path)
 
     printf("Sent our request!\n");
 
-    // Print incoming data
-    printf("Printing incoming data:\n");
-
     // Put the socket in non-blocking mode:
     int opt = 1;
     int rc = ioctl(my_socket, FIONBIO, (char *)&opt);
@@ -112,6 +82,9 @@ void getHttp(const char *url, const char *path)
         closesocket(my_socket);
         return;
     }
+
+    // Print incoming data
+    printf("Printing incoming data:\n");
 
     // 512 KB buffer for the received website
     static char response_buffer[512 * 1024];
@@ -190,6 +163,10 @@ void getHttp(const char *url, const char *path)
             printf("Website too big!\n");
             break;
         }
+
+        // When using non-blocking sockets we need to give the other threads a
+        // chance to use the CPU.
+        cothread_yield();
     }
 
     // It's good practice to shutdown the socket.
@@ -224,7 +201,7 @@ void access_point_selection_menu(void)
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
         scanKeys();
         uint16_t keys = keysDown();
@@ -416,7 +393,7 @@ connect:
 
         while (selection == 0)
         {
-            swiWaitForVBlank();
+            cothread_yield_irq(IRQ_VBLANK);
             scanKeys();
             if (keysDown() & KEY_A)
                 selection = 1;
@@ -454,7 +431,7 @@ connect:
         int oldstatus = -1;
         while (1)
         {
-            swiWaitForVBlank();
+            cothread_yield_irq(IRQ_VBLANK);
 
             scanKeys();
             if (keysDown() & KEY_B)
@@ -477,7 +454,7 @@ connect:
 
                 while (1)
                 {
-                    swiWaitForVBlank();
+                    cothread_yield_irq(IRQ_VBLANK);
                     scanKeys();
                     if (keysDown() & KEY_START)
                         goto connect;
@@ -526,7 +503,7 @@ connect:
 
         while (1)
         {
-            swiWaitForVBlank();
+            cothread_yield_irq(IRQ_VBLANK);
 
             scanKeys();
             if (keysHeld() & KEY_A)
@@ -550,7 +527,7 @@ connect:
 
         while (1)
         {
-            swiWaitForVBlank();
+            cothread_yield_irq(IRQ_VBLANK);
 
             scanKeys();
             if (keysDown() & KEY_A)
@@ -573,7 +550,7 @@ end:
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
         scanKeys();
         if (keysHeld() & KEY_START)
             break;

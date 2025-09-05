@@ -163,6 +163,8 @@ void getHttp(const char *url, const char *path)
             printf("Website too big!\n");
             break;
         }
+
+        cothread_yield();
     }
 
     // It's good practice to shutdown the socket.
@@ -197,7 +199,7 @@ void access_point_selection_menu(void)
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
         scanKeys();
         uint16_t keys = keysDown();
@@ -388,7 +390,7 @@ connect:
 
         while (selection == 0)
         {
-            swiWaitForVBlank();
+            cothread_yield_irq(IRQ_VBLANK);
             scanKeys();
             if (keysDown() & KEY_A)
                 selection = 1;
@@ -426,7 +428,7 @@ connect:
         int oldstatus = -1;
         while (1)
         {
-            swiWaitForVBlank();
+            cothread_yield_irq(IRQ_VBLANK);
 
             scanKeys();
             if (keysDown() & KEY_B)
@@ -449,7 +451,7 @@ connect:
 
                 while (1)
                 {
-                    swiWaitForVBlank();
+                    cothread_yield_irq(IRQ_VBLANK);
                     scanKeys();
                     if (keysDown() & KEY_START)
                         goto connect;
@@ -498,7 +500,7 @@ connect:
 
         while (1)
         {
-            swiWaitForVBlank();
+            cothread_yield_irq(IRQ_VBLANK);
 
             scanKeys();
             if (keysHeld() & KEY_A)
@@ -522,7 +524,7 @@ connect:
 
         while (1)
         {
-            swiWaitForVBlank();
+            cothread_yield_irq(IRQ_VBLANK);
 
             scanKeys();
             if (keysDown() & KEY_A)
@@ -545,7 +547,7 @@ end:
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
         scanKeys();
         if (keysHeld() & KEY_START)
             break;

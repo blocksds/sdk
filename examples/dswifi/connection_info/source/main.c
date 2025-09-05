@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
         scanKeys();
         if (keysHeld() & KEY_START)
             break;

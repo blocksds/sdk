@@ -10,13 +10,6 @@
 #include <nds.h>
 #include <dswifi9.h>
 
-// This is only required when using debug builds of DSWifi on the ARM9. However,
-// it only prints sgIP messages, and sgIP isn't used in local multiplayer mode.
-void sgIP_dbgprint(char *msg, ...)
-{
-    // Do nothing
-}
-
 static PrintConsole topScreen;
 static PrintConsole bottomScreen;
 

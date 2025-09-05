@@ -161,6 +161,8 @@ void getHttp(const char *url, const char *path)
             printf("Website too big!\n");
             break;
         }
+
+        cothread_yield();
     }
 
     // It's good practice to shutdown the socket.
@@ -188,6 +190,8 @@ void getHttp(const char *url, const char *path)
 
 int main(int argc, char *argv[])
 {
+    defaultExceptionHandler();
+
     PrintConsole topScreen;
     PrintConsole bottomScreen;
 
@@ -231,7 +235,7 @@ int main(int argc, char *argv[])
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
         scanKeys();
         if (keysHeld() & KEY_START)
             break;

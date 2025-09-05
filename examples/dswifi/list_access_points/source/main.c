@@ -23,7 +23,7 @@ void access_point_selection_menu(void)
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
         scanKeys();
         uint16_t keys = keysDown();
@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
         consoleClear();
         int status = Wifi_AssocStatus();
@@ -246,7 +246,7 @@ end:
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
         scanKeys();
         if (keysHeld() & KEY_START)
             break;
