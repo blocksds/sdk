@@ -24,6 +24,22 @@ weight: -20
   - Add basic counting semaphore helpers for the cothread module.
   - Replaced old FIFO IRQ defines by the new ones.
 
+- DSWiFi:
+
+  - Migrate from sgIP to lwIP. lwIP is being maintained, and it is used by lots
+    of other projects, which means it has been tested properly. It also supports
+    more features than sgIP.
+  - This migration makes the size of NDS ROMs increse, so the build system of
+    DSWiFi now creates new releases of the library without lwIP. They are useful
+    for developers that only want to use the local multiplayer (NiFi) features
+    of DSWiFi. The new library archives are called `libdswifi9_noip.a` and
+    `libdswifi9d_noip.a`.
+  - One big difference is that programs using DSWiFi will need to use
+    threads. Instead of using `swiWaitForVBlank()` they will need to use
+    `cothread_yield_irq(IRQ_VBLANK)`, for example. If they have a loop where
+    they call `recv()` they will also need to call `cothread_yield()` at
+    some point in the loop.
+
 - Maxmod:
 
   - `mmPlayModule()` has been deprecated because its name is misleading and it
@@ -58,6 +74,7 @@ weight: -20
     soundbank.
   - Improve example `nitrofs_and_fat` to also display the contents of the NAND
     filesystem. It has been renamed to `all_filesystems`.
+  - Update DSWiFi examples to work with the new version of DSWiFi.
   - Add test of setting and getting filesystem labels.
   - Allow building all examples and tests in parallel. @steveschnepp
 

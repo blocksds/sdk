@@ -29,6 +29,15 @@ Copyright (c) 2006-2018 Dave Murphy (WinterMute)
 Copyright (C) 2025 Antonio Niño Díaz
 ```
 
+On the ARM9 you can use a version of the library with and without lwIP (required
+for Internet communications). If you use the version of the library with lwIP
+you also need to follow the terms of the lwIP library, licensed under the
+3-clause BSD license:
+
+```
+Copyright (c) 2001, 2004 Swedish Institute of Computer Science.
+```
+
 ## libnds
 
 This is used in all programs that use the default crts, ARM7 binary, etc.

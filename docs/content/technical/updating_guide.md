@@ -10,6 +10,24 @@ to implement. These are documented here.
 Please refer to the changelog for a full list of changes, including additions
 and enhancements to the SDK which are not listed here.
 
+## Upgrading to BlocksDS DEV
+
+* `WiFi_Deinit()`, introduced in version 1.13.1, no longer works after starting
+  DSWiFi with Internet mode enabled. This is due to limitations of lwIP, which
+  can't be deinitialized.
+
+## Upgrading to BlocksDS 1.13.1
+
+* The function `Wifi_InitDefault()` of DSWiFi now takes an integer as an
+  argument instead of a bool.  The new values passed to the function have been
+  designed so that old code still works.
+
+## Upgrading to BlocksDS 1.8.0
+
+* `ledBlink()` now takes an enum as an argument instead of an integer. In C++
+   projects, this will cause an error until you add an explicit cast or you use
+   one of the new defines.
+
 ## Upgrading to BlocksDS 1.7.0
 
 * `glColorTableEXT()` now supports allocating empty palettes by passing a
