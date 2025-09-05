@@ -105,6 +105,11 @@ NotTWL:
     ldr     r3, =__libc_init_array  // global constructors
     bl      _blx_r3_stub
 
+    // Checks if the argv struct has been passed to the application. If not,
+    // it constructs one from the device list (if any).
+    ldr     r3, =check_device_list
+    bl      _blx_r3_stub
+
     // Prepare address, arguments and return address of main().
     mov     r0, #0              // int argc
     mov     r1, #0              // char *argv[]
