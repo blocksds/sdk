@@ -57,17 +57,17 @@ void getHttp(const char *url, const char *path)
     if (connect(my_socket, (struct sockaddr *)&sain, sizeof(sain)) == -1)
     {
         perror("connect()");
-        closesocket(my_socket);
+        close(my_socket);
         return;
     }
 
     printf("Connected to server!\n");
 
     // send our request
-    if (send(my_socket, request_text, strlen(request_text), 0) == -1)
+    if (write(my_socket, request_text, strlen(request_text)) == -1)
     {
-        perror("send()");
-        closesocket(my_socket);
+        perror("write()");
+        close(my_socket);
         return;
     }
 
@@ -79,7 +79,7 @@ void getHttp(const char *url, const char *path)
     if (rc < 0)
     {
         perror("ioctl()");
-        closesocket(my_socket);
+        close(my_socket);
         return;
     }
 
@@ -100,8 +100,8 @@ void getHttp(const char *url, const char *path)
 
     while (1)
     {
-        int recvd_len = recv(my_socket, &(response_buffer[response_buffer_ptr]),
-                             chunk_size, 0);
+        int recvd_len = read(my_socket, &(response_buffer[response_buffer_ptr]),
+                             chunk_size);
 
         if (recvd_len > 0)
         {
@@ -176,9 +176,9 @@ void getHttp(const char *url, const char *path)
     }
 
     // Remove the socket.
-    if (closesocket(my_socket) != 0)
+    if (close(my_socket) != 0)
     {
-        perror("closesocket()");
+        perror("close()");
     }
 
     // Print response (clamp it if it's too long)
