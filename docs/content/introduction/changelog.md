@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version DEV (2025-XX-XX)
+## Version 1.14.0 (2025-09-06)
 
 - libnds:
 
@@ -28,6 +28,9 @@ weight: -20
     mode.
   - Mutexes and semaphores now use signals to yield and to notify other threads
     of changes to their state.
+  - Add a function to create an `argv` struct if the program is running on DSi,
+    the loader hasn't provided a valid `argv` struct, but there is a valid
+    device list. @edo9300
   - Replaced old FIFO IRQ defines by the new ones.
   - Some warnings have been fixed.
 
@@ -82,6 +85,9 @@ weight: -20
 
 - SDK:
 
+  - In the crt0 of the ARM9, generate an `argv` struct if the application is
+    running on a DSi, there is no valid `argv` provided by the loader, but there
+    is a valid device list. @edo9300
   - Add example of how to play MAS files with Maxmod manually without a
     soundbank.
   - Improve example `nitrofs_and_fat` to also display the contents of the NAND
