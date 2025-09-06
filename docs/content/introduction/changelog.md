@@ -22,7 +22,14 @@ weight: -20
   - Added `fatGetVolumeLabel()` and `fatSetVolumeLabel()`. @asiekierka
   - Added `SDMMC_getCidRaw()`. @edo9300
   - Add basic counting semaphore helpers for the cothread module.
+  - Implement `cothread_yield_signal()` and `cothread_send_signal()` to allow
+    threads to sleep until a user-defined event is sent to the scheduler. If all
+    threads are waiting for signals or interrupts the CPU will enter low-power
+    mode.
+  - Mutexes and semaphores now use signals to yield and to notify other threads
+    of changes to their state.
   - Replaced old FIFO IRQ defines by the new ones.
+  - Some warnings have been fixed.
 
 - DSWiFi:
 
@@ -43,6 +50,7 @@ weight: -20
     descriptors.
   - Functions `readv()`, `writev()`, `recvmsg()` and `sendmsg()` have been
     implemented.
+  - Some warnings have been fixed on ARM9 code.
 
 - Maxmod:
 
@@ -79,6 +87,7 @@ weight: -20
   - Improve example `nitrofs_and_fat` to also display the contents of the NAND
     filesystem. It has been renamed to `all_filesystems`.
   - Update DSWiFi examples to work with the new version of DSWiFi.
+  - Add example of how to wait for signals in multithreading applications.
   - Add test of setting and getting filesystem labels.
   - Allow building all examples and tests in parallel. @steveschnepp
 
