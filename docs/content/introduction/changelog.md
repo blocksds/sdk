@@ -39,6 +39,10 @@ weight: -20
     `cothread_yield_irq(IRQ_VBLANK)`, for example. If they have a loop where
     they call `recv()` they will also need to call `cothread_yield()` at
     some point in the loop.
+  - Functions `write()`, `read()` and `close()` now work with socket file
+    descriptors.
+  - Functions `readv()`, `writev()`, `recvmsg()` and `sendmsg()` have been
+    implemented.
 
 - Maxmod:
 
