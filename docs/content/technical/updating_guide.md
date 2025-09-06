@@ -10,11 +10,17 @@ to implement. These are documented here.
 Please refer to the changelog for a full list of changes, including additions
 and enhancements to the SDK which are not listed here.
 
-## Upgrading to BlocksDS DEV
+## Upgrading to BlocksDS 1.14.0
 
 * `WiFi_Deinit()`, introduced in version 1.13.1, no longer works after starting
   DSWiFi with Internet mode enabled. This is due to limitations of lwIP, which
   can't be deinitialized.
+* Applications using DSWiFi to connect to the Internet will now need to replace
+  all calls to `swiWaitForVBlank()` by `cothread_yield_irq(IRQ_VBLANK)`. Any
+  infinite loop reading from sockets or writing to them needs to call
+  `cothread_yield()` at some point to give lwIP the chance to process packets.
+  The changes are required because DSWiFi now relies on the multithreading code
+  of libnds to work.
 
 ## Upgrading to BlocksDS 1.13.1
 
