@@ -138,11 +138,14 @@ int main(int argc, char **argv)
         wait_forever();
     }
 
-    init_ok = nandInit(true);
-    if (!init_ok)
+    if (isDSiMode())
     {
-        perror("nandInit()");
-        wait_forever();
+        init_ok = nandInit(true);
+        if (!init_ok)
+        {
+            perror("nandInit()");
+            wait_forever();
+        }
     }
 
     consoleSelect(&bottomScreen);
