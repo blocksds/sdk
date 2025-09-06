@@ -12,7 +12,7 @@
 
 // Defined in libnds
 extern uint32_t cothread_threads_count;
-extern uint32_t cothread_threads_wait_irq_count;
+extern uint32_t cothread_threads_waiting_count;
 
 static PrintConsole topScreen;
 static PrintConsole bottomScreen;
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
 
         consoleSetCursor(NULL, 0, 2);
         printf("Frames: %d\nTotal %lu - Waiting %lu  \n", count++,
-               cothread_threads_count, cothread_threads_wait_irq_count);
+               cothread_threads_count, cothread_threads_waiting_count);
 
         scanKeys();
 
