@@ -58,10 +58,9 @@ SOURCES_CPP	:= $(shell find -L $(SOURCEDIRS) -name "*.cpp")
 # Compiler and linker flags
 # -------------------------
 
-WARNFLAGS_C	:= -Wall -Wextra
+WARNFLAGS_C	:= -Wall -Wextra -Wpedantic -Wstrict-prototypes -Wshadow
 
-WARNFLAGS_CXX	:= -Wall -Wextra -Wno-unused-result -Wno-class-memaccess \
-		   -Wno-stringop-truncation
+WARNFLAGS_CXX	:= -Wall -Wextra -Wpedantic -Wstrict-prototypes -Wshadow
 
 ifeq ($(SOURCES_CPP),)
     HOSTLD	:= $(HOSTCC)
