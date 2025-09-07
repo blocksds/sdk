@@ -58,7 +58,7 @@ SOURCES_CPP	:= $(shell find -L $(SOURCEDIRS) -name "*.cpp")
 # Compiler and linker flags
 # -------------------------
 
-WARNFLAGS_C	:= -Wall -Wextra -Wstrict-prototypes
+WARNFLAGS_C	:= -Wall -Wextra -Wstrict-prototypes -Wshadow
 
 WARNFLAGS_CXX	:= -Wall -Wextra
 
