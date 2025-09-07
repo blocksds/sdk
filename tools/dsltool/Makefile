@@ -58,9 +58,9 @@ SOURCES_CPP	:= $(shell find -L $(SOURCEDIRS) -name "*.cpp")
 # Compiler and linker flags
 # -------------------------
 
-WARNFLAGS_C	:= -Wall -Wextra -Wstrict-prototypes
+WARNFLAGS_C	:= -Wall -Wextra -Wstrict-prototypes -Wshadow
 
-WARNFLAGS_CXX	:= -Wall -Wextra
+WARNFLAGS_CXX	:= -Wall -Wextra -Wstrict-prototypes -Wshadow
 
 ifeq ($(SOURCES_CPP),)
     HOSTLD	:= $(HOSTCC)
@@ -73,7 +73,7 @@ INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path)) \
 
 LIBDIRSFLAGS	:= $(foreach path,$(LIBDIRS),-L$(path)/lib)
 
-CFLAGS		+= -std=gnu11 $(WARNFLAGS_C) $(DEFINES) $(INCLUDEFLAGS) -O3
+CFLAGS		+= -std=gnu17 $(WARNFLAGS_C) $(DEFINES) $(INCLUDEFLAGS) -O3
 
 CXXFLAGS	+= -std=gnu++14 $(WARNFLAGS_CXX) $(DEFINES) $(INCLUDEFLAGS) -O3
 

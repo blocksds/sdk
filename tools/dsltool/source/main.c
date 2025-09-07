@@ -256,16 +256,16 @@ int main(int argc, char *argv[])
             uint8_t type = ELF_ST_TYPE(sym->st_info);
             uint8_t vis = ELF_ST_VISIBILITY(sym->st_other);
 
-            const char *name;
+            const char *sym_name;
 
             if (type == STT_SECTION)
             {
-                const Elf32_Shdr *shdr = elf_section(hdr, sym->st_shndx);
-                name = elf_get_string_shstrtab(hdr, shdr->sh_name);
+                const Elf32_Shdr *shdr_ = elf_section(hdr, sym->st_shndx);
+                sym_name = elf_get_string_shstrtab(hdr, shdr_->sh_name);
             }
             else
             {
-                name = elf_get_string_strtab(hdr, strtab_index, sym->st_name);
+                sym_name = elf_get_string_strtab(hdr, strtab_index, sym->st_name);
             }
 
             bool public = true;
@@ -290,16 +290,16 @@ int main(int argc, char *argv[])
             // Each module should have its own instance of this symbol. It is
             // defined in the linker, so it is of STT_NOTYPE. This check makes
             // sure it's handled correctly.
-            if (strcmp("__dso_handle", name) == 0)
+            if (strcmp("__dso_handle", sym_name) == 0)
             {
                 public = false;
                 unknown = false;
             }
 
-            VERBOSE("%zu: \"%s\" = %u%s%s\n", s, name, sym->st_value,
+            VERBOSE("%zu: \"%s\" = %u%s%s\n", s, sym_name, sym->st_value,
                     public ? " [Public]" : "", unknown ? " [Unknown]": "");
 
-            sym_add_to_table(name, sym->st_value, public, unknown);
+            sym_add_to_table(sym_name, sym->st_value, public, unknown);
         }
     }
 
@@ -396,9 +396,9 @@ int main(int argc, char *argv[])
             NULL
         };
 
-        for (int i = 0; ; i++)
+        for (int j = 0; ; j++)
         {
-            const char *name = ctors_dtors_names[i];
+            const char *name = ctors_dtors_names[j];
             if (name == NULL)
                 break;
 
