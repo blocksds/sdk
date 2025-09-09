@@ -25,6 +25,12 @@ Before starting the application, the loader copies a small binary blob at the
 end of RAM, in a location that has been predefined by the protocol. Then, the
 loader starts the application.
 
+Important note: The bootstub routine of the NDS Homebrew Menu (which is used by
+other loaders) has a hardcoded return to a file named "BOOT.NDS" in the root of
+the filesystem. In a regular DS, it will look for the file in the flashcard. In
+a DSi, it will look for it in the SD card of the DSi. If you don't have a file
+called "BOOT.NDS" the system won't work.
+
 ## 2. The application exits
 
 The first step involves the application itself. Both the ARM9 and ARM7 CPUs can
@@ -61,16 +67,28 @@ model, the size of the RAM is different, so the location will change as well. In
 `libnds` there is a pointer called `fake_heap_end` that is set up during
 boot and points to this location.
 
- Model           | RAM end   | `bootstub` address
------------------|-----------|---------------------
- DS/DS Lite      | 0x2400000 | 0x23F4000
- DSi             | 0x3000000 | 0x2FF4000
+Right after the struct NDS Homebrew Menu stores a mini bootloader that attempts
+to boot a ROM called "BOOT.NDS" from the root of the filesystem. There's also an
+exception handler (for programs that don't set up one).
 
-`__libnds_exit()` tries to access the struct at that location. If `bootsig`
-matches `BOOTSIG`, it means that the exit to loader data has been provided and
-the function can try to start the exit process. If the signature isn't found, it
-will simply power off the console (which actually causes a reset to the system
-menu in the DSi).
+The real limit in DSi consoles is the location of the DSi NDS header,
+at 0x2FFE000. In DS consoles the limit is the libnds IPC region at 0x23FF000.
+
+This is how the NDS Homebrew Menu sets it up:
+
+ Model           | RAM end   | bootstub + bootloader | Exception. handler | Limit
+-----------------|-----------|-----------------------|--------------------|----------
+ DS/DS Lite      | 0x2400000 | 0x23F4000             | 0x23FA000          | 0x23FF000
+ DSi             | 0x3000000 | 0x2FF4000             | 0x2FFA000          | 0x2FFE000
+
+So the maximum space available for the bootstub and bootloader is the one
+available in DSi mode: 40 KiB.
+
+`__libnds_exit()` tries to access the struct at the right location for the DS
+model. If `bootsig` matches `BOOTSIG`, it means that the exit to loader data has
+been provided and the function can try to start the exit process. If the
+signature isn't found, it will simply power off the console (which actually
+causes a reset to the system menu in the DSi).
 
 If the reset has been requested from the ARM7, `arm7reboot()` is called.
 Similarly, if the ARM9 has requested the reset, `arm9reboot()` is called. Note
