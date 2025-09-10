@@ -3,6 +3,53 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version 1.14.1 (2025-09-10)
+
+- libnds:
+
+  - NitroFS now detects failures during initialization. `nitroFSInit()` has been
+    cleaned and documented. Normally, `nitroFSInit()` tries to open the NDS ROM
+    as a file, then it tries to read NitroFS from Slot-2 cartridge memory, and
+    then it falls back to cartridge commands. There were no checks to verify
+    that cartridge commands worked.
+  - The exit-to-loader system has been slightly modified to increase
+    compatibility with loaders that don't determine the size of DSi RAM
+    correctly. The compatibility break happened in Version 0.13.0.
+  - `keysCurrent()` has been marked as deprecated. `keyboardUpdate()` has been
+    modified to use `keysHeld()` instead. This isn't a new break, this just adds
+    a warning for users of BlocksDS. The break happened in Version 0.13.0.
+  - Function `dlopen_FILE()` has been introduced. It works like `dlopen()`, but
+    it takes a `FILE` handle as input instead of a path. This is useful to load
+    dynamic libraries that are already in RAM instead of in the filesystem.
+  - The check that verifies that the IPC transfer region fits in memory has been
+    fixed to not overlap the following memory regions.
+  - Card functions now use the right `CARD_` defines. @lifehackerhansol
+
+- DSWiFi:
+
+  - Some minor improvements to the intergration with lwIP.
+  - Enable and fix some compiler warnings.
+
+- LibXM7:
+
+  - Enable and fix some compiler warnings.
+
+- grit:
+
+  - Fix `dib_pixel_replace()` for 32-bit values.
+  - Added some missing `break` statements.
+  - Enable and fix some compiler warnings.
+
+- mmutil:
+
+  - Enable and fix some compiler warnings.
+
+- SDK:
+
+  - Document more of the behaviour of the exit-to-loader process of the NDS
+    Homebrew Menu and the bootstub struct.
+  - Enable and fix some compiler warnings in dsltool, teaktool and mkfatimg.
+
 ## Version 1.14.0 (2025-09-06)
 
 - libnds:
