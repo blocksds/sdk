@@ -130,6 +130,18 @@ _start:
     bl      ClearMem
 
 NotTWL:
+    // Flush caches
+
+    // The instructions above, write data to ram areas that are backed up by a cache
+    // flush all the written data to RAM.
+    // This is needed especially for the arm9i binary on a DSi, since it could contain
+    // data sections that could be not available right at the start of the program since
+    // they're still in cache
+    ldr     r3, =CP15_CleanAndFlushDCache
+    blx     r3
+
+    ldr     r3, =CP15_FlushICache
+    blx     r3
 
     // Setup heap limits
 
