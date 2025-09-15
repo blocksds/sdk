@@ -30,10 +30,14 @@ filesystem you can't do it in the same CPU. The ARM9 is too busy with the game
 logic, it can't just stop until it has finished reading a file.
 
 The fix is to use the ARM7 to do the reads while the ARM9 is doing other things.
-Note that, at the time of writing this document, while DLDI in ARM7 is
-supported, there is no way to do asynchronous reads yet. For this, a cooperative
-multithreading scheduler is needed. This has a high priority in the to-do list
-of this SDK.
+For this you can use the cooperative multithreading (cothread) system of libnds.
+All you need to do is to start as many threads as you want. Regular C functions
+like `fopen()` and `fread()` switch threads automatically when they need to wait
+for the ARM7 to read data. Any thread that doesn't read from the filesystem
+needs to call `cothread_yield()`, `cothread_yield_irq()` or
+`cothread_yield_signal()` to switch threads. In practice, it's pretty easy to
+do. Check [this example](https://github.com/blocksds/sdk/tree/master/examples/filesystem/async_loading)
+to see how to load two different files using two threads at the same time.
 
 ## 3. Supported flashcarts
 
