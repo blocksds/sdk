@@ -3,6 +3,28 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version DEV (2025-XX-XX)
+
+- libnds:
+
+  - Improve error checking in `nitroFSInit()` when using official card commands
+    to access NitroFS. `nitroFSInit()` now reads the new magic string stored by
+    ndstool in the NDS ROM to check that the cartridge data can be read. The
+    previous system was incorrect because the ROM header can't be read after the
+    initial load of the ROM.
+  - Prevent changing the filesystem label of DSi NAND partitions with
+    `fatSetVolumeLabel()`.
+  - Some minor code cleanup.
+
+- ndstool:
+
+  - Add a magic string after the FAT filesystem table. This string can be used
+    by libnds to check that card commands can read the cartridge data correctly.
+  - The unit code and title ID of the DSi ROM header can now be set by the user
+    independently.
+  - The default title ID for DSi ROMs is now the DSiware code rather than the
+    DSi gamecard code.
+
 ## Version 1.14.1 (2025-09-10)
 
 - libnds:
