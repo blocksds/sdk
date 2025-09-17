@@ -211,8 +211,8 @@ int main(int argc, char **argv)
 
     consoleClear();
 
-    printf("NAND (DSi)\n");
-    printf("==========\n");
+    printf("NAND (DSi, main partition)\n");
+    printf("==========================\n");
     printf("\n");
 
     if (chdir("nand:/") == 0)
@@ -225,6 +225,27 @@ int main(int argc, char **argv)
         printf("\n");
         wait_press_button_a();
     }
+
+    // List the contents in the root folder of the DSi NAND
+
+    consoleClear();
+
+    printf("NAND (DSi, 2nd partition)\n");
+    printf("=========================\n");
+    printf("\n");
+
+    if (chdir("nand2:/") == 0)
+    {
+        dir_list();
+    }
+    else
+    {
+        printf("Failed to chdir()\n");
+        printf("\n");
+        wait_press_button_a();
+    }
+
+    // All done
 
     consoleClear();
     printf("Tests finished!\n");
