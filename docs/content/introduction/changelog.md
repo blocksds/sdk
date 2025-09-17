@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version DEV (2025-XX-XX)
+## Version 1.14.2 (2025-09-17)
 
 - libnds:
 
@@ -13,7 +13,16 @@ weight: -20
     previous system was incorrect because the ROM header can't be read after the
     initial load of the ROM.
   - Prevent changing the filesystem label of DSi NAND partitions with
-    `fatSetVolumeLabel()`.
+    `fatSetVolumeLabel()`. @edo9300
+  - Add support for the photo partition of the DSi NAND. @edo9300
+  - Save some RAM related to FatFs structs by moving them to TWL RAM. @edo9300
+  - Some minor code cleanup.
+
+- DSWiFi:
+
+  - Implemented `inet_aton()`, `inet_addr()`, `inet_ntop()` and `inet_pton()`.
+  - DSWiFi now prevents lwIP from updating its state before being connected to
+    an access point.
   - Some minor code cleanup.
 
 - ndstool:
@@ -24,6 +33,15 @@ weight: -20
     independently.
   - The default title ID for DSi ROMs is now the DSiware code rather than the
     DSi gamecard code.
+
+- SDK:
+
+  - NitroFS now works when ROMs are loaded from Unlaunch (with some limitations,
+    paths can only be up to 40 characters long, and file/folder names are in 8.3
+    name format). Thanks to @edo9300 for his device list support additions and
+    his suggestions for ndstool.
+  - The example that accessess all filesystems has been improved to check the
+    `nand2` filesystem as well.
 
 ## Version 1.14.1 (2025-09-10)
 
