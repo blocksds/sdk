@@ -16,6 +16,7 @@ BlocksDS, as with any open-source development kit for a complex embedded device,
 - Discostew
 - Double, Chris (doublec)
 - eKid
+- Edoardo Lolletti (edo9300)
 - Epstein, Keith (KeithE)
 - Eric M. Lope BSN RN, Richard (Relminator)
 - fincs
