@@ -150,6 +150,7 @@ Address   | Description
 0x2FFA000 | NDS Homebrew Menu copies its exception handler here. Its current size is smaller than 0x2000 bytes.
 0x2FFE000 | DSi only: .nds header - 0x1000 bytes.
 0x2FFF000 | libnds ARM9/ARM7 internal IPC region.
+0x2FFDC00 | DSi: This is where the device list is placed by loaders normally. Only used during boot. This isn't reserved, and it is also used for the internal IPC region after boot.
 0x2FFFC80 | DS/DSi: user settings loaded from flash memory.
 0x2FFFD9C | DS/DSi: ARM9 exception vector, as well as top of stack.
 0x2FFFE00 | DS/DSi: .nds header - 0x160 bytes on DSi, 0x170 bytes on NDS.
