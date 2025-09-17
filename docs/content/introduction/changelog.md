@@ -32,7 +32,12 @@ weight: -20
   - The unit code and title ID of the DSi ROM header can now be set by the user
     independently.
   - The default title ID for DSi ROMs is now the DSiware code rather than the
-    DSi gamecard code.
+    DSi gamecard code. This is a compatibility break with older versions. To get
+    the same result as previous invocations of ndstool you need to use the
+    argument `-u 00030000`. If you were using a different title ID already now
+    you will need to specify the unit code. For example, `-u 00030004` now
+    becomes `-u 00030004 -uc 3`, and you can skip the `-u 00030004` because
+    that's the new default value.
 
 - SDK:
 

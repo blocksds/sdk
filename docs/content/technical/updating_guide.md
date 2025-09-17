@@ -10,6 +10,22 @@ to implement. These are documented here.
 Please refer to the changelog for a full list of changes, including additions
 and enhancements to the SDK which are not listed here.
 
+## Upgrading to BlocksDS 1.14.2
+
+* ndstool now handles DSi title IDs and units codes differently. This shouldn't
+  affect any regular user of BlocksDS, but it may be a problem in some unusual
+  cases.
+
+  The new default title ID is `0x00030004`, not `0x00030000`. Also, with
+  previous versions, title ID `0x00030000` would set the unit code to 2 and
+  other title IDs would set the unit code to 3. This isn't automatic anymore.
+
+  Some examples if you want to preserve the old behaviour:
+
+  - `ndstool` with no `-u` becomes `ndstool -u 00030000`
+  - `ndstool -u 00030004` becomes `ndstool -uc 3`
+  - `ndstool -u 0003000F` becomes `ndstool -u 0003000F -uc 3`
+
 ## Upgrading to BlocksDS 1.14.0
 
 * `WiFi_Deinit()`, introduced in version 1.13.1, no longer works after starting
