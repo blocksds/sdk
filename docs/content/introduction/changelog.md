@@ -37,9 +37,9 @@ weight: -20
 - SDK:
 
   - NitroFS now works when ROMs are loaded from Unlaunch (with some limitations,
-    paths can only be up to 40 characters long, and file/folder names are in 8.3
-    name format). Thanks to @edo9300 for his device list support additions and
-    his suggestions for ndstool.
+    paths can only be up to 0x40 characters long, and file/folder names are in
+    8.3 name format). Thanks to @edo9300 for his device list support additions
+    and his suggestions for ndstool.
   - The example that accessess all filesystems has been improved to check the
     `nand2` filesystem as well.
 
