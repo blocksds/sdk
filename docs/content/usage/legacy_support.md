@@ -84,12 +84,21 @@ be limited to appropriate, specialized use cases.
 The [argv structure](https://devkitpro.org/wiki/Homebrew_Menu) was added to libnds
 [in mid-2007](https://github.com/devkitPro/libnds/commit/34f30043ce8683d48194fa009fd788da691517de);
 this means that any launcher written before that date, as well as many launchers
-written after that date (including ones as recent as Unlaunch), do not support
-passing command-line arguments. Most notably, this impacts the NitroFS filesystem,
-which - outside of Slot-2 cartridges - relies on reading `argv[0]` to find
-the `.nds` file it was launched from.
+written after that date, do not support passing command-line arguments. Most
+notably, this impacts the NitroFS filesystem, which - outside of Slot-2
+cartridges - relies on reading `argv[0]` to find the `.nds` file it was launched
+from. As this is a missing feature rather than a bug, there is no workaround
+available.
 
-As this is a missing feature rather than a bug, there is no workaround available.
+Unlaunch is a special case. It doesn't setup an `argv` struct before booting NDS
+ROMs, it passes a [device list](https://problemkaputt.de/gbatek.htm#dsisdmmcdevicelist),
+which is the format used by Nintendo to pass this information to official games.
+BlocksDS supports this struct, so loaders that don't support `argv` but support
+device lists can still use NitroFS.
+
+Note that paths are restricted to 40 characters in the device list format.
+Unlaunch uses the 8.3 file name format instead of passing full names to increase
+compatibility with ROMs with long paths.
 
 ### Reduced DLDI driver reserved space
 
