@@ -54,7 +54,7 @@ static int outfunc(JDEC* state, void* indata, JRECT* rect)
 // pictures are stored in the path:
 // nand2:/photo/DCIM/100NINXX/HNI_XXXX.JPG
 // iterate both the subfolders to find all the jpg files
-DIR* get_next_dcim_subfolder(bool* rewund)
+DIR *get_next_dcim_subfolder(bool* rewund)
 {
     chdir(DCIM);
     bool has_rewund = false;
@@ -68,11 +68,14 @@ DIR* get_next_dcim_subfolder(bool* rewund)
             rewinddir(dcim_dirp);
             continue;
         }
+
         if(cur_dcim->d_type != DT_DIR)
             continue;
-        if (strlen(cur_dcim->d_name) == 0)
+
+        if (*cur_dcim->d_name == 0)
             continue;
-        DIR * dirp = opendir(cur_dcim->d_name);
+
+        DIR *dirp = opendir(cur_dcim->d_name);
         if(dirp != NULL)
         {
             chdir(cur_dcim->d_name);
@@ -108,7 +111,7 @@ const char* get_next_picture()
         if(cur->d_type == DT_DIR)
             continue;
 
-        if (strlen(cur->d_name) == 0)
+        if (*cur->d_name == 0)
             continue;
 
         return cur->d_name;
@@ -164,6 +167,7 @@ void show_details(const char* file)
     printf("Slideshow!!\n\n");
     printf("D-PAD: pan\n");
     printf("L/R: next image\n");
+    printf("START: return to loader\n");
     printf("\n\nDisplaying:\n%s/%s\n", cwd, file);
     free(cwd);
 }
