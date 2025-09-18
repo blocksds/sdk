@@ -29,6 +29,7 @@ void usage(void)
          "  -o output.dsl      Path to DSL file to be created.\n"
          "  -m main_binary.elf Optional main binary ELF file to resolve symbols\n"
          "  -v                 Enable verbose logging\n"
+         "  -V                 Print version string and exit\n"
     );
 }
 
@@ -43,7 +44,13 @@ typedef struct {
 
 int main(int argc, char *argv[])
 {
-    INFO("dsltool " PACKAGE_VERSION "\n"
+    if ((argc == 2) && (strcmp(argv[1], "-V") == 0))
+    {
+        printf("dsltool " VERSION_STRING "\n");
+        return 0;
+    }
+
+    INFO("dsltool " VERSION_STRING "\n"
          "=============\n"
     );
 

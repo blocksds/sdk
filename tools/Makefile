@@ -37,7 +37,7 @@ dldipatch:
 	$(MAKE) -C dldipatch
 
 dsltool:
-	$(MAKE) -C dsltool
+	$(MAKE) -C dsltool SDK_VERSION=$(SDK_VERSION)
 
 mkfatimg:
 	$(MAKE) -C mkfatimg
