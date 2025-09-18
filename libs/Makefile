@@ -16,15 +16,18 @@ MAKE		:= make
 RM		:= rm -rf
 MKDIR		:= mkdir
 
-.PHONY: all clean dswifi install libnds libteak libxm7 maxmod
+.PHONY: all clean dswifi install libblocksds libnds libteak libxm7 maxmod
 
-all: dswifi libnds libxm7 libteak maxmod
+all: dswifi libblocksds libnds libxm7 libteak maxmod
 
 # Build targets
 # =============
 
 dswifi: libnds
 	+$(MAKE) -C dswifi
+
+libblocksds:
+	+$(MAKE) -C libblocksds VERSION_STRING=$(VERSION_STRING)
 
 libnds:
 	+$(MAKE) -C libnds
@@ -54,6 +57,7 @@ install: all
 	@$(RM) $(INSTALLDIR_ABS)
 	@$(INSTALL) -d $(INSTALLDIR_ABS)
 	+$(MAKE) -C libnds install INSTALLDIR=$(INSTALLDIR_ABS)/libnds
+	+$(MAKE) -C libblocksds install INSTALLDIR=$(INSTALLDIR_ABS)/libblocksds
 	+$(MAKE) -C dswifi install INSTALLDIR=$(INSTALLDIR_ABS)/dswifi
 	+$(MAKE) -C libxm7 install INSTALLDIR=$(INSTALLDIR_ABS)/libxm7
 	+$(MAKE) -C maxmod install INSTALLDIR=$(INSTALLDIR_ABS)/maxmod
