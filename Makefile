@@ -68,9 +68,7 @@ install: all
 	+$(MAKE) -C tools install INSTALLDIR=$(INSTALLDIR_ABS)/tools
 	+$(CP) -r sys/cmake $(INSTALLDIR_ABS)/cmake
 	+$(CP) -r licenses $(INSTALLDIR_ABS)
-	@if [ `git rev-parse HEAD 2> /dev/null` ]; then \
-		git rev-parse HEAD > $(INSTALLDIR)/version.txt ; \
-	fi
+	@echo $(VERSION_STRING) > $(INSTALLDIR)/version.txt
 
 clean:
 	+$(MAKE) -C examples clean
