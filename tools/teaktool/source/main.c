@@ -11,7 +11,12 @@
 
 void usage(void)
 {
-    printf("Usage: teaktool -i input_file.elf -o output_file.tlf\n");
+    printf("Usage: teaktool -i input_file.elf -o output_file.tlf\n"
+         "\n"
+         "  -i    Input elf file\n"
+         "  -o    Output tlf file\n"
+         "  -V    Print version string and exit\n"
+    );
 }
 
 typedef struct {
@@ -25,7 +30,13 @@ typedef struct {
 
 int main(int argc, char *argv[])
 {
-    printf("Teak tool " PACKAGE_VERSION "\n");
+    if ((argc == 2) && (strcmp(argv[1], "-V") == 0))
+    {
+        printf("teaktool " VERSION_STRING "\n");
+        return 0;
+    }
+
+    printf("Teak tool " VERSION_STRING "\n");
 
     const char *in_file = NULL;
     const char *out_file = NULL;

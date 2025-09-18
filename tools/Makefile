@@ -52,7 +52,7 @@ squeezer:
 	$(MAKE) -C squeezer
 
 teaktool:
-	$(MAKE) -C teaktool
+	$(MAKE) -C teaktool SDK_VERSION=$(SDK_VERSION)
 
 INSTALLDIR	?= /opt/blocksds/core/tools
 INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
