@@ -190,6 +190,11 @@ int main (int argc, char* argv[])
 	int ai = 1, truncation = 0;
 	const char *outfile;
 
+	if ((argc == 2) && (strcmp(argv[1], "-V") == 0))
+	{
+		printf("mkfatimg " VERSION_STRING "\n");
+		return 0;
+	}
 
 	/* Initialize parameters */
 	while (argc >= 2 && *argv[ai] == '-') {
@@ -207,9 +212,10 @@ int main (int argc, char* argv[])
 	}
 
 	if (argc < 3) {
-		printf("usage: mkfatimg [-t] [-v] <source node> <output image> <image size> [<cluster size>]\n"
+		printf("usage: mkfatimg [-V] [-t] [-v] <source node> <output image> <image size> [<cluster size>]\n"
 				"    -t: Truncate unused area for read only volume.\n"
 				"    -v: Verbose mode.\n"
+				"    -V: Print version and exit.\n"
 				"    <source node>: Source node as root of output image\n"
 				"    <output image>: FAT volume image file\n"
 				"    <image size>: Size of output image in unit of sectors (0 = auto, default:0)\n"

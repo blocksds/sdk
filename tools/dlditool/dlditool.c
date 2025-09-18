@@ -14,7 +14,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define DLDITOOL_VERSION "1.26"
+#define DLDITOOL_VERSION VERSION_STRING
 
 #ifndef _MSC_VER
 #include <unistd.h>
@@ -254,7 +254,12 @@ FILE *openDLDIFile(const char *argv0, char *dldiFileName ) {
 
 int main(int argc, char* argv[])
 {
-	
+	if ((argc == 2) && (strcmp(argv[1], "-V") == 0))
+	{
+		printf("dlditool " DLDITOOL_VERSION "\n");
+		return 0;
+	}
+
 	char *dldiFileName = NULL;
 	char *appFileName = NULL;
 

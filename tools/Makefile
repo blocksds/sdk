@@ -54,7 +54,7 @@ grit:
 	$(MAKE) -C grit VERSION_STRING=$(VERSION_STRING)
 
 dlditool:
-	$(MAKE) -C dlditool
+	$(MAKE) -C dlditool VERSION_STRING=$(VERSION_STRING)
 
 dldipatch:
 	$(MAKE) -C dldipatch
@@ -63,7 +63,7 @@ dsltool:
 	$(MAKE) -C dsltool VERSION_STRING=$(VERSION_STRING)
 
 mkfatimg:
-	$(MAKE) -C mkfatimg
+	$(MAKE) -C mkfatimg VERSION_STRING=$(VERSION_STRING)
 
 mmutil:
 	$(MAKE) -C mmutil VERSION_STRING=$(VERSION_STRING)
