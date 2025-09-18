@@ -155,8 +155,22 @@ void generate_transformed_name(const char *_path, const char *dir_out,
 void print_help(const char *path)
 {
     fprintf(stderr, "Invalid arguments.\n"
-                    "Usage: %s [--noext] file_in folder_out\n", path);
-    exit(1);
+                    "\n"
+                    "Usage:\n"
+                    "    %s [--noext] file_in folder_out\n"
+                    "\n"
+                    "Options:\n"
+                    "    --noext  Remove original extension from output\n"
+                    "    -V       Print version string and exit\n",
+                    path);
+
+    exit(EXIT_FAILURE);
+}
+
+void print_version(void)
+{
+    printf("bin2c " VERSION_STRING "\n");
+    exit(EXIT_SUCCESS);
 }
 
 int main(int argc, char **argv)
@@ -166,6 +180,9 @@ int main(int argc, char **argv)
 
     if (argc < 2)
         print_help(argv[0]);
+
+    if ((argc == 2) && (strcmp(argv[1], "-V") == 0))
+        print_version();
 
     bool save_ext;
     const char *path_in;

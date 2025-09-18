@@ -13,6 +13,29 @@ CP		:= cp
 RM		:= rm -rf
 INSTALL		:= install
 
+# Version string handling
+# -----------------------
+
+# Try to find the SDK version if it wasn't already provided e.g. by the parent Makefile
+SDK_VERSION	?= $(shell git describe --tags --exact-match --dirty 2>/dev/null)
+
+ifneq ($(SDK_VERSION),)
+    VERSION_STRING	:= "$(SDK_VERSION)"
+else
+    # Try to get the commit ID. --exclude to prevent any older tags from being displayed
+    COMMIT_ID	:= $(shell git describe --always --dirty --exclude '*' 2>/dev/null)
+    ifneq ($(COMMIT_ID),)
+        VERSION_STRING	:= "commit $(COMMIT_ID)"
+    else
+        VERSION_STRING	:= "DEV"
+    endif
+endif
+
+# Defines passed to all files
+# ---------------------------
+
+DEFINES		:= -DVERSION_STRING=\"$(VERSION_STRING)\"
+
 # Verbose flag
 # ------------
 
@@ -31,7 +54,7 @@ all: bin2c
 
 bin2c: bin2c.c
 	@echo "  HOSTCC  $<"
-	$(V)$(HOSTCC) -Wall -Wextra -std=gnu11 -Wformat-truncation=0 -O3 -o $@ $<
+	$(V)$(HOSTCC) $(DEFINES) -Wall -Wextra -std=gnu11 -Wformat-truncation=0 -O3 -o $@ $<
 
 clean:
 	@echo "  CLEAN  "

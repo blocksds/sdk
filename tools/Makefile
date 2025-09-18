@@ -25,7 +25,7 @@ all: bin2c dldipatch dlditool dsltool grit mkfatimg mmutil ndstool squeezer \
 	teaktool
 
 bin2c:
-	$(MAKE) -C bin2c
+	$(MAKE) -C bin2c SDK_VERSION=$(SDK_VERSION)
 
 grit:
 	$(MAKE) -C grit SDK_VERSION=$(SDK_VERSION)
