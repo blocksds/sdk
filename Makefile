@@ -2,6 +2,9 @@
 #
 # SPDX-FileContributor: Antonio Niño Díaz, 2023
 
+# Try to find the SDK version if it wasn't provided
+SDK_VERSION	?= $(shell git describe --tags --exact-match --dirty 2>/dev/null)
+
 .PHONY: all clean examples install libs sys templates tests tools
 
 all: libs sys tools
@@ -29,7 +32,7 @@ tests:
 	+$(MAKE) -C tests
 
 tools:
-	+$(MAKE) -C tools
+	+$(MAKE) -C tools SDK_VERSION=$(SDK_VERSION)
 
 # Default installation path of BlocksDS core components
 INSTALLDIR	?= /opt/blocksds/core/

@@ -28,7 +28,7 @@ bin2c:
 	$(MAKE) -C bin2c
 
 grit:
-	$(MAKE) -C grit
+	$(MAKE) -C grit SDK_VERSION=$(SDK_VERSION)
 
 dlditool:
 	$(MAKE) -C dlditool
@@ -43,10 +43,10 @@ mkfatimg:
 	$(MAKE) -C mkfatimg
 
 mmutil:
-	$(MAKE) -C mmutil
+	$(MAKE) -C mmutil SDK_VERSION=$(SDK_VERSION)
 
 ndstool:
-	$(MAKE) -C ndstool
+	$(MAKE) -C ndstool SDK_VERSION=$(SDK_VERSION)
 
 squeezer:
 	$(MAKE) -C squeezer
