@@ -1,0 +1,12 @@
+This homebrew uses the TJpgDec library by ChaN with 2 minor changes to output
+the image buffer in a format supported by the DS
+
+The library is distributed under this license
+--------------------------------
+
+ Copyright (C) 2021, ChaN, all right reserved.
+
+* The TJpgDec module is a free software and there is NO WARRANTY.
+* No restriction on use. You can use, modify and redistribute it for
+  personal, non-profit or commercial products UNDER YOUR RESPONSIBILITY.
+* Redistributions of source code must retain the above copyright notice.
