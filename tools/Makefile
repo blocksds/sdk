@@ -1,6 +1,9 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2023-2024
+# SPDX-FileContributor: Antonio Niño Díaz, 2023-2025
+
+# Tools
+# -----
 
 STRIP		:= -s
 BINMODE		:= 755
@@ -8,6 +11,23 @@ BINMODE		:= 755
 RM		:= rm -rf
 MAKE		:= make
 INSTALL		:= install
+
+# Version string handling
+# -----------------------
+
+# Try to generate a version string if it isn't already provided
+ifeq ($(VERSION_STRING),)
+    # Try an exact match with a tag (e.g. v1.12.1)
+    VERSION_STRING	:= $(shell git describe --tags --exact-match --dirty 2>/dev/null)
+    ifeq ($(VERSION_STRING),)
+        # Try a non-exact match (e.g. v1.12.1-3-g67a811a)
+        VERSION_STRING	:= $(shell git describe --tags --dirty 2>/dev/null)
+        ifeq ($(VERSION_STRING),)
+            # If no version is provided by the user or git, fall back to this
+            VERSION_STRING	:= DEV
+        endif
+    endif
+endif
 
 # Verbose flag
 # ------------
@@ -18,6 +38,9 @@ else
 V		:= @
 endif
 
+# Targets
+# -------
+
 .PHONY: bin2c clean dldipatch dlditool dsltool grit install mkfatimg mmutil \
 	ndstool squeezer teaktool
 
@@ -25,10 +48,10 @@ all: bin2c dldipatch dlditool dsltool grit mkfatimg mmutil ndstool squeezer \
 	teaktool
 
 bin2c:
-	$(MAKE) -C bin2c SDK_VERSION=$(SDK_VERSION)
+	$(MAKE) -C bin2c VERSION_STRING=$(VERSION_STRING)
 
 grit:
-	$(MAKE) -C grit SDK_VERSION=$(SDK_VERSION)
+	$(MAKE) -C grit VERSION_STRING=$(VERSION_STRING)
 
 dlditool:
 	$(MAKE) -C dlditool
@@ -37,22 +60,22 @@ dldipatch:
 	$(MAKE) -C dldipatch
 
 dsltool:
-	$(MAKE) -C dsltool SDK_VERSION=$(SDK_VERSION)
+	$(MAKE) -C dsltool VERSION_STRING=$(VERSION_STRING)
 
 mkfatimg:
 	$(MAKE) -C mkfatimg
 
 mmutil:
-	$(MAKE) -C mmutil SDK_VERSION=$(SDK_VERSION)
+	$(MAKE) -C mmutil VERSION_STRING=$(VERSION_STRING)
 
 ndstool:
-	$(MAKE) -C ndstool SDK_VERSION=$(SDK_VERSION)
+	$(MAKE) -C ndstool VERSION_STRING=$(VERSION_STRING)
 
 squeezer:
-	$(MAKE) -C squeezer
+	$(MAKE) -C squeezer VERSION_STRING=$(VERSION_STRING)
 
 teaktool:
-	$(MAKE) -C teaktool SDK_VERSION=$(SDK_VERSION)
+	$(MAKE) -C teaktool VERSION_STRING=$(VERSION_STRING)
 
 INSTALLDIR	?= /opt/blocksds/core/tools
 INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))

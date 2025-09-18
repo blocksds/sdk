@@ -1,18 +1,38 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2023
+# SPDX-FileContributor: Antonio Niño Díaz, 2023-2025
 
-# Try to find the SDK version if it wasn't provided
-SDK_VERSION	?= $(shell git describe --tags --exact-match --dirty 2>/dev/null)
-
-.PHONY: all clean examples install libs sys templates tests tools
-
-all: libs sys tools
+# Tools
+# -----
 
 CP		:= cp
 INSTALL		:= install
 MAKE		:= make
 RM		:= rm -rf
+
+# Version string handling
+# -----------------------
+
+# Try to generate a version string if it isn't already provided
+ifeq ($(VERSION_STRING),)
+    # Try an exact match with a tag (e.g. v1.12.1)
+    VERSION_STRING	:= $(shell git describe --tags --exact-match --dirty 2>/dev/null)
+    ifeq ($(VERSION_STRING),)
+        # Try a non-exact match (e.g. v1.12.1-3-g67a811a)
+        VERSION_STRING	:= $(shell git describe --tags --dirty 2>/dev/null)
+        ifeq ($(VERSION_STRING),)
+            # If no version is provided by the user or git, fall back to this
+            VERSION_STRING	:= DEV
+        endif
+    endif
+endif
+
+# Targets
+# -------
+
+.PHONY: all clean examples install libs sys templates tests tools
+
+all: libs sys tools
 
 examples:
 	+$(MAKE) -C examples
@@ -32,7 +52,7 @@ tests:
 	+$(MAKE) -C tests
 
 tools:
-	+$(MAKE) -C tools SDK_VERSION=$(SDK_VERSION)
+	+$(MAKE) -C tools VERSION_STRING=$(VERSION_STRING)
 
 # Default installation path of BlocksDS core components
 INSTALLDIR	?= /opt/blocksds/core/
