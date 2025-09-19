@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 
 ## 2. Usage in Makefile
 
-At the end of your makefile add the following line:
+At the end of your makefile add the following lines:
 
 ```make
 BLOCKSDS_VERSION_FILE = $(BLOCKSDS)/libs/libblocksds/make/blocksds_version.make
@@ -50,15 +50,15 @@ endif
 include $(BLOCKSDS_VERSION_FILE)
 ```
 
-After that line you can use it like this, for example:
+After those lines you can use it like this, for example:
 
 ```make
 # This will fail if the installed version of BlocksDS isn't exactly v1.14.2
-$(eval $(call blocksds_version_equals, 1, 14, 2))
+$(eval $(call error_if_blocksds_version_different, 1, 14, 2))
 
 # This will fail if the installed version of BlocksDS isn't at least v1.14.2
-$(eval $(call blocksds_version_at_least, 1, 14, 2))
+$(eval $(call error_if_blocksds_version_less_than, 1, 14, 2))
 
 # This will fail if the installed version of BlocksDS isn't at most v1.14.2
-$(eval $(call blocksds_version_at_most, 1, 14, 2))
+$(eval $(call error_if_blocksds_version_greater_than, 1, 14, 2))
 ```
