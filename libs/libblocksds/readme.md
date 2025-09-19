@@ -41,7 +41,13 @@ int main(int argc, char *argv[])
 At the end of your makefile add the following line:
 
 ```make
-include $(BLOCKSDS)/libs/libblocksds/make/blocksds_version.make
+BLOCKSDS_VERSION_FILE = $(BLOCKSDS)/libs/libblocksds/make/blocksds_version.make
+
+ifeq ("$(wildcard $(BLOCKSDS_VERSION_FILE))","")
+$(error BlocksDS version too old. Please update.)
+endif
+
+include $(BLOCKSDS_VERSION_FILE)
 ```
 
 After that line you can use it like this, for example:
