@@ -499,3 +499,55 @@ priorities of the layers, but you can change it by calling
 The highest priority is priority 0, which is displayed on top of priorities 1,
 2 and 3. If two layers have the same priority, the one with the lowest index
 is displayed on top.
+
+## 11. Using the sub engine
+
+Excluding the large background mode, which isn't available in the sub engine,
+everything else works exactly the same. All you need to do is repeat the setup
+you've done for the main engine. For example, if we remember how we loaded tiled
+backgrounds before, this is how you would display the same background in both
+screens:
+
+```c
+#include <nds.h>
+
+// This file contains pointers to the data: `forest_townTiles`, `forest_townMap`
+// and `forest_townPal`. It also contains the size of everything:
+// `forest_townTilesLen`, etc.
+#include "forest_town.h"
+
+int main(int argc, char *argv[])
+{
+    // Use a video mode that sets layer 0 as a regular tiled background. Mode 0
+    // sets all 4 layers as regular tiled backgrounds.
+    videoSetMode(MODE_0_2D);
+    videoSetModeSub(MODE_0_2D); // New!
+
+    // Designate VRAM A as memory for main engine backgrounds. This gives us 128
+    // KB in total. Designate VRAM C for sub engine backgrounds.
+    vramSetBankA(VRAM_A_MAIN_BG);
+    vramSetBankC(VRAM_C_SUB_BG); // New
+
+    // Initialize layer 0 as a regular (text) background with 256 colors (8 bpp)
+    // and size 256x256. The last 0 is the map base and the 1 is the tile base.
+    // We'll talk about that in a minute.
+    int bg = bgInit(0, BgType_Text8bpp, BgSize_T_256x256, 0, 1);
+    int bgsub = bgInitSub(0, BgType_Text8bpp, BgSize_T_256x256, 0, 1); // New
+
+    // Copy tiles and tile map to VRAM (main engine)
+    dmaCopy(forest_townTiles, bgGetGfxPtr(bg), forest_townTilesLen);
+    dmaCopy(forest_townMap, bgGetMapPtr(bg), forest_townMapLen);
+
+    // Copy tiles and tile map to VRAM (sub engine)
+    dmaCopy(forest_townTiles, bgGetGfxPtr(bgsub), forest_townTilesLen);
+    dmaCopy(forest_townMap, bgGetMapPtr(bgsub), forest_townMapLen);
+
+    // Copy palete to palette RAM
+    dmaCopy(forest_townPal, BG_PALETTE, forest_townPalLen);
+    dmaCopy(forest_townPal, BG_PALETTE_SUB, forest_townPalLen); // New
+
+    // Wait forever
+    while (1)
+        swiWaitForVBlank();
+}
+```
