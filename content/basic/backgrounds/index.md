@@ -543,8 +543,8 @@ int main(int argc, char *argv[])
     dmaCopy(forest_townMap, bgGetMapPtr(bg), forest_townMapLen);
 
     // Copy tiles and tile map to VRAM (sub engine)
-    dmaCopy(forest_townTiles, bgGetGfxPtr(bgsub), forest_townTilesLen);
-    dmaCopy(forest_townMap, bgGetMapPtr(bgsub), forest_townMapLen);
+    dmaCopy(forest_townTiles, bgGetGfxPtr(bgsub), forest_townTilesLen); // New
+    dmaCopy(forest_townMap, bgGetMapPtr(bgsub), forest_townMapLen); // New
 
     // Copy palete to palette RAM
     dmaCopy(forest_townPal, BG_PALETTE, forest_townPalLen);
