@@ -504,9 +504,13 @@ is displayed on top.
 
 Excluding the large background mode, which isn't available in the sub engine,
 everything else works exactly the same. All you need to do is repeat the setup
-you've done for the main engine. For example, if we remember how we loaded tiled
-backgrounds before, this is how you would display the same background in both
-screens:
+you've done for the main engine.
+
+Check this example for a practical demonstration:
+[`examples/graphics_2d/bg_regular_8bit_2screens`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_regular_8bit_2screens)
+
+For example, if we remember how we loaded tiled backgrounds before, this is how
+you would display the same background in both screens:
 
 ```c
 #include <nds.h>
