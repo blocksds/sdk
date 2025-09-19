@@ -3,6 +3,29 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version DEV (2025-XX-XX)
+
+- libnds:
+
+  - Fix reading console ID with `SCFG_ROM` registers disabled. @edo9300
+  - Ensure crypto has been initialized when a NAND read/write command is
+    received in the ARM7. @edo9300
+
+- SDK:
+
+  - Improve SDK version string generation. The makefiles of all tools (except
+    for `dldipatch`) have been modified to use the value of `VERSION_STRING`
+    provided by the user. If the string is not provided, it tries to generate a
+    version string in 2 different ways. If that fails, it defaults to "DEV".
+  - All tools (except for `dldipatch`) now accept a `-V` flag. When the tools
+    are run with `-V` they print the version string and exit right away. This
+    flag has been selected because some tools were already using `-v` for other
+    purposes (like verbose output).
+  - The file `$BLOCKSDS/version.txt` will now contain the value of
+    `VERSION_STRING` generated when building BlocksDS instead of the commit ID.
+  - There is now a new example that lets you display the photos stored in the
+    NAND of a DSi console.
+
 ## Version 1.14.2 (2025-09-17)
 
 - libnds:
