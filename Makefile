@@ -39,7 +39,7 @@ examples:
 
 # libnds depends on grit and bin2c
 libs: tools
-	+$(MAKE) -C libs
+	+$(MAKE) -C libs VERSION_STRING=$(VERSION_STRING)
 
 # The default ARM7 depends on some libraries
 sys: libs
