@@ -51,7 +51,7 @@ all:
 	@$(MKDIR) -p build
 	@echo "  GENERATE VERSION HEADER"
 	@bash generate_version_header.sh $(VERSION_STRING) \
-		build/blocksds_version.h build/blocksds_version.make
+		build/blocksds_version.h build/blocksds_version.make fixed_makefile_part
 
 clean:
 	@echo "  CLEAN"
