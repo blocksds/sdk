@@ -4,16 +4,17 @@
 #
 # Copyright (C) 2025 Antonio Niño Díaz
 
-if [[ $# -ne 3 ]]; then
+if [[ $# -ne 4 ]]; then
     echo "Invalid number of arguments"
     echo
-    echo "Usage: $0 <version> <out header path> <out makefile path>"
+    echo "Usage: $0 <version> <out header path> <out makefile path> <fixed_makefile_part path>"
     exit 1
 fi
 
 VERSION_STRING=$1
 OUT_HEADER_PATH=$2
 OUT_MAKEFILE_PATH=$3
+FIXED_MAKEFILE_PATH=$4
 
 # Split version string into its components
 # ========================================
@@ -96,8 +97,6 @@ EOF
 # Export Makefile
 # ===============
 
-full=$(( ${major} * 65536 + ${minor} * 256 + ${patch} ))
-
 cat <<EOF > ${OUT_MAKEFILE_PATH}
 # SPDX-License-Identifier: Zlib
 #
@@ -108,38 +107,14 @@ BLOCKSDS_VERSION_MAJOR = ${major}
 BLOCKSDS_VERSION_MINOR = ${minor}
 BLOCKSDS_VERSION_PATCH = ${patch}
 
-# Integer that represents the version number of this build
-BLOCKSDS_VERSION_FULL = ${full}
-
 # Full version string
 BLOCKSDS_VERSION_STRING = ${VERSION_STRING}
 
 # This is 1 if the current build of BlocksDS is a tagged (official) release
 BLOCKSDS_VERSION_IS_TAGGED = ${tagged_version}
 
-# Causes an error if the version of BlocksDS isn't high enough
-# Use it like this: \$(eval \$(call blocksds_version_equals, 1, 12, 2))
-define blocksds_version_equals
-    ifeq (\$(shell expr ${full} == \( \$(1) \* 65536 + \$(2) \* 256 + \$(3) \) ),0)
-        \$\$(error Version of BlocksDS doesn't match)
-    endif
-endef
-
-# Causes an error if the version of BlocksDS isn't high enough
-# Use it like this: \$(eval \$(call blocksds_version_at_least, 1, 12, 2))
-define blocksds_version_at_least
-    ifeq (\$(shell expr ${full} \>= \( \$(1) \* 65536 + \$(2) \* 256 + \$(3) \) ),0)
-        \$\$(error Version of BlocksDS is too small)
-    endif
-endef
-
-# Causes an error if the version of BlocksDS isn't low enough
-# Use it like this: \$(eval \$(call blocksds_version_at_most, 1, 12, 2))
-define blocksds_version_at_most
-    ifeq (\$(shell expr ${full} \<= \( \$(1) \* 65536 + \$(2) \* 256 + \$(3) \) ),0)
-        \$\$(error Version of BlocksDS is too big)
-    endif
-endef
 EOF
+
+cat ${FIXED_MAKEFILE_PATH} >> ${OUT_MAKEFILE_PATH}
 
 exit 0
