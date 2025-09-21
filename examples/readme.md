@@ -27,5 +27,6 @@ specific area:
 - `maxmod`: How to use the features of Maxmod.
 - `peripherals`: Using integrated, Slot-1 and Slot-2 peripherals.
 - `time`: How to use timers and the RTC.
+- `version`: Check that the installed version of BlocksDS is supported by a project.
 - `video_capture`: Capturing the main engine graphics output and using it later.
 - `video_effects`: How to use 2D effects like blending and windows.

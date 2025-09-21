@@ -38,12 +38,11 @@ int main(int argc, char *argv[])
 
 ## 2. Usage in Makefile
 
-At the end of your makefile, you need to include
-`$(BLOCKSDS)/libs/version/blocksds_version.make`.
-Below, an example which includes the file and also checks
-for older versions of the BlocksDS SDK as well.
-Depending on the use case, checking for the existence
-of `$(BLOCKSDS)/libs/version/blocksds_version.make` may not be necessary.
+In your makefile, you need to include the file
+`$(BLOCKSDS)/libs/version/blocksds_version.make`. Below, an example which
+includes the file and also checks for older versions of the BlocksDS SDK as
+well. Depending on the use case, checking for the existence of
+`$(BLOCKSDS)/libs/version/blocksds_version.make` may not be necessary.
 
 ```make
 BLOCKSDS_VERSION_FILE = $(BLOCKSDS)/libs/version/blocksds_version.make
