@@ -306,7 +306,7 @@ bool access_point_selection_menu(void)
             printf("   Name: [%.19s]\n", name);
             printf("   Players %d/%d | %08X\n", ap.nintendo.players_current,
                    ap.nintendo.players_max, (unsigned int)ap.nintendo.game_id);
-            printf("   %s | Ch %2d | RSSI %u\n", security, ap.channel, ap.rssi);
+            printf("   %s | Ch %2d | RSSI %d\n", security, ap.channel, ap.rssi);
             printf("\n");
 
             if (i == chosen)

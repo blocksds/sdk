@@ -71,7 +71,7 @@ void access_point_selection_menu(void)
 
             printf("%s [%.24s] %s\n", i == chosen ? "->" : "  ", ap.ssid,
                 ap.flags & WFLAG_APDATA_ADHOC ? "*" : "");
-            printf("   %s | Ch %2d | RSSI %u\n", security, ap.channel, ap.rssi);
+            printf("   %s | Ch %2d | RSSI %d\n", security, ap.channel, ap.rssi);
             printf("\n");
 
             if (i == chosen)
