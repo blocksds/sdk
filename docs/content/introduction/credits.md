@@ -73,6 +73,7 @@ In addition, the BlocksDS-provided version of libnds includes code developed by 
 - Rak, Patrik
 - Stair, Stephen (sgstair)
 - Theall, Michael (mtheall)
+- Thomas, Max (ShinyQuagsire)
 
 # Maxmod
 
