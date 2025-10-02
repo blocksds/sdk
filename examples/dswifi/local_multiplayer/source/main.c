@@ -350,23 +350,18 @@ bool AccessPointSelectionMenu(void)
 
             // DSWifi host access points don't use any encryption
 
-            const char *security = "Open";
-            if (ap.flags & WFLAG_APDATA_WPA)
-                security = "WPA ";
-            else if (ap.flags & WFLAG_APDATA_WEP)
-                security = "WEP ";
-
             if (ap.nintendo.allows_connections)
                 consoleSetColor(&bottomScreen, CONSOLE_DEFAULT);
             else
                 consoleSetColor(&bottomScreen, CONSOLE_LIGHT_RED);
 
-            printf("%s [%.24s] %s\n", i == chosen ? "->" : "  ", ap.ssid,
-                ap.flags & WFLAG_APDATA_ADHOC ? "*" : "");
+            printf("%s [%.24s]\n", i == chosen ? "->" : "  ", ap.ssid);
             printf("   Name: [%.19s]\n", name);
             printf("   Players %d/%d | %08X\n", ap.nintendo.players_current,
                    ap.nintendo.players_max, (unsigned int)ap.nintendo.game_id);
-            printf("   %s | Ch %2d | RSSI %d\n", security, ap.channel, ap.rssi);
+            printf("   %-4s | Ch %2d | RSSI %d\n",
+                   Wifi_ApSecurityTypeString(ap.security_type), ap.channel,
+                   ap.rssi);
             printf("\n");
 
             if (i == chosen)

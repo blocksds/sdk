@@ -241,15 +241,10 @@ void access_point_selection_menu(void)
             Wifi_AccessPoint ap;
             Wifi_GetAPData(i, &ap);
 
-            const char *security = "Open";
-            if (ap.flags & WFLAG_APDATA_WPA)
-                security = "WPA ";
-            else if (ap.flags & WFLAG_APDATA_WEP)
-                security = "WEP ";
-
-            printf("%s [%.24s] %s\n", i == chosen ? "->" : "  ", ap.ssid,
-                ap.flags & WFLAG_APDATA_ADHOC ? "*" : "");
-            printf("   %s | Ch %2d | RSSI %d\n", security, ap.channel, ap.rssi);
+            printf("%s [%.24s]\n", i == chosen ? "->" : "  ", ap.ssid);
+            printf("   %-4s | Ch %2d | RSSI %d\n",
+                   Wifi_ApSecurityTypeString(ap.security_type), ap.channel,
+                   ap.rssi);
             printf("\n");
 
             if (i == chosen)
@@ -305,7 +300,7 @@ void connect_to_other_access_points(void)
             if (len == 13)
                 wepmode = WEPMODE_128BIT;
             else if (len == 5)
-                wepmode = WEPMODE_40BIT;
+                wepmode = WEPMODE_64BIT;
             else
                 printf("Invalid key length! [%s] %zu\n", password, len);
 
@@ -323,8 +318,8 @@ void connect_to_other_access_points(void)
     printf("Selected network:\n");
     printf("\n");
     printf("%.31s\n", AccessPoint.ssid);
-    printf("Key: %s | Ch: %d\n",
-           AccessPoint.flags & WFLAG_APDATA_WEP ? "WEP" : "No",
+    printf("Security: %s | Ch: %d\n",
+           Wifi_ApSecurityTypeString(AccessPoint.security_type),
            AccessPoint.channel);
     printf("\n");
 }
