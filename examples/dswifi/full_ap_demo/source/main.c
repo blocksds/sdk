@@ -282,7 +282,7 @@ void connect_to_other_access_points(void)
         consoleClear();
 
         char password[100];
-        int wepmode = WEPMODE_NONE;
+        size_t password_len;
 
         printf("Please, enter the password:\n");
 
@@ -291,26 +291,22 @@ void connect_to_other_access_points(void)
             password[0] = '\0';
             scanf("%s", password);
 
-            size_t len = strlen(password);
-            if (password[len - 1] == '\n')
-                password[len - 1] = '\0';
+            password_len = strlen(password);
+            if (password[password_len - 1] == '\n')
+                password[password_len - 1] = '\0';
 
-            if (len == 13)
-                wepmode = WEPMODE_128BIT;
-            else if (len == 5)
-                wepmode = WEPMODE_64BIT;
-            else
-                printf("Invalid key length! [%s] %zu\n", password, len);
-
-            if (wepmode != WEPMODE_NONE)
+            bool valid = (password_len == 13) || (password_len == 5);
+            if (valid)
                 break;
+
+            printf("Invalid key length! [%s] %zu\n", password, password_len);
         }
 
-        Wifi_ConnectAP(&AccessPoint, wepmode, 0, (u8 *)password);
+        Wifi_ConnectSecureAP(&AccessPoint, password, password_len);
     }
     else
     {
-        Wifi_ConnectAP(&AccessPoint, WEPMODE_NONE, 0, 0);
+        Wifi_ConnectSecureAP(&AccessPoint, NULL, 0);
     }
 
     printf("Selected network:\n");
