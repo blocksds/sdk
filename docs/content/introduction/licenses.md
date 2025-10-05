@@ -20,13 +20,28 @@ These libraries are present in the BlocksDS source tree.
 
 This is used in the default ARM7 binary.
 
-MIT license. You must include the following copyright notice with your program,
-as well as the MIT license terms:
+The library itself is under the MIT license. You must include the following
+copyright notice with your program, as well as the MIT license terms:
 
 ```
 Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org
 Copyright (c) 2006-2018 Dave Murphy (WinterMute)
 Copyright (C) 2025 Antonio Niño Díaz
+```
+
+It also includes code of libraries [lwIP](https://savannah.nongnu.org/projects/lwip/)
+and [Mbed TLS](https://github.com/Mbed-TLS/mbedtls). Mbed TLS is always
+included, lwIP can be included or not depending on your needs.
+
+Mbed TLS files are provided under a dual [Apache-2.0](https://spdx.org/licenses/Apache-2.0.html)
+OR [GPL-2.0-or-later](https://spdx.org/licenses/GPL-2.0-or-later.html) license.
+This means that users may choose which of these licenses they take the code
+under. Normally you will use the Apache-2.0 license, so you need to provide the
+Apache-2.0 license text, and you need to include the following copyright notice
+in your program:
+
+```
+Copyright The Mbed TLS Contributors
 ```
 
 On the ARM9 you can use a version of the library with and without lwIP (required
