@@ -18,6 +18,8 @@ GAME_SUBTITLE	:= DSWiFi
 # Libraries
 # ---------
 
+ARM7ELF		:= $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi_maxmod.elf
+
 ifeq ($(DEBUG),1)
     DEFINES := -DDSWIFI_LOGS
     ARM7ELF	:= $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi_debug.elf

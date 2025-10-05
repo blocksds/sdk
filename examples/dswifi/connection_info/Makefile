@@ -13,6 +13,8 @@ GAME_SUBTITLE	:= DSWiFi
 # Libraries
 # ---------
 
+ARM7ELF		:= $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi_maxmod.elf
+
 LIBS		:= -ldswifi9 -lnds9
 LIBDIRS		:= $(BLOCKSDS)/libs/dswifi \
 			   $(BLOCKSDS)/libs/libnds

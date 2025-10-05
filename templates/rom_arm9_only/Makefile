@@ -45,7 +45,9 @@ DEFINES		:= -DSAMPLE_DEFINE -DSAMPLE_DEFINE_WITH_VALUE=123
 # Libraries
 # ---------
 
-ARM7ELF		:= $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi_maxmod.elf
+# Remember to use an ARM7 core with dswifi if you use it on the ARM9
+#ARM7ELF		:= $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi_maxmod.elf
+ARM7ELF		:= $(BLOCKSDS)/sys/arm7/main_core/arm7_maxmod.elf
 
 LIBS		:= -lmm9 -lnds9
 LIBDIRS		:= $(BLOCKSDS)/libs/maxmod \
