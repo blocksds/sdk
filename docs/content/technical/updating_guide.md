@@ -10,6 +10,21 @@ to implement. These are documented here.
 Please refer to the changelog for a full list of changes, including additions
 and enhancements to the SDK which are not listed here.
 
+## Upgrading to BlocksDS 1.15.0
+
+* The default makefiles of ARM9-only projects have switched to an ARM7 core that
+  doesn't include DSWiFi because most projects don't need it, so it saves around
+  40 KB of space in the NDS ROM of every other project.
+
+  If you have copied the Makefile of the ARM9-only template to your own project,
+  this doesn't affect you. It only affects you if you include the default
+  makefile in your own makefile. In that case, you will need to add this line to
+  go back to the previous core:
+
+  ```
+  ARM7ELF := $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi_maxmod.elf
+  ```
+
 ## Upgrading to BlocksDS 1.14.2
 
 * ndstool now handles DSi title IDs and units codes differently. This shouldn't
