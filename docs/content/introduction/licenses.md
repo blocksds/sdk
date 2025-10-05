@@ -26,6 +26,7 @@ copyright notice with your program, as well as the MIT license terms:
 ```
 Copyright (C) 2005-2006 Stephen Stair - sgstair@akkit.org
 Copyright (c) 2006-2018 Dave Murphy (WinterMute)
+Copyright (c) 2021 Max Thomas (ShinyQuagsire)
 Copyright (C) 2025 Antonio Niño Díaz
 ```
 
