@@ -3,13 +3,65 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version DEV (2025-XX-XX)
+## Version 1.15.0 (2025-XX-XX)
 
 - libnds:
 
   - Fix reading console ID with `SCFG_ROM` registers disabled. @edo9300
   - Ensure crypto has been initialized when a NAND read/write command is
     received in the ARM7. @edo9300
+  - Support using `write()` to send text to the console with file descriptors
+    `STDOUT_FILENO` and `STDERR_FILENO`.
+  - Add some missing SCFG and NDMA register definitions.
+  - Add no$gba debug register definitions (also used in melonDS).
+  - Simplify no$gba message print on the ARM9 (melonDS doesn't support the
+    simplified system on the ARM7).
+
+- DSWiFi:
+
+  - Add new DSi mode driver with support for Open, WEP and WPA2 networks.
+    @Shinyquagsire23 is the original author of the driver. It has been
+    extracted from [dsiwifi](https://github.com/shinyquagsire23/dsiwifi) and
+    modified to integrate it with the previous DSWiFi code.
+  - This driver can be enabled by passing `WIFI_ATTEMPT_DSI_MODE` as one of the
+    flags to `Wifi_InitDefault()`. It's also possible to use `WIFI_DS_MODE_ONLY`
+    to force DS mode even on DSi consoles (this is the default setting).
+  - The new DSi driver doesn't support NiFi mode, it's only available in
+    backwards-compatible DS mode.
+  - The library now reads all Access Points configured in the WFC settings of
+    DSi consoles. It uses them even in backwards-compatible DS mode (but it
+    ignores access points that use WPA).
+  - `Wifi_ConnectAP()` has been deprecated, `Wifi_ConnectSecureAP()` supersedes
+    it. It's more convenient because it takes as input a key and key length
+    instead of a key and hardware definitions. Currently it doesn't support WPA2
+    Access Points.
+  - The code on the ARM7 side is now divided into two parts. One of them is for
+    DS mode, which is always loaded. The other one is for the DSi driver, which
+    is only loaded to RAM in DSi mode. Some code can be shared between both
+    modes, but not much.
+  - The code has been refactored a lot. The `WIFI_MODE`, `WIFI_AUTHLEVEL` and
+    `WIFI_CONNECT_STATE` state machines are now decoupled and they can't
+    directly change the state of other state machines, making it easier to
+    understand the execution flow.
+  - The internal IPC code of the library has been simplified. Several status
+    flags have been removed as they are no longer needed.
+  - `Wifi_FindMatchingAP()` has been simplified. It now only checks the BSSID
+    and SSID of the reference AP we're looking for.
+  - Some new fields related to the security of the AP have been added to struct
+    `Wifi_AccessPoint`. Also, field `rssi` is now signed instead of unsigned.
+  - Mbed TLS 3.4.6 has been added to the repository. This is required by the
+    WPA2 handshake code. The license has been added to the repository, and the
+    SDK documentation has been update to mention the new requirements.
+  - Flag `WFLAG_APDATA_ADHOC` no longer works as ad hoc mode support has been
+    removed (this is different from multiplayer mode, that's still supported).
+    Field `macaddr` has been removed from struct `Wifi_AccessPoint`.
+  - Unused define `WFLAG_APDATA_SHORTPREAMBLE` has been removed.
+  - The strings of `ASSOCSTATUS_STRINGS` have been modified to make them useful.
+  - The network interface (netif) used by lwIP is now set down when the WiFi
+    connection is lost and set up when the console connects to an access point.
+    This helps lwIP do some things better, like DHCP.
+  - Scan mode is now a bit faster in DS mode, the library stays for a shorter
+    period of time in each channel.
 
 - SDK:
 
@@ -23,8 +75,17 @@ weight: -20
     purposes (like verbose output).
   - The file `$BLOCKSDS/version.txt` will now contain the value of
     `VERSION_STRING` generated when building BlocksDS instead of the commit ID.
-  - There is now a new example that lets you display the photos stored in the
-    NAND of a DSi console.
+  - Update license information about DSWiFi.
+  - To reduce the size of NDS ROMs the default ARM9-only Makefile now uses the
+    default ARM7 core with maxmod but without DSWiFi. Programs that require
+    DSWiFi need to select the right core by adding this line to the Makefile:
+    `ARM7ELF := $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi_maxmod.elf`
+  - Examples:
+
+    - New example that lets you display the photos stored in the NAND of a DSi
+      console.
+    - The DSWiFi examples have been updated to use DSi mode.
+    - There's a new example to show how to use the new version check helpers.
 
 ## Version 1.14.2 (2025-09-17)
 

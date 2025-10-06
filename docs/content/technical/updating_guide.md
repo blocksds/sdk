@@ -24,6 +24,12 @@ and enhancements to the SDK which are not listed here.
   ```
   ARM7ELF := $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi_maxmod.elf
   ```
+* Field `rssi` of struct `Wifi_AccessPoint` is now signed instead of unsigned.
+* Flag `WFLAG_APDATA_ADHOC` no longer works as ad hoc mode support has been
+  removed (this is different from multiplayer mode, that's still supported).
+  Field `macaddr` of struct `Wifi_AccessPoint` has been removed.
+* Unused define `WFLAG_APDATA_SHORTPREAMBLE` has been removed.
+* The strings of `ASSOCSTATUS_STRINGS` have been modified to make them useful.
 
 ## Upgrading to BlocksDS 1.14.2
 
