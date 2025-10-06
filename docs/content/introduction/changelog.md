@@ -33,8 +33,8 @@ weight: -20
     ignores access points that use WPA).
   - `Wifi_ConnectAP()` has been deprecated, `Wifi_ConnectSecureAP()` supersedes
     it. It's more convenient because it takes as input a key and key length
-    instead of a key and hardware definitions. Currently it doesn't support WPA2
-    Access Points.
+    instead of a key and hardware definitions. It supports WPA, WEP and open
+    networks.
   - The code on the ARM7 side is now divided into two parts. One of them is for
     DS mode, which is always loaded. The other one is for the DSi driver, which
     is only loaded to RAM in DSi mode. Some code can be shared between both
@@ -84,7 +84,8 @@ weight: -20
 
     - New example that lets you display the photos stored in the NAND of a DSi
       console.
-    - The DSWiFi examples have been updated to use DSi mode.
+    - The DSWiFi examples have been updated to use DSi mode and connect to WPA2
+      networks whenever possible.
     - There's a new example to show how to use the new version check helpers.
 
 ## Version 1.14.2 (2025-09-17)
