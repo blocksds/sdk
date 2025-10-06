@@ -248,13 +248,12 @@ void access_point_selection_menu(void)
             printf("\n");
 
             if (i == chosen)
-                Wifi_GetAPData(chosen, &AccessPoint);
+                AccessPoint = ap;
         }
 
         if (keys & KEY_A)
         {
-            // WPA isn't supported
-            if (!(AccessPoint.flags & WFLAG_APDATA_WPA))
+            if (AccessPoint.flags & WFLAG_APDATA_COMPATIBLE)
                 break;
         }
     }
@@ -279,7 +278,7 @@ void connect_to_other_access_points(void)
     Wifi_SetIP(0, 0, 0, 0, 0);
 
     // If the access point requires a password, ask the user to provide it
-    if (AccessPoint.flags & WFLAG_APDATA_WEP)
+    if (AccessPoint.security_type != AP_SECURITY_OPEN)
     {
         consoleClear();
 
@@ -297,7 +296,12 @@ void connect_to_other_access_points(void)
             if (password[password_len - 1] == '\n')
                 password[password_len - 1] = '\0';
 
-            bool valid = (password_len == 13) || (password_len == 5);
+            bool valid = false;
+            if (AccessPoint.security_type == AP_SECURITY_WEP)
+                valid = (password_len == 13) || (password_len == 5);
+            else
+                valid = (password_len <= 64);
+
             if (valid)
                 break;
 
