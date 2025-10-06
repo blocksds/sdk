@@ -348,7 +348,9 @@ bool AccessPointSelectionMenu(void)
             if (ret <= 0)
                 name[0] = '\0';
 
-            // DSWifi host access points don't use any encryption
+            // In multiplayer client mode DSWiFi ignores all access points that
+            // don't offer any Nintendo information. Also, DSWiFi host access
+            // points don't use any encryption.
 
             if (ap.nintendo.allows_connections)
                 consoleSetColor(&bottomScreen, CONSOLE_DEFAULT);
@@ -365,17 +367,13 @@ bool AccessPointSelectionMenu(void)
             printf("\n");
 
             if (i == chosen)
-                Wifi_GetAPData(chosen, &AccessPoint);
+                AccessPoint = ap;
 
             consoleSetColor(&bottomScreen, CONSOLE_DEFAULT);
         }
 
-        // Currently, multiplayer networks are open
-        if (!(AccessPoint.flags & (WFLAG_APDATA_WPA | WFLAG_APDATA_WEP)))
-        {
-            if (keys & KEY_A)
-                return true;
-        }
+        if (keys & KEY_A)
+            return true;
     }
 
     consoleClear();
