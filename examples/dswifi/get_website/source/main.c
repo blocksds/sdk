@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
     printf("Connecting to WiFi using\n");
     printf("firmware settings...\n");
 
-    if (!Wifi_InitDefault(WFC_CONNECT))
+    if (!Wifi_InitDefault(WFC_CONNECT | WIFI_ATTEMPT_DSI_MODE))
     {
         printf("Can't connect to WiFi!\n");
     }

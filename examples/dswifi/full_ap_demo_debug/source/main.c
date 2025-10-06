@@ -351,7 +351,13 @@ int main(int argc, char *argv[])
 
     printf("Initializing WiFi...\n");
 
-    if (!Wifi_InitDefault(INIT_ONLY))
+    // If the ROM is loaded without holding L DSWiFi will try to boot in DSi
+    // mode. If the user holds L at boot it will force DS mode even on DSi.
+    scanKeys();
+    u32 flags = INIT_ONLY |
+                ((keysHeld() & KEY_L) ? WIFI_DS_MODE_ONLY : WIFI_ATTEMPT_DSI_MODE);
+
+    if (!Wifi_InitDefault(flags))
     {
         printf("Can't initialize WiFi!\n");
         goto end;
