@@ -67,8 +67,9 @@ to the homebrew program. Unfortunately, many old loaders don't support this
 protocol; first, make sure you're running on the newest firmware for your
 flashcart.
 
-A good way to avoid this problem altogether is to use the [NDS Homebrew Menu](https://github.com/devkitPro/nds-hb-menu/releases),
-which is capable of correctly launching modern homebrew.
+A good way to avoid this problem altogether is to use the
+[NDS Homebrew Menu](https://github.com/devkitPro/nds-hb-menu/releases), which is
+capable of correctly launching modern homebrew.
 
 Download the `.zip` archive and copy `BOOT.NDS` to your SD card/storage. You can
 rename this file to a name that you can remember. Once you have it on the cartridge,
@@ -117,21 +118,10 @@ because they help every current and future user of the library.
 
 ### How well is Wi-Fi supported?
 
-Wi-Fi support in BlocksDS is currently limited. It comes with `DSWiFi`, a
-library that provides Wi-Fi support. However, it only supports the Wi-Fi
-hardware of the Nintendo DS, not the one of the DSi. It can only run on a DSi in
-the backwards compatibility mode where it acts like a regular DS (so it doesn't
-support access points with WPA encryption).
-
-DSWifi supports connecting to an access point with your DS, even using the
-access points configured in the firmware of the DS. It also supports local
-multiplayer between multiple DS consoles without an access point.
-
-Adding support for the DSi features is an ongoing effort.
-
-Related issue:
-
-- https://github.com/blocksds/sdk/issues/61
+DSWiFi now supports all features of the DS and DSi hardware! It supports local
+multiplayer without a router, and it supports connecting to the Internet using
+open, WEP and WPA2 networks (WPA2 is only supported on DSi because of hardware
+limitations!).
 
 ### How well is the Teak DSP supported?
 

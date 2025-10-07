@@ -31,8 +31,8 @@ check the following links:
   - [Library documentation](./libxm7/index.html)
   - [Examples](https://github.com/blocksds/sdk/tree/master/examples/libxm7)
 
-- **DSWiFi**: Library to use the WiFi hardware of the NDS. It has no support for
-  the WiFi improvements of the DSi.
+- **DSWiFi**: Library to use the WiFi hardware of the NDS and DSi with support
+  for local multiplayer and Internet access.
 
   - [Library documentation](./dswifi/index.html)
   - [Examples](https://github.com/blocksds/sdk/tree/master/examples/dswifi)
