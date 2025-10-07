@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version 1.15.0 (2025-XX-XX)
+## Version 1.15.0 (2025-10-07)
 
 - libnds:
 
@@ -12,6 +12,11 @@ weight: -20
     received in the ARM7. @edo9300
   - Support using `write()` to send text to the console with file descriptors
     `STDOUT_FILENO` and `STDERR_FILENO`.
+  - Fix potential cache corruption caused by `DC_InvalidateRange()` in
+    `readFirmware()`. It has been replaced by `DC_FlushRange()`, and all calls
+    to `DC_InvalidateRange()` have been removed. For more details, check Cearn's
+    articles [here](https://www.coranac.com/2009/05/dma-vs-arm9-fight/) and
+    [here](https://www.coranac.com/2010/03/dma-vs-arm9-round-2).
   - Add some missing SCFG and NDMA register definitions.
   - Add no$gba debug register definitions (also used in melonDS).
   - Simplify no$gba message print on the ARM9 (melonDS doesn't support the
@@ -62,6 +67,8 @@ weight: -20
     This helps lwIP do some things better, like DHCP.
   - Scan mode is now a bit faster in DS mode, the library stays for a shorter
     period of time in each channel.
+  - A few definitions and structs have been added to the public headers, as well
+    as `freeaddrinfo()` and `getaddrinfo()`.
 
 - SDK:
 
