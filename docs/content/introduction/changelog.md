@@ -25,7 +25,7 @@ weight: -20
 - DSWiFi:
 
   - Add new DSi mode driver with support for Open, WEP and WPA2 networks.
-    @Shinyquagsire23 is the original author of the driver. It has been
+    @ShinyQuagsire23 is the original author of the driver. It has been
     extracted from [dsiwifi](https://github.com/shinyquagsire23/dsiwifi) and
     modified to integrate it with the previous DSWiFi code.
   - This driver can be enabled by passing `WIFI_ATTEMPT_DSI_MODE` as one of the
@@ -76,6 +76,9 @@ weight: -20
     for `dldipatch`) have been modified to use the value of `VERSION_STRING`
     provided by the user. If the string is not provided, it tries to generate a
     version string in 2 different ways. If that fails, it defaults to "DEV".
+  - Added a prototype Mbed TLS 3.6.4 package to the pacman repository. Note that
+    the entropy generation isn't correct, so don't use this for any application
+    that requires security for now!
   - All tools (except for `dldipatch`) now accept a `-V` flag. When the tools
     are run with `-V` they print the version string and exit right away. This
     flag has been selected because some tools were already using `-v` for other
@@ -90,7 +93,7 @@ weight: -20
   - Examples:
 
     - New example that lets you display the photos stored in the NAND of a DSi
-      console.
+      console. @edo9300
     - The DSWiFi examples have been updated to use DSi mode and connect to WPA2
       networks whenever possible.
     - There's a new example to show how to use the new version check helpers.
