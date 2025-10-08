@@ -237,8 +237,8 @@ static void getWebsiteSSL(const char *certs, const char *host, const char *path)
 
         if (ret == MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY)
         {
-            printf("The return value %d from mbedtls_ssl_read() means that the server\n"
-                   "closed the connection first. We're ok with that.\n",
+            printf("The return value %d from mbedtls_ssl_read() means that the server"
+                   " closed the connection first. We're ok with that.\n",
                    MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY);
             break;
         }
