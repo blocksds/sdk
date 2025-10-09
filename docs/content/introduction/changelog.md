@@ -3,6 +3,19 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version 1.15.1 (2025-10-09)
+
+- DSWiFi:
+
+  - In the ARM7, Mbed TLS has been moved to twl sections. This code is only
+    required to connect to WPA2 networks.
+  - Transfer of data between DSWiFi and lwIP in the ARM9 has been fixed. The way
+    `pbuf` structs were managed was incorrect, and caused frequent assertion
+    panic screens.
+  - Some missing defines have beena dded to public DSWiFI headers.
+  - Some settings have been changed in lwIP (for example, to increase the number
+    of available simultaneous sockets).
+
 ## Version 1.15.0 (2025-10-07)
 
 - libnds:
