@@ -152,6 +152,7 @@ void host_mode(void)
         printf("B:       Reject new clients\n");
         printf("A:       Allow new clients\n");
         printf("START:   Leave host mode\n");
+        printf("L:       Send CMD packet\n");
         printf("R:       Kick AID 1\n");
         printf("DOWN/UP: Send text to client 1\n");
         printf("\n");
