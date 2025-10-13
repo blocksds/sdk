@@ -14,7 +14,7 @@
 %(cpp) %(blocksds_cc1plus)
 
 *link:
-%(blocksds_link) -T %:getenv(BLOCKSDS /sys/crts/dsi_arm9.mem) -T %:getenv(BLOCKSDS /sys/crts/ds_arm9.ld) --gc-sections --no-warn-rwx-segments --use-blx
+%(blocksds_link) -T %:getenv(BLOCKSDS /sys/crts/dsi_arm9.mem) -T %:getenv(BLOCKSDS /sys/crts/ds_arm9.ld) --gc-sections --no-warn-rwx-segments --use-blx --defsym=__sync_synchronize=__sync_synchronize_none
 
 *startfile:
 %:getenv(BLOCKSDS /sys/crts/ds_arm9_crt0%O)

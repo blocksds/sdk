@@ -14,7 +14,7 @@
 %(cpp) %(blocksds_cc1plus)
 
 *link:
-%(blocksds_link) -T %:getenv(BLOCKSDS /sys/crts/ds_arm7_vram.ld) --gc-sections --no-warn-rwx-segments
+%(blocksds_link) -T %:getenv(BLOCKSDS /sys/crts/ds_arm7_vram.ld) --gc-sections --no-warn-rwx-segments --defsym=__sync_synchronize=__sync_synchronize_none
 
 *startfile:
 %:getenv(BLOCKSDS /sys/crts/ds_arm7_vram_crt0%O)

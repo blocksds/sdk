@@ -19,7 +19,7 @@
 -mcpu=arm7tdmi
 
 *link:
-%(blocksds_link) -T %:getenv(BLOCKSDS /sys/crts/dldi.ld) --gc-sections --no-warn-rwx-segments
+%(blocksds_link) -T %:getenv(BLOCKSDS /sys/crts/dldi.ld) --gc-sections --no-warn-rwx-segments --defsym=__sync_synchronize=__sync_synchronize_none
 
 *lib:
 %(libgcc)
