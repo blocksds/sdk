@@ -25,12 +25,20 @@ weight: -20
     Function `Wifi_RxRawReadPacketPointer()` has been implemented as an
     alternative. It returns an uncached pointer to the packet in RAM. Please,
     check the documentation for advice on how to use them.
+  - Improve random number generation. Previously, in DS mode, `W_RANDOM` was
+    used for WEP seeds, a bad handmade RNG was used for WPA2 handshakes, and
+    `rand()` was used in Mbed TLS instead of hardware entropy collection. A new
+    system has replaced all of them. It constantly collects randomness from
+    different events and updates a seed that is used to seed a xorshift32
+    generator.  It isn't super secure because there is no real source of
+    randomness on the DS, but it's better than the previous systems.
   - The `Wifi_TxHeader` and `Wifi_RxHeader` structs are now private. They are
     never required by user code, and there is no equivalent in DSi mode, so it's
     better to hide them.
 
 - SDK:
 
+  - Fix linker warning about the implementation of `__sync_synchronize`.
   - In a DSWiFi example some missing instructions have been added to the console
     output.
 
