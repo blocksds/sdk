@@ -10,6 +10,12 @@ to implement. These are documented here.
 Please refer to the changelog for a full list of changes, including additions
 and enhancements to the SDK which are not listed here.
 
+## Upgrading to BlocksDS 1.15.2
+
+* The DSWiFi structs `Wifi_TxHeader` and `Wifi_RxHeader` are now private. They
+  are never required by user code, and there is no equivalent in DSi mode, so
+  it's better to hide them.
+
 ## Upgrading to BlocksDS 1.15.0
 
 * The default makefiles of ARM9-only projects have switched to an ARM7 core that

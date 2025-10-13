@@ -3,6 +3,37 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version 1.15.2 (2025-10-XX)
+
+- libnds:
+
+  - Fix mounting filesystems in SD cards with multiple partitions. @edo9300
+
+- DSWiFi:
+
+  - A potential buffer overflow has been fixed in the DSi RX/TX queues.
+  - The DS RX/TX queues that transfer packets between the ARM9 and ARM7 have
+    been rewritten to behave like in DSi mode. Now packets are written to the
+    circular buffer one after the other, but they are never cut into two parts
+    when the end of the buffer is reached. This guarantees that packets are
+    always stored in one piece, which means that the ARM9 can avoid doing an
+    extra copy to concatenate both parts, making communications faster.
+  - In DS mode packets are now read from/written to MAC RAM using DMA for extra
+    speed and simplify the code.
+  - Now that packets are always stored in one piece, it isn't needed to use
+    `Wifi_RxRawReadPacketPointer()` to copy them to a user-allocated buffer.
+    Function `Wifi_RxRawReadPacketPointer()` has been implemented as an
+    alternative. It returns an uncached pointer to the packet in RAM. Please,
+    check the documentation for advice on how to use them.
+  - The `Wifi_TxHeader` and `Wifi_RxHeader` structs are now private. They are
+    never required by user code, and there is no equivalent in DSi mode, so it's
+    better to hide them.
+
+- SDK:
+
+  - In a DSWiFi example some missing instructions have been added to the console
+    output.
+
 ## Version 1.15.1 (2025-10-09)
 
 - DSWiFi:
