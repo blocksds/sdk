@@ -7,7 +7,8 @@ weight: -20
 
 - libnds:
 
-  - Fix mounting filesystems in SD cards with multiple partitions. @edo9300
+  - Fix mounting filesystems in SD cards with multiple partitions. This affected
+    DeSmuME, for example. @edo9300
 
 - DSWiFi:
 
