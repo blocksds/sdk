@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version 1.15.2 (2025-10-XX)
+## Version 1.15.2 (2025-10-14)
 
 - libnds:
 
@@ -38,9 +38,11 @@ weight: -20
 
 - SDK:
 
-  - Fix linker warning about the implementation of `__sync_synchronize`.
+  - Fix linker warning about the implementation of `__sync_synchronize`. Thanks
+    to @asiekierka for the workaround.
   - In a DSWiFi example some missing instructions have been added to the console
     output.
+  - The SSL DSWiFi example has been updated with more test websites.
 
 ## Version 1.15.1 (2025-10-09)
 
