@@ -327,31 +327,46 @@ int main(int argc, char *argv[])
 
     printf("Pick one option:\n");
     printf("\n");
-    printf("A: Use correct certificates\n");
-    printf("B: Use incorrect certificates\n");
+    printf("A: akkit.org\n");
+    printf("B: akkit.org (incorrect certs)\n");
+    printf("Y: wikipedia.org\n");
+    printf("X: example.com\n");
 
     while (1)
     {
         scanKeys();
         u16 keys_down = keysDown();
-        if (keys_down & KEY_A)
+
+        if (keys_down & (KEY_A | KEY_B | KEY_Y | KEY_X))
         {
             consoleClear();
             consoleSelect(&topScreen);
+        }
 
+        if (keys_down & KEY_A)
+        {
             getWebsiteSSL("/akkit-org-chain.pem",
                           "www.akkit.org", "/dswifi/example1.php");
             break;
         }
         if (keys_down & KEY_B)
         {
-            consoleClear();
-            consoleSelect(&topScreen);
-
             // The certificates used here are the ones required for
             // www.example.com, so they won't work for this website.
             getWebsiteSSL("/example-com-chain.pem",
                           "www.akkit.org", "/dswifi/example1.php");
+            break;
+        }
+        if (keys_down & KEY_Y)
+        {
+            getWebsiteSSL("/wikipedia-org-chain.pem",
+                          "www.wikipedia.org", "/");
+            break;
+        }
+        if (keys_down & KEY_X)
+        {
+            getWebsiteSSL("/example-com-chain.pem",
+                          "www.example.com", "/");
             break;
         }
     }
