@@ -521,23 +521,31 @@ connect:
                 break;
         }
 
+        // ASSOCSTATUS_ASSOCIATED is reached if we have an IPv4 or IPv6 address.
+        // DHCP for IPv4 is faster than DHCPv6, and this demo focuses on IPv6
+        // only, so we need to wait for an address to be assigned to us.
+        printf("Waiting for an IPv6 address...\n");
+
+        struct in6_addr ipv6;
+
+        while (1)
+        {
+            cothread_yield_irq(IRQ_VBLANK);
+            if (Wifi_GetIPv6(&ipv6))
+                break;
+        }
+
         consoleClear();
 
         // Get network information
 
         consoleSelect(&topScreen);
 
-        // TODO: Remove this delay
-        for (int i = 0; i < 300; i++)
-            cothread_yield_irq(IRQ_VBLANK);
-
-#if 0
-        // TODO: Print IPv6 information as well
         struct in_addr ip, gateway, mask, dns1, dns2;
         ip = Wifi_GetIPInfo(&gateway, &mask, &dns1, &dns2);
 
         printf("\n");
-        printf("Connection information:\n");
+        printf("IPv4 information:\n");
         printf("\n");
         printf("IP:      %s\n", inet_ntoa(ip));
         printf("Gateway: %s\n", inet_ntoa(gateway));
@@ -545,7 +553,10 @@ connect:
         printf("DNS1:    %s\n", inet_ntoa(dns1));
         printf("DNS2:    %s\n", inet_ntoa(dns2));
         printf("\n");
-#endif
+        printf("IPv6 information:\n");
+        printf("\n");
+        char buf[128];
+        printf("IP: %s\n", inet_ntop(AF_INET6, &ipv6, buf, sizeof(buf)));
 
         printf("\n");
         printf("Press A to fetch a website\n");
