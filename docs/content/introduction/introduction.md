@@ -123,17 +123,22 @@ This is an SDK to develop applications for Nintendo DS in C or C++.
 
 - It is possible to read and set the date and time of the RTC clock.
 
-- It is possible to connect to WiFi Access Points and perform DS to DS WiFi
-  communications with the DS WiFi library.
+- It is possible to connect to WiFi access points and access the Internet. IT's
+  also possible to communicate between multiple consoles in local multiplayer
+  mode without an external access point. WEP and open access points are
+  supported. IPv4 and IPv6 are supported.
 
 - **ndstool** supports creating NDS ROMs and define a ROM icon and banner text
   (in multiple languages!).
 
 ### 2.3 Supported DSi features
 
-- The SD slot of the DSi is supported.
+- The SD slot of the DSi is supported. The NAND memory is also supported.
 
 - The new DMA features, as well as the new WRAM memory banks, are supported.
+
+- DSi WiFi features are supported, which lets you connect to WPA2 access points,
+  not only WEP and open APs. IPv4 and IPv6 are supported.
 
 - **ndstool** supports animated icons from PNG, GIF, even animated GIF files.
 
@@ -143,6 +148,3 @@ This is an SDK to develop applications for Nintendo DS in C or C++.
 - There is preliminary support for the DSP of the DSi (the toolchain is very
   buggy, so be very careful when using it, it's probably not ready to be used by
   most developers!).
-
-- Unfortunately, none of the DSi WiFi features (such as WPA support) are
-  supported by DS WiFi yet.
