@@ -56,6 +56,10 @@ void FromHostPacketHandler(Wifi_MPPacketType type, int base, int len)
             Wifi_RxRawReadPacket(base, sizeof(packet), &packet);
             printf("%08X", (unsigned int)packet.count);
         }
+        else
+        {
+            printf("Bad size (%u != %u)\n", len, sizeof(packet));
+        }
     }
     else if (type == WIFI_MPTYPE_DATA)
     {
@@ -93,6 +97,10 @@ void FromClientPacketHandler(Wifi_MPPacketType type, int aid, int base, int len)
         {
             Wifi_RxRawReadPacket(base, sizeof(packet), &packet);
             printf("%08X", (unsigned int)packet.uncount);
+        }
+        else
+        {
+            printf("Bad size (%u != %u)\n", len, sizeof(packet));
         }
     }
     else if (type == WIFI_MPTYPE_DATA)
