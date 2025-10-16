@@ -97,6 +97,16 @@ You can remove the DSWiFi or Maxmod libraries if you aren't using them.
 The reason for this additional complexity with `LIBS` and `LIBDIRS` is to allow
 the user as much flexibility as possible when mixing and matching libraries.
 
+If your project doesn't use a custom ARM7 core you can select between the
+multiple cores provided by BlocksDS in `$BLOCKSDS/sys/arm7/maincore`. The
+default core includes Maxmod and libnds only, which is enough for most projects.
+If your program depends on DSWiFi you will need to use a core that includes
+DSWiFi. For example:
+
+```make
+ARM7ELF := $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi_maxmod.elf
+```
+
 ## 3. Filesystem libraries
 
 devkitARM and BlocksDS also heavily differ with regards to the structure of
