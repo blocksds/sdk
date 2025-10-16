@@ -3,6 +3,7 @@
 This folder contains examples of how to use the video capture feature of the
 main graphics engine.
 
+- `bloom`: Creates a bloom effect by manually processing captured video output.
 - `dual_screen_3d`: Uses video capture to render 3D graphics on both screens.
 - `png_screenshot`: How to capture the screen and save it as a PNG file.
 - `motion_blur`: Simulate motion blur by blending the last two 3D frames.
