@@ -4,4 +4,8 @@
 
 BLOCKSDS	?= /opt/blocksds/core
 
+# Use debug build of libnds
+
+LIBS		:= -lnds9d
+
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9arm7/Makefile.arm9
