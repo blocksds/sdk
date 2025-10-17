@@ -5,6 +5,7 @@ This folder contains examples of how to use DSWiFi.
 - `connection_info`: Connects to an AP from the firmware and prints information.
 - `get_website`: Connects to an AP from the firmware and downloads a website.
 - `get_website_ipv6_debug`: Download a website using IPv6 instead of IPv4.
+- `get_website_libcurl`: Use libcurl to download a website.
 - `get_website_ssl`: Download a website using SSL with the library Mbed TLS.
 - `full_ap_demo`: Shows how to do everything related to APs in an interactive way.
 - `full_ap_demo_debug`: How to show DSWifi debug messages with `full_ap_demo`.
