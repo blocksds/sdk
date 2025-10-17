@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: -20
 ---
 
-## Version DEV (2025-XX-XX)
+## Version 1.15.3 (2025-10-17)
 
 - DSWiFi:
 
@@ -28,6 +28,7 @@ weight: -20
   - Improve documentation of exception handler example.
   - Add a bloom example based on the original demo by Bluescrn.
   - Mention the multiple ARM7 cores in the migration guide.
+  - Support edge-triggered rumble cartridges in the Slot-2 example.
 
 ## Version 1.15.2 (2025-10-14)
 
