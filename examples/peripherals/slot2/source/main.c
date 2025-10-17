@@ -1,11 +1,48 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2023
+// SPDX-FileContributor: Antonio Niño Díaz, 2023-2025
 // SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 #include <nds.h>
 #include <stdbool.h>
 #include <stdio.h>
+
+static bool rumble_toggle = false;
+static uint8_t rumble_strength = 0;
+
+void rumble_toggler(void)
+{
+    if (rumble_toggle)
+        setRumble(rumble_strength);
+    else
+        setRumble(0);
+
+    rumble_toggle = !rumble_toggle;
+}
+
+void example_set_rumble(int strength)
+{
+    if (strength == 0)
+    {
+        timerStop(0);
+        setRumble(0);
+        return;
+    }
+
+    if (peripheralSlot2GetSupportMask() & SLOT2_PERIPHERAL_RUMBLE_EDGE)
+    {
+        // If we're using an edge-triggered rumble cartridge we need to switch
+        // between on and off at a high frequency to actually feel the
+        // vibration. This starts a timer that will cause an interrupt 100 times
+        // per second.
+        rumble_strength = strength;
+        timerStart(0, ClockDivider_256, timerFreqToTicks_256(100), rumble_toggler);
+    }
+    else
+    {
+        setRumble(strength);
+    }
+}
 
 int main(int argc, char **argv)
 {
@@ -67,7 +104,7 @@ int main(int argc, char **argv)
             if (keys_down & KEY_A)
             {
                 rumble = (rumble + 1) % (rumbleGetMaxRawStrength() + 1);
-                setRumble(rumble);
+                example_set_rumble(rumble);
             }
 
             // Go to the start of the line (it will stop at X=0)
