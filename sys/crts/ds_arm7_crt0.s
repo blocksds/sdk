@@ -113,6 +113,7 @@ NotTWL:
     // Prepare address, arguments and return address of main().
     mov     r0, #0              // int argc
     mov     r1, #0              // char *argv[]
+    mov     r2, #0              // char *envp[] (used in some weird programs)
     ldr     r3, =main
     ldr     lr, =__libnds_exit
 
