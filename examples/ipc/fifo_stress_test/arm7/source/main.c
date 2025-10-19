@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     // regularly. The interrupt simply adds one second every time, it doesn't
     // read the date. Reading the RTC is very slow, so it's a bad idea to do it
     // frequently.
-    initClockIRQTimer(3);
+    initClockIRQTimer(LIBNDS_DEFAULT_TIMER_RTC);
 
     // Now that the FIFO is setup we can start sending input data to the ARM9.
     irqSet(IRQ_VBLANK, vblank_handler);
