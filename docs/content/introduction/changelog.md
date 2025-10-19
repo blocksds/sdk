@@ -3,6 +3,23 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version 1.15.4 (2025-10-19)
+
+- libnds:
+
+  - `glTranslate3f32()` has been converted from a define to a `static inline`
+    function. The define could cause issues if someone was creating a C++
+    wrapper with the same name, for example.
+
+- DSWiFi:
+
+  - Don't crash on an `assert()` when sending fragmented lwIP packets.
+
+- SDK:
+
+  - Support unusual `main()` prototypes with 3 arguments instead of two. The
+    third argument is set to `NULL`.
+
 ## Version 1.15.3 (2025-10-17)
 
 - DSWiFi:
