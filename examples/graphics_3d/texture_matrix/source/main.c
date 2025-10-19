@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
         // Adjust the texture matrix to translate the texture coordinates
         glMatrixMode(GL_TEXTURE);
         glLoadIdentity();
-        glTranslate3f32(tx << 12, ty << 12, 0);
+        glTranslatef32(tx << 12, ty << 12, 0);
 
         // Use the modelview matrix while drawing
         glMatrixMode(GL_MODELVIEW);

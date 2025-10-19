@@ -321,7 +321,7 @@ int main(int argc, char *argv[])
                       0.0, 1.0, 0.0);   // Up
 
             // Move cube away from the camera
-            glTranslate3f32(0, 0, floattof32(-1));
+            glTranslatef32(0, 0, floattof32(-1));
 
             glRotateX(rx);
             glRotateY(ry);
@@ -374,7 +374,7 @@ int main(int argc, char *argv[])
                       0.0, 1.0, 0.0);   // Up
 
             // Move cube away from the camera
-            glTranslate3f32(0, 0, floattof32(-1));
+            glTranslatef32(0, 0, floattof32(-1));
 
             glRotateX(rotateX);
             glRotateY(rotateY);

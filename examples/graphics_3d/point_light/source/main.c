@@ -290,7 +290,7 @@ int main(int argc, char *argv[])
             setup_point_light(1, light[1].pos, teapot_pos[0],
                               light[1].attenuation, light[1].r, light[1].g, light[1].b);
 
-            glTranslate3f32(teapot_pos[0][0], teapot_pos[0][1], teapot_pos[0][2]);
+            glTranslatef32(teapot_pos[0][0], teapot_pos[0][1], teapot_pos[0][2]);
 
             glCallList(teapot_bin);
         }
@@ -303,7 +303,7 @@ int main(int argc, char *argv[])
             setup_point_light(1, light[1].pos, teapot_pos[1],
                               light[1].attenuation, light[1].r, light[1].g, light[1].b);
 
-            glTranslate3f32(teapot_pos[1][0], teapot_pos[1][1], teapot_pos[1][2]);
+            glTranslatef32(teapot_pos[1][0], teapot_pos[1][1], teapot_pos[1][2]);
 
             glCallList(teapot_bin);
         }

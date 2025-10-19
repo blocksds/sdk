@@ -218,7 +218,7 @@ int main(int argc, char *argv[])
         // Draw regular models
 
         glPushMatrix();
-            glTranslate3f32(x, y, z);
+            glTranslatef32(x, y, z);
             glRotateXi(rx << 6);
             glRotateYi(ry << 6);
             glRotateZi(rz << 6);

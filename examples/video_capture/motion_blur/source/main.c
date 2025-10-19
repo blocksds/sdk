@@ -170,7 +170,7 @@ void DrawScene(void)
     glPushMatrix();
     {
         // Move cube left and away from the camera
-        glTranslate3f32(floattof32(-0.5), 0, floattof32(-1));
+        glTranslatef32(floattof32(-0.5), 0, floattof32(-1));
 
         glRotateX(rx);
         glRotateY(ry);
@@ -184,7 +184,7 @@ void DrawScene(void)
     glPushMatrix();
     {
         // Move cube right and away from the camera
-        glTranslate3f32(floattof32(0.5), 0, floattof32(-1));
+        glTranslatef32(floattof32(0.5), 0, floattof32(-1));
 
         glRotateX(rotateX);
         glRotateY(rotateY);
