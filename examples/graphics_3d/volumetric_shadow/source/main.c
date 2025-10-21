@@ -9,7 +9,7 @@
 
 void DrawFloor(void)
 {
-    glNormal3f(0, -0.97, 0);
+    glNormal3f(0, 0.97, 0);
 
     glBegin(GL_QUAD);
 
@@ -30,7 +30,7 @@ void DrawFloor(void)
 
 void DrawLid(void)
 {
-    glNormal3f(0, -0.97, 0);
+    glNormal3f(0, 0.97, 0);
 
     glBegin(GL_QUAD);
 
