@@ -17,6 +17,9 @@ int main(int argc, char **argv)
     printf("L+R+START+SELECT: ARM7 exit\n");
     printf("A+B:              ARM9 exit\n");
     printf("\n");
+    printf("X: systemShutDown()\n");
+    printf("Y: systemReboot()\n");
+    printf("\n");
 
     printf("DLDI name:\n");
     printf("%s\n", io_dldi_data->friendlyName);
@@ -44,8 +47,15 @@ int main(int argc, char **argv)
         scanKeys();
 
         uint32_t keys = keysHeld();
+
         if ((keys & KEY_A) && (keys & KEY_B))
             break;
+
+        if (keys & KEY_X)
+            systemShutDown();
+
+        if (keys & KEY_Y)
+            systemReboot();
     }
 
     return 0;
