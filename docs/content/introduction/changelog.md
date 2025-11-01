@@ -3,6 +3,36 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version 1.15.5 (2025-11-01)
+
+- libnds:
+
+  - Split `systemShutDown()` to create `systemReboot()`.
+  - Clean power management definitions.
+  - Un-deprecate ` glTranslate3f32()` because it's used in several projects.
+  - Stop writing the NAND CID to arbitrary RAM addresses used by the official
+    SDK but not by BlocksDS. @edo9300
+  - Stop writing to `REG_VCOUNT` during initialization of the ROM. Thanks to
+    @TuxSH for finding the original bug.
+  - Add global timer definitions so that other libraries know which timer they
+    can use.
+  - Ensure that file descriptors passed to `truncate()` are valid FAT
+    descriptors.
+
+- DSWiFi:
+
+  - Drop lwIP packets if there isn't enough RAM to allocate a buffer for them
+    (instead of crashing in an `assert()`).
+  - Add a workaround to prevent IPC buffer overflows.
+
+- SDK:
+
+  - Use the new libnds timer defines in ARM7 templates and examples, as well as
+    in DSWiFI, Maxmod and LibXM7.
+  - Fixed the orientation of normals for planes in the volumetric shadow
+    example. @Mori-TM
+  - Improve exit-to-loader test.
+
 ## Version 1.15.4 (2025-10-19)
 
 - libnds:
