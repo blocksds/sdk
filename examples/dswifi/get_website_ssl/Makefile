@@ -8,8 +8,15 @@ BLOCKSDSEXT	?= /opt/blocksds/external
 # Only build this example if Mbed TLS is found
 MBEDTLS_FOUND	:= $(shell find $(BLOCKSDSEXT)/mbedtls -name libmbedtls.a 2> /dev/null)
 ifeq ($(strip $(MBEDTLS_FOUND)),)
+
+.PHONY: all clean
+
 all:
 	@echo "Error: Mbed TLS not found. Run: wf-pacman -Sy blocksds-mbedtls"
+
+clean:
+	@echo "  CLEAN"
+
 else
 
 # User config

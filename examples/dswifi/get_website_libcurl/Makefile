@@ -22,9 +22,14 @@ endif
 
 ifneq ($(strip $(PACKAGES_FOUND)),true)
 
+.PHONY: all clean
+
 all:
 	@echo "Error: Packages missing. Run this command:"
 	@echo "    wf-pacman -Sy toolchain-gcc-arm-none-eabi-zlib blocksds-mbedtls blocksds-libcurl"
+
+clean:
+	@echo "  CLEAN"
 
 else
 
