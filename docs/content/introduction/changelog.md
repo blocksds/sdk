@@ -3,6 +3,25 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version 1.15.6 (2025-11-12)
+
+- libnds:
+
+  - Fix `pianoIsInserted()` always returning `false`. @exelotl
+  - Fix sound playback helpers not starting or stopping sounds when requested.
+
+- DSWiFi:
+
+  - Fix race condition when writing packets to the IPC RX/TX circular buffers
+    that could cause a crash in the library.
+
+- SDL:
+
+  - Fix the timer index used for RTC on the ARM7 in the ARM9+ARM7 template.
+  - Fix `make clean` target in the examples that use Mbed TLS or libcurl. It
+    used to cause an error if the libraries weren't present in the system.
+  - The documentation about multithreading locks has been updated.
+
 ## Version 1.15.5 (2025-11-01)
 
 - libnds:
