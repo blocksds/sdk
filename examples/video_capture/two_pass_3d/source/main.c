@@ -5,7 +5,7 @@
 // Two-pass 3D example. This example uses the video capture hardware to increase
 // the number of polygons that can be drawn on one screen. It shows one way of
 // doing it. It draws the left and right halves of the screen in different
-// passes. It requires special perspective textures on both halves, but that's
+// passes. It requires special perspective matrices on both halves, but that's
 // the only unusual thing to take care of. Both halves have full Z-buffer
 // support, so it isn't needed to sort polygons before sending them to the GPU.
 //
