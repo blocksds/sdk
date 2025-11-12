@@ -87,14 +87,8 @@ handlers.
 Functions like `fopen()` or `malloc()` need to be thread-safe, and picolibc uses
 locks to ensure that they are thread-safe. The implementation of the locking
 funtrions is platform-specific, and libnds has its implementation in
-[this file](https://github.com/blocksds/libnds/blob/8e7ab8207dfb761cd9984719690ac0c318f2f1ca/source/common/libc/locks.c).
+[this file](https://github.com/blocksds/libnds/blob/25889452ac651d2e66dc652c5210cbc8b8199fc2/source/common/libc/locks.c).
 
-In general, you don't need to worry about them. However, if there is an
-unexpected crash because of running the undefined instruction `0xEBAD`, it may
-mean that the locking functions have found a logic error.
-
-Printing an error message is very expensive: it is required to include a text
-font as well as console handling functions. The locking functions simply have
-a [function](https://github.com/blocksds/libnds/blob/8e7ab8207dfb761cd9984719690ac0c318f2f1ca/source/common/libc/locks.c#L34)
-with an opcode that is defined to always be an undefined instruction in Thumb
-mode by the ARM Architecture Reference Manual.
+In general, you don't need to worry about them. However, it's possible for them
+to fail under very unusual situations and that will trigger a crash that shows
+an error message such as "Lock init".
