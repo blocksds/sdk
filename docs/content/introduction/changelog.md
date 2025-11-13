@@ -15,7 +15,7 @@ weight: -20
   - Fix race condition when writing packets to the IPC RX/TX circular buffers
     that could cause a crash in the library.
 
-- SDL:
+- SDK:
 
   - Fix the timer index used for RTC on the ARM7 in the ARM9+ARM7 template.
   - Fix `make clean` target in the examples that use Mbed TLS or libcurl. It
