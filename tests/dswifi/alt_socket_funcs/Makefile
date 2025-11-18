@@ -6,9 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= dswifi_full_ap_demo
-GAME_TITLE	:= Full AP demo
-GAME_SUBTITLE	:= DSWiFi
+NAME		:= tests_alt_socket_funcs
+GAME_TITLE	:= Alt. socket funcs
+GAME_SUBTITLE	:= Tests: DSWiFi
 
 # Libraries
 # ---------

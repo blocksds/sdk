@@ -2,6 +2,10 @@
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2024-2025
 
+// This example shows how to download a website using IPv4 using alternate
+// socket functions like recv() instead of read(), send() instead of write(),
+// and closesocket() instead of close().
+
 #include <netdb.h>
 #include <netinet/in.h>
 #include <stdio.h>
