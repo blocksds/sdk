@@ -7,12 +7,12 @@ BLOCKSDS	?= /opt/blocksds/core
 # User config
 
 ifeq ($(DEBUG),1)
-    NAME	:= dswifi_get_website_ipv6_debug
+    NAME	:= dswifi_get_website_debug
 else
-    NAME	:= dswifi_get_website_ipv6
+    NAME	:= dswifi_get_website
 endif
 
-GAME_TITLE	:= Get website IPv6
+GAME_TITLE	:= Get website
 GAME_SUBTITLE	:= DSWiFi
 
 # Libraries
