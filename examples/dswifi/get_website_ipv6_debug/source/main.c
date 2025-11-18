@@ -2,6 +2,9 @@
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2024-2025
 
+// This example shows how to download a website using only IPv4, only IPv6, or
+// using whatever is available.
+
 #include <netdb.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -18,8 +21,9 @@ static PrintConsole bottomScreen;
 static Wifi_AccessPoint AccessPoint;
 
 // This function sends an HTTP request to the specified URL and prints the
-// response from the server.
-void getHttp(const char *url, const char *path)
+// response from the server. The family can be AF_INET for IPv4 inly, AF_INET6
+// for IPv6 only, or AF_UNSPEC to allow both.
+void getHttp(const char *url, const char *path, int family)
 {
     consoleSelect(&topScreen);
 
@@ -28,7 +32,7 @@ void getHttp(const char *url, const char *path)
     struct addrinfo hint;
 
     hint.ai_flags = AI_CANONNAME;
-    hint.ai_family = AF_INET6;      // Ask for IPv6
+    hint.ai_family = family;
     hint.ai_socktype = SOCK_STREAM; // TCP
     hint.ai_protocol = 0;
     hint.ai_addrlen = 0;
@@ -64,6 +68,12 @@ void getHttp(const char *url, const char *path)
             addr = inet_ntop(AF_INET, &sinp->sin_addr, buf, sizeof(buf));
 
             printf("  %s:%d\n", addr, ntohs(sinp->sin_port));
+
+            if ((family == AF_INET) || (family == AF_UNSPEC))
+            {
+                found_rp = rp;
+                break;
+            }
         }
         else if (rp->ai_family == AF_INET6)
         {
@@ -74,20 +84,22 @@ void getHttp(const char *url, const char *path)
 
             printf("  [%s]:%d\n", addr, ntohs(sinp->sin_port));
 
-            found_rp = rp;
-
-            break;
+            if ((family == AF_INET6) || (family == AF_UNSPEC))
+            {
+                found_rp = rp;
+                break;
+            }
         }
     }
 
     if (found_rp == NULL)
     {
-        printf("Can't find IPv6 info!\n");
+        printf("Can't find IP info!\n");
         freeaddrinfo(result);
         return;
     }
 
-    printf("IPv6 info found!\n");
+    printf("IP info found!\n");
 
     int sfd = socket(found_rp->ai_family, found_rp->ai_socktype, found_rp->ai_protocol);
     if (sfd == -1)
@@ -528,11 +540,20 @@ connect:
 
         struct in6_addr ipv6;
 
+        unsigned int timeout = 60;
+
         while (1)
         {
             cothread_yield_irq(IRQ_VBLANK);
             if (Wifi_GetIPv6(&ipv6))
                 break;
+
+            timeout--;
+            if (timeout == 0)
+            {
+                printf("Can't get IPv6 address\n");
+                break;
+            }
         }
 
         consoleClear();
@@ -559,20 +580,42 @@ connect:
         printf("IP: %s\n", inet_ntop(AF_INET6, &ipv6, buf, sizeof(buf)));
 
         printf("\n");
-        printf("Press A to fetch a website\n");
+        printf("Press to fetch a website:\n");
+        printf("\n");
+        printf("  A: Using IPv4\n");
+        printf("  X: Using IPv6\n");
+        printf("  Y: Using IPv4 or IPv6\n");
+        printf("\n");
+
+        int family;
 
         while (1)
         {
             cothread_yield_irq(IRQ_VBLANK);
 
             scanKeys();
-            if (keysHeld() & KEY_A)
+            u16 keys = keysDown();
+
+            if (keys & KEY_A)
+            {
+                family = AF_INET;
                 break;
+            }
+            else if (keys & KEY_X)
+            {
+                family = AF_INET6;
+                break;
+            }
+            else if (keys & KEY_Y)
+            {
+                family = AF_UNSPEC;
+                break;
+            }
         }
 
         consoleSelect(&bottomScreen);
 
-        getHttp("www.example.com", "/");
+        getHttp("www.example.com", "/", family);
 
         consoleSelect(&topScreen);
 
