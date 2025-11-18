@@ -6,9 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= dswifi_get_website
-GAME_TITLE	:= Get website
-GAME_SUBTITLE	:= DSWiFi
+NAME		:= tests_dswifi_ipv4
+GAME_TITLE	:= Get Website IPv4
+GAME_SUBTITLE	:= Tests: DSWiFi
 
 # Libraries
 # ---------

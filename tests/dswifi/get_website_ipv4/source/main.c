@@ -2,6 +2,9 @@
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2024
 
+// This example downloads a website but it only supports IPv4. This shouldn't be
+// used in new programs, you should use getaddrinfo() instead of gethostbyname().
+
 #include <errno.h>
 #include <netdb.h>
 #include <netinet/in.h>
