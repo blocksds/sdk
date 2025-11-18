@@ -7,6 +7,9 @@
 // example provided by Mbed TLS:
 //
 // https://github.com/Mbed-TLS/mbedtls/blob/v3.6.4/programs/ssl/ssl_client1.c
+//
+// Internally mbedtls_net_connect() connects to either IPv4 or IPv6 addresses
+// depending on what it can resolve.
 
 #include <unistd.h>
 
