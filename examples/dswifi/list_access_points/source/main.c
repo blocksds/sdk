@@ -221,6 +221,10 @@ int main(int argc, char *argv[])
     printf("   %s\n", url);
     printf("\n");
 
+    // Note: Don't use gethostbyname() in new applications, use getaddrinfo()
+    // like in other examples. gethostbyname() is only used here because the
+    // code is shorter and this example doesn't focus on connecting to a remote
+    // server, only on connecting to an access point.
     struct hostent *host = gethostbyname(url);
 
     if (host)

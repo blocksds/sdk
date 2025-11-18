@@ -534,13 +534,15 @@ connect:
         }
 
         // ASSOCSTATUS_ASSOCIATED is reached if we have an IPv4 or IPv6 address.
-        // DHCP for IPv4 is faster than DHCPv6, and this demo focuses on IPv6
-        // only, so we need to wait for an address to be assigned to us.
+        // DHCP for IPv4 is faster than DHCPv6, and this demo focuses on
+        // selecting IPv6 or IPv4, so we need to wait for an address to be
+        // assigned to us. However, this may never happen if the network doesn't
+        // support IPv6, so we can't wait forever.
         printf("Waiting for an IPv6 address...\n");
 
         struct in6_addr ipv6;
 
-        unsigned int timeout = 60;
+        unsigned int timeout = 5 * 60; // 5 seconds
 
         while (1)
         {
