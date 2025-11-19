@@ -2,6 +2,10 @@
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2024-2025
 
+// This demo shows how to connect to access points configured in the firmware or
+// how to let the user select one and input the password to connect to it. Then,
+// it downloads a website using IPv4 or IPv6 depending on what's available.
+
 #include <netdb.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -15,9 +19,99 @@
 static Wifi_AccessPoint AccessPoint;
 
 // This function sends an HTTP request to the specified URL and prints the
-// response from the server.
+// response from the server. It tries to use IPv4 or IPv6.
 void getHttp(const char *url, const char *path)
 {
+    printf("Getting address info:\n");
+
+    struct addrinfo hint;
+
+    hint.ai_flags = AI_CANONNAME;
+    hint.ai_family = AF_UNSPEC;     // Allow IPv4 and IPv6
+    hint.ai_socktype = SOCK_STREAM; // TCP
+    hint.ai_protocol = 0;
+    hint.ai_addrlen = 0;
+    hint.ai_canonname = NULL;
+    hint.ai_addr = NULL;
+    hint.ai_next = NULL;
+
+    struct addrinfo *result, *rp;
+
+    int err = getaddrinfo(url, "80", &hint, &result);
+    if (err != 0)
+    {
+        printf("getaddrinfo(): %d\n", err);
+        return;
+    }
+
+    struct addrinfo *found_rp = NULL;
+
+    for (rp = result; rp != NULL; rp = rp->ai_next)
+    {
+        struct sockaddr_in *sinp;
+        const char *addr;
+        char buf[1024];
+
+        printf("- Canonical Name:\n  %s\n", rp->ai_canonname);
+        if (rp->ai_family == AF_INET)
+        {
+            // This should never happen because we have explicitly asked for
+            // IPv6 addresses, but let's keep it here for reference.
+            printf("- AF_INET\n");
+
+            sinp = (struct sockaddr_in *)rp->ai_addr;
+            addr = inet_ntop(AF_INET, &sinp->sin_addr, buf, sizeof(buf));
+
+            printf("  %s:%d\n", addr, ntohs(sinp->sin_port));
+
+            found_rp = rp;
+            break;
+        }
+        else if (rp->ai_family == AF_INET6)
+        {
+            printf("- AF_INET6\n");
+
+            sinp = (struct sockaddr_in *)rp->ai_addr;
+            addr = inet_ntop(AF_INET6, &sinp->sin_addr, buf, sizeof(buf));
+
+            printf("  [%s]:%d\n", addr, ntohs(sinp->sin_port));
+
+            found_rp = rp;
+            break;
+        }
+    }
+
+    if (found_rp == NULL)
+    {
+        printf("Can't find IP info!\n");
+        freeaddrinfo(result);
+        return;
+    }
+
+    printf("IP info found!\n");
+
+    int sfd = socket(found_rp->ai_family, found_rp->ai_socktype, found_rp->ai_protocol);
+    if (sfd == -1)
+    {
+        perror("socket");
+        freeaddrinfo(result);
+        return;
+    }
+
+    printf("Socket created!\n");
+
+    if (connect(sfd, found_rp->ai_addr, found_rp->ai_addrlen) == -1)
+    {
+        perror("connect");
+        close(sfd);
+        freeaddrinfo(result);
+        return;
+    }
+
+    freeaddrinfo(result);
+
+    printf("Connected to server!\n");
+
     static char request_text[1024];
 
     snprintf(request_text, sizeof(request_text),
@@ -26,48 +120,11 @@ void getHttp(const char *url, const char *path)
         "User-Agent: Nintendo DS\r\n\r\n",
         path, url);
 
-    // Get host information, including the IP address
-    struct hostent *myhost = gethostbyname(url);
-    if (myhost == NULL)
-    {
-        perror("gethostbyname()");
-        return;
-    }
-
-    unsigned long ip = *((unsigned long *)(myhost->h_addr_list[0]));
-
-    printf("IP Address: %ld.%ld.%ld.%ld\n", (ip >> 0) & 0xFF, (ip >> 8) & 0xFF,
-           (ip >> 16) & 0xFF, (ip >> 24) & 0xFF);
-
-    // Create a TCP socket
-    int my_socket = socket(AF_INET, SOCK_STREAM, 0);
-    if (my_socket == -1)
-    {
-        perror("socket()");
-        return;
-    }
-
-    printf("Created Socket!\n");
-
-    // Tell the socket to connect to the IP address we found, on port 80 (HTTP)
-    struct sockaddr_in sain;
-    sain.sin_family = AF_INET;
-    sain.sin_port = htons(80);
-    sain.sin_addr.s_addr = ip;
-    if (connect(my_socket, (struct sockaddr *)&sain, sizeof(sain)) == -1)
-    {
-        perror("connect()");
-        close(my_socket);
-        return;
-    }
-
-    printf("Connected to server!\n");
-
     // send our request
-    if (write(my_socket, request_text, strlen(request_text)) == -1)
+    if (write(sfd, request_text, strlen(request_text)) == -1)
     {
         perror("write()");
-        close(my_socket);
+        close(sfd);
         return;
     }
 
@@ -75,11 +132,11 @@ void getHttp(const char *url, const char *path)
 
     // Put the socket in non-blocking mode:
     int opt = 1;
-    int rc = ioctl(my_socket, FIONBIO, (char *)&opt);
+    int rc = ioctl(sfd, FIONBIO, (char *)&opt);
     if (rc < 0)
     {
         perror("ioctl()");
-        close(my_socket);
+        close(sfd);
         return;
     }
 
@@ -100,7 +157,7 @@ void getHttp(const char *url, const char *path)
 
     while (1)
     {
-        int recvd_len = read(my_socket, &(response_buffer[response_buffer_ptr]),
+        int recvd_len = read(sfd, &(response_buffer[response_buffer_ptr]),
                              chunk_size);
 
         if (recvd_len > 0)
@@ -170,13 +227,13 @@ void getHttp(const char *url, const char *path)
     }
 
     // It's good practice to shutdown the socket.
-    if (shutdown(my_socket, 0) != 0)
+    if (shutdown(sfd, 0) != 0)
     {
         perror("shutdown()");
     }
 
     // Remove the socket.
-    if (close(my_socket) != 0)
+    if (close(sfd) != 0)
     {
         perror("close()");
     }
@@ -470,6 +527,34 @@ connect:
 
         // Get network information
 
+        // ASSOCSTATUS_ASSOCIATED is reached if we have an IPv4 or IPv6 address.
+        // DHCP for IPv4 is faster than DHCPv6, and this demo focuses on
+        // selecting IPv6 or IPv4, so we need to wait for an address to be
+        // assigned to us. However, this may never happen if the network doesn't
+        // support IPv6, so we can't wait forever.
+        //
+        // You can remove this wait loop if you want. This is only here so that
+        // the example can use IPv6 easier.
+        printf("Waiting for an IPv6 address...\n");
+
+        struct in6_addr ipv6;
+
+        unsigned int timeout = 5 * 60; // 5 seconds
+
+        while (1)
+        {
+            cothread_yield_irq(IRQ_VBLANK);
+            if (Wifi_GetIPv6(&ipv6))
+                break;
+
+            timeout--;
+            if (timeout == 0)
+            {
+                printf("Can't get IPv6 address\n");
+                break;
+            }
+        }
+
         consoleSelect(&topScreen);
 
         struct in_addr ip, gateway, mask, dns1, dns2;
@@ -484,21 +569,8 @@ connect:
         printf("DNS1:    %s\n", inet_ntoa(dns1));
         printf("DNS2:    %s\n", inet_ntoa(dns2));
         printf("\n");
-
-        const char *url = "www.wikipedia.com";
-
-        printf("Resolving IP of:\n");
-        printf("\n");
-        printf("   %s\n", url);
-        printf("\n");
-
-        struct hostent *host = gethostbyname(url);
-
-        if (host)
-            printf("IP: %s\n", inet_ntoa(*(struct in_addr *)host->h_addr_list[0]));
-        else
-            printf("Could not get IP\n");
-
+        char buf[128];
+        printf("IP: %s\n", inet_ntop(AF_INET6, &ipv6, buf, sizeof(buf)));
         printf("\n");
         printf("Press A to fetch a website\n");
 
