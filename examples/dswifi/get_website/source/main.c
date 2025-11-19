@@ -543,7 +543,7 @@ connect:
         // the example can use IPv6 easier.
         printf("Waiting for an IPv6 address...\n");
 
-        struct in6_addr ipv6;
+        struct in6_addr ipv6 = { 0 };
 
         unsigned int timeout = 5 * 60; // 5 seconds
 
@@ -567,7 +567,8 @@ connect:
 
         consoleSelect(&topScreen);
 
-        struct in_addr ip, gateway, mask, dns1, dns2;
+        struct in_addr ip = { 0 }, gateway = { 0 }, mask = { 0 };
+        struct in_addr dns1 = { 0 }, dns2 = { 0 };
         ip = Wifi_GetIPInfo(&gateway, &mask, &dns1, &dns2);
 
         printf("\n");

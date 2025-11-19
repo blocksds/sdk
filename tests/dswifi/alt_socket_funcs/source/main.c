@@ -467,7 +467,8 @@ connect:
 
         consoleSelect(&topScreen);
 
-        struct in_addr ip, gateway, mask, dns1, dns2;
+        struct in_addr ip = { 0 }, gateway = { 0 }, mask = { 0 };
+        struct in_addr dns1 = { 0 }, dns2 = { 0 };
         ip = Wifi_GetIPInfo(&gateway, &mask, &dns1, &dns2);
 
         printf("\n");
