@@ -538,6 +538,9 @@ connect:
         // selecting IPv6 or IPv4, so we need to wait for an address to be
         // assigned to us. However, this may never happen if the network doesn't
         // support IPv6, so we can't wait forever.
+        //
+        // You can remove this wait loop if you want. This is only here so that
+        // the example can use IPv6 easier.
         printf("Waiting for an IPv6 address...\n");
 
         struct in6_addr ipv6;
