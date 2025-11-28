@@ -173,17 +173,18 @@ as explained before. To open files from this slot, use `"sd:/"` instead of
 The driver to use the internal NAND partitions is also included in libnds.
 `fatInitDefault()` tries to initialize access to NAND, but it isn't a reliable
 way to know if it has been initialized or not (it will return success even if
-NAND hasn't been initialized).
+NAND hasn't been initialized). Also, it only initializes NAND in read-only mode
+(so that applications stored in NAND can use NitroFS).
+
+It's a good idea to initialize NAND as read-only unless you really really need
+to write to it. Users will definitely dislike it if you use NAND to store data
+casually. The DSi has a SD slot, use that instead. `nandInit(true)` initializes
+it in read-only mode, `nandInit(false)` initializes it in read/write mode.
 
 Note that there are two partitions supported by libnds. `"nand:/"` is the main
 NAND partition, and `"nand2:/"` is the partition used to store photos by the
 system camera application.
 
-Important: It's a good idea to initialize NAND as read-only unless you really
-really need to write to it. Users will definitely dislike it if you use NAND to
-store data casually. The DSi has a SD slot, use that instead. `nandInit(true)`
-initializes it in read-only mode, `nandInit(false)` initializes it in read/write
-mode.
 
 ```c
 #include <fat.h>
