@@ -5,12 +5,62 @@ weight: 10
 
 ## 1. Introduction
 
-BlocksDS supports using standard C functions to access the filesystem. It is
-possible to use them to access both the SD cards of flashcarts, and the internal
-SD slot of the DSi. This code is integrated in `libnds`, so you don't need to
-do anything special to use it.
+BlocksDS supports using standard C functions to access different filesystems of
+the DS:
 
-Add the following to your project:
+- SD card of Slot-1 or Slot-2 flashcarts (using DLDI drivers).
+- Embedded files in the NDS ROM (NitroFS).
+
+Additionally, in DSi consoles:
+
+- Integrated SD slot.
+- Internal NAND memory.
+
+If you want to know how to initialize and access each filesystem, keep reading.
+
+The developer needs to initialize the filesystems before using them, but then
+they can be accessed using standard C functions.
+
+You may use functions such as `fopen()`, `fread()`, `fwrite()`, `fseek()`,
+`fclose()`, `stat()`, `rename()`, `truncate()`, `mkdir()`, `unlink()`,
+`access()`, `chdir()`, `getcwd()`. Function `fstat()` works, but a limitation:
+it doesn't have access to the modification date of the file. `stat()` has access
+to that date.
+
+You can also use `open()`, `read()`, `write()`, `lseek()` and `close()`, but
+they aren't used as frequently as the ones mentioned before.
+
+The `dirent.h` functions to read the contents of directories are available:
+`opendir()`, `closedir()`, `readdir()`, `rewinddir()`, `seekdir()`, `telldir()`.
+
+It's easy to find information online about how to use all of them. There are
+[examples](https://github.com/blocksds/sdk/tree/master/examples/filesystem/) of
+using filesystem functions in the main repository of BlocksDS, you can also use
+them as reference.
+
+If any specific function isn't supported, raise an issue to request it.
+
+## 2. Slot-1 and Slot-2 flashcarts
+
+Slot-1 and Slot-2 flashcarts usually contain a SD or microSD card where the user
+stores files. If the flashcart has a [DLDI driver](https://www.chishm.com/DLDI/)
+it's possible to access it from homebrew applications. You can use it to read
+additional data for your program or to write saved data, for example.
+
+Most flashcarts autopatch NDS ROMs with the right DLDI driver, but some (the
+very old ones) don't do it automatically, and they force the user to do it
+manually. BlocksDS comes with `dldipatch`, which you can use to patch your ROMs.
+Check [this archive](https://github.com/DS-Homebrew/DLDI) and look for your
+flashcart, then use `dldipatch` like this:
+
+```sh
+$BLOCKSDS/tools/dldipatch/dldipatch patch dldi_driver.dldi rom.nds
+```
+
+Note: `dlditool` is still included for backwards-compatibility with older
+Makefiles and scripts, but its use is discouraged.
+
+Once the ROM is patched, you can initialize the filesystem and use it like this:
 
 ```c
 #include <fat.h>
@@ -24,33 +74,61 @@ int main(int argc, char *argv[])
     }
 
     // Rest of the code
+
+    FILE *f = fopen("fat:/myfile.txt", "rb");
+
+    // ...
 }
 ```
 
-This function whether it's running on a regular DS or a DSi.
+## 3. NitroFS
 
-- DS: It will try to use DLDI to initialize access to the SD card of the
-  flashcart. If it isn't possible it returns false. If it succeedes, it returns
-  true.
+In most cases it isn't practical to distribute a NDS ROM with a bunch of
+additional files that users have to copy to their flashcart. NitroFS is a
+filesystem that is appended to the end of the NDS ROM file. The files aren't
+loaded to RAM when the application is loaded, they are simply appended there so
+that all the data used by the application is self-contained.
 
-- DSi: It will try to initialize access to the internal SD slot, and the SD of
-  the flashcart. It will only return false if the internal slot of the DSi can't
-  be accessed, and it will return true if it can.
+The main problem of NitroFS is finding the NDS ROM so that it can read its
+contents. This has to be done in very different ways depending on where it runs:
 
-The initial working directory is "fat:/" on the DS (DLDI), and "sd:/" on DSi.
-On the DSi it is possible to switch between both filesystems with `chdir()`.
+- Emulators: They support official Nintendo cartridge read commands. NitroFS can
+  use the same commands to easily access the files the same way as any official
+  game.
 
-It is also possible to embed a filesystem in the NDS ROM with NitroFS. This is
-a good way to keep all the assets and code of your game as one single file. You
-can access files in this filesystem by using the drive name `nitro:/` in
-any path provided to the C library functions.
+- SD cards and NAND: If the application is in a filesystem it can't be read with
+  official cartridge commands. The application needs to know where the file is
+  located to open it and read from it. Applications written in C can use the
+  value of `argv[0]` provided to the `main()` function, and that's what NitroFS
+  uses internally. However, many loaders of ROMs don't provide this value. You
+  will need to use a more modern loader that supports the homebrew `argv`
+  protocol, like [NDS Homebrew Menu](https://github.com/devkitPro/nds-hb-menu/releases).
+  You can boot this menu from the loader of your flashcard and then load the
+  homebrew application from there.
+
+- Unlaunch: If you load your application with Unlaunch it won't use the homebrew
+  `argv` protocol, but it uses a different system used by official DSi
+  applications. It's equivalent, but it limits the length of the path to 64
+  characters. If your application is inside folders with long names this will be
+  an issue.
+
+Important note: This filesystem is read only!
+
+To use this filesystem you need to add some files to it. Open your `Makefile`
+and look for `NITROFSDIR`. You can add a list of directories (separated by
+spaces) that will be added to the filesystem. The contents of all directories
+will be merged into a single filesystem.
+
+Then, in your code, do this:
 
 ```c
 #include <filesystem.h>
 
 int main(int argc, char *argv[])
 {
-    // Call fatInitDefault() here if you want.
+    // Call fatInitDefault() here if you want to also access the SD card. It
+    // isn't required if the only thing you want to use is NitroFS.
+    // nitroFSInit() calls fatInitDefault() internally if it's required.
 
     bool init_ok = nitroFSInit(NULL);
     if (!init_ok)
@@ -61,42 +139,146 @@ int main(int argc, char *argv[])
         // loader.
     }
 
+    FILE *f = fopen("nitro:/myfile.txt", "rb");
+
     // Rest of the code
+
+    // ...
 }
 ```
+
+Important note: An empty NitroFS filesystem will cause `nitroFSInit()` to fail.
 
 Check [this example](https://github.com/blocksds/sdk/tree/master/examples/filesystem/nitrofs)
 to see how to use `NitroFS`.
 
-## 2. Supported functions
+## 4. DSi SD card slot
 
-You may use functions such as `fopen`, `fread`, `fwrite`, `fseek`,
-`fclose`, `stat`, `rename`, `truncate`, `mkdir`, `unlink`,
-`access`, `chdir`, `getcwd`. `fstat` works, but a limitation: it doesn't
-have access to the modification date of the file, while `stat` does.
+The driver to use the SD card slot of the DSi is integrated in libnds, so you
+don't need to do any special patching to use it. Simply call `fatInitDefault()`
+as explained before. To open files from this slot, use `"sd:/"` instead of
+`"fat:/"` when opening files.
 
-You can also use `open`, `read`, `write`, `lseek` and `close`, but
-this isn't as common.
+## 5. Internal DSi NAND
 
-The `dirent.h` functions to read the contents of directories are available:
-`opendir`, `closedir`, `readdir`, `rewinddir`, `seekdir`, `telldir`.
+The driver to use the internal NAND partitions is also included in libnds.
+`fatInitDefault()` tries to initialize access to NAND, but it isn't a reliable
+way to know if it has been initialized or not (it will return success even if
+NAND hasn't been initialized).
 
-It's easy to find information online about how to use all of them. If any
-specific function isn't supported, raise an issue to request it.
+Note that there are two partitions supported by libnds. `"nand:/"` is the main
+NAND partition, and `"nand2:/"` is the partition used to store photos by the
+system camera application.
 
-## 3. Running on hardware
+Important: It's a good idea to initialize NAND as read-only unless you really
+really need to write to it. Users will definitely dislike it if you use NAND to
+store data casually. The DSi has a SD slot, use that instead. `nandInit(true)`
+initializes it in read-only mode, `nandInit(false)` initializes it in read/write
+mode.
 
-If your flashcart doesn't do it automatically, patch your ROM with the DLDI
-patcher. Most flashcarts do this automatically.
+```c
+#include <fat.h>
 
-## 4. Running on emulators
+int main(int argc, char *argv[])
+{
+    bool init_ok = nandInit(true); // true = read-only, false = read/write
+    if (!init_ok)
+    {
+        // Handle error.
+    }
+
+    // Open file from the main NAND partition
+    FILE *f1 = fopen("nand:/myfile.txt", "rb");
+
+    // Open file from the partition used to store photos
+    FILE *f2 = fopen("nand2:/myfile.txt", "rb");
+
+    // Rest of the code
+
+    // ...
+}
+```
+
+## 6. Using multiple filesystems at the same time
+
+You can use all filesystems at once after initializing it. All you need to do is
+use the right prefix. For reference:
+
+- `"fat:/"`: Slot-1 or Slot-2 flashcart.
+- `"nitro:/"`: NitroFS.
+- `"sd:/"`: SD slot of the DSi.
+- `"nand:/"`: Main NAND partition of the DSi.
+- `"nand2:/"`: NAND partition used to store photos.
+
+You can use absolute paths like `sd:/folder/file.txt` or you can use `chdir()`
+to switch to the main filesystem you want to use and then use relative paths.
+The default filesystem depends on the console type and how many filesystems you
+have initialized.
+
+`fatInitDefault()` sets the default filesystem to `"fat:/"` in DS. In DSi it sets
+it to `"sd:/"` unless the ROM has been loaded from a Slot-1 cartridge and
+`argv[0]` is a path inside `"fat:/"`.
+
+This is annoying to keep track of, so you can use two helpers of libnds:
+
+- `fatGetDefaultDrive()` returns a `const char *` that will contain `"fat:/` in
+  a DS and `"sd:/"` in a DSi. This pointer must not be passed to `free()`.
+
+- `fatGetDefaultCwd()` returns a `char *` that contains the path to the folder
+  that contains the NDS ROM (excluding the name of the ROM). If your ROM is
+  located in `sd:/folder/file.nds` it will return `sd:/folder/`. If `argv[0]`
+  isn't provided it will return the same value as `fatGetDefaultDrive()`.
+
+  Important: Remember to call `free()` to free the memory used by this string
+  after you have used it.
+
+For example, if most of what you do is use NitroFS, but you sometimes write
+saved data to the same folder that contains your ROM, you can do:
+
+```
+int main(int argc, char *argv[])
+{
+    bool init_ok = fatInitDefault();
+    if (!init_ok)
+    {
+        // Handle error and hang
+    }
+
+    init_ok = nitroFSInit();
+    if (!init_ok)
+    {
+        // Handle error and hang
+    }
+
+    // Set NitroFS as the default filesystem
+    chdir("nitro:/");
+
+    FILE *f = fopen("background/data.bin", "rb");
+
+    // Load game data
+
+    // ...
+
+    // When you want to save data
+
+    char *cwd = fatGetDefaultCwd();
+    char path[512];
+    snprintf(path, sizeof(path), "%s/savedata.bin", cwd);
+    FILE *fout = fopen(path, "wb");
+    free(cwd);
+
+    // Now you can write data to fout
+}
+```
+
+## 7. Running on emulators
 
 Filesystem access works in several emulators. The following ones have been
 tested:
 
-- melonDS: The ROM runs in DS/DSi mode.
-- no$gba: The ROM runs in DSi mode. A FAT image needs to be used.
-- DeSmuMe: The ROM needs to be DLDI patched, it only runs in DS mode.
+- melonDS: Slot-1 is emulated (it autopatches DLDI), DSi SD card is emulated.
+- no$gba: DSi SD card is emulated.
+- DeSmuMe: Slot-1 is emulated (the user must patch it).
 
 ### melonDS
 
@@ -108,6 +290,9 @@ for DS.
 Open "Emu settings". The "DSi mode" and "DLDI" tabs let you select the folders
 to use as root of the filesystems (or the filesystem images to be used, if you
 prefer that).
+
+You don't need to patch the ROM with any special DLDI to use the Slot-1
+emulation, melonDS does it automatically when you load the ROM.
 
 ### no$gba
 
