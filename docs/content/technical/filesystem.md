@@ -152,6 +152,15 @@ Important note: An empty NitroFS filesystem will cause `nitroFSInit()` to fail.
 Check [this example](https://github.com/blocksds/sdk/tree/master/examples/filesystem/nitrofs)
 to see how to use `NitroFS`.
 
+**Note for Slot-2 flashcarts**
+
+If you're using NitroFS in a Slot-2 flashcart that doesn't support DLDI, it will
+still work. The flashcart will load the full NDS ROM to its RAM, and libnds will
+read data from the Slot-2 memory region. However, this memory area has a size of
+32 MB. If your NDS ROM is bigger than 32 MB it won't be able to access all data.
+This can cause unexpected errors if it isn't detected, so `nitroFSInit()` will
+simply return an error if the ROM is bigger.
+
 ## 4. DSi SD card slot
 
 The driver to use the SD card slot of the DSi is integrated in libnds, so you
