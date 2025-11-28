@@ -77,10 +77,14 @@ _start:
     mov     r9, r11, lsl #8
     str     r9, [r12, #0x180] // Send SCFG_A9ROM to the ARM7
 
-    mov     r9, #0
-    bl      IPCSync // Wait until ARM7 sends 0x0 to know it has entered main()
-
-    str     r9, [r12, #0x180] // Set sent value back to 0x0
+    // Wait until ARM7 sends 0x7 to know it is ready to enter main()
+    mov     r9, #0x7
+    bl      IPCSync
+    // Send 0x7 to the ARM7 allow it to enter main(). 0x7 is never a valid value
+    // of doing (SCFG_A9ROM & 3), so we can always tell if the value in the
+    // IPC_SYNC register has changed.
+    mov     r9, #(0x7 << 8)
+    str     r9, [r12, #0x180]
 
     // Copy ITCM from LMA to VMA
     ldr     r1, =__itcm_lma

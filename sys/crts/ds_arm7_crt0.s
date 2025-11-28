@@ -110,6 +110,15 @@ NotTWL:
     ldr     r3, =check_device_list
     bl      _blx_r3_stub
 
+    // Send 0x7 to the ARM9 to tell it that we are ready to enter main().
+    mov     r12, #0x4000000
+    mov     r9, #(0x7 << 8)
+    str     r9, [r12, #0x180]
+    // Wait until the ARM9 has read our message and it sends 0x7 to allow us
+    // to enter main().
+    mov     r9, #0x7
+    bl      IPCSync
+
     // Prepare address, arguments and return address of main().
     mov     r0, #0              // int argc
     mov     r1, #0              // char *argv[]
@@ -117,12 +126,7 @@ NotTWL:
     ldr     r3, =main
     ldr     lr, =__libnds_exit
 
-    // Send 0x0 to the ARM9 to tell it that we are ready
-    mov     r12, #0x4000000
-    mov     r9, #0
-    str     r9, [r12, #0x180]
-
-    // Fall through to call main()
+    // Fall through to _blx_r3_stub to call main()
 
 _blx_r3_stub:
     bx      r3
