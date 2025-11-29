@@ -99,6 +99,14 @@ directories here: [`examples/filesystem/nitrofs`](https://github.com/blocksds/sd
 
 This chapter focuses on how to read files, how to list contents in a directory,
 and how NitroFS actually works and some common problems you may have with it.
+There will be a future chapter about how to read and write data from the SD
+card for other things (like saving game data!).
+
+As a final note, it's possible to start the NitroFS driver with an arbitrary NDS
+file if you pass the path during initialization. For example,
+`nitroFSInit("path/to/file.nds")` will make all NitroFS accesses use that file
+instead of the current ROM. You can't open two files at once with the NitroFS
+driver.
 
 ## 2. Reading files
 
@@ -110,8 +118,8 @@ There are plenty of tutorials online to learn how to use them, so this tutorial
 won't get into much detail about them.
 
 The main thing to remember is that the drive name of NitroFS is "nitro:". For
-example, the full path to a file called "test.bin" in the root of the filesystem
-is "nitro:/test.bin".
+example, the full path to a file called `"test.bin"` in the root of the
+filesystem is `"nitro:/test.bin"`.
 
 Important reminder: NitroFS is a read-only filesystem: you can't write to it. If
 you try to open a file in write mode it will fail to be opened.
@@ -229,9 +237,9 @@ chdir("nitro:/myfolder");
 fopen("test.bin", "rb");
 ```
 
-One final comment is that normally you don't need to use the "nitro:" drive name
-every time you open a file. If you haven't used `chdir()` the following three
-functions are equivalent:
+One final comment is that normally you don't need to use the `"nitro:"` drive
+name every time you open a file. If you haven't used `chdir()` the following
+three functions are equivalent:
 
 ```c
 fopen("nitro:/myfolder/test.bin", "rb");
@@ -346,7 +354,9 @@ NitroFS requires two things:
 
 - Your NDS ROM needs to be DLDI patched with the driver of your flashcard. DLDI
   is a system that lets loaders patch homebrew games with the right driver to
-  read and write from the SD card of your flashcard.
+  read and write from the SD card of your flashcard. However, DLDI isn't
+  required in DSi mode if the application runs from the internal SD slot or
+  NAND, as those drivers are included in libnds by default.
 
 - Your loader needs to provide `argv[0]` to the program. This is the location of
   the ROM inside the SD card, which is used by NitroFS to open the ROM and start
