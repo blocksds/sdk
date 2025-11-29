@@ -63,7 +63,8 @@ void access_point_selection_menu(void)
             Wifi_AccessPoint ap;
             Wifi_GetAPData(i, &ap);
 
-            printf("%s [%.24s]\n", i == chosen ? "->" : "  ", ap.ssid);
+            printf("%s [%.20s]%s\n", i == chosen ? "->" : "  ", ap.ssid,
+                   (ap.flags & WFLAG_APDATA_CONFIG_IN_WFC) ? " WFC" : "");
             printf("   %-4s | Ch %2d | RSSI %d\n",
                    Wifi_ApSecurityTypeString(ap.security_type), ap.channel,
                    ap.rssi);
@@ -79,6 +80,104 @@ void access_point_selection_menu(void)
                 break;
         }
     }
+}
+
+void connect_to_other_access_points(void)
+{
+    // Search for all available access points
+    access_point_selection_menu();
+
+    // Setting everything to 0 will make DHCP determine the IP address
+    Wifi_SetIP(0, 0, 0, 0, 0);
+
+    bool wfc_settings_used = false;
+
+    if (AccessPoint.flags & WFLAG_APDATA_CONFIG_IN_WFC)
+    {
+        // If the AP is known, use the password stored in the WFC settings. Ask
+        // the user whether to use the saved settings or to type the password
+        // manually,
+
+        printf("WFC settings found:\n");
+        printf("\n");
+        printf("A: Use WFC password\n");
+        printf("B: Type password manually\n");
+        printf("\n");
+
+        while (1)
+        {
+            cothread_yield_irq(IRQ_VBLANK);
+            scanKeys();
+            u16 keys = keysDown();
+            if (keys & KEY_A)
+            {
+                wfc_settings_used = true;
+                printf("Using WFC settings...\n");
+                printf("\n");
+                Wifi_ConnectWfcAP(&AccessPoint);
+                break;
+            }
+            if (keys & KEY_B)
+            {
+                printf("Ignoring WFC settings...\n");
+                printf("\n");
+                break;
+            }
+        }
+    }
+
+    if (!wfc_settings_used)
+    {
+        // This AP isn't in the WFC settings. If the access point requires a
+        // WEP/WPA password, ask the user to provide it. Note that you can still
+        // allow the user to call this function with an AP that is saved in the
+        // WFC settings, but the function will ignore the saved settings in the
+        // WFC configuration and use the provided password instead.
+        if (AccessPoint.security_type != AP_SECURITY_OPEN)
+        {
+            consoleClear();
+
+            char password[100];
+            size_t password_len;
+
+            printf("Please, enter the password:\n");
+
+            while (1)
+            {
+                password[0] = '\0';
+                scanf("%s", password);
+
+                password_len = strlen(password);
+                if (password[password_len - 1] == '\n')
+                    password[password_len - 1] = '\0';
+
+                bool valid = false;
+                if (AccessPoint.security_type == AP_SECURITY_WEP)
+                    valid = (password_len == 13) || (password_len == 5);
+                else
+                    valid = (password_len <= 64);
+
+                if (valid)
+                    break;
+
+                printf("Invalid key length! [%s] %zu\n", password, password_len);
+            }
+
+            Wifi_ConnectSecureAP(&AccessPoint, password, password_len);
+        }
+        else
+        {
+            Wifi_ConnectSecureAP(&AccessPoint, NULL, 0);
+        }
+    }
+
+    printf("Selected network:\n");
+    printf("\n");
+    printf("%.31s\n", AccessPoint.ssid);
+    printf("Security: %s | Ch: %d\n",
+           Wifi_ApSecurityTypeString(AccessPoint.security_type),
+           AccessPoint.channel);
+    printf("\n");
 }
 
 // Callback called whenever the keyboard is pressed so that a character is
@@ -122,62 +221,7 @@ int main(int argc, char *argv[])
 
     consoleSelect(&bottomScreen);
 
-    access_point_selection_menu();
-
-    consoleClear();
-
-    consoleSelect(&topScreen);
-
-    printf("Selected network:\n");
-    printf("\n");
-    printf("%.31s\n", AccessPoint.ssid);
-    printf("Security: %s | Ch: %d\n",
-           Wifi_ApSecurityTypeString(AccessPoint.security_type),
-           AccessPoint.channel);
-    printf("\n");
-
-    // Setting everything to 0 will make DHCP determine the IP address
-    Wifi_SetIP(0, 0, 0, 0, 0);
-
-    consoleSelect(&bottomScreen);
-
-    // If the access point requires a password, ask the user to provide it
-    if (AccessPoint.security_type != AP_SECURITY_OPEN)
-    {
-        consoleClear();
-
-        char password[100];
-        size_t password_len;
-
-        printf("Please, enter the password:\n");
-
-        while (1)
-        {
-            password[0] = '\0';
-            scanf("%s", password);
-
-            password_len = strlen(password);
-            if (password[password_len - 1] == '\n')
-                password[password_len - 1] = '\0';
-
-            bool valid = false;
-            if (AccessPoint.security_type == AP_SECURITY_WEP)
-                valid = (password_len == 13) || (password_len == 5);
-            else
-                valid = (password_len <= 64);
-
-            if (valid)
-                break;
-
-            printf("Invalid key length! [%s] %zu\n", password, password_len);
-        }
-
-        Wifi_ConnectSecureAP(&AccessPoint, password, password_len);
-    }
-    else
-    {
-        Wifi_ConnectSecureAP(&AccessPoint, NULL, 0);
-    }
+    connect_to_other_access_points();
 
     consoleClear();
 
