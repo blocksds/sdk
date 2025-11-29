@@ -229,6 +229,9 @@ have initialized.
 it to `"sd:/"` unless the ROM has been loaded from a Slot-1 cartridge and
 `argv[0]` is a path inside `"fat:/"`.
 
+In the unusual case of a program running from NAND, the default filesystem will
+be `"nand:/"`.
+
 This is annoying to keep track of, so you can use two helpers of libnds:
 
 - `fatGetDefaultDrive()` returns a `const char *` that will contain `"fat:/` in
