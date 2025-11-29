@@ -235,7 +235,10 @@ be `"nand:/"`.
 This is annoying to keep track of, so you can use two helpers of libnds:
 
 - `fatGetDefaultDrive()` returns a `const char *` that will contain `"fat:/` in
-  a DS and `"sd:/"` in a DSi. This pointer must not be passed to `free()`.
+  a DS. In DSi it may contain `"fat:/"`, `"sd:/"` or `"nand:/"` depending on
+  where your ROM is located.
+
+  Important: This pointer must not be passed to `free()`.
 
 - `fatGetDefaultCwd()` returns a `char *` that contains the path to the folder
   that contains the NDS ROM (excluding the name of the ROM). If your ROM is
@@ -264,7 +267,10 @@ int main(int argc, char *argv[])
     }
 
     // Set NitroFS as the default filesystem
-    chdir("nitro:/");
+    if (chdir("nitro:/") != 0)
+    {
+        // Handle error and hang
+    }
 
     FILE *f = fopen("background/data.bin", "rb");
 
