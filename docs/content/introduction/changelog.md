@@ -3,6 +3,53 @@ title: 'Changelog'
 weight: -20
 ---
 
+## Version 1.15.7 (2025-11-29)
+
+- libnds:
+
+  - Add a wait loop to `systemReboot()` to give the power management hardware
+    enough time to do the reboot (before `systemShutDown()` is called, which is
+    faster to act).
+  - Update FatFs to version R0.16p1.
+
+- DSWiFi:
+
+  - `gethostbyname()` has been marked as deprecated. This function only returns
+    IPv4 addresses and it's deprecated in the libraries of modern systems. You
+    should use `getaddrinfo()` instead, which returns IPv4 and IPv6 addresses.
+    That way applications will be future-proof.
+  - A new flag called `WFLAG_APDATA_CONFIG_IN_WFC` has been added to
+    `Wifi_AccessPoint.flags` to tell the developer that the access point has
+    been configured in the WFC settings.
+  - `Wifi_ConnectWfcAP()` has been implemented. This function allows the user to
+    select one of the APs configured in the WFC settings instead of connecting
+    to the first one that the library finds. Previously you could only use
+    `Wifi_ConnectSecureAP()`, which forces you to provide the password instead
+    of reading the data stored in the WFC settings. Now you can use either
+    function depending on whether you want to use the WFC settings or a
+    different password.
+
+- Maxmod:
+
+  - `mmInitNoSoundbank()` has been improved to initialize the pointer to the
+    soundbank to `NULL` for clarity. This wasn't causing any issue because the
+    number of songs and samples was correctly initialized to 0.
+
+- SDK:
+
+  - The documentation about using filesystems has been improved a lot.
+  - Improve synchronization of ARM9 and ARM7 CPUs before the ARM7 is allowed to
+    enter `main()`. In very rare cases, if the user modified `REG_IPC_SYNC` too
+    soon inside `main()` the ARM9 synchronization code would never see the
+    message from the ARM7 allowing it to continue and it would hang.
+  - All DSWiFi examples have been updated to stop using `gethostbyname()` and to
+    use `getaddrinfo()` instead. One of the examples has been moved to the
+    `tests` folder to make sure we can still test `gethostbyname()` in the
+    future (the plan is to keep it and discourage its use, not to remove it).
+    Now all examples support IPv4 and IPv6 as recommended.
+  - The DSWiFi examples have been updated to use `Wifi_ConnectWfcAP()` in
+    addition to the other functions to connect to access points.
+
 ## Version 1.15.6 (2025-11-12)
 
 - libnds:
