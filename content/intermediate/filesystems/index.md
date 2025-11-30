@@ -406,3 +406,59 @@ int main(int argc, char *argv[])
     // Copy the contents of "buffer" to VRAM, for example
 }
 ```
+
+You will also need to add gbajpeg to the Makefile:
+
+```
+LIBS        := -lgbajpeg -lnds9 -lc
+LIBDIRS     := $(BLOCKSDS)/libs/libnds \
+               $(BLOCKSDSEXT)/gbajpeg
+```
+
+## 8. Third-party libraries
+
+The examples shown before are just a small showcase of what you can do. There
+are plenty of libraries you can use to load files in different formats. Most of
+them will just work with BlocksDS because BlocksDS implements the most common C
+library functions, which cross-platform libraries depend on.
+
+This is a list of Some popular libraries you may be interested in:
+
+- PNG file loaders:
+
+  - [libpng](https://libpng.org/pub/png/libpng.html)
+  - [LodePNG](https://lodev.org/lodepng/)
+
+- JPG file loaders:
+
+  - [jpeglib](https://jpeglib.readthedocs.io/en/latest/index.html)
+
+- GIF file loaders:
+
+  - [GIFLIB](https://giflib.sourceforge.net/)
+
+- Multi-format image loaders:
+
+  - [libplum](https://github.com/aaaaaa123456789/libplum)
+  - [stb\_image](https://github.com/nothings/stb/blob/master/stb_image.h)
+
+- Compression/Uncompression libraries:
+
+  - [zlib](https://www.zlib.net/)
+
+- Font loaders and renderers:
+
+  - [FreeType](https://freetype.org/)
+  - [stb\_truetype](https://github.com/nothings/stb/blob/master/stb_truetype.h)
+
+This tutorial won't explain how to use any of them. You should check the
+documentation, examples and tutorials of the libraries you want to use.
+
+Wonderful Toolchain has packages with pre-built versions of FreeType, libpng
+and zlib:
+
+```
+wf-pacman -Sy toolchain-gcc-arm-none-eabi-freetype
+wf-pacman -Sy toolchain-gcc-arm-none-eabi-libpng16
+wf-pacman -Sy toolchain-gcc-arm-none-eabi-zlib
+```
