@@ -89,14 +89,16 @@ PNG file. They are just text files with `.grit` extension. In this example, it
 looks like this:
 
 ```sh
-# 8 bpp, tiles, export map, not compressed
--gB8 -gt -m
+# 8 bpp, tiles, export map, not compressed, set magenta as transparent color
+-gB8 -gt -m -gTFF00FF
 ```
 
 `-gB8` tells grit to work in 8 bit per pixel mode. It will create one palette of
 256 colors. `-gt` tells grit to create a tiled map. `-m` tells grit to also
 export the tile map. The palette is exported by default (you can request it
-explicitly with `-p`).
+explicitly with `-p`). `-gTFF00FF` tells grit to treat color `FF00FF` (magenta)
+as transparent. If the image doesn't have any magenta pixel, it will be fully
+opaque.
 
 Now we need to see how to use the converted graphics. Each pair of `.png` and
 `.grit` files create a `.h` file that has to be included in the source code. In
@@ -157,8 +159,8 @@ There are only two differences you need to check. The first one is the grit
 file:
 
 ```sh
-# 4 bpp, tiles, export map, flat layout, not compressed
--gt -gB4 -mR4 -mLf
+# 4 bpp, tiles, export map, flat layout, not compressed, set magenta as transparent
+-gt -gB4 -mR4 -mLf -gTFF00FF
 ```
 
 And the second one is the way to setup the background (use `BgType_Text4bpp`
@@ -215,12 +217,17 @@ it you can rotate it, scale it and scroll it. It should look like this:
 We need to convert the image in a different way:
 
 ```sh
-# 8 bpp, tiles, export map, affine, not compressed
--gB8 -gt -m -mLa
+# 8 bpp, tiles, export map, affine, not compressed, set mangenta as transparent
+-gB8 -gt -m -mLa -gTFF00FF
 ```
 
 The difference is `-mLa`, which switches the background mode from regular format
 to affine format.
+
+Important: The maximum number of tiles supported by non-extended affine
+backgrounds is 256. This is a pretty strong limit and you will reach it before
+you realize. Remember to use extended backgrounds if you go over the limit, they
+are explained below.
 
 In the code, the main two differences are the video mode and the way in which
 you initialize the background:
