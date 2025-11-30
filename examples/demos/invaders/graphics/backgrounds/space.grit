@@ -1,2 +1,3 @@
 # Export 8 bpp tiles with Huffman compression, export map with RLE compression
--gB8 -gt -gzh -m -mzr
+# Set magenta as transparent color
+-gB8 -gt -gzh -m -mzr -gTFF00FF

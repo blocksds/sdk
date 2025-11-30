@@ -1,2 +1,2 @@
-# 8 bpp, tiles, export map, affine, not compressed
--gB8 -gt -m -mLa
+# 8 bpp, tiles, export map, affine, not compressed, set mangenta as transparent
+-gB8 -gt -m -mLa -gTFF00FF

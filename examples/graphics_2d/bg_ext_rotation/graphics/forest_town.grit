@@ -1,3 +1,3 @@
-# 8 bpp, tiles, export map, not compressed
--gB8 -gt -m
+# 8 bpp, tiles, export map, not compressed, set magenta as transparent color
+-gB8 -gt -m -gTFF00FF
 # Note: It uses the same map layout as a regular tiled background!
