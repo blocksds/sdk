@@ -562,3 +562,176 @@ int main(int argc, char *argv[])
         swiWaitForVBlank();
 }
 ```
+
+## 12. Multiple layers
+
+Until now we have used only one background layer using different configurations.
+However, normally, you will want to use more than one layer. Unfortunately, this
+means that it's more difficult to load tiles and maps to VRAM.
+
+If you want to display two backgrounds on the same screen you will need to
+define slots of tile sets and tile maps that don't overlap. For example, suppose
+you want to display two 256-color backgrounds, one with 256 tiles and another
+one with 128 tiles. One possible setup would be:
+
+![Multiple background layers](multiple_bg_layers.png "Multiple background layers")
+
+The resulting code would be:
+
+```c
+videoSetMode(MODE_0_2D);
+
+bgInit(0, BgType_Text8bpp, BgSize_T_512x512, 0, 1);
+bgInit(1, BgType_Text8bpp, BgSize_T_256x256, 4, 2);
+```
+
+You can experiment with it here:
+
+https://mtheall.com/vram.html#T0=1&NT0=256&MB0=0&TB0=1&S0=3&T1=1&NT1=128&MB1=4&TB1=2&S1=0
+
+It's possible to use multiple layers sharing tile sets or tile maps. Sharing
+tile sets is very common and it allows you to save a lot of space in the final
+ROM in a very convenient way. Sharing tile maps doesn't make sense in general.
+
+Sharing palettes is mandatory, though. There is only one 256-color palette. You
+can split it into 16 palettes of 16 colors each, and you can be clever about
+how you share palettes in both modes, but this is inconvenient.
+
+The current Makefiles of BlocksDS don't allow you to convert PNG files and share
+tile sets or palettes. You can do it if you run the tool manually.  Check
+options `-S` and `-pS` from the documentation of grit if you're curious about
+it. The command line interface of grit for shared graphics is a bit restrictive.
+If you can't get used to it and want an alternative, check this out:
+[SuperFamiconv](https://github.com/Optiroc/SuperFamiconv)
+
+This tool is provided in the Wonderful Toolchain packages:
+
+```sh
+wf-pacman -Sy wonderful-superfamiconv
+```
+
+Because of the limitations of grit we're going to skip any real code example in
+this section. Instead, wait for the section about extended palettes. They will
+allow us to have background layers that don't need to share palettes.
+
+## 13. Backdrop color
+
+This is a small detail, but it can be unexpected.
+
+When you display a background, color index 0 is always transparent. That means
+that in 256-color backgrounds you have 255 available colors, and in 16x16 color
+backgrounds you only have 15x16 available colors.
+
+The color that is displayed under the background is the backdrop color. It's the
+color that gets displayed if there are no sprites or backgrounds covering some
+part of the screen.
+
+The backdrop color is index 0 of the background palette, and you can set it with
+the following functions:
+
+```c
+setBackdropColor(RGB15(31, 0, 0));
+setBackdropColorSub(RGB15(31, 31, 0));
+```
+
+This code will set the backdrop color of the main graphics engine to red, and
+the one of the sub engine to green.
+
+It's very easy to convert backgrounds and to forget to specify a transparent
+color. Normally, this means that grit will use color index 0 as a normal color
+to be used by your background. Initially, if you only have one background layer,
+you won't notice anything. However, when you add more layers, it will become
+more obvious.
+
+My advice is to always set a transparent color when using grit to convert
+graphics. Using `-gTFF00FF` is a good idea because that shade of magenta is
+barely used.
+
+The only exception is 16-bit backgrounds. They don't use the background palette
+memory, so you can use `gT!` or not depending on whether you want it to have
+some transparent pixels or not.
+
+## 14. Extended palettes
+
+If you want to display multiple 2D background layers, the limitation of having
+one single palette is very restrictive. Extended palettes allow you to have up
+to 16 palettes for each background layer!
+
+A very simple way to use extended palettes is to use one full 256-color palette
+for each background layer. You could also use 16x256 palettes in one single
+layer, in a similar way as the 16x16 color palette mode.
+
+This section will talk about the first situation because it's the one that is
+most likely to be used. It will load two different images with two different
+256-color palettes.
+
+![Background extended palettes](bg_extended_palettes.png "Background extended palettes")
+
+The code of this example is here: [`examples/graphics_2d/bg_ext_palette`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_ext_palette).
+
+The process to load extended palettes is a bit more difficult than loading
+regular palettes, but not by much. In short: You can't make the background
+palette memory bigger, so you need to take one of the VRAM banks that can work
+as extended palette memory and assign it as extended background palettes. The
+main 2D engine can use VRAM banks E, F and G. The sub 2D engine can only use
+VRAM bank H for extended palettes.
+
+However, you can't copy data to the banks at any point. Once you set them up as
+extended background palettes you can't access them from the CPU. The correct
+process is to set them to LCD mode, copy the data, and set them to extended
+palette mode:
+
+```c
+// Let the CPU access VRAM E and H to copy the extended palettes. Extended
+// palette VRAM can't be accessed by the CPU (background VRAM can be
+// accessed even without mapping it as LCD).
+vramSetBankE(VRAM_E_LCD);
+vramSetBankH(VRAM_H_LCD);
+
+// Main engine background palettes
+
+// Background layer 0, palette 12
+dmaCopy(ponypoke_0Pal, &VRAM_E_EXT_PALETTE[0][12], ponypoke_0PalLen);
+// Background layer 1, palette 7
+dmaCopy(forest_townPal, &VRAM_E_EXT_PALETTE[1][7], forest_townPalLen);
+
+// Sub engine background palettes
+
+// Background layer 1, palette 12
+dmaCopy(ponypoke_0Pal, &VRAM_H_EXT_PALETTE[1][12], ponypoke_0PalLen);
+// Background layer 2, palette 7
+dmaCopy(forest_townPal, &VRAM_H_EXT_PALETTE[2][7], forest_townPalLen);
+
+// Setup VRAM as extended palette VRAM
+
+vramSetBankE(VRAM_E_BG_EXT_PALETTE);
+vramSetBankH(VRAM_H_SUB_BG_EXT_PALETTE);
+```
+
+Tile sets and tile maps don't need anything special. Copy them the same way as
+before.
+
+Make sure to actually enable extended background palettes:
+
+```c
+bgExtPaletteEnable();
+bgExtPaletteEnableSub();
+```
+
+Also, you will need to convert your graphics in a special way. You will need to
+tell grit the palette index to be used by the background:
+
+`forest_town.grit`
+```sh
+# 8 bpp, tiles, export map, palette 7, not compressed
+-gB8 -gt -m -mp7 -gTFF00FF
+```
+
+`ponypoke_0.grit`
+```sh
+# 8 bpp, tiles, export map, palette 12, not compressed
+-gB8 -gt -m -mp12 -gTFF00FF
+```
+
+And that's it! As you can see, it requires a bit of additional setup, but it's a
+very simple way to make your 2D graphics look a lot better.
