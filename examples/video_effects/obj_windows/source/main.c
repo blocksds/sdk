@@ -21,6 +21,12 @@ int main(int argc, char *argv[])
     dmaCopy(cityMap, bgGetMapPtr(bg), cityMapLen);
     dmaCopy(cityPal, BG_PALETTE, cityPalLen);
 
+    // Make the backgdrop color black. This is the color that gets drawn on the
+    // screen if no background or sprite is in that part of the screen. This
+    // value is stored in BG_PALETTE[0], so it must be set after copying the
+    // background palette.
+    setBackdropColor(RGB15(0, 0, 0));
+
     oamInit(&oamMain, SpriteMapping_1D_32, false);
 
     // Allocate space for the tiles and copy them there
