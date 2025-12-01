@@ -10,6 +10,18 @@ to implement. These are documented here.
 Please refer to the changelog for a full list of changes, including additions
 and enhancements to the SDK which are not listed here.
 
+## Upgrading to BlocksDS DEV
+
+* `grit` used to silently fail if it was exporting a tiled map with too many
+  tiles. The indices written to the file would be incorrect for the tiles that
+  went over the limit. This error was quite hard to notice in some cases
+  because some images have tiles that are very similar to others.
+
+  Now it prints an error message (instead of silently failing or printing a
+  warning) and fails the conversion. This may break the build process of some
+  games, but it's important to check all images that fail to be converted
+  because they weren't being converted correctly before.
+
 ## Upgrading to BlocksDS 1.15.2
 
 * The DSWiFi structs `Wifi_TxHeader` and `Wifi_RxHeader` are now private. They
@@ -39,9 +51,9 @@ and enhancements to the SDK which are not listed here.
 
 ## Upgrading to BlocksDS 1.14.2
 
-* ndstool now handles DSi title IDs and units codes differently. This shouldn't
-  affect any regular user of BlocksDS, but it may be a problem in some unusual
-  cases.
+* `ndstool` now handles DSi title IDs and units codes differently. This
+  shouldn't affect any regular user of BlocksDS, but it may be a problem in some
+  unusual cases.
 
   The new default title ID is `0x00030004`, not `0x00030000`. Also, with
   previous versions, title ID `0x00030000` would set the unit code to 2 and
@@ -68,7 +80,7 @@ and enhancements to the SDK which are not listed here.
 ## Upgrading to BlocksDS 1.13.1
 
 * The function `Wifi_InitDefault()` of DSWiFi now takes an integer as an
-  argument instead of a bool.  The new values passed to the function have been
+  argument instead of a bool. The new values passed to the function have been
   designed so that old code still works.
 
 ## Upgrading to BlocksDS 1.8.0
