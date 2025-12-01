@@ -674,7 +674,7 @@ regular palettes, but not by much. In short: You can't make the background
 palette memory bigger, so you need to take one of the VRAM banks that can work
 as extended palette memory and assign it as extended background palettes. The
 main 2D engine can use VRAM banks E, F and G. The sub 2D engine can only use
-VRAM bank H for extended palettes.
+VRAM bank H for background extended palettes.
 
 However, you can't copy data to the banks at any point. Once you set them up as
 extended background palettes you can't access them from the CPU. The correct
@@ -711,7 +711,7 @@ vramSetBankH(VRAM_H_SUB_BG_EXT_PALETTE);
 Tile sets and tile maps don't need anything special. Copy them the same way as
 before.
 
-Make sure to actually enable extended background palettes:
+Make sure to actually enable background extended palettes:
 
 ```c
 bgExtPaletteEnable();

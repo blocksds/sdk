@@ -405,3 +405,31 @@ priority 2 will display that sprite on top of background layer 2.
 
 The priority of `oamSet()` has priority over the sprite ID: Sprite ID 0 with
 priority 2 will be displayed under sprite ID 60 with priority 0.
+
+## 10. Extended palettes
+
+This system works the same way as with backgrounds. It allows you to use up to
+16 palettes of 256 colors each per screen.
+
+![Sprite extended palettes](spr_extended_palettes.png "Sprite extended palettes")
+
+The code of this example is here: [`examples/graphics_2d/sprites_ext_palette`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/sprites_ext_palette).
+
+The process to load the extended palettes is the same one as for backgrounds.
+You set the VRAM bank to LCD mode, copy data to it, and set it to extended
+palette mode again.
+
+The main 2D engine can use VRAM banks F and G. The sub 2D engine can only use
+VRAM bank I for sprite extended palettes.
+
+Make sure to actually enable sprite extended palettes (set the last parameter of
+`oamInit()` to `true`):
+
+```c
+oamInit(&oamMain, SpriteMapping_Bmp_1D_128, true);
+oamInit(&oamSub, SpriteMapping_Bmp_1D_128, true);
+```
+
+Unlike with backgrounds, you don't need to make any changes to the way you
+convert sprites. However, you will need to specify the right extended palette
+index as the palette number when you call `oamSet()`.
