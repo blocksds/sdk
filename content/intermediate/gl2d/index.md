@@ -46,6 +46,8 @@ int main(int argc, char *argv[])
 
     while(1)
     {
+        swiWaitForVBlank();
+
         // Start 2D scene
         glBegin2D();
 
@@ -55,7 +57,6 @@ int main(int argc, char *argv[])
         glEnd2D();
 
         glFlush(0);
-        swiWaitForVBlank();
     }
 }
 ```
