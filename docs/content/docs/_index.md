@@ -1,4 +1,4 @@
 ---
 weight: -30
-title: 'Documentation'
+title: 'User documentation'
 ---
