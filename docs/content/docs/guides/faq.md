@@ -1,6 +1,6 @@
 ---
 title: Frequently asked questions
-weight: -10
+weight: 1
 ---
 
 ## General questions

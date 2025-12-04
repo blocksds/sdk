@@ -1,6 +1,6 @@
 ---
 title: 'External libraries'
-weight: 10
+weight: 2
 ---
 
 There are also some libraries and tools that are supported in BlocksDS, but not

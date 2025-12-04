@@ -1,6 +1,6 @@
 ---
 title: 'Design choices'
-weight: 0
+weight: 1
 ---
 
 This guide serves as a loose explanation of some design choices made during

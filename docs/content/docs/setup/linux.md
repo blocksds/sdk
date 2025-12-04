@@ -1,6 +1,6 @@
 ---
 title: 'Linux'
-weight: 0
+weight: 2
 ---
 
 This is the easiest option, but you may not get the latest version of the SDK

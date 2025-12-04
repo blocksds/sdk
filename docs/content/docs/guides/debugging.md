@@ -1,6 +1,6 @@
 ---
 title: Debugging guide
-weight: 0
+weight: 2
 ---
 
 While developing applications with BlocksDS you will reach situations where you

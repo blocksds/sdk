@@ -1,6 +1,6 @@
 ---
 title: 'Dynamic libraries'
-weight: 20
+weight: 3
 ---
 
 ## 1. Introduction

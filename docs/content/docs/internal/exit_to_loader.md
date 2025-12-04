@@ -1,6 +1,6 @@
 ---
 title: 'Exit to loader protocol'
-weight: 30
+weight: 4
 ---
 
 ## 1. Introduction

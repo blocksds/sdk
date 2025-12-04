@@ -1,6 +1,6 @@
 ---
 title: 'DLDI in ARM7'
-weight: 40
+weight: 7
 ---
 
 ## 1. Introduction

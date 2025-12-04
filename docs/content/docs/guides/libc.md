@@ -1,6 +1,6 @@
 ---
 title: 'C/C++ support'
-weight: 30
+weight: 6
 ---
 
 ## 1. Introduction

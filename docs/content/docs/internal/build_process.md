@@ -1,6 +1,6 @@
 ---
 title: 'Build process information'
-weight: 40
+weight: 5
 ---
 
 ## 1. Introduction

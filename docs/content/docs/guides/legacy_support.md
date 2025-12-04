@@ -1,6 +1,6 @@
 ---
 title: Legacy device/launcher support
-weight: 70
+weight: 10
 ---
 
 ROMs built with BlocksDS are designed first and foremost to support modern

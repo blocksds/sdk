@@ -1,6 +1,6 @@
 ---
 title: 'Introduction'
-weight: -30
+weight: 1
 ---
 
 BlocksDS is an SDK to develop applications for Nintendo DS in C or C++.

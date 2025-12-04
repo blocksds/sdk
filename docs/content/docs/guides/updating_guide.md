@@ -1,6 +1,6 @@
 ---
 title: 'Upgrade guide'
-weight: 50
+weight: 8
 ---
 
 Newer BlocksDS versions occasionally introduce breaking changes which require

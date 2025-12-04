@@ -1,6 +1,6 @@
 ---
 title: 'Windows'
-weight: -10
+weight: 1
 ---
 
 The following instructions describe how to install BlocksDS on Windows natively.

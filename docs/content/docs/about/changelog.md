@@ -1,6 +1,6 @@
 ---
 title: 'Changelog'
-weight: -20
+weight: 2
 ---
 
 ## Version 1.15.7 (2025-11-29)

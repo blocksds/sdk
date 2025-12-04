@@ -1,6 +1,6 @@
 ---
-weight: -30
 title: 'Base libraries'
+weight: 1
 ---
 
 If you're looking for documentation about specific libraries of BlocksDS,
