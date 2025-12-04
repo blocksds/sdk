@@ -1,6 +1,6 @@
 ---
 title: 'Licenses'
-weight: 0
+weight: 15
 ---
 
 This document enumerates the components which are part of a BlocksDS toolchain

@@ -16,7 +16,3 @@ BlocksDS.
 
 - [Introduction](introduction): Introduction to BlocksDS that describes all
   features supported by it.
-
-- [Licenses](licenses): Short guide about the licenses used by libraries in
-  BlocksDS and what they mean to applications using them.
-

@@ -23,6 +23,9 @@ developing applications.
 - [Legacy device/launcher support](legacy_support): Information about how to get
   applications running in old Slot-2 flashcards when in DS mode.
 
+- [Licenses](licenses): Short guide about the licenses used by libraries in
+  BlocksDS and what they mean to applications using them.
+
 - [Migrating from devkitARM](devkitarm_porting_guide): Steps to port
   applications created for devkitARM (particularly the ones created before
   November 2024 with their Calico update).

@@ -30,7 +30,7 @@ BlocksDS is an SDK to develop applications for Nintendo DS in C or C++.
   came before it and who developed FOSS libraries that can be now used by
   BlocksDS. This SDK must ensure that all the code remains FOSS for other people
   to use it in the future. For more information about the licenses used by
-  different components, check [this](../licenses).
+  different components, check [this](../../guides/licenses).
 
 ## 2. Features
 
