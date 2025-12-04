@@ -1,6 +1,6 @@
 ---
 weight: 1
-title: 'Setup instructions'
+title: 'Getting started'
 ---
 
 ## Windows 🪟

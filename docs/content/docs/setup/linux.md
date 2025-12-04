@@ -3,104 +3,113 @@ title: 'Linux'
 weight: 2
 ---
 
-This is the easiest option, but you may not get the latest version of the SDK
-right away.
+If you don't want to build the SDK from source, this is the easiest option.
 
-1. You will also need to install the ARM toolchain of Wonderful Toolchains.
-   Follow the instructions in this link:
-   https://wonderful.asie.pl/docs/getting-started/#linux
+{{% steps %}}
 
-1. Add the BlocksDS repository to `wf-pacman`:
+### Install Wonderful Toolchain
 
-   ```bash
-   export PATH=/opt/wonderful/bin:$PATH
+Follow the instructions in this link:
 
-   wf-pacman -Syu wf-tools
-   wf-config repo enable blocksds
-   wf-pacman -Syu
-   ```
+https://wonderful.asie.pl/wiki/doku.php?id=getting_started:linux
 
-1. Now, install the ARM toolchain of Wonderful Toolchains, as well as BlocksDS:
+### Add the BlocksDS repository to `wf-pacman`
 
-   ```bash
-   wf-pacman -S blocksds-toolchain
-   ```
+```bash
+export PATH=/opt/wonderful/bin:$PATH
 
-   To install the documentation and examples you can install:
+wf-pacman -Syu wf-tools
+wf-config repo enable blocksds
+wf-pacman -Syu
+```
 
-   ```bash
-   wf-pacman -S blocksds-docs
-   ```
+### Install the ARM toolchain and BlocksDS
 
-   Install the following if you plan to develop binaries for the DSP of the DSi:
+```bash
+wf-pacman -S blocksds-toolchain
+```
 
-   ```bash
-   wf-pacman -S toolchain-llvm-teak-llvm
-   ```
+To install the documentation and examples you can install:
 
-1. (Optional step) You can also install some third party libraries like
-   [NightFox’s Lib](https://github.com/knightfox75/nds_nflib) and
-   [Nitro Engine](https://github.com/AntonioND/nitro-engine) using
-   `wf-pacman`:
+```bash
+wf-pacman -S blocksds-docs
+```
 
-   ```bash
-   wf-pacman -S blocksds-nflib blocksds-nitroengine
-   ```
+Install the following if you plan to develop binaries for the DSP of the DSi
+(you can skip this now and do it in the future if you need it):
 
-   You can get a full list of packages by running:
+```bash
+wf-pacman -S toolchain-llvm-teak-llvm
+```
 
-   ```bash
-   wf-pacman -Sl
-   ```
+### Install third-party libraries (Optional)
 
-1. `wf-pacman` installs BlocksDS in `/opt/wonderful/thirdparty/blocksds/`.
-   This isn't the standard location (`wf-pacman` can only write files to
-   `/opt/wonderful/`) so you need to do one of the two following options:
+You can also install some third party libraries like
+[NightFox’s Lib](https://github.com/knightfox75/nds_nflib) and
+[Nitro Engine](https://github.com/AntonioND/nitro-engine) using
+`wf-pacman`:
 
-   1. Create a symlink (note that this doesn't work with MinGW):
+```bash
+wf-pacman -S blocksds-nflib blocksds-nitroengine
+```
 
-      ```bash
-      ln -s /opt/wonderful/thirdparty/blocksds /opt/blocksds
-      ```
+You can get a full list of packages by running:
 
-   1. Set your environment variables correctly:
+```bash
+wf-pacman -Sl
+```
 
-      ```bash
-      source /opt/wonderful/bin/wf-env
-      ```
+### Setup environment variables
 
-      You can do it manually instead if you prefer:
+`wf-pacman` installs BlocksDS in `/opt/wonderful/thirdparty/blocksds/`.  This
+isn't the standard location (`wf-pacman` can only write files to
+`/opt/wonderful/`) so you need to do one of the two following options:
 
-      ```bash
-      export BLOCKSDS=/opt/wonderful/thirdparty/blocksds/core
-      export BLOCKSDSEXT=/opt/wonderful/thirdparty/blocksds/external
-      ```
-
-1. Whenever you need to update the SDK, run:
+1. Create a symlink (note that this doesn't work with MinGW):
 
    ```bash
-   wf-pacman -Syu
+   ln -s /opt/wonderful/thirdparty/blocksds /opt/blocksds
    ```
 
-1. Now you can try to build one of the BlocksDS examples. From the shell, run:
+1. Set your environment variables correctly:
 
    ```bash
-   cd /opt/wonderful/thirdparty/blocksds/core/examples/
+   source /opt/wonderful/bin/wf-env
    ```
 
-   From there, for example, go to `graphics_3d/volumetric_shadow` and type
-   `make`. This will generate a NDS ROM that you can try with an emulator or a
-   flashcart.
-
-   You can also try one of the open source projects made with BlocksDS that are
-   listed [here](https://github.com/blocksds/awesome-blocksds).
-
-   If you get an error like "command not found: make", you need to install it
-   from the packages of your system:
+   You can do it manually instead if you prefer:
 
    ```bash
-   sudo apt-get install -y --no-install-recommends build-essential
+   export BLOCKSDS=/opt/wonderful/thirdparty/blocksds/core
+   export BLOCKSDSEXT=/opt/wonderful/thirdparty/blocksds/external
    ```
 
-   If you want to know how to debug your programs, check the guide
-   [here](../../../guides/debugging).
+{{% /steps %}}
+
+### How to update the SDK
+
+When you want to update the packages, run:
+
+```bash
+wf-pacman -Syu
+```
+
+### How to build projects
+
+Now you can try to build one of the BlocksDS examples. From the shell, run:
+
+```bash
+cd /opt/wonderful/thirdparty/blocksds/core/examples/
+```
+
+From there, for example, go to `graphics_3d/volumetric_shadow` and type
+`make`. This will generate a NDS ROM that you can try with an emulator or a
+flashcart.
+
+You can also try one of the open source projects made with BlocksDS that are
+listed [here](https://github.com/blocksds/awesome-blocksds).
+
+> [!WARNING]
+> If you get an error like `command not found: make`, you need to install it
+> from the packages of your system. For example, try ``sudo apt-get install -y
+> --no-install-recommends build-essential``

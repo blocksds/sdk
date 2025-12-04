@@ -6,71 +6,80 @@ weight: 1
 The following instructions describe how to install BlocksDS on Windows natively.
 If you want to use it in WSL, follow the instructions for Linux instead.
 
-1. You will need to install the ARM toolchain of Wonderful Toolchains. Follow
-   the instructions in this link:
-   https://wonderful.asie.pl/docs/getting-started/#windows-via-msys2
+{{% steps %}}
 
-1. Add the BlocksDS repository to `wf-pacman`:
+### Install Wonderful Toolchain
 
-   ```bash
-   wf-pacman -Syu wf-tools
-   wf-config repo enable blocksds
-   wf-pacman -Syu
-   ```
+Follow the instructions in this link:
 
-1. Now, install the ARM toolchain of Wonderful Toolchains, as well as BlocksDS:
+https://wonderful.asie.pl/wiki/doku.php?id=getting_started:windows
 
-   ```bash
-   wf-pacman -S blocksds-toolchain
-   ```
+### Add the BlocksDS repository to `wf-pacman`
 
-   To install the documentation and examples you can install:
+```bash
+wf-pacman -Syu wf-tools
+wf-config repo enable blocksds
+wf-pacman -Syu
+```
 
-   ```bash
-   wf-pacman -S blocksds-docs
-   ```
+### Install the ARM toolchain and BlocksDS
 
-1. (Optional step) You can also install some third party libraries like
-   [NightFox’s Lib](https://github.com/knightfox75/nds_nflib) and
-   [Nitro Engine](https://github.com/AntonioND/nitro-engine) using
-   `wf-pacman`:
+```bash
+wf-pacman -S blocksds-toolchain
+```
 
-   ```bash
-   wf-pacman -S blocksds-nflib blocksds-nitroengine
-   ```
+To install the documentation and examples you can install:
 
-   You can get a full list of packages by running:
+```bash
+wf-pacman -S blocksds-docs
+```
 
-   ```bash
-   wf-pacman -Sl
-   ```
+### Install third-party libraries (Optional)
 
-1. Whenever you need to update the SDK, run:
+You can also install some third party libraries like
+[NightFox’s Lib](https://github.com/knightfox75/nds_nflib) and
+[Nitro Engine](https://github.com/AntonioND/nitro-engine) using
+`wf-pacman`:
 
-   ```bash
-   wf-pacman -Syu
-   ```
+```bash
+wf-pacman -S blocksds-nflib blocksds-nitroengine
+```
 
-1. Run Wonderful Toolchain Shell from the Start menu. This shell has predefined
-   environment variables to ensure that BlocksDS projects can be built. If you
-   don't, the environment variable `BLOCKSDS` won't be set to the right path.
+You can get a full list of packages by running:
 
-1. Now you can try to build one of the BlocksDS examples. From the shell, run:
+```bash
+wf-pacman -Sl
+```
 
-   ```bash
-   cd /opt/wonderful/thirdparty/blocksds/core/examples/
-   ```
+{{% /steps %}}
 
-   From there, for example, go to `graphics_3d/volumetric_shadow` and type
-   `make`. This will generate a NDS ROM that you can try with an emulator or a
-   flashcart.
+### How to update the SDK
 
-   You can also try one of the open source projects made with BlocksDS that are
-   listed [here](https://github.com/blocksds/awesome-blocksds).
+When you want to update the packages, run:
 
-   > [!WARNING]
-   > If you get an error like `command not found: make`, you need to install it
-   > from the packages of your system. For example, try ``pacman -S make``
+```bash
+wf-pacman -Syu
+```
 
-   If you want to know how to debug your programs, check the guide
-   [here](../../../guides/debugging).
+### How to build projects
+
+Run **Wonderful Toolchain Shell** from the Start menu. This shell has predefined
+environment variables to ensure that BlocksDS projects can be built. If you
+don't, the environment variable `BLOCKSDS` won't be set to the right path.
+
+Now you can try to build one of the BlocksDS examples. From the shell, run:
+
+```bash
+cd /opt/wonderful/thirdparty/blocksds/core/examples/
+```
+
+From there, for example, go to `graphics_3d/volumetric_shadow` and type
+`make`. This will generate a NDS ROM that you can try with an emulator or a
+flashcart.
+
+You can also try one of the open source projects made with BlocksDS that are
+listed [here](https://github.com/blocksds/awesome-blocksds).
+
+> [!WARNING]
+> If you get an error like `command not found: make`, you need to install it
+> from the packages of your system. For example, try ``pacman -S make``

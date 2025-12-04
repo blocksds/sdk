@@ -1,5 +1,5 @@
 ---
-title: 'Post-setup steps'
+title: 'Post-installation steps'
 weight: 5
 ---
 

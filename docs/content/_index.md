@@ -17,6 +17,6 @@ for the Nintendo DS and DSi in C and C++.
 </div>
 
 <div class="hx:mb-6">
-{{< hextra/hero-button text="Get Started" link="docs/setup" >}}
+{{< hextra/hero-button text="Getting Started" link="docs/setup" >}}
 {{< hextra/hero-button text="Documentation" link="docs" >}}
 </div>
