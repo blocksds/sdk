@@ -1,6 +1,7 @@
 ---
 title: 'BlocksDS'
 geekdocAnchor: false
+geekdocBreadcrumb: false
 ---
 
 Welcome to the documentation of BlocksDS! This is a set of libraries and tools
