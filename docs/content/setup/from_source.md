@@ -1,6 +1,6 @@
 ---
 title: 'Build from source'
-weight: 10
+weight: 20
 ---
 
 This is the option you should use if you want to help develop BlocksDS, or if

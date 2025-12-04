@@ -1,5 +1,5 @@
 ---
-title: 'Extra steps'
+title: 'Post-setup steps'
 weight: 40
 ---
 

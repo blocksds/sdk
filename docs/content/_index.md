@@ -8,7 +8,7 @@ created to develop games and applications for the Nintendo DS family of
 consoles
 
 If you're looking for information on how to install BlocksDS, check the
-[instructions](./setup/options).
+[instructions](./setup/).
 
 For an introduction to programming the Nintendo DS with BlocksDS, check
 [this tutorial](https://blocksds.skylyrac.net/tutorial/). Note that this
