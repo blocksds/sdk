@@ -1,0 +1,53 @@
+languageCode: 'en-us'
+
+baseURL: "http://localhost"
+title: "BlocksDS"
+theme: "hextra"
+
+pluralizeListTitles: false
+
+# Required if you want to render robots.txt template
+enableRobotsTXT: true
+
+markup:
+  goldmark:
+    renderer:
+      # Needed to add raw HTML to the homepage
+      unsafe: true
+
+menu:
+  main:
+    - identifier: documentation
+      name: Documentation
+      pageRef: /docs
+      weight: 1
+    - name: Search
+      weight: 3
+      params:
+        type: search
+    - name: Theme Toggle
+      weight: 4
+      params:
+        type: theme-toggle
+        label: true # optional, default is false
+
+  sidebar:
+    - name: External links
+      params:
+        type: separator
+      weight: 1
+    - name: GitHub
+      weight: 2
+      url: "https://github.com/blocksds"
+
+params:
+  theme:
+    # light | dark | system
+    default: system
+    displayToggle: true
+
+  footer:
+    enable: true
+    displayCopyright: true
+    displayPoweredBy: false
+    width: narrow
