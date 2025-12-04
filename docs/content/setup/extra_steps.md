@@ -3,7 +3,7 @@ title: 'Post-setup steps'
 weight: 40
 ---
 
-## 1. Test
+## 1. Test the installation
 
 To test that everything is working, you can try building one of the
 [examples](https://github.com/blocksds/sdk/tree/master/examples) or
@@ -56,5 +56,5 @@ BlocksDS. `BLOCKSDSEXT` is left for users to freely install third party
 libraries and tools.
 
 If they aren't set the default makefiles assume that the paths are
-`/opt/blocksds/core/` and `/opt/blocksds/external/`. Other tools should assume
-imitate this behaviour.
+`/opt/blocksds/core/` and `/opt/blocksds/external/`. Other tools should imitate
+this behaviour.
