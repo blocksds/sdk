@@ -72,7 +72,7 @@ consoleDebugInit(DebugDevice_NOCASH);
 
 After that, you can send messages to the console like this (it will
 automatically insert a new line after the message):
-```
+```c
 fprintf(stderr, "Debug message!");
 ```
 
