@@ -8,9 +8,10 @@ with BlocksDS.
 
 ## Optimizing CPU usage
 
-* **Measure CPU performance on hardware only!** As of writing (May 2024), the most
-  popular emulators are not sufficiently cycle-accurate to provide accurate
-  profiling results; this might lead, at worst, to mistaken optimizations.
+> [!IMPORTANT]
+> Measure CPU performance on hardware only! Emulators are not sufficiently
+> cycle-accurate to provide accurate profiling results.
+
 * Avoid using floating point values (`float`, `double`). As the DS does not
   include any hardware for accelerating floating point math, operations on them
   have to be emulated in software, which is quite costly.
