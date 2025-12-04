@@ -10,11 +10,10 @@ set -x
 # Download theme
 
 if [ ! -d themes/hextra ]; then
-    mkdir -p themes
     cd themes
     git clone https://github.com/imfing/hextra.git --depth=1
+    cd ..
 fi
-exit 0
 
 hugo --cleanDestinationDir --baseURL https://blocksds.skylyrac.net/
 
