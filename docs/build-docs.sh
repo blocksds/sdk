@@ -15,7 +15,7 @@ if [ ! -d themes/hugo-geekdoc ]; then
     tar -xzvf hugo-geekdoc.tar.gz -C themes/hugo-geekdoc --strip-components=1
 fi
 
-hugo --cleanDestinationDir --baseURL https://blocksds.skylyrac.net/docs/
+hugo --cleanDestinationDir --baseURL https://blocksds.skylyrac.net/
 
 pushd ../libs/libnds
 make docs

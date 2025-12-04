@@ -19,7 +19,7 @@ the origins of each component that is built.
 
 Before doing anything, you need to ensure that the changelog is updated with the
 changes that have happened since the previous release. The changelog can be
-found in `docs/content/introduction/changelog.md`. You will also need to decide
+found in `docs/content/about/changelog.md`. You will also need to decide
 the new version number for the release at this point.
 
 ### 2.2 Run some examples and tests
@@ -52,7 +52,7 @@ repository.
 ### 2.5 Build documentation
 
 Run the documentation workflow, which will build and publish the documentation
-automatically: [Link](https://github.com/blocksds/docs/actions/workflows/build.yml)
+automatically: [Link](https://github.com/blocksds/blocksds.github.io/actions/workflows/build.yml)
 
 You can build the documentation at the same time that pacman packages are being
 built. Also, you can build the documentation at any point in between releases

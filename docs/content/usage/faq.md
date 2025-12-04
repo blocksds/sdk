@@ -19,7 +19,7 @@ listed [here](https://github.com/blocksds/awesome-blocksds).
 Unfortunately, there isn't any tutorial on how to develop NDS applications or
 games from scratch. Your best bet is to take a look at the examples and to ask
 other developers if you get stuck. Check the "getting support" section of the
-documentation [here](../../introduction/support).
+documentation [here](../../about/support).
 
 You can also check the online mirror of the documentation of all libraries
 included in BlocksDS [here](../../).
