@@ -1,5 +1,5 @@
 ---
-title: 'Additional libraries/tools'
+title: 'External libraries'
 weight: 10
 ---
 

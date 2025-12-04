@@ -1,40 +1,20 @@
 ---
 weight: -30
-title: 'User documentation'
+title: 'Documentation'
 ---
 
-If you're looking for documentation about specific libraries of BlocksDS,
-check the following links:
+BlocksDS comes with some core libraries and tools (libnds, grit, DSWiFi,
+Maxmod, etc). They are a combination of libraries that are required to build
+programs (libnds) and others that aren't required but used in many projects.
+All of them are installed in the path specified in the environment variable
+`BLOCKSDS`.
 
-- **libnds**: General-purpose library to use the hardware of the NDS.
+BlocksDS also allows users to install external libraries that aren't a core part
+of the SDK. They get installed in `BLOCKSDSEXT`.
 
-  - [Library documentation](../libnds/index.html)
-  - [Examples](https://github.com/blocksds/sdk/tree/master/examples)
+- The documentation of the **core libraries** of BlocksDS is [here](core_libs).
 
-- **Maxmod**: Music player that can play MOD, S3M, XM, IT and WAV files. It can
-  use hardware or software mixing, and it runs on the ARM7.
+- There are links to some popular **external libraries** [here](external_libs).
 
-  - [Library documentation](../maxmod/index.html)
-  - [Examples](https://github.com/blocksds/sdk/tree/master/examples/maxmod)
-
-- **LibXM7**: Hardware-accelerated player of XM and MOD music files that runs
-  on the ARM7.
-
-  - [Library documentation](../libxm7/index.html)
-  - [Examples](https://github.com/blocksds/sdk/tree/master/examples/libxm7)
-
-- **DSWiFi**: Library to use the WiFi hardware of the NDS and DSi with support
-  for local multiplayer and Internet access.
-
-  - [Library documentation](../dswifi/index.html)
-  - [Examples](https://github.com/blocksds/sdk/tree/master/examples/dswifi)
-
-- **libteak**: Library to use the Teak DSP included in the DSi and 3DS consoles.
-
-  - [Library documentation](../libteak/index.html)
-  - [Examples](https://github.com/blocksds/sdk/tree/master/examples/dsp)
-
-There are also some libraries and tools that are supported by BlocksDS, but not
-fully integrated with it. They include libraries to easily handle 2D and 3D
-graphics, additional converters for graphics and build systems. Take a look at
-the [documentation](./additional_libs) for more information.
+- If you're looking for a list of open source projects to use as reference,
+  check [this link](https://github.com/blocksds/awesome-blocksds).
