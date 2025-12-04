@@ -1,6 +1,6 @@
 ---
-title: Debugging programs
-weight: 30
+title: Debugging guide
+weight: 0
 ---
 
 While developing applications with BlocksDS you will reach situations where you
@@ -268,7 +268,7 @@ You should allocate anything bigger than one or two KBs on the heap with
 `malloc()` or similar functions.
 
 You can read more about how memory is used in BlocksDS in
-[this document](../../technical/memory_map).
+[this document](../../internal/memory_map).
 
 Other types of stack overflows happen when you, for example, allocate an array
 on the stack by declaring it at the top of a function, and you have a loop that

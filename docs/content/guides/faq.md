@@ -1,6 +1,6 @@
 ---
 title: Frequently asked questions
-weight: 40
+weight: -10
 ---
 
 ## General questions
@@ -22,7 +22,7 @@ other developers if you get stuck. Check the "getting support" section of the
 documentation [here](../../about/support).
 
 You can also check the online mirror of the documentation of all libraries
-included in BlocksDS [here](../libraries).
+included in BlocksDS [here](../../docs).
 
 If `libnds` is too low-level for you, you can check high-level libraries like
 [Nitro Engine](https://github.com/AntonioND/nitro-engine) or
@@ -44,7 +44,7 @@ GBATEK addendum:
 The recommended emulators are [melonDS](https://melonds.kuribo64.net/),
 [DeSmuMe](https://github.com/TASEmulators/desmume/releases) and
 [no$gba](https://problemkaputt.de/gba.htm). There is more information about
-debugging NDS programs [here](../debugging).
+debugging NDS programs [here](../../guides/debugging).
 
 ### When I load my game on my flashcart, it cannot find NitroFS files.
 
@@ -155,41 +155,41 @@ Related issues:
 
 BlocksDS provides built-in libraries for a variety of external peripherals:
 
-- [Slot-2 RAM cartridges](https://blocksds.skylyrac.net/libnds/slot2_8h.html)
+- [Slot-2 RAM cartridges](../../libnds/slot2_8h.html)
 
   - Memory Expansion Pak
   - Most other cartridges
 
-- [Slot-2 gyroscope](https://blocksds.skylyrac.net/libnds/slot2gyro_8h.html)
+- [Slot-2 gyroscope](../../libnds/slot2gyro_8h.html)
 
   - GBA WarioWare
 
-- [Slot-2 rumble](https://blocksds.skylyrac.net/libnds/rumble_8h.html)
+- [Slot-2 rumble](../../libnds/rumble_8h.html)
 
   - GBA WarioWare, Drill Dozer
   - DS Rumble Pak
   - Many other cartridges
 
-- [Slot-2 solar sensor](https://blocksds.skylyrac.net/libnds/slot2solar_8h.html)
+- [Slot-2 solar sensor](../../libnds/slot2solar_8h.html)
 
   - GBA Boktai 1, 2, 3
 
-- [Slot-2 tilt sensor](https://blocksds.skylyrac.net/libnds/slot2tilt_8h.html)
+- [Slot-2 tilt sensor](../../libnds/slot2tilt_8h.html)
 
   - GBA Yoshi, Koro Koro Puzzle
 
-- [DS Motion Card](https://blocksds.skylyrac.net/libnds/ndsmotion_8h.html)
+- [DS Motion Card](../../libnds/ndsmotion_8h.html)
 
   - DS Motion Card
   - DS Motion Pak
   - Motion Pack (bundled with Tony Hawk Motion)
   - Other cartridges
 
-- [Slot-2 Easy Piano](https://blocksds.skylyrac.net/libnds/piano_8h.html)
+- [Slot-2 Easy Piano](../../libnds/piano_8h.html)
 
-- [Slot-2 Guitar Grip](https://blocksds.skylyrac.net/libnds/guitarGrip_8h.html)
+- [Slot-2 Guitar Grip](../../libnds/guitarGrip_8h.html)
 
-- [Slot-2 Taito DS Paddle Controller](https://blocksds.skylyrac.net/libnds/paddle_8h.html)
+- [Slot-2 Taito DS Paddle Controller](../../libnds/paddle_8h.html)
 
 Additional peripheral support is provided by third-party libraries:
 
@@ -207,7 +207,7 @@ are only loaded in DSi mode, and ignored in DS mode, for example. They are also
 supported by debuggers, so it is possible to use `gdb` with emulators like
 melonDS and DeSmuMe to debug your games.
 
-There is more information [here](../../technical/build_process).
+There is more information [here](../../internal/build_process).
 
 ### Why is libnds required to build CPU binaries?
 
@@ -219,7 +219,7 @@ The license of `libnds` is Zlib, which means that you don't need to give any
 kind of attribution to its authors, and it doesn't impose any restriction on how
 you distribute your binaries and source code.
 
-There is more information [here](../../technical/build_process).
+There is more information [here](../../internal/build_process).
 
 ### Why is a custom C library required?
 
@@ -228,7 +228,7 @@ tightly coupled so that it's possible to use standard POSIX functions like
 `fopen()` or `time()` from NDS programs. While it is possible to replace the C
 library or `libnds`, it requires a lot of effort to make them work together.
 
-There is more information [here](../../technical/build_process).
+There is more information [here](../../internal/build_process).
 
 ### Why do the BlocksDS makefiles pass specs files to GCC?
 

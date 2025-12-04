@@ -1,6 +1,6 @@
 ---
 title: 'Optimization guide'
-weight: 40
+weight: 60
 ---
 
 This guide covers some techniques one can use to optimize DS/DSi homebrew

@@ -103,4 +103,4 @@ right away.
    ```
 
    If you want to know how to debug your programs, check the guide
-   [here](../../../docs/debugging).
+   [here](../../../guides/debugging).

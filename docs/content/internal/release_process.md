@@ -1,6 +1,6 @@
 ---
 title: 'BlocksDS release process'
-weight: 20
+weight: 60
 ---
 
 ## 1. Introduction

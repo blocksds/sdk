@@ -1,6 +1,6 @@
 ---
 title: 'C/C++ support'
-weight: 0
+weight: 30
 ---
 
 ## 1. Introduction
@@ -52,7 +52,7 @@ see the relevant examples bundled with BlocksDS.
 
 To provide correct argv information, the loader needs to support argv structure
 passing. This is not supported by certain legacy loaders; for more information,
-see our page on [legacy support](../../technical/legacy_support).
+see our page on [legacy support](../../guides/legacy_support).
 
 Under compatible loading environment, `argv[0]` will hold the path of the .nds
 file. Other `argv` entries may be set as well, but this isn't a common
@@ -77,7 +77,7 @@ particular manner, however.
 If the NDS ROM loader supports it, `exit` can be used to return to the loader.
 You can also return from `main()` to get the same effect.
 
-For more information, check [this document](../../design/exit_to_loader).
+For more information, check [this document](../../internal/exit_to_loader).
 
 In addition, `atexit` is supported for dynamically registering program exit
 handlers.
