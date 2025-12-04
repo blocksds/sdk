@@ -1,5 +1,5 @@
 ---
-weight: 00
+weight: 3
 title: 'User guides'
 ---
 

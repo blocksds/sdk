@@ -1,20 +1,27 @@
 ---
-weight: -30
-title: 'Documentation'
+title: 'BlocksDS'
+cascade:
+  type: docs
 ---
 
-BlocksDS comes with some core libraries and tools (libnds, grit, DSWiFi,
-Maxmod, etc). They are a combination of libraries that are required to build
-programs (libnds) and others that aren't required but used in many projects.
-All of them are installed in the path specified in the environment variable
-`BLOCKSDS`.
+Welcome to the documentation of BlocksDS! This is a set of libraries and tools
+created to develop games and applications for the Nintendo DS family of
+consoles
 
-BlocksDS also allows users to install external libraries that aren't a core part
-of the SDK. They get installed in `BLOCKSDSEXT`.
+If you're looking for information on how to install BlocksDS, check the
+[instructions](./setup/).
 
-- The documentation of the **core libraries** of BlocksDS is [here](core_libs).
+For an introduction to programming the Nintendo DS with BlocksDS, check
+[this tutorial](https://blocksds.skylyrac.net/tutorial/). Note that this
+tutorial assumes that you're familiar with the C programming language! It
+focuses exclusively on Nintendo DS development, not on programming.
 
-- There are links to some popular **external libraries** [here](external_libs).
+If you're looking for support, check [this page](../about/support).
 
-- If you're looking for a list of open source projects to use as reference,
-  check [this link](https://github.com/blocksds/awesome-blocksds).
+[This](https://github.com/blocksds/awesome-blocksds) is a list of interesting
+projects made with BlocksDS.
+
+The GitHub organization of BlocksDS is [here](https://github.com/blocksds).
+
+If you want to report issues with any of the repositories managed by BlocksDS,
+do it [here](https://github.com/blocksds/sdk/issues).

@@ -1,5 +1,5 @@
 ---
-weight: -40
+weight: 1
 title: 'Setup instructions'
 ---
 

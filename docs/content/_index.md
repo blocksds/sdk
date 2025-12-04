@@ -1,27 +1,22 @@
 ---
 title: 'BlocksDS'
-geekdocAnchor: false
-geekdocBreadcrumb: false
+layout: hextra-home
 ---
 
-Welcome to the documentation of BlocksDS! This is a set of libraries and tools
-created to develop games and applications for the Nintendo DS family of
-consoles
+<div class="hx:mt-6 hx:mb-6">
+{{< hextra/hero-headline >}}
+  BlocksDS
+{{< /hextra/hero-headline >}}
+</div>
 
-If you're looking for information on how to install BlocksDS, check the
-[instructions](./setup/).
+<div class="hx:mb-12">
+{{< hextra/hero-subtitle >}}
+Create your own applications and games &nbsp;<br class="hx:sm:block hx:hidden" />
+for the Nintendo DS and DSi in C and C++.
+{{< /hextra/hero-subtitle >}}
+</div>
 
-For an introduction to programming the Nintendo DS with BlocksDS, check
-[this tutorial](https://blocksds.skylyrac.net/tutorial/). Note that this
-tutorial assumes that you're familiar with the C programming language! It
-focuses exclusively on Nintendo DS development, not on programming.
-
-If you're looking for support, check [this page](../about/support).
-
-[This](https://github.com/blocksds/awesome-blocksds) is a list of interesting
-projects made with BlocksDS.
-
-The GitHub organization of BlocksDS is [here](https://github.com/blocksds).
-
-If you want to report issues with any of the repositories managed by BlocksDS,
-do it [here](https://github.com/blocksds/sdk/issues).
+<div class="hx:mb-6">
+{{< hextra/hero-button text="Get Started" link="docs/setup" >}}
+{{< hextra/hero-button text="Documentation" link="docs" >}}
+</div>

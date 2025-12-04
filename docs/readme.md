@@ -11,15 +11,15 @@ The documentation of the libraries included in BlocksDS is built with
 - **Hugo**
 
   Follow the [installation guide](https://gohugo.io/categories/installation/).
+  You need the extended version of Hugo.
 
-- **Geekdoc**
+- **Hextra**
 
-  Install the theme by downloading [this tarball](https://github.com/thegeeklab/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz)
-  and extracting it in `themes/hugo-geekdoc/`. For example, in Linux:
+  Download the theme by cloning the repository in `themes/hextra`:
 
   ```bash
-  cd docs
-  wget https://github.com/thegeeklab/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C themes/hugo-geekdoc/ --strip-components=1
+  cd themes
+  git clone https://github.com/imfing/hextra --depth=1
   ```
 
 ## Testing the documentation of BlocksDS
