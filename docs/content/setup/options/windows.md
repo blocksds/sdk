@@ -76,4 +76,4 @@ If you want to use it in WSL, follow the instructions for Linux instead.
    ```
 
    If you want to know how to debug your programs, check the guide
-   [here](../../../usage/debugging).
+   [here](../../../docs/debugging).

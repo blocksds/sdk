@@ -1,6 +1,6 @@
 ---
 title: 'Additional libraries/tools'
-weight: 50
+weight: 10
 ---
 
 There are also some libraries and tools that are supported in BlocksDS, but not

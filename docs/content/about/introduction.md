@@ -20,7 +20,7 @@ This is an SDK to develop applications for Nintendo DS in C or C++.
 - To try to keep compatibility with pre-existing C projects made by devkitARM.
   In theory, it should be enough to replace the Makefile of devkitARM by a
   Makefile of BlocksDS to build any old project, with some few exceptions. Check
-  [this guide](../../technical/devkitarm_porting_guide) for more details.
+  [this guide](../../docs/devkitarm_porting_guide) for more details.
 
 - To document as much of the SDK as possible. For detailed information about the
   design of BlocksDS, check [this document](../../design/design_guide).

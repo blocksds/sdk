@@ -1,6 +1,6 @@
 ---
-title: How to debug programs
-weight: 10
+title: Debugging programs
+weight: 30
 ---
 
 While developing applications with BlocksDS you will reach situations where you
