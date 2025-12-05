@@ -2,7 +2,8 @@
 
 # This script must be called from the docs/ folder of the sdk repository.
 #
-# This script depends on having hugo in your system.
+# This script depends on having hugo in your system. It has been tested with
+# v0.152.2 of hugo-extended.
 
 set -e
 set -x
@@ -12,7 +13,9 @@ set -x
 if [ ! -d themes/hextra ]; then
     cd themes
     git clone https://github.com/imfing/hextra.git --depth=1
-    cd ..
+    cd hextra
+    git checkout 9466af337f3a54e77b68c9852a568b79038ff0ef
+    cd ../..
 fi
 
 hugo --cleanDestinationDir --baseURL https://blocksds.skylyrac.net/
