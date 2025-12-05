@@ -24,6 +24,10 @@ menu:
       name: Documentation
       pageRef: /docs
       weight: 1
+    - identifier: tutorial
+      name: Tutorial
+      pageRef: /tutorial
+      weight: 2
     - name: Search
       weight: 3
       params:
