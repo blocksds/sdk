@@ -42,8 +42,8 @@ jobs:
           echo "[***] Installing Hugo"
           echo ""
 
-          wget https://github.com/gohugoio/hugo/releases/download/v0.140.2/hugo_extended_0.140.2_linux-amd64.tar.gz
-          tar -xf hugo_extended_0.140.2_linux-amd64.tar.gz
+          wget https://github.com/gohugoio/hugo/releases/download/v0.152.2/hugo_extended_0.152.2_linux-amd64.tar.gz
+          tar -xf hugo_extended_0.152.2_linux-amd64.tar.gz
           sudo mv hugo /usr/bin
 
           hugo version

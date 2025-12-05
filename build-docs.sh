@@ -9,10 +9,12 @@ set -x
 
 # Download theme
 
-if [ ! -d themes/hugo-geekdoc ]; then
-    mkdir -p themes/hugo-geekdoc
-    wget https://github.com/thegeeklab/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz
-    tar -xzvf hugo-geekdoc.tar.gz -C themes/hugo-geekdoc --strip-components=1
+if [ ! -d themes/hextra ]; then
+    cd themes
+    git clone https://github.com/imfing/hextra.git --depth=1
+    cd hextra
+    git checkout 9466af337f3a54e77b68c9852a568b79038ff0ef
+    cd ../..
 fi
 
 hugo --cleanDestinationDir --baseURL https://blocksds.skylyrac.net/tutorial/
