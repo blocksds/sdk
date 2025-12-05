@@ -38,4 +38,11 @@ for the Nintendo DS and DSi in C and C++.
     link="tutorial"
     style="background-color: rgba(128,255,128,0.3)"
   >}}
+  {{< hextra/feature-card
+    title="Getting support"
+    subtitle="Get help with the SDK."
+    icon="question-mark-circle"
+    link="docs/support"
+    style="background-color: rgba(224,224,128,0.3)"
+  >}}
 {{< /hextra/feature-grid >}}
