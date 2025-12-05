@@ -3,7 +3,7 @@ title: 'Getting started'
 weight: 2
 ---
 
-## Windows 🪟
+### Windows 🪟
 
 Instructions to install BlocksDS natively in Windows.
 
@@ -14,7 +14,7 @@ instructions instead.
   {{< card icon="cog" link="windows" title="Setup guide" >}}
 {{< /cards >}}
 
-## Linux 🐧
+### Linux 🐧
 
 If you are using Linux, MinGW, WSL, or any similar environment.
 
@@ -22,7 +22,7 @@ If you are using Linux, MinGW, WSL, or any similar environment.
   {{< card icon="cog" link="linux" title="Setup guide" >}}
 {{< /cards >}}
 
-## Docker 🐳
+### Docker 🐳
 
 The Docker images of BlocksDS can be used in any OS (including macOS). They
 require more disk space than the native installation, but they may be needed if
@@ -37,7 +37,7 @@ a native installation isn't possible.
 > **macOS** is not supported natively. You can use Docker instead. We're
 > [looking for help](https://github.com/blocksds/sdk/issues/205).
 
-## Build from source 🛠️
+### Build from source 🛠️
 
 This is the option you should use if you want to help develop BlocksDS, or if
 you want to always use the cutting edge version of BlocksDS. This is only
