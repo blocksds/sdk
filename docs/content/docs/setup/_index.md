@@ -1,6 +1,6 @@
 ---
-weight: 1
 title: 'Getting started'
+weight: 2
 ---
 
 ## Windows 🪟

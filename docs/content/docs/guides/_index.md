@@ -1,6 +1,6 @@
 ---
-weight: 3
 title: 'User guides'
+weight: 4
 ---
 
 This section has documentation that users of BlocksDS may find useful while

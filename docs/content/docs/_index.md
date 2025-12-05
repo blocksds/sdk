@@ -1,5 +1,6 @@
 ---
 title: 'Documentation'
+weight: 1
 cascade:
   type: docs
 ---
@@ -13,7 +14,7 @@ Welcome to the documentation of BlocksDS!
   {{< card icon="code" link="internal" title="Internal documentation" >}}
 {{< /cards >}}
 
-If you're looking for support, check [this page](../about/support).
+If you're looking for support, check [this page](./support).
 
 [This](https://github.com/blocksds/awesome-blocksds) is a list of interesting
 projects made with BlocksDS.

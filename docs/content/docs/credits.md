@@ -1,6 +1,6 @@
 ---
 title: 'Credits'
-weight: 4
+weight: 7
 ---
 
 BlocksDS, as with any open-source development kit for a complex embedded device, was only possible thanks to the work of hundreds of free software developers. This page serves as our way of acknowledging their efforts.

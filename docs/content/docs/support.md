@@ -1,6 +1,6 @@
 ---
 title: 'Getting support'
-weight: 3
+weight: 8
 ---
 
 If you want to report any bugs or suggest new features and make sure they aren't
