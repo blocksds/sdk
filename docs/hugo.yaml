@@ -14,6 +14,9 @@ markup:
     renderer:
       # Needed to add raw HTML to the homepage
       unsafe: true
+  highlight:
+    noClasses: false
+    style: light
 
 menu:
   main:
