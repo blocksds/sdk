@@ -18,8 +18,3 @@ If you're looking for support, check [this page](./support).
 
 [This](https://github.com/blocksds/awesome-blocksds) is a list of interesting
 projects made with BlocksDS.
-
-The GitHub organization of BlocksDS is [here](https://github.com/blocksds).
-
-If you want to report issues with any of the repositories managed by BlocksDS,
-do it [here](https://github.com/blocksds/sdk/issues).

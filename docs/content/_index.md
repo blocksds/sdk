@@ -22,7 +22,7 @@ for the Nintendo DS and DSi in C and C++.
     subtitle="Instructions to setup BlocksDS."
     icon="cog"
     link="docs/setup"
-    style="background-color: rgba(128,128,255,0.3)"
+    style="background-color: rgba(128,192,255,0.3)"
   >}}
   {{< hextra/feature-card
     title="Documentation"
@@ -36,13 +36,13 @@ for the Nintendo DS and DSi in C and C++.
     subtitle="Learn to use BlocksDS to create your own games and applications."
     icon="book-open"
     link="tutorial"
-    style="background-color: rgba(128,255,128,0.3)"
+    style="background-color: rgba(128,255,192,0.3)"
   >}}
   {{< hextra/feature-card
     title="Getting support"
     subtitle="Get help with the SDK."
     icon="question-mark-circle"
     link="docs/support"
-    style="background-color: rgba(224,224,128,0.3)"
+    style="background-color: rgba(192,255,128,0.3)"
   >}}
 {{< /hextra/feature-grid >}}
