@@ -1,20 +1,17 @@
 ---
-title: 'BlocksDS'
+title: 'Documentation'
 cascade:
   type: docs
 ---
 
-Welcome to the documentation of BlocksDS! This is a set of libraries and tools
-created to develop games and applications for the Nintendo DS family of
-consoles
+Welcome to the documentation of BlocksDS!
 
-If you're looking for information on how to install BlocksDS, check the
-[instructions](./setup/).
-
-For an introduction to programming the Nintendo DS with BlocksDS, check
-[this tutorial](https://blocksds.skylyrac.net/tutorial/). Note that this
-tutorial assumes that you're familiar with the C programming language! It
-focuses exclusively on Nintendo DS development, not on programming.
+{{< cards cols="1" >}}
+  {{< card icon="cog" link="setup" title="Getting started" >}}
+  {{< card icon="book-open" link="docs" title="Library documentation" >}}
+  {{< card icon="book-open" link="guides" title="User guides" >}}
+  {{< card icon="code" link="internal" title="Internal documentation" >}}
+{{< /cards >}}
 
 If you're looking for support, check [this page](../about/support).
 

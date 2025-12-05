@@ -12,9 +12,26 @@ All of them are installed in the path specified in the environment variable
 BlocksDS also allows users to install external libraries that aren't a core part
 of the SDK. They get installed in `BLOCKSDSEXT`.
 
-- The documentation of the **core libraries** of BlocksDS is [here](core_libs).
+{{< cards cols="1" >}}
+  {{< card
+    icon="code"
+    title="Core libraries"
+    link="core_libs"
+  >}}
+  {{< card
+    icon="code"
+    title="External libraries"
+    link="external_libs"
+  >}}
+{{< /cards >}}
 
-- There are links to some popular **external libraries** [here](external_libs).
+There's also a list of open source projects that you can use as reference or
+inspiration:
 
-- If you're looking for a list of open source projects to use as reference,
-  check [this link](https://github.com/blocksds/awesome-blocksds).
+{{< cards cols="1" >}}
+  {{< card
+    icon="arrow-up-right"
+    title="Open source projects"
+    link="https://github.com/blocksds/awesome-blocksds"
+  >}}
+{{< /cards >}}

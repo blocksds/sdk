@@ -16,8 +16,26 @@ for the Nintendo DS and DSi in C and C++.
 {{< /hextra/hero-subtitle >}}
 </div>
 
-<div class="hx:mb-6">
-{{< hextra/hero-button text="Getting Started" link="docs/setup" >}}
-{{< hextra/hero-button text="Documentation" link="docs" >}}
-{{< hextra/hero-button text="Tutorial" link="tutorial" >}}
-</div>
+{{< hextra/feature-grid >}}
+  {{< hextra/feature-card
+    title="Getting started"
+    subtitle="Instructions to setup BlocksDS."
+    icon="cog"
+    link="docs/setup"
+    style="background-color: rgba(128,128,255,0.3)"
+  >}}
+  {{< hextra/feature-card
+    title="Documentation"
+    subtitle="User guides, documentation of libraries, internal SDK documentation."
+    icon="code"
+    link="docs"
+    style="background-color: rgba(128,224,224,0.3)"
+  >}}
+  {{< hextra/feature-card
+    title="Tutorial"
+    subtitle="Learn to use BlocksDS to create your own games and applications."
+    icon="book-open"
+    link="tutorial"
+    style="background-color: rgba(128,255,128,0.3)"
+  >}}
+{{< /hextra/feature-grid >}}

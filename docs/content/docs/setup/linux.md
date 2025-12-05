@@ -109,7 +109,7 @@ flashcart.
 You can also try one of the open source projects made with BlocksDS that are
 listed [here](https://github.com/blocksds/awesome-blocksds).
 
-> [!WARNING]
+> [!NOTE]
 > If you get an error like `command not found: make`, you need to install it
 > from the packages of your system. For example, try ``sudo apt-get install -y
 > --no-install-recommends build-essential``
