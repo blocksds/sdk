@@ -10,7 +10,7 @@ A supplementary good source for understanding its design choices is the
 [BlocksDS issue tracker](https://github.com/blocksds/sdk/issues?q=is%3Aissue),
 where many were and continue to be openly discussed.
 
-## 1. Standardized binary build of the GCC compiler
+### 1. Standardized binary build of the GCC compiler
 
 Existing builds of GCC used for embedded development come with various, often
 not fully matching C/C++ standard libraries. The compatibility issues and
@@ -29,7 +29,7 @@ robust toolchain, it has been decided to standardize on a custom binary build
 of GCC. For this purpose, BlocksDS relies on a courtesy build provided by the
 [Wonderful toolchain](https://wonderful.asie.pl)'s infrastructure.
 
-## 2. Easy toolchain modification and rebuilds
+### 2. Easy toolchain modification and rebuilds
 
 Often, SDKs come with pre-built libraries - users only need to build them
 manually if they want to modify them. It is the more convenient route for
@@ -46,7 +46,7 @@ The exceptions are `picolibc` (standard C library) and `libstdc++` (standard
 C++ library), which are fairly difficult to build reliably. They are, as such,
 provided by the toolchain.
 
-## 3. Using picolibc over newlib
+### 3. Using picolibc over newlib
 
 The C library [picolibc](https://github.com/picolibc/picolibc) is used in
 BlocksDS instead of [newlib](https://sourceware.org/newlib). The reasons are:
@@ -77,7 +77,7 @@ evaluated, such as [PDCLib](https://github.com/DevSolar/pdclib/), but as of
 writing (May 2024) have been deemed insufficiently complete for production
 use in the context of BlocksDS.
 
-## 4. Standard C library port
+### 4. Standard C library port
 
 `picolibc` only provides the generic functionality of the standard C library.
 For example, it provides versions of `memset()` or `strlen()` that are
@@ -100,7 +100,7 @@ The reason to keep this as a separate library, instead of adding it to
 `picolibc` as a target, is to make updating `picolibc` mostly independent
 from refactors in `libnds`.
 
-## 5. Filesystem support
+### 5. Filesystem support
 
 This section will describe how the filesystem support has been implemented in
 libnds. Check [this document](../../guides/filesystem) if you're interested
@@ -136,7 +136,7 @@ card are provided as a DLDI driver. `f_open()` must determine the location of
 the file (based on the filesystem prefix, `fat:` or `sd:`) and use DLDI
 driver functions or DSi SD driver functions accordingly.
 
-## 6. NitroFS implementation
+### 6. NitroFS implementation
 
 When creating a game, it is needed to add a lot of assets such as graphics and
 music. Initially, most people just include them in their ARM9 binary, but this
@@ -184,7 +184,7 @@ in a transparent manner. The developer doesn't need to worry about the method
 of execution used for their homebrew; on the vast majority of platforms, it
 will be handled transparently.
 
-## 7. Multithreading
+### 7. Multithreading
 
 The original `libnds` did not support any kind of multithreading. This made it
 impossible to fully utilize the CPUs of the NDS during blocking operations.
@@ -197,7 +197,7 @@ integrating it with `libnds`, it is possible for functions like `fopen`
 or `fread` to switch to a different thread while they are waiting for the
 SD card to finish reading a block.
 
-### DLDI on the ARM7
+#### 7.1 DLDI on the ARM7
 
 While accessing the internal SD card on the DSi is performed on the ARM7,
 DLDI drivers used by cartridges are traditionally executed on the ARM9.

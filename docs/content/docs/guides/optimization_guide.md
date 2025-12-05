@@ -6,7 +6,7 @@ weight: 9
 This guide covers some techniques one can use to optimize DS/DSi homebrew
 with BlocksDS.
 
-## Optimizing CPU usage
+### Optimizing CPU usage
 
 > [!IMPORTANT]
 > Measure CPU performance on hardware only! Emulators are not sufficiently
@@ -18,7 +18,7 @@ with BlocksDS.
 * On the ARM9, place "hot" (often used) code and data in ITCM and DTCM,
   respectively. More information is available below.
 
-### ITCM and DTCM
+#### ITCM and DTCM
 
 ITCM stands for *Instruction Tightly Coupled Memory*, and on the DS refers to
 32 kilobytes of fast memory connected directly to the ARM9 CPU to be used for
@@ -41,14 +41,14 @@ ARM9 main CPU, such as the ARM7 or the DMA hardware.
 More details, as well as information on how to use ITCM/DTCM in assembly
 code, is available in the [usage notes](../usage_notes).
 
-## Reducing memory usage
+### Reducing memory usage
 
 * By default, the versions of `printf()` and `scanf()` linked by the toolchain
   contain code to handle `float` and `double` values. The required conversion
   code costs a few kilobytes of memory. Instead, integer versions can be
   utilized, as documented below.
 
-### Integer versions of stdio.h functions
+#### Integer versions of stdio.h functions
 
 By default, the build of `picolibc` of BlocksDS makes `printf()`, `sscanf()` and
 similar functions support float and double conversions. This is done to maintain
@@ -73,7 +73,7 @@ requirements:
 
 For more information, please read [the relevant picolibc documentation](https://github.com/picolibc/picolibc/blob/main/doc/printf.md).
 
-## Optimizing filesystem usage
+### Optimizing filesystem usage
 
 If you've programmed for ROM-based platforms before, like the GBA, you might be
 used to accessing in-ROM assets or filesystems instantly. That is not the case
@@ -113,9 +113,9 @@ There are things which can be done to make the most out of filesystem I/O:
     fatInitLookupCacheFile(file, 2 * 1024); /* 2 KB maximum lookup cache */
 ```
 
-## OpenGL-like API usage
+### OpenGL-like API usage
 
-### Texture formats
+#### Texture formats
 
 The `GL_RGB` texture format isn't actually supported by the hardware. When a
 texture is loaded with `glTexImage2D()` with format `GL_RGB`, it is actually

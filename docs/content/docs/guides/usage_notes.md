@@ -3,11 +3,11 @@ title: 'Usage notes'
 weight: 5
 ---
 
-## 1. Introduction
+### 1. Introduction
 
 This is just a list of tips and notes about how to use BlocksDS.
 
-## 2. Default ARM7 cores
+### 2. Default ARM7 cores
 
 Most projects need some sort of audio and WiFi support on the ARM7, but they
 don't need any custom code. BlocksDS provides a few ARM7 cores with different
@@ -35,7 +35,7 @@ Maxmod core.
 Remember to give credit correctly according to the libraries you have present in
 the ARM7, even if you aren't using them!
 
-## 3. Section annotations in filenames
+### 3. Section annotations in filenames
 
 Some projects require specific functions or variables to be placed in specific
 memory regions. Some functions may also need to be compiled as ARM instead of
@@ -64,7 +64,7 @@ BEGIN_ASM_FUNC my_function itcm
     bx  lr
 ```
 
-## 4. Optimizing DTCM usage
+### 4. Optimizing DTCM usage
 
 Applications are loaded at the start of main RAM (code, data sections,
 statically-allocated variables, etc). All remaining space is used as heap for
@@ -149,9 +149,9 @@ size for your application. There are two ways to set it:
 You can check [this test](https://github.com/blocksds/sdk/tree/master/tests/system/dtcm_fixed_size)
 to experiment with this value.
 
-## 5. Using alternative memory layouts
+### 5. Using alternative memory layouts
 
-### ARM7 options
+#### ARM7 options
 
 There are three different layouts provided by BlocksDS that applications can use
 for their ARM7 code. They can be selected by changing the `.specs` file in the
@@ -169,7 +169,7 @@ ARM7 makefile:
 
 Note that the IWRAM and VRAM options aren't supported for DSi applications.
 
-### ARM9 options
+#### ARM9 options
 
 They can be selected by changing the `.specs` file used in the Makefile:
 

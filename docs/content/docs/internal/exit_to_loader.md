@@ -3,7 +3,7 @@ title: 'Exit to loader protocol'
 weight: 4
 ---
 
-## 1. Introduction
+### 1. Introduction
 
 Normally, the only way to exit a DS application is to switch the console off and
 turn it on again. It can get annoying to do this if you're, for example, testing
@@ -31,7 +31,7 @@ the filesystem. In a regular DS, it will look for the file in the flashcard. In
 a DSi, it will look for it in the SD card of the DSi. If you don't have a file
 called "BOOT.NDS" the system won't work.
 
-## 2. The application exits
+### 2. The application exits
 
 The first step involves the application itself. Both the ARM9 and ARM7 CPUs can
 call `exit()`, or to return from the `main()` function.
@@ -42,7 +42,7 @@ it does is to call another function, `__libnds_exit()`.
 If the `main()` function returns, the effect is the same, as the `crt0` will
 call `__libnds_exit()` right after `main()` returns.
 
-## 3. libnds starts the exit to the loader
+### 3. libnds starts the exit to the loader
 
 The implementation of `__libnds_exit()` is in
 [libnds\_exit.c](https://github.com/blocksds/libnds/blob/91826293e9da6d85f77db8a631d20e6247920394/source/common/libnds_exit.c).
@@ -99,7 +99,7 @@ The last field of the struct, `bootsize`, is the size of the loader that
 located right after the `arm7reboot()` and `arm9reboot()` functions. It is
 simply appended to the `bootstub` code. This will be explained later.
 
-## 4. Handshake between ARM7 and ARM9
+### 4. Handshake between ARM7 and ARM9
 
 This part of the process involves the code in
 [bootstub.s](https://github.com/devkitPro/nds-hb-menu/blob/219e45a59a71eb36dc915038ec3f6908f321e6c3/bootstub/bootstub.s).
@@ -239,7 +239,7 @@ void hook7from9(void) // arm9reboot() -> this has to run on the ARM9
 }
 ```
 
-### Exit from ARM7
+#### 4.1 Exit from ARM7
 
 This process is different in devkitPro and BlocksDS. The version of BlocksDS is
 slightly simplified compared to devkitPro (it simplifies exit from the ARM7 by
@@ -289,7 +289,7 @@ both CPUs.
   `BIOS_ARM9_BOOTADDR`. This means that, at this point, the process is the
   same as when the reset has been started from the ARM9.
 
-### Exit from ARM9
+#### 4.2 Exit from ARM9
 
 - `arm9reboot()` is called by the ARM9.
 
@@ -326,7 +326,7 @@ both CPUs.
   the ARM9 can end the boot loop and jump to the ARM9 code that will continue
   the process.
 
-## 5. Loader of bootloader
+### 5. Loader of bootloader
 
 This code runs from `VRAM_C`, and initially it runs on the ARM7 only. The ARM7
 must copy the ARM9 code somewhere outside of `VRAM_C` (it has been mapped to

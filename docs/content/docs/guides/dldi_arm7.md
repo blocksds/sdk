@@ -1,9 +1,9 @@
 ---
-title: 'DLDI in ARM7'
+title: 'DLDI in the ARM7'
 weight: 7
 ---
 
-## 1. Introduction
+### 1. Introduction
 
 DLDI (Dynamically Linked Disc Interface) is an interface designed for homebrew
 projects to be able to access the memory of flashcarts (usually micro SD cards)
@@ -18,7 +18,7 @@ yourself. DeSmuME doesn't autopatch ROMS, for example, while melonDS does.
 
 This is an archive of DLDI drivers: https://github.com/DS-Homebrew/DLDI
 
-## 2. Why is DLDI in ARM7 important?
+### 2. Why is DLDI in the ARM7 important?
 
 Reading files with DLDI is very slow because reading from SD cards is very slow.
 It's not limited to DLDI. Regular cartridge read commands (like the ones used by
@@ -39,14 +39,14 @@ needs to call `cothread_yield()`, `cothread_yield_irq()` or
 do. Check [this example](https://github.com/blocksds/sdk/tree/master/examples/filesystem/async_loading)
 to see how to load two different files using two threads at the same time.
 
-## 3. Supported flashcarts
+### 3. Supported flashcarts
 
 The main drawback of this approach is that not all flashcarts support this. Some
 DLDI drivers have been built for the ARM9 and will crash in the ARM7, for
 example. This is why DLDI in ARM7 isn't enforced. The current code supports
 using DLDI from both ARM9 and ARM7 without rebuilding the application.
 
-## 4. Adding support to a DLDI driver
+### 4. Adding support to a DLDI driver
 
 All you need to do is to make sure that your code is built for the ARM7 instead
 of the ARM9. Use `-mcpu=arm7tdmi` instead of `-mcpu=arm946e-s+nofp`.
@@ -60,7 +60,7 @@ Then add the following flag to the features entry of your DLDI header:
 BlocksDS's fork of libnds will detect this flag and switch to using DLDI from
 the ARM7.
 
-## 5. Using DLDI with BlocksDS
+### 5. Using DLDI with BlocksDS
 
 If your application doesn't care about which CPU uses DLDI, you don't have to do
 anything. Any driver marked with `FEATURE_ARM7_CAPABLE` will run from the
@@ -78,7 +78,7 @@ dldiSetMode(DLDI_MODE_ARM9); // or DLDI_MODE_AUTODETECT or DLDI_MODE_ARM7
 DLDI_MODE dldi_mode = dldiGetMode(void);
 ```
 
-## 6. Supported flashcarts
+### 6. Supported flashcarts
 
 This is a list of flashcarts that have been reported to work. Please, test your
 flashcart using

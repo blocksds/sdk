@@ -12,11 +12,11 @@ enumeration of project licenses, not a grant of licensing terms in its own right
 In no event will the BlocksDS project or its authors be held liable for any
 damages arising from errors or mistakes in this information.
 
-# Distributed by BlocksDS
+## Distributed by BlocksDS
 
 These libraries are present in the BlocksDS source tree.
 
-## DSWiFi
+### DSWiFi
 
 This is used in the default ARM7 binary.
 
@@ -54,7 +54,7 @@ you also need to follow the terms of the lwIP library, licensed under the
 Copyright (c) 2001, 2004 Swedish Institute of Computer Science.
 ```
 
-## libnds
+### libnds
 
 This is used in all programs that use the default crts, ARM7 binary, etc.
 
@@ -63,7 +63,7 @@ Zlib license. No copyright notice required in binary distributions.
 FatFs uses a custom BSD/MIT/ISC-like license that doesn't require attribution in
 binary files either.
 
-## LibXM7
+### LibXM7
 
 This is only used if the user explicitly links it.
 
@@ -74,7 +74,7 @@ as well as the MIT license terms:
 Copyright (C) 2018 sverx
 ```
 
-## Maxmod
+### Maxmod
 
 This is used in the default ARM7 binary.
 
@@ -86,7 +86,7 @@ Copyright (C) 2021-2025 Antonio Niño Díaz
 Copyright (C) 2023 Lorenzooone (lollo.lollo.rbiz@gmail.com)
 ```
 
-## crts
+### crts
 
 This code is used in any program unless the user explicitly provides an alternative.
 
@@ -96,7 +96,7 @@ This code is used in any program unless the user explicitly provides an alternat
 
 The source code for crts is available [here](https://github.com/blocksds/sdk/tree/master/sys/crts).
 
-## default\_arm7
+### Default ARM7
 
 This is used in any project that doesn't include source code for an ARM7 binary.
 
@@ -109,12 +109,12 @@ libraries. For example, some use LibXM7 instead of Maxmod, and some don't use
 DSWiFi at all. You need to only give credit for the libraries present in your
 core.
 
-# Distributed by the toolchain
+## Distributed by the toolchain
 
 These libraries are not present in the BlocksDS source tree or packages,
 but are used when creating a BlocksDS application.
 
-## picolibc
+### picolibc
 
 This library is always used unless you tell the compiler to not link libc at all.
 
@@ -129,7 +129,7 @@ Citing [the README](https://github.com/picolibc/picolibc/blob/main/README.md):
 For more information, take a look at `COPYING.picolibc` in the `picolibc` repository
 [here](https://github.com/WonderfulToolchain/wf-picolibc/blob/wonderful/COPYING.picolibc).
 
-## libstdc++
+### libstdc++
 
 This library is used, by default, in any C++ program or program that is linked with
 a C++ library, unless you tell the compiler to not link default libraries
@@ -149,7 +149,7 @@ done by a standard BlocksDS configuration.
 
 For more information, read [the license terms of the exception](https://www.gnu.org/licenses/gcc-exception-3.1.en.html).
 
-## libgcc
+### libgcc
 
 This library is used, by default, in any program compiled with GCC.
 

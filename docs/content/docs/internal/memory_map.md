@@ -3,7 +3,7 @@ title: 'Memory map'
 weight: 2
 ---
 
-## 1. Introduction
+### 1. Introduction
 
 The DS has several RAM regions that are distributed across its address space.
 In most cases you don't need to worry about the details, as libnds is set up in a
@@ -11,9 +11,9 @@ way that covers most use-cases. All you normally need to worry about is how to
 allocate VRAM to be used by the 2D and 3D engines. However, in some cases it may
 be needed to understand how everything works.
 
-## 2. Memory map
+### 2. Memory map
 
-### 2.1 ARM9 Memory Map
+#### 2.1 ARM9 Memory Map
 
 Address    | Size       | Description
 -----------|------------|--------------------------------------------------------
@@ -29,7 +29,7 @@ Address    | Size       | Description
 0xA000000  | 64 KB      | GBA slot SRAM
 0xFFFF0000 | 32 KB      | ARM9 BIOS
 
-### 2.2 ARM7 Memory Map
+#### 2.2 ARM7 Memory Map
 
 Address   | Size       | Description
 ----------|------------|--------------------------------------------------------
@@ -42,7 +42,7 @@ Address   | Size       | Description
 0x8000000 | 32 MB      | GBA slot ROM/RAM
 0xA000000 | 64 KB      | GBA slot SRAM
 
-### 2.3 DSi changes
+#### 2.3 DSi changes
 
 - ARM7 BIOS is 64 KB instead of 16 KB.
 - ARM9 BIOS is 64 KB instead of 32 KB.
@@ -51,7 +51,7 @@ Address   | Size       | Description
 - The GBA slot ROM and RAM areas are filled with 0xFF.
 - At 0xC000000 there is a mirror of main RAM.
 
-## 3. Memory Protection Unit (MPU)
+### 3. Memory Protection Unit (MPU)
 
 The ARM9 has a MPU, as well as data and instruction caches. The MPU lets you:
 
@@ -102,9 +102,9 @@ Note that slot 2 memory is normally uncached, but libnds provides helpers to use
 RAM slot 2 cartridges, and it allows the developer to enable cache for them if
 desired.
 
-## 4. Main RAM
+### 4. Main RAM
 
-### 4.1. Configuration
+#### 4.1. Configuration
 
 The size and location of main RAM changes depending on the console model. All of
 them have main RAM starting at address 0x2000000, this table shows the
@@ -138,7 +138,7 @@ Debugger DSi consoles are very unusual, so they aren't a real concern. However,
 DSi debugger unit. Because of this, it is interesting to support the full 32 MB
 of RAM.
 
-### 4.2. Reserved areas
+#### 4.2. Reserved areas
 
 The last 48 KB of main RAM is reserved by libnds and/or contains data provided by
 the .nds loader:
@@ -156,7 +156,7 @@ Address   | Description
 0x2FFFE00 | DS/DSi: .nds header - 0x160 bytes on DSi, 0x170 bytes on NDS.
 0x2FFFE70 | [devkitARM argv structure](https://github.com/blocksds/libnds/blob/7d131d933ebab8eecf1c28a4eeb2107257f09e14/include/nds/system.h#L435-L447). Used for implementing argument passing.
 
-### 4.3. Caveats
+#### 4.3. Caveats
 
 Note that, if both CPUs are accessing main RAM at the same time, there will be
 penalties that will delay accesses. Ideally, ARM9 and ARM7 should use different
@@ -165,7 +165,7 @@ uses ARM7 WRAM and Shared WRAM (which is always mapped to the ARM7 by libnds).
 This way the ARM7 has access to 96 KB of WRAM, which isn't much, but it's
 normally enough.
 
-## 5. ITCM and DTCM
+### 5. ITCM and DTCM
 
 Because of how fast it is, DTCM is used for the stack of the ARM9. DTCM can be
 mapped anywhere, and libnds maps the 16 KB of DTCM at 0x2FF0000-0x2FF4000.
@@ -198,7 +198,7 @@ However, it's important to have the option for the CPU to access ITCM at address
 0x0000000 because users are allowed to setup a custom exception handler there.
 Access to this region is enabled if you call `setVectorBase()`.
 
-## 6. ARM7 WRAM and Shared WRAM
+### 6. ARM7 WRAM and Shared WRAM
 
 This WRAM is available for the ARM7 only. It's fairly small, only 64 KB.
 However, this is the main RAM that the ARM7 should use, as it will leave main
@@ -209,7 +209,7 @@ because the ARM7 WRAM is so small, libnds allocates all of it to the ARM7 in a
 way that the 32 KB of shared WRAM go right before the 64 KB of ARM7 WRAM, for a
 total of 96 KB of WRAM.
 
-### 6.1. Reserved areas
+#### 6.1. Reserved areas
 
 The last 64 bytes of ARM7 WRAM is reserved for the NDS BIOS:
 
@@ -220,7 +220,7 @@ Address   | Description
 0x380FFF8 | BIOS IRQ acknowledgement
 0x380FFFC | BIOS IRQ handler access
 
-### 6.2. DSi Shared WRAM (NWRAM)
+#### 6.2. DSi Shared WRAM (NWRAM)
 
 The DSi introduces 3 new banks of WRAM (libnds calls it NWRAM). Each one of the
 banks (A, B and C) are 256 KB in size. Each bank is divided in 32 KB slots that
@@ -253,7 +253,7 @@ Final note: The DSi ROM header has some fields that are used as default values
 for all `MBK` registers. However, it doesn't look like all homebrew loaders use
 them, so we can't rely on them.
 
-## 7. GBA slot
+### 7. GBA slot
 
 In DS consoles it is possible to access the GBA slot starting at address
 0x8000000. While it is possible to use this to read the ROM of GBA cartridges,
@@ -267,7 +267,7 @@ cached (which could be useful if a RAM expansion pack is detected).
 Also, note that RAM in this memory region can't be written in 8-bit units, only
 in 16 or 32-bit units.
 
-## 8. VRAM
+### 8. VRAM
 
 VRAM mappings aren't very intuitive. Let's explain this with an example.
 

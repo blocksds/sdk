@@ -3,7 +3,7 @@ title: 'Build process information'
 weight: 5
 ---
 
-## 1. Introduction
+### 1. Introduction
 
 NDS ROMs have an ARM9 binary, an ARM7 binary, an optional read-only filesystem,
 and a ROM header. The ARM9 and ARM7 binaries are loaded to RAM by the NDS ROM
@@ -17,9 +17,9 @@ You can get more information about the header
 This document explains the way BlocksDS builds each component and assembles the
 final ROM.
 
-## 2. ARM7 and ARM9 binaries
+### 2. ARM7 and ARM9 binaries
 
-### 2.1 ELF sections
+#### 2.1 ELF sections
 
 The developer provides source code files that are compiled and linked into an
 `.elf` file (one per CPU). The source code files may contain code or data as
@@ -75,7 +75,7 @@ files (with `objcopy`) and using them to build the final ROM. However, `bin`
 files generated this way don't contain information about the entrypoint address,
 and it isn't possible to determine which parts are only needed for DSi.
 
-## 2.2 Custom linkerscript and crt0 files
+### 2.2 Custom linkerscript and crt0 files
 
 Building an ARM7/ARM9 binary for the NDS can be done with a generic toolchain
 without any modifications, all you need to do is to provide a custom
@@ -109,7 +109,7 @@ It is possible to use BlocksDS without the default `crt0` by passing
 `-nostartfiles` to the linker, but then you will be in charge of initializing
 the hardware yourself.
 
-## 2.3 Dependency on libnds
+### 2.3 Dependency on libnds
 
 It is required to link `libnds` in all programs because of two reasons:
 
@@ -133,7 +133,7 @@ your code or binaries, and it doesn't require any attribution like copyright
 notices in your game. You are very welcome to add an acknowledgment to its
 authors, but it's not mandatory.
 
-## 2.4 Specs files
+### 2.4 Specs files
 
 Because of all the custom `gcc` options required to build NDS binaries
 correctly, it is possible that new options are required after `gcc` updates, or
@@ -153,7 +153,7 @@ If you build the binary with `make V=` instead of just `make`, the makefile will
 print the exact commands used at every step of the build process. You will be
 able to see which libraries are used, which compiler options are used, etc.
 
-## 3. Filesystem
+### 3. Filesystem
 
 The size of the ARM7 and ARM9 binaries is limited to the available RAM of the
 console. In order to support bigger games, the NDS ROM can contain a `NitroFS`
@@ -165,7 +165,7 @@ expected to have one or more folders with data and pass them to `ndstool` when
 the ROM is created. `ndstool` will generate a filesystem image by combining all
 the folders provided by the user.
 
-## 4. Teak DSP binaries
+### 4. Teak DSP binaries
 
 The DSi has another general-purpose CPU that can run user code, a Teak DSP.
 Binaries for this CPU are treated as generic data. You can add them to your CPU
@@ -173,7 +173,7 @@ binaries, or keep them in the filesystem so that they can be switched at
 runtime. Note that this toolchain isn't very mature, so you will need to be very
 careful and test your code often if you decide to use it.
 
-## 5. NDS ROM creation
+### 5. NDS ROM creation
 
 `ndstool` is a program that can take the following and generate a NDS ROM out of
 it:

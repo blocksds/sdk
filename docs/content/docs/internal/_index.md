@@ -1,6 +1,6 @@
 ---
 weight: 4
-title: 'Internal documentation'
+title: 'Internal docs'
 ---
 
 This section contains documentation for BlocksDS developers, but it may also be

@@ -27,7 +27,7 @@ https://wonderful.asie.pl/wiki/doku.php?id=getting_started:linux
 
 ### Install the ARM toolchain
 
-Install the ARM toolchain of Wonderful Toolchains:
+Install the ARM toolchain of Wonderful Toolchain:
 
 ```bash
 export PATH=/opt/wonderful/bin:$PATH

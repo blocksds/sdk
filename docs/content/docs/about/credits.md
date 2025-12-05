@@ -5,7 +5,7 @@ weight: 4
 
 BlocksDS, as with any open-source development kit for a complex embedded device, was only possible thanks to the work of hundreds of free software developers. This page serves as our way of acknowledging their efforts.
 
-# libnds
+### libnds
 
 - Auby, Christian (DesktopMan)
 - bakawun
@@ -64,7 +64,7 @@ In addition, the BlocksDS-provided version of libnds includes code developed by 
 - Gericom (Teak DSP)
 - profi200 (TMIO SD/MMC driver)
 
-# DSWifi
+### DSWifi
 
 - Gamblore
 - Murphy, Dave (WinterMute)
@@ -75,19 +75,19 @@ In addition, the BlocksDS-provided version of libnds includes code developed by 
 - Theall, Michael (mtheall)
 - Thomas, Max (ShinyQuagsire)
 
-# Maxmod
+### Maxmod
 
 - maxmod: Johnson, Mukunda
 - Murphy, Dave (WinterMute)
 - Niño Díaz, Antonio
 - Lorenzooone
 
-# Other on-device libraries
+### Other on-device libraries
 
 - crt0: fincs; Murphy, Dave (WinterMute); PoroCYon
 - LibXM7: sverx
 
-# grit
+### grit
 
 - bpunit
 - btuduri
@@ -106,15 +106,16 @@ In addition, the BlocksDS-provided version of libnds includes code developed by 
 
 Special thanks to aaaaaa123456789 for developing libplum.
 
-# Other tools
+### Other tools
 
 - dldipatch: lifehackerhansol
 - squeezer: Hu, Jeremy (huxingyi)
 
-# Final acknowledgements
+### Final acknowledgements
 
 This project wouldn't have been possible without:
 
-- the GNU project, developers of [GCC](https://gcc.gnu.org/) and [make](https://www.gnu.org/software/make/) among others;
+- The GNU project, developers of [GCC](https://gcc.gnu.org/) and [make](https://www.gnu.org/software/make/) among others;
 - Keith Packard, the lead developer of [picolibc](https://github.com/picolibc/picolibc), itself based on Cygnus/Red Hat's [newlib](https://sourceware.org/newlib/);
+- asie, for [Wonderful Toolchain](https://wonderful.asie.pl/).
 - many others!

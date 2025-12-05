@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: 2
 ---
 
-## Version 1.15.7 (2025-11-29)
+### Version 1.15.7 (2025-11-29)
 
 - libnds:
 
@@ -50,7 +50,7 @@ weight: 2
   - The DSWiFi examples have been updated to use `Wifi_ConnectWfcAP()` in
     addition to the other functions to connect to access points.
 
-## Version 1.15.6 (2025-11-12)
+### Version 1.15.6 (2025-11-12)
 
 - libnds:
 
@@ -69,7 +69,7 @@ weight: 2
     used to cause an error if the libraries weren't present in the system.
   - The documentation about multithreading locks has been updated.
 
-## Version 1.15.5 (2025-11-01)
+### Version 1.15.5 (2025-11-01)
 
 - libnds:
 
@@ -99,7 +99,7 @@ weight: 2
     example. @Mori-TM
   - Improve exit-to-loader test.
 
-## Version 1.15.4 (2025-10-19)
+### Version 1.15.4 (2025-10-19)
 
 - libnds:
 
@@ -116,7 +116,7 @@ weight: 2
   - Support unusual `main()` prototypes with 3 arguments instead of two. The
     third argument is set to `NULL`.
 
-## Version 1.15.3 (2025-10-17)
+### Version 1.15.3 (2025-10-17)
 
 - DSWiFi:
 
@@ -143,7 +143,7 @@ weight: 2
   - Mention the multiple ARM7 cores in the migration guide.
   - Support edge-triggered rumble cartridges in the Slot-2 example.
 
-## Version 1.15.2 (2025-10-14)
+### Version 1.15.2 (2025-10-14)
 
 - libnds:
 
@@ -185,7 +185,7 @@ weight: 2
     output.
   - The SSL DSWiFi example has been updated with more test websites.
 
-## Version 1.15.1 (2025-10-09)
+### Version 1.15.1 (2025-10-09)
 
 - DSWiFi:
 
@@ -198,7 +198,7 @@ weight: 2
   - Some settings have been changed in lwIP (for example, to increase the number
     of available simultaneous sockets).
 
-## Version 1.15.0 (2025-10-07)
+### Version 1.15.0 (2025-10-07)
 
 - libnds:
 
@@ -293,7 +293,7 @@ weight: 2
       networks whenever possible.
     - There's a new example to show how to use the new version check helpers.
 
-## Version 1.14.2 (2025-09-17)
+### Version 1.14.2 (2025-09-17)
 
 - libnds:
 
@@ -338,7 +338,7 @@ weight: 2
   - The example that accessess all filesystems has been improved to check the
     `nand2` filesystem as well.
 
-## Version 1.14.1 (2025-09-10)
+### Version 1.14.1 (2025-09-10)
 
 - libnds:
 
@@ -385,7 +385,7 @@ weight: 2
     Homebrew Menu and the bootstub struct.
   - Enable and fix some compiler warnings in dsltool, teaktool and mkfatimg.
 
-## Version 1.14.0 (2025-09-06)
+### Version 1.14.0 (2025-09-06)
 
 - libnds:
 
@@ -479,7 +479,7 @@ weight: 2
   - Add test of setting and getting filesystem labels.
   - Allow building all examples and tests in parallel. @steveschnepp
 
-## Version 1.13.1 (2025-08-20)
+### Version 1.13.1 (2025-08-20)
 
 - libnds:
 
@@ -576,7 +576,7 @@ weight: 2
     operations. @asiekierka
   - picolibc has been updated with minor fixes to the `printf` function family.
 
-## Version 1.13.0 (2025-08-11)
+### Version 1.13.0 (2025-08-11)
 
 - libnds:
 
@@ -718,7 +718,7 @@ weight: 2
   - An example has been added to show how to set the LCD brightness level on
     different DS models.
 
-## Version 1.12.0 (2025-07-12)
+### Version 1.12.0 (2025-07-12)
 
 - libnds:
 
@@ -845,7 +845,7 @@ weight: 2
     - Modify the default makefiles to allow the user to specify additional
       `LDFLAGS` when including them.
 
-## Version 1.11.1 (2025-05-30)
+### Version 1.11.1 (2025-05-30)
 
 - libnds:
 
@@ -860,7 +860,7 @@ weight: 2
   - Improve C++ example to test global destructors in addition to global
     constructors.
 
-## Version 1.11.0 (2025-05-29)
+### Version 1.11.0 (2025-05-29)
 
 - libnds:
 
@@ -924,7 +924,7 @@ weight: 2
       garbage collector of the linker from removing it.
 
 
-## Version 1.10.1 (2025-04-26)
+### Version 1.10.1 (2025-04-26)
 
 - SDK:
 
@@ -934,7 +934,7 @@ weight: 2
     - Fix conflicting types when including `math.h` instead of `cmath` from C++
       files.
 
-## Version 1.10.0 (2025-04-25)
+### Version 1.10.0 (2025-04-25)
 
 - Maxmod:
 
@@ -981,7 +981,7 @@ weight: 2
     - Some comments have been added to the libnds sound example.
     - A missing example description has been added.
 
-## Version 1.9.1 (2025-04-03)
+### Version 1.9.1 (2025-04-03)
 
 - libnds:
 
@@ -1027,7 +1027,7 @@ weight: 2
       [here](https://blocksds.skylyrac.net/tutorial/), and the source code is
       available [here](https://github.com/blocksds/tutorial).
 
-## Version 1.9.0 (2025-03-26)
+### Version 1.9.0 (2025-03-26)
 
 - libnds:
 
@@ -1105,7 +1105,7 @@ weight: 2
     - Libraries are now built with debug symbols (`-g`) to help debug
       applications made with them.
 
-## Version 1.8.1 (2025-03-07)
+### Version 1.8.1 (2025-03-07)
 
 - libnds:
 
@@ -1165,7 +1165,7 @@ weight: 2
     - Update CMake build system to link the debug version of libnds in debug
       builds.
 
-## Version 1.8.0 (2025-02-28)
+### Version 1.8.0 (2025-02-28)
 
 - libnds:
 
@@ -1268,7 +1268,7 @@ weight: 2
       to prevent linking errors due to circular dependencies. Also, banner title
       formation has been improved.
 
-## Version 1.7.3 (2025-01-15)
+### Version 1.7.3 (2025-01-15)
 
 - libnds:
 
@@ -1317,7 +1317,7 @@ weight: 2
     - Use the right system header in `dldipatch` to fix a compiler warning.
     - PAlib is now available as a pacman package: `blocksds-palib`
 
-## Version 1.7.2 (2025-01-07)
+### Version 1.7.2 (2025-01-07)
 
 - libnds:
 
@@ -1360,7 +1360,7 @@ weight: 2
       toolchain rather than the host to build the library.
     - Improve scripts to release new SDK versions.
 
-## Version 1.7.1 (2024-12-25)
+### Version 1.7.1 (2024-12-25)
 
 - libnds:
 
@@ -1392,7 +1392,7 @@ weight: 2
 
     - New example of how to use the ARM7 console to print text on the screen.
 
-## Version 1.7.0 (2024-12-23)
+### Version 1.7.0 (2024-12-23)
 
 - libnds:
 
@@ -1493,7 +1493,7 @@ weight: 2
     - Some sample defines have been added to the makefiles of the templates to
       clarify its syntax.
 
-## Version 1.6.3 (2024-11-11)
+### Version 1.6.3 (2024-11-11)
 
 - libnds:
 
@@ -1533,7 +1533,7 @@ weight: 2
     - Update ARM assembly code to always use UAL syntax.
     - Update official Docker image to Ubuntu 24.04.
 
-## Version 1.6.2 (2024-11-04)
+### Version 1.6.2 (2024-11-04)
 
 - libnds:
 
@@ -1551,7 +1551,7 @@ weight: 2
 
     - Improve FAQ and updating guide.
 
-## Version 1.6.1 (2024-11-03)
+### Version 1.6.1 (2024-11-03)
 
 - libnds:
 
@@ -1561,7 +1561,7 @@ weight: 2
       reads of recently written sectors, but the submodule wasn't updated
       correctly so the fix was left out.
 
-## Version 1.6.0 (2024-11-03)
+### Version 1.6.0 (2024-11-03)
 
 - libnds:
 
@@ -1639,7 +1639,7 @@ weight: 2
     - Add `inttypes.h` include in some examples that require it after picolibc
       changes.
 
-## Version 1.5.0 (2024-09-10)
+### Version 1.5.0 (2024-09-10)
 
 - libnds:
 
@@ -1719,7 +1719,7 @@ weight: 2
       for everyone else.
     - Remove usage of `__DATE__` in teaktool.
 
-## Version 1.4.0 (2024-08-08)
+### Version 1.4.0 (2024-08-08)
 
 - libnds:
 
@@ -1829,7 +1829,7 @@ weight: 2
       are uniform across all the codebase.
     - All Doxyfiles have been updated.
 
-## Version 1.3.1 (2024-07-26)
+### Version 1.3.1 (2024-07-26)
 
 - libnds:
 
@@ -1880,7 +1880,7 @@ weight: 2
       press only, as opposed to every frame while the pen is touching the
       display.
 
-## Version 1.3.0 (2024-07-06)
+### Version 1.3.0 (2024-07-06)
 
 - libnds:
 
@@ -2047,7 +2047,7 @@ weight: 2
     - The Teak LLVM toolchain is no longer mentioned in the Windows setup
       instructions, as it is not available there.
 
-## Version 1.2.0 (2024-06-08)
+### Version 1.2.0 (2024-06-08)
 
 - libnds:
 
@@ -2105,7 +2105,7 @@ weight: 2
   - Improve timer example.
   - Add a test for the videoGL functions that allocate textures and palettes.
 
-## Version 1.1.0 (2024-05-08)
+### Version 1.1.0 (2024-05-08)
 
 - libnds:
 
@@ -2125,7 +2125,7 @@ weight: 2
   - Add tests for `realpath()`.
   - Fix warnings found by GCC 14 in examples.
 
-## Version 1.0.0 (2024-03-30)
+### Version 1.0.0 (2024-03-30)
 
 - libnds:
 
@@ -2161,7 +2161,7 @@ weight: 2
 
   - Fix return type of `mmEffectCancel()` in ARM9 code.
 
-## Version 0.14.0 (2024-03-02)
+### Version 0.14.0 (2024-03-02)
 
 - libnds:
 
@@ -2226,7 +2226,7 @@ weight: 2
    - Some definitions have been turned into enums.
    - `inline` functions in headers have been turned into `static inline.`
 
-## Version 0.13.0 (2024-02-01)
+### Version 0.13.0 (2024-02-01)
 
 - libnds:
 
@@ -2294,7 +2294,7 @@ weight: 2
     with the loader that has been used to launch the application.
   - Add test to display all configured MPU regions.
 
-## Version 0.12.0 (2023-12-26)
+### Version 0.12.0 (2023-12-26)
 
 - libnds:
 
@@ -2326,7 +2326,7 @@ weight: 2
     `.meta`, `.pal` extensions, as opposed to `.img.bin`, `.map.bin`,
     `.meta.bin` and `.pal.bin`.
 
-## Version 0.11.3 (2023-12-04)
+### Version 0.11.3 (2023-12-04)
 
 - libnds:
 
@@ -2365,7 +2365,7 @@ weight: 2
       use of the BLX opcode for linking ARM/Thumb code in place of trampolines,
       slightly improving final executable size and performance.
 
-## Version 0.11.2 (2023-11-27)
+### Version 0.11.2 (2023-11-27)
 
 - libnds:
 
@@ -2382,7 +2382,7 @@ weight: 2
   - Move crt0 and linkerscript to libteak repository.
   - Preprocess all assembly files, not just the crt0.
 
-## Version 0.11.1 (2023-11-25)
+### Version 0.11.1 (2023-11-25)
 
 - libnds:
 
@@ -2405,7 +2405,7 @@ weight: 2
   - Added an example of how to use DMA to transfer data from the DSP memory to
     the ARM9 memory.
 
-## Version 0.11.0 (2023-11-19)
+### Version 0.11.0 (2023-11-19)
 
 - libc:
 
@@ -2472,15 +2472,15 @@ weight: 2
   - Minor optimizations have been done to `readUserSettings()`.
   - Fixed the `NDMA_DST_FIX` macro definition.
 
-## Version 0.10.2 (2023-11-11)
+### Version 0.10.2 (2023-11-11)
 
 - NitroFS: Fix file traversal not working without running a `chdir()` first.
 
-## Version 0.10.1 (2023-11-11)
+### Version 0.10.1 (2023-11-11)
 
 - Fix NitroFS directory reads occasionally failing on non-DLDI environments.
 
-## Version 0.10.0 (2023-11-11)
+### Version 0.10.0 (2023-11-11)
 
 - Build system:
 
@@ -2555,18 +2555,18 @@ weight: 2
 
   - Added a new test for SWI functions.
 
-## Version 0.9.1 (2023-10-19)
+### Version 0.9.1 (2023-10-19)
 
 - Revert changes in Maxmod that duplicated some symbols.
 
-## Version 0.9.0 (2023-10-18)
+### Version 0.9.0 (2023-10-18)
 
 - SDK:
 
   - Native windows support added. Wonderful toolchains now distribute native
     Windows binaries, and the only required change in BlocksDS was to change a
     library used by Grit. Thank you, Generic and asie!
-  - The stdio implementation of picolibc provided by Wonderful Toolchains has
+  - The stdio implementation of picolibc provided by Wonderful Toolchain has
     been patched by asie and this has substantially improved direct SD card read
     and write speeds.
   - The RTC interrupt is no longer used in any test, example or template. Users
@@ -2619,7 +2619,7 @@ weight: 2
   - Switch from libfreeimage to libplum. This allows us to build Grit on Windows
     easier.
 
-## Version 0.8.1 (2023-08-01)
+### Version 0.8.1 (2023-08-01)
 
 - libnds:
 
@@ -2638,7 +2638,7 @@ weight: 2
     sub-make, so it isn't required.
   - Added basic Maxmod and Maxmod + NitroFAT examples.
 
-## Version 0.8 (2023-07-16)
+### Version 0.8 (2023-07-16)
 
 - libnds:
 
@@ -2672,7 +2672,7 @@ weight: 2
   - Updated libc documentation.
   - Improved and cleanup some examples.
 
-## Version 0.7 (2023-04-19)
+### Version 0.7 (2023-04-19)
 
 - libnds:
 
@@ -2706,7 +2706,7 @@ weight: 2
     can't mount them.
   - Improved installation instructions.
 
-## Version 0.6 (2023-04-11)
+### Version 0.6 (2023-04-11)
 
 - SDK:
 
@@ -2744,7 +2744,7 @@ weight: 2
   - Support more file formats for icons (GIF, PNG).
   - Support animated icons (from GIF files).
 
-## Version 0.5 (2023-03-31)
+### Version 0.5 (2023-03-31)
 
 - SDK:
 
@@ -2768,7 +2768,7 @@ weight: 2
   - Fixed and simplified exit to loader code on the ARM7 side.
   - Improved documentation of exit to loader logic and `BoxTest()`.
 
-## Version 0.4 (2023-03-26)
+### Version 0.4 (2023-03-26)
 
 - SDK:
 
@@ -2795,13 +2795,13 @@ weight: 2
   - Updated FatFS to R0.15p2.
   - Fixed `glTexImage2D()` not flushing textures before copying them with DMA.
 
-## Version 0.3.1 (2023-03-20)
+### Version 0.3.1 (2023-03-20)
 
 - libnds:
 
   - Restored support of `gettimeofday()` on the ARM7.
 
-## Version 0.3 (2023-03-20)
+### Version 0.3 (2023-03-20)
 
 - SDK:
 
@@ -2826,7 +2826,7 @@ weight: 2
   - General cleanup of libnds code (like replacing magic numbers by defines).
   - Fixed `consoleDemoInit()` to restore display brightness when initializing.
 
-## Version 0.2 (2023-03-15)
+### Version 0.2 (2023-03-15)
 
 - SDK:
 
@@ -2846,7 +2846,7 @@ weight: 2
   - Reduced the size of data structures controlling the built-in keyboard.
   - Implemented missing bounds checks in `keyboardGetKey()`.
 
-## Version 0.1 (2023-03-14)
+### Version 0.1 (2023-03-14)
 
 First beta release of BlocksDS. Features:
 

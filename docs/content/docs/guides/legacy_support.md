@@ -19,18 +19,18 @@ Workarounds exist to run affected homebrew software on these platforms,
 both from the user and developer's perspective. A detailed explanation of
 the specific technical issues is also provided further below.
 
-## User workarounds
+### 1. User workarounds
 
 This section is intended for users who would like to run modern homebrew
 on affected legacy devices and execution methods.
 
-### nds-hb-menu
+#### 1.1 nds-hb-menu
 
 The recommended way to launch a BlocksDS ROM on legacy devices is to use
 the `nds-hb-menu` launcher, which is lightweight and appropriately
 respects all modern homebrew standards.
 
-#### Example: Slot-1 devices
+##### Example: Slot-1 devices
 
 - Download `nds-hb-menu` [here](https://github.com/devkitPro/nds-hb-menu/releases).
   The file that is required for this is `BOOT.NDS`. Other files in the `hbmenu`
@@ -44,7 +44,7 @@ respects all modern homebrew standards.
   /opt/blocksds/core/tools/dldipatch/dldipatch patch BOOT.NDS device_driver.dldi
   ```
 
-#### Example: Slot-2 devices
+##### Example: Slot-2 devices
 
 Some Slot-2 devices require additional work for proper support.
 
@@ -72,14 +72,14 @@ Some Slot-2 devices require additional work for proper support.
 - Copy `hbmenu.sc.nds` to your SD card. Any NDS homebrew ROM loaded with this
   loader should work.
 
-## Developer workarounds
+### 2. Developer workarounds
 
 This section is intended for developers who would like to understand why
 modern homebrew does not run on affected legacy devices and execution methods.
 Workarounds are provided where available, but their use is discouraged and should
 be limited to appropriate, specialized use cases.
 
-### Missing argv support
+#### 2.1 Missing argv support
 
 The [argv structure](https://devkitpro.org/wiki/Homebrew_Menu) was added to libnds
 [in mid-2007](https://github.com/devkitPro/libnds/commit/34f30043ce8683d48194fa009fd788da691517de);
@@ -100,7 +100,7 @@ Note that paths are restricted to 40 characters in the device list format.
 Unlaunch uses the 8.3 file name format instead of passing full names to increase
 compatibility with ROMs with long paths.
 
-### Reduced DLDI driver reserved space
+#### 2.2 Reduced DLDI driver reserved space
 
 ROM files built [from 2017 onwards](https://github.com/devkitPro/libnds/commit/c9668aa8f47bd41400f485b8a9a728b517a1174d)
 only reserve 16 kilobytes, as opposed to 32 kilobytes, for the DLDI driver used
@@ -119,7 +119,7 @@ source directory with the following contents:
 .equ __dldi_size, 32768
 ```
 
-### NDS/DSi hybrid ROMs
+#### 2.3 NDS/DSi hybrid ROMs
 
 ROM files built [from 2017 onwards](https://github.com/devkitPro/ndstool/commit/18d3c00df65a2b7a9c9f0312eaac518678869345)
 are designed to simultaneously be both valid NDS and DSi-format ROMs. However,

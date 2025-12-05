@@ -3,7 +3,7 @@ title: 'C/C++ support'
 weight: 6
 ---
 
-## 1. Introduction
+### 1. Introduction
 
 BlocksDS supports modern C/C++ standard libraries by providing the following
 libraries:
@@ -14,7 +14,7 @@ libraries:
 
 However, this support includes some platform-specific caveats.
 
-## 2. POSIX I/O
+### 2. POSIX I/O
 
 BlocksDS provides POSIX standard I/O using the tinystdio library, which is part
 of picolibc. It supports most of the functionality mandated by the C standard,
@@ -48,7 +48,7 @@ For more information about ANSI escape sequences, check
 for example, the keyboard of libnds is used as input device. For more information,
 see the relevant examples bundled with BlocksDS.
 
-## 3. argc and argv
+### 3. argc and argv
 
 To provide correct argv information, the loader needs to support argv structure
 passing. This is not supported by certain legacy loaders; for more information,
@@ -62,17 +62,17 @@ occurrence.
 * For DSi consoles loading .nds files from the internal SD card, the drive
   name used is `sd:` - for example, `sd:/homebrew/program.nds`.
 
-## 4. Dynamic heap allocation
+### 4. Dynamic heap allocation
 
 Functions like `malloc`, `calloc`, `memalign` and `free` are supported. They
 always return space from the main RAM region.
 
-## 5. Time
+### 5. Time
 
 `gettimeofday` and `time` are supported. Timezones are not handled in any
 particular manner, however.
 
-## 6. Exit
+### 6. Exit
 
 If the NDS ROM loader supports it, `exit` can be used to return to the loader.
 You can also return from `main()` to get the same effect.
@@ -82,7 +82,7 @@ For more information, check [this document](../../internal/exit_to_loader).
 In addition, `atexit` is supported for dynamically registering program exit
 handlers.
 
-## 7. Multithreading
+### 7. Multithreading
 
 Functions like `fopen()` or `malloc()` need to be thread-safe, and picolibc uses
 locks to ensure that they are thread-safe. The implementation of the locking

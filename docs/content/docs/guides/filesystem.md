@@ -3,7 +3,7 @@ title: 'Filesystem support'
 weight: 3
 ---
 
-## 1. Introduction
+### 1. Introduction
 
 BlocksDS supports using standard C functions to access different filesystems of
 the DS:
@@ -40,7 +40,7 @@ them as reference.
 
 If any specific function isn't supported, raise an issue to request it.
 
-## 2. Slot-1 and Slot-2 flashcarts
+### 2. Slot-1 and Slot-2 flashcarts
 
 Slot-1 and Slot-2 flashcarts usually contain a SD or microSD card where the user
 stores files. If the flashcart has a [DLDI driver](https://www.chishm.com/DLDI/)
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-## 3. NitroFS
+### 3. NitroFS
 
 In most cases it isn't practical to distribute a NDS ROM with a bunch of
 additional files that users have to copy to their flashcart. NitroFS is a
@@ -161,14 +161,14 @@ read data from the Slot-2 memory region. However, this memory area has a size of
 This can cause unexpected errors if it isn't detected, so `nitroFSInit()` will
 simply return an error if the ROM is bigger.
 
-## 4. DSi SD card slot
+### 4. DSi SD card slot
 
 The driver to use the SD card slot of the DSi is integrated in libnds, so you
 don't need to do any special patching to use it. Simply call `fatInitDefault()`
 as explained before. To open files from this slot, use `"sd:/"` instead of
 `"fat:/"` when opening files.
 
-## 5. Internal DSi NAND
+### 5. Internal DSi NAND
 
 The driver to use the internal NAND partitions is also included in libnds.
 `fatInitDefault()` tries to initialize access to NAND, but it isn't a reliable
@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-## 6. Using multiple filesystems at the same time
+### 6. Using multiple filesystems at the same time
 
 You can use all filesystems at once after initializing it. All you need to do is
 use the right prefix. For reference:
@@ -290,7 +290,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-## 7. Running on emulators
+### 7. Running on emulators
 
 Filesystem access works in several emulators. The following ones have been
 tested:
@@ -299,7 +299,7 @@ tested:
 - no$gba: DSi SD card is emulated.
 - DeSmuMe: Slot-1 is emulated (the user must patch it).
 
-### melonDS
+#### melonDS
 
 melonDS supports both DLDI in DS/DSi modes, and the internal SD in DSi mode.
 
@@ -313,7 +313,7 @@ prefer that).
 You don't need to patch the ROM with any special DLDI to use the Slot-1
 emulation, melonDS does it automatically when you load the ROM.
 
-### no$gba
+#### no$gba
 
 no$gba supports DSi mode. You must generate a FAT filesystem image with
 `tools/imgbuild`. The sample `Makefile` of the provided templates have a
@@ -330,7 +330,7 @@ renaming the file all the time.
 
 Then, open no$gba as normal.
 
-### DeSmuMe
+#### DeSmuMe
 
 It supports DS mode only. Run the following command when building the ROM:
 

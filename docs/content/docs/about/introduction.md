@@ -5,7 +5,7 @@ weight: 1
 
 BlocksDS is an SDK to develop applications for Nintendo DS in C or C++.
 
-## 1. Goals
+### 1. Goals
 
 - To create an easy-to-use NDS software development kit based on GCC with as few
   dependencies as possible, and that supports as many features of the DS and DSi
@@ -14,7 +14,7 @@ BlocksDS is an SDK to develop applications for Nintendo DS in C or C++.
 - To encourage developers to hack and improve the SDK by letting them have all
   the source code of the SDK. This also shows how easy it is to build the whole
   codebase. The exception is the toolchain, which is non-trivial to build.
-  Because of that, [Wonderful Toolchains](https://wonderful.asie.pl/) is used
+  Because of that, [Wonderful Toolchain](https://wonderful.asie.pl/) is used
   instead of asking the users to build it themselves.
 
 - To try to keep compatibility with pre-existing C projects made by devkitARM.
@@ -32,9 +32,9 @@ BlocksDS is an SDK to develop applications for Nintendo DS in C or C++.
   to use it in the future. For more information about the licenses used by
   different components, check [this](../../guides/licenses).
 
-## 2. Features
+### 2. Features
 
-### 2.1 Standard libraries
+#### 2.1 Standard libraries
 
 - Binaries are pretty small and their baseline RAM usage is low thanks to using
   [picolibc](https://github.com/picolibc/picolibc) instead of the more commonly
@@ -80,7 +80,7 @@ BlocksDS is an SDK to develop applications for Nintendo DS in C or C++.
   with DLDI devices. Most DLDI drivers can run from the ARM7 even if they
   haven't been explicitly built with that in mind!
 
-### 2.2 Supported DS features
+#### 2.2 Supported DS features
 
 - All features of the 2D video hardware are supported. There are some
   APIs to simplify the usage of backgrounds and sprites, as well as a basic text
@@ -131,7 +131,7 @@ BlocksDS is an SDK to develop applications for Nintendo DS in C or C++.
 - **ndstool** supports creating NDS ROMs and define a ROM icon and banner text
   (in multiple languages!).
 
-### 2.3 Supported DSi features
+#### 2.3 Supported DSi features
 
 - The SD slot of the DSi is supported. The NAND memory is also supported.
 

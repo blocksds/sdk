@@ -10,7 +10,7 @@ to implement. These are documented here.
 Please refer to the changelog for a full list of changes, including additions
 and enhancements to the SDK which are not listed here.
 
-## Upgrading to BlocksDS DEV
+### Upgrading to BlocksDS DEV
 
 * `grit` used to silently fail if it was exporting a tiled map with too many
   tiles. The indices written to the file would be incorrect for the tiles that
@@ -22,13 +22,13 @@ and enhancements to the SDK which are not listed here.
   games, but it's important to check all images that fail to be converted
   because they weren't being converted correctly before.
 
-## Upgrading to BlocksDS 1.15.2
+### Upgrading to BlocksDS 1.15.2
 
 * The DSWiFi structs `Wifi_TxHeader` and `Wifi_RxHeader` are now private. They
   are never required by user code, and there is no equivalent in DSi mode, so
   it's better to hide them.
 
-## Upgrading to BlocksDS 1.15.0
+### Upgrading to BlocksDS 1.15.0
 
 * The default makefiles of ARM9-only projects have switched to an ARM7 core that
   doesn't include DSWiFi because most projects don't need it, so it saves around
@@ -49,7 +49,7 @@ and enhancements to the SDK which are not listed here.
 * Unused define `WFLAG_APDATA_SHORTPREAMBLE` has been removed.
 * The strings of `ASSOCSTATUS_STRINGS` have been modified to make them useful.
 
-## Upgrading to BlocksDS 1.14.2
+### Upgrading to BlocksDS 1.14.2
 
 * `ndstool` now handles DSi title IDs and units codes differently. This
   shouldn't affect any regular user of BlocksDS, but it may be a problem in some
@@ -65,7 +65,7 @@ and enhancements to the SDK which are not listed here.
   - `ndstool -u 00030004` becomes `ndstool -uc 3`
   - `ndstool -u 0003000F` becomes `ndstool -u 0003000F -uc 3`
 
-## Upgrading to BlocksDS 1.14.0
+### Upgrading to BlocksDS 1.14.0
 
 * `WiFi_Deinit()`, introduced in version 1.13.1, no longer works after starting
   DSWiFi with Internet mode enabled. This is due to limitations of lwIP, which
@@ -77,19 +77,19 @@ and enhancements to the SDK which are not listed here.
   The changes are required because DSWiFi now relies on the multithreading code
   of libnds to work.
 
-## Upgrading to BlocksDS 1.13.1
+### Upgrading to BlocksDS 1.13.1
 
 * The function `Wifi_InitDefault()` of DSWiFi now takes an integer as an
   argument instead of a bool. The new values passed to the function have been
   designed so that old code still works.
 
-## Upgrading to BlocksDS 1.8.0
+### Upgrading to BlocksDS 1.8.0
 
 * `ledBlink()` now takes an enum as an argument instead of an integer. In C++
    projects, this will cause an error until you add an explicit cast or you use
    one of the new defines.
 
-## Upgrading to BlocksDS 1.7.0
+### Upgrading to BlocksDS 1.7.0
 
 * `glColorTableEXT()` now supports allocating empty palettes by passing a
   `NULL` pointer in the `table` argument. This is a small compatibility break
@@ -105,14 +105,14 @@ and enhancements to the SDK which are not listed here.
   wf-pacman -Syu
   ```
 
-## Upgrading to BlocksDS 1.6.0
+### Upgrading to BlocksDS 1.6.0
 
 * The GRF format has been slightly modified. This has been done to add a version
   field to the header. The GRF functions of libnds have been updated as well as
   grit, so you will have to rebuild your GRF files and update any GRF loader
   that you have implemented.
 
-## Upgrading to BlocksDS 1.4.0
+### Upgrading to BlocksDS 1.4.0
 
 * Custom libnds keyboards now work. This seems to have never worked because
   libnds overwrote the custom keyboard struct with the default keyboard struct.
@@ -123,7 +123,7 @@ and enhancements to the SDK which are not listed here.
 * Some fields of the `PrintConsole` have been modified to reduce the size of the
   struct. Please, check the examples to get more information.
 
-## Upgrading to BlocksDS 1.3.0
+### Upgrading to BlocksDS 1.3.0
 
 * General changes:
 
@@ -151,7 +151,7 @@ and enhancements to the SDK which are not listed here.
       `REG_RTCCNT8` and `REG_HALTCNT`, respectively.
     - `SerialWaitBusy` has been renamed to `spiWaitBusy`.
 
-## Upgrading to BlocksDS 1.2.0
+### Upgrading to BlocksDS 1.2.0
 
 * The `SOUND_FREQ` (ARM7) and `TIMER_FREQ` macros have been reworked to
   provide the nearest frequency to the one requested by the user, rounded.
@@ -161,19 +161,19 @@ and enhancements to the SDK which are not listed here.
   for texture coordinates, rather than 32-bit `unsigned int`s. This has been done
   to reduce memory waste, as the coordinates always fit in a 16-bit integer.
 
-## Upgrading to BlocksDS 1.0.0
+### Upgrading to BlocksDS 1.0.0
 
 * In `nds/bios.h`, the `PUnpackStruct` alias for `TUnpackStruct*` has been
   deprecated.
 * In `nds/ndstypes.h`, the `fp` function pointer type has been deprecated.
 
-## Upgrading to BlocksDS 0.14.0
+### Upgrading to BlocksDS 0.14.0
 
 * The `nds/arm9/grf.h` GRF file loading functions introduced in BlocksDS 0.13.0
   have been replaced.
 * The `libxm7` library now uses timer 0, matching `maxmod`.
 
-## Upgrading to BlocksDS 0.13.0
+### Upgrading to BlocksDS 0.13.0
 
 * Users are encouraged to use the new function `isHwDebugger()` over `swiIsDebugger()`
   to more accurately detect debug units.
@@ -182,7 +182,7 @@ and enhancements to the SDK which are not listed here.
   need to be regenerated.
 * The Slot-2 tilt API introduced in BlocksDS 0.11.0 has been replaced.
 
-### libnds touch screen and keyboard handling
+#### libnds touch screen and keyboard handling
 
 `scanKeys()` updates the internal state of the key handling code. This is then
 used by `keysHeld()` and `keysDown()`.
@@ -225,12 +225,12 @@ touch screen. This forces the developer to call `scanKeys()`, but it also
 ensures that there are no race conditions, as `scanKeys()` will read all the
 state atomically.
 
-## Upgrading to BlocksDS 0.12.0
+### Upgrading to BlocksDS 0.12.0
 
 * In `readdir()`, `.` and `..` filesystem entries are now returned, both on
   FAT and NitroFS filesystems.
 
-## Upgrading to BlocksDS 0.11.3
+### Upgrading to BlocksDS 0.11.3
 
 * If you were using the ndstool feature of adding alternate language banner text
   (added in BlocksDS 0.6), the argument syntax has changed from `-bt5 "Text"` to

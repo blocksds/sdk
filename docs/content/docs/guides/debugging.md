@@ -7,7 +7,7 @@ While developing applications with BlocksDS you will reach situations where you
 need to debug your code. There are different ways to do this with BlocksDS, and
 they are described below.
 
-## 1. Regular text console
+### 1. Regular text console
 
 printf-debugging is the most basic way to debug code, but it's still very useful
 so it's worth mentioning it.
@@ -37,7 +37,7 @@ You can check [this example](https://github.com/blocksds/sdk/tree/master/example
 for a more advanced setup that allows you to display text over a 3D scene. You
 can set it up over other 2D layers as well.
 
-## 2. no$gba-style console
+### 2. no$gba-style console
 
 If you don't have any available memory or background layer to display the text
 console, it's possible to setup libnds so that `stderr` is redirected to the
@@ -100,7 +100,7 @@ fprintf(stderr, "Frame: %%frame%%\n");
 
 More information [here](https://problemkaputt.de/gbatek.htm#debugmessages).
 
-## 4. assert(), sassert() and debug builds of libnds
+### 3. assert(), sassert() and debug builds of libnds
 
 libnds has a release and a debug build. The difference is whether assertions are
 enabled or not.
@@ -134,7 +134,7 @@ To do a debug build, leave `CFLAGS` without `-DNDEBUG`, and add `-lnds9d` to
 
 You need to do the same in the ARM7 (with `-lnds7` and `-lnds7d` instead).
 
-## 5. No$gba debugger
+### 4. No$gba debugger
 
 No$gba debugger version has an impressive debugger that lets you see the
 disassembly of the code running on the emulator, the contents of the RAM, the
@@ -147,7 +147,7 @@ have in your arsenal. You can download it [here](https://problemkaputt.de/gba.ht
 [This website](https://problemkaputt.de/gbapics.htm) has lots of screenshots of
 the debugger so that you can get an idea of what it is capable of.
 
-## 6. Exception handler
+### 5. Exception handler
 
 libnds comes with an exception handler that can help you debug some crashes in
 your program. It appears as a red screen that says "ARM9/ARM7 Guru Meditation
@@ -217,7 +217,7 @@ Check [this example](https://github.com/blocksds/sdk/tree/master/examples/debug/
 to see it in action. Note that this will only work in melonDS and on hardware.
 Other emulators won't emulate it at all.
 
-### 6.1 How to use all the information on the screen?
+#### 5.1 How to use all the information on the screen?
 
 The most important thing on the screen are the values of `pc` and `addr` at the
 top of the screen. `pc` says what's the address where the CPU crashed. You can
@@ -249,7 +249,7 @@ Also, if you understand assembly language, you can try to use the rest of the
 information on the screen to try to understand what the code was doing when it
 crashed.
 
-## 7. Stack overflows
+### 6. Stack overflows
 
 A very common bug found while developing DS applications is stack overflows.
 BlocksDS places the user stack starting at the top address of DTCM. DTCM is a
@@ -299,9 +299,9 @@ function takes the same amount of space) or `dynamic` (the function uses
 variable-length arrays or functions like `alloca()` that allocate memory on the
 stack).
 
-## 8. GDB with melonDS and DeSmuME
+### 7. GDB with melonDS and DeSmuME
 
-### 8.1 Introduction
+#### 7.1 Introduction
 
 DeSmuME has support for GDB. MelonDS also has (experimental) support for GDB.
 You can use this to connect to the emulator from a debugger and debug your
@@ -314,7 +314,7 @@ You need a version of GDB that supports the 32 bit ARM architecture, like
 sudo apt install gdb-multiarch
 ```
 
-### 8.2 DeSmuME
+#### 7.2 DeSmuME
 
 Start DeSmuME from the command line like this to start GDB and tell the emulator
 which ports to use for the GDB server:
@@ -327,7 +327,7 @@ You can start GDB in one core or in both of them.
 
 Emulation will start stopped so that you can debug your program from the start.
 
-### 8.3 melonDS
+#### 7.3 melonDS
 
 In melonDS, go to: "Config" > "Emu settings" > "Devtools"
 
@@ -337,7 +337,7 @@ You can decide to start the debugging session from the start of the program by
 checking "Break on startup". If you don't check it, the emulator will run until
 GDB connects to it.
 
-### 8.4 Connecting from GDB
+#### 7.4 Connecting from GDB
 
 If you're using a graphical debugger, you will need to point it to the elf file
 of your program. Check the `build` folder after building your program. If your

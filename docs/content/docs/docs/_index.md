@@ -1,6 +1,6 @@
 ---
 weight: 2
-title: 'Documentation'
+title: 'Library docs'
 ---
 
 BlocksDS comes with some core libraries and tools (libnds, grit, DSWiFi,

@@ -3,7 +3,7 @@ title: 'Migrating from devkitARM'
 weight: 11
 ---
 
-## 1. Introduction
+### 1. Introduction
 
 This guide applies to projects that don't use Calico or devkitARM's libnds 2.0.
 Migrating projects that use Calico is outside of scope for BlocksDS.
@@ -12,7 +12,7 @@ For older devkitARM projects, porting them projects to BlocksDS should be
 relatively easy. BlocksDS includes most of the NDS functionality provided by
 devkitARM. For simple projects, only minor changes should be required.
 
-## 2. New build system
+### 2. New build system
 
 This is the biggest difference between devkitARM and BlocksDS. Makefiles provided
 by devkitARM are more complicated: they call themselves recursively from the build
@@ -107,7 +107,7 @@ DSWiFi. For example:
 ARM7ELF := $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi_maxmod.elf
 ```
 
-## 3. Filesystem libraries
+### 3. Filesystem libraries
 
 devkitARM and BlocksDS also heavily differ with regards to the structure of
 their filesystem access libraries. For most users, this should not lead to major
@@ -136,7 +136,7 @@ Beyond the limitations listed below, filesystem support should work identically.
 Please report any behaviour that isn't the same. If any other functionality your
 homebrew program requires is missing, please report that as well.
 
-## 3a. NitroFS compatibility
+### 3.1 NitroFS compatibility
 
 Some minor implementation differences exist between `libfilesystem` and BlocksDS's
 implementation:
@@ -148,7 +148,7 @@ implementation:
   an *output* base path. To retrieve the base path, it is required to use the
   `fatGetDefaultCwd()` function instead.
 
-## 3b. readdir() compatibility
+### 3.2 readdir() compatibility
 
 `readdir()` returns a `struct dirent` pointer with the field `d_type`.
 This field can be used to determine if an entry is a directory or a file. I've
@@ -173,13 +173,13 @@ else if (cur->d_type == DT_REG)
     printf("This is a file\n");
 ```
 
-## 3c. Other differences
+### 3.3 Other differences
 
 * To cut down on RAM, code size and complexity, BlocksDS omits the `devoptab`
   interface. As homebrew does not generally need to modify the device list,
   this should not affect them.
 
-## 4. Integer versions of stdio.h functions
+### 4. Integer versions of stdio.h functions
 
 The `newlib` C library provides faster and smaller integer versions of `stdio.h`
 functions, such as `iprintf()` or `siscanf()`. These are not provided by
@@ -196,7 +196,7 @@ compatibility reasons, the float-compatible versions are provided.
 `picolibc`'s printf/scanf replacement functionality is documented further in
 [the optimization guide](../optimization_guide).
 
-## 5. libnds touch screen and keyboard handling
+### 5. libnds touch screen and keyboard handling
 
 `scanKeys()` updates the internal state of the key handling code. This is then
 used by `keysHeld()` and `keysDown()`.
@@ -239,7 +239,7 @@ touch screen. This forces the developer to call `scanKeys()`, but it also
 ensures that there are no race conditions, as `scanKeys()` will read all the
 state atomically.
 
-## 6. Updating legacy devkitARM homebrew
+### 6. Updating legacy devkitARM homebrew
 
 Occasionally, various components of the devkitARM toolchain introduced breaking
 changes of their own, which lead to the unfortunate situation of homebrew being
@@ -247,7 +247,7 @@ stuck on legacy, buggier and less reliable versions of toolchains. These issues
 also need to be resolved before updating to BlocksDS. Some known issues and their
 remedies are documented here; note that this list is not exhaustive.
 
-### Removed functions
+#### 6.1 Removed functions
 
 During its history, many libnds functions have been removed and replaced by new
 ones. For example, `glIdentity()` was removed in favour of `glLoadIdentity()`.
@@ -264,7 +264,7 @@ of the devkitPro git repository.
 There is a also a version of the CVS repository converted to git
 [in this GitHub repository](https://github.com/AntonioND/ndslib-archive/).
 
-### ARM7 changes
+#### 6.2 ARM7 changes
 
 In libnds, while the ARM9 initializes console hardware in a separate function
 called before `main()`, the ARM7 does so as part of its code. Over time, these
@@ -276,14 +276,14 @@ When updating old homebrew with custom ARM7 binaries, it is recommended to study
 the latest version of [the default ARM7 binary](https://github.com/blocksds/sdk/tree/master/sys/default_arm7)
 to apply any necessary changes.
 
-### Replacing IPC with FIFO
+#### 6.3 Replacing IPC with FIFO
 
 Many old libnds-based homebrew extend the `TransferRegion` memory area to facilitate
 communication between the ARM9 and ARM7 CPUs. With the introducion of the FIFO
 message queue system, this approach is discouraged for message/command passing.
 For sharing buffers, one can use the FIFO system to send pointers to main RAM.
 
-### Legacy register names
+#### 6.4 Legacy register names
 
 Old versions of libnds used alternate name defines for the DS console's memory
 mapped registers. They are primarily distinguished by not having the `REG_`
@@ -294,7 +294,7 @@ A translation table is provided in `#include <nds/registers_alt.h>`; this can
 be used as a stopgap to compile the project and update all uses of legacy
 register names.
 
-### New assembly function definition syntax
+#### 6.5 New assembly function definition syntax
 
 For ARM/Thumb interwork (calling ARM functions from Thumb and vice versa) to work
 correctly in more recent versions of the GNU toolchain, functions must be
@@ -327,7 +327,7 @@ BEGIN_ASM_FUNC myFunction
    // code
 ```
 
-### Memory layout changes
+#### 6.6 Memory layout changes
 
 Hardcoding areas at the end of RAM at `0x27FFFFF` is not compatible with
 the DSi, as it has more than 8 MB of RAM. Using `0x2FFFFFF` works on both
@@ -342,7 +342,7 @@ Note that, as all accesses omit the ARM9 cache on the ARM7 CPU, it is
 recommended to send pointers to it which have not been processed by
 `memUncached()`.
 
-### Other changes
+#### 6.7 Other changes
 
 * `irqInit()` is now called on the ARM9 CPU before `main()`. As the FIFO
   system registers its own IRQ handlers, and `irqInit()` clears them,

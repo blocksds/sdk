@@ -3,7 +3,7 @@ title: 'Post-installation steps'
 weight: 5
 ---
 
-## 1. Test the installation
+### 1. Test the installation
 
 To test that everything is working, you can try building one of the
 [examples](https://github.com/blocksds/sdk/tree/master/examples) or
@@ -39,12 +39,12 @@ need to use folders outside of the folder of the project, create a symlink to
 the destination, or build the other code as a static library and link it with
 the project.
 
-## 2. Additional libraries and tools
+### 2. Additional libraries and tools
 
 [This document](../../docs/external_libs) has a list of tools and libraries
 that support BlocksDS and can be installed in `/opt/blocksds/external`.
 
-## 3. Keeping multiple versions of BlocksDS
+### 3. Keeping multiple versions of BlocksDS
 
 You may keep multiple versions of this SDK in your PC. The location of the
 active SDK is expected to be in the environment variables `BLOCKSDS` and

@@ -3,7 +3,7 @@ title: 'Dynamic libraries'
 weight: 3
 ---
 
-## 1. Introduction
+### 1. Introduction
 
 BlocksDS supports loading dynamic libraries at runtime. This document explains
 how the system works, its features and its limitations. The process will be
@@ -27,7 +27,7 @@ The system used by BlocksDS is heavily inspired by the one used by
 information about the system in the libdragon
 [wiki](https://github.com/DragonMinded/libdragon/wiki/DSO-(dynamic-libraries)).
 
-## 2. Creating libraries
+### 2. Creating libraries
 
 The first step is creating the libraries you want to load. A library can contain
 graphics, data, audio, source code, or anything that a regular binary would
@@ -63,7 +63,7 @@ and only `arm*-*-symbianelf` uses `abs` relocations. To simplify libnds we can
 use the `--target1-abs` switch, which lets us not implement `R_ARM_REL32`. You
 can find more information [here](https://sourceware.org/binutils/docs/ld/ARM.html).
 
-## 3. Converting ELF files to DSL
+### 3. Converting ELF files to DSL
 
 Converting the ELF file to DSL is a process that involves reading all the
 sections and symbols from the ELF file and removing all information that isn't
@@ -106,7 +106,7 @@ plugins would receive pointers to `fopen()` and related functions.
 
 After a DSL file is built, it can be stored in either nitroFS or the SD card.
 
-## 4. Loading DSL files
+### 4. Loading DSL files
 
 The main binary needs to initialize NitroFS or FAT (`nitroFsInit()` or
 `fatInitDefault()`). Then, it has to call `dlopen()` with the path to the DSL
@@ -145,7 +145,7 @@ used by it.
 You can find the code of the functions in this file in
 [libnds](https://github.com/blocksds/libnds/blob/master/source/arm9/dlfcn.c).
 
-## 5. Advantages over overlays
+### 5. Advantages over overlays
 
 Overlays are supported in other SDKs, and they are just parts of code that are
 built as part of the main binary, but use the same space in memory. For example,
@@ -169,7 +169,7 @@ through a pointer, so there is always the cost of an additional indirection
 compared to overlays. If the library is full of very small functions, this cost
 may be noticeable. If the functions are big, this cost won't be noticeable.
 
-## 6. Debugging dynamic libraries
+### 6. Debugging dynamic libraries
 
 When you're in a GDB session, run the following command to load the symbols of
 the dynamic library:
@@ -180,7 +180,7 @@ add-symbol-file path/to/dynamic.elf -s .progbits <load_address>
 
 You can obtain the address by calling the DS-specific function `dlmembase()`.
 
-## 7. Limitations
+### 7. Limitations
 
 - Libraries must use symbols that are present in the main binary. It isn't
   possible for a binary to use `malloc()` if the main binary doesn't use
