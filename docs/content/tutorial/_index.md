@@ -12,20 +12,20 @@ programming.
 
 <div class="hx:mt-6"></div>
 
-{{< hextra/feature-grid >}}
-  {{< hextra/feature-card
+{{< cards cols="1" >}}
+  {{< card
     icon="book-open"
     title="Basic"
     link="basic"
     style="background-color: rgba(128,255,128,0.2)"
   >}}
-  {{< hextra/feature-card
+  {{< card
     icon="book-open"
     title="Intermediate"
     link="intermediate"
     style="background-color: rgba(224,224,128,0.2)"
   >}}
-{{< /hextra/feature-grid >}}
+{{< /cards >}}
 
 <div class="hx:mt-6"></div>
 
