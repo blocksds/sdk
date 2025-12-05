@@ -20,17 +20,17 @@ BlocksDS is an SDK to develop applications for Nintendo DS in C or C++.
 - To try to keep compatibility with pre-existing C projects made by devkitARM.
   In theory, it should be enough to replace the Makefile of devkitARM by a
   Makefile of BlocksDS to build any old project, with some few exceptions. Check
-  [this guide](../../guides/devkitarm_porting_guide) for more details.
+  [this guide](../guides/devkitarm_porting_guide) for more details.
 
 - To document as much of the SDK as possible. For detailed information about the
-  design of BlocksDS, check [this document](../../internal/design_guide).
+  design of BlocksDS, check [this document](../internal/design_guide).
 
 - To ensure that the licensing status of all the code is correct and that the
   licenses used are all FOSS. This SDK is made from the work of many others that
   came before it and who developed FOSS libraries that can be now used by
   BlocksDS. This SDK must ensure that all the code remains FOSS for other people
   to use it in the future. For more information about the licenses used by
-  different components, check [this](../../guides/licenses).
+  different components, check [this](../guides/licenses).
 
 ### 2. Features
 

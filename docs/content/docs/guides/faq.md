@@ -155,41 +155,41 @@ Related issues:
 
 BlocksDS provides built-in libraries for a variety of external peripherals:
 
-- [Slot-2 RAM cartridges](../../libnds/slot2_8h.html)
+- [Slot-2 RAM cartridges](../../../libnds/slot2_8h.html)
 
   - Memory Expansion Pak
   - Most other cartridges
 
-- [Slot-2 gyroscope](../../libnds/slot2gyro_8h.html)
+- [Slot-2 gyroscope](../../../libnds/slot2gyro_8h.html)
 
   - GBA WarioWare
 
-- [Slot-2 rumble](../../libnds/rumble_8h.html)
+- [Slot-2 rumble](../../../libnds/rumble_8h.html)
 
   - GBA WarioWare, Drill Dozer
   - DS Rumble Pak
   - Many other cartridges
 
-- [Slot-2 solar sensor](../../libnds/slot2solar_8h.html)
+- [Slot-2 solar sensor](../../../libnds/slot2solar_8h.html)
 
   - GBA Boktai 1, 2, 3
 
-- [Slot-2 tilt sensor](../../libnds/slot2tilt_8h.html)
+- [Slot-2 tilt sensor](../../../libnds/slot2tilt_8h.html)
 
   - GBA Yoshi, Koro Koro Puzzle
 
-- [DS Motion Card](../../libnds/ndsmotion_8h.html)
+- [DS Motion Card](../../../libnds/ndsmotion_8h.html)
 
   - DS Motion Card
   - DS Motion Pak
   - Motion Pack (bundled with Tony Hawk Motion)
   - Other cartridges
 
-- [Slot-2 Easy Piano](../../libnds/piano_8h.html)
+- [Slot-2 Easy Piano](../../../libnds/piano_8h.html)
 
-- [Slot-2 Guitar Grip](../../libnds/guitarGrip_8h.html)
+- [Slot-2 Guitar Grip](../../../libnds/guitarGrip_8h.html)
 
-- [Slot-2 Taito DS Paddle Controller](../../libnds/paddle_8h.html)
+- [Slot-2 Taito DS Paddle Controller](../../../libnds/paddle_8h.html)
 
 Additional peripheral support is provided by third-party libraries:
 

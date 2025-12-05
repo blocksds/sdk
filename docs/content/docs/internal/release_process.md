@@ -19,8 +19,8 @@ the origins of each component that is built.
 
 Before doing anything, you need to ensure that the changelog is updated with the
 changes that have happened since the previous release. The changelog can be
-found in `docs/content/about/changelog.md`. You will also need to decide
-the new version number for the release at this point.
+found in `docs/content/docs/changelog.md`. You will also need to decide the new
+version number for the release at this point.
 
 #### 2.2 Run some examples and tests
 

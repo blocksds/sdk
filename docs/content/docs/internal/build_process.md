@@ -180,7 +180,7 @@ it:
 
 - One ARM9 `elf` file.
 - One ARM7 `elf` file. If no file is specified, `ndstool` will use the
-  [default ARM7](https://github.com/blocksds/sdk/tree/master/sys/default_arm7)
+  [default ARM7](https://github.com/blocksds/sdk/tree/master/sys/arm7)
   of BlocksDS instead.
 - One or more folders to be added to the ROM filesystem. If no folder is
   provided, the filesystem will be kept emtpy.

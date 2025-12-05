@@ -273,7 +273,7 @@ example, a missing `touchInit();` can lead to the touch screen not functioning
 as expected.
 
 When updating old homebrew with custom ARM7 binaries, it is recommended to study
-the latest version of [the default ARM7 binary](https://github.com/blocksds/sdk/tree/master/sys/default_arm7)
+the latest version of [the default ARM7 binary](https://github.com/blocksds/sdk/tree/master/sys/arm7)
 to apply any necessary changes.
 
 #### 6.3 Replacing IPC with FIFO
