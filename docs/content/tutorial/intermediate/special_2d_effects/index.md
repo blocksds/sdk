@@ -36,7 +36,7 @@ the shape of sprites specified by the developer.
 It may be hard to understand what they actually do without an example, so let's
 start with the regular windows:
 
-![Regular windows](window_regular.png "Regular windows")
+![Regular windows](window_regular.png)
 
 You can check the full source code of the example here:
 [`examples/video_effects/regular_windows`](https://github.com/blocksds/sdk/tree/master/examples/video_effects/regular_windows).
@@ -82,7 +82,7 @@ Windows may not look impressive when used as rectangles, but you can achieve
 very interesting effects if you combine this with HBL interrupts or
 HBL-triggered DMA.
 
-![Circular window](window_circular.png "Circular window")
+![Circular window](window_circular.png)
 
 You can check the full source code of the example here:
 [`examples/video_effects/circular_window`](https://github.com/blocksds/sdk/tree/master/examples/video_effects/circular_window).
@@ -103,11 +103,11 @@ create the circular window of the previous section) you can use any window shape
 you want by using sprites. For example, you can use the following image as the
 shape of the window:
 
-![Statue](statue.png "Statue")
+![Statue](statue.png)
 
 And obtain the following effect:
 
-![Object window](window_obj.png "Object window")
+![Object window](window_obj.png)
 
 You can check the full source code of the example here:
 [`examples/video_effects/obj_windows`](https://github.com/blocksds/sdk/tree/master/examples/video_effects/obj_windows).
@@ -192,7 +192,7 @@ fade effects:
 
 [`examples/video_effects/blending`](https://github.com/blocksds/sdk/tree/master/examples/video_effects/blending).
 
-![Blending](blending.png "Blending")
+![Blending](blending.png)
 
 Setting up the effects is actually very easy.
 
@@ -249,7 +249,7 @@ backgrounds or sprites "blockier". You need to specify a block size in pixels
 (from 1x1 to 16x16) and it will pixelate the selected backgrounds and sprites to
 that size.
 
-![Mosaic](mosaic.png "Mosaic")
+![Mosaic](mosaic.png)
 
 This effect has been used in some games to simulate "digital" explosions (you
 can increase the mosaic dimensions over a few frames and then delete the sprite,

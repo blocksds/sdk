@@ -154,7 +154,7 @@ your program. It appears as a red screen that says "ARM9/ARM7 Guru Meditation
 Error!" followed by a lot of information. This is information about the state
 the CPU was in when the crash happened:
 
-![Exception handler](../exception_handler.png "Exception handler")
+![Exception handler](../exception_handler.png)
 
 You can enable it by calling this function, preferably right at the start of
 `main()`:

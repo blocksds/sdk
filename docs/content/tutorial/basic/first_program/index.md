@@ -109,7 +109,7 @@ by Rafael Vuijk, Dave Murphy, Alexei Karpenko
 
 Load it in an emulator or in your console, you should get something like this:
 
-![Custom fonts](custom_fonts.png "Custom fonts")
+![Custom fonts](custom_fonts.png)
 
 Congratulations! Now you can start learning how to create your own games and
 applications for the DS.

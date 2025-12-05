@@ -68,7 +68,7 @@ if you want to have a look at the code while reading this section. You can try
 to build the example first, the output should be something like this (which you
 can scroll with the D-Pad):
 
-![Regular background 8 BPP](bg_types_regular_8bit.png "Regular background 8 BPP")
+![Regular background 8 BPP](bg_types_regular_8bit.png)
 
 Now, let's understand how the code works.
 
@@ -153,7 +153,7 @@ To finish this section let's see how to create a background that uses 16
 palettes of 16 colors instead. You can open
 [`examples/graphics_2d/bg_regular_4bit`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_regular_4bit),
 
-![Regular background 4 BPP](bg_types_regular_4bit.png "Regular background 4 BPP")
+![Regular background 4 BPP](bg_types_regular_4bit.png)
 
 There are only two differences you need to check. The first one is the grit
 file:
@@ -212,7 +212,7 @@ Check [`examples/graphics_2d/bg_rotation`](https://github.com/blocksds/sdk/tree/
 if you want to have a look at the code while reading this section. If you build
 it you can rotate it, scale it and scroll it. It should look like this:
 
-![Affine background](bg_types_affine.png "Affine background")
+![Affine background](bg_types_affine.png)
 
 We need to convert the image in a different way:
 
@@ -306,7 +306,7 @@ understand! From this point, it's easier.
 Bitmap modes are ideal to display images that don't follow any grid-like
 pattern. Check [`examples/graphics_2d/bg_bmp_8bit`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_bmp_8bit):
 
-![8-bit bitmap background](bg_types_bmp_8bits.png "8-bit bitmap background")
+![8-bit bitmap background](bg_types_bmp_8bits.png)
 
 The first important thing to mention are the instructions passed to grit:
 
@@ -387,7 +387,7 @@ for regular games. It's ideal for photos, for example.
 
 Check [`examples/graphics_2d/bg_bmp_16bit`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_bmp_16bit):
 
-![16-bit bitmap background](bg_types_bmp_16bits.png "16-bit bitmap background")
+![16-bit bitmap background](bg_types_bmp_16bits.png)
 
 This is how you convert graphics for this format:
 
@@ -444,7 +444,7 @@ before. Note that only the main engine can be set in this mode.
 
 Check [`examples/graphics_2d/bg_bmp_8bit_large`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_bmp_8bit_large):
 
-![Large 8-bit bitmap background](bg_types_bmp_8bits_large.png "Large 8-bit bitmap background")
+![Large 8-bit bitmap background](bg_types_bmp_8bits_large.png)
 
 The instructions passed to grit are the same as with regular 8-bit backgrounds:
 
@@ -574,7 +574,7 @@ define slots of tile sets and tile maps that don't overlap. For example, suppose
 you want to display two 256-color backgrounds, one with 256 tiles and another
 one with 128 tiles. One possible setup would be:
 
-![Multiple background layers](multiple_bg_layers.png "Multiple background layers")
+![Multiple background layers](multiple_bg_layers.png)
 
 The resulting code would be:
 
@@ -665,7 +665,7 @@ This section will talk about the first situation because it's the one that is
 most likely to be used. It will load two different images with two different
 256-color palettes.
 
-![Background extended palettes](bg_extended_palettes.png "Background extended palettes")
+![Background extended palettes](bg_extended_palettes.png)
 
 The code of this example is here: [`examples/graphics_2d/bg_ext_palette`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_ext_palette).
 

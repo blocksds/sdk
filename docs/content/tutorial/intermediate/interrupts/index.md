@@ -254,7 +254,7 @@ We're going to see a practical example of how to use interrupts by creating a
 wave effect with the HBL interrupt. This section of the tutorial is based on the
 following example: [`examples/video_effects/hblank_scroll`](https://github.com/blocksds/sdk/tree/master/examples/video_effects/hblank_scroll).
 
-![IRQ scroll effect](hblank_effect_irq.png "IRQ scroll effect")
+![IRQ scroll effect](hblank_effect_irq.png)
 
 For this effect we are going to use the horizontal blanking interrupt. This
 interrupt is called after every line of the screen gets drawn. There's a bit of

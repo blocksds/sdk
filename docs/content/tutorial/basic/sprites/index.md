@@ -154,7 +154,7 @@ sprite mapping mode for bitmap sprites if you want to use bitmap sprites.
 Now, let's learn how to display sprites. You can see a more detailed example of
 regular sprites in [`examples/graphics_2d/sprites_regular`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/sprites_regular):
 
-![Regular sprites](spr_types_regular.png "Regular sprites")
+![Regular sprites](spr_types_regular.png)
 
 The image has to be converted in a similar way as backgrounds, but we use `-m!`
 to tell grit that we don't need a map, just tiles.
@@ -255,7 +255,7 @@ even need to change the instructions passed to grit.
 
 Check the example in [`examples/graphics_2d/sprites_affine`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/sprites_affine):
 
-![Affine sprites](spr_types_affine.png "Affine sprites")
+![Affine sprites](spr_types_affine.png)
 
 First, let's take a look at `oamSet()`. The two parameters you need to check are
 "affine index" and "double size for affine sprites":
@@ -312,7 +312,7 @@ bits per pixel) so you don't have any limitation due to requiring a palette.
 
 Check the example in [`examples/graphics_2d/sprites_bitmap`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/sprites_bitmap):
 
-![Bitmap sprites](spr_types_bitmap.png "Bitmap sprites")
+![Bitmap sprites](spr_types_bitmap.png)
 
 The main difference is in the instructions passed to grit:
 
@@ -371,7 +371,7 @@ whenever the animation needs to advance.
 This example shows how to animate a sprite with both systems:
 [`examples/graphics_2d/sprites_animated`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/sprites_animated)
 
-![Animated sprites](spr_types_animated.gif "Animated sprites")
+![Animated sprites](spr_types_animated.gif)
 
 I recommend you to take a look at the example to see how to do it. The short
 explanation is:
@@ -411,7 +411,7 @@ priority 2 will be displayed under sprite ID 60 with priority 0.
 This system works the same way as with backgrounds. It allows you to use up to
 16 palettes of 256 colors each per screen.
 
-![Sprite extended palettes](spr_extended_palettes.png "Sprite extended palettes")
+![Sprite extended palettes](spr_extended_palettes.png)
 
 The code of this example is here: [`examples/graphics_2d/sprites_ext_palette`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/sprites_ext_palette).
 

@@ -68,7 +68,7 @@ without textures. However, note that some emulators don't display dots and lines
 correctly! Check the following example for a demonstration:
 [`examples/gl2d/primitives`](https://github.com/blocksds/sdk/tree/master/examples/gl2d/primitives).
 
-![GL2D primitives](primitives.png "GL2D primitives")
+![GL2D primitives](primitives.png)
 
 This example shows how to use all types of primitives supported by GL2D:
 
@@ -151,7 +151,7 @@ BlocksDS comes with a fork of [**squeezer** by Jeremy Hu](https://github.com/hux
 to pack images. For example, we can pack a few images named `1.png` to `7.png`
 that are stored in a folder called `original_images` and look like this:
 
-![GL2D sprites individual](sprites_individual.png "GL2D sprites individual")
+![GL2D sprites individual](sprites_individual.png)
 
 This command will create a file called `atlas_texture.png` and two other files
 called `atlas.c` and `atlas.h` with the coordinates and sizes of the original
@@ -168,7 +168,7 @@ images. `ATLAS` will be the base name used for defines and array names:
 
 **atlas_texture.png**
 
-![GL2D sprites atlas](sprites_atlas.png "GL2D sprites atlas")
+![GL2D sprites atlas](sprites_atlas.png)
 
 **atlas.c**
 
@@ -305,7 +305,7 @@ glDeleteTextures(1, &ruins_texture_id);
 
 Now, let's focus on this other example: [`examples/gl2d/spriteset`](https://github.com/blocksds/sdk/tree/master/examples/gl2d/spriteset)
 
-![GL2D sprites tramsform](sprites_transform.gif "GL2D sprites transform")
+![GL2D sprites tramsform](sprites_transform.gif)
 
 It possible to rotate and scale sprites like we have done with
 primitives. Functions like `glSpriteRotate()`, `glSpriteRotateScaleXY()` or
@@ -331,11 +331,11 @@ sprites.
 
 Let's check this example: [`examples/gl2d/tileset_background`](https://github.com/blocksds/sdk/tree/master/examples/gl2d/tileset_background)
 
-![GL2D background](background.png "GL2D background")
+![GL2D background](background.png)
 
 This image is composed of tiles from this tileset:
 
-![Original tileset](bg_tileset.png "Original tileset")
+![Original tileset](bg_tileset.png)
 
 You need to pad the tileset up to sizes that are powers of two, and convert it
 with grit as usual:

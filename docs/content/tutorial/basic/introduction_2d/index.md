@@ -35,7 +35,7 @@ The first distinction we need to make is between tiled and bitmap graphics.
   feel that some images have. For example, you can see the tiles that form the
   background in this screenshot:
 
-  ![Background with grid](background_with_grid.png "Background with grid")
+  ![Background with grid](background_with_grid.png)
 
   Check [this chapter of Tonc](https://gbadev.net/tonc/objbg.html) for a more
   detailed explanation.

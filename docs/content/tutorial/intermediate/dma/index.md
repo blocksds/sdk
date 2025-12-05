@@ -137,7 +137,7 @@ We're going to see a practical example of how to use special modes by using the
 HBL start mode on the ARM9. This section of the tutorial is based on the
 following example: [`examples/video_effects/hblank_scroll_dma`](https://github.com/blocksds/sdk/tree/master/examples/video_effects/hblank_scroll_dma).
 
-![DMA scroll effect](hblank_effect_dma.png "DMA scroll effect")
+![DMA scroll effect](hblank_effect_dma.png)
 
 As you can see, this example is similar to the one we saw in the interrupts
 chapter. The difference is in the code that creates the effect.

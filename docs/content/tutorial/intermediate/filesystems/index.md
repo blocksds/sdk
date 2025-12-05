@@ -371,7 +371,7 @@ Something you can do is let the user provide additional files to your
 application. For example, in a photo viewer you need the user to provide their
 own files and you need to be able to open them and display them.
 
-![Example with gbajpeg](gbajpeg.png "Example with gbajpeg")
+![Example with gbajpeg](gbajpeg.png)
 
 You could ask the user to convert them to one of the formats supported by the
 DS, but that isn't very user-friendly. Normally you would let the user have
