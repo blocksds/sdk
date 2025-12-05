@@ -1,5 +1,7 @@
 ---
 title: 'BlocksDS Tutorial'
+cascade:
+  type: docs
 ---
 
 Welcome to the tutorial of [BlocksDS](https://blocksds.skylyrac.net/). This
