@@ -1,7 +1,9 @@
 ---
-title: 'Getting support'
 weight: 1
+title: 'About'
 ---
+
+## Getting support
 
 If you want to report any bugs or suggest new chapters and make sure they aren't
 forgotten, use the [GitHub issue tracker](https://github.com/blocksds/sdk/issues)
@@ -19,3 +21,9 @@ change. You can find the invitation [in this link](https://gbadev.net).
 If you don't like Discord, or you can't use it for some reason, most of the
 channels in the gbadev discord are bridged to IRC. For more information, check
 [this link](https://gbadev.net/chat.html).
+
+## Credits
+
+This is a list of contributors to this tutorial.
+
+- Antonio Niño Díaz (AntonioND)
