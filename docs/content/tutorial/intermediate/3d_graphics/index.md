@@ -208,6 +208,9 @@ coordinates (0, 0, 0) and use translation commands to adjust the coordinates.
 and you can use `glPopMatrix()` later to restore the previous transformations
 quickly.
 
+With that knowledge you now know about all the functions used in the previous
+example: [`examples/graphics_3d/colored_polygon`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/colored_polygon)
+
 This tutorial doesn't have any example of a complex room being drawn, but it's
 still important to understand the idea. For example, imagine you're inside a
 room. You have:
