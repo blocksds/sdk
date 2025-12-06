@@ -3,7 +3,7 @@ title: 'Docker'
 weight: 3
 ---
 
-## 1. Introduction
+### 1. Introduction
 
 This is a short and simplified explanation of Docker in case you aren't familiar
 with it.
@@ -39,7 +39,7 @@ issues. This means that you can use GitHub pipelines, for example, to
 automatically generate a build of your project whenever a new patch is pushed to
 the repository.
 
-## 2. BlocksDS container images
+### 2. BlocksDS container images
 
 There are two different official images:
 
@@ -54,7 +54,7 @@ environment variable or anything else.
 
 The images are available on architectures amd64 and arm64.
 
-## 3. Downloading the pre-built images
+### 3. Downloading the pre-built images
 
 The official BlocksDS container images are available
 [here](https://hub.docker.com/r/skylyrac/blocksds).
@@ -74,7 +74,7 @@ docker image pull skylyrac/blocksds:dev-latest
 
 You will need to run the same commands whenver you want to update the image.
 
-## 4. Build images locally
+### 4. Build images locally
 
 If you don't want to get the pre-built images, you can build them yourself. You
 have the option to build the image for your platform, or a multi-platform image.
@@ -97,7 +97,7 @@ docker build --target $TARGET --tag $TAG_NAME \
 
 You will need to run the same commands whenver you want to update the image.
 
-## 5. How to use the containers
+### 5. How to use the containers
 
 All instructions from now on will use the slim image, but they work the same way
 on the dev version.
@@ -169,7 +169,7 @@ You can close the container by running:
 exit
 ```
 
-## 6. Uninstall the images
+### 6. Uninstall the images
 
 If you have installed Docker just for this, you can run the following command to
 remove all docker images available in your PC:
