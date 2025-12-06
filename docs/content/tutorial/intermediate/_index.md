@@ -15,4 +15,5 @@ initial knowledge of the NIntendo DS:
   {{< card icon="folder-open" link="filesystems" title="FAT filesystems" >}}
   {{< card icon="sparkles" link="special_2d_effects" title="Special 2D effects" >}}
   {{< card icon="server" link="memory_management" title="Memory management" >}}
+  {{< card icon="cube" link="3d_graphics" title="3D graphics" >}}
 {{< /cards >}}
