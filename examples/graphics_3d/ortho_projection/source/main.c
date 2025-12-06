@@ -28,16 +28,16 @@ void draw_box(float bx_, float by_, float bz_, float ex_, float ey_, float ez_)
         glColor3f(0, 1, 0);
 
         glVertex3v16(bx, by, ez);
-        glVertex3v16(bx, ey, ez);
-        glVertex3v16(ex, ey, ez);
         glVertex3v16(ex, by, ez);
+        glVertex3v16(ex, ey, ez);
+        glVertex3v16(bx, ey, ez);
 
         glColor3f(0, 0, 1);
 
         glVertex3v16(bx, by, bz);
-        glVertex3v16(bx, by, ez);
-        glVertex3v16(ex, by, ez);
         glVertex3v16(ex, by, bz);
+        glVertex3v16(ex, by, ez);
+        glVertex3v16(bx, by, ez);
 
         glColor3f(1, 0, 1);
 
@@ -56,9 +56,9 @@ void draw_box(float bx_, float by_, float bz_, float ex_, float ey_, float ez_)
         glColor3f(1, 1, 0);
 
         glVertex3v16(ex, by, bz);
-        glVertex3v16(ex, by, ez);
-        glVertex3v16(ex, ey, ez);
         glVertex3v16(ex, ey, bz);
+        glVertex3v16(ex, ey, ez);
+        glVertex3v16(ex, by, ez);
 
     glEnd();
 }

@@ -35,14 +35,14 @@ void draw_box(int32_t cx, int32_t cy, int32_t cz, // Center
         glVertex3v16(ex, by, bz);
 
         glVertex3v16(bx, by, ez);
-        glVertex3v16(bx, ey, ez);
-        glVertex3v16(ex, ey, ez);
         glVertex3v16(ex, by, ez);
+        glVertex3v16(ex, ey, ez);
+        glVertex3v16(bx, ey, ez);
 
         glVertex3v16(bx, by, bz);
-        glVertex3v16(bx, by, ez);
-        glVertex3v16(ex, by, ez);
         glVertex3v16(ex, by, bz);
+        glVertex3v16(ex, by, ez);
+        glVertex3v16(bx, by, ez);
 
         glVertex3v16(bx, ey, bz);
         glVertex3v16(bx, ey, ez);
@@ -55,9 +55,9 @@ void draw_box(int32_t cx, int32_t cy, int32_t cz, // Center
         glVertex3v16(bx, ey, bz);
 
         glVertex3v16(ex, by, bz);
-        glVertex3v16(ex, by, ez);
-        glVertex3v16(ex, ey, ez);
         glVertex3v16(ex, ey, bz);
+        glVertex3v16(ex, ey, ez);
+        glVertex3v16(ex, by, ez);
 
     glEnd();
 }
