@@ -26,7 +26,7 @@ weight: 2
   >}}
 {{< /card >}}
 
-> [!NOTE]
->
-> **macOS** is not supported natively, you need to use Docker instead. We're
-> [looking for help](https://github.com/blocksds/sdk/issues/205).
+{{< callout type="info" >}}
+**macOS** isn't supported natively, you need to use Docker instead. We're
+[looking for help](https://github.com/blocksds/sdk/issues/205) with it.
+{{< /callout >}}
