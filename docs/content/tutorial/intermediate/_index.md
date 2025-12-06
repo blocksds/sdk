@@ -12,7 +12,7 @@ initial knowledge of the NIntendo DS:
   {{< card icon="copy" link="dma" title="DMA" >}}
   {{< card icon="puzzle" link="gl2d" title="GL2D" >}}
   {{< card icon="folder" link="nitrofs" title="NitroFS" >}}
-  {{< card icon="folder-download" link="filesystems" title="FAT filesystems" >}}
+  {{< card icon="folder-open" link="filesystems" title="FAT filesystems" >}}
   {{< card icon="sparkles" link="special_2d_effects" title="Special 2D effects" >}}
   {{< card icon="server" link="memory_management" title="Memory management" >}}
 {{< /cards >}}
