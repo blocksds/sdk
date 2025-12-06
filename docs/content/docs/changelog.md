@@ -162,10 +162,10 @@ weight: 6
   - In DS mode packets are now read from/written to MAC RAM using DMA for extra
     speed and simplify the code.
   - Now that packets are always stored in one piece, it isn't needed to use
-    `Wifi_RxRawReadPacketPointer()` to copy them to a user-allocated buffer.
-    Function `Wifi_RxRawReadPacketPointer()` has been implemented as an
-    alternative. It returns an uncached pointer to the packet in RAM. Please,
-    check the documentation for advice on how to use them.
+    `Wifi_RxRawReadPacket()` to copy them to a user-allocated buffer. Function
+    `Wifi_RxRawReadPacketPointer()` has been implemented as an alternative. It
+    returns an uncached pointer to the packet in RAM. Please, check the
+    documentation for advice on how to use them.
   - Improve random number generation. Previously, in DS mode, `W_RANDOM` was
     used for WEP seeds, a bad handmade RNG was used for WPA2 handshakes, and
     `rand()` was used in Mbed TLS instead of hardware entropy collection. A new
