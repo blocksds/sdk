@@ -95,8 +95,8 @@ int main(int argc, char **argv)
     // Switch to model view matrix
     glMatrixMode(GL_MODELVIEW);
 
-    int angle_x = 0;
-    int angle_z = 0;
+    int angle_x = 45;
+    int angle_z = 45;
 
     float x = 0.0;
     float y = 0.0;
