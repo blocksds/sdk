@@ -16,7 +16,7 @@ for the Nintendo DS and DSi in C and C++.
 {{< /hextra/hero-subtitle >}}
 </div>
 
-{{< hextra/feature-grid >}}
+{{< hextra/feature-grid cols="2" >}}
   {{< hextra/feature-card
     title="Getting started"
     subtitle="Instructions to setup BlocksDS."
@@ -44,5 +44,20 @@ for the Nintendo DS and DSi in C and C++.
     icon="question-mark-circle"
     link="docs/support"
     style="background-color: rgba(192,255,128,0.3)"
+  >}}
+{{< /hextra/feature-grid >}}
+
+<div class="hx:mt-6"></div>
+
+{{< hextra/feature-grid cols="2" >}}
+  {{< hextra/feature-card
+    title="About BlocksDS"
+    icon="light-bulb"
+    link="docs/introduction"
+  >}}
+  {{< hextra/feature-card
+    title="Credits"
+    icon="user"
+    link="docs/credits"
   >}}
 {{< /hextra/feature-grid >}}
