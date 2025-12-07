@@ -17,10 +17,10 @@ BlocksDS is an SDK to develop applications for Nintendo DS in C or C++.
   Because of that, [Wonderful Toolchain](https://wonderful.asie.pl/) is used
   instead of asking the users to build it themselves.
 
-- To try to keep compatibility with pre-existing C projects made by devkitARM.
-  In theory, it should be enough to replace the Makefile of devkitARM by a
-  Makefile of BlocksDS to build any old project, with some few exceptions. Check
-  [this guide](../guides/devkitarm_porting_guide) for more details.
+- To try to keep compatibility with pre-existing C projects made by pre-calico
+  devkitARM. In theory, it should be enough to replace the Makefile of that kind
+  of projects by a Makefile of BlocksDS to build them, with some few exceptions.
+  Check [this guide](../guides/devkitarm_porting_guide) for more details.
 
 - To document as much of the SDK as possible. For detailed information about the
   design of BlocksDS, check [this document](../internal/design_guide).
@@ -46,7 +46,7 @@ BlocksDS is an SDK to develop applications for Nintendo DS in C or C++.
 
   There are versions of functions like `memcpy()`, `memset()` and `memmove()`
   that have been optimized for the CPUs of the DS. This is thanks to using
-  **ndsabi**, a fork of [agbabi](https://github.com/felixjones/agbabi) by
+  ndsabi, a fork of [agbabi](https://github.com/felixjones/agbabi) by
   felixjones.
 
   Also, `argv` may be provided by the environment so that programs know where
@@ -82,9 +82,9 @@ BlocksDS is an SDK to develop applications for Nintendo DS in C or C++.
 
 #### 2.2 Supported DS features
 
-- All features of the 2D video hardware are supported. There are some
-  APIs to simplify the usage of backgrounds and sprites, as well as a basic text
-  console system based on the 2D background system.
+- All features of the 2D video hardware are supported. There are some APIs to
+  simplify the usage of backgrounds and sprites, as well as a basic text console
+  system based on the 2D background system.
 
 - All features of the 3D hardware are supported through an API that is similar
   to the one of OpenGL 1. There is a library to render 2D graphics with the 3D
@@ -92,7 +92,7 @@ BlocksDS is an SDK to develop applications for Nintendo DS in C or C++.
 
 - There is a tool to convert graphics to the formats used by the DS: `grit`. The
   only format that it doesn't support is the `Tex4x4` texture format, but that
-  one is supported by [**ptexconv**](https://github.com/Garhoogin/ptexconv/).
+  one is supported by [ptexconv](https://github.com/Garhoogin/ptexconv/).
 
 - The audio hardware is supported. There are two libraries that can be used to
   play music: Maxmod and libxm7. libxm7 only supports playing MOD and XM files,
@@ -123,12 +123,12 @@ BlocksDS is an SDK to develop applications for Nintendo DS in C or C++.
 
 - It is possible to read and set the date and time of the RTC clock.
 
-- It is possible to connect to WiFi access points and access the Internet. IT's
+- It is possible to connect to WiFi access points and access the Internet. It's
   also possible to communicate between multiple consoles in local multiplayer
   mode without an external access point. WEP and open access points are
   supported. IPv4 and IPv6 are supported.
 
-- **ndstool** supports creating NDS ROMs and define a ROM icon and banner text
+- `ndstool` supports creating NDS ROMs and define a ROM icon and banner text
   (in multiple languages!).
 
 #### 2.3 Supported DSi features
@@ -137,14 +137,14 @@ BlocksDS is an SDK to develop applications for Nintendo DS in C or C++.
 
 - The new DMA features, as well as the new WRAM memory banks, are supported.
 
-- DSi WiFi features are supported, which lets you connect to WPA2 access points,
-  not only WEP and open APs. IPv4 and IPv6 are supported.
+- DSi WiFi features are supported, which lets you connect to WPA2 access points
+  in addition to WEP and open APs.
 
-- **ndstool** supports animated icons from PNG, GIF, even animated GIF files.
+- `ndstool` supports animated icons from PNG, GIF, even animated GIF files.
 
 - The DSi camera is supported (thanks, asie!). It's still quite basic, but
   enough to be able to take photos from the front and back cameras.
 
-- There is preliminary support for the DSP of the DSi (the toolchain is very
+- There is preliminary support for the DSP of the DSi. The toolchain is very
   buggy, so be very careful when using it, it's probably not ready to be used by
-  most developers!).
+  most developers.
