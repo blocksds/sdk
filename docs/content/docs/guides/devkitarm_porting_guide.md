@@ -51,16 +51,20 @@ AUDIODIRS   := audio
 NITROFSDIR  := nitrofs
 ```
 
-Important notes:
-
-- `SOURCEDIRS` searches all directories recursively. If you don't
+{{< callout type="tip" >}}
+`SOURCEDIRS` searches all directories recursively. If you don't
 like this behaviour, go to the `SOURCES_S`, `SOURCES_C` and `SOURCES_CPP` lines
 and add `-maxdepth 1` to the `find` command.
-- Paths to directories that are outside of the root of the project is not 
-supported.
+{{< /callout >}}
 
-Note that `TARGET` is not part of this group. The top of the Makefile has this
-other group of variables that you can also set to your own values:
+{{< callout type="warning" >}}
+Paths to directories that are outside of the root of the project are not
+supported.
+{{< /callout >}}
+
+Note that `TARGET` is not part of this group of variables. The top of the
+Makefile has this other group of variables that you can also set to your own
+values:
 
 ```make
 NAME          := template_arm9     # Name of the resulting NDS file
@@ -175,9 +179,9 @@ else if (cur->d_type == DT_REG)
 
 ### 3.3 Other differences
 
-* To cut down on RAM, code size and complexity, BlocksDS omits the `devoptab`
-  interface. As homebrew does not generally need to modify the device list,
-  this should not affect them.
+To cut down on RAM, code size and complexity, BlocksDS omits the `devoptab`
+interface. As homebrew does not generally need to modify the device list,
+this should not affect them.
 
 ### 4. Integer versions of stdio.h functions
 

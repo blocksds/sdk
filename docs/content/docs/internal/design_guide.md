@@ -207,4 +207,3 @@ a file operation is performed, prohibiting the use of multithreading.
 As a workaround, BlocksDS supports moving DLDI execution to the ARM7 sub
 CPU; this should be compatible with many, but not all cartridges. Feel free
 to read [this document](../../guides/dldi_arm7) for more information.
-

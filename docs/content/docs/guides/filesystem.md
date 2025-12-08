@@ -89,6 +89,11 @@ filesystem that is appended to the end of the NDS ROM file. The files aren't
 loaded to RAM when the application is loaded, they are simply appended there so
 that all the data used by the application is self-contained.
 
+{{< callout type="warning" >}}
+NitroFS is a read-only filesystem. It can hold your application data, but you
+can't write anything to it.
+{{< /callout >}}
+
 The main problem of NitroFS is finding the NDS ROM so that it can read its
 contents. This has to be done in very different ways depending on where it runs:
 
@@ -111,8 +116,6 @@ contents. This has to be done in very different ways depending on where it runs:
   applications. It's equivalent, but it limits the length of the path to 64
   characters. If your application is inside folders with long names this will be
   an issue.
-
-Important note: This filesystem is read only!
 
 To use this filesystem you need to add some files to it. Open your `Makefile`
 and look for `NITROFSDIR`. You can add a list of directories (separated by
@@ -147,19 +150,21 @@ int main(int argc, char *argv[])
 }
 ```
 
-Important note: An empty NitroFS filesystem will cause `nitroFSInit()` to fail.
+{{< callout type="warning" >}}
+An empty NitroFS filesystem will cause `nitroFSInit()` to fail.
+{{< /callout >}}
 
 Check [this example](https://github.com/blocksds/sdk/tree/master/examples/filesystem/nitrofs)
 to see how to use `NitroFS`.
 
-**Note for Slot-2 flashcarts**
-
-If you're using NitroFS in a Slot-2 flashcart that doesn't support DLDI, it will
-still work. The flashcart will load the full NDS ROM to its RAM, and libnds will
-read data from the Slot-2 memory region. However, this memory area has a size of
-32 MB. If your NDS ROM is bigger than 32 MB it won't be able to access all data.
-This can cause unexpected errors if it isn't detected, so `nitroFSInit()` will
-simply return an error if the ROM is bigger.
+{{< callout type="info" >}}
+If you're using NitroFS in a **Slot-2 flashcart** that doesn't support DLDI, the
+flashcart will load the full NDS ROM to its RAM, and libnds will read data from
+the Slot-2 memory region. However, this memory area has a size of 32 MiB. If
+your NDS ROM is bigger than 32 MiB it won't be able to access all data. This
+could cause unexpected errors if it isn't detected, so `nitroFSInit()` will
+simply return an error if the ROM is bigger than 32 MiB.
+{{< /callout >}}
 
 ### 4. DSi SD card slot
 
@@ -184,7 +189,6 @@ it in read-only mode, `nandInit(false)` initializes it in read/write mode.
 Note that there are two partitions supported by libnds. `"nand:/"` is the main
 NAND partition, and `"nand2:/"` is the partition used to store photos by the
 system camera application.
-
 
 ```c
 #include <fat.h>

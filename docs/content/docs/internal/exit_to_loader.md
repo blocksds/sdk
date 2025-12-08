@@ -25,11 +25,18 @@ Before starting the application, the loader copies a small binary blob at the
 end of RAM, in a location that has been predefined by the protocol. Then, the
 loader starts the application.
 
-Important note: The bootstub routine of the NDS Homebrew Menu (which is used by
-other loaders) has a hardcoded return to a file named "BOOT.NDS" in the root of
-the filesystem. In a regular DS, it will look for the file in the flashcard. In
-a DSi, it will look for it in the SD card of the DSi. If you don't have a file
-called "BOOT.NDS" the system won't work.
+This small binary blob is the "bootstub". It looks for a specific file in the
+filesystem and launches it. That's how the return happens: it isn't a return to
+the loader, it just boots the loader again.
+
+The bootstub routine of the NDS Homebrew Menu (which is used by other loaders)
+launches a file called "BOOT.NDS". In a DS this file must be in the root of the
+SD card of your flashcard. In a DSi this file must be in the root of the
+internal SD card slot.
+
+{{< callout type="warning" >}}
+If you don't have the expected "BOOT.NDS" file, the bootstub will fail.
+{{< /callout >}}
 
 ### 2. The application exits
 

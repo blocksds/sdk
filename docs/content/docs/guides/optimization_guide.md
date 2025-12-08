@@ -98,9 +98,9 @@ There are things which can be done to make the most out of filesystem I/O:
   require re-filling the whole buffer. For example, to allocate a 4 KB buffer for
   a file, one can use:
 
-```c
-    setvbuf(file, NULL, _IOFBF, 4 * 1024);
-```
+  ```c
+  setvbuf(file, NULL, _IOFBF, 4 * 1024);
+  ```
 
 * If your data format is based around random reads, you may benefit from enabling
   a lookup cache. This reduces the amount of SD card reads required for finding the
@@ -109,9 +109,9 @@ There are things which can be done to make the most out of filesystem I/O:
   exceed a few hundred bytes. Note that the lookup cache is automatically enabled
   for NitroFS accesses. For example, to try and enable the lookup cache on a file:
 
-```c
-    fatInitLookupCacheFile(file, 2 * 1024); /* 2 KB maximum lookup cache */
-```
+  ```c
+  fatInitLookupCacheFile(file, 2 * 1024); // 2 KB maximum lookup cache
+  ```
 
 ### OpenGL-like API usage
 

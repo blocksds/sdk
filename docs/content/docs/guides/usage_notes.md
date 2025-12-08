@@ -134,14 +134,14 @@ size for your application. There are two ways to set it:
 
 1. Edit your Makefile and the following to `LDFLAGS`:
 
-   ```
+   ```make
    LDFLAGS := -Wl,--defsym,__dtcm_data_size=1024
    ```
 
 2. Add a file to your project with the value of the symbol. For example, create
    a file called `dtcm_size.s` with the following contents:
 
-   ```
+   ```asm
    .global __dtcm_data_size
    .equ __dtcm_data_size, 1024
    ```
