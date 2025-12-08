@@ -9,7 +9,7 @@ Welcome to the documentation of BlocksDS!
 
 {{< cards cols="1" >}}
   {{< card icon="cog" link="setup" title="Getting started" >}}
-  {{< card icon="book-open" link="docs" title="Library documentation" >}}
+  {{< card icon="book-open" link="libs" title="Library documentation" >}}
   {{< card icon="book-open" link="guides" title="User guides" >}}
   {{< card icon="code" link="internal" title="Internal documentation" >}}
 {{< /cards >}}

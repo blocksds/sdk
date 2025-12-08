@@ -22,7 +22,7 @@ other developers if you get stuck. Check the "getting support" section of the
 documentation [here](../../support).
 
 You can also check the online mirror of the documentation of all libraries
-included in BlocksDS [here](../../docs).
+included in BlocksDS [here](../../libs).
 
 If `libnds` is too low-level for you, you can check high-level libraries like
 [Nitro Engine](https://github.com/AntonioND/nitro-engine) or

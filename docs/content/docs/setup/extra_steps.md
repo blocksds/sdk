@@ -42,7 +42,7 @@ the project.
 ### 2. Additional libraries and tools
 
 There are several libraries and tools that aren't installed by default. They are
-listed in the links you can find [here](../../docs). They all get installed to
+listed in the links you can find [here](../../libs). They all get installed to
 `BLOCKSDSEXT`.
 
 ### 3. Keeping multiple versions of BlocksDS
