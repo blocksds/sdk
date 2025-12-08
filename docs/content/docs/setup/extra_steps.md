@@ -41,8 +41,9 @@ the project.
 
 ### 2. Additional libraries and tools
 
-[This document](../../docs/external_libs) has a list of tools and libraries
-that support BlocksDS and can be installed in `/opt/blocksds/external`.
+There are several libraries and tools that aren't installed by default. They are
+listed in the links you can find [here](../../docs). They all get installed to
+`BLOCKSDSEXT`.
 
 ### 3. Keeping multiple versions of BlocksDS
 

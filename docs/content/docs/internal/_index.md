@@ -1,5 +1,5 @@
 ---
-title: 'Internal docs'
+title: 'Internal documentation'
 weight: 5
 ---
 

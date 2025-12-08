@@ -5,7 +5,7 @@ weight: 1
 
 All the base libraries included with BlocksDS come with extensive documentation
 and examples. If you want information about other libraries not included with
-the base SDK, check [this link](../external_libs).
+the base SDK, check the links [here](..).
 
 ### libnds
 
