@@ -37,15 +37,22 @@ menu:
       params:
         type: theme-toggle
         label: true # optional, default is false
+    - name: GitHub
+      url: "https://github.com/blocksds"
+      params:
+        icon: github
 
   sidebar:
     - name: External links
       params:
         type: separator
       weight: 1
-    - name: GitHub
+    - name: "Wonderful Toolchain"
       weight: 2
-      url: "https://github.com/blocksds"
+      url: "https://wonderful.asie.pl"
+    - name: "GBATEK"
+      weight: 3
+      url: "https://problemkaputt.de/gbatek.htm"
 
 params:
   theme:
