@@ -1,5 +1,5 @@
 ---
-title: 'Upgrade guide'
+title: 'Updating guide'
 weight: 8
 ---
 
@@ -7,8 +7,8 @@ Newer BlocksDS versions occasionally introduce breaking changes which require
 developer action, as well as non-breaking changes which developers are encouraged
 to implement. These are documented here.
 
-Please refer to the changelog for a full list of changes, including additions
-and enhancements to the SDK which are not listed here.
+Please refer to the [changelog](../../changelog) for a full list of changes,
+including additions and enhancements to the SDK which are not listed here.
 
 ### Upgrading to BlocksDS DEV
 

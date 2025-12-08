@@ -7,10 +7,11 @@ This document enumerates the components which are part of a BlocksDS toolchain
 and their licenses. This is useful if you want to release a binary built with
 BlocksDS and you aren't sure about what copyright notices you need to add.
 
-Note that this document **does not constitute legal advice**. It is a simplified
-enumeration of project licenses, not a grant of licensing terms in its own right.
-In no event will the BlocksDS project or its authors be held liable for any
-damages arising from errors or mistakes in this information.
+> [!WARNING]
+> This document **does not constitute legal advice**. It's a simplified
+> enumeration of project licenses, not a grant of licensing terms in its own
+> right. In no event will the BlocksDS project or its authors be held liable for
+> any damages arising from errors or mistakes in this information.
 
 ## Distributed by BlocksDS
 

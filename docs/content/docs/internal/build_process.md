@@ -70,10 +70,12 @@ creation of NDS ROMs.
 For more information, you can see the full linker scripts used by BlocksDS in
 [this folder](https://github.com/blocksds/sdk/blob/master/sys/crts).
 
-Note: In the past, the build process involved creating `bin` files from `elf`
+{{< callout type="info" >}}
+In the past, the build process involved creating `bin` files from `elf`
 files (with `objcopy`) and using them to build the final ROM. However, `bin`
 files generated this way don't contain information about the entrypoint address,
 and it isn't possible to determine which parts are only needed for DSi.
+{{< /callout >}}
 
 ### 2.2 Custom linkerscript and crt0 files
 
