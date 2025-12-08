@@ -3,38 +3,93 @@ title: 'Base libraries'
 weight: 1
 ---
 
-If you're looking for documentation about specific libraries of BlocksDS,
-check the following links:
+All the base libraries included with BlocksDS come with extensive documentation
+and examples. If you want information about other libraries not included with
+the base SDK, check [this link](../external_libs).
 
-- **libnds**: General-purpose library to use the hardware of the NDS.
+### libnds
 
-  - [Library documentation](../../../libnds/index.html)
-  - [Examples](https://github.com/blocksds/sdk/tree/master/examples)
+General-purpose library to use the hardware of the NDS.
 
-- **Maxmod**: Music player that can play MOD, S3M, XM, IT and WAV files. It can
-  use hardware or software mixing, and it runs on the ARM7.
+{{< cards cols="2" >}}
+  {{< card
+    icon="book-open"
+    title="Documentation"
+    link="../../../libnds/index.html"
+  >}}
+  {{< card
+    icon="code"
+    title="Examples"
+    link="https://github.com/blocksds/sdk/tree/master/examples"
+  >}}
+{{< /cards >}}
 
-  - [Library documentation](../../../maxmod/index.html)
-  - [Examples](https://github.com/blocksds/sdk/tree/master/examples/maxmod)
+### Maxmod
 
-- **LibXM7**: Hardware-accelerated player of XM and MOD music files that runs
-  on the ARM7.
+Music player that can play MOD, S3M, XM, IT and WAV files. It can use hardware
+or software mixing, and it runs on the ARM7.
 
-  - [Library documentation](../../../libxm7/index.html)
-  - [Examples](https://github.com/blocksds/sdk/tree/master/examples/libxm7)
+{{< cards cols="2" >}}
+  {{< card
+    icon="book-open"
+    title="Documentation"
+    link="(../../../maxmod/index.html"
+  >}}
+  {{< card
+    icon="code"
+    title="Examples"
+    link="https://github.com/blocksds/sdk/tree/master/examples/maxmod"
+  >}}
+{{< /cards >}}
 
-- **DSWiFi**: Library to use the WiFi hardware of the NDS and DSi with support
-  for local multiplayer and Internet access.
+### DSWiFi
 
-  - [Library documentation](../../../dswifi/index.html)
-  - [Examples](https://github.com/blocksds/sdk/tree/master/examples/dswifi)
+Library to use the WiFi hardware of the NDS and DSi with support for local
+multiplayer and Internet access.
 
-- **libteak**: Library to use the Teak DSP included in the DSi and 3DS consoles.
+{{< cards cols="2" >}}
+  {{< card
+    icon="book-open"
+    title="Documentation"
+    link="(../../../dswifi/index.html"
+  >}}
+  {{< card
+    icon="code"
+    title="Examples"
+    link="https://github.com/blocksds/sdk/tree/master/examples/dswifi"
+  >}}
+{{< /cards >}}
 
-  - [Library documentation](../../../libteak/index.html)
-  - [Examples](https://github.com/blocksds/sdk/tree/master/examples/dsp)
+### LibXM7
 
-There are also some libraries and tools that are supported by BlocksDS, but not
-fully integrated with it. They include libraries to easily handle 2D and 3D
-graphics, additional converters for graphics and build systems. Take a look at
-the [documentation](../external_libs) for more information.
+Hardware-accelerated player of XM and MOD music files that runs on the ARM7.
+
+{{< cards cols="2" >}}
+  {{< card
+    icon="book-open"
+    title="Documentation"
+    link="(../../../libxm7/index.html"
+  >}}
+  {{< card
+    icon="code"
+    title="Examples"
+    link="https://github.com/blocksds/sdk/tree/master/examples/libxm7"
+  >}}
+{{< /cards >}}
+
+### libteak
+
+Library to use the Teak DSP included in the DSi and 3DS consoles.
+
+{{< cards cols="2" >}}
+  {{< card
+    icon="book-open"
+    title="Documentation"
+    link="(../../../libteak/index.html"
+  >}}
+  {{< card
+    icon="code"
+    title="Examples"
+    link="https://github.com/blocksds/sdk/tree/master/examples/dsp"
+  >}}
+{{< /cards >}}
