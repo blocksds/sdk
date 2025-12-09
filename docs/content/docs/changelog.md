@@ -3,6 +3,70 @@ title: 'Changelog'
 weight: 6
 ---
 
+### Version DEV (2025-XX-XX)
+
+- libnds:
+
+  - Function `fatGetDefaultDrive()` can now return `"nand:/"` if the application
+    runs from NAND.
+  - New definitions have been added for the window registers. The old ones
+    didn't use the same names used by GBATEK.
+
+- grit:
+
+  - When exporting tiled backgrounds grit didn't check if the size of the tile
+    set was too big. There was a check but it was incorrect. Now, grit will fail
+    if it's trying to export too many tiles for the specified format. For
+    example, affine backgrounds can only have up to 256 tiles. Previously, grit
+    would export a broken tile map silently, which was hard to detect if there
+    were too many similar tiles.
+
+- SDK:
+
+  - Arguments `-std=gnu17` and `-std=gnu++17` have been removed from all default
+    and template makefiles. They prevented users from changing this themselves.
+
+  - Examples:
+
+    - Add example of using windows and DMA to create a circular window.
+    - Add example of using the master brightness registers (not the LCD
+      brightness).
+    - Add example of drawing a single colored 3D quad.
+    - Set transparent color explicitly in grit files that convert tiled
+      backgrounds. Index 0 is always transparent, so it's a good idea to tell
+      grit which color to use as transparent so that we don't get surprises
+      later.
+    - Simplify background image used in the `bg_rotation` example. It was using
+      way more tiles than the limit of 256, but it wasn't noticeable because
+      many tiles looked similar.
+    - Set backdrop color in some examples to black instead of leaving magenta,
+      which is the transparent color of the background.
+    - The graphics of the examples in the `video_effects` folder have been
+      replaced by prettier images.
+    - In 3D examples that draw cubes the old vertex order was incorrect (so
+      culling wasn't working properly). It has been fixed.
+    - A new example has been added to show how to draw a 3D cube and what's the
+      effect of changing the culling setting.
+
+  - Documentation:
+
+    - The documentation has been completely reorganized. Old links to specific
+      pages won't work.
+    - The old Hugo theme has been replaced by one that supports different
+      sections better (SDK documentation vs tutorial, for example).
+    - A lot of icons and nicer formatting has been added to all the previous
+      documentation. In particular, the setup instructions have been simplified.
+    - The documentation now includes information about all the libraries
+      provided in the BlocksDS and Wonderful Toolchain repositories. They
+      weren't easily discoverable before.
+    - Add a new page with documentation about filesystem support.
+    - The tutorial has new sections about background and sprite extended
+      palettes.
+    - The tutorial has new chapters about 2D effects (blending, mosaic, etc),
+      memory management, and 3D.
+    - The tutorial has been merged into the SDK repository to unify the
+      documentation of BlocksDS.
+
 ### Version 1.15.7 (2025-11-29)
 
 - libnds:
