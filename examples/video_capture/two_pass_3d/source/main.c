@@ -35,68 +35,68 @@ void DrawTexturedCube(void)
 
         glNormal(NORMAL_PACK(0, 0, floattov10(-0.97)));
 
-        GFX_TEX_COORD = TEXTURE_PACK(0, 0);
+        glTexCoord2t16(0, 0);
         glVertex3v16(bx, by, bz);
-        GFX_TEX_COORD = TEXTURE_PACK(0, inttot16(128));
+        glTexCoord2t16(0, inttot16(128));
         glVertex3v16(bx, ey, bz);
-        GFX_TEX_COORD = TEXTURE_PACK(inttot16(128), inttot16(128));
+        glTexCoord2t16(inttot16(128), inttot16(128));
         glVertex3v16(ex, ey, bz);
-        GFX_TEX_COORD = TEXTURE_PACK(inttot16(128), 0);
+        glTexCoord2t16(inttot16(128), 0);
         glVertex3v16(ex, by, bz);
 
         glNormal(NORMAL_PACK(0, 0, floattov10(0.97)));
 
-        GFX_TEX_COORD = TEXTURE_PACK(0, 0);
+        glTexCoord2t16(0, 0);
         glVertex3v16(bx, by, ez);
-        GFX_TEX_COORD = TEXTURE_PACK(0, inttot16(128));
+        glTexCoord2t16(0, inttot16(128));
         glVertex3v16(bx, ey, ez);
-        GFX_TEX_COORD = TEXTURE_PACK(inttot16(128), inttot16(128));
+        glTexCoord2t16(inttot16(128), inttot16(128));
         glVertex3v16(ex, ey, ez);
-        GFX_TEX_COORD = TEXTURE_PACK(inttot16(128), 0);
+        glTexCoord2t16(inttot16(128), 0);
         glVertex3v16(ex, by, ez);
 
         glNormal(NORMAL_PACK(0, floattov10(-0.97), 0));
 
-        GFX_TEX_COORD = TEXTURE_PACK(0, 0);
+        glTexCoord2t16(0, 0);
         glVertex3v16(bx, by, bz);
-        GFX_TEX_COORD = TEXTURE_PACK(0, inttot16(128));
+        glTexCoord2t16(0, inttot16(128));
         glVertex3v16(bx, by, ez);
-        GFX_TEX_COORD = TEXTURE_PACK(inttot16(128), inttot16(128));
+        glTexCoord2t16(inttot16(128), inttot16(128));
         glVertex3v16(ex, by, ez);
-        GFX_TEX_COORD = TEXTURE_PACK(inttot16(128), 0);
+        glTexCoord2t16(inttot16(128), 0);
         glVertex3v16(ex, by, bz);
 
         glNormal(NORMAL_PACK(0, floattov10(0.97), 0));
 
-        GFX_TEX_COORD = TEXTURE_PACK(0, 0);
+        glTexCoord2t16(0, 0);
         glVertex3v16(bx, ey, bz);
-        GFX_TEX_COORD = TEXTURE_PACK(0, inttot16(128));
+        glTexCoord2t16(0, inttot16(128));
         glVertex3v16(bx, ey, ez);
-        GFX_TEX_COORD = TEXTURE_PACK(inttot16(128), inttot16(128));
+        glTexCoord2t16(inttot16(128), inttot16(128));
         glVertex3v16(ex, ey, ez);
-        GFX_TEX_COORD = TEXTURE_PACK(inttot16(128), 0);
+        glTexCoord2t16(inttot16(128), 0);
         glVertex3v16(ex, ey, bz);
 
         glNormal(NORMAL_PACK(floattov10(-0.97), 0, 0));
 
-        GFX_TEX_COORD = TEXTURE_PACK(0, 0);
+        glTexCoord2t16(0, 0);
         glVertex3v16(bx, by, bz);
-        GFX_TEX_COORD = TEXTURE_PACK(0, inttot16(128));
+        glTexCoord2t16(0, inttot16(128));
         glVertex3v16(bx, by, ez);
-        GFX_TEX_COORD = TEXTURE_PACK(inttot16(128), inttot16(128));
+        glTexCoord2t16(inttot16(128), inttot16(128));
         glVertex3v16(bx, ey, ez);
-        GFX_TEX_COORD = TEXTURE_PACK(inttot16(128), 0);
+        glTexCoord2t16(inttot16(128), 0);
         glVertex3v16(bx, ey, bz);
 
         glNormal(NORMAL_PACK(floattov10(0.97), 0, 0));
 
-        GFX_TEX_COORD = TEXTURE_PACK(0, 0);
+        glTexCoord2t16(0, 0);
         glVertex3v16(ex, by, bz);
-        GFX_TEX_COORD = TEXTURE_PACK(0, inttot16(128));
+        glTexCoord2t16(0, inttot16(128));
         glVertex3v16(ex, by, ez);
-        GFX_TEX_COORD = TEXTURE_PACK(inttot16(128), inttot16(128));
+        glTexCoord2t16(inttot16(128), inttot16(128));
         glVertex3v16(ex, ey, ez);
-        GFX_TEX_COORD = TEXTURE_PACK(inttot16(128), 0);
+        glTexCoord2t16(inttot16(128), 0);
         glVertex3v16(ex, ey, bz);
 
     glEnd();

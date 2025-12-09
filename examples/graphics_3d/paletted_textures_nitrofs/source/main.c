@@ -171,16 +171,16 @@ int main(int argc, char **argv)
 
             glBegin(GL_QUADS);
 
-                GFX_TEX_COORD = (TEXTURE_PACK(0, inttot16(32)));
+                glTexCoord2t16(0, inttot16(32));
                 glVertex3v16(floattov16(-1), floattov16(-1), floattov16(-0.2));
 
-                GFX_TEX_COORD = (TEXTURE_PACK(inttot16(32),inttot16(32)));
+                glTexCoord2t16(inttot16(32),inttot16(32));
                 glVertex3v16(floattov16(1), floattov16(-1), floattov16(-0.2));
 
-                GFX_TEX_COORD = (TEXTURE_PACK(inttot16(32), 0));
+                glTexCoord2t16(inttot16(32), 0);
                 glVertex3v16(floattov16(1), floattov16(1), floattov16(-0.2));
 
-                GFX_TEX_COORD = (TEXTURE_PACK(0,0));
+                glTexCoord2t16(0, 0);
                 glVertex3v16(floattov16(-1), floattov16(1), floattov16(-0.2));
 
             glEnd();
@@ -195,16 +195,16 @@ int main(int argc, char **argv)
 
             glBegin(GL_QUADS);
 
-                GFX_TEX_COORD = (TEXTURE_PACK(0, inttot16(32)));
+                glTexCoord2t16(0, inttot16(32));
                 glVertex3v16(floattov16(-1), floattov16(-1), 0);
 
-                GFX_TEX_COORD = (TEXTURE_PACK(inttot16(32),inttot16(32)));
+                glTexCoord2t16(inttot16(32), inttot16(32));
                 glVertex3v16(floattov16(1), floattov16(-1), 0);
 
-                GFX_TEX_COORD = (TEXTURE_PACK(inttot16(32), 0));
+                glTexCoord2t16(inttot16(32), 0);
                 glVertex3v16(floattov16(1), floattov16(1), 0);
 
-                GFX_TEX_COORD = (TEXTURE_PACK(0,0));
+                glTexCoord2t16(0, 0);
                 glVertex3v16(floattov16(-1), floattov16(1), 0);
 
             glEnd();
