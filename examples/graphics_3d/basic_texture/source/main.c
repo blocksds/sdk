@@ -69,8 +69,9 @@ int main(int argc, char **argv)
 
         // Print some controls
         printf("PAD:    Rotate quad\n");
-        printf("START:  Exit to loader\n");
+        printf("A:      Add colors\n");
         printf("\n");
+        printf("START:  Exit to loader\n");
 
         // Handle user input
         // -----------------
@@ -92,6 +93,10 @@ int main(int argc, char **argv)
         if (keys & KEY_START)
             break;
 
+        bool color = false;
+        if (keys & KEY_A)
+            color = true;
+
         // Render 3D scene
         // ---------------
 
@@ -110,15 +115,23 @@ int main(int argc, char **argv)
 
         glBegin(GL_QUADS);
 
+            if (color)
+                glColor3f(1, 0, 0);
             glTexCoord2t16(0, inttot16(128));
             glVertex3v16(floattov16(-1), floattov16(-1), 0);
 
+            if (color)
+                glColor3f(1, 1, 0);
             glTexCoord2t16(inttot16(128), inttot16(128));
             glVertex3v16(floattov16(1), floattov16(-1), 0);
 
+            if (color)
+                glColor3f(0, 1, 0);
             glTexCoord2t16(inttot16(128), 0);
             glVertex3v16(floattov16(1), floattov16(1), 0);
 
+            if (color)
+                glColor3f(0, 0, 1);
             glTexCoord2t16(0, 0);
             glVertex3v16(floattov16(-1), floattov16(1), 0);
 
