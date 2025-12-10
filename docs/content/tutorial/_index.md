@@ -36,6 +36,6 @@ If you want to make any suggestions or submit fixes, you can check the
 repository of this tutorial [here](https://github.com/blocksds/sdk).
 
 The text of this tutorial is licensed under the license
-[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Any code in
-this tutorial is licensed under the
+[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). Any code
+in this tutorial is licensed under the
 [CC0-1.0](https://creativecommons.org/publicdomain/zero/1.0/).
