@@ -61,6 +61,16 @@ params:
     default: system
     displayToggle: true
 
+  navbar:
+    displayTitle: true
+    displayLogo: true
+    logo:
+      path: images/logo_notext.png
+      dark: images/logo_notext.png
+      link: /
+      width: 50
+      height: 50
+
   footer:
     enable: true
     displayCopyright: true

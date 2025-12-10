@@ -13,7 +13,26 @@ BlocksDS and you aren't sure about what copyright notices you need to add.
 > right. In no event will the BlocksDS project or its authors be held liable for
 > any damages arising from errors or mistakes in this information.
 
-## Distributed by BlocksDS
+## BlocksDS Logo
+
+You're free to use the BlocksDS in your applications (commercial or not) to give
+credit to the authors of BlocksDS, but you have no obligation to do it. This is
+completely optional.
+
+The logo is licensed under [CC BY-ND 4.0](https://creativecommons.org/licenses/by-nd/4.0/).
+In short: You're allowed to use it in your projects as long as you give
+attribution and you don't make modifications to it.
+
+```
+BlocksDS Logo © 2025 by Megan Gozzard is licensed under CC BY-ND 4.0
+```
+
+For your convenience, this is a 256x192 image that you may use as a splash
+screen during the startup sequence of your application:
+
+[![BlocksDS splash screen](splash_screen.png)](../splash_screen.png)
+
+## Libraries distributed by BlocksDS
 
 These libraries are present in the BlocksDS source tree.
 
@@ -110,7 +129,7 @@ libraries. For example, some use LibXM7 instead of Maxmod, and some don't use
 DSWiFi at all. You need to only give credit for the libraries present in your
 core.
 
-## Distributed by the toolchain
+## Libraries distributed by the toolchain
 
 These libraries are not present in the BlocksDS source tree or packages,
 but are used when creating a BlocksDS application.

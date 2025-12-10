@@ -3,20 +3,22 @@ title: 'BlocksDS'
 layout: hextra-home
 ---
 
-<div class="hx:mt-6 hx:mb-6">
-{{< hextra/hero-headline >}}
-  BlocksDS
-{{< /hextra/hero-headline >}}
-</div>
-
-<div class="hx:mb-12">
+<div class="hx:flex hx:flex-col hx:items-start">
+  <div class=" hextra-feature-grid hx:grid hx:sm:max-lg:grid-cols-1 hx:max-sm:grid-cols-1 hx:gap-4 hx:w-full not-prose" style="--hextra-feature-grid-cols: 2; " >
+    <div class="hx:mx-auto">
+      <a class=" " >
+        <img title="BlocksDS Logo © 2025 by Megan Gozzard is licensed under CC BY-ND 4.0" src="/images/logo.png" width="400" alt="logo"/>
+<div class="hx:mt-6"></div>
 {{< hextra/hero-subtitle >}}
-Create your own applications and games&nbsp;<br class="hx:sm:block hx:hidden" />
-for the Nintendo DS and DSi in C and C++.
+BlocksDS is an Open Source SDK that lets<br class="hx:sm:block hx:hidden" />
+you create your own applications for<br class="hx:sm:block hx:hidden" />
+the Nintendo DS and DSi using C or C++.<br class="hx:sm:block hx:hidden" />
 {{< /hextra/hero-subtitle >}}
-</div>
-
-{{< hextra/feature-grid cols="2" >}}
+      </a>
+    </div>
+    <div class="hx:w-full">
+<div class="hx:mt-6"></div>
+{{< hextra/feature-grid cols="1" >}}
   {{< hextra/feature-card
     title="Getting started"
     subtitle="Instructions to setup BlocksDS."
@@ -45,11 +47,6 @@ for the Nintendo DS and DSi in C and C++.
     link="docs/support"
     style="background-color: rgba(192,255,128,0.3)"
   >}}
-{{< /hextra/feature-grid >}}
-
-<div class="hx:mt-6"></div>
-
-{{< hextra/feature-grid cols="2" >}}
   {{< hextra/feature-card
     title="About BlocksDS"
     icon="light-bulb"
@@ -61,3 +58,6 @@ for the Nintendo DS and DSi in C and C++.
     link="docs/credits"
   >}}
 {{< /hextra/feature-grid >}}
+    </div>
+  </div>
+</div>

@@ -5,6 +5,11 @@ weight: 7
 
 BlocksDS, as with any open-source development kit for a complex embedded device, was only possible thanks to the work of hundreds of free software developers. This page serves as our way of acknowledging their efforts.
 
+### BlocksDS Logo
+
+BlocksDS Logo © 2025 by [Megan Gozzard](https://megangozzard.co.uk) is licensed
+under [CC BY-ND 4.0](https://creativecommons.org/licenses/by-nd/4.0/)
+
 ### libnds
 
 - Auby, Christian (DesktopMan)
