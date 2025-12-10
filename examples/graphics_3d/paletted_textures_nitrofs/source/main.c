@@ -63,33 +63,35 @@ int main(int argc, char **argv)
     // Generate IDs for two textures
     glGenTextures(2, &textureID[0]);
 
+    int width, height;
+
     {
         void *gfxDst = NULL;
         void *palDst = NULL;
         GRFHeader header = { 0 };
-        GRFError err = grfLoadPath("grit/ball_png.grf", &header, &gfxDst, NULL,
+        GRFError err = grfLoadPath("grit/statue_png.grf", &header, &gfxDst, NULL,
                                    NULL, NULL, &palDst, NULL);
         if (err != GRF_NO_ERROR)
         {
-            printf("Couldn't load GRF file: %d", err);
+            printf("Couldn't load GRF file: %d\n", err);
             wait_forever();
         }
 
         if (gfxDst == NULL)
         {
-            printf("No graphics found in GRF file");
+            printf("No graphics found in GRF file\n");
             wait_forever();
         }
 
         if (palDst == NULL)
         {
-            printf("No palette found in GRF file");
+            printf("No palette found in GRF file\n");
             wait_forever();
         }
 
         if (header.gfxAttr != 8)
         {
-            printf("Invalid format in GRF file");
+            printf("Invalid format in GRF file\n");
             wait_forever();
         }
 
@@ -120,6 +122,9 @@ int main(int argc, char **argv)
             printf("Failed to load palette 2\n");
             wait_forever();
         }
+
+        width = header.gfxWidth;
+        height = header.gfxHeight;
     }
 
     // Setup matrices
@@ -171,13 +176,13 @@ int main(int argc, char **argv)
 
             glBegin(GL_QUADS);
 
-                glTexCoord2t16(0, inttot16(32));
+                glTexCoord2t16(0, inttot16(height));
                 glVertex3v16(floattov16(-1), floattov16(-1), floattov16(-0.2));
 
-                glTexCoord2t16(inttot16(32),inttot16(32));
+                glTexCoord2t16(inttot16(width), inttot16(height));
                 glVertex3v16(floattov16(1), floattov16(-1), floattov16(-0.2));
 
-                glTexCoord2t16(inttot16(32), 0);
+                glTexCoord2t16(inttot16(width), 0);
                 glVertex3v16(floattov16(1), floattov16(1), floattov16(-0.2));
 
                 glTexCoord2t16(0, 0);
@@ -195,13 +200,13 @@ int main(int argc, char **argv)
 
             glBegin(GL_QUADS);
 
-                glTexCoord2t16(0, inttot16(32));
+                glTexCoord2t16(0, inttot16(height));
                 glVertex3v16(floattov16(-1), floattov16(-1), 0);
 
-                glTexCoord2t16(inttot16(32), inttot16(32));
+                glTexCoord2t16(inttot16(width), inttot16(height));
                 glVertex3v16(floattov16(1), floattov16(-1), 0);
 
-                glTexCoord2t16(inttot16(32), 0);
+                glTexCoord2t16(inttot16(width), 0);
                 glVertex3v16(floattov16(1), floattov16(1), 0);
 
                 glTexCoord2t16(0, 0);

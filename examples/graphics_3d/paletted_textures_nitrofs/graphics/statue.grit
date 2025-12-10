@@ -1,0 +1,2 @@
+# 8 bit texture bitmap, set magenta as transparent color
+-gx -gb -gB8 -gTFF00FF
