@@ -255,7 +255,7 @@ while (1);
 
             glPopMatrix(1);
         }
-        }
+    }
 
     // Restore the previous transformations.
     glPopMatrix(1);
@@ -293,7 +293,7 @@ This order is used by the GPU to decide whether the polygon is facing the camera
 or away from it. If vertices are counter-clockwise when rendered on the screen
 the GPU considers the polygon to be facing the camera.
 
-The exampl [`examples/graphics_3d/basic_cube`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/basic_cube)
+The example [`examples/graphics_3d/basic_cube`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/basic_cube)
 shows the effects of using back culling (on the left) or front culling (on the
 right). Back culling shows the model as expected because it doesn't draw the
 polygons that you don't normally see. Front culling hides the polygons you
@@ -305,6 +305,192 @@ Normally you won't be defining polygons by hand, so you don't have to worry
 about the order of the polygons. Your 3D modelling program will export vertices
 in the right format.
 
-## 6. Work in progress
+## 6. Using textures
 
-...
+Textures can be used to apply images to your polygons like in this example:
+
+![Texture with no color](texture_nocolor.png)
+
+Essentially, you need to:
+
+- Convert your files to the right format.
+- Assign some VRAM memory for 3D textures and 3D texture palettes.
+- Load the textures.
+- Before drawing textured polygons, tell the GPU to use that texture.
+- While drawing textured polygons, send texture coordinates to the GPU
+  interleaved with the vertices of the model.
+
+The screenshot shown before corresponds to the example
+[`examples/graphics_3d/basic_texture`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/basic_texture).
+Let's see what has changed compared to the previous examples.
+
+First, we can see that there is an image in the `graphics` folder, and the
+corresponding `.grit`  file contains the following parameters:
+
+```sh
+# 16 bit texture bitmap, force alpha bit to 1
+-gx -gb -gB16 -gT!
+```
+
+This generates a 16-bit texture in RGBA format. This is the easiest texture type
+to load because it doesn't need a palette. We will see how to use paletted
+textures later.
+
+Now, you need to enable textures and assign some VRAM memory to be used for
+textures.
+
+```c
+glEnable(GL_TEXTURE_2D);
+
+vramSetBankA(VRAM_A_TEXTURE);
+```
+
+Only VRAM banks A to D can be used to store textures. The size of the banks is
+128 KiB. This is easier than the VRAM modes for 2D graphics because there is
+only one mode for 3D textures (and one mode for 3D palettes, as we will see
+later).
+
+You can load a texture like this:
+
+```c
+// This integer will contain a texture ID (called name in the videoGL
+// documentation) that you need to use to interact with videoGL when you want to
+// use or delete the texture.
+int textureID;
+
+// First, we need to generate a texture ID. This function allocates a struct
+// that contains texture metadata, but it doesn't allocate any texture data yet.
+// You can generate multiple IDs with a single call by providing an array of
+// integers and passing the number of integers in the first argument.
+if (glGenTextures(1, &textureID) == 0)
+{
+    printf("Failed to generate ID\n");
+    while (1)
+        swiWaitForVBlank();
+}
+
+// Now that we have a valid ID, tell videoGL that this texture is the active
+// texture we are going to use.
+glBindTexture(0, textureID);
+
+// This function tries to load a texture to the active texture ID. It can fail
+// if there isn't enough memory or there is no active texture.
+if (glTexImage2D(0, 0,      // Unused parameters (for compatibility with OpenGL)
+                 GL_RGBA,   // Texture format
+                 128, 128,  // Texture size (width, height)
+                 0,         // Unused parameter (for compatibility with OpenGL)
+                 TEXGEN_TEXCOORD,  // Parameters (to be explained later)
+                 neonBitmap) == 0) // Pointer to the data
+{
+    printf("Failed to load texture\n");
+    while (1)
+        swiWaitForVBlank();
+}
+```
+
+Most of the time you will use multiple textures, so you need to remember to bind
+it again when you want to use it. In general, you need to do something like this
+to draw textured polygons:
+
+```
+glBindTexture(0, textureID);
+
+// For now, set the color to white so that we can see the plain texture clearly
+glColor3f(1, 1, 1);
+
+glBegin(GL_QUADS);
+
+    glTexCoord2t16(0, inttot16(128)); // Texture coordinates for the next vertex
+    glVertex3v16(floattov16(-1), floattov16(-1), 0);
+
+    glTexCoord2t16(inttot16(128), inttot16(128));
+    glVertex3v16(floattov16(1), floattov16(-1), 0);
+
+    // ...
+
+glEnd();
+```
+
+You can delete the texture with:
+
+```c
+glDeleteTextures(1, &textureID);
+```
+
+And you can delete all loaded textures with:
+
+```c
+glResetTextures();
+```
+
+As a final note, you can temporarily disable textures by doing this:
+
+```c
+glBindTexture(0, NULL);
+```
+
+After doing that, all polygons are drawn as if there was a white texture active.
+You can bind a texture at any point later when you're ready to use textures
+again.
+
+{{< callout type="warning" >}}
+Sometimes you will notice that textures are drawn half a pixel or a pixel off.
+This is unavoidable, and it happens because of inaccuracies in the calculations
+in the GPU.
+{{< /callout >}}
+
+Note that you can change the color and the texture coordinates before every
+vertex to achieve nicer graphics if you want. The last example lets you see this
+effect if you hold button A. This is the result:
+
+![Texture with color](texture_color.png)
+
+## 7. Texture formats
+
+The DS supports 7 texture formats, and 6 of them use palettes. Now that we know
+how to load and use textures that don't need palettes we can start to think
+about formats that require palettes.
+
+- `GL_RGBA`: 16 bit textures: 5 bits for each one of the RGB components, 1 bit
+  for alpha (2 bytes per pixel). It doesn't use palettes.
+
+  You may see some code that uses `GL_RGB`. It is the same format internally,
+  but `glTexImage2D()` sets the alpha bit to 1 internally (which takes CPU
+  time!). This alias can be useful if your graphics conversion program doesn't
+  set the alpha bit correctly, but it's generally better to set it to 1 manually
+  before calling `glTexImage2D()`,
+
+- `GL_RGB256`, `GL_RGB16` `GL_RGB4`: Textures with 256, 16 or 4 color palettes.
+  Each color in the palette uses 5 bits for each one of the RGB components (but
+  the last bit isn't the alpha bit!). Option `GL_TEXTURE_COLOR0_TRANSPARENT`
+  lets you define index 0 as transparent or not (we'll see how to later). The
+  formats use 1 byte per pixel, 4 bits per pixel, and 2 bits per pixel
+  respectively.
+
+- `GL_COMPRESSED`: This is a special format. It splits the texture into blocks
+  of 4x4 pixels and compresses the texture by sharing textures between different
+  4x4 blocks. The actual details of the format aren't important, but you can see
+  them [here](https://problemkaputt.de/gbatek.htm#ds3dtextureformats) if you're
+  interested.
+
+  This format uses a fixed amount of space for the texture itself (3 bits per
+  pixel of texture memory) plus a variable amount of palette memory. The palette
+  is where conversion tools can try to save space. Also, pixels can be made
+  transparent.
+
+  This format isn't good for textures that have a lot of details. Think of it as
+  the JPEG format of the DS. Use it for natural-looking textures.
+
+- `GL_RGB32_A3` and `GL_RGB8_A5`: They are translucent palettes in which you're
+  allowed to set a different translucency value (alpha value) per pixel. They
+  have 32 color and 8 color palettes respecively. This only uses 5 and 3 bits
+  of a byte, and the remaining bits are used as alpha value for that pixel. We
+  will see how to use the two formats later when we discuss alpha blending.
+  Alpha blending requires some special handling.
+
+You can convert images to all formats but `GL_COMPRESSED` with grit. For
+`GL_COMPRESSED` you need to install and use ptexconv.
+
+{{< callout type="error" >}}
+This chapter is a work in progres...
+{{< /callout >}}
