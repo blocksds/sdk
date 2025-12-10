@@ -293,7 +293,7 @@ This order is used by the GPU to decide whether the polygon is facing the camera
 or away from it. If vertices are counter-clockwise when rendered on the screen
 the GPU considers the polygon to be facing the camera.
 
-The example [`examples/graphics_3d/basic_cube`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/basic_cube)
+Example [`examples/graphics_3d/basic_cube`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/basic_cube)
 shows the effects of using back culling (on the left) or front culling (on the
 right). Back culling shows the model as expected because it doesn't draw the
 polygons that you don't normally see. Front culling hides the polygons you
@@ -324,75 +324,89 @@ The screenshot shown before corresponds to the example
 [`examples/graphics_3d/basic_texture`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/basic_texture).
 Let's see what has changed compared to the previous examples.
 
-First, we can see that there is an image in the `graphics` folder, and the
-corresponding `.grit`  file contains the following parameters:
+1. We can see that there is an image in the `graphics` folder, and the
+   corresponding `.grit` file contains the following parameters:
 
-```sh
-# 16 bit texture bitmap, force alpha bit to 1
--gx -gb -gB16 -gT!
-```
+   ```sh
+   # 16 bit texture bitmap, force alpha bit to 1
+   -gx -gb -gB16 -gT!
+   ```
 
-This generates a 16-bit texture in RGBA format. This is the easiest texture type
-to load because it doesn't need a palette. We will see how to use paletted
-textures later.
+   This generates a 16-bit texture in RGBA format. This is the easiest texture type
+   to load because it doesn't need a palette. We will see how to use paletted
+   textures later.
 
-Now, you need to enable textures and assign some VRAM memory to be used for
-textures.
+2. Enable textures and assign some VRAM memory to be used for textures.
 
-```c
-glEnable(GL_TEXTURE_2D);
+   ```c
+   glEnable(GL_TEXTURE_2D);
 
-vramSetBankA(VRAM_A_TEXTURE);
-```
+   vramSetBankA(VRAM_A_TEXTURE);
+   ```
 
-Only VRAM banks A to D can be used to store textures. The size of the banks is
-128 KiB. This is easier than the VRAM modes for 2D graphics because there is
-only one mode for 3D textures (and one mode for 3D palettes, as we will see
-later).
+   Only VRAM banks A to D can be used to store textures. The size of the banks
+   is 128 KiB. This is easier than the VRAM modes for 2D graphics because there
+   is only one mode for 3D textures (and one mode for 3D palettes, as we will
+   see later). To load a texture you need to do the following:
 
-You can load a texture like this:
+3. You need an `int` that will contain a texture ID (called name in the videoGL
+   documentation) that you need to use to interact with videoGL when you want to
+   use or delete the texture.
 
-```c
-// This integer will contain a texture ID (called name in the videoGL
-// documentation) that you need to use to interact with videoGL when you want to
-// use or delete the texture.
-int textureID;
+   ```c
+   int textureID;
+   ```
 
-// First, we need to generate a texture ID. This function allocates a struct
-// that contains texture metadata, but it doesn't allocate any texture data yet.
-// You can generate multiple IDs with a single call by providing an array of
-// integers and passing the number of integers in the first argument.
-if (glGenTextures(1, &textureID) == 0)
-{
-    printf("Failed to generate ID\n");
-    while (1)
-        swiWaitForVBlank();
-}
+4. Generate a texture ID. This function allocates a struct that contains texture
+   metadata, but it doesn't allocate any texture data yet.  You can generate
+   multiple IDs with a single call by providing an array of integers and passing
+   the number of integers in the first argument.
 
-// Now that we have a valid ID, tell videoGL that this texture is the active
-// texture we are going to use.
-glBindTexture(0, textureID);
+   ```c
+   if (glGenTextures(1, &textureID) == 0)
+   {
+       printf("Failed to generate ID\n");
+       while (1)
+           swiWaitForVBlank();
+   }
+   ```
 
-// This function tries to load a texture to the active texture ID. It can fail
-// if there isn't enough memory or there is no active texture.
-if (glTexImage2D(0, 0,      // Unused parameters (for compatibility with OpenGL)
-                 GL_RGBA,   // Texture format
-                 128, 128,  // Texture size (width, height)
-                 0,         // Unused parameter (for compatibility with OpenGL)
-                 TEXGEN_TEXCOORD,  // Parameters (to be explained later)
-                 neonBitmap) == 0) // Pointer to the data
-{
-    printf("Failed to load texture\n");
-    while (1)
-        swiWaitForVBlank();
-}
-```
+5. Now that we have a valid ID, tell videoGL that this texture is the active
+   texture we are going to use.
+
+   ```c
+   glBindTexture(0, textureID);
+   ```
+
+6. Finally, try to load it. This function tries to load a texture to the active
+   texture ID. It can fail if there isn't enough memory or there is no active
+   texture.
+
+   ```c
+   if (glTexImage2D(
+           0, 0,     // Unused parameters (for compatibility with OpenGL)
+           GL_RGBA,  // Texture format
+           128, 128, // Texture size (width, height)
+           0,        // Unused parameter (for compatibility with OpenGL)
+           TEXGEN_TEXCOORD,  // Texture parameters (explained later)
+           neonBitmap) == 0) // Pointer to the data
+   {
+       printf("Failed to load texture\n");
+       while (1)
+           swiWaitForVBlank();
+   }
+   ```
+
+   `glTexImage2D()` in libnds has 3 unused parameters because the OpenGL version
+   of this image uses them for things that aren't supported on DS. The
+   parameters have been kept in the function prototype to help porting OpenGL
+   code to libnds.
 
 Most of the time you will use multiple textures, so you need to remember to bind
-it again when you want to use it. In general, you need to do something like this
-to draw textured polygons:
+textures when you want to use them. In general, you need to do something like
+this to draw textured polygons:
 
-```
+```c
 glBindTexture(0, textureID);
 
 // For now, set the color to white so that we can see the plain texture clearly
@@ -411,7 +425,8 @@ glBegin(GL_QUADS);
 glEnd();
 ```
 
-You can delete the texture with:
+You can delete textures with this function (it can also take an array of
+integers like `glGenTextures()`):
 
 ```c
 glDeleteTextures(1, &textureID);
@@ -460,6 +475,18 @@ about formats that require palettes.
   set the alpha bit correctly, but it's generally better to set it to 1 manually
   before calling `glTexImage2D()`,
 
+  Sample grit arguments:
+
+  ```sh
+  # 16 bit texture bitmap, force alpha bit to 1
+  -gx -gb -gB16 -gT!
+  ```
+
+  ```sh
+  # 16 bit texture bitmap, set magenta as transparent color
+  -gx -gb -gB16 -gTFF00FF
+  ```
+
 - `GL_RGB256`, `GL_RGB16` `GL_RGB4`: Textures with 256, 16 or 4 color palettes.
   Each color in the palette uses 5 bits for each one of the RGB components (but
   the last bit isn't the alpha bit!). Option `GL_TEXTURE_COLOR0_TRANSPARENT`
@@ -467,11 +494,48 @@ about formats that require palettes.
   formats use 1 byte per pixel, 4 bits per pixel, and 2 bits per pixel
   respectively.
 
+  Sample grit arguments:
+
+  ```sh
+  # 256-color (8 bits per pixel) texture, set magenta as transparent color
+  -gx -gb -gB8 -gTFF00FF
+  ```
+
+  ```sh
+  # 16-color (4 bits per pixel) texture, set black as transparent color
+  -gx -gb -gB4 -gT000000
+  ```
+
+  ```sh
+  # 4-color (2 bits per pixel) texture, set magenta as transparent color
+  -gx -gb -gB2 -gTFF00FF
+  ```
+
+- `GL_RGB32_A3` and `GL_RGB8_A5`: They are translucent palettes in which you're
+  allowed to set a different translucency value (alpha value) per pixel. They
+  have 32 color and 8 color palettes respecively. This only uses 5 and 3 bits
+  of a byte, and the remaining bits are used as alpha value for that pixel. We
+  will see how to use the two formats later when we discuss alpha blending.
+  Alpha blending requires some special handling (regular on/off transparency,
+  like in the other formats, doesn't need any special handling).
+
+  Sample grit arguments:
+
+  ```sh
+  # 5 bits of alpha, 3 bits of color index
+  -gx -gb -gBa5i3 -gT!
+  ```
+
+  ```sh
+  # 3 bits of alpha, 5 bits of color index
+  -gx -gb -gBa3i5 -gT!
+  ```
+
 - `GL_COMPRESSED`: This is a special format. It splits the texture into blocks
   of 4x4 pixels and compresses the texture by sharing textures between different
   4x4 blocks. The actual details of the format aren't important, but you can see
   them [here](https://problemkaputt.de/gbatek.htm#ds3dtextureformats) if you're
-  interested.
+  interested. This format is also called tex4x4 in some tools.
 
   This format uses a fixed amount of space for the texture itself (3 bits per
   pixel of texture memory) plus a variable amount of palette memory. The palette
@@ -481,16 +545,120 @@ about formats that require palettes.
   This format isn't good for textures that have a lot of details. Think of it as
   the JPEG format of the DS. Use it for natural-looking textures.
 
-- `GL_RGB32_A3` and `GL_RGB8_A5`: They are translucent palettes in which you're
-  allowed to set a different translucency value (alpha value) per pixel. They
-  have 32 color and 8 color palettes respecively. This only uses 5 and 3 bits
-  of a byte, and the remaining bits are used as alpha value for that pixel. We
-  will see how to use the two formats later when we discuss alpha blending.
-  Alpha blending requires some special handling.
+  You need to use ptexconv to convert images to this format, grit doesn't
+  support it. Check [this link](../../../docs/libs/tools) for information on how
+  to install it. We'll see this in more detail later.
 
-You can convert images to all formats but `GL_COMPRESSED` with grit. For
-`GL_COMPRESSED` you need to install and use ptexconv.
+Let's see how to load paletted textures.
+
+1. Assign some VRAM memory to be used for texture palettes:
+
+   ```c
+   vramSetBankF(VRAM_F_TEX_PALETTE);
+   ```
+
+   Banks F (64 KiB), G (16 KiB) and H (16 KiB) can be used for texture palettes.
+
+2. Generate a texture ID with `glGenTextures()` and bind with `glBindTexture()`
+   as explained before.
+
+3. Load the texture specifying the right format. How you also need to decide if
+   color with index 0 is transparent or not. If you want it to be transparent,
+   add `GL_TEXTURE_COLOR0_TRANSPARENT` to the texture parameters. Note that this
+   setting doesn't work with `GL_RGBA` and `GL_COMPRESSED` formats.
+
+   ```c
+    if (glTexImage2D(0, 0, GL_RGB256, 64, 64, 0,
+                     TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT,
+                     statueBitmap) == 0)
+    {
+        printf("Failed to load texture\n");
+        wait_forever();
+    }
+    ```
+
+4. Load the palette specifying the format and size:
+
+   ```c
+   if (glColorTableEXT(0, 0, statuePalLen / 2, 0, 0, statuePal) == 0)
+   {
+       printf("Failed to load palette\n");
+       wait_forever();
+   }
+   ```
+
+The following example shows how to do this in practice:
+[`examples/graphics_3d/paletted_textures`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/paletted_textures).
+Note how the texture is loaded twice. On the left it's displayed with color 0
+set as transparent. On the right it's displayed with color 0 set as opaque:
+
+![Texture with palette](texture_with_palette.png)
+
+## 8. Compressed textures
+
+Compressed textures are a bit special. Instead of having two parts (texture data
+and palette data) they have three: texel blocks, palette indices and palette
+data.
+
+The three parts need to be loaded to different locations in VRAM:
+
+- Texel blocks can be stored in texture slots 0 or 2 (in libnds they are
+  normally VRAM A and VRAM C).
+- Palette indices are stored in texture slot 1 (VRAM B).
+- Palette data is stored in palette VRAM.
+
+Some tools (like ptexconv) generate 3 different files. Other tools only generate
+two (the first two parts are concatenated and saved as a single file). This is
+possible because the texel blocks data is always double the size as the palette
+indices data (the palette data can have any arbitrary size, so it's always
+stored separately).
+
+`glTexImage2D()` expects the texel blocks and palette indices to be provided as
+one single file. You can concatenate them manually before adding them to the
+data folder of your game or you can concatenate them at runtime, the choice is
+yours.
+
+You can check the following example:
+[`examples/graphics_3d/compressed_texture`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/compressed_texture).
+
+![Compressed texture](texture_compressed.png)
+
+The main difference is the fact that you need to use ptexconv to convert the
+texture. This example comes with a shell script with the following command:
+
+```sh
+$BLOCKSDSEXT/ptexconv/ptexconv \
+    -gt -ob -k FF00FF -v -f tex4x4 \
+    -o data/neon \
+    assets/neon.png
+```
+
+This generates a texture with magenta as transparent color of tex4x4 format. The
+output files are `neon_tex.bin` (texel blocks), `neon_idx.bin` (palette indices)
+and `neon_pal.bin` (palette data). Then, the script concatenates the files:
+
+```sh
+cat data/neon_tex.bin data/neon_idx.bin > data/neon_combined.bin
+rm data/neon_tex.bin data/neon_idx.bin
+```
+
+The actual code that loads the texture and the palette are the same as for all
+other textures with palettes:
+
+```c
+if (glTexImage2D(0, 0, GL_COMPRESSED, 128, 128, 0, TEXGEN_TEXCOORD, neon_combined_bin) == 0)
+{
+    printf("Failed to load texture\n");
+    wait_forever();
+}
+
+if (glColorTableEXT(0, 0, neon_pal_bin_size / 2, 0, 0, neon_pal_bin) == 0)
+{
+    printf("Failed to load palette\n");
+    wait_forever();
+}
+```
 
 {{< callout type="error" >}}
-This chapter is a work in progres...
+This chapter is a work in progress...
 {{< /callout >}}
