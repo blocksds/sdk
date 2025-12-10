@@ -36,7 +36,8 @@ menu:
       weight: 4
       params:
         type: theme-toggle
-        label: true # optional, default is false
+        default: system
+        label: false
     - name: GitHub
       url: "https://github.com/blocksds"
       params:
