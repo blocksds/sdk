@@ -33,7 +33,7 @@ or software mixing, and it runs on the ARM7.
   {{< card
     icon="book-open"
     title="Documentation"
-    link="(../../../maxmod/index.html"
+    link="../../../maxmod/index.html"
   >}}
   {{< card
     icon="code"
@@ -51,7 +51,7 @@ multiplayer and Internet access.
   {{< card
     icon="book-open"
     title="Documentation"
-    link="(../../../dswifi/index.html"
+    link="../../../dswifi/index.html"
   >}}
   {{< card
     icon="code"
@@ -68,7 +68,7 @@ Hardware-accelerated player of XM and MOD music files that runs on the ARM7.
   {{< card
     icon="book-open"
     title="Documentation"
-    link="(../../../libxm7/index.html"
+    link="../../../libxm7/index.html"
   >}}
   {{< card
     icon="code"
@@ -85,7 +85,7 @@ Library to use the Teak DSP included in the DSi and 3DS consoles.
   {{< card
     icon="book-open"
     title="Documentation"
-    link="(../../../libteak/index.html"
+    link="../../../libteak/index.html"
   >}}
   {{< card
     icon="code"
