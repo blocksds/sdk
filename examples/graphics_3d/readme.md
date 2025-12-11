@@ -20,6 +20,7 @@ libnds.
 - `point_light`: How to implement fake spot lights using directional lights.
 - `sort_translucent_objects`: How to sort and draw translucent objects.
 - `text_over_3d`: How to display the libnds console over the 3D output.
+- `texture_edge_modes`: Shows the behaviour of all modes of texture overflows.
 - `texture_matrix`: How to use the texture matrix to achieve special effects.
 - `toon_shading`: How to achieve a toon shading effect.
 - `translucent_polygon`: How to draw translucent polygons (alpha per polygon).
