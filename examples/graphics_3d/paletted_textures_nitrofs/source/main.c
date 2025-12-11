@@ -168,11 +168,11 @@ int main(int argc, char **argv)
 
         glColor3f(1, 1, 1);
 
-        glBindTexture(0, textureID[0]);
-
         glPushMatrix();
 
             glTranslatef(-1.5, 0, 0);
+
+            glBindTexture(0, textureID[0]);
 
             glBegin(GL_QUADS);
 
