@@ -7,6 +7,8 @@ weight: 6
 
 - libnds:
 
+  - `glDeinit()` has been implemented. This function frees all memory used by
+    videoGL and stops the 3D hardware until `glInit()` is called again.
   - Function `fatGetDefaultDrive()` can now return `"nand:/"` if the application
     runs from NAND.
   - New definitions have been added for the window registers. The old ones
@@ -23,6 +25,7 @@ weight: 6
 
 - SDK:
 
+  - The first official logo of BlocksDS has been created.
   - Arguments `-std=gnu17` and `-std=gnu++17` have been removed from all default
     and template makefiles. They prevented users from changing this themselves.
 
@@ -47,6 +50,13 @@ weight: 6
       culling wasn't working properly). It has been fixed.
     - A new example has been added to show how to draw a 3D cube and what's the
       effect of changing the culling setting.
+    - Use GL helpers for texture coordinates instead of raw register writes.
+    - Minor improvements to 3D examples.
+    - The graphics files used in some 3D examples have been improved.
+    - The example that loads a compressed texture has been simplified so that
+      the concatenation happens at build time rather than at run time.
+    - A new example has been added to show the different effects of using
+      texture coordinates outside of bounds (stretch, wrap, wrap and flip).
 
   - Documentation:
 
@@ -65,7 +75,8 @@ weight: 6
     - The tutorial has new chapters about 2D effects (blending, mosaic, etc),
       memory management, and 3D.
     - The tutorial has been merged into the SDK repository to unify the
-      documentation of BlocksDS.
+      documentation of BlocksDS.a
+    - The tutorial is now licensed under the license CC BY-NC-SA 4.0.
 
 ### Version 1.15.7 (2025-11-29)
 
