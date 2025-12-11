@@ -77,7 +77,7 @@ files generated this way don't contain information about the entrypoint address,
 and it isn't possible to determine which parts are only needed for DSi.
 {{< /callout >}}
 
-### 2.2 Custom linkerscript and crt0 files
+#### 2.2 Custom linkerscript and crt0 files
 
 Building an ARM7/ARM9 binary for the NDS can be done with a generic toolchain
 without any modifications, all you need to do is to provide a custom
@@ -111,7 +111,7 @@ It is possible to use BlocksDS without the default `crt0` by passing
 `-nostartfiles` to the linker, but then you will be in charge of initializing
 the hardware yourself.
 
-### 2.3 Dependency on libnds
+#### 2.3 Dependency on libnds
 
 It is required to link `libnds` in all programs because of two reasons:
 
@@ -135,7 +135,7 @@ your code or binaries, and it doesn't require any attribution like copyright
 notices in your game. You are very welcome to add an acknowledgment to its
 authors, but it's not mandatory.
 
-### 2.4 Specs files
+#### 2.4 Specs files
 
 Because of all the custom `gcc` options required to build NDS binaries
 correctly, it is possible that new options are required after `gcc` updates, or
@@ -154,6 +154,24 @@ uses one of the default makefiles (located
 If you build the binary with `make V=` instead of just `make`, the makefile will
 print the exact commands used at every step of the build process. You will be
 able to see which libraries are used, which compiler options are used, etc.
+
+#### 2.5 GCC, libc and stdlibc++
+
+BlocksDS uses the build of GCC provided by Wonderful Toolchain. This build is
+mostly vanilla (it has a few patches, but they aren't mandatory).
+
+However, a custom libc is required because of how tightly coupled libnds and
+libc are. The integration between libnds and picolibc would make it hard for
+other implementations of the C standard library to work. In practice, this ties
+BlocksDS to picolibc. The repository of the picolibc used by Wonderful Toolchain
+is [here](https://github.com/WonderfulToolchain/wf-picolibc). The build options
+for picolibc are [here](https://github.com/WonderfulToolchain/wonderful-packages/blob/main/packages/toolchain-gcc-arm-none-eabi-picolibc-generic/PKGBUILD).
+
+Using a custom C library means that we need a build of the C++ standard library
+that works with this custom C library. The library used by Wonderful Toolchain
+is the one provided with GCC. You can find the build instructions
+[here](https://github.com/WonderfulToolchain/wonderful-packages/blob/5f04a489e065e24676554875d3ad65fbac9c01fc/packages/toolchain-gcc-arm-none-eabi-libstdcxx-picolibc/PKGBUILD).
+The library itself is built without any modifications.
 
 ### 3. Filesystem
 
@@ -174,6 +192,10 @@ Binaries for this CPU are treated as generic data. You can add them to your CPU
 binaries, or keep them in the filesystem so that they can be switched at
 runtime. Note that this toolchain isn't very mature, so you will need to be very
 careful and test your code often if you decide to use it.
+
+Currently there is nobody working on a better toolchain for this architecture,
+so don't expect any improvements anytime soon. More information in
+[this link](https://github.com/blocksds/sdk/issues/93).
 
 ### 5. NDS ROM creation
 
