@@ -42,6 +42,17 @@ the DSP of the DSi. This isn't available in all platforms (like in Windows).
 wf-pacman -S toolchain-llvm-teak-llvm
 ```
 
+### Add the BlocksDS repository to `wf-pacman`
+
+This isn't strictly required, but you may want to install some pre-built
+BlocksDS packages even if you build the rest from source.
+
+```bash
+wf-pacman -Syu wf-tools
+wf-config repo enable blocksds
+wf-pacman -Syu
+```
+
 ### Clone the main repository of BlocksDS
 
 Now, clone this repository:
