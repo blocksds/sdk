@@ -98,6 +98,9 @@ int main(int argc, char *argv[])
         // Render frame
         glFlush(0);
     }
+
+    // Deinitialize 3D hardware and free all memory used by videoGL
+    glDeinit();
 }
 ```
 
