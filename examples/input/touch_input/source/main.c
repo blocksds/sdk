@@ -11,9 +11,6 @@
 
 int main(int argc, char **argv)
 {
-    uint16_t keys_held;
-    touchPosition touch_pos;
-
     // Initialize display:
     // - sub screen (top): console output
     // - main screen (bottom): GL2D graphics
@@ -23,13 +20,15 @@ int main(int argc, char **argv)
     videoSetMode(MODE_0_3D);
     glScreen2D();
 
+    touchPosition touch_pos = { 0 };
+
     while (1)
     {
         swiWaitForVBlank();
 
         // Read key input.
         scanKeys();
-        keys_held = keysHeld();
+        uint16_t keys_held = keysHeld();
 
         // Handle key presses.
         if ((keys_held & (KEY_START | KEY_SELECT)) == (KEY_START | KEY_SELECT))
