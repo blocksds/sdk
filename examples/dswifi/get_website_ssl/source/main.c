@@ -116,7 +116,7 @@ static void getWebsiteSSL(const char *certs, const char *host, const char *path)
     printf("- Connecting to tcp/%s/%s\n", host, SERVER_PORT);
 
     ret = mbedtls_net_connect(&server_fd, host, SERVER_PORT,
-                              MBEDTLS_NET_PROTO_TCP);
+                              MBEDTLS_NET_PROTO_TCP); // TCP
     if (ret != 0)
     {
         printf("  Error! ret = %d\n", ret);
@@ -129,7 +129,7 @@ static void getWebsiteSSL(const char *certs, const char *host, const char *path)
 
     ret = mbedtls_ssl_config_defaults(&conf,
                                       MBEDTLS_SSL_IS_CLIENT,
-                                      MBEDTLS_SSL_TRANSPORT_STREAM,
+                                      MBEDTLS_SSL_TRANSPORT_STREAM, // TCP
                                       MBEDTLS_SSL_PRESET_DEFAULT);
     if (ret != 0)
     {
