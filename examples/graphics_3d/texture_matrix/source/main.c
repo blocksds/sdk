@@ -19,7 +19,6 @@ int main(int argc, char *argv[])
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_ANTIALIAS);
-    glEnable(GL_BLEND);
 
     // Setup the rear plane
     glClearColor(0, 0, 0, 0); // Set BG to black
