@@ -383,7 +383,9 @@ Let's see what has changed compared to the previous examples.
 
 6. Finally, try to load it. This function tries to load a texture to the active
    texture ID. It can fail if there isn't enough memory or there is no active
-   texture.
+   texture. This function will look for all VRAM banks assigned as texture VRAM
+   and it will try to allocate the data there. It will ignore banks assigned to
+   other types of data.
 
    ```c
    if (glTexImage2D(
@@ -580,7 +582,9 @@ Let's see how to load paletted textures.
     }
     ```
 
-4. Load the palette specifying the format and size:
+4. Load the palette specifying the format and size. This function will look for
+   all VRAM banks assigned as texture palette VRAM and it will try to allocate
+   the data there. It will ignore banks assigned to other types of data.
 
    ```c
    if (glColorTableEXT(0, 0, statuePalLen / 2, 0, 0, statuePal) == 0)
@@ -661,6 +665,130 @@ if (glColorTableEXT(0, 0, neon_pal_bin_size / 2, 0, 0, neon_pal_bin) == 0)
     wait_forever();
 }
 ```
+
+## 9. Final notes about textures
+
+### 9.1 Edge texture modes
+
+When you draw textured polygons you normally use coordinates that fit inside the
+texture. For example, if your texture size is 64x64 pixels, your texture
+coordinates go from 0 to 63. However, you're allowed to send values that are
+outside of those bounds (negative, or bigger than 63).
+
+You can decide the behaviour in that case when you load a texture with
+`glTexImage2D()`:
+
+- Clamp them to the texture size (default setting).
+- Wrap the coordinates and repeat the texture: `GL_TEXTURE_WRAP_S` and
+  `GL_TEXTURE_WRAP_T`.
+- Wrap the coordinates and flip the texture. You need to use the previous flags
+  and the flip flags `GL_TEXTURE_FLIP_S` and `GL_TEXTURE_FLIP_T`.
+
+Check the following example:
+[`examples/graphics_3d/texture_edge_modes`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/texture_edge_modes).
+
+![Texture edge modes](texture_edge_modes.png)
+
+### 9.2 Texture matrix
+
+Apart from the projection and model view matrices you can use the texture
+matrix. This texture can be used to achieve transformation effects without
+having to calculate the texture coordinates by hand.
+
+This tutorial won't get into many details, it will only show a simple example of
+using it:
+
+Check the following example:
+[`examples/graphics_3d/texture_matrix`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/texture_matrix).
+
+![Texture matrix](texture_matrix.gif)
+
+The important things to consider are:
+
+- The effect of the texture matrix depends on how you load textures. For
+  example, in this case we use `TEXGEN_TEXCOORD` and we enable texture wrap
+  because we are going to make the texture loop to create that effect.
+
+  ```c
+  if (glTexImage2D(0, 0, GL_RGBA, 256, 256, 0,
+                   TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T,
+                   teapotBitmap) == 0)
+  ```
+
+- You need to setup the texture matrix. In this example we do a simple
+  translation. The effect of the example appears because the texture coordinates
+  of the model follow a spherical pattern. They start on the bottom of the
+  teapot.
+
+  ```c
+  glMatrixMode(GL_TEXTURE);
+  glLoadIdentity();
+  glTranslatef32(tx << 10, ty << 10, 0);
+  ```
+
+You can check [GBATEK](https://problemkaputt.de/gbatek.htm#ds3dtextureattributes)
+for all the details, but this is the short version:
+
+- `TEXGEN_OFF`: Ignore the texture matrix.
+- `TEXGEN_TEXCOORD`: Multiply texture coordinates by the texture matrix.
+- `TEXGEN_NORMAL`: Set texture coordinates equal to normal * texture matrix,
+  used for spherical reflection mapping.
+- `TEXGEN_POSITION`: Set texture coordinates equal to vertex * texture matrix.
+
+### 9.3 Sharing palettes between textures
+
+If you want to use the same palette in more than one texture you can use
+function `int glAssignColorTable(int target, int name)`. It will take the
+palette of `name` and assign it to `target`. The palette will only be deleted
+from VRAM when all the textures that use it are deleted.
+
+### 9.4 Live editing of textures
+
+Live editing of palettes is very useful:
+
+- You can edit textures and palettes to create special effects, like palette
+  loop effects.
+
+- You can use them to delay loading of textures and palettes. If you pass a
+  `NULL` data pointers to `glTexImage2D()` or `glColorTableEXT()` and they will
+  allocate space in VRAM, but not copy anything there. You can load data later
+  with this system.
+
+There are a few functions that take a texture ID as argument and return a
+pointer to the address in VRAM of the requested data:
+
+- `glGetTexturePointer()`: Address of the texture data.
+- `glGetTextureExtPointer()`: Address of the palette indices data (only
+  `GL_COMPRESSED` textures).
+- `glGetColorTablePointer()`: Address of the palette data.
+
+Unfortunately, texture and palette data can't be accessed right away. You need
+to switch the VRAM banks to LCD mode, edit the data, and switch back to the
+previous mode. And you need to do this quickly because the GPU needs the VRAM
+banks to be set to texture or texture palette mode to be able to use them. The
+process to do this correctly is:
+
+- Setup a VBL handler with your texture/palette editting code.
+- In the handler, call the `glGet*Pointer()` function to get the pointer to the
+  data you want to edit.
+- Set the banks to LCD mode. For example, call `vramSetBankA(VRAM_A_LCD)` if
+  you have assigned VRAM bank A as texture VRAM, or `vramSetBankF(VRAM_F_LCD)`
+  if you have assigned VRAM bank F for palettes.
+- Edit the data.
+- Call `vramSetBankA(VRAM_A_TEXTURE)` or `vramSetBankF(VRAM_F_TEX_PALETTE)` as
+  required.
+
+You don't even have the full vertical blanking period to do the modifications.
+The GPU starts to render lines 48 scanlines before the end of the vertical
+blanking period (documentation [here](https://problemkaputt.de/gbatek.htm#ds3doverview)
+and [here](https://problemkaputt.de/gbatek.htm#ds3dstatus)).
+
+Vertical blanking starts in scanline 192, and 3D rendering starts in scanline
+214. At that point, the GPU starts rendering lines and storing them in a buffer
+that can hold up to 48 lines (you can check the current status by reading
+`GFX_RDLINES_COUNT`). The actual screen output starts after scanline 262. In
+practice, you only have 22 scanlines to upload data to VRAM. If you don't make
+it in time, the GPU will read white pixels from VRAM.
 
 {{< callout type="error" >}}
 This chapter is a work in progress...
