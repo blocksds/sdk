@@ -13,6 +13,8 @@ weight: 6
     runs from NAND.
   - New definitions have been added for the window registers. The old ones
     didn't use the same names used by GBATEK.
+  - Fix `SOUNDXCNT_VOL_DIV_x` defines.
+  - Add defines `GL_TRANS_YSORT` and `GL_ZBUFFERING` for `glFlush()`.
 
 - grit:
 
@@ -57,6 +59,10 @@ weight: 6
       the concatenation happens at build time rather than at run time.
     - A new example has been added to show the different effects of using
       texture coordinates outside of bounds (stretch, wrap, wrap and flip).
+    - Improve the example of drawing several 3D translucent objects to let the
+      user break it in different ways and see the results.
+    - Add an example of how to draw a polygon in which all faces are translucent
+      and visible at the same time.
 
   - Documentation:
 
