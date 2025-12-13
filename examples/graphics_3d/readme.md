@@ -23,6 +23,7 @@ libnds.
 - `texture_edge_modes`: Shows the behaviour of all modes of texture overflows.
 - `texture_matrix`: How to use the texture matrix to achieve special effects.
 - `toon_shading`: How to achieve a toon shading effect.
+- `translucent_cube`: How to draw a cube with translucent faces correctly.
 - `translucent_polygon`: How to draw translucent polygons (alpha per polygon).
 - `translucent_texture`: How to use translucent textures (alpha per pixel).
 - `volumetric_shadow`: How to display hardware accelerated volumetric shadows.
