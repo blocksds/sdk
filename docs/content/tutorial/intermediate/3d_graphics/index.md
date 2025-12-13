@@ -798,6 +798,171 @@ that can hold up to 48 lines (you can check the current status by reading
 practice, you only have 22 scanlines to upload data to VRAM. If you don't make
 it in time, the GPU will read white pixels from VRAM.
 
+## 10. Alpha blending (translucency)
+
+There are two ways to draw polygons that aren't fully opaque:
+
+- Setting the polygon alpha value with `glPolyFmt()` and `POLY_ALPHA()`.
+- Using the translucent textures formats `GL_RGB32_A3` and `GL_RGB8_A5`.
+
+### 10.1 Per-polygon alpha value
+
+You can create translucency effects by setting an alpha value between 1 and 30
+to polygons. Check the following example:
+[`examples/graphics_3d/translucent_polygon`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/translucent_polygon).
+
+![Translucent polygon](translucent_polygon.png)
+
+In this example there is only one opaque polygon and one translucent polygon, so
+we don't need to worry about the order in which we draw them. That will become a
+problem when we start drawing multiple translucent polygons.
+
+In this very easy example all we need to do is to enable alpha blending:
+
+```c
+glEnable(GL_BLEND);
+```
+
+And set the alpha blending for the polygons to be drawn next:
+
+```c
+glPolyFmt(POLY_ALPHA(15) | POLY_CULL_NONE);
+```
+
+{{< callout type="warning" >}}
+A value of 0 doesn't make the polygon fully transparent, it enables wireframe
+mode. In that mode only the outline of polygons is drawn.
+{{< /callout >}}
+
+### 10.2 Translucent textures
+
+The previous system restricts you to one single alpha value per polygon. Using
+translucent textures allows you to specify up to 8 levels of transparency with
+`GL_RGB32_A3` or 32 levels with `GL_RGB8_A5`.
+
+![Translucent texture](translucent_texture.png)
+
+The code of the example is here:
+[`examples/graphics_3d/translucent_texture`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/translucent_texture).
+
+In this case you also need to enable alpha blending:
+
+```c
+glEnable(GL_BLEND);
+```
+
+The rest of the work involves creating a PNG file with an alpha channel. When
+you convert it with grit, it will use that channel to generate the translucency
+values of `GL_RGB32_A3` and `GL_RGB8_A5` textures. You need to use the following
+parameters for grit:
+
+```sh
+# 5 bits of alpha, 3 bits of color index
+-gx -gb -gBa5i3 -gT!
+```
+
+```sh
+# 3 bits of alpha, 5 bits of color index
+-gx -gb -gBa3i5 -gT!
+```
+
+### 10.3 Multiple translucent objects
+
+So far we have only seen how to display translucent polygons on top of opaque
+polygons. This is easy and you don't really need to do anything special. Opaque
+polygons are drawn before translucent polygons, so they get naturally sorted by
+themselves. However, if you want to draw translucent polygons on top of others
+you need to manage polygon IDs.
+
+We have ignored this so far, but `glPolyFmt()` can take a polygon ID (0 to 63)
+with `POLY_ID()`. The clear plane also has its own polygon ID, which can be set
+with `glClearPolyID()`. Polygon IDs are important for anti-aliasing and polygon
+outlines, we will see them later.
+
+Translucent polygons that belong to the same object (and don't blend with each
+other) can have the same polygon ID. Polygons that are meant to overlap other
+translucent polygons need to have different IDs.
+
+However, the hardest part is that you need to draw all the translucent objects
+in the right order (for now, ignore the part of the code that sorts the objects
+by distance, we will see how to do that later). Polygons that are far away from
+the camera need to be drawn first. Polygons closer to the camera need to be
+drawn last. Also, you need to do this to finish the frame:
+
+```c
+glFlush(GL_TRANS_MANUALSORT);
+```
+
+If you don't pass this value, it will sort polygons by their Y coordinate, which
+probably isn't what you want.
+
+This example takes everything into consideration to draw a few translucent
+balls: [`examples/graphics_3d/sort_translucent_objects`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/sort_translucent_objects).
+
+The following image shows the regular output of this example when balls are
+ordered correctly (left) and when they are sorted in reverse (right):
+
+![Compare sort order of translucent objects](translucent_objects_sort_order.png)
+
+In this example each ball has its own polygon ID. The following image compares
+the output when all balls have different IDs (left) and when they all share the
+same ID (right):
+
+![Compare polygon ID effects on translucent objects with](translucent_objects_polygon_ids.png)
+
+You also need to consider culling when drawing objects that are translucent.
+Normally you only want to see the camera-facing polygons of the translucent
+objects (left), but you can also correctly display the back-facing polygons
+(right):
+
+![Translucent objects with back and front culling](translucent_objects_cull_back_front.png)
+
+If you want to see both sets of polygons you can't just disable culling:
+
+![Translucent objects with no culling](translucent_objects_cull_none.png)
+
+The problem here is that polygons are drawn in an order that isn't back to
+front. You need to sort the polygons inside each object, which may not be
+possible at all if you are using display lists (as we will see later).
+
+A trick you can use is to render the objects twice:
+
+- First, with front culling, so that the back-facing polygons are rendered.
+- Second, with back culling, so that the camera-facing polygons are rendered.
+
+Also, you need to sort the objects as well. For example, in the case of the
+balls, you need to draw each ball twice as described, and then start drawing the
+next ball. You can't draw all balls with front culling and then all balls with
+front culling.
+
+This is a bit complicated to see in an example with so many objects, so let's
+show it in an easier example with just one cube:
+[`examples/graphics_3d/translucent_cube`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/translucent_cube).
+
+![Translucent cube](translucent_cube.png)
+
+This is the important part of the code. You can see how we draw the back-facing
+polygons first with 0 as polygon ID, and then the front-facing polygons with 1
+as polygon ID:
+
+```c
+glPolyFmt(POLY_ALPHA(10) | POLY_ID(0) | POLY_CULL_FRONT);
+
+draw_box(-0.75, -0.75, -0.75,
+         0.75, 0.75, 0.75);
+
+glPolyFmt(POLY_ALPHA(10) | POLY_ID(1) | POLY_CULL_BACK);
+
+draw_box(-0.75, -0.75, -0.75,
+         0.75, 0.75, 0.75);
+```
+
+Remember to tell the hardware that we have sorted translucent polygons manually:
+
+```c
+glFlush(GL_TRANS_MANUALSORT);
+```
+
 {{< callout type="error" >}}
 This chapter is a work in progress...
 {{< /callout >}}
