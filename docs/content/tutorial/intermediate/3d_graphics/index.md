@@ -407,6 +407,14 @@ Let's see what has changed compared to the previous examples.
    parameters have been kept in the function prototype to help porting OpenGL
    code to libnds.
 
+{{< callout type="warning" >}}
+While you're copying 3D textures or palettes to VRAM the GPU doesn't have access
+to them. If the GPU tries to access textures at this time it will read white
+pixels. You can try to load textures in the vertical blanking period, but it
+isn't very reliable. We will see later how to load textures on the fly safely.
+For now, only load textures during loading screens in your application or game.
+{{< /callout >}}
+
 Most of the time you will use multiple textures, so you need to remember to bind
 textures when you want to use them. In general, you need to do something like
 this to draw textured polygons:
