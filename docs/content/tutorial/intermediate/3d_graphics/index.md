@@ -43,7 +43,68 @@ explained in detail in a future chapter. In case you can't wait, there is an
 example of how this system works here
 [`examples/video_capture/dual_screen_3d`](https://github.com/blocksds/sdk/tree/master/examples/video_capture/dual_screen_3d).
 
-## 2. Initialization
+## 2. Fixed point types
+
+The GPU uses several types of fixed point for different tasks, and there are
+some definitions in libnds to help you convert between floating point, integer
+values and fixed point:
+
+- `fixed12d3`: Used to represent depth distances (12.3).
+- `t16`: Used to represent texture coordinates (12.4).
+- `v16`: Used to represent vertices (4.12).
+- `v10`: USed to represent normals or vertices (0.10).
+- `f32`: Used to represent matrix componets (20.12).
+
+The values inside the parentheses represent the number of bits used as integer
+and fractionary parts. For example, `v16` is a signed type that goes from
+`0x8000` to `0x7FFF`. This corresponds to `-0x8000 / (1 << 12)` and `0x7FFF /
+(1 << 12)` in floating point, which is -8.0 to aprox. 7.99976. Values outside of
+this range can't be represented in this format.
+
+If you want a more in-depth explanation, check the chapter about fixed points in
+Tonc [here](https://gbadev.net/tonc/fixed.html).
+
+It can be hard to remember which type to use in each function, so most functions
+are named after the type of fixed point type required. For example,
+`glVertex3v16()` takes three `v16` values as arguments but `glVertex3f()` takes
+three floats (that are converted internally to `v16`).
+
+However, you should avoid using floating point values in your game. They can be
+convenient to test the code initially, but calculations with floats are very
+slow. If you use floating point constants the compiler can optimize calculations
+and store only the final result.
+
+For example, if you call `glVertex3f(1.0, 2.0, 3.0)` the compiler will see the
+implementation of the function:
+
+```c
+static inline void glVertex3f(float x, float y, float z)
+{
+    glVertex3v16(floattov16(x), floattov16(y), floattov16(z));
+}
+```
+
+It will see that the result of `floattov16()` is a constant in all three cases
+and it will replace the original function call by `glVertex3v16(1 << 12, 2 <<
+12, 3 << 12)`. The resulting code is just as efficient, but easier to read.
+
+However, the following code probably won't be optimized:
+
+```c
+float x = 0.0;
+
+while (x < 10.0)
+{
+    glVertex3f(x, 2.0, 3.0);
+    x += 1.0;
+}
+```
+
+In general, you can start with floating point variables when you're learning and
+you can switch to fixed point when you want to do something more complicated
+that requires a more efficient CPU usage.
+
+## 3. Initialization
 
 A typical program that uses 3D looks like this:
 
@@ -112,7 +173,7 @@ changed. With the 3D hardware you need to send all the polygons to the GPU every
 frame, which takes some CPU time. At the end of this chapter we will learn how
 to use display lists, which is one of the ways to optimize 3D rendering.
 
-## 3. Rendering a polygon
+## 4. Rendering a polygon
 
 The first thing we need to do is to get a single polygon. Starting from the
 example in the previous section, we can replace the contents of the main loop by
@@ -186,7 +247,7 @@ vertices to the GPU with the 3 provided coordinates.
 When all polygons have been sent to the GPU we call `glFlush()` so that the GPU
 starts working on them for the next frame.
 
-## 4. Moving the camera
+## 5. Moving the camera
 
 The "camera" of your game is implemented in hardware as transformation matrices.
 The matrices are stored in the 3D hardware, and all calculations done to them
@@ -289,7 +350,7 @@ while (1);
 }
 ```
 
-## 5. Culling
+## 6. Culling
 
 When you draw polygons you send the vertices to the GPU in a specific order.
 This order is used by the GPU to decide whether the polygon is facing the camera
@@ -308,7 +369,7 @@ Normally you won't be defining polygons by hand, so you don't have to worry
 about the order of the polygons. Your 3D modelling program will export vertices
 in the right format.
 
-## 6. Using textures
+## 7. Using textures
 
 Textures can be used to apply images to your polygons like in this example:
 
@@ -473,7 +534,7 @@ effect if you hold button A. This is the result:
 
 ![Texture with color](texture_color.png)
 
-## 7. Texture formats
+## 8. Texture formats
 
 The DS supports 7 texture formats, and 6 of them use palettes. Now that we know
 how to load and use textures that don't need palettes we can start to think
@@ -609,7 +670,7 @@ set as transparent. On the right it's displayed with color 0 set as opaque:
 
 ![Texture with palette](texture_with_palette.png)
 
-## 8. Compressed textures
+## 9. Compressed textures
 
 Compressed textures are a bit special. Instead of having two parts (texture data
 and palette data) they have three: texel blocks, palette indices and palette
@@ -674,9 +735,9 @@ if (glColorTableEXT(0, 0, neon_pal_bin_size / 2, 0, 0, neon_pal_bin) == 0)
 }
 ```
 
-## 9. Final notes about textures
+## 10. Final notes about textures
 
-### 9.1 Edge texture modes
+### 10.1 Edge texture modes
 
 When you draw textured polygons you normally use coordinates that fit inside the
 texture. For example, if your texture size is 64x64 pixels, your texture
@@ -697,7 +758,7 @@ Check the following example:
 
 ![Texture edge modes](texture_edge_modes.png)
 
-### 9.2 Texture matrix
+### 10.2 Texture matrix
 
 Apart from the projection and model view matrices you can use the texture
 matrix. This texture can be used to achieve transformation effects without
@@ -743,14 +804,14 @@ for all the details, but this is the short version:
   used for spherical reflection mapping.
 - `TEXGEN_POSITION`: Set texture coordinates equal to vertex * texture matrix.
 
-### 9.3 Sharing palettes between textures
+### 10.3 Sharing palettes between textures
 
 If you want to use the same palette in more than one texture you can use
 function `int glAssignColorTable(int target, int name)`. It will take the
 palette of `name` and assign it to `target`. The palette will only be deleted
 from VRAM when all the textures that use it are deleted.
 
-### 9.4 Live editing of textures
+### 10.4 Live editing of textures
 
 Live editing of palettes is very useful:
 
@@ -798,14 +859,14 @@ that can hold up to 48 lines (you can check the current status by reading
 practice, you only have 22 scanlines to upload data to VRAM. If you don't make
 it in time, the GPU will read white pixels from VRAM.
 
-## 10. Alpha blending (translucency)
+## 11. Alpha blending (translucency)
 
 There are two ways to draw polygons that aren't fully opaque:
 
 - Setting the polygon alpha value with `glPolyFmt()` and `POLY_ALPHA()`.
 - Using the translucent textures formats `GL_RGB32_A3` and `GL_RGB8_A5`.
 
-### 10.1 Per-polygon alpha value
+### 11.1 Per-polygon alpha value
 
 You can create translucency effects by setting an alpha value between 1 and 30
 to polygons. Check the following example:
@@ -834,7 +895,7 @@ A value of 0 doesn't make the polygon fully transparent, it enables wireframe
 mode. In that mode only the outline of polygons is drawn.
 {{< /callout >}}
 
-### 10.2 Translucent textures
+### 11.2 Translucent textures
 
 The previous system restricts you to one single alpha value per polygon. Using
 translucent textures allows you to specify up to 8 levels of transparency with
@@ -866,7 +927,7 @@ parameters for grit:
 -gx -gb -gBa3i5 -gT!
 ```
 
-### 10.3 Multiple translucent objects
+### 11.3 Multiple translucent objects
 
 So far we have only seen how to display translucent polygons on top of opaque
 polygons. This is easy and you don't really need to do anything special. Opaque
