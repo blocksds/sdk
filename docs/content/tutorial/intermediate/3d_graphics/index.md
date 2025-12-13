@@ -88,15 +88,26 @@ It will see that the result of `floattov16()` is a constant in all three cases
 and it will replace the original function call by `glVertex3v16(1 << 12, 2 <<
 12, 3 << 12)`. The resulting code is just as efficient, but easier to read.
 
-However, the following code probably won't be optimized:
+However, the following code probably won't be optimized and it will try to
+convert between floating point and fixed point every time:
 
 ```c
 float x = 0.0;
 
-while (x < 10.0)
+while (1)
 {
+    scanKeys();
+    u16 keys = keysHeld();
+    if (keys & KEY_LEFT)
+        x -= 1.0;
+    if (keys & KEY_RIGHT)
+        x += 1.0;
+
+    ...
+
     glVertex3f(x, 2.0, 3.0);
-    x += 1.0;
+
+    ...
 }
 ```
 
