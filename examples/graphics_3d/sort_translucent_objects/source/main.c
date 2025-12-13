@@ -1,15 +1,24 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2024
+// SPDX-FileContributor: Antonio Niño Díaz, 2024-2025
 
 // This example shows how to draw translucent polygons the right way. It
 // calculates the distance from the camera to all of the objects in the scene,
 // it sorts them, and it draws each one of them with a different polygon ID so
 // that alpha blending works between them. Back faces are culled because they
-// are part of the ball model and they can't be sorted with this system/
+// are part of the ball model and they can't be sorted with this system.
 //
-// You can also break the sorting order by pressing the right key to see what
-// happens when you don't do the right thing.
+// You can also break the alpha blending effect.
+//
+// - You can revert the sorting order by pressing A to see what happens when you
+//   don't do the right thing.
+// - You can use one single polygon ID instead of multiple polygon IDs to see
+//   how translucency breaks.
+// - If you want to see translucent objects correctly you need to use back
+//   culling because you can't sort the polygons of a model from back to front
+//   easily (they are in a display list). Front culling also works, if you want
+//   a specific effect. However, "cull none" will cause things to be displayed
+//   incorrectly because polygons aren't drawn in the right order.
 
 #include <stdlib.h>
 
@@ -79,7 +88,7 @@ void balls_sort_by_reverse_distance(void)
     qsort(&Ball[0], NUM_BALLS, sizeof(BallInfo), is_ball_further_away);
 }
 
-void balls_draw(void)
+void balls_draw(bool different_ids, int cull_mode)
 {
     for (int i = 0; i < NUM_BALLS; i++)
     {
@@ -87,9 +96,13 @@ void balls_draw(void)
         glTranslatef32(Ball[i].x, Ball[i].y, Ball[i].z);
 
         // Each ball needs a different polygon ID
-        int id = 10 + i;
+        int id;
+        if (different_ids)
+            id = 10 + i;
+        else
+            id = 10;
 
-        glPolyFmt(POLY_ALPHA(20) | POLY_CULL_BACK | POLY_FORMAT_LIGHT0 | POLY_ID(id));
+        glPolyFmt(POLY_ALPHA(20) | cull_mode | POLY_FORMAT_LIGHT0 | POLY_ID(id));
         glCallList(sphere_bin);
 
         glPopMatrix(1);
@@ -140,6 +153,17 @@ int main(int argc, char *argv[])
 
     balls_initialize();
 
+    consoleClear();
+
+    printf("PAD:   Rotate\n");
+    printf("A:     Revert sorting order\n");
+    printf("B:     Use the same poly ID\n");
+    printf("Y:     Set cull none\n");
+    printf("X:     Set cull front\n");
+    printf("(Default: cull back)\n");
+    printf("\n");
+    printf("START: Exit to loader");
+
     while (1)
     {
         // Handle key input
@@ -155,13 +179,6 @@ int main(int argc, char *argv[])
             rotateY += 3 << 5;
         if (keys_held & KEY_RIGHT)
             rotateY -= 3 << 5;
-
-        consoleClear();
-
-        printf("PAD:   Rotate\n");
-        printf("A:     Reverse sorting order\n");
-        printf("\n");
-        printf("START: Exit to loader");
 
         // Save the state of the current matrix(the modelview matrix)
         glLoadIdentity();
@@ -183,7 +200,21 @@ int main(int argc, char *argv[])
         else
             balls_sort_by_distance();
 
-        balls_draw();
+        bool different_ids;
+        if (keys_held & KEY_B)
+            different_ids = false;
+        else
+            different_ids = true;
+
+        int cull_mode;
+        if (keys_held & KEY_Y)
+            cull_mode = POLY_CULL_NONE;
+        else if (keys_held & KEY_X)
+            cull_mode = POLY_CULL_FRONT;
+        else
+            cull_mode = POLY_CULL_BACK;
+
+        balls_draw(different_ids, cull_mode);
 
         // Sort transparent polygons manually, use w-buffer instead of z-buffer
         glFlush(GL_TRANS_MANUALSORT | GL_WBUFFERING);
