@@ -57,7 +57,7 @@ dlditool:
 	$(MAKE) -C dlditool VERSION_STRING=$(VERSION_STRING)
 
 dldipatch:
-	$(MAKE) -C dldipatch
+	$(MAKE) -C dldipatch VERSION_STRING=$(VERSION_STRING)
 
 dsltool:
 	$(MAKE) -C dsltool VERSION_STRING=$(VERSION_STRING)
@@ -84,10 +84,8 @@ install: all
 	@echo "  INSTALL $(INSTALLDIR_ABS)"
 	@test $(INSTALLDIR_ABS)
 	@$(V)$(RM) $(INSTALLDIR_ABS)
-	@$(V)$(INSTALL) -d $(INSTALLDIR_ABS) \
-		      $(INSTALLDIR_ABS)/dldipatch
-	$(INSTALL) $(STRIP) -m $(BINMODE) dldipatch/dldipatch $(INSTALLDIR_ABS)/dldipatch/
 	$(MAKE) -C bin2c install INSTALLDIR=$(INSTALLDIR_ABS)/bin2c
+	$(MAKE) -C dldipatch install INSTALLDIR=$(INSTALLDIR_ABS)/dldipatch
 	$(MAKE) -C dlditool install INSTALLDIR=$(INSTALLDIR_ABS)/dlditool
 	$(MAKE) -C dsltool install INSTALLDIR=$(INSTALLDIR_ABS)/dsltool
 	$(MAKE) -C grit install INSTALLDIR=$(INSTALLDIR_ABS)/grit
