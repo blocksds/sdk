@@ -4,6 +4,7 @@ This folder contains examples of how to use the 3D features of the DS with
 libnds.
 
 - `2d_and_3d`: Combines 2D sprites and background with the 3D output.
+- `alpha_test`: It shows the effect of the alpha test setting.
 - `basic_cube`: It draws a simple 3D cube and shows the effects of culling.
 - `basic_texture`: Loads a 16 bpp texture from the ARM9 binary.
 - `basic_texture_nitrofs`: Loads a 16 bpp texture from NitroFS.
