@@ -184,7 +184,9 @@ changed. With the 3D hardware you need to send all the polygons to the GPU every
 frame, which takes some CPU time. At the end of this chapter we will learn how
 to use display lists, which is one of the ways to optimize 3D rendering.
 
-## 4. Rendering a polygon
+## 4. Polygons
+
+### 4.1 Rendering a polygon
 
 The first thing we need to do is to get a single polygon. Starting from the
 example in the previous section, we can replace the contents of the main loop by
@@ -257,6 +259,73 @@ vertices to the GPU with the 3 provided coordinates.
 
 When all polygons have been sent to the GPU we call `glFlush()` so that the GPU
 starts working on them for the next frame.
+
+### 4.2 Types of polygons
+
+The DS supports triangles and quads. You can draw them as individual polygons or
+in strips. Also, you can draw lines (if two of the vertices of a triangle have
+the same coordinates) and even dots (if all three coordinates are the same).
+However, some old emulators don't display lines and dots correctly.
+
+This image shows the types of polygon primitives you can use:
+
+![Polygon types](polygon_types.png)
+
+- `GL_TRIANGLES`: You can call `glBegin(GL_TRIANGLES)` once and then send all
+  the vertices you need to the GPU. Every 3 vertices it will draw a new
+  triangle. If you want to draw lines or dots, you should use this type as well.
+  You can draw lines and dots with other types, but triangles use fewer
+  vertices than quads. Call `glEnd()` when you're done drawing triangles.
+- `GL_QUADS`: It works like `GL_TRIANGLES`, it draws a quad per each group of 4
+  vertices the GPU receives. Note that you can't draw any shape you want with
+  quads. The two edges at each vertex can't have an angle greater than 180º, and
+  vertices must be sent in the order shown in the image.
+- `GL_TRIANGLE_STRIP`: After `glBegin(GL_TRIANGLE_STRIP)` you need to send 3
+  vertices to define the first triangle. After that, the next triangles will be
+  defined as the last two vertices sent plus the new vertex. If you want to
+  start a new strip you need to call `glEnd()` and `glBegin()` again.
+- `GL_QUAD_STRIP`: It's similar to `GL_TRIANGLE_STRIP`. First, send 4 vertices
+  to define a quad, and then send 2 more vertices per quad. Note that the order
+  of vertices doesn't match the one of `GL_QUADS`.
+
+### 4.3 Types of vertex commands
+
+There are multiple commands to send vertices to the GPU. The GPU has a few
+registers that receive different types of arguments to optimize the way you draw
+your polygons:
+
+- `GFX_VERTEX16`: This is the most common way to define vertices. You need to
+  write the 3 coordinates using `v16` fixed point. The coordinates can go from
+  -8.0 to about 7.99. Each vertex requires two writes (the first one contains X
+  and Y, the second one just Z). This command gives you the greatest possible
+  range of coordinates, but it requires more writes.
+
+- `GFX_VERTEX10`: This command lets you write the 3 components in one single
+  write, but it uses `v10` format. That means you can use coordinates between
+  -1.0 to about 0.99. It gives you less accuracy than `GFX_VERTEX16`, but it's a
+  smaller command, so it may be a good idea to use it if you don't need all the
+  possible accuracy.
+
+- `GFX_VERTEX_XY`, `GFX_VERTEX_XZ`, `GFX_VERTEX_YZ`: They use `v16`, but they
+  only require two components to define a new vertex. The third component is the
+  one of the previous vertex. For example, if you use `GFX_VERTEX16` followed by
+  `GFX_VERTEX_XY`, the Z component of the second vertex is the one of the
+  `GFX_VERTEX16` command.
+
+- `GFX_VERTEX_DIFF`: This command takes three `v10` fixed point values and it
+  generates a new vertex by adding the values to the previous vertex.
+  Internally, vertex coordinates are stored as `v16`. `v10` values are converted
+  to `v16` and added to the previous vertex. The `v16` value can overflow, so
+  be careful with it.
+
+If you want to draw objects that don't fit in the coordinate ranges of the
+vertex commands you should scale your model down in your 3D modelling program.
+For example, you can reduce it to a box of size 1.0 x 1.0 x 1.0 and use a
+`glScale()` command before drawing the model so that it's scalled up to the
+right size.
+
+For more information about the registers, check
+[this](https://problemkaputt.de/gbatek.htm#ds3dpolygondefinitionsbyvertices).
 
 ## 5. Moving the camera
 
@@ -903,7 +972,8 @@ glPolyFmt(POLY_ALPHA(15) | POLY_CULL_NONE);
 
 {{< callout type="warning" >}}
 A value of 0 doesn't make the polygon fully transparent, it enables wireframe
-mode. In that mode only the outline of polygons is drawn.
+mode. In that mode only the outline of polygons is drawn. To hide polygons,
+don't draw them at all.
 {{< /callout >}}
 
 ### 11.2 Translucent textures
