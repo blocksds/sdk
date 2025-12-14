@@ -5,7 +5,8 @@
 // This example enables alpha test with GL_ALPHA_TEST and then it lets the user
 // change the alpha threshold with glAlphaFunc(). Only pixels with a bigger
 // alpha value get drawn. A threshold of 0 will allow all pixels to be drawn, a
-// threshold of 31 will prevent everything from being drawn.
+// threshold of 31 will prevent everything from being drawn (even opaque
+// polygons!).
 
 #include <stdio.h>
 

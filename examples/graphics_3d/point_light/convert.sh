@@ -4,6 +4,10 @@
 #
 # https://github.com/AntonioND/nitro-engine
 #
+# You can install it with:
+#
+#     wf-pacman -Sy blocksds-nitroengine
+#
 # The model has normals, texture UV information, and no material information.
 
 export OBJ2DL="python3 /opt/blocksds/external/nitro-engine/tools/obj2dl/obj2dl.py"
