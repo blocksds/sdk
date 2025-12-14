@@ -1105,6 +1105,30 @@ Remember to tell the hardware that we have sorted translucent polygons manually:
 glFlush(GL_TRANS_MANUALSORT);
 ```
 
+### 11.4 Alpha test
+
+The alpha test is an interesting feature that lets you setup a threshold of the
+minimum alpha value that is rendered. If the threshold is 0, pixels with all
+alpha values are drawn. If the threshold is 10, only alpha values 11 to 31 are
+drawn. If the threshold is 31, all alpha values are hidden (even opaque
+polygons!).
+
+The left image shows the effect of a threshold of 11, the right one has a
+threshold of 25. You can see that a lot more of the translucent texture is
+hidden:
+
+![Alpha test](alpha_test.png)
+
+To do this, you have to enable the feature and set the threshold you want:
+
+```c
+glEnable(GL_ALPHA_TEST);
+glAlphaFunc(25);
+```
+
+You can check the code of the example here:
+[`examples/graphics_3d/alpha_test`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/alpha_test)
+
 ## 12. Orthogonal and perspective projections
 
 So far we have only seen perspective projections in this chapter. With this kind
