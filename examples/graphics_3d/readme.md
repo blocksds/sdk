@@ -13,6 +13,7 @@ libnds.
 - `colored_polygon`: Very simple example of how to draw a colored polygon.
 - `compressed_texture`: Loads a compressed/Tex4x4 texture from the ARM9 binary.
 - `display_list_creation`: Manually creates a display list and uses it.
+- `display_list_teapot`: Displays a pre-converted teapot model.
 - `fog`: How to use hardware fog.
 - `ortho_projection`: It uses an orthogonal projection instead of perspective.
 - `paletted_textures`: It loads paletted textures from the ARM9 binary.
