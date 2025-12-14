@@ -1105,6 +1105,70 @@ Remember to tell the hardware that we have sorted translucent polygons manually:
 glFlush(GL_TRANS_MANUALSORT);
 ```
 
+## 12. Orthogonal and perspective projections
+
+So far we have only seen perspective projections in this chapter. With this kind
+of projections, polygons get closer to each other on the screen as they get
+further away from the camera. This is how things work normally. The same depth
+that is used to determine which polygons are in front is used to transform the
+coordinates of the vertices.
+
+However, it is also possible to setup a projection where depth doesn't affect
+the coordinates of the vertices (and only decide which polygons are in front of
+the rest).
+
+Projections like this one are called "orthogonal" projections. This image shows
+a regular perspective projection on the left and an orthogonal projection on
+the right:
+
+![Orthogonal vs perspective projections](orthogonal_projection.png)
+
+You can check the code of the example here:
+[`examples/graphics_3d/ortho_projection`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/ortho_projection)
+
+This is the important part of the example:
+
+```c
+glMatrixMode(GL_PROJECTION);
+glLoadIdentity();
+
+if (keys & KEY_SELECT)
+    gluPerspective(70, 256.0 / 192.0, 0.1, 40);
+else
+    glOrtho(-3, 3, -2, 2, 0.1, 100);
+```
+
+Note that this example uses `gluPerspective()` instead of `gluLookAt()`. They
+are both useful, and you should pick one or the other based on the kind of
+parameters you want to define.
+
+The perspective projection has a field of view angle of 70 degrees (in the Y
+direction, side to side), an aspect ratio of 256 / 192. The near Z plane is at
+0.1, and the far Z plane at 40.0. Only polygons located between both planes are
+drawn.
+
+The orthogonal projection is setup so that the left and right bounds are -3 and
+3, the bottom and top bounds are -2 and 2, and the Z planes are 0.1 and 100.
+
+Orthogonal projections are very useful to draw 2D graphics like a user
+interface. It's also used internally by GL2D.
+
+Function `glBeing2D()` sets a projection where the bounds are set to the size of
+the screen, something like this:
+
+```c
+glOrthof32(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -inttof32(1), inttof32(1));
+```
+
+The actual code used by the function is a bit more complicated because it's
+designed to work around some accuracy issues. Because of that, you should use
+GL2D if you are trying to draw 2D elements in your 3D scene instead of setting
+up the projection yourself.
+
+You can check the code
+[here](https://github.com/blocksds/libnds/blob/9eaccbc45b46fd20a41e0e3d32bc6c0a1364d553/source/arm9/video/gl2d.c#L68-L108)
+if you're curious about the issue and how it's fixed.
+
 {{< callout type="error" >}}
 This chapter is a work in progress...
 {{< /callout >}}
