@@ -1193,6 +1193,104 @@ You can check the code
 [here](https://github.com/blocksds/libnds/blob/9eaccbc45b46fd20a41e0e3d32bc6c0a1364d553/source/arm9/video/gl2d.c#L68-L108)
 if you're curious about the issue and how it's fixed.
 
+## 13. Display lists
+
+Until now we have seen how to send commands to the GPU manually one by one, but
+this isn't the most efficient way to send commands to the GPU. The GPU can also
+receive packed commands, and it's possible to setup a DMA copy that sends a list
+of packed commands to the GPU very efficiently.
+
+Normally you don't create display lists by hand (there are tools that convert
+popular 3D model formats into display lists) but it's a good idea to know how
+they are created, so let's see a sample display list:
+
+```c
+const uint32_t display_list[] =
+{
+    13,
+
+    FIFO_COMMAND_PACK(FIFO_BEGIN, FIFO_COLOR, FIFO_VERTEX16, FIFO_COLOR),
+        // FIFO_BEGIN
+        GL_QUADS,
+        // FIFO_COLOR
+        RGB15(31, 0, 0),
+        // FIFO_VERTEX16
+        VERTEX_PACK(inttov16(-1), inttov16(-1)),
+        VERTEX_PACK(0, 0),
+        // FIFO_COLOR
+        RGB15(0, 31, 0),
+
+    FIFO_COMMAND_PACK(FIFO_VERTEX_XY, FIFO_COLOR, FIFO_VERTEX_XY, FIFO_COLOR),
+        // FIFO_VERTEX_XY
+        VERTEX_PACK(inttov16(1), inttov16(-1)),
+        // FIFO_COLOR
+        RGB15(0, 0, 31),
+        // FIFO_VERTEX_XY
+        VERTEX_PACK(inttov16(1), inttov16(1)),
+        // FIFO_COLOR
+        RGB15(31, 31, 0),
+
+    FIFO_COMMAND_PACK(FIFO_VERTEX_XY, FIFO_END, FIFO_NOP, FIFO_NOP),
+        // FIFO_VERTEX_XY
+        VERTEX_PACK(inttov16(-1), inttov16(1)),
+        // FIFO_END and FIFO_NOP don't have parameters
+};
+```
+
+This code is used to display a colored quad, and it's taken from
+[`examples/graphics_3d/display_list_creation`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/display_list_creation).
+
+A display list is a simple array of 32-bit elements that contains commands and
+parameters (the indentation is different for the parameters elements so that
+it's easier to understand the code).
+
+- The first word of the display list is the size (in words) of the display list,
+  excluding the size itself. This value isn't a part of the display list itself,
+  but it's used by libnds to know how much data to send to the GPU.
+
+- Next, there is a word which is a block of 4 packed GPU commands (like
+  `glBegin()`, `glColor()`, `glVertex()`, ...). There are some helper defines in
+  libnds [here](https://github.com/blocksds/libnds/blob/173c19c9ee26ffc137e61b035a1fb83a8e11f64b/include/nds/arm9/videoGL.h#L380-L412).
+
+- After each word with commands you need to add words with the parameters that
+  each command needs. If a command needs more than one parameter, it must be
+  split into multiple words (like `FIFO_VERTEX16`, which needs to be split into
+  two). Some commands don't take any parameter, like `FIFO_END`.
+
+- Create a new word with commands and repeat until the last command is used.
+  The last word with commands can be padded with `FIFO_NOP` commands (they don't
+  take any parameter).
+
+Once you have your display list ready you can call `glCallList(display_list)`
+and all the commands will be sent to the GPU.
+
+This system of sending commands to the GPU is great to draw complex models
+because you don't need to use any CPU time to send individual commands. You can
+send any command to the GPU with a display list (but normally you only send the
+commands needed to draw models).
+
+Normally you will create 3D models in a tool like Blender, export it as some
+format like Wavefront OBJ, use some tool to convert it to a display list, and
+add the display list to your game as data.
+
+The following example has a `convert.sh` script that uses a conversion tool from
+[Nitro Engine](https://github.com/AntonioND/nitro-engine/tree/master/tools/obj2dl).
+This script takes the OBJ file and it generates a BIN file that is added to the
+game.
+
+[`examples/graphics_3d/display_list_teapot`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/display_list_teapot).
+
+Also, remember the wireframe mode that we mentioned in the chapter about
+translucency? This is a perfect time to show it in action! The following images
+show the output of that example. The left image displays the model as normal,
+and the one on the right displays it in wireframe mode (which doesn't work in
+all emulators):
+
+![Display list and wireframe mode](display_list.png)
+
+This system can even be used to draw animated models, but that's more advanced,
+and we will see how to do it in a future chapter.
+
 {{< callout type="error" >}}
 This chapter is a work in progress...
 {{< /callout >}}
