@@ -9,12 +9,20 @@ weight: 6
 
   - `glDeinit()` has been implemented. This function frees all memory used by
     videoGL and stops the 3D hardware until `glInit()` is called again.
+  - `fsync()` has been implemented. `fflush()` doesn't guarantee a flush to the
+    disk, so `fsync(fileno(fp))` can be used instead.
   - Function `fatGetDefaultDrive()` can now return `"nand:/"` if the application
     runs from NAND.
   - New definitions have been added for the window registers. The old ones
     didn't use the same names used by GBATEK.
   - Fix `SOUNDXCNT_VOL_DIV_x` defines.
   - Add defines `GL_TRANS_YSORT` and `GL_ZBUFFERING` for `glFlush()`.
+
+- DSWiFi:
+
+  - Access points with hidden SSID (the name of the network) are now supported
+    in DS mode (not in DSi mode yet). This only works for APs that send probe
+    responses that contain a SSID (some APs don't, and they aren't supported).
 
 - grit:
 
@@ -25,11 +33,18 @@ weight: 6
     would export a broken tile map silently, which was hard to detect if there
     were too many similar tiles.
 
+- ndstool:
+
+  - The CRC of the secure area wasn't calculated when generating the header.
+    This is now fixed. @edo9300.
+
 - SDK:
 
   - The first official logo of BlocksDS has been created.
   - Arguments `-std=gnu17` and `-std=gnu++17` have been removed from all default
     and template makefiles. They prevented users from changing this themselves.
+  - `dldipatch` now returns the version string when it runs with argument `-V`
+    (this change was applied to all other tools in version 1.15.0).
 
   - Examples:
 
@@ -63,6 +78,8 @@ weight: 6
       user break it in different ways and see the results.
     - Add an example of how to draw a polygon in which all faces are translucent
       and visible at the same time.
+    - Add an example of how to use the 3D alpha test.
+    - Add an example of how to draw a simple pre-converted display list.
 
   - Documentation:
 
