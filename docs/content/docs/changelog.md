@@ -17,6 +17,12 @@ weight: 6
     didn't use the same names used by GBATEK.
   - Fix `SOUNDXCNT_VOL_DIV_x` defines.
   - Add defines `GL_TRANS_YSORT` and `GL_ZBUFFERING` for `glFlush()`.
+  - Define `GL_SPECULAR_USE_TABLE` has been added so that it can be added to
+    `glMaterial()` instead of using magic numbers.
+  - `glMaterialShinyness()` has been deprecated. The name is a typo, and the new
+    name is `glMaterialShininess()`. The old name will be kept around forever
+    because too many projects use it.
+  - Add warning to material `GL_SHININESS` because it isn't used for anything.
 
 - DSWiFi:
 
@@ -49,6 +55,9 @@ weight: 6
   - Examples:
 
     - Add example of using windows and DMA to create a circular window.
+    - Add example of the material properties of 3D objects. It shows several
+      combinations of properties to understand the effect they have on the
+      resulting color of the polygons.
     - Add example of using the master brightness registers (not the LCD
       brightness).
     - Add example of drawing a single colored 3D quad.
@@ -80,6 +89,9 @@ weight: 6
       and visible at the same time.
     - Add an example of how to use the 3D alpha test.
     - Add an example of how to draw a simple pre-converted display list.
+    - Add an example of how to apply lighting to a 3D cube drawn manually. The
+      previous examples used pre-converted display lists so the developer
+      couldn't see the `glNormal()` commands.
 
   - Documentation:
 
