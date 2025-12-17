@@ -111,9 +111,6 @@ int main(int argc, char *argv[])
               0.0, 0.0, 0.0,  // Look at
               0.0, 1.0, 0.0); // Up
 
-    // Setup the light
-    glLight(0, RGB15(31, 31, 31), 0, floattov10(-1.0), 0);
-
     while (1)
     {
         // Handle key input
@@ -160,12 +157,12 @@ int main(int argc, char *argv[])
                 if (clicked == CONE)
                 {
                     // Set a poly ID for outlining
-                    glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_FORMAT_LIGHT0 | POLY_ID(1));
+                    glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_ID(1));
                 }
                 else
                 {
                     // Set a poly ID for no outlining (same as BG)
-                    glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_FORMAT_LIGHT0 | POLY_ID(0));
+                    glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_ID(0));
                 }
                 // Draw a green cone from a predefined packed command list
                 glCallList(cone_bin);
@@ -175,12 +172,12 @@ int main(int argc, char *argv[])
                 if (clicked == CYLINDER)
                 {
                     // Set a poly ID for outlining
-                    glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_FORMAT_LIGHT0 | POLY_ID(1));
+                    glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_ID(1));
                 }
                 else
                 {
                     // Set a poly ID for no outlining (same as BG)
-                    glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_FORMAT_LIGHT0 | POLY_ID(0));
+                    glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_ID(0));
                 }
                 // Draw a blue cylinder from a predefined packed command list
                 glCallList(cylinder_bin);
@@ -190,12 +187,12 @@ int main(int argc, char *argv[])
                 if (clicked == SPHERE)
                 {
                     // Set a poly ID for outlining
-                    glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_FORMAT_LIGHT0 | POLY_ID(1));
+                    glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_ID(1));
                 }
                 else
                 {
                     // Set a poly ID for no outlining (same as BG)
-                    glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_FORMAT_LIGHT0 | POLY_ID(0));
+                    glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_ID(0));
                 }
                 // Draw a red sphere from a predefined packed command list
                 glCallList(sphere_bin);
