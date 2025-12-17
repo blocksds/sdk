@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 
         if (keys & KEY_A)
             glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_FORMAT_LIGHT0 |
-                      POLY_ID(0) | POLY_DECAL);
+                      POLY_ID(0) | POLY_MODULATION);
         else
             glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_FORMAT_LIGHT0 |
                       POLY_ID(0) | POLY_TOON_HIGHLIGHT);
