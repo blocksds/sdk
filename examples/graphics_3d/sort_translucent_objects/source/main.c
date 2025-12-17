@@ -140,10 +140,6 @@ int main(int argc, char *argv[])
     glMaterialf(GL_SPECULAR, RGB15(0, 0, 0));
     glMaterialf(GL_EMISSION, RGB15(0, 0, 0));
 
-    // Create table of values for specular materials (unused in this example,
-    // but needed in general).
-    glMaterialShinyness();
-
     // Setup the projection matrix for regular drawing
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();

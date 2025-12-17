@@ -94,10 +94,6 @@ int main(int argc, char **argv)
     glMaterialf(GL_SPECULAR, RGB15(0, 0, 0));
     glMaterialf(GL_EMISSION, RGB15(0, 0, 0));
 
-    // Create table of values for specular materials (unused in this example,
-    // but needed in general).
-    glMaterialShinyness();
-
     // Setup light
     glLight(0, RGB15(31, 0, 0), floattov10(-0.71), floattov10(0.71), floattov10(0));
     glLight(1, RGB15(0, 31, 0), floattov10(0.71), floattov10(0), floattov10(-0.71));

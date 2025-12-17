@@ -52,10 +52,6 @@ int main(int argc, char *argv[])
     glMaterialf(GL_SPECULAR, RGB15(0, 0, 0));
     glMaterialf(GL_EMISSION, RGB15(0, 0, 0));
 
-    // Create table of values for specular materials (unused in this example,
-    // but needed in general).
-    glMaterialShinyness();
-
     u32 rotateX = 0;
     u32 rotateY = 0;
 
