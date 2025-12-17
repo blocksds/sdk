@@ -189,6 +189,10 @@ int main(int argc, char *argv[])
     glMaterialf(GL_SPECULAR, RGB15(0, 0, 0));
     glMaterialf(GL_EMISSION, RGB15(0, 0, 0));
 
+    // Create table of values for specular materials (unused in this example,
+    // but needed in general).
+    glMaterialShinyness();
+
     int32_t teapot_pos[2][3] = {
         { floattof32(1.9), floattof32(1.5), floattof32(0) },
         { floattof32(-1.6), floattof32(1.7), floattof32(1.5) },
