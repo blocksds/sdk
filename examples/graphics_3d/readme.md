@@ -15,6 +15,7 @@ libnds.
 - `display_list_creation`: Manually creates a display list and uses it.
 - `display_list_teapot`: Displays a pre-converted teapot model.
 - `fog`: How to use hardware fog.
+- `lighting_cube`: It shows how to display a cube with lighting.
 - `ortho_projection`: It uses an orthogonal projection instead of perspective.
 - `paletted_textures`: It loads paletted textures from the ARM9 binary.
 - `paletted_textures_nitrofs`: It loads paletted textures from NitroFS.
