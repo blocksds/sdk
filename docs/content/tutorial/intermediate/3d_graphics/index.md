@@ -1291,6 +1291,204 @@ all emulators):
 This system can even be used to draw animated models, but that's more advanced,
 and we will see how to do it in a future chapter.
 
+## 14. Using lighting
+
+### 14.1 Introduction
+
+The DS allows you to setup up to 4 sources of directional light. They behave
+like the sun:
+
+- All rays of light are parallel.
+- Light sources don't have a defined position because they are "infinitely" far
+  away.
+
+You can see an example here:
+[`examples/graphics_3d/lighting_cube`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/lighting_cube)
+
+![Cube with light](lighting_cube.png)
+
+This cube doesn't have textures or color. It's illuminated by three lights (red,
+green and blue) that have different directions.
+
+In order to use them you need to define some material properties first (we will
+explain them better later):
+
+```c
+glMaterialf(GL_AMBIENT, RGB15(8, 8, 8));
+glMaterialf(GL_DIFFUSE, RGB15(24, 24, 24));
+glMaterialf(GL_SPECULAR, RGB15(0, 0, 0));
+glMaterialf(GL_EMISSION, RGB15(0, 0, 0));
+```
+
+Then you need to setup the color and direction of the lights:
+
+```c
+glLight(0, RGB15(31, 0, 0), floattov10(-0.71), floattov10(0.71), floattov10(0));
+glLight(1, RGB15(0, 31, 0), floattov10(0.71), floattov10(0), floattov10(-0.71));
+glLight(2, RGB15(0, 0, 31), floattov10(0), floattov10(-0.71), floattov10(-0.71));
+```
+
+{{< callout type="warning" >}}
+The directions used for lighting must be unit vectors.
+{{< /callout >}}
+
+{{< callout type="tip" >}}
+Light directions are transformed by the model view matrix but not by the
+projection matrix.
+{{< /callout >}}
+
+Before drawing your polygons you need to specify the lights that affect them:
+
+```c
+glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_FORMAT_LIGHT0 |
+          POLY_FORMAT_LIGHT1 | POLY_FORMAT_LIGHT2);
+```
+
+And you need to use normal commands while you draw your polygons. Normal
+commands look away from the polygon:
+
+```c
+glNormal3f(1, 0, 0);
+
+glVertex3v16(0, 1, 0);
+glVertex3v16(0, 1, 1);
+glVertex3v16(0, 0, 1);
+```
+
+Normal commands overwrite color commands, and color commands overwrite normal
+commands, you can't use both at the same time.
+
+{{< callout type="tip" >}}
+As mentioned [here](https://melonds.kuribo64.net/board/thread.php?id=141), the
+fastest way to send commands to the GPU is to send commands in the order
+"normal, texture coordinate, vertex", not "texture coordinate, normal, vertex".
+{{< /callout >}}
+
+### 14.2 Material types
+
+The DS has 4 different material properties. You need to define a color for each
+material type, and they define how light behaves on the polygons drawn
+afterwards.
+
+- Diffuse: This is "normal" light. It is more intense in polygons that face
+  towards light sources, and it behaves how you would expect a mate object
+  behave.
+
+![Diffuse material](material_diffuse.png)
+
+- Ambient: This is is light that illuminates the object uniformly. Essentially,
+  it's a base level of light for all vertices. It's only applied if there are
+  active lights in the room. If all lights are disabled, the ambient component
+  will be black.
+
+![Ambient material](material_ambient.png)
+
+- Specular: It has a metallic feel. You can also enable a shinyness table you
+  can fill with your own values. If the table is disabled it behaves as a linear
+  table. Function `glMaterialShininess()` of libnds also sets a linear table to
+  it. You may want to set a different table of values if you want other effects.
+
+![Specular material](material_specular.png)
+
+- Emission: This is the base color of the object independent from any light. It
+  is added to the polygons even if all lights are disabled. It isn't affected by
+  the color of the lights.
+
+![Emission material](material_emission.png)
+
+You can check the source code of the example here:
+[`examples/graphics_3d/lighting_materials`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/lighting_materials)
+
+If you want to use the shininess table, you'll need to define your `GL_SPECULAR`
+material like this:
+
+```c
+glMaterial(GL_SPECULAR, RGB(31, 31, 31) | GL_SPECULAR_USE_TABLE);
+```
+
+You can use `glMaterialShininess()` to setup a linear table, or you can setup
+your own table like this, for example:
+
+```c
+uint32_t table[128 / 4];
+uint8_t *bytes = (uint8_t *)table;
+
+// Cubic function
+for (int i = 0; i < 128; i++)
+{
+    int v = i * i * i;
+    int div = 128 * 128;
+    bytes[i] = v * 2 / div;
+}
+
+for (int i = 0; i < 128 / 4; i++)
+    GFX_SHININESS = table[i];
+```
+
+If you want a full explanation of how materials work, check
+[GBATEK](https://problemkaputt.de/gbatek.htm#ds3dpolygonlightparameters).
+Section "Internal Operation on Normal Command" explains the behaviour:
+
+```
+IF TexCoordTransformMode = 2 THEN
+    TexCoord = NormalVector * Matrix (see TexCoord)
+
+NormalVector = NormalVector * DirectionalMatrix
+VertexColor = EmissionColor
+
+FOR i = 0 to 3
+    IF PolygonAttrLight[i] = enabled THEN
+        DiffuseLevel = max(0, -(LightVector[i] * NormalVector))
+        ShininessLevel = max(0, (-HalfVector[i]) * (NormalVector)) ^ 2
+        IF TableEnabled THEN
+            ShininessLevel = ShininessTable[ShininessLevel]
+
+        # Colors are processed separately for the R,G,B color components
+        VertexColor = VertexColor + SpecularColor * LightColor[i] * ShininessLevel
+        VertexColor = VertexColor + DiffuseColor * LightColor[i] * DiffuseLevel
+        VertexColor = VertexColor + AmbientColor * LightColor[i]
+    ENDIF
+NEXT i
+```
+
+## 14.3. Toon shading
+
+Toon shading is a very easy effect you can use to display 3D objects with a
+cartoon-like effect. Instead of treating light changes gradually it lets you
+define your own behaviour. For example, you can define a behaviour in which the
+table only has two values (light on, light off) to give your objects an aspect
+similar to how cartoons are drawn.
+
+The image on the left shows a teapot with toon shading enabled, the image on the
+right shows the same teapot with regular (decal) shading.
+
+![Toon shading](toon_shading.png)
+
+The code of this example can be found here:
+[`examples/graphics_3d/toon_shading`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/toon_shading)
+
+Toon shading works by treating the output of the lights calculation as an entry into a
+shading table. You need to define the values of the entries in the table.
+
+In this example we define two ranges of values:
+
+- The first range (0 - 15) is for pixels with less than half the maximum light
+  intensity (shaded areas).
+- The second one (16 - 31) is for pixels that have over half the maximum light
+  intensity (areas facing the light).
+
+```c
+glSetToonTableRange(0, 15, RGB15(8, 8, 8));
+glSetToonTableRange(16, 31, RGB15(28, 28, 28));
+```
+
+You also need to change the shading mode in `glPolyFmt()`:
+```
+glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_FORMAT_LIGHT0 | POLY_TOON_HIGHLIGHT);
+```
+
+Normal shading can be enabled with `POLY_MODULATION` (this one is the default).
+
 {{< callout type="error" >}}
 This chapter is a work in progress...
 {{< /callout >}}
