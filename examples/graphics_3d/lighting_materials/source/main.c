@@ -106,21 +106,21 @@ int main(int argc, char *argv[])
             false, false,
             "Specular material.",
             "Like metal.",
-            "Shinyness table: None",
+            "Shininess table: None",
         },
         {
             RGB15(0, 0, 0), RGB15(0, 0, 0), RGB15(31, 31, 31), RGB15(0, 0, 0),
             true, false,
             "Specular material",
             "Like metal.",
-            "Shinyness table: libnds",
+            "Shininess table: libnds",
         },
         {
             RGB15(0, 0, 0), RGB15(0, 0, 0), RGB15(31, 31, 31), RGB15(0, 0, 0),
             false, true,
             "Specular material",
             "Like metal.",
-            "Shinyness table: custom",
+            "Shininess table: custom",
         }
     };
 
@@ -219,17 +219,17 @@ int main(int argc, char *argv[])
         printf("\n");
 
         if (material->libnds_shinyness_table)
-            printf("  Shinyness table: libnds\n");
+            printf("  Shininess table: libnds\n");
         else if (material->custom_shinyness_table)
-            printf("  Shinyness table: custom\n");
+            printf("  Shininess table: custom\n");
         else
-            printf("  Shinyness table: none\n");
+            printf("  Shininess table: none\n");
 
         // Setup some material properties
         glMaterialf(GL_AMBIENT, material->ambient);
         glMaterialf(GL_DIFFUSE, material->diffuse);
         if (material->libnds_shinyness_table || material->custom_shinyness_table)
-            glMaterialf(GL_SPECULAR, material->specular | BIT(15));
+            glMaterialf(GL_SPECULAR, material->specular | GL_SPECULAR_USE_TABLE);
         else
             glMaterialf(GL_SPECULAR, material->specular); // Linear table
         glMaterialf(GL_EMISSION, material->emission);
@@ -237,7 +237,7 @@ int main(int argc, char *argv[])
         if (material->libnds_shinyness_table)
         {
             // Create table of values for specular materials
-            glMaterialShinyness();
+            glMaterialShininess();
         }
         else if (material->custom_shinyness_table)
         {
