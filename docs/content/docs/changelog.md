@@ -9,8 +9,8 @@ weight: 6
 
   - `glDeinit()` has been implemented. This function frees all memory used by
     videoGL and stops the 3D hardware until `glInit()` is called again.
-  - `fsync()` has been implemented. `fflush()` doesn't guarantee a flush to the
-    disk, so `fsync(fileno(fp))` can be used instead.
+  - `fsync()` has been implemented. `fflush()` doesn't currently guarantee a
+    flush to the disk, so `fsync(fileno(fp))` can be used instead.
   - Function `fatGetDefaultDrive()` can now return `"nand:/"` if the application
     runs from NAND.
   - New definitions have been added for the window registers. The old ones
