@@ -1451,7 +1451,7 @@ FOR i = 0 to 3
 NEXT i
 ```
 
-## 14.3. Toon shading
+### 14.3 Toon shading
 
 Toon shading is a very easy effect you can use to display 3D objects with a
 cartoon-like effect. Instead of treating light changes gradually it lets you
@@ -1488,6 +1488,33 @@ glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_FORMAT_LIGHT0 | POLY_TOON_HIGHL
 ```
 
 Normal shading can be enabled with `POLY_MODULATION` (this one is the default).
+
+### 14.4 Modulation and decal polygon modes
+
+Modulation mode (`POLY_MODULATION`) is the default mode used to render polygons.
+This mode behaves the way you expect them to behave:
+
+- Translucent polygons and translucent areas of textures are translucent.
+- Lights change the color of the textures used to draw polygons.
+
+However, there's another mode called decal mode (`POLY_DECAL`), and it behaves
+in a very different way:
+
+- Translucent polygons and translucent areas of textures behave like white
+  textures that are affected by light.
+- Lights **don't** change the color of the textures used to draw polygons.
+
+This is easier to see with an example:
+
+![Modulation vs decal 1](modulation_vs_decal_1.png)
+
+![Modulation vs decal 2](modulation_vs_decal_2.png)
+
+The code of this example can be found here:
+[`examples/graphics_3d/modulation_vs_decal`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/modulation_vs_decal)
+
+There's more information about how the two modes work
+[in GBATEK](https://problemkaputt.de/gbatek.htm#ds3dtextureblending).
 
 {{< callout type="error" >}}
 This chapter is a work in progress...
