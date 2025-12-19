@@ -22,6 +22,7 @@ libnds.
 - `paletted_textures_nitrofs`: It loads paletted textures from NitroFS.
 - `picking`: How to detecti if a 3D object is being pressed in the touch screen.
 - `point_light`: How to implement fake spot lights using directional lights.
+- `modulation_vs_decal`: Show difference between modulation and decal poly modes.
 - `sort_translucent_objects`: How to sort and draw translucent objects.
 - `text_over_3d`: How to display the libnds console over the 3D output.
 - `texture_edge_modes`: Shows the behaviour of all modes of texture overflows.
