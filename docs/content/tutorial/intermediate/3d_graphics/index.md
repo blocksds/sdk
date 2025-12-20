@@ -1483,7 +1483,7 @@ glSetToonTableRange(16, 31, RGB15(28, 28, 28));
 ```
 
 You also need to change the shading mode in `glPolyFmt()`:
-```
+```c
 glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_FORMAT_LIGHT0 | POLY_TOON_HIGHLIGHT);
 ```
 
