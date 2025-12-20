@@ -55,9 +55,11 @@ int main(int argc, char **argv)
     printf("DLDI name:\n%s\n\n", io_dldi_data->friendlyName);
     printf("DSi mode: %d\n\n", isDSiMode());
 
-    if (isDSiMode())
+    // Check that the DLDI name isn't the default one
+    const char *nodldi = "Default (No interface)";
+    if (strcmp(nodldi, io_dldi_data->friendlyName) == 0)
     {
-        printf("Please, run this demo in DS mode\n");
+        printf("ROM not patched with DLDI.\n");
         goto end;
     }
 
