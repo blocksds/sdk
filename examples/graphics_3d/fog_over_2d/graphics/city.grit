@@ -1,2 +1,0 @@
-# 8 bpp, tiles, export map, not compressed, set magenta as transparent color
--gB8 -gt -m -gTFF00FF
