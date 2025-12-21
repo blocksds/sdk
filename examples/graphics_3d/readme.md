@@ -14,7 +14,8 @@ libnds.
 - `compressed_texture`: Loads a compressed/Tex4x4 texture from the ARM9 binary.
 - `display_list_creation`: Manually creates a display list and uses it.
 - `display_list_teapot`: Displays a pre-converted teapot model.
-- `fog`: How to use hardware fog.
+- `fog`: How to use hardware fog to fade 3D objects in a 3D environment.
+- `fog_over_2d`: How to use hardware fog to fade 3D objects on top of 2D layers.
 - `lighting_cube`: It shows how to display a cube with lighting.
 - `lighting_materials`: It shows the effect of different materials.
 - `ortho_projection`: It uses an orthogonal projection instead of perspective.
