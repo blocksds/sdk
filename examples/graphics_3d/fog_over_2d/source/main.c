@@ -107,7 +107,7 @@ int main(int argc, char **argv)
     // Don't apply fog to clear plane
     glClearFogEnable(true);
 
-    // Setup color and alpha (but alpha is ignored)
+    // Setup color and alpha (color is ignored, only alpha is used)
     glFogColor(0, 0, 0, 0);
 
     // Fog alpha blending on 2D layers requires the 2D blending registers to be

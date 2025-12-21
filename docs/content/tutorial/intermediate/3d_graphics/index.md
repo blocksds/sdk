@@ -1516,6 +1516,144 @@ The code of this example can be found here:
 There's more information about how the two modes work
 [in GBATEK](https://problemkaputt.de/gbatek.htm#ds3dtextureblending).
 
+## 15. Fog
+
+The DS supports a fog effect that can be very useful in games:
+
+- It can be used as a simple visual effect to make the game graphics more
+  beautiful. For example, black fog can be used to simulate the darkness in a
+  night 3D environment.
+
+- It can be used to hide objects as they move far away from the camera so that
+  they can be unloaded without popping. For example, a blue fog could be used in
+  a sea environment to make distant islands fade away in a 3D environment.
+
+- It can be used to make 3D objects become more and more translucent as they get
+  far away and blend them over a 2D background.
+
+The first two scenarios use the fog "color + alpha" mode, and the last one uses
+the "only alpha" mode.
+
+### 15.1 Color fog
+
+This is an example of the effect:
+[`examples/graphics_3d/fog`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/fog)
+
+![Color fog](fog_color.png)
+
+It's quite easy to use it, but it needs a bit of trial and error to configure
+it. First, enable it and define the fog color (for now, let's make the alpha 31
+to make the fog fully opaque):
+
+```c
+glEnable(GL_FOG);
+
+glFogColor(20, 20, 20, 31); // R, G, B, A
+```
+
+You need to decide if the fog will be added to the clear plane or not. If you're
+showing 2D layers behind the 3D graphics you will need to disable it, for
+example. If not, the fog will be used as clear color.
+
+```c
+glClearFogEnable(true);
+```
+
+You also need to define the parameters of the fog for this example:
+
+- Offset: Distance from the camera where the fog starts having an effect on
+  polygons. In this example, that's the `offset` variable.
+- Shift: Defines the distance between different entries of the fog table. In
+  this example, that's the `shift` variable.
+- Fog density table: Values that define how the fog increases as distance
+  increases. In this example, `mass` is a constant that gets added to the
+  density of the previous entry in the table to create a linear fog density
+  table.
+
+```c
+// How much depth difference there is between table entries
+glFogShift(shift);
+
+// Depth at which the fog starts (and the table starts applying)
+glFogOffset(depth);
+
+// Generate a linear density table
+
+int density = 0; // Start table at 0
+
+for (int i = 0; i < 32; i++) // It has 32 steps
+{
+    glFogDensity(i, density);
+
+    density += mass << 1;
+
+    // Entries are 7 bit, so cap the density to 127
+    if (density > 127)
+        density = 127;
+}
+```
+
+The example in the previous link lets you experiment with different values for
+each of the parameters. You will probably need to do the same in your game.
+
+The last step is allowing fog to be displayed on top of polygons. You can select
+which polygons are affected and which ones are not. For example, a skybox
+shouldn't be affected by the fog.
+
+```c
+glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_FOG);
+```
+
+### 15.2 Alpha fog
+
+This is an example of the effect:
+[`examples/graphics_3d/fog_over_2d`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/fog_over_2d)
+
+![Alpha fog](fog_alpha.png)
+
+This example involves the 2D and 3D hardware and it's a bit trickier to setup.
+
+Enable fog and alpha blending so that fog can blend on the 2D layers.  Also, set
+fog to "only alpha" mode to ignore the fog color and only use the alpha value.
+
+```c
+glEnable(GL_BLEND);
+glEnable(GL_FOG);
+glEnable(GL_FOG_ONLY_ALPHA);
+```
+
+You also need to setup the 3D clear plane to be transparent so that 2D layers
+can be seen under the 3D layer:
+
+```c
+// Don't apply fog to clear plane
+glClearFogEnable(true);
+
+// Setup color and alpha (color is ignored, only alpha is used)
+glFogColor(0, 0, 0, 0);
+
+// IMPORTANT: The 3D background must be transparent (alpha = 0) so that the 2D
+// layers behind it can be seen.
+glClearColor(0, 0, 0, 0);
+glClearPolyID(63);
+```
+
+Fog alpha blending on 2D layers requires the 2D blending registers to be setup
+to work. We don't need to set a source layer, the 3D layer is set as source
+layer automatically, but you need to set the destination layers. Also, the EVA
+and EVB values are ignored.
+
+```c
+REG_BLDCNT = BLEND_ALPHA | BLEND_DST_BG2 | BLEND_DST_BACKDROP;
+REG_BLDALPHA = BLDALPHA_EVA(31) | BLDALPHA_EVB(31);
+```
+
+Then just draw your polygons with fog enabled:
+
+```c
+glPolyFmt(POLY_ALPHA(31) | POLY_ID(0) | POLY_CULL_BACK | POLY_FOG);
+```
+
 {{< callout type="error" >}}
 This chapter is a work in progress...
 {{< /callout >}}
