@@ -1528,7 +1528,92 @@ The code of this example can be found here:
 There's more information about how the two modes work
 [in GBATEK](https://problemkaputt.de/gbatek.htm#ds3dtextureblending).
 
-## 15. Fog
+## 15. Combining 2D and 3D on the same screen
+
+Sometimes it can be useful to combine 2D backgrounds of sprites and 3D graphics
+on the same screen. For example:
+
+- You may want to display a 2D player interface over the 3D scene. You can do it
+  with the 3D hardware by sending a few polygons to the GPU, but you can also
+  setup a 2D background layer to be drawn on top of the 3D output and you won't
+  need to worry about drawing it every frame.
+
+- If you're creating a 2D game using GL2D, you may want to use a 2D background
+  under the GL2D graphics. Drawing a tiled background using the 3D hardware
+  needs hundreds of polygons, which takes a lot of CPU time and GPU resources. A
+  2D tiled background is basically free for the CPU and GPU.
+
+The most important things to remember are:
+
+- The 3D output replaces background layer 0 of the main graphics engine.
+
+- The 3D output has its own alpha channel. If you want to display 2D graphics
+  under the 3D output, you need to ensure that the 3D output doesn't make all
+  pixels opaque.
+
+### 15.1 2D over 3D
+
+In practice, all you need to do is to reduce the priority of background layer 0
+and increase the priority of some other layers that you want on top of it.
+Sprites have a higher priority than backgrounds by default, so you don't need to
+worry about them.
+
+![Text over 3D](text_over_3d.png)
+
+The code of this example can be found here:
+[`examples/graphics_3d/text_over_3d`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/text_over_3d)
+
+First, you need to set the right video mode. The mode affects background layers
+1, 2 and 3 (layer 0 is used for the 3D output):
+
+```c
+videoSetMode(MODE_0_3D);
+```
+
+Now, setup your 2D layers. In this example all we're doing is setting up the
+text console, so we need to allocate some VRAM for main engine background and
+setup background layer 1 as a console layer:
+
+```c
+vramSetBankF(VRAM_F_MAIN_BG_0x06000000);
+consoleInit(NULL, 1, BgType_Text4bpp, BgSize_T_256x256, 7, 0, true, true);
+```
+
+Finally, set the priorities of the background layers so that the console has a
+higher priority than the 3D output (lower numbers have a higher priority):
+
+```c
+// Set layer 0 (3D layer) to priority 1
+bgSetPriority(0, 1);
+
+// Set layer 1 (console) to priority 0
+bgSetPriority(1, 0);
+```
+
+### 15.2 3D mixed with 2D
+
+The main thing you need to consider is that the clear plane has to be
+transparent if you want to see anything under the 3D output. Set the alpha (the
+last argument) to zero:
+
+```c
+glClearColor(0, 0, 0, 0);
+```
+
+{{< callout type="tip" >}}
+Making the clear plane transparent disables antialiasing between the edges of
+polygons and the clear plane.
+{{< /callout >}}
+
+This is an example of how to display 2D sprites and backgrounds and 3D polygons
+at the same time:
+
+![2D and 3D](2d_and_3d.png)
+
+The code of this example can be found here:
+[`examples/graphics_3d/2d_and_3d`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/2d_and_3d)
+
+## 16. Fog
 
 The DS supports a fog effect that can be very useful in games:
 
@@ -1546,7 +1631,7 @@ The DS supports a fog effect that can be very useful in games:
 The first two scenarios use the fog "color + alpha" mode, and the last one uses
 the "only alpha" mode.
 
-### 15.1 Color fog
+### 16.1 Color fog
 
 This is an example of the effect:
 [`examples/graphics_3d/fog`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/fog)
@@ -1616,7 +1701,7 @@ shouldn't be affected by the fog.
 glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_FOG);
 ```
 
-### 15.2 Alpha fog
+### 16.2 Alpha fog
 
 This is an example of the effect:
 [`examples/graphics_3d/fog_over_2d`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/fog_over_2d)
@@ -1666,7 +1751,7 @@ Then just draw your polygons with fog enabled:
 glPolyFmt(POLY_ALPHA(31) | POLY_ID(0) | POLY_CULL_BACK | POLY_FOG);
 ```
 
-## 16. Antialiasing and edge-marking
+## 17. Antialiasing and edge-marking
 
 **Antialiasing** is an effect that softens the edges of polygons. The Nintendo
 DS has a resolution of 256x192 pixels, but the screen is big enough that pixels
@@ -1728,7 +1813,7 @@ around the screen border for that polygon:
 The code of the example can be found here:
 [`examples/graphics_3d/antialiasing_and_edge_marking`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/antialiasing_and_edge_marking)
 
-## 17. GPU memory usage
+## 18. GPU memory usage
 
 As we saw in the introduction, there is a limit of 6144 vertices per frame. You
 can draw up to 2048 triangles or 1536 quads in total. Any vertex or polygon
