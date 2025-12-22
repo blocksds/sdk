@@ -93,13 +93,17 @@ TWL_CODE int myfunction(int a, int b)
 }
 ```
 
+If you want to create a file that only contains DSi-mode functions and
+variables, you can change the name of that file instead of tagging all functions
+and variables. For example, you can rename `enemy.c` to `enemy.twl.c`.
+
 Remember to always use `isDSiMode()` to check if you're running in DSi mode! If
 you try to use them in DS mode you will cause memory corruption and crashes.
-Also, remember that the `twl` sections also have a limit (2.5 MiB).
+Also, remember that the `twl` sections also have a limit in the ARM9 (2.5 MiB).
 
 The source of the limits is GBATEK:
 
-[DS limtations](https://problemkaputt.de/gbatek.htm#dscartridgeheader):
+[DS limitations](https://problemkaputt.de/gbatek.htm#dscartridgeheader):
 ```
 ARM9 size (max 3BFE00h) (3839.5KB)
 ARM7 size (max 3BFE00h, or FE00h) (3839.5KB, 63.5KB)
