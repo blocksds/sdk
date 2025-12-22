@@ -1654,6 +1654,68 @@ Then just draw your polygons with fog enabled:
 glPolyFmt(POLY_ALPHA(31) | POLY_ID(0) | POLY_CULL_BACK | POLY_FOG);
 ```
 
+## 16. Antialiasing and edge-marking
+
+**Antialiasing** is an effect that softens the edges of polygons. The Nintendo
+DS has a resolution of 256x192 pixels, but the screen is big enough that pixels
+are noticeable. Antialiasing uses the slope of the edges of polygons and it
+modifies the color of pixels that form the edge so that they are blended between
+the two sides of that edge.
+
+In practice, there is no reason to not enable antialiasing in most games. All
+you need to do is to enable it:
+
+```c
+glEnable(GL_ANTIALIAS);
+```
+
+There are some limitations, though:
+
+- Translucent pixels aren't affected by antialiasing.
+- Line and point polygons (triangles that share vertices) are also softened, and
+  they can become too faint to see.
+- Wireframe polygons are also affected in a similar way as line polygons.
+
+There's a lot of information about it in [this](https://melonds.kuribo64.net/comments.php?id=32).
+blog post by Arisotura
+
+**Edge marking** is another effect that affects polygon edges: it makes the GPU
+draw polygon edges as a line of a single color. You can define up to 8 different
+colors to be used for edge marking. Color 0 is used for polygons with ID 0 to 7,
+color 1 is used for polygons with ID 8 to 15, etc.
+
+Edges are only drawn between polygons with different IDs. For example, if you
+draw a ball in which all polygons have ID 0 and it overlaps a ball with polygon
+ID 1, there will be an edge between the balls, but not between the polygons of
+each ball.
+
+In order to use this effect, set some outline colors and enable the effect:
+
+```c
+glSetOutlineColor(0, RGB15(31, 0, 0));
+glSetOutlineColor(1, RGB15(0, 31, 0));
+
+glEnable(GL_OUTLINE);
+```
+
+The following screenshots have a 4x zoom and they show the effect of
+antialiasing and edge marking. The top-left image shows polygons without either
+enabled. The top-right image shows the result of only enabling antialiasing. The
+bottom-left image shows the result of only enabling edge marking. The
+bottom-right one shows the result of enabling both (which isn't very good):
+
+![Antialiasing and edge marking](antialiasing_and_edge_marking.png)
+
+Something important to mention is that the clear plane has a polygon ID too. We
+saw this when we talked about alpha blending, but it is also important here. If
+a polygon doesn't have the same ID as the clear plane there will be an edge
+around the screen border for that polygon:
+
+![Edge marking with different polygon IDs](edge_marking_clear_plane.png)
+
+The code of the example can be found here:
+[`examples/graphics_3d/antialiasing_and_edge_marking`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/antialiasing_and_edge_marking)
+
 {{< callout type="error" >}}
 This chapter is a work in progress...
 {{< /callout >}}
