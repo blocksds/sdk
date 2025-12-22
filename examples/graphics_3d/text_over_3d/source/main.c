@@ -66,6 +66,7 @@ void draw_box(float bx_, float by_, float bz_, float ex_, float ey_, float ez_)
 int main(int argc, char **argv)
 {
     videoSetMode(MODE_0_3D);
+    videoSetModeSub(MODE_0_2D); // Make the sub screen black
 
     // libnds sets up VRAM banks A, B, C and D to some default values at boot.
     // We need to unset the default settings to prevent conflicts with VRAM F.
