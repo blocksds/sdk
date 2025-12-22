@@ -939,6 +939,18 @@ that can hold up to 48 lines (you can check the current status by reading
 practice, you only have 22 scanlines to upload data to VRAM. If you don't make
 it in time, the GPU will read white pixels from VRAM.
 
+### 10.5 Obtaining the size of the active texture
+
+If you want to know the dimensions of the active texture you can do it like
+this:
+
+```c
+int width = 0;
+int height = 0;
+glGetInt(GL_GET_TEXTURE_WIDTH, &width);
+glGetInt(GL_GET_TEXTURE_HEIGHT, &height);
+```
+
 ## 11. Alpha blending (translucency)
 
 There are two ways to draw polygons that aren't fully opaque:
@@ -1715,6 +1727,55 @@ around the screen border for that polygon:
 
 The code of the example can be found here:
 [`examples/graphics_3d/antialiasing_and_edge_marking`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/antialiasing_and_edge_marking)
+
+## 17. GPU memory usage
+
+As we saw in the introduction, there is a limit of 6144 vertices per frame. You
+can draw up to 2048 triangles or 1536 quads in total. Any vertex or polygon
+sent to the GPU after reaching that limit will be ignored.
+
+Because of that, it can be useful to know how many polygons and vertices are
+currently in the RAM of the GPU. It can be used to know when to optimize a
+scene. You can do it like this:
+
+```c
+int polygons = 0;
+int vertices = 0;
+glGetInt(GL_GET_POLYGON_RAM_COUNT, &polygons);
+glGetInt(GL_GET_VERTEX_RAM_COUNT, &vertices);
+```
+
+Another useful thing to know is the value of register `GFX_RDLINES_COUNT`. The
+GPU draws the 3D scenes without a frame buffer. Instead, it has an internal
+buffer of 48 lines that starts getting filled during the VBL period, so that
+when the screen starts to be drawn there are up to 48 lines of 3D output to send
+to the screen. On one side, the GPU works to fill this buffer until all 192
+lines of 3D output are rendered. On the other side, the hardware that combines
+2D and 3D gets one line from this buffer per scanline.
+
+The problem is that rendering a line of 3D output can take longer than the time
+it takes for the LCD to require another line. This happens if a horizontal
+line has too many big polygons. If there are too many lines with too many big
+polygons, the number of lines stored in the buffer can go down to 0.
+
+When this happens, lines are taken out of the buffer even if they aren't
+finished. This causes some polygons to appear half-drawn, with some polygons
+missing (for example, the background may appear black, or objects may appear to
+be missing some horizontal lines).
+
+You don't need to read the `GFX_RDLINES_COUNT` register constantly to know if
+there has been an underflow, you can use `GFX_CONTROL` instead:
+
+```c
+// Check if there's an underflow
+if (GFX_CONTROL & GL_COLOR_UNDERFLOW)
+{
+    // Clear the underflow flag
+    GFX_CONTROL |= GL_COLOR_UNDERFLOW;
+
+    // Print a warning in a debug log, for example.
+}
+```
 
 {{< callout type="error" >}}
 This chapter is a work in progress...
