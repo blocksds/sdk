@@ -49,10 +49,18 @@ weight: 6
 
   - The CRC of the secure area wasn't calculated when generating the header.
     This is now fixed. @edo9300.
+  - Support for GRF files has been removed. It was outdated and it didn't make
+    sense to update it. This format was worse than PNG and BMP for static icons
+    because it needs to be pre-converted by hand. Also, it didn't support
+    animated icons like GIF files.
 
 - SDK:
 
-  - The first official logo of BlocksDS has been created.
+  - The first official logo of BlocksDS has been created. Thanks to Megan
+    Gozzard.
+  - A new icon has been added to the SDK to be used as default icon for all
+    ROMs. The old icon file is still available for projects that depend on it,
+    but it has been updated to use the new icon. Thanks to @DVdo.
   - Arguments `-std=gnu17` and `-std=gnu++17` have been removed from all default
     and template makefiles. They prevented users from changing this themselves.
   - `dldipatch` now returns the version string when it runs with argument `-V`
@@ -70,6 +78,7 @@ weight: 6
     - Add example that compares modulation and decal 3D polygon modes.
     - Add example of using fog to fade 3D objects over 2D layers.
     - Add example of 3D antialiasing and edge marking.
+    - Fix 3D box test example.
     - Set transparent color explicitly in grit files that convert tiled
       backgrounds. Index 0 is always transparent, so it's a good idea to tell
       grit which color to use as transparent so that we don't get surprises
