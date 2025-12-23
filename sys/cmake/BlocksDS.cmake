@@ -176,7 +176,7 @@ function(nds_create_rom target)
 
     # resolve icon
     if (NOT DEFINED NDSTOOL_ICON)
-        find_file(NDSTOOL_ICON NAMES icon.bmp HINTS "${BLOCKSDS}/sys")
+        find_file(NDSTOOL_ICON NAMES icon.gif HINTS "${BLOCKSDS}/sys")
 
         if(NOT NDSTOOL_ICON)
             message(FATAL_ERROR "nds_create_rom: could not find default icon, try installing libnds")

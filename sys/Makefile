@@ -35,6 +35,7 @@ install: all
 		      $(INSTALLDIR_ABS)/dldi_r4
 	$(INSTALL) dldi_r4/r4tf.dldi dldi_r4/LICENSE $(INSTALLDIR_ABS)/dldi_r4/
 	$(CP) icon.bmp $(INSTALLDIR_ABS)
+	$(CP) icon.gif $(INSTALLDIR_ABS)
 	$(CP) -r default_arm7 $(INSTALLDIR_ABS)/default_arm7
 	$(MAKE) -C crts install INSTALLDIR=$(INSTALLDIR_ABS)/crts
 	$(MAKE) -C arm7 install INSTALLDIR=$(INSTALLDIR_ABS)/arm7
