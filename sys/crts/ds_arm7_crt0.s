@@ -4,7 +4,7 @@
     .section ".crt0","ax"
     .global  _start
 
-    .align 4
+    .balign 16
     .arm
 
 // -----------------------------------------------------------------------------
@@ -221,6 +221,6 @@ CIDLoop:
     bne     CIDLoop
     bx      lr
 
-    .align
+    .balign 4
     .pool
     .end

@@ -8,7 +8,7 @@
     .syntax unified
     .section ".crt0","ax"
     .global _start
-    .align    4
+    .balign 16
     .arm
 
 @ Driver patch file standard header -- 16 bytes
@@ -24,12 +24,11 @@
 
 @ Text identifier - can be anything up to 47 chars + terminating null -- 48 bytes
 
-    .align  4
     .asciz  "Default (No interface)"
+    .balign 64
 
 @ Offsets to important sections within the data -- 32 bytes
 
-    .align  6
     .word   __text_start    @ data start
     .word   __data_end      @ data end
     .word   __glue_start    @ Interworking glue start -- Needs address fixing
@@ -56,6 +55,6 @@
 
 _start:
 
-    .align
+    .balign 4
     .pool
     .end
