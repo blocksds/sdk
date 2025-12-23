@@ -1849,16 +1849,24 @@ missing (for example, the background may appear black, or objects may appear to
 be missing some horizontal lines).
 
 You don't need to read the `GFX_RDLINES_COUNT` register constantly to know if
-there has been an underflow, you can use `GFX_CONTROL` instead:
+there has been an underflow, you can use `GFX_CONTROL` instead. You can also use
+it to see if there has been a polygon RAM overflow:
 
 ```c
-// Check if there's an underflow
+// Check if there's an underflow in the rendered lines buffer
 if (GFX_CONTROL & GL_COLOR_UNDERFLOW)
 {
-    // Clear the underflow flag
-    GFX_CONTROL |= GL_COLOR_UNDERFLOW;
-
     // Print a warning in a debug log, for example.
+}
+
+// Check if there has been an overflow in the polygon RAM
+if (GFX_CONTROL & GL_POLY_OVERFLOW)
+{
+    // Print a warning in a debug log, for example.
+}
+
+// Clear the error flags by writing 1 to them
+GFX_CONTROL |= GL_COLOR_UNDERFLOW | GL_POLY_OVERFLOW;
 }
 ```
 
