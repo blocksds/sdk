@@ -30,6 +30,12 @@ weight: 6
     in DS mode (not in DSi mode yet). This only works for APs that send probe
     responses that contain a SSID (some APs don't, and they aren't supported).
 
+- Maxmod:
+
+  - Fix mode C mixer. Version 1.14.0 did a partial fix, but it didn't update
+    the volume divider bits of the audio channel control register correctly.
+    This bug could be seen in the `audio_modes` example.
+
 - grit:
 
   - When exporting tiled backgrounds grit didn't check if the size of the tile
@@ -61,6 +67,9 @@ weight: 6
     - Add example of using the master brightness registers (not the LCD
       brightness).
     - Add example of drawing a single colored 3D quad.
+    - Add example that compares modulation and decal 3D polygon modes.
+    - Add example of using fog to fade 3D objects over 2D layers.
+    - Add example of 3D antialiasing and edge marking.
     - Set transparent color explicitly in grit files that convert tiled
       backgrounds. Index 0 is always transparent, so it's a good idea to tell
       grit which color to use as transparent so that we don't get surprises
@@ -92,6 +101,8 @@ weight: 6
     - Add an example of how to apply lighting to a 3D cube drawn manually. The
       previous examples used pre-converted display lists so the developer
       couldn't see the `glNormal()` commands.
+    - The images used in some examples that combine 2D and 3D graphics have been
+      improved.
 
   - Documentation:
 
@@ -112,6 +123,10 @@ weight: 6
     - The tutorial has been merged into the SDK repository to unify the
       documentation of BlocksDS.a
     - The tutorial is now licensed under the license CC BY-NC-SA 4.0.
+
+  - Tests:
+
+    - Make DLDI-on-ARM7 test work in DSi Slot-1 flashcarts.
 
 ### Version 1.15.7 (2025-11-29)
 
