@@ -1919,6 +1919,9 @@ if (in)
 The code of the example can be found here:
 [`examples/graphics_3d/box_test`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/box_test)
 
+You can also use `BoxTestf_Asynch()` and `BoxTestResult()` if you want to do the
+test asynchronously while doing other calculations.
+
 {{< callout type="warning" >}}
 According to [GBATEK](https://problemkaputt.de/gbatek.htm#ds3dtests), the box
 test will return false if the whole box is inside the view volume of the camera.
@@ -1926,6 +1929,50 @@ The test only checks if the faces of the box are visible. If the box is too big,
 the faces will be culled and it will return false. You need to use boxes small
 enough to not fit inside the camera or add additional manual checks.
 {{< /callout >}}
+
+## 20. Position test
+
+The position test lets you pass a vertex to the GPU and read the result of
+transforming it by the currently active matrices.
+
+Using it is very simple:
+
+```c
+PosTest(vertex.x, vertex.y, vertex.z);
+
+int32_t x = PosTestXresult();
+int32_t y = PosTestYresult();
+int32_t z = PosTestZresult();
+int32_t w = PosTestWresult();
+```
+
+You can also do this asynchronously like this:
+
+```c
+PosTest_Asynch(vertex.x, vertex.y, vertex.z);
+
+// Do something here
+
+while (PosTestBusy());
+
+int32_t w = PosTestWresult();
+```
+
+The most useful way to use the result is to check the value of W to determine
+the distance from the camera to the vertex. You can calculate the W value of
+the center of several translucent objects to know the order in which you need to
+draw them (from objects that are far away to objects that are close to the
+camera). We've [already seen]({{< ref "#113-multiple-translucent-objects" >}})
+an example that does this:
+
+[`examples/graphics_3d/sort_translucent_objects`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/sort_translucent_objects)
+
+You could also use the W value as a debug value while you're setting up a fog
+effect. You could move an object around the 3D scene while printing its W value
+and use it as initial offset for the fog, for example.
+
+You could even use the X and Y coordinates to check if the player is touching
+the touch screen close to a specific object.
 
 {{< callout type="error" >}}
 This chapter is a work in progress...
