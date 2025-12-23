@@ -1867,8 +1867,65 @@ if (GFX_CONTROL & GL_POLY_OVERFLOW)
 
 // Clear the error flags by writing 1 to them
 GFX_CONTROL |= GL_COLOR_UNDERFLOW | GL_POLY_OVERFLOW;
+```
+
+## 19. Box test
+
+One of the first things you will want to do when you start optimizing your 3D
+rendering code is to avoid sending polygons to the GPU if they aren't going to
+appear on the screen. Even if they don't take any time to be rendered, they
+still need space in the GPU RAM, and they need processing time from the CPU and
+GPU.
+
+A very simple test you can use is the box test. The idea is to run a box test to
+see if a certain object or area of your scene can be seen by the camera or not.
+For example, if you have a character that fits in a 1x1x1 box you could do a box
+test with a size of 1x1x1. If the box is visible, you send the character model
+to the GPU. This can save you a lot of CPU time if you can organize your code to
+do a few box tests and only draw what is actually shown on the screen. Of
+course, you will still be sending some polygons that aren't visible, but this is
+a simple way to optimize your code with minimal effort.
+
+There are some requisites mentioned in [GBATEK](https://problemkaputt.de/gbatek.htm#ds3dtests).
+You need to enable rendering of polygons that intersect with far plane and 1-dot
+polygons behind `GFX_CUTOFF_DEPTH`:
+
+```c
+glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE |
+          POLY_RENDER_FAR_POLYS | POLY_RENDER_1DOT_POLYS);
+// Update the polygon formats by using glBegin()
+glBegin(GL_TRIANGLES);
+glEnd();
+```
+
+This code can be used to check a box of size 1x1x1 centered around coordinates
+(0, 0, 0). It goes from (-0.5, -0.5, -0.5) to (0.5, 0.5, 0.5):
+
+```c
+int in = BoxTestf(-0.5, -0.5, -0.5, // Position
+                  1.0, 1.0, 1.0);   // Size
+
+printf("Is box on screen? %s", in ? "Yes" : "No");
+
+if (in)
+{
+    glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE);
+
+    draw_box(-0.5, -0.5, -0.5, // Position
+             1.0, 1.0, 1.0);   // Size
 }
 ```
+
+The code of the example can be found here:
+[`examples/graphics_3d/box_test`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/box_test)
+
+{{< callout type="warning" >}}
+According to [GBATEK](https://problemkaputt.de/gbatek.htm#ds3dtests), the box
+test will return false if the whole box is inside the view volume of the camera.
+The test only checks if the faces of the box are visible. If the box is too big,
+the faces will be culled and it will return false. You need to use boxes small
+enough to not fit inside the camera or add additional manual checks.
+{{< /callout >}}
 
 {{< callout type="error" >}}
 This chapter is a work in progress...
