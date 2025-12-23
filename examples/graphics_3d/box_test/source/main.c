@@ -6,15 +6,15 @@
 
 #include <nds.h>
 
-void draw_box(float bx_, float by_, float bz_, float ex_, float ey_, float ez_)
+void draw_box(float bx_, float by_, float bz_, float sx_, float sy_, float sz_)
 {
     // Begin and end coordinates
     int bx = floattov16(bx_);
-    int ex = floattov16(ex_);
+    int ex = floattov16(bx_ + sx_);
     int by = floattov16(by_);
-    int ey = floattov16(ey_);
+    int ey = floattov16(by_ + sy_);
     int bz = floattov16(bz_);
-    int ez = floattov16(ez_);
+    int ez = floattov16(bz_ + sz_);
 
     glBegin(GL_QUADS);
 
@@ -159,15 +159,30 @@ int main(int argc, char **argv)
         glRotateY(angle_z);
         glRotateX(angle_x);
 
-        int in = BoxTestf(-0.5, -0.5, -0.5,
-                          0.5, 0.5, 0.5);
+        // Requisites mentioned in GBATEK:
+        //
+        //     https://problemkaputt.de/gbatek.htm#ds3dtests
+        //
+        // Render polygons that intersect with far plane and 1-dot polygons
+        // behind GFX_CUTOFF_DEPTH. This is required for the box test.
+        glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE | POLY_RENDER_FAR_POLYS |
+                  POLY_RENDER_1DOT_POLYS);
+        // Update the polygon formats by using glBegin()
+        glBegin(GL_TRIANGLES);
+        glEnd();
+
+        int in = BoxTestf(-0.5, -0.5, -0.5, // Position
+                          1.0, 1.0, 1.0);   // Size
 
         printf("Is box on screen? %s", in ? "Yes" : "No");
 
         glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE);
 
-        draw_box(-0.5, -0.5, -0.5,
-                 0.5, 0.5, 0.5);
+        // We could use the value of "in" to call this function or not. In this
+        // example we don't call it because we want to make sure that the screen
+        // is consistent with the variable.
+        draw_box(-0.5, -0.5, -0.5, // Position
+                 1.0, 1.0, 1.0);   // Size
 
         glPopMatrix(1);
 
