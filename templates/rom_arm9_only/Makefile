@@ -16,7 +16,7 @@ NAME		:= template_arm9
 GAME_TITLE	:= ARM9 only template
 GAME_SUBTITLE	:= Built with BlocksDS
 GAME_AUTHOR	:= github.com/blocksds/sdk
-GAME_ICON	:= icon.bmp
+GAME_ICON	:= icon.gif
 
 # DLDI and internal SD slot of DSi
 # --------------------------------

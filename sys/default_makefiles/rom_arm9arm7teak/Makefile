@@ -13,7 +13,7 @@ NAME		?= template
 GAME_TITLE	?= Template
 GAME_SUBTITLE	?= Built with BlocksDS
 GAME_AUTHOR	?= github.com/blocksds/sdk
-GAME_ICON	?= $(BLOCKSDS)/sys/icon.bmp
+GAME_ICON	?= $(BLOCKSDS)/sys/icon.gif
 
 # DLDI and internal SD slot of DSi
 # --------------------------------
