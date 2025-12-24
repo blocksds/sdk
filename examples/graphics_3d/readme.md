@@ -8,7 +8,6 @@ libnds.
 - `alpha_test`: It shows the effect of the alpha test setting.
 - `basic_cube`: It draws a simple 3D cube and shows the effects of culling.
 - `basic_texture`: Loads a 16 bpp texture from the ARM9 binary.
-- `basic_texture_nitrofs`: Loads a 16 bpp texture from NitroFS.
 - `billboards`: Display 2D objects that always face the camera in a 3D world.
 - `box_test`: Uses the box test to detect if a cube is displayed on the screen.
 - `colored_polygon`: Very simple example of how to draw a colored polygon.
@@ -22,7 +21,6 @@ libnds.
 - `lighting_materials`: It shows the effect of different materials.
 - `ortho_projection`: It uses an orthogonal projection instead of perspective.
 - `paletted_textures`: It loads paletted textures from the ARM9 binary.
-- `paletted_textures_nitrofs`: It loads paletted textures from NitroFS.
 - `picking`: How to detecti if a 3D object is being pressed in the touch screen.
 - `point_light`: How to implement fake spot lights using directional lights.
 - `modulation_vs_decal`: Show difference between modulation and decal poly modes.

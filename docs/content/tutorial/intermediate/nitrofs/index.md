@@ -462,8 +462,7 @@ see how they are configured to convert graphics into GRF files.
 
 - 3D textures:
 
-  - [`examples/graphics_3d/basic_texture_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/basic_texture_nitrofs)
-  - [`examples/graphics_3d/paletted_textures_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/paletted_textures_nitrofs)
+  - [`examples/graphics_3d/grf_textures_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/grf_textures_nitrofs)
 
 - There's also a demo of how to create a simple game using GRF files:
 
