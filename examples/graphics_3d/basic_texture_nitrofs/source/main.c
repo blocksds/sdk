@@ -2,6 +2,11 @@
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2023
 
+// This example compresses the texture using the appropriate grit compression
+// arguments. Huffman compression isn't supported in some emulators. If you
+// don't see some textures correctly, make sure you're using a dump of your BIOS
+// in your emulator.
+
 #include <stdio.h>
 
 #include <filesystem.h>
