@@ -91,7 +91,7 @@ void decompression_stream_tests(void)
 
     // For Huffman, make sure to pass a 512 byte buffer in 'param' to be used as
     // a temporary buffer by the decompression code.
-    uint8_t huffman_temp_buffer[0x200];
+    uint32_t huffman_temp_buffer[512 / sizeof(uint32_t)];
     decompressStreamStruct(city_huffman_bin, &buffer[0], HUFF,
                            &huffman_temp_buffer[0], &stream);
     if (memcmp(city_uncompressed_bin, buffer, sizeof(buffer)) == 0)
