@@ -328,6 +328,7 @@ SECTIONS
         *.twl*(.data)
         *.twl*(.data.*)
         *.twl*(.gnu.linkonce.d*)
+        . = ALIGN(4);
         __arm9i_end__ = ABSOLUTE(.);
     } :twl
 
