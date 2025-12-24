@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 
     // The background must be fully opaque and have a unique polygon ID
     // (different from the polygons that are going to be drawn) so that
-    // antialias works.
+    // alpha blending works.
     glClearColor(10, 10, 10, 31);
     glClearPolyID(63);
 

@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
     // Setup the 3D rear plane. This plane can have any color that you want, and
     // it can be transparent or opaque. The background must be fully opaque and
     // have a unique polygon ID (different from the polygons that are going to
-    // be drawn) so that antialiasing works.
+    // be drawn) so that alpha blending works.
     glClearColor(0, 0, 0, 31);
     glClearPolyID(63);
 
