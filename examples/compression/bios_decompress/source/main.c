@@ -105,7 +105,7 @@ void decompression_stream_tests(void)
 
     memset(buffer, 0, sizeof(buffer));
     decompressStreamStruct(city_lzss_bin, &buffer[0], LZ77Vram,
-                           &huffman_temp_buffer[0], &stream);
+                           NULL, &stream);
     if (memcmp(city_uncompressed_bin, buffer, sizeof(buffer)) == 0)
         printf("LZSS: OK\n");
     else
@@ -113,7 +113,7 @@ void decompression_stream_tests(void)
 
     memset(buffer, 0, sizeof(buffer));
     decompressStreamStruct(city_rle_bin, &buffer[0], RLEVram,
-                           &huffman_temp_buffer[0], &stream);
+                           NULL, &stream);
     if (memcmp(city_uncompressed_bin, buffer, sizeof(buffer)) == 0)
         printf("RLE: OK\n");
     else
