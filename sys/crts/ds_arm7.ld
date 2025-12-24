@@ -97,7 +97,7 @@ SECTIONS
         *.twl*(.noinit)
         *.twl*(.noinit.*)
         *.twl*(.gnu.linkonce.n.*)
-        . = ALIGN(4);    /* REQUIRED. LD is flaky without it. */
+        . = ALIGN(4);
         __twl_noinit_end__ = ABSOLUTE(.);
         __twl_end__ = ABSOLUTE(.);
     } >twl_iwram :NONE
@@ -105,7 +105,7 @@ SECTIONS
     .crt0	:
     {
         KEEP (*(.crt0))
-        . = ALIGN(4);  /* REQUIRED. LD is flaky without it. */
+        . = ALIGN(4);
     } >ewram :crt0
 
     .text :
@@ -119,7 +119,7 @@ SECTIONS
         /* .gnu.warning sections are handled specially by elf32.em.  */
         *(.gnu.warning)
         *(.glue_7t) *(.glue_7) *(.v4_bx)
-        . = ALIGN(4);  /* REQUIRED. LD is flaky without it. */
+        . = ALIGN(4);
     } >iwram AT>ewram :arm7
 
     .fini           :
@@ -135,7 +135,7 @@ SECTIONS
         *(.rodata.*)
         *(.gnu.linkonce.r*)
         SORT(CONSTRUCTORS)
-        . = ALIGN(4);   /* REQUIRED. LD is flaky without it. */
+        . = ALIGN(4);
     } >iwram AT>ewram
 
     .ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >iwram AT>ewram
@@ -260,7 +260,7 @@ SECTIONS
         *(.gnu.linkonce.b*)
         *(.bss*)
         *(COMMON)
-        . = ALIGN(4);    /* REQUIRED. LD is flaky without it. */
+        . = ALIGN(4);
         __bss_end__ = ABSOLUTE(.);
     } >iwram
 
@@ -268,7 +268,7 @@ SECTIONS
     {
         __noinit_start = ABSOLUTE(.);
         *(.noinit .noinit.* .gnu.linkonce.n.*)
-        . = ALIGN(4);    /* REQUIRED. LD is flaky without it. */
+        . = ALIGN(4);
         __noinit_end = ABSOLUTE(.);
     } >iwram
 
@@ -283,7 +283,7 @@ SECTIONS
     } >iwram
 
     __tls_size = __tls_end - __tls_start;
-    
+
     HIDDEN(__arm7_size__ = __arm7_end__ - __arm7_start__);
     HIDDEN(__arm7i_size__ = __arm7i_end__ - __arm7i_start__);
     HIDDEN(__bss_size__ = __bss_end__ - __bss_start__);

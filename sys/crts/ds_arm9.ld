@@ -204,7 +204,7 @@ SECTIONS
     } >ewram :main = 0xff
     .got            : { *(.got.plt) *(.got) *(.rel.got) } >ewram :main = 0
 
-    .ewram ALIGN(4) : 
+    .ewram ALIGN(4) :
     {
         __ewram_start = ABSOLUTE(.);
         *(.ewram)
@@ -342,7 +342,7 @@ SECTIONS
         *.twl*(.gnu.linkonce.b*)
         *.twl*(.bss*)
         *.twl*(COMMON)
-        . = ALIGN(4);    /* REQUIRED. LD is flaky without it. */
+        . = ALIGN(4);
         __twl_bss_end__ = ABSOLUTE(.);
     } :NONE
 
@@ -354,7 +354,7 @@ SECTIONS
         *.twl*(.noinit)
         *.twl*(.noinit.*)
         *.twl*(.gnu.linkonce.n.*)
-        . = ALIGN(4);    /* REQUIRED. LD is flaky without it. */
+        . = ALIGN(4);
         __twl_noinit_end__ = ABSOLUTE(.);
         __twl_end__ = ABSOLUTE(.);
     } :NONE
