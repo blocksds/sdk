@@ -307,6 +307,7 @@ SECTIONS
     {
         __tls_start = ABSOLUTE(.);
         . = . + __tdata_size + __tbss_size;
+        . = ALIGN(4);
          __tls_end = ABSOLUTE(.);
         __end__ = ABSOLUTE(.);
     } >ewram :NONE
