@@ -23,6 +23,7 @@ weight: 6
     name is `glMaterialShininess()`. The old name will be kept around forever
     because too many projects use it.
   - Add warning to material `GL_SHININESS` because it isn't used for anything.
+  - Align the Huffman temporary buffer to a word just in case it's needed.
 
 - DSWiFi:
 
@@ -68,6 +69,8 @@ weight: 6
 
   - Examples:
 
+    - Delete both examples about loading textures in GRF format and create a
+      better example that doesn't hardcode any values (`grf_textures_nitrofs`).
     - Add example of using windows and DMA to create a circular window.
     - Add example of the material properties of 3D objects. It shows several
       combinations of properties to understand the effect they have on the
@@ -112,6 +115,12 @@ weight: 6
       couldn't see the `glNormal()` commands.
     - The images used in some examples that combine 2D and 3D graphics have been
       improved.
+    - In the BIOS decompression example, align the Huffman temporary buffer to a
+      word just in case it's needed. Clear the destination buffer before each
+      decompression to make sure that a decompression that doesn't write
+      anything doesn't pass as a correct decompression. Use VRAM-safe
+      compression for LZSS so that it works with WRAM and VRAM decompression
+      routines.
 
   - Documentation:
 
