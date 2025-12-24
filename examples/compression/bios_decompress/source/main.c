@@ -22,18 +22,21 @@ void direct_decompression_tests(void)
     printf("======\n");
     printf("\n");
 
+    memset(buffer, 0, sizeof(buffer));
     decompress(city_huffman_bin, &buffer[0], HUFF);
     if (memcmp(city_uncompressed_bin, buffer, sizeof(buffer)) == 0)
         printf("HUFFMAN: OK\n");
     else
         printf("HUFFMAN: BAD\n");
 
+    memset(buffer, 0, sizeof(buffer));
     decompress(city_lzss_bin, &buffer[0], LZ77);
     if (memcmp(city_uncompressed_bin, buffer, sizeof(buffer)) == 0)
         printf("LZSS: OK\n");
     else
         printf("LZSS: BAD\n");
 
+    memset(buffer, 0, sizeof(buffer));
     decompress(city_rle_bin, &buffer[0], RLE);
     if (memcmp(city_uncompressed_bin, buffer, sizeof(buffer)) == 0)
         printf("RLE: OK\n");
@@ -91,6 +94,7 @@ void decompression_stream_tests(void)
 
     // For Huffman, make sure to pass a 512 byte buffer in 'param' to be used as
     // a temporary buffer by the decompression code.
+    memset(buffer, 0, sizeof(buffer));
     uint32_t huffman_temp_buffer[512 / sizeof(uint32_t)];
     decompressStreamStruct(city_huffman_bin, &buffer[0], HUFF,
                            &huffman_temp_buffer[0], &stream);
@@ -99,6 +103,7 @@ void decompression_stream_tests(void)
     else
         printf("HUFFMAN: BAD\n");
 
+    memset(buffer, 0, sizeof(buffer));
     decompressStreamStruct(city_lzss_bin, &buffer[0], LZ77Vram,
                            &huffman_temp_buffer[0], &stream);
     if (memcmp(city_uncompressed_bin, buffer, sizeof(buffer)) == 0)
@@ -106,6 +111,7 @@ void decompression_stream_tests(void)
     else
         printf("LZSS: BAD\n");
 
+    memset(buffer, 0, sizeof(buffer));
     decompressStreamStruct(city_rle_bin, &buffer[0], RLEVram,
                            &huffman_temp_buffer[0], &stream);
     if (memcmp(city_uncompressed_bin, buffer, sizeof(buffer)) == 0)
