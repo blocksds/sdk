@@ -1,0 +1,2 @@
+# 8 bit texture bitmap, set magenta as transparent color, LZ77 compression
+-gx -gb -gB8 -gTFF00FF -gzl
