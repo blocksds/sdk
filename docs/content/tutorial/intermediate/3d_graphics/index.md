@@ -951,6 +951,28 @@ glGetInt(GL_GET_TEXTURE_WIDTH, &width);
 glGetInt(GL_GET_TEXTURE_HEIGHT, &height);
 ```
 
+### 10.6 Load textures from the filesystem
+
+The most straightforward way to do this is to convert textures and store them as
+binary data in the filesystem. You can load them as described in previous
+chapters. However, this system forces you to hardcode the sizes and formats of
+all textures in your code. This can make the job of the artists harder because
+they would need to modify the code if they want to change the format of a
+texture they are working on. Also, the number of binary blobs required for
+different formats is different. `GL_RGBA` textures only require one file,
+`GL_COMPRESSED` textures require three (or two, depending on how your exporter
+works), and the other formats require two.
+
+The tools grit and ptexconv support exporting to GRF format. This is a format
+that bundles all binary files in a single file that also has some metadata to
+know the format and size of the texture. You can have code that loads GRF files
+using the metadata from the file so that you don't need to hardcode any value in
+your code, giving you a lot of flexibility.
+
+If you want to see an example of how to do this, check the following example:
+
+[`examples/graphics_3d/grf_textures_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/grf_textures_nitrofs)
+
 ## 11. Alpha blending (translucency)
 
 There are two ways to draw polygons that aren't fully opaque:
@@ -1973,7 +1995,3 @@ and use it as initial offset for the fog, for example.
 
 You could even use the X and Y coordinates to check if the player is touching
 the touch screen close to a specific object.
-
-{{< callout type="error" >}}
-This chapter is a work in progress...
-{{< /callout >}}
