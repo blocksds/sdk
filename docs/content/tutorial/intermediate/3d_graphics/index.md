@@ -595,7 +595,7 @@ glResetTextures();
 As a final note, you can temporarily disable textures by doing this:
 
 ```c
-glBindTexture(0, NULL);
+glBindTexture(0, 0);
 ```
 
 After doing that, all polygons are drawn as if there was a white texture active.
