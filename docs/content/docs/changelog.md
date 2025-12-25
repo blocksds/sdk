@@ -10,7 +10,7 @@ weight: 6
   - `glDeinit()` has been implemented. This function frees all memory used by
     videoGL and stops the 3D hardware until `glInit()` is called again.
   - `fsync()` has been implemented. `fflush()` doesn't currently guarantee a
-    flush to the disk, so `fsync(fileno(fp))` can be used instead.
+    flush to the disk, so `fsync(fileno(fp))` can be used instead. @asiekierka
   - Function `fatGetDefaultDrive()` can now return `"nand:/"` if the application
     runs from NAND.
   - New definitions have been added for the window registers. The old ones
@@ -25,7 +25,7 @@ weight: 6
   - Add warning to material `GL_SHININESS` because it isn't used for anything.
   - Align the Huffman temporary buffer to a word just in case it's needed.
   - Stop expecting a size field in the `GRF` chunk of GRF files.
-  - Support `PIDX` chunks in GRF files.
+  - Support `PIDX` chunks in GRF files. This is used for Tex4x4 texture format.
 
 - DSWiFi:
 
@@ -67,6 +67,7 @@ weight: 6
   - A new icon has been added to the SDK to be used as default icon for all
     ROMs. The old icon file is still available for projects that depend on it,
     but it has been updated to use the new icon. Thanks to @DVdo.
+  - `dprintf()` and `vdprintf()` have been added to picolibc.
   - Arguments `-std=gnu17` and `-std=gnu++17` have been removed from all default
     and template makefiles. They prevented users from changing this themselves.
   - `dldipatch` now returns the version string when it runs with argument `-V`
@@ -144,7 +145,7 @@ weight: 6
     - The tutorial has new chapters about 2D effects (blending, mosaic, etc),
       memory management, and 3D.
     - The tutorial has been merged into the SDK repository to unify the
-      documentation of BlocksDS.a
+      documentation of BlocksDS.
     - The tutorial is now licensed under the license CC BY-NC-SA 4.0.
 
   - Tests:
