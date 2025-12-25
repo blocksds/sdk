@@ -24,6 +24,8 @@ weight: 6
     because too many projects use it.
   - Add warning to material `GL_SHININESS` because it isn't used for anything.
   - Align the Huffman temporary buffer to a word just in case it's needed.
+  - Stop expecting a size field in the `GRF` chunk of GRF files.
+  - Support `PIDX` chunks in GRF files.
 
 - DSWiFi:
 
@@ -39,6 +41,9 @@ weight: 6
 
 - grit:
 
+  - Remove size field from `GRF` chunks in GRF files. This was added by BlocksDS
+    and it makes it harder to be compatible with other GRF files. Removing it
+    doesn't affect anything because the RIFF chunk already has the size.
   - When exporting tiled backgrounds grit didn't check if the size of the tile
     set was too big. There was a check but it was incorrect. Now, grit will fail
     if it's trying to export too many tiles for the specified format. For

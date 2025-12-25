@@ -22,6 +22,13 @@ including additions and enhancements to the SDK which are not listed here.
   games, but it's important to check all images that fail to be converted
   because they weren't being converted correctly before.
 
+* The "size" field of `GRF` chunks in GRF files has been removed. This field was
+  added in one of the initial versions of BlocksDS, and it makes it harder to
+  support old and new files simultaneously. Programs using `grit`, `ptexconv`
+  and the libnds helpers to load GRF files will need to rebuild all their
+  graphics. Programs with custom parsers will need to modify their parsers to
+  remove that field.
+
 ### Upgrading to BlocksDS 1.15.2
 
 * The DSWiFi structs `Wifi_TxHeader` and `Wifi_RxHeader` are now private. They
