@@ -34,11 +34,12 @@ int load_texture_grf(const char *path, int *width, int *height)
 
     GRFHeader header = { 0 };
     void *gfxDst = NULL;
+    void *pidxDst = NULL;
     void *palDst = NULL;
     size_t palSize = 0;
 
     GRFError err = grfLoadPath(path, &header, &gfxDst, NULL,
-                               NULL, NULL, &palDst, &palSize);
+                               &pidxDst, NULL, &palDst, &palSize);
     if (err != GRF_NO_ERROR)
     {
         printf("Couldn't load GRF file: %d", err);
@@ -67,9 +68,36 @@ int load_texture_grf(const char *path, int *width, int *height)
     }
     else if (header.gfxAttr == GRF_TEXFMT_4x4)
     {
-        // TODO
-        printf("Tex4x4 not supported in this example\n");
-        wait_forever();
+        if (palDst == NULL)
+        {
+            printf("Tex4x4 texture without palette\n");
+            wait_forever();
+        }
+
+        if (pidxDst == NULL)
+        {
+            printf("Tex4x4 texture without palette indices\n");
+            wait_forever();
+        }
+
+        // Concatenate texels and palette indices data
+
+        size_t gfx_size = (header.gfxWidth * header.gfxHeight * 2) / 8;
+        size_t pidx_size = gfx_size / 2;
+
+        gfxDst = realloc(gfxDst, gfx_size + pidx_size);
+        if (gfxDst == NULL)
+        {
+            printf("Tex4x4 texture can't be allocated\n");
+            wait_forever();
+        }
+
+        memcpy(((u8*)gfxDst) + gfx_size, pidxDst, pidx_size);
+
+        free(pidxDst);
+
+        texture_format = GL_COMPRESSED;
+        printf("    GL_COMPRESSED\n");
     }
     else
     {
@@ -194,13 +222,14 @@ int main(int argc, char **argv)
         int id;
     } texture_info_t;
 
-#define NUM_TEXTURES 3
+#define NUM_TEXTURES 4
 
     texture_info_t tex[NUM_TEXTURES] = { 0 };
 
     tex[0].id = load_texture_grf("tex/neon_png.grf", &tex[0].width, &tex[0].height);
     tex[1].id = load_texture_grf("tex/statue_png.grf", &tex[1].width, &tex[1].height);
     tex[2].id = load_texture_grf("tex/teapot_png.grf", &tex[2].width, &tex[2].height);
+    tex[3].id = load_texture_grf("tex/compressed_png.grf", &tex[3].width, &tex[3].height);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -326,6 +355,7 @@ int main(int argc, char **argv)
     glDeleteTextures(1, &tex[0].id);
     glDeleteTextures(1, &tex[1].id);
     glDeleteTextures(1, &tex[2].id);
+    glDeleteTextures(1, &tex[3].id);
 
     return 0;
 }
