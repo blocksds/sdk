@@ -44,3 +44,8 @@ pushd ../libs/maxmod
 make docs
 popd
 mv ../libs/maxmod/docs/html public/maxmod
+
+pushd ../tools/grit
+make docs
+popd
+mv ../tools/grit/docs/html public/grit

@@ -93,3 +93,20 @@ Library to use the Teak DSP included in the DSi and 3DS consoles.
     link="https://github.com/blocksds/sdk/tree/master/examples/dsp"
   >}}
 {{< /cards >}}
+
+### Grit
+
+Graphics converter for GBA and NDS.
+
+{{< cards cols="2" >}}
+  {{< card
+    icon="book-open"
+    title="Documentation"
+    link="../../../grit/index.html"
+  >}}
+  {{< card
+    icon="code"
+    title="Repository"
+    link="https://github.com/blocksds/grit"
+  >}}
+{{< /cards >}}
