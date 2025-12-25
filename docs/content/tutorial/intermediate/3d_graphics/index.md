@@ -1139,6 +1139,9 @@ Remember to tell the hardware that we have sorted translucent polygons manually:
 glFlush(GL_TRANS_MANUALSORT);
 ```
 
+This won't work with complex objects where there are different disconnected
+parts, but it's good enough for simple models.
+
 ### 11.4 Alpha test
 
 The alpha test is an interesting feature that lets you setup a threshold of the
