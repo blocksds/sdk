@@ -1318,7 +1318,9 @@ game.
 [`examples/graphics_3d/display_list_teapot`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/display_list_teapot).
 
 You can also store the bin files in the NitroFS filesystem and load them from
-there.
+there:
+
+[`examples/graphics_3d/display_list_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/display_list_nitrofs).
 
 Also, remember the wireframe mode that we mentioned in the chapter about
 translucency? This is a perfect time to show it in action! The following images
