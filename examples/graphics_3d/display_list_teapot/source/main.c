@@ -71,8 +71,8 @@ int main(int argc, char *argv[])
         // Print some controls
         printf("PAD:     Rotate\n");
         printf("\n");
-        printf("A:       Enable eireframe\n");
-        printf("B:       Disable eireframe\n");
+        printf("A:       Enable wireframe\n");
+        printf("B:       Disable wireframe\n");
         printf("\n");
         printf("L:       Cull front\n");
         printf("R:       Cull back\n");
