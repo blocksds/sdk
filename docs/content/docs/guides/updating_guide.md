@@ -10,7 +10,7 @@ to implement. These are documented here.
 Please refer to the [changelog](../../changelog) for a full list of changes,
 including additions and enhancements to the SDK which are not listed here.
 
-### Upgrading to BlocksDS DEV
+### Upgrading to BlocksDS 1.16.0
 
 * `grit` used to silently fail if it was exporting a tiled map with too many
   tiles. The indices written to the file would be incorrect for the tiles that
@@ -21,6 +21,14 @@ including additions and enhancements to the SDK which are not listed here.
   warning) and fails the conversion. This may break the build process of some
   games, but it's important to check all images that fail to be converted
   because they weren't being converted correctly before.
+
+  Some people abused `grit` in the past by passing images that had a big tileset
+  on purpose. They would convert them as regular non-affine tiled backgrounds
+  and disable tile flip bits so that the tile index would overflow into those
+  two bits. The check wasn't active, so this would work. If you want to achieve
+  the same effect, use options `-mB16:p4i12 -mRtp` to use a custom format
+  without tile flip bits and to disable tileset optimizations based on tile
+  flipping.
 
 * The "size" field of `GRF` chunks in GRF files has been removed. This field was
   added in one of the initial versions of BlocksDS, and it makes it harder to
