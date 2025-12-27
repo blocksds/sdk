@@ -7,6 +7,7 @@ libnds.
 - `bg_bmp_8bit`: It displays a paletted 8 bpp bitmap.
 - `bg_bmp_8bit_large`: It displays a large paletted 8 bpp bitmap in video mode 6.
 - `bg_ext_palette`: It displays 8 bpp tiled backgrounds using extended palettes.
+- `bg_scroll_bigmap`: It scrolls a 8 bpp tiled background bigger than the hardware limits.
 - `bg_regular_4bit`: It displays a regular 4 bpp tiled background.
 - `bg_regular_8bit`: It displays a regular 8 bpp tiled background.
 - `bg_regular_8bit_2screens`: It displays a regular 8 bpp tiled background in both screens.
