@@ -7,13 +7,13 @@ libnds.
 - `bg_bmp_8bit`: It displays a paletted 8 bpp bitmap.
 - `bg_bmp_8bit_large`: It displays a large paletted 8 bpp bitmap in video mode 6.
 - `bg_ext_palette`: It displays 8 bpp tiled backgrounds using extended palettes.
-- `bg_scroll_bigmap`: It scrolls a 8 bpp tiled background bigger than the hardware limits.
+- `bg_ext_rotation`: It displays an extended affine background.
 - `bg_regular_4bit`: It displays a regular 4 bpp tiled background.
 - `bg_regular_8bit`: It displays a regular 8 bpp tiled background.
 - `bg_regular_8bit_2screens`: It displays a regular 8 bpp tiled background in both screens.
 - `bg_regular_nitrofs`: It loads a regular 8 bpp tiled background from NitroFS.
 - `bg_rotation`: It displays a background with rotation and scaling (affine).
-- `bg_ext_rotation`: It displays an extended affine background.
+- `bg_scroll_bigmap`: It scrolls a 8 bpp tiled background bigger than the hardware limits.
 - `sprites_regular`: It displays regular sprites on both screens.
 - `sprites_animated`: It animate sprites on both screens in two different ways.
 - `sprites_affine`: It displays sprites with rotation and scaling.
