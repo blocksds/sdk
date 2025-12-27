@@ -75,14 +75,23 @@ static inline u32 vram_map_entry_index(u32 tx, u32 ty)
 
 static void map_load_row(int x, int y)
 {
+    if (y >= (map_size_height / 8))
+        return;
+
     const u16 *src = (const u16 *)map_data;
     u16 *dst = (u16 *)bgGetMapPtr(map_bg);
 
     u32 src_index = (y * (map_size_width / 8)) + x;
 
-    for (int i = 0; i < (SCREEN_WIDTH / 8) + 1; i++)
+    int x_start = x;
+    int x_end = x_start + (SCREEN_WIDTH / 8) + 1;
+
+    if (x_end > (map_size_width / 8))
+        x_end = map_size_width / 8;
+
+    for (int i = x_start; i < x_end; i++)
     {
-        u32 dst_index = vram_map_entry_index((x + i) & (64 - 1), y & (32 - 1));
+        u32 dst_index = vram_map_entry_index(i & (64 - 1), y & (32 - 1));
         dst[dst_index] = src[src_index];
         src_index++;
     }
@@ -90,14 +99,23 @@ static void map_load_row(int x, int y)
 
 static void map_load_column(int x, int y)
 {
+    if (x >= (map_size_width / 8))
+        return;
+
     const u16 *src = (const u16 *)map_data;
     u16 *dst = (u16 *)bgGetMapPtr(map_bg);
 
     u32 src_index = (y * (map_size_width / 8)) + x;
 
-    for (int j = 0; j < (SCREEN_HEIGHT / 8) + 1; j++)
+    int y_start = y;
+    int y_end = y_start + (SCREEN_HEIGHT / 8) + 1;
+
+    if (y_end > (map_size_height / 8))
+        y_end = map_size_height / 8;
+
+    for (int j = y_start; j < y_end; j++)
     {
-        u32 dst_index = vram_map_entry_index(x & (64 - 1), (y + j) & (32 - 1));
+        u32 dst_index = vram_map_entry_index(x & (64 - 1), j & (32 - 1));
         dst[dst_index] = src[src_index];
         src_index += map_size_width / 8;
     }
