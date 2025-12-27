@@ -3,6 +3,35 @@ title: 'Changelog'
 weight: 6
 ---
 
+### Version DEV (2026-XX-XX)
+
+- libnds:
+
+  - Allow developers to send cothread signals from IRQs safely with
+    `cothread_send_signal()`.
+
+- grit:
+
+  - Create documentation page based on the contents of the original
+    [documentation](https://www.coranac.com/man/grit/html/grit.htm) (only the
+    first page has been adapted). All new options added to the BlocksDS port of
+    grit have been documented, and the documentation of the options has been
+    slightly improved for clarity.
+
+- SDK:
+
+  - The documentation now links to the new page with the documentation of grit.
+
+  - Examples:
+
+    - New example of loading 3D display lists from NitroFS.
+    - New example of scrolling a 2D background with a map that is bigger than
+      the hardware limits.
+
+  - Tutorial:
+
+    - Mention how to load 3D display lists from NitroFS.
+
 ### Version 1.16.0 (2025-12-25)
 
 - libnds:
@@ -49,7 +78,9 @@ weight: 6
     if it's trying to export too many tiles for the specified format. For
     example, affine backgrounds can only have up to 256 tiles. Previously, grit
     would export a broken tile map silently, which was hard to detect if there
-    were too many similar tiles.
+    were too many similar tiles. If you were taking advantage of this broken
+    check to overflow the tile index into the tile flip bits of regular maps,
+    use options `-mB16:p4i12 -mRtp` to achieve the same effect.
 
 - ndstool:
 
