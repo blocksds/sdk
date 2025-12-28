@@ -1,0 +1,12 @@
+# 8 bpp, tiles, export map, not compressed, set magenta as transparent
+-gB8 -gt -m -gTFFOOFF
+
+# Custom format: Use 16 bit map entries, all 16 bits are the tile index
+-mB16:i16
+
+# Only attempt tile reduction, not flip reduction
+-mRt
+
+# In this example you can also try to disable tile reduction to push the engine
+# to the limit. In that case, the tile usage will always be the maximum.
+#-mR!
