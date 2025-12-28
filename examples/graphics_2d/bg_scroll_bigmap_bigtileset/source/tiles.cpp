@@ -2,7 +2,7 @@
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2025
 
-#include <map>
+#include <unordered_map>
 
 #include <assert.h>
 
@@ -25,7 +25,7 @@ typedef struct {
     u16 vram_tile_index;
 } tile_entry_t;
 
-std::map<int, tile_entry_t> tile_entry;
+std::unordered_map<int, tile_entry_t> tile_entry;
 
 static tile_entry_t *tileset_find_tile_index(int index)
 {
@@ -38,7 +38,7 @@ extern "C"
 void tileset_reset(void)
 {
     // Erase all elements in the map
-    tile_entry.erase(tile_entry.begin(), tile_entry.end());
+    tile_entry.clear();
 
     vram_tiles_reset();
 
