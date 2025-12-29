@@ -8,19 +8,30 @@ weight: 7
 As we have seen in the [backgrounds chapter](../backgrounds), the DS only
 supports tiled 2D backgrounds with some specific map and tileset sizes:
 
-Type                | Max. tileset size | Max. map size
---------------------|-------------------|--------------
-Regular             | 1024              | 512x512
-Affine              | 256               | 1024x1024
-Extended affine     | 1024              | 1024x1024
-256-color bitmap    | N/A               | 512x512
-Direct-color bitmap | N/A               | 512x512
-Large bitmap        | N/A               | 1024x512 or 512x1024
+Type            | Max. tileset size | Max. map size
+----------------|-------------------|--------------
+Regular         | 1024              | 512x512
+Affine          | 256               | 1024x1024
+Extended affine | 1024              | 1024x1024
+8-bit bitmap    | N/A               | 512x512
+16-bit bitmap   | N/A               | 512x512
+Large bitmap    | N/A               | 1024x512 or 512x1024
 
 If your backgrounds fit inside the supported sizes, you don't have to do
 anything special. If your background is bigger than the hardware limits, you
 need special code to load data to VRAM as needed. This will take some CPU time,
 but it's the only way to get around the limitations of the hardware.
+
+{{< callout type="warning" >}}
+VRAM can only be written in 16-bit or 32-bit chunks. Be careful with affine
+tiled backgrounds or 8-bit bitmaps.
+{{< /callout >}}
+
+The examples below work by editing map entries one by one. Entries in regular,
+extended affine, and 16-bit bitmaps are 16 bit wide, so they work as expected.
+Entries in affine and 8-bit bitmaps are 8 bit wide, so you need to take extra
+care when editing them (read 16 bits, edit the value, then write the result). No
+examples of this are shown in this tutorial.
 
 ## 2. Tiled backgrounds
 
@@ -139,6 +150,13 @@ debugging the scroll engine with emulators that show the contents of VRAM.
 
 ## 3. Bitmap backgrounds
 
-{{< callout type="error" >}}
-This chapter is a work in progress...
-{{< /callout >}}
+It's also possible to apply this technique to bitmap backgrounds, not just tiled
+backgrounds. In this case, all you need to do is to load rows and columns of
+pixels as they appear on the screen.
+
+This example shows you how to scroll a 16-bit bitmap:
+[`examples/graphics_2d/bg_scroll_big_bmp`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_scroll_big_bmp)
+
+You could try to optimize the code by loading several rows/columns at the same
+time, for example, but this example only tries to show how to use the technique
+to scroll backgrounds, even if it's not the most optimal implementation.
