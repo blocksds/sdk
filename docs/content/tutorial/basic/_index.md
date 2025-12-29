@@ -13,4 +13,5 @@ to understand in most cases.
   {{< card icon="photograph" link="backgrounds" title="Backgrounds" >}}
   {{< card icon="star" link="sprites" title="Sprites" >}}
   {{< card icon="music-note" link="audio" title="Music and sound effects" >}}
+  {{< card icon="map" link="backgrounds_scroll" title="Scrolling big backgrounds" >}}
 {{< /cards >}}
