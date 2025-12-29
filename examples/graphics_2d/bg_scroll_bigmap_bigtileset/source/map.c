@@ -19,6 +19,8 @@ static int map_size_height;
 
 // Pointer to map data
 static const void *map_data;
+// Pointer to map buffer in VRAM
+static void *map_vram_buffer;
 
 // Map ID returned by libnds
 static int map_bg;
@@ -45,6 +47,7 @@ void map_load(int bg_layer, int map_base, int tile_base,
     map_size_width = map_width;
     map_size_height = map_height;
     map_data = map;
+    map_vram_buffer = bgGetMapPtr(map_bg);
 }
 
 int map_get_scroll_x(void)
@@ -84,7 +87,7 @@ static void map_load_row(int x, int y)
         return;
 
     const u16 *src = (const u16 *)map_data;
-    u16 *dst = (u16 *)bgGetMapPtr(map_bg);
+    u16 *dst = (u16 *)map_vram_buffer;
 
     u32 src_index = (y * (map_size_width / 8)) + x;
 
@@ -115,7 +118,7 @@ static void map_clear_row(int x, int y)
 
     if (debug_mode_is_enabled())
     {
-        u16 *dst = (u16 *)bgGetMapPtr(map_bg);
+        u16 *dst = (u16 *)map_vram_buffer;
 
         for (int i = x_start; i < x_end; i++)
         {
@@ -141,7 +144,7 @@ static void map_load_column(int x, int y)
         return;
 
     const u16 *src = (const u16 *)map_data;
-    u16 *dst = (u16 *)bgGetMapPtr(map_bg);
+    u16 *dst = (u16 *)map_vram_buffer;
 
     u32 src_index = (y * (map_size_width / 8)) + x;
 
@@ -172,7 +175,7 @@ static void map_clear_column(int x, int y)
 
     if (debug_mode_is_enabled())
     {
-        u16 *dst = (u16 *)bgGetMapPtr(map_bg);
+        u16 *dst = (u16 *)map_vram_buffer;
 
         for (int j = y_start; j < y_end; j++)
         {
@@ -217,7 +220,7 @@ void map_set_position(int x, int y)
 
     if (debug_mode_is_enabled())
     {
-        memset(bgGetMapPtr(map_bg), 0, 64 * 32 * sizeof(u16));
+        memset(map_vram_buffer, 0, 64 * 32 * sizeof(u16));
     }
 
     for (int j = 0; j < (SCREEN_HEIGHT / 8) + 1; j++)

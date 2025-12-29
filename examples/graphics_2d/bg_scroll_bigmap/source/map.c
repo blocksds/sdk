@@ -16,6 +16,8 @@ static int map_size_height;
 
 // Pointer to map data
 static const void *map_data;
+// Pointer to map buffer in VRAM
+static void *map_vram_buffer;
 
 // Map ID returned by libnds
 static int map_bg;
@@ -40,6 +42,7 @@ void map_load(int bg_layer, int map_base, int tile_base,
     map_size_width = map_width;
     map_size_height = map_height;
     map_data = map;
+    map_vram_buffer = bgGetMapPtr(map_bg);
 }
 
 int map_get_scroll_x(void)
@@ -79,7 +82,7 @@ static void map_load_row(int x, int y)
         return;
 
     const u16 *src = (const u16 *)map_data;
-    u16 *dst = (u16 *)bgGetMapPtr(map_bg);
+    u16 *dst = (u16 *)map_vram_buffer;
 
     u32 src_index = (y * (map_size_width / 8)) + x;
 
@@ -103,7 +106,7 @@ static void map_load_column(int x, int y)
         return;
 
     const u16 *src = (const u16 *)map_data;
-    u16 *dst = (u16 *)bgGetMapPtr(map_bg);
+    u16 *dst = (u16 *)map_vram_buffer;
 
     u32 src_index = (y * (map_size_width / 8)) + x;
 

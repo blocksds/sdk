@@ -16,6 +16,8 @@ static int map_size_height;
 
 // Pointer to map data
 static const void *map_data;
+// Pointer to map buffer in VRAM
+static void *map_vram_buffer;
 
 // Map ID returned by libnds
 static int map_bg;
@@ -34,6 +36,7 @@ void map_load(int bg_layer, int map_base,
     map_size_width = map_width;
     map_size_height = map_height;
     map_data = map;
+    map_vram_buffer = bgGetMapPtr(map_bg);
 
     // Enable wrapping. Bitmap backgrounds don't wrap around by default
     bgWrapOn(bg_layer);
@@ -73,7 +76,7 @@ static void map_load_row(int x, int y)
     // differently because we can't write to VRAM in 8-bit units.
 
     const u16 *src = (const u16 *)map_data;
-    u16 *dst = (u16 *)bgGetMapPtr(map_bg);
+    u16 *dst = (u16 *)map_vram_buffer;
 
     u32 src_index = (y * map_size_width) + x;
 
@@ -98,7 +101,7 @@ static void map_load_column(int x, int y)
         return;
 
     const u16 *src = (const u16 *)map_data;
-    u16 *dst = (u16 *)bgGetMapPtr(map_bg);
+    u16 *dst = (u16 *)map_vram_buffer;
 
     u32 src_index = (y * map_size_width) + x;
 
