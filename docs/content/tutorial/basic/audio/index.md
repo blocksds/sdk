@@ -1,5 +1,5 @@
 ---
-title: Audio
+title: Music and sound effects
 weight: 6
 ---
 

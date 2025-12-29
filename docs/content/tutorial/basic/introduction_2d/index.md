@@ -1,9 +1,9 @@
 ---
-title: Intro to 2D graphics
+title: Introduction to 2D graphics
 weight: 3
 ---
 
-## 1. Introduction to DS graphics
+## 1. Nintendo DS graphics
 
 The Nintendo DS has two graphics engines: a main engine and a sub engine. The
 sub engine is a 2D-only graphics engine that can display up to 4 background

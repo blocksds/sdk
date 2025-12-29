@@ -4,7 +4,7 @@ title: 'Intermediate'
 ---
 
 The chapters in this section talk about some concepts that are require some
-initial knowledge of the NIntendo DS:
+initial knowledge of the Nintendo DS:
 
 {{< cards cols="1" >}}
   {{< card icon="bell" link="interrupts" title="Interrupts" >}}
