@@ -1,2 +1,2 @@
-# 8 bpp, tiles, export map, palette 12, not compressed
--gB8 -gt -m -mp12 -gTFF00FF
+# 8 bpp, tiles, export map, palette 12, SSB layout, magenta is transparent
+-gB8 -gt -m -mp12 -mLs -gTFF00FF

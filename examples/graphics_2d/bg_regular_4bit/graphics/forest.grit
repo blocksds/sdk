@@ -1,2 +1,2 @@
-# 4 bpp, tiles, export map, flat layout, not compressed, set magenta as transparent
--gt -gB4 -mR4 -mLf -gTFFOOFF
+# 4 bpp, tiles, export map, SSB layout, set magenta as transparent
+-gt -gB4 -mR4 -mLs -gTFFOOFF

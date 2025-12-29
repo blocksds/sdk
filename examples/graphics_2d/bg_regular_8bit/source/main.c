@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 
     vramSetPrimaryBanks(VRAM_A_MAIN_BG, VRAM_B_LCD, VRAM_C_LCD, VRAM_D_LCD);
 
-    int bg = bgInit(0, BgType_Text8bpp, BgSize_T_256x256, 0,1);
+    int bg = bgInit(0, BgType_Text8bpp, BgSize_T_512x256, 0,1);
 
     dmaCopy(forest_townTiles, bgGetGfxPtr(bg), forest_townTilesLen);
     dmaCopy(forest_townMap, bgGetMapPtr(bg), forest_townMapLen);

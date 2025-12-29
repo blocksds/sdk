@@ -89,8 +89,8 @@ PNG file. They are just text files with `.grit` extension. In this example, it
 looks like this:
 
 ```sh
-# 8 bpp, tiles, export map, not compressed, set magenta as transparent color
--gB8 -gt -m -gTFF00FF
+# 8 bpp, tiles, export map, SSB layout, set magenta as transparent color
+-gB8 -gt -m -mLs -gTFF00FF
 ```
 
 `-gB8` tells grit to work in 8 bit per pixel mode. It will create one palette of
@@ -100,10 +100,22 @@ explicitly with `-p`). `-gTFF00FF` tells grit to treat color `FF00FF` (magenta)
 as transparent. If the image doesn't have any magenta pixel, it will be fully
 opaque.
 
-Now we need to see how to use the converted graphics. Each pair of `.png` and
-`.grit` files create a `.h` file that has to be included in the source code. In
-this case we have `forest_town.png` and `forest_town.grit`, so `forest_town.h`
-is created automatically.
+The last option, `-mLs`, arranges the tiles the right way. Regular backgrounds
+are laid out in VRAM in blocks of 32x32 tiles. Inside each block tiles are
+arranged from left to right, then top to bottom. The 32x32 blocks are also
+arranged from left to right, then top to bottom. This is an example for a
+512x512 pixels background (64x64 tiles):
+
+![Regular background layout](regular_background_layout.png)
+
+In other sections we will see some situations in which we will use a regular
+flat layout (`-mLf`).
+
+Now that we've seen how to convert the image we need to see how to use the
+converted graphics. Each pair of `.png` and `.grit` files create a `.h` file
+that has to be included in the source code. In this case we have
+`forest_town.png` and `forest_town.grit`, so `forest_town.h` is created
+automatically.
 
 Let's go through the main code to get this working:
 
@@ -126,9 +138,9 @@ int main(int argc, char *argv[])
     vramSetBankA(VRAM_A_MAIN_BG);
 
     // Initialize layer 0 as a regular (text) background with 256 colors (8 bpp)
-    // and size 256x256. The last 0 is the map base and the 1 is the tile base.
+    // and size 512x256. The last 0 is the map base and the 1 is the tile base.
     // We'll talk about that in a minute.
-    int bg = bgInit(0, BgType_Text8bpp, BgSize_T_256x256, 0, 1);
+    int bg = bgInit(0, BgType_Text8bpp, BgSize_T_512x256, 0, 1);
 
     // Copy tiles and tile map to VRAM
     dmaCopy(forest_townTiles, bgGetGfxPtr(bg), forest_townTilesLen);
@@ -159,8 +171,8 @@ There are only two differences you need to check. The first one is the grit
 file:
 
 ```sh
-# 4 bpp, tiles, export map, flat layout, not compressed, set magenta as transparent
--gt -gB4 -mR4 -mLf -gTFF00FF
+# 4 bpp, tiles, export map, ssb layout, not compressed, set magenta as transparent
+-gt -gB4 -mR4 -mLs -gTFF00FF
 ```
 
 And the second one is the way to setup the background (use `BgType_Text4bpp`
@@ -217,7 +229,7 @@ it you can rotate it, scale it and scroll it. It should look like this:
 We need to convert the image in a different way:
 
 ```sh
-# 8 bpp, tiles, export map, affine, not compressed, set mangenta as transparent
+# 8 bpp, tiles, export map, affine layout, set mangenta as transparent
 -gB8 -gt -m -mLa -gTFF00FF
 ```
 
@@ -264,12 +276,16 @@ with a fraction of 8 bits. Angles go from 0 to 32768: If you want to rotate the
 image 180 degrees, use an angle of 16384. If you want to rotate the image 90
 degrees, use an angle of 8192.
 
-Finally, you can also scroll the background like regular backgrounds with
+You can also scroll the background like regular backgrounds with
 `bgSetScroll(bg, x, y)`, but this function doesn't have as much accuracy as
 possible because it scrolls by whole pixels. If you scale a background you may
 need finer scroll values than one pixel. In that case, use the function
 `bgSetScrollf(bg, x, y)`, which uses fixed point values with a fraction of 8
 bits.
+
+Finally, you can also decide if you want the background to wrap around or to be
+transparent around its edges. You can use `bgWrapOn(bg)` and `bgWrapOff(bg)` to
+enable wrapping or disable it.
 
 ## 6. Extended affine backgrounds
 
@@ -284,8 +300,8 @@ backgrounds.
 
 The only things to consider is that:
 
-- The instructions for grit are the same as for a regular background, not for an
-  affine background.
+- It uses a flat layout instead of SSB layout. Use `-mLf` in grit instead of
+  `-mLs` in your grit file.
 
 - The video mode and initialization of the background are slightly different:
 
@@ -723,14 +739,14 @@ tell grit the palette index to be used by the background:
 
 `forest_town.grit`
 ```sh
-# 8 bpp, tiles, export map, palette 7, not compressed
--gB8 -gt -m -mp7 -gTFF00FF
+# 8 bpp, tiles, export map, palette 7, SSB layout, not compressed
+-gB8 -gt -m -mp7 -mLs -gTFF00FF
 ```
 
 `ponypoke_0.grit`
 ```sh
-# 8 bpp, tiles, export map, palette 12, not compressed
--gB8 -gt -m -mp12 -gTFF00FF
+# 8 bpp, tiles, export map, palette 12, SSB layout, not compressed
+-gB8 -gt -m -mp12 -mLs -gTFF00FF
 ```
 
 And that's it! As you can see, it requires a bit of additional setup, but it's a

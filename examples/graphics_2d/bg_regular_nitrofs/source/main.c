@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
             wait_forever();
         }
 
-        bg = bgInit(0, BgType_Text8bpp, BgSize_T_256x256, 0, 1);
+        bg = bgInit(0, BgType_Text8bpp, BgSize_T_512x256, 0, 1);
 
         // Flush cache so that we can use DMA to copy the data to VRAM
         DC_FlushAll();
