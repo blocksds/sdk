@@ -1,0 +1,2 @@
+# 16 bpp, bitmap, export map, set magenta as transparent
+-gB16 -gb -m -gTFFOOFF

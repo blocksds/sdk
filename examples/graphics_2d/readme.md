@@ -13,7 +13,8 @@ libnds.
 - `bg_regular_8bit_2screens`: It displays a regular 8 bpp tiled background in both screens.
 - `bg_regular_nitrofs`: It loads a regular 8 bpp tiled background from NitroFS.
 - `bg_rotation`: It displays a background with rotation and scaling (affine).
-- `bg_scroll_bigmap`: It scrolls a 8 bpp tiled background bigger than the hardware limits.
+- `bg_scroll_big_bmp`: It scrolls an 8 bpp bitmap bigger than the hardware limits.
+- `bg_scroll_bigmap`: It scrolls an 8 bpp tiled background bigger than the hardware limits.
 - `bg_scroll_bigmap_bigtileset`: It scrolls background with very big map and tileset.
 - `sprites_regular`: It displays regular sprites on both screens.
 - `sprites_animated`: It animate sprites on both screens in two different ways.
