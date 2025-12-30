@@ -25,6 +25,12 @@ programming.
     link="intermediate"
     style="background-color: rgba(224,224,128,0.2)"
   >}}
+  {{< card
+    icon="book-open"
+    title="Advanced"
+    link="advanced"
+    style="background-color: rgba(224,224,128,0.2)"
+  >}}
 {{< /cards >}}
 
 <div class="hx:mt-6"></div>
