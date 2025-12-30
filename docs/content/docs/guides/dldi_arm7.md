@@ -88,6 +88,7 @@ and report your findings.
 flashcart         | ARM9 | ARM7 | Notes
 ------------------|------|------|------
 Acekard 2i        | Yes  | Yes  |
+SuperCard DSONE   | Yes  | Yes  |
 SuperCard DSTWO   | Yes  | Yes  |
 Original R4       | Yes  | Yes  |
 DSpico            | Yes  | Yes  |
