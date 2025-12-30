@@ -85,9 +85,11 @@ flashcart using
 [this test](https://github.com/blocksds/sdk/tree/master/tests/filesystem/dldi_arm9_arm7)
 and report your findings.
 
-flashcart       | ARM9 | ARM7 | Notes
-----------------|------|------|------
-Acekard 2i      | Yes  | Yes  |
-SuperCard DSTWO | Yes  | Yes  |
-Original R4     | Yes  | Yes  |
-DSpico          | Yes  | Yes  |
+flashcart         | ARM9 | ARM7 | Notes
+------------------|------|------|------
+Acekard 2i        | Yes  | Yes  |
+SuperCard DSONE   | Yes  | Yes  |
+SuperCard DSTWO   | Yes  | Yes  |
+Original R4       | Yes  | Yes  |
+DSpico            | Yes  | Yes  |
+R4i Gold 3DS Plus | Yes  | Yes  | Confusable name; stickers say "www.r4ids.cn"
