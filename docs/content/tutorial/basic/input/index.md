@@ -157,6 +157,16 @@ int main(int argc, char **argv)
 You can check [`examples/input/touch_input`](https://github.com/blocksds/sdk/tree/master/examples/input/touch_input)
 for a more interesting example.
 
+It's also possible to know the pressure applied to the touch screen. You can
+check [`examples/input/touch_pressure`](https://github.com/blocksds/sdk/tree/master/examples/input/touch_pressure)
+to see how to do it. However, the values returned by it depend on the DS model,
+and they are more accurate in DS than in DSi or 3DS.
+
+If you want an example of how to do gesture recognition you can check
+[`examples/input/gesture_recognition`](https://github.com/blocksds/sdk/tree/master/examples/input/gesture_recognition).
+This is an advanced topic, so don't check the example if you're just getting
+started.
+
 ## 5. Closing the lid
 
 When the Nintendo DS is closed while running a game, it enters sleep mode. This

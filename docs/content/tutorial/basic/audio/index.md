@@ -111,7 +111,22 @@ RAM. This system will be explained later in the tutorial.
 
 Check the [documentation of Maxmod](https://blocksds.skylyrac.net/docs/maxmod/index.html)
 and the [examples](https://github.com/blocksds/sdk/tree/master/examples/maxmod)
-for more information.
+for more information:
+
+- You can add special effects to your songs and use them as event triggers to
+  synchronize the song with events in your application:
+  [`examples/maxmod/song_events`](https://github.com/blocksds/sdk/tree/master/examples/maxmod/song_events)
+
+- You can stream raw audio with Maxmod:
+  [`examples/maxmod/streaming`](https://github.com/blocksds/sdk/tree/master/examples/maxmod/streaming)
+
+- You can enable a reverberation effect:
+  [`examples/maxmod/reverb`](https://github.com/blocksds/sdk/tree/master/examples/maxmod/reverb)
+
+- You can use different playback modes to select hardware mixing, software
+  mixing, or combined software and hardware mixing (called extended mixing in
+  Maxmod):
+  [`examples/maxmod/audio_modes`](https://github.com/blocksds/sdk/tree/master/examples/maxmod/audio_modes)
 
 ## 3. LibXM7
 

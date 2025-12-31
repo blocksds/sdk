@@ -425,7 +425,13 @@ NITROFSDIR	:= nitrofs
 
 Check the example here: [`examples/maxmod/nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/maxmod/nitrofs)
 
-## 8. Loading GRF files
+## 8. Using LibXM7 with NitroFS
+
+All you need to do is load the songs to RAM before playing them. There's an
+example of how to do that here:
+[`examples/libxm7/nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/libxm7/nitrofs)
+
+## 9. Loading GRF files
 
 GRF is a format that can hold Nintendo DS graphics in all formats supported by
 the console. It was originally designed by Cearn, the author of **grit**. This
@@ -468,7 +474,7 @@ see how they are configured to convert graphics into GRF files.
 
   - [`examples/demos/invaders`](https://github.com/blocksds/sdk/tree/master/examples/demos/invaders)
 
-## 9. Using GL2D with NitroFS
+## 10. Using GL2D with NitroFS
 
 In the chapter about GL2D we learned how to merge a lot of images into a single
 big image plus a list of coordinates and sizes. The tool in charge of doing this
