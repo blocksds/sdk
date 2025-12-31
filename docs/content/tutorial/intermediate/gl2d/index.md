@@ -454,3 +454,53 @@ file with information helping you find frames inside the image. You are expected
 to arrange the frames the way you want, and it's likely you will want to have
 one texture per animation so that it's easier to remember which frame belongs to
 each animation.
+
+## 5. GL2D and 3D graphics
+
+Sometimes you may want to use GL2D to draw 2D objects and regular 3D routines to
+draw 3D objects in the same scene:
+
+![GL2D and 2D](gl2d_and_3d.png)
+
+This is very easy to do. In your application loop you can use regular 3D
+functions to setup your projection and modelview matrices the right way to
+display your 3D scene. Then, you can call `glBegin2D()`, use GL2D functions, and
+call `glEnd2D()` when you're done:
+
+```c
+while (1)
+{
+    swiWaitForVBlank();
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(70, 256.0 / 192.0, 0.1, 40);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(0.0, 0.0, 3.0,  // Position
+                0.0, 0.0, 0.0,  // Look at
+                0.0, 1.0, 0.0); // Up
+
+    // Draw 3D objects
+
+    // ...
+
+    // Set up GL2D for 2D mode
+    glBegin2D();
+
+    // Render 2D objects
+
+    // ...
+
+    glEnd2D();
+
+    glFlush(0);
+}
+```
+
+There's a full [chapter about 3D graphics](../3d_graphics) in this tutorial,
+check it if you want to know more about how to display 3D graphics.
+
+The code of this example is here:
+[`examples/gl2d/2d_and_3d`](https://github.com/blocksds/sdk/tree/master/examples/gl2d/2d_and_3d)
