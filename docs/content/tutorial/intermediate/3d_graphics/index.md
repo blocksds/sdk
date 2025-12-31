@@ -1230,6 +1230,12 @@ You can check the code
 [here](https://github.com/blocksds/libnds/blob/9eaccbc45b46fd20a41e0e3d32bc6c0a1364d553/source/arm9/video/gl2d.c#L68-L108)
 if you're curious about the issue and how it's fixed.
 
+You can also check the following example to see how different emulators and
+hardware behave when pixel-perfect accuracy is attempted:
+[`examples/gl2d/sprite_transform`](https://github.com/blocksds/sdk/tree/master/examples/gl2d/sprite_transform)
+
+![Pixel accuracy](pixel_accuracy.png)
+
 ## 13. Display lists
 
 Until now we have seen how to send commands to the GPU manually one by one, but
