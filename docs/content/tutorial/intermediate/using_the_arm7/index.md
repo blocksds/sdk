@@ -213,3 +213,50 @@ There are two different ways to handle this issue:
     line. Cache handling functions don't operate with a granularity of a byte,
     they affect the full line. If the data you want to invalidate is in the same
     line as data you don't want to invalidate, you will lose that data too.
+
+## 4. ARM7 console
+
+When you're writing ARM7 code you will need to debug it. A very popular way to
+debug code is to print information to the screen. This is very easy to do from
+the ARM9, but the ARM7 also has a simple text console that it can use to
+transfer text to the ARM9 so that it gets printed on the screen.
+
+![ARM7 console](arm7_console.png)
+
+The code of the example is available here:
+[`examples/console/arm7_console`](https://github.com/blocksds/sdk/tree/master/examples/console/arm7_console)
+
+You can initialize the console from the ARM9 by calling `consoleArm7Setup()`.
+You will need to provide the console instance that will receive all text from
+the ARM7, and the size of the shared buffer that will hold the text.
+
+On the ARM7 you can use the following functions:
+
+- `consolePrintf()`: It only supports flags `%c`, `%d`, `%s`, `%u` and `%x`,
+  with no modifiers. All integers are 32 bit in size.
+- `consolePuts()`
+
+When you're done printing text you have to call `consoleFlush()` to tell the
+ARM9 to update the contents of the console on the screen. You can also update
+the contents by calling `consoleArm7Flush()` from the ARM9.
+
+You can deinitialize the console from the ARM9 with `consoleArm7Disable()`.
+
+## 5. Debug console
+
+You can print text to the no$gba/melonDS debug console by writing text to
+`stderr`. This is the default setting, all you need to do is something like
+this:
+
+```c
+fprintf(stderr, "ARM7 text\n");
+```
+
+You can check the following example:
+[`examples/debug/nocash_debug`](https://github.com/blocksds/sdk/tree/master/examples/debug/nocash_debug)
+
+{{< callout type="warning" >}}
+The standard C library functions to print text are very big, and the ARM7
+doesn't have a lot of available memory for code and data. It's very likely that
+you will run out of memory if you try to use this debug console.
+{{< /callout >}}
