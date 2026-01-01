@@ -255,6 +255,9 @@ fprintf(stderr, "ARM7 text\n");
 You can check the following example:
 [`examples/debug/nocash_debug`](https://github.com/blocksds/sdk/tree/master/examples/debug/nocash_debug)
 
+The text gets printed to a special window in no$gba, and to the terminal in
+melonDS.
+
 {{< callout type="warning" >}}
 The standard C library functions to print text are very big, and the ARM7
 doesn't have a lot of available memory for code and data. It's very likely that
