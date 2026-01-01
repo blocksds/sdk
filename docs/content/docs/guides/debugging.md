@@ -379,3 +379,16 @@ You can exit GDB with:
 ```
 exit
 ```
+
+### 8. Unhandled C++ exceptions
+
+When a C++ exception happens outside of a `try`/`catch` block it is called an
+"unhandled exception". By default, the code calls `std::terminate()`, which
+simply ends the program.
+
+You can change the default behaviour by calling `std::set_terminate()` in your
+program. Check this [link](https://en.cppreference.com/w/cpp/error/set_terminate.html)
+for more details.
+
+There's a test to see how this system works in the BlocksDS repository
+[here](https://github.com/blocksds/sdk/tree/master/tests/system/cpp_exception).
