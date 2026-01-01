@@ -304,6 +304,129 @@ melonDS.
 You can check the following example to see it in action:
 [`examples/debug/nocash_debug`](https://github.com/blocksds/sdk/tree/master/examples/debug/nocash_debug)
 
+## 4. Keyboard
+
+## 4.1 Basic usage
+
+Libnds includes a basic keyboard that you can use for basic text input:
+
+![Default keyboard](default_keyboard.png)
+
+The keyboard included in libnds can work in two different ways:
+
+- You can manually initialize the keyboard, decide when to display it on the
+  screen, manage key presses and close it manually when required.
+
+- You can manually initialize the keyboard and use `scanf()`, which will display
+  the keyboard, wait for the user to press "return", and close it automatically.
+
+The default keyboard is loaded to background layer 3 but, unlike the console, it
+doesn't initialize any hardware and it requires you to setup a video mode that
+allows background layer 3 to have a regular tiled background. If you initialize
+the demo console you can initialize the demo keyboard right away and they will
+work together. This is very useful for porting simple PC applications, for
+example.
+
+## 4.2 Manual keyboard handling
+
+Initialize demo keyboard and load graphics to VRAM:
+
+```c
+keyboardDemoInit();
+```
+
+You can display the keyboard when you need to use it:
+
+```c
+keyboardShow();
+```
+
+In your game loop you need to call `keyboardUpdate()` every frame, but that
+function requires you to call `scanKeys()` as well:
+
+```c
+scanKeys();
+
+int16_t c = keyboardUpdate();
+if (c != -1)
+{
+    if (c == '\b')
+    {
+        // This is a backspace
+    }
+    else if (c >= 32)
+    {
+        // This is a character
+    }
+}
+```
+
+The keyboard returns -1 when there are no pressed keys, negative values for
+special keys, and positive values for regular keys that have a valid ASCII
+representation. For example, `DVK_BACKSPACE` has the same value as `'\b'`, but
+`DVK_CTRL` or `DVK_LEFT` doesn't have a valid ASCII representation.
+
+ You can use the values from the `Keys` enum present in libnds to identify
+ special keys. Check the documentation
+[here](https://blocksds.skylyrac.net/libnds/keyboard_8h.html#a0ada92b8263d776ca3c779d2a0e031bc).
+
+When you're done, you can hide the keyboard:
+
+```c
+keyboardHide();
+```
+
+Check the full code of the exampe here:
+[`examples/keyboard/default_keyboard`](https://github.com/blocksds/sdk/tree/master/examples/keyboard/default_keyboard)
+
+## 4.3 Automatic `scanf()` keyboard handling
+
+First, initialize the keyboard and load its graphics to VRAM, but keep the
+pointer to the keyboard instance:
+
+```c
+Keyboard *kbd = keyboardDemoInit();
+```
+
+Key presses are normally handled by the keyboard, but not printed anywhere. When
+you manually handle keyboard presses it's easy to print characters as you read
+them, but you can't do that while `scanf()` is running. If you want to display
+key presses on the screen you can do something like this:
+
+```c
+void on_key_pressed(int key)
+{
+   if (key > 0)
+      printf("%c", key);
+}
+
+...
+
+kbd->OnKeyPressed = on_key_pressed;
+```
+
+Once the keyboard is setup you can just call `scanf()` when you want to get text
+from the user. It will show the keyboard, wait for the user to input a string,
+and return when the user presses "return". Note the `%255s` format, this
+prevents `scanf()` from reading more than 255 characters and overflowing the
+buffer.
+
+```c
+char string[256];
+string[0] = '\0';
+scanf("%255s", string);
+```
+
+{{< callout type="warning" >}}
+This system doesn't work well if the user presses backspace. In general, it's
+better to handle keyboard presses manually.
+{{< /callout >}}
+
+You can check the full source of the example here:
+[`examples/keyboard/stdin_input`](https://github.com/blocksds/sdk/tree/master/examples/keyboard/stdin_input)
+
+## 4.4 Custom keyboards
+
 {{< callout type="error" >}}
 This chapter is a work in progress...
 {{< /callout >}}
