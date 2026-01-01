@@ -280,6 +280,30 @@ Using a 8 bpp tiled background will prevent you from changing the color of the
 text with `consoleSetColor()` or ANSI sequences.
 {{< /callout >}}
 
+## 3. Debug console
+
+This console doesn't print text to the screen, but to the debug console of
+emulators like no$gba or melonDS.
+
+All you have to do is to initialize the console like this:
+
+```c
+consoleDebugInit(DebugDevice_NOCASH);
+```
+
+After this, any text send to `stderr` will be sent to the debug console. For
+example:
+
+```c
+fprintf(stderr, "Debug message\n");
+```
+
+The text gets printed to a special window in no$gba, and to the terminal in
+melonDS.
+
+You can check the following example to see it in action:
+[`examples/debug/nocash_debug`](https://github.com/blocksds/sdk/tree/master/examples/debug/nocash_debug)
+
 {{< callout type="error" >}}
 This chapter is a work in progress...
 {{< /callout >}}
