@@ -427,6 +427,178 @@ You can check the full source of the example here:
 
 ## 4.4 Custom keyboards
 
-{{< callout type="error" >}}
-This chapter is a work in progress...
+You can create your own keyboard, but it requires a lot more manual work than
+in the case of a text console. For example, this is a custom keyboard based on
+the keyboard of libnds with a small color change:
+
+![Custom keyboard](custom_keyboard.png)
+
+First, create your keyboard graphics. You can use the default template as a
+starting point:
+
+![Custom keyboard graphics template](custom_keyboard_gfx.png)
+
+This template only has uppercase and lowercase layouts, but libnds also supports
+two other layouts (numeric keyboard layout and reduced footprint layout). You
+also need to provide the graphics that have to be displayed when a key is
+pressed.
+
+To convert it you can use the grit settings used by the default keyboard:
+
+```sh
+-gB4 -gt -m -gzl -pe16 -gT000000
+```
+
+{{< callout type="warning" >}}
+The keyboard graphics must have a compression header. You can use options
+`-gzl`, `-gzh` or `-gzr`, but not `-gz!`. If you want to use uncompressed data,
+you need to add a placeholder compression header with `-gz0`. The map must be
+uncompressed, and it must not have a compression header (`-mz!`).
 {{< /callout >}}
+
+You also need to provide the layout of the keyboard to libnds so that the
+library knows where each key is located. This is provided as an array that
+contains rows of 32 elements. Each element in a row is 8 pixels wide and 16
+pixels tall. This is done to allow for keys to be slightly displaced, not as a
+simple square grid. However, this is only needed for the X coordinates. All keys
+are assumed to be 16 pixels tall. This can be adjusted in the `Keyboard` struct
+if you want different settings.
+
+When you press a key, libnds detects all the tiles that form that key by
+checking the key map and it swaps the graphics to display the key as "pressed".
+
+For example, a key map for a keyboard with uppercase and lowercase layouts looks
+like this:
+
+```c
+static const s16 SimpleKbdLower[] =
+{
+    DVK_FOLD, DVK_FOLD, NOKEY, '1', '1', '2', '2', '3', '3', '4', '4', '5', '5',
+    '6', '6', '7', '7', '8', '8', '9', '9', '0', '0', '-', '-', '=', '=',
+    DVK_BACKSPACE, DVK_BACKSPACE, DVK_BACKSPACE, DVK_BACKSPACE, DVK_BACKSPACE,
+
+    DVK_TAB, DVK_TAB, DVK_TAB, DVK_TAB, 'q', 'q', 'w', 'w', 'e', 'e', 'r', 'r',
+    't', 't', 'y', 'y', 'u', 'u', 'i', 'i', 'o', 'o', 'p', 'p', '[', '[', ']',
+    ']', '\\', '\\', '`', '`',
+
+    DVK_CAPS, DVK_CAPS, DVK_CAPS, DVK_CAPS, DVK_CAPS, 'a', 'a', 's', 's', 'd',
+    'd', 'f', 'f', 'g', 'g', 'h', 'h', 'j', 'j', 'k', 'k', 'l', 'l', ';', ';',
+    '\'', '\'', DVK_ENTER, DVK_ENTER, DVK_ENTER, DVK_ENTER, DVK_ENTER,
+
+    DVK_SHIFT, DVK_SHIFT, DVK_SHIFT, DVK_SHIFT, DVK_SHIFT, DVK_SHIFT, 'z', 'z',
+    'x', 'x', 'c', 'c', 'v', 'v', 'b', 'b', 'n', 'n', 'm', 'm', ',', ',', '.',
+    '.', '/', '/', NOKEY, NOKEY, DVK_UP, DVK_UP, NOKEY, NOKEY,
+
+    DVK_CTRL, DVK_CTRL, DVK_CTRL, DVK_CTRL, DVK_CTRL, DVK_ALT, DVK_ALT, DVK_ALT,
+    DVK_ALT, DVK_SPACE, DVK_SPACE, DVK_SPACE, DVK_SPACE, DVK_SPACE, DVK_SPACE,
+    DVK_SPACE, DVK_SPACE, DVK_SPACE, DVK_SPACE, DVK_SPACE, DVK_SPACE, DVK_MENU,
+    DVK_MENU, DVK_MENU, DVK_MENU, DVK_MENU, DVK_LEFT, DVK_LEFT, DVK_DOWN,
+    DVK_DOWN, DVK_RIGHT, DVK_RIGHT
+};
+
+static const s16 SimpleKbdUpper[] =
+{
+    DVK_FOLD, DVK_FOLD, NOKEY, '!', '!', '@', '@', '#', '#', '$', '$', '%', '%',
+    '^', '^', '&', '&', '*', '*', '(', '(', ')', ')', '_', '_', '+', '+',
+    DVK_BACKSPACE, DVK_BACKSPACE, DVK_BACKSPACE, DVK_BACKSPACE, DVK_BACKSPACE,
+
+    DVK_TAB, DVK_TAB, DVK_TAB, DVK_TAB, 'Q', 'Q', 'W', 'W', 'E', 'E', 'R', 'R',
+    'T', 'T', 'Y', 'Y', 'U', 'U', 'I', 'I', 'O', 'O', 'P', 'P', '{', '{', '}',
+    '}', '|', '|', '~', '~',
+
+    DVK_CAPS, DVK_CAPS, DVK_CAPS, DVK_CAPS, DVK_CAPS, 'A', 'A', 'S', 'S', 'D',
+    'D', 'F', 'F', 'G', 'G', 'H', 'H', 'J', 'J', 'K', 'K', 'L', 'L', ':', ':',
+    '"', '"', DVK_ENTER, DVK_ENTER, DVK_ENTER, DVK_ENTER, DVK_ENTER,
+
+    DVK_SHIFT, DVK_SHIFT, DVK_SHIFT, DVK_SHIFT, DVK_SHIFT, DVK_SHIFT, 'Z', 'Z',
+    'X', 'X', 'C', 'C', 'V', 'V', 'B', 'B', 'N', 'N', 'M', 'M', '<', '<', '>',
+    '>', '?', '?', NOKEY, NOKEY, DVK_UP, DVK_UP, NOKEY, NOKEY,
+
+    DVK_CTRL, DVK_CTRL, DVK_CTRL, DVK_CTRL, DVK_CTRL, DVK_ALT, DVK_ALT, DVK_ALT,
+    DVK_ALT, DVK_SPACE, DVK_SPACE, DVK_SPACE, DVK_SPACE, DVK_SPACE, DVK_SPACE,
+    DVK_SPACE, DVK_SPACE, DVK_SPACE, DVK_SPACE, DVK_SPACE, DVK_SPACE, DVK_MENU,
+    DVK_MENU, DVK_MENU, DVK_MENU, DVK_MENU, DVK_LEFT, DVK_LEFT, DVK_DOWN,
+    DVK_DOWN, DVK_RIGHT, DVK_RIGHT
+};
+```
+
+You also need to tell libnds where to find the graphics of each layout. Check
+the sample code below to see how each map data is at a different offset inside
+`keyboardGfxMap`.
+
+Also, you're free to pick a different keyboard width or height than the default,
+but you need to adjust the layout accordingly.
+
+```c
+static const KeyMap capsLock =
+{
+    .mapDataPressed = keyboardGfxMap + 32 * 20,
+    .mapDataReleased = keyboardGfxMap,
+    .keymap = SimpleKbdUpper,
+    .width = 32, // 32 * 8 pixels
+    .height = 5  // 5 * 16 pixels
+};
+
+static const KeyMap lowerCase =
+{
+    .mapDataPressed = keyboardGfxMap + 32 * 30,
+    .mapDataReleased = keyboardGfxMap + 32 * 10,
+    .keymap = SimpleKbdLower,
+    .width = 32,
+    .height = 5
+};
+```
+
+When you have defined your graphics you can define the behaviour of the
+keyboard.
+
+```c
+static const Keyboard customKeyboard =
+{
+    // Set this to 0 to make the keyboard appear/disappear right away
+    .scrollSpeed = 3,
+
+    // Size of each entry in the key layout grid
+    .grid_width = 8,   // Grid width
+    .grid_height = 16, // Grid height
+
+    // Initial state of the keyboard. By setting the initial state to uppercase,
+    // and marking the keyboard as shifted, the first character will be
+    // uppercase and the next ones will be lowercase, like with modern
+    // smartphone keyboards.
+    .shifted = true,
+    .state = Upper,
+
+    .mappings = {
+        &lowerCase, // keymap for lowercase
+        &capsLock,  // keymap for caps lock
+        0,          // keymap for numeric entry
+        0           // keymap for reduced footprint
+    },
+
+    .tiles = keyboardGfxTiles,       // graphics tiles
+    .tileLen = keyboardGfxTilesLen,  // graphics tiles length
+    .palette = keyboardGfxPal,       // palette
+    .paletteLen = keyboardGfxPalLen, // size of palette
+    .tileOffset = 0,                 // tile offset
+
+    .OnKeyPressed = NULL,            // keypress callback
+    .OnKeyReleased = NULL,           // key release callback
+};
+```
+
+You can load the keyboard like this:
+
+```c
+keyboardInit(&customKeyboard,
+             3,                // Background layer to use
+             BgType_Text4bpp,  // 16 color palette format
+             BgSize_T_256x512, // Background size
+             20,               // Map base
+             0,                // Tile base
+             false,            // Display it on the sub screen
+             true);            // Load graphics to VRAM
+```
+
+Check this example to see the full example:
+[`examples/keyboard/custom_keyboard`](https://github.com/blocksds/sdk/tree/master/examples/keyboard/custom_keyboard)
