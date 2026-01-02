@@ -15,12 +15,12 @@ int main(int argc, char **argv)
     {
         swiWaitForVBlank();
 
-        uint32_t value = getBatteryLevel();
-        uint32_t battery_level = value & 0xF;
-        uint32_t charger_connected = value & BIT(7);
+        u32 value = getBatteryLevel();
+        unsigned int battery_level = value & BATTERY_LEVEL_MASK;
+        bool charger_connected = value & BATTERY_CHARGER_CONNECTED;
 
         consoleClear();
-        printf("Current charge level: %" PRIu32 "\n", battery_level);
+        printf("Current charge level: %u\n", battery_level);
         printf("Charger connected: %s\n", charger_connected ? "Yes" : "No");
         printf("\n");
         printf("Press START to exit");
