@@ -103,12 +103,65 @@ Remember to subtract 2000 from the real year when writing the values of a
 {{< callout type="tip" >}}
 Games like Animal Crossing detect manual changes of the time/date in the
 firmware settings because the firmware settings store the fact that you've
-modified the RTC settings. Changing the values with libnds won't affect that
-flag, so the change won't be detected!
+modified the RTC settings (`PersonalData->rtcOffset`). Changing the values with
+libnds won't affect that flag, so the change won't be detected!
 {{< /callout >}}
 
 You can check this code in action in this example:
 [`examples/time/rtc_set_get`](https://github.com/blocksds/sdk/tree/master/examples/time/rtc_set_get)
+
+## 5. Firmware user settings
+
+Players can set settings like their name, birthday, etc, in a small flash memory
+present in all DS models. This memory also stores the Wi-Fi connection settings,
+for example.
+
+{{< callout type="warning" >}}
+The default ARM7 core in BlocksDS reads the settings with function
+`readUserSettings()`, which is called at the beginning of `main()`. You may have
+to wait for a couple of frames for the function to run and load the settings.
+{{< /callout >}}
+
+You can access them with the `PersonalData` pointer. You can see information
+about its members [here](https://blocksds.skylyrac.net/libnds/structtPERSONAL__DATA.html).
+For example, you can just type `PersonalData->birthDay` to read the user birth
+day.
+
+The name and personal message are encoded as UTF-16LE format, not UTF-8. You can
+use function `utf16_to_utf8()` of libnds to convert it.
+
+Check the following example to see how to do this in practice:
+[`examples/firmware/user_settings`](https://github.com/blocksds/sdk/tree/master/examples/firmware/user_settings)
+
+## 6. LCD backlight
+
+The backlight of the LCD screens can be adjusted by the application. This is
+useful when entering sleep mode, for example. However, different DS models have
+different capabilities, Libnds provides `systemSetBacklightLevel()`, which takes
+a value between 0 and 5, and this is how it behaves in different models:
+
+- DSi: 5 levels of brightness (1 to 5, or `PM_BACKLIGHT_MIN` to
+  `PM_BACKLIGHT_MAX`).
+- DS Lite: 4 levels of brightness (2 to 5). Level 1 is internally set to
+  level 2.
+- DS: The screen can be turned off or on. Levels 1 to 5 are internally set
+  to level 5 (full brightness). Some models of the DS support the same
+  levels of brightness of the DS Lite. In them, the function behaves the
+  same way as on DS Lite.
+
+Level 0 (`PM_BACKLIGHT_OFF`) turns the backlight off.
+
+DS and DS Lite consoles support turning on and off individual screens, but
+`systemSetBacklightLevel()` doesn't support controlling the two screens
+independently.
+
+{{< callout type="warning" >}}
+On DSi the brightness setting is persistent and it will be the setting used the
+next time the console is turned on.
+{{< /callout >}}
+
+You can check this code in action in this example:
+[`examples/peripherals/backlight_level`](https://github.com/blocksds/sdk/tree/master/examples/peripherals/backlight_level)
 
 {{< callout type="error" >}}
 This chapter is a work in progress...
