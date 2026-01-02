@@ -17,4 +17,5 @@ initial knowledge of the Nintendo DS:
   {{< card icon="server" link="memory_management" title="Memory management" >}}
   {{< card icon="cube" link="3d_graphics" title="3D graphics" >}}
   {{< card icon="chip" link="using_the_arm7" title="Using the ARM7" >}}
+  {{< card icon="microphone" link="peripherals" title="Peripherals" >}}
 {{< /cards >}}
