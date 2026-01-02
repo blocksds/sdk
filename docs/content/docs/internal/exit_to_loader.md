@@ -98,8 +98,13 @@ signature isn't found, it will simply power off the console (which actually
 causes a reset to the system menu in the DSi).
 
 If the reset has been requested from the ARM7, `arm7reboot()` is called.
-Similarly, if the ARM9 has requested the reset, `arm9reboot()` is called. Note
-that in BlocksDS, `arm7reboot()` isn't used anymore.
+Similarly, if the ARM9 has requested the reset, `arm9reboot()` is called.
+
+{{< callout type="warning" >}}
+In BlocksDS `arm7reboot()` isn't used. Letting the ARM7 interrupt the ARM9 is
+potentially dangerous (it could be writing to the SD card, for example) so it's
+better to let the ARM9 exit when it's ready.
+{{< /callout >}}
 
 The last field of the struct, `bootsize`, is the size of the loader that
 `arm7reboot()` and `arm9reboot()` eventually boot into. The loader is
