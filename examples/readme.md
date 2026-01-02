@@ -16,6 +16,7 @@ specific area:
 - `dswifi`: DSWiFi library features.
 - `dynamic_libs`: How to load dynamic libraries with libnds.
 - `filesystem`: How to access the 3 filesystems of the DS/DSi.
+- `firmware`: User firmware settings.
 - `gl2d`: How to use the GL2D library for 2D graphics with the 3D hardware.
 - `graphics_2d`: 2D graphics features of the DS.
 - `graphics_3d`: 3D graphics features of the DS (alone or alongside 2D graphics).
