@@ -92,4 +92,9 @@ SuperCard DSONE   | Yes  | Yes  |
 SuperCard DSTWO   | Yes  | Yes  |
 Original R4       | Yes  | Yes  |
 DSpico            | Yes  | Yes  |
-R4i Gold 3DS Plus | Yes  | Yes  | Confusable name; stickers say "www.r4ids.cn"
+R4i Gold 3DS Plus | Yes  | Yes  | [^1]
+
+[^1]: These cards have a confusable name. They can be identified by the URL
+      `www.r4ids.cn` written on their stickers, but don't visit that site
+      hoping to buy one. [These cards haven't been in production for a long
+      time, and the last batch they shipped was faulty.](https://www.flashcarts.net/ds-quick-start-guide?tab=non-recommended#r4i-gold-3ds-plus)
