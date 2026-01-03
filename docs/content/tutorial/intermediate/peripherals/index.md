@@ -357,6 +357,33 @@ The Slot-2 API abstracts all of them and provides a unified API to use them:
 Check this example to see all of this in action:
 [`examples/peripherals/slot2`](https://github.com/blocksds/sdk/tree/master/examples/peripherals/slot2)
 
-{{< callout type="error" >}}
-This chapter is a work in progress...
-{{< /callout >}}
+## 10. DS Motion Card
+
+The DS Motion Card is a Slot-1 cartridge with an accelerometer and a gyroscope.
+This device isn't very popular because it requires the user to run homebrew from
+a Slot-2 cartridge, and most people just use Slot-1 devices because they are
+more convenient. In theory you could use them in a DSi easier than in a DS
+because you can run homebrew from the SD card of the DSi itself.
+
+1. Initialize the device with `motion_init()`. You can get its type with
+   `motion_get_type()` and its name with `motion_get_name(motion_get_type())`.
+
+2. Ask the user to callibrate the accelerometer by placing the console on a flat
+   surface. The measurements of the X and Y axes will be 0 and the one of the Z
+   axis will be equal to G.
+
+   ```c
+   motion_set_offs_x();
+   motion_set_offs_y();
+   motion_set_sens_z(motion_read_z());
+   ```
+
+3. You can callibrate the gyroscope with `motion_set_offs_gyro()`.
+
+4. Read the callibrated values with `motion_acceleration_x()`,
+   `motion_acceleration_y()`, `motion_acceleration_z()` and `motion_rotation()`.
+
+5. Call `motion_deinit()` when you've finished using the device.
+
+Check the following example:
+[`examples/peripherals/motion_card`](https://github.com/blocksds/sdk/tree/master/examples/peripherals/motion_card)
