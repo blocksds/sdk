@@ -12,6 +12,7 @@ libnds.
 - `box_test`: Uses the box test to detect if a cube is displayed on the screen.
 - `colored_polygon`: Very simple example of how to draw a colored polygon.
 - `compressed_texture`: Loads a compressed/Tex4x4 texture from the ARM9 binary.
+- `depth_buffering_modes`: Shows the difference between Z and W-buffering.
 - `display_list_creation`: Manually creates a display list and uses it.
 - `display_list_teapot`: Displays a pre-converted teapot model.
 - `display_list_nitrofs`: Loads a pre-converted teapot model from NitroFS.

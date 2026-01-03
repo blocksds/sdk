@@ -1,0 +1,131 @@
+// SPDX-License-Identifier: CC0-1.0
+//
+// SPDX-FileContributor: Antonio Niño Díaz, 2023-2026
+
+#include <stdio.h>
+
+#include <nds.h>
+
+int main(int argc, char **argv)
+{
+    // Setup sub screen for the text console
+    consoleDemoInit();
+
+    videoSetMode(MODE_0_3D);
+
+    glInit();
+
+    glEnable(GL_ANTIALIAS);
+
+    // The background must be fully opaque and have a unique polygon ID
+    // (different from the polygons that are going to be drawn) so that
+    // alpha blending works.
+    glClearColor(0, 0, 0, 31);
+    glClearPolyID(63);
+
+    glClearDepth(0x7FFF);
+
+    glViewport(0, 0, 255, 191);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(70, 256.0 / 192.0, 0.1, 40);
+
+    gluLookAt(0.0, 0.0, 2.0,  // Position
+              0.0, 0.0, 0.0,  // Look at
+              0.0, 1.0, 0.0); // Up
+
+    consoleClear();
+
+    printf("A:      Z-buffering\n");
+    printf("B:      W-buffering\n");
+    printf("PAD:    Rotate quad\n");
+    printf("\n");
+    printf("START:  Exit to loader\n");
+
+    int angle_x = 0;
+    int angle_z = 0;
+
+    int buffering = GL_ZBUFFERING;
+
+    while (1)
+    {
+        // Synchronize game loop to the screen refresh
+        swiWaitForVBlank();
+
+        // Handle user input
+        // -----------------
+
+        scanKeys();
+
+        uint16_t keys = keysHeld();
+
+        if (keys & KEY_LEFT)
+            angle_z += 3;
+        if (keys & KEY_RIGHT)
+            angle_z -= 3;
+
+        if (keys & KEY_UP)
+            angle_x += 3;
+        if (keys & KEY_DOWN)
+            angle_x -= 3;
+
+        if (keys & KEY_A)
+            buffering = GL_ZBUFFERING;
+        if (keys & KEY_B)
+            buffering = GL_WBUFFERING;
+
+        if (keys & KEY_START)
+            break;
+
+        // Render 3D scene
+        // ---------------
+
+        glMatrixMode(GL_MODELVIEW);
+
+        glPushMatrix();
+
+        glRotateZ(angle_z);
+        glRotateX(angle_x);
+
+        glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE);
+
+        glBegin(GL_QUADS);
+
+            // First quad
+
+            glColor(RGB15(31, 0, 0));
+            glVertex3v16(floattov16(-1), floattov16(-1), 0);
+
+            glColor(RGB15(31, 31, 0));
+            glVertex3v16(floattov16(1), floattov16(-1), 0);
+
+            glColor(RGB15(0, 31, 0));
+            glVertex3v16(floattov16(1), floattov16(1), 0);
+
+            glColor(RGB15(0, 0, 31));
+            glVertex3v16(floattov16(-1), floattov16(1), 0);
+
+            // Second quad, very close to the first one
+
+            glColor(RGB15(15, 0, 0));
+            glVertex3v16(floattov16(-0.95), floattov16(-0.95), floattov16(0.001));
+
+            glColor(RGB15(15, 15, 0));
+            glVertex3v16(floattov16(1.05), floattov16(-0.95), floattov16(0.001));
+
+            glColor(RGB15(0, 15, 0));
+            glVertex3v16(floattov16(1.05), floattov16(1.05), floattov16(0.001));
+
+            glColor(RGB15(0, 0, 15));
+            glVertex3v16(floattov16(-0.95), floattov16(1.05), floattov16(0.001));
+
+        glEnd();
+
+        glPopMatrix(1);
+
+        glFlush(buffering);
+    }
+
+    return 0;
+}
