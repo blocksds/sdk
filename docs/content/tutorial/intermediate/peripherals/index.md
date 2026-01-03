@@ -253,6 +253,110 @@ files in path `"nand2:/photo/DCIM"`.
 There's a demo that displays the photos in that folder here:
 [`examples/demos/photo_slideshow`](https://github.com/blocksds/sdk/tree/master/examples/demos/photo_slideshow)
 
+## 9. Slot-2 devices
+
+There are lots of Slot-2 cartridges with special hardware. Some of them came as
+additional controllers for Nintendo DS games, but some of them are just GBA
+games with peripherals that can be used from a DS game:
+
+- Piano keyboard: Used by game "Easy Piano".
+- Rumble pak: Used by several games.
+- Guitar Grip: Used by the "Guitar Hero" series.
+- The Opera "Nintendo DS Browser" has a Slot-2 cartridge with 8 MiB of RAM.
+- Solar sensor: Used by "Boktai 1", "Boktai 2" and "Boktai 3".
+- Tilt sensor: Used by "Koro Koro Puzzle" and "Yoshi's Universal Gravitation".
+- Rumble + Gyroscope: Used by "WarioWare".
+- Paddle Controller: Used by a few Taito arcade games.
+
+There are also some GBA/DS flashcarts with special hardware or RAM:
+
+- SuperCard SD: External RAM. Some models (SuperCard Rumble) have rumble.
+- M3: External RAM
+- G6: External RAM
+- EZ-Flash III/IV/Omega/Omega Definitive Edition: External RAM. Some models have
+  rumble.
+- EZ-Flash 3in1: External RAM. Some models have rumble.
+- EverDrive GBA: External RAM.
+
+The Slot-2 API abstracts all of them and provides a unified API to use them:
+
+1. Start it with `peripheralSlot2InitDefault()`, which will autodetect the
+   cartridge you have in the Slot-2.
+
+2. The name of the device can be obtained with `peripheralSlot2GetName()`, and a
+   bit mask of all the features supported by the device with
+   `peripheralSlot2GetSupportMask()`. This mask is a combination of the defines
+   `SLOT2_PERIPHERAL_*`.
+
+3. You can detect if the device has RAM with `peripheralSlot2RamStart()`, which
+   returns a pointer to the start of RAM if available or `NULL` if there is no
+   external RAM. Use `peripheralSlot2RamSize()` to see the size of the available
+   RAM. Also, some unusual devices have banked RAM. You can check the number of
+   banks of the device with `peripheralSlot2RamBanks()`.
+
+   {{< callout type="tip" >}}
+   This sytem can also be used to access the additional 16 MiB of RAM available
+   in Nintendo DSi debugger consoles (with 32 MiB instead of 16 MiB of RAM) and
+   3DS consoles running in DSi mode.
+   {{< /callout >}}
+
+4. You can detect if the device supports rumble by checking if flag
+   `SLOT2_PERIPHERAL_RUMBLE_ANY` is set. Then you can use function
+   `rumbleGetMaxRawStrength()` to detect the maximum strength supported by the
+   device, and `setRumble(strength)` to activate it. Use `setRumble(0)` to
+   disable the vibration.
+
+   {{< callout type="tip" >}}
+   Some rumble cartridges are level-activated (they start vibrating by setting
+   them to "ON") and others are edge-activated (they move a bit each time they
+   switch from "OFF" to "ON" and from "ON" to "OFF"). If you want to support all
+   types of rumble, treat all cartridges as edge-activated cartridges and flip
+   between "ON" and "OFF" in your game.
+   {{< /callout >}}
+
+5. If your device has a tilt sensor (`SLOT2_PERIPHERAL_TILT`) you will need to
+   start a read with `peripheralSlot2TiltStart()` before you can read its value.
+   You also need to do it every time you read its value:
+
+   ```c
+   slot2TiltPosition pos;
+
+   if (peripheralSlot2TiltRead(&pos))
+   {
+       printf("Tilt: X=%03X, Y=%03X", pos.x, pos.y);
+       peripheralSlot2TiltStart();
+   }
+   ```
+
+6. If your device has a gyroscope (`SLOT2_PERIPHERAL_GYRO_GPIO`) you can read it
+   with `peripheralSlot2GyroScan()`.
+
+7. If your device has a solar sensor (`SLOT2_PERIPHERAL_SOLAR_GPIO`) you can
+   read its value with `peripheralSlot2SolarScanFast()`.
+
+8. If your device has a Guitar Grip (`SLOT2_PERIPHERAL_GUITAR_GRIP`) you need to
+   treat it like the other keys in libnds. Use `guitarGripScanKeys()` to fetch
+   and update the state of the keys, and then `guitarGripKeysDown()`,
+   `guitarGripKeysHeld()` and `guitarGripKeysUp()`. You can use the defines
+   `GUITARGRIP_GREEN`, `GUITARGRIP_RED`, `GUITARGRIP_YELLOW` and
+   `GUITARGRIP_BLUE` to see the state of each button. You can also bypass the
+   Slot-2 API and use `guitarGripIsInserted()` to detect the Guitar Grip if you
+   aren't interested in other devices.
+
+9. If you device has a Paddle Controller (`SLOT2_PERIPHERAL_PADDLE`) you can
+   read its state with `paddleRead()`.
+
+10. If your device has a Piano keyboard (`SLOT2_PERIPHERAL_PIANO`) you need to
+    use `pianoScanKeys()` (and then `pianoKeysDown()`, `pianoKeysHeld()` and
+    `pianoKeysUp()`). You can also bypass the Slot-2 API and use
+    `pianoIsInserted()` to detect the piano if you aren't interested in other
+    devices. The names of the defines used to check the keys are `PIANO_C`,
+    `PIANO_CS`, `PIANO_D`, `PIANO_DS`, `PIANO_E`, `PIANO_F`, `PIANO_FS`,
+    `PIANO_G`, `PIANO_GS`, `PIANO_A`, `PIANO_AS`, `PIANO_B` and `PIANO_C2`.
+
+Check this example to see all of this in action:
+[`examples/peripherals/slot2`](https://github.com/blocksds/sdk/tree/master/examples/peripherals/slot2)
+
 {{< callout type="error" >}}
 This chapter is a work in progress...
 {{< /callout >}}
