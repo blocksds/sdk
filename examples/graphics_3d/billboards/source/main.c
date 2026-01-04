@@ -93,7 +93,7 @@ int main(int argc, char **argv)
     int32_t camera_pos[3] = { floattof32(0), floattof32(2), floattof32(3) };
     int32_t ball_pos[3] = { floattof32(0), floattof32(0), floattof32(0) };
 
-    int32_t ball_size = inttof32(1) / 2;
+    int32_t ball_size = 1;
 
     // Clear console
     consoleClear();
@@ -122,13 +122,21 @@ int main(int argc, char **argv)
                      0, floattof32(1.0), 0);                      // Up
 
         // Get 3x3 modelview matrix. We will extract its vectors to use them for
-        // our calculations later. Note that the vectors are normalized.
+        // our calculations later. Note that the vectors are normalized, so we
+        // can invert the matrix by transposing it.
         int matrix[9];
         glGetFixed(GL_GET_MATRIX_VECTOR, matrix);
 
         int32_t right[3] = { matrix[0], matrix[3], matrix[6] };
         int32_t up[3] =    { matrix[1], matrix[4], matrix[7] };
         int32_t front[3] = { matrix[2], matrix[5], matrix[8] };
+
+        // Create the inverse matrix of the vector matrix
+        const m3x3 to_billboard_space = {{
+             right[0],  right[1],  right[2],
+                up[0],     up[1],     up[2],
+            -front[0], -front[1], -front[2],
+        }};
 
         // Handle user input
         // -----------------
@@ -141,7 +149,12 @@ int main(int argc, char **argv)
 
         uint16_t keys_down = keysDown();
         if (keys_down & KEY_SELECT)
-            ball_size ^= inttof32(1) / 4;
+        {
+            if (ball_size == 2)
+                ball_size = 1;
+            else
+                ball_size = 2;
+        }
 
         // Move camera left/right and front/back from the camera's perspective
 
@@ -177,32 +190,6 @@ int main(int argc, char **argv)
         // Draw 3D scene
         // -------------
 
-        // Calculate vertices of the billboard
-
-        int32_t p_bl[3] = { // Bottom left
-            f32tov16(mulf32(-right[0], ball_size)) + f32tov16(ball_pos[0]),
-            f32tov16(mulf32(-right[1], ball_size)) + f32tov16(ball_pos[1]),
-            f32tov16(mulf32(-right[2], ball_size)) + f32tov16(ball_pos[2]),
-        };
-
-        int32_t p_br[3] = { // Bottom right
-            f32tov16(mulf32(right[0], ball_size)) + f32tov16(ball_pos[0]),
-            f32tov16(mulf32(right[1], ball_size)) + f32tov16(ball_pos[1]),
-            f32tov16(mulf32(right[2], ball_size)) + f32tov16(ball_pos[2]),
-        };
-
-        int32_t p_tl[3] = { // Top left
-            f32tov16(mulf32(-right[0] + 2 * up[0], ball_size)) + f32tov16(ball_pos[0]),
-            f32tov16(mulf32(-right[1] + 2 * up[1], ball_size)) + f32tov16(ball_pos[1]),
-            f32tov16(mulf32(-right[2] + 2 * up[2], ball_size)) + f32tov16(ball_pos[2]),
-        };
-
-        int32_t p_tr[3] = { // Top right
-            f32tov16(mulf32(right[0] + 2 * up[0], ball_size)) + f32tov16(ball_pos[0]),
-            f32tov16(mulf32(right[1] + 2 * up[1], ball_size)) + f32tov16(ball_pos[1]),
-            f32tov16(mulf32(right[2] + 2 * up[2], ball_size)) + f32tov16(ball_pos[2]),
-        };
-
         // Draw billboarded ball
 
         glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE);
@@ -211,21 +198,34 @@ int main(int argc, char **argv)
 
         glColor3f(1, 1, 1);
 
-        glBegin(GL_QUADS);
+        glPushMatrix();
 
-            glTexCoord2t16(inttot16(32), 0);
-            glVertex3v16(p_tl[0], p_tl[1], p_tl[2]);
+            // Move to the position of the ball first
+            glTranslate3f32(ball_pos[0], ball_pos[1], ball_pos[2]);
 
-            glTexCoord2t16(0, 0);
-            glVertex3v16(p_tr[0], p_tr[1], p_tr[2]);
+            // Rotate the world so that the axes are in billboard space
+            glMultMatrix3x3(&to_billboard_space);
 
-            glTexCoord2t16(0, inttot16(32));
-            glVertex3v16(p_br[0], p_br[1], p_br[2]);
+            // Now we can scale the billboard if we want
+            glScalef32(inttof32(ball_size), inttof32(ball_size), inttof32(1));
 
-            glTexCoord2t16(inttot16(32), inttot16(32));
-            glVertex3v16(p_bl[0], p_bl[1], p_bl[2]);
+            glBegin(GL_QUADS);
 
-        glEnd();
+                glTexCoord2t16(inttot16(32), 0);
+                glVertex3v16(floattov16(-0.5), floattov16(1), 0);
+
+                glTexCoord2t16(0, 0);
+                glVertex3v16(floattov16(0.5), floattov16(1), 0);
+
+                glTexCoord2t16(0, inttot16(32));
+                glVertex3v16(floattov16(0.5), 0, 0);
+
+                glTexCoord2t16(inttot16(32), inttot16(32));
+                glVertex3v16(floattov16(-0.5), 0, 0);
+
+            glEnd();
+
+        glPopMatrix(1);
 
         // Draw ground
 
@@ -251,7 +251,7 @@ int main(int argc, char **argv)
 
         // Draw X, Y and Z axis
 
-        glBindTexture(0, 0);
+        glBindTexture(0, 0); // Don't use a texture
 
         glBegin(GL_TRIANGLES);
 
