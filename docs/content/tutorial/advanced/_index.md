@@ -9,4 +9,5 @@ need once you start working on more complicated projects.
 {{< cards cols="1" >}}
   {{< card icon="wifi" link="wifi" title="Wi-FI" >}}
   {{< card icon="cube" link="advanced_3d" title="Advanced 3D techniques" >}}
+  {{< card icon="clock" link="optimizing_code" title="Optimizing code" >}}
 {{< /cards >}}
