@@ -38,8 +38,6 @@ int main(int argc, char *argv[])
             swiWaitForVBlank();
     }
 
-    glMaterialShinyness();
-
     // Set material properties
     glMaterialf(GL_AMBIENT, RGB15(8, 8, 8));
     glMaterialf(GL_DIFFUSE, RGB15(24, 24, 24));
