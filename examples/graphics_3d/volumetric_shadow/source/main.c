@@ -199,7 +199,6 @@ int main(int argc, char *argv[])
 
         // Use the modelview matrix while drawing
         glMatrixMode(GL_MODELVIEW);
-
         glLoadIdentity();
 
         // Setup the camera
@@ -207,13 +206,13 @@ int main(int argc, char *argv[])
                   0, 1.25, 0,
                   0, 1, 0);
 
+        // Draw regular models
+
         glLight(0, RGB15(31, 31, 31), 0, floattov10(-0.97), 0);
 
         glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_FORMAT_LIGHT0 | POLY_MODULATION);
 
         glBindTexture(0, textureID);
-
-        // Draw regular models
 
         glPushMatrix();
             glTranslatef32(x, y, z);
@@ -226,18 +225,20 @@ int main(int argc, char *argv[])
         DrawFloor();
         DrawLid();
 
+        if (draw_edges)
+        {
+            // Draw the shadow volume in wireframe mode to see where it is
+            glBindTexture(0, 0);
+            glColor3f(0, 0, 0);
+            glPolyFmt(POLY_ALPHA(0) | POLY_ID(0) |  POLY_CULL_NONE | POLY_MODULATION);
+            DrawShadowVolume();
+        }
+
         // Draw shadow volume as a black volume (shadow)
 
         glBindTexture(0, 0);
 
         glColor3f(0, 0, 0);
-
-        if (draw_edges)
-        {
-            // Draw the shadow volume in wireframe mode to see where it is
-            glPolyFmt(POLY_ALPHA(0) | POLY_ID(0) |  POLY_CULL_NONE | POLY_MODULATION);
-            DrawShadowVolume();
-        }
 
         glPolyFmt(POLY_ALPHA(1) | POLY_ID(0) |  POLY_CULL_NONE | POLY_SHADOW);
         DrawShadowVolume();
