@@ -171,6 +171,48 @@ Some things to consider:
 You can check the example here:
 [`examples/graphics_3d/picking`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/picking)
 
+## 4. Point light
+
+The GPU of the Nintendo DS only supports directional light:
+
+- It behaves like sunlight.
+- All the rays of light are parallel.
+- The intensity of the light isn't affected by the distance to the light source.
+- The light is defined by its color and direction (it doesn't have a position).
+
+Using this kind of lights it's possible to emulate point lights:
+
+- It behaves like a lightbulb.
+- Rays of light emerge from a point in space.
+- The intensity of the light is affected by the distance to the light source.
+- The light is defined by its color, position, and a function that defines the
+  attenuation of the light based on the distance.
+
+<video controls>
+  <source src="point_light.webm" type="video/webm">
+  Your browser does not support the video tag.
+</video>
+
+In a few words: You have to use directional lights, but you adjust their
+direction and color before drawing each object affected by point lights.
+
+For each light (up to 4):
+
+- Calculate the difference between the coordinates of the object and the
+  coordinates of the light: `light_to_obj[] = object_position[] - light_position[]`
+- Calculate the length of this vector: `distance = length(light_to_obj[])`
+- Turn this vector into a unit vector: `light_to_obj[] = light_to_obj[] / distance`
+- Calculate the light intensity. For example, for each of the R, G and B
+  components, you can do: `R_obj = R_light / (attenuation * distance ^ 2)`
+- Setup the light by calling `glLight()` with `light_to_obj[]` as direction
+  and `(R_obj, G_obj, B_obj)` as color.
+
+This is a pretty convincing effect in most cases. However, it becomes less
+convincing when the light source is very close to the object it illuminates.
+
+You can check the source code of the example here:
+[`examples/graphics_3d/point_light`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/point_light)
+
 {{< callout type="error" >}}
 This chapter is a work in progress...
 {{< /callout >}}
