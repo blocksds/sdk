@@ -213,6 +213,66 @@ convincing when the light source is very close to the object it illuminates.
 You can check the source code of the example here:
 [`examples/graphics_3d/point_light`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/point_light)
 
+## 5. Volumetric shadow
+
+Volumetric shadows allow you to display scenes in which parts of a model are
+shadowed while others are displayed normally. For example, the following image
+shows the 3D scene on the left, and it highlights the shadow volume in wireframe
+on the right:
+
+![Volumetric shadow](volumetric_shadow.png)
+
+You can also use this to cause a flashlight effect if the shadow volume is
+brighter than the rest of the scene.
+
+The steps to use this effect are:
+
+1. Enable blending and manual sorting of translucent polygons.
+
+   ```c
+   glEnable(GL_BLEND);
+   glFlush(GL_TRANS_MANUALSORT);
+   ```
+
+2. Draw your scene as usual sorting your translucent polygons manually.
+
+3. Draw shadow volume to set the stencil buffer mask. Use shadow polygon mode,
+   polygon ID 0, and alpha between 1 and 30. This won't draw the shadow, but it
+   will prepare the buffer to draw it in the next step.
+
+   ```c
+   glPolyFmt(POLY_ALPHA(1) | POLY_ID(0) |  POLY_CULL_NONE | POLY_SHADOW);
+   DrawShadowVolume();
+   ```
+
+4. Draw shadow volume to render it. Use shadow polygon mode as well, but this
+   time use the alpha value you want for your shadow, and a polygon ID that
+   isn't 0. If you're using fog, enable it here as well (or not, if you want a
+   flashlight effect with a bright shadow volume).
+
+   ```c
+   glPolyFmt(POLY_ALPHA(20) | POLY_ID(63) |  POLY_CULL_NONE | POLY_SHADOW);
+   DrawShadowVolume();
+   ```
+
+5. Repeat the last two steps for every shadow you want to display on the screen.
+   Don't try to draw all the masks and volumes at once or shadows won't shadow
+   each other.
+
+6. Finish the scene using manual sorting mode for translucent polygons:
+
+   ```c
+   glFlush(GL_TRANS_MANUALSORT);
+   ```
+
+You can check the code of the example here:
+[`examples/graphics_3d/volumetric_shadow`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/volumetric_shadow)
+
+You can check [GBATEK](https://problemkaputt.de/gbatek.htm#ds3dshadowpolygons)
+to get more information, and you can check the
+[Volumetric Shadow Demo](https://codeberg.org/SkyLyrac/volumetric_shadow_demo)
+by silent_code to see a more complex example that uses this technique.
+
 {{< callout type="error" >}}
 This chapter is a work in progress...
 {{< /callout >}}
