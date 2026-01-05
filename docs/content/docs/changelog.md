@@ -9,6 +9,8 @@ weight: 6
 
   - Allow developers to send cothread signals from IRQs safely with
     `cothread_send_signal()`.
+  - Move DTCM to `0x2FF4000`, increasing the amount of available memory by
+    up to around 16 KiB.
 
 - grit:
 
