@@ -24,6 +24,7 @@ DEFINES		:= -DSAMPLE_DEFINE -DSAMPLE_DEFINE_WITH_VALUE=123
 # Libraries
 # ---------
 
+LIBS        := -lgcc
 LIBDIRS		:=
 
 # Build artifacts
