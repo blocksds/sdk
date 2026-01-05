@@ -28,7 +28,7 @@ int main(int argc, char **argv)
     // As explained above, this isn't required in debug builds, only in release
     // builds. In debug builds this is called before reaching main(). In release
     // builds, this replaces the minimal release exception handler.
-    debugExceptionHandler();
+    defaultExceptionHandler();
     //releaseExceptionHandler();
 
     consoleDemoInit();
