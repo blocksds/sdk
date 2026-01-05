@@ -41,6 +41,76 @@ on the level of accuracy you want:
   You can see an example of using this system here:
   [`examples/time/profiling`](https://github.com/blocksds/sdk/tree/master/examples/time/profiling)
 
+## 3. ARM/Thumb CPU modes
+
+By default BlocksDS asks GCC to compile all code as Thumb code, not ARM. The
+two CPU modes have a few differences:
+
+ARM:
+
+- Instructions are 32-bit wide.
+- All instructions can be executed conditionally.
+- It supports multiplications from 32-bit wide operands into a 64-bit wide
+  result. This is also used by compilers to optimize divisions by constants.
+- All CPU registers are treated equally.
+- The CPU mode and status can be changed in this mode.
+
+Thumb:
+
+- Instructions are 16-bit wide.
+- The only conditional instructions are jumps.
+- Multiplications have a 32-bit wide result.
+- Registers `r0` to `r7` are more convenient to use than the rest.
+- The CPU mode and status can't be changed.
+
+In general, this means that ARM code can do more things per instruction, but at
+a cost of needing more space for the code. Reading code from memory takes time,
+so the extra size of ARM functions needs to be considered when switching
+functions from Thumb to ARM.
+
+The ARM9 has an instruction cache, so keeping your code small can speed it up
+significantly: the cache will have to swap code in and out less frequently.
+Also, the ARM9 has ITCM, where you can place code that needs to be particularly
+fast. If you want more details, check the chapter about the
+[TCM and cache](../../intermediate/tcm_and_cache).
+
+There are two options to tell GCC to build your code as ARM:
+
+- You can tag the implementation of your functions with `ARM_CODE`. The default
+  is Thumb, which is equivalent to using `THUMB_CODE`:
+
+  ```c
+  ARM_CODE int test_function(int a, int b)
+  {
+      return a + b;
+  }
+
+  THUMB_CODE int test_function2(int a, int b)
+  {
+      return a + b;
+  }
+  ```
+
+- If you're using the default makefiles of BlocksDS You can rename your `.c` and
+  `.cpp` files to `.arm.c` and `.arm.cpp`. All the code in that file will be
+  built as ARM (unless `THUMB_CODE` is used).
+
+When should you use ARM code?
+
+- You have a function that does a lot of multiplications (for example, for 3D
+  graphics) that runs very frequently.
+- You have a big and complicated function with many variables that needs to be
+  very fast.
+
+However, making GCC build your functions as ARM won't always make your code
+faster. Very simple functions won't benefit from it, or functions that are
+executed very rarely. Sometimes, moving your Thumb functions to ITCM is enough
+to make it fast, and building it as ARM won't help that much.
+
+Remember to always profile your code before and after making this kind of
+changes. Optimizing rarely used functions isn't useful. Optimizing your most
+frequently used functions will have a very big effect.
+
 {{< callout type="error" >}}
 This chapter is a work in progress...
 {{< /callout >}}
