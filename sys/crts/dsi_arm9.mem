@@ -2,6 +2,6 @@
 
 MEMORY {
 	ewram	: ORIGIN = 0x02000000, LENGTH = 15M - 512k
-	dtcm	: ORIGIN = 0x02ff0000, LENGTH = 16K
+	dtcm	: ORIGIN = 0x02ff4000, LENGTH = 16K
 	itcm	: ORIGIN = 0x01000000, LENGTH = 32K
 }
