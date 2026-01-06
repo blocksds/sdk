@@ -266,7 +266,7 @@ This repository contains most of the history of the library before the creation
 of the devkitPro git repository.
 
 There is a also a version of the CVS repository converted to git
-[in this GitHub repository](https://github.com/AntonioND/ndslib-archive/).
+[in this GitHub repository](https://codeberg.org/SkyLyrac/ndslib-archive).
 
 #### 6.2 ARM7 changes
 
