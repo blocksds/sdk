@@ -145,8 +145,7 @@ the .nds loader:
 
 Address   | Description
 ----------|---------------------------------------------------------
-0x2FF0000 | libnds shadows this area with DTCM, making it inaccessible through this address. This is only a problem in DSi mode, where it needs to be accessed from 0xCFF0000. It needs to be the first thing in the reserved memory area so that the stack can overflow into main RAM without affecting any other reserved information.
-0x2FF4000 | [devkitARM bootstub structure](https://github.com/blocksds/libnds/blob/7d131d933ebab8eecf1c28a4eeb2107257f09e14/include/nds/system.h#L451-L458). Used for implementing the [exit to loader protocol](../../design/exit_to_loader/). Right after the bootstumb NDS Homebrew Menu stores a mini bootloader that attempts to boot a ROM called "BOOT.NDS" from the root of the filesystem. In total there are 0x5000 bytes reserved for the bootstub and bootloader.
+0x2FF4000 | [devkitARM bootstub structure](https://github.com/blocksds/libnds/blob/7d131d933ebab8eecf1c28a4eeb2107257f09e14/include/nds/system.h#L451-L458). Used for implementing the [exit to loader protocol](../../design/exit_to_loader/). Right after the bootstumb NDS Homebrew Menu stores a mini bootloader that attempts to boot a ROM called "BOOT.NDS" from the root of the filesystem. In total there are 0x5000 bytes reserved for the bootstub and bootloader. libnds shadows this area with DTCM, making it inaccessible through this address. It needs to be the first thing in the reserved memory area so that the stack can overflow into main RAM without affecting any other reserved information.
 0x2FFA000 | NDS Homebrew Menu copies its exception handler here. Its current size is smaller than 0x2000 bytes.
 0x2FFE000 | DSi only: .nds header - 0x1000 bytes.
 0x2FFF000 | libnds ARM9/ARM7 internal IPC region.
@@ -168,7 +167,7 @@ normally enough.
 ### 5. ITCM and DTCM
 
 Because of how fast it is, DTCM is used for the stack of the ARM9. DTCM can be
-mapped anywhere, and libnds maps the 16 KB of DTCM at 0x2FF0000-0x2FF4000.
+mapped anywhere, and libnds maps the 16 KB of DTCM at 0x2FF4000-0x2FF8000.
 Developers may use DTCM for their own variables, but that will reduce the amount
 of stack available, so be careful when doing that. Check the [usage notes](../../guides/usage_notes)
 of BlocksDS to know how to optimize the DTCM layout if you want to allocate your

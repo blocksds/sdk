@@ -170,25 +170,13 @@ NotTWL:
     ldr     r1, =fake_heap_start
     str     r2, [r1]
 
-    // The heap end is located in different places in DS consoles than in DSi
-    // consoles.
+    // The heap end is located at the end of main RAM, minus the space
+    // reserved at for libnds (48 KB, or 0xC000).
     //
-    // - In DS consoles the full main RAM is available from 0x2000000 to
-    //   0x2400000 (or 0x2800000 in debugger consoles). There is a bit of space
-    //   reserved at the end of RAM for libnds (48 KB, or 0xC000).
-    //   __libnds_mpu_setup() sets r8 to the end of main RAM, so we can use the
-    //   value of r8 minus the reserved space for IPC and bootstub.
-    //
-    // - In DSi consoles main RAM and DTCM overlap. DTCM is located before the
-    //   reserved libnds RAM, so the end of the heap is actually the start of
-    //   DTCM, as that will also preserve the reserved memory.
+    // __libnds_mpu_setup() sets r8 to the end of main RAM.
 
     ldr     r1, =fake_heap_end
-
-    cmp     r11, #1 // Check if this is a DSi
-    ldreq   r8, =__dtcm_start // DSi consoles
-    subne   r8, r8, 0xC000    // DS consoles
-
+    sub     r8, r8, 0xC000
     str     r8, [r1]
 
     // We need to do some additional initialization, but that needs to happen

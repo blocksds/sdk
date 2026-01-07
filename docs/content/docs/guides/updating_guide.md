@@ -10,6 +10,13 @@ to implement. These are documented here.
 Please refer to the [changelog](../../changelog) for a full list of changes,
 including additions and enhancements to the SDK which are not listed here.
 
+### Upgrading to BlocksDS DEV
+
+* The DTCM memory region has been moved from `0x2FF0000` to `0x2FF4000`. This
+  should only break code which writes [boot stubs](../../internal/exit_to_loader),
+  in which case you can either use a DMA copy or
+  [read from/write to a different memory mirror](https://github.com/blocksds/libnds/pull/199).
+
 ### Upgrading to BlocksDS 1.16.0
 
 * `grit` used to silently fail if it was exporting a tiled map with too many
