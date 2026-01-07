@@ -121,3 +121,21 @@ the end of DTCM and make it possible for the stack to grow into main RAM again.
 You can set the value of this symbol by adding the following to `LDFLAGS` in
 your Makefile. For example, this will leave 512 bytes of DTCM for the code:
 `-Wl,--defsym=__dtcm_data_size=512`
+
+## 4. DMA copy while the CPU runs
+
+DMA copies stall the CPU when it tries to access the same memory as the DMA
+hardware. This means that, in theory, it's possible to do DMA copies while the
+CPU is doing other work as long as the CPU doesn't try to use the same memory as
+the DMA.
+
+In the case of the ARM9, you can achieve this by placing your code in ITCM and
+your variables in DTCM. DMA can't see ITCM or DTCM because they are internal to
+the ARM9, so DMA copies will involve main RAM, VRAM, or I/O registers. If the
+ARM9 only uses internal memory it won´t get stalled by DMA.
+
+In practice, it isn't easy to find applications for this. Generally you use DMA
+when you want to copy big chunks of data or when you're doing I/O DMA writes
+(to achieve scanline-based effects, for example). If you're copying big chunks
+of data there won't be anything useful you can do at the same time. If you're
+doing small I/O writes, setting this up isn't worth the effort.

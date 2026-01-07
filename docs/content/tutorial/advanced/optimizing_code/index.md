@@ -41,7 +41,7 @@ on the level of accuracy you want:
   You can see an example of using this system here:
   [`examples/time/profiling`](https://github.com/blocksds/sdk/tree/master/examples/time/profiling)
 
-## 3. ARM/Thumb CPU modes
+## 3. ARM and Thumb CPU modes
 
 By default BlocksDS asks GCC to compile all code as Thumb code, not ARM. The
 two CPU modes have a few differences:
@@ -110,6 +110,13 @@ to make it fast, and building it as ARM won't help that much.
 Remember to always profile your code before and after making this kind of
 changes. Optimizing rarely used functions isn't useful. Optimizing your most
 frequently used functions will have a very big effect.
+
+## 4. ITCM and DTCM
+
+ITCM and DTCM are very fast memory areas where you can store ARM9 code and
+variables. We learned most things about ITCM and DTCM in chapter
+[TCM and cache](../../intermediate/tcm_and_cache). Check that chapter for more
+information.
 
 {{< callout type="error" >}}
 This chapter is a work in progress...
