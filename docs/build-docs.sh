@@ -12,7 +12,7 @@ set -x
 
 if [ ! -d themes/hextra ]; then
     cd themes
-    git clone https://github.com/blocksds/hextra.git --depth=1
+    git clone https://codeberg.org/blocksds/hextra --depth=1
     cd hextra
     git checkout 9466af337f3a54e77b68c9852a568b79038ff0ef
     cd ../..
