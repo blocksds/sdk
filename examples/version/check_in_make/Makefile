@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2025
+# SPDX-FileContributor: Antonio Niño Díaz, 2025-2026
 
 BLOCKSDS	?= /opt/blocksds/core
 
@@ -14,14 +14,17 @@ GAME_SUBTITLE	:= Version
 
 BLOCKSDS_VERSION_FILE = $(BLOCKSDS)/libs/version/blocksds_version.make
 
-ifeq ("$(wildcard $(BLOCKSDS_VERSION_FILE))","")
-$(error BlocksDS version too old. Please update.)
+# Allow running the "clean" target even if the file is missing
+ifneq ($(MAKECMDGOALS),clean)
+    ifeq ("$(wildcard $(BLOCKSDS_VERSION_FILE))","")
+        $(error BlocksDS version too old, please update)
+    endif
+
+    include $(BLOCKSDS_VERSION_FILE)
+
+    # You can experiment by changing this version number. If the number is too
+    # high the project won't be able to be built!
+    $(eval $(call error_if_blocksds_version_less_than, 1, 14, 2))
 endif
-
-include $(BLOCKSDS_VERSION_FILE)
-
-# You can experiment by changing this version number. If the number is too high
-# the project won't be able to be built!
-$(eval $(call error_if_blocksds_version_less_than, 1, 14, 2))
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile
