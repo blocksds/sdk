@@ -10,7 +10,18 @@ weight: 6
   - Allow developers to send cothread signals from IRQs safely with
     `cothread_send_signal()`.
   - Move DTCM to `0x2FF4000`, increasing the amount of available memory by
-    up to around 16 KiB.
+    up to around 16 KiB. Fix `__system_bootstub` definition for DTCM at
+    `0x2FF4000`. @asiekierka
+  - Fix holding power button for 1 second not turning off the console.
+    @RocketRobz
+  - Add defines to read the battery status easier: `BATTERY_CHARGER_CONNECTED`,
+    `BATTERY_LEVEL_MASK`, `BATTERY_LEVEL_DS_HIGH` and`BATTERY_LEVEL_DS_LOW`.
+  -  Disable microphone FIFO after disabling microphone amp. @asiekierka
+  - Add note to the console documentation that background types with 8-bit map
+    entries aren't supported.
+  - Pull `dlmalloc` implementation to the libnds repository. This is no longer
+    present in picolibc, it has been removed in favour of `nano-malloc`, but
+    `nano-malloc` has worse performance than `dlmalloc`. @asiekierka
 
 - grit:
 
@@ -23,16 +34,55 @@ weight: 6
 - SDK:
 
   - The documentation now links to the new page with the documentation of grit.
+  - Add more flashcarts to the list of flashcards where DLDI is verified to work
+    on the ARM7. @19tracks
+  - Add test to verify that C++ unhandled exceptions are handled by the callback
+    defined by the C++ standard instead of just crashing. This callback has been
+    added to the debugging guide as well.
+  - Clarify that the bootstub field `arm7reboot` isn't used by libnds.
+  - The upgrade guide and memory map documentation have been updated to mention
+    that DTCM has been moved. @asiekierka
 
   - Examples:
 
     - New example of loading 3D display lists from NitroFS.
-    - New example of scrolling a 2D background with a map that is bigger than
-      the hardware limits.
+    - New example of scrolling a 2D tiled background with a map that is bigger
+      than the hardware limits.
+    - New example of scrolling a 2D tiled background with a map and a tile set
+      that are bigger than the hardware limits.
+    - New example of scrolling a 16-bit bitmap background bigger than the
+      hardware limits.
+    - New example of reading firmware user settings.
+    - New example that compares Z and W depth buffering for 3D graphics.
+    - Improve background conversion settings. We weren't using SSB layout when
+      converting regular backgrounds (grit uses flat layout by default).
+    - Improve the example of using libnds console windows.
+    - The example of using billboards in 3D has been simplified.
+    - Don't load the shininess table in 3D examples unless it's required.
+    - The volumetric shadow example has been reorganized a bit.
+    - Fix function name in exception handler example. @steveschnepp
+    - Allow running "make clean" in version "check_in_make" example when the
+      version file is missing instead of showing an error message.
 
   - Tutorial:
 
+    - Add chapter about how to scroll 2D backgrounds that are bigger than the
+      hardware limits.
+    - Add chapter about Wi-Fi communications.
+    - Add chapter about how to use the ARM7.
+    - Add chapter about using the libnds console and keyboard.
+    - Add chapter about integrated peripherals of the NDS as well as external
+      Slot-1 and Slot-2 peripherals.
+    - Add chapter about advanced 3D techniques.
+    - Add chapter about optimizing code for the NDS.
     - Mention how to load 3D display lists from NitroFS.
+    - Add sections about how to combine 2D and 3D graphics in the same screen.
+    - Some chapters have been renamed.
+    - Some links to pre-existing examples have been added in old chapters.
+    - Mention how regular tiled maps are arranged in VRAM when they are bigger
+      than 256x256 pixels.
+    - Mention that DMA copies in the ARM9 can happen while the CPU runs as long
+      as the CPU only uses ITCM and DTCM.
 
 ### Version 1.16.0 (2025-12-25)
 
