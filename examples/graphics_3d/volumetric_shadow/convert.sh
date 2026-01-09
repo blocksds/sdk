@@ -2,7 +2,7 @@
 
 # This script requires obj2dl from Nitro Engine:
 #
-# https://github.com/AntonioND/nitro-engine
+# https://codeberg.org/SkyLyrac/nitro-engine
 #
 # The model has normals, texture UV information, and no material information.
 

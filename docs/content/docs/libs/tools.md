@@ -6,7 +6,7 @@ weight: 4
 This is a list of additional tools that don't come with the base SDK.  You can
 check their documentation and examples in their respective homepages.
 
-### [ptexconv](https://github.com/blocksds/ptexconv)
+### [ptexconv](https://github.com/Garhoogin/ptexconv)
 
 Tool to convert images to files in the format of the NDS. This tool is one of
 the few available tools that can output files in the very efficient tex4x4
@@ -24,7 +24,7 @@ They don't support things like having multiple DSP binaries either. You can
 check ArchitectDS if you need a more flexible build system. It's written in
 Python 3 and it uses [ninja-build](https://ninja-build.org/) internally.
 
-### [NDS Compressors by CUE](https://github.com/WonderfulToolchain/wf-nnpack)
+### [NDS Compressors by CUE](https://codeberg.org/WonderfulToolchain/wf-nnpack)
 
 Compressors for Nintendo GBA/DS consoles by CUE. They support the formats that
 the BIOS can decompress.

@@ -17,7 +17,7 @@ using the 3D engine.
 wf-pacman -Sy blocksds-nflib
 ```
 
-### [Nitro Engine](https://github.com/AntonioND/nitro-engine)
+### [Nitro Engine](https://codeberg.org/SkyLyrac/nitro-engine)
 
 Library to create 3D applications. It supports dual screen 3D, static and
 animated models, supports all texture types, and has basic 2D support using the
@@ -27,7 +27,7 @@ animated models, supports all texture types, and has basic 2D support using the
 wf-pacman -Sy blocksds-nitroengine
 ```
 
-### [LibDSF](https://github.com/AntonioND/libdsf)
+### [LibDSF](https://codeberg.org/SkyLyrac/libdsf)
 
 Library that uses pre-converted TTF fonts to render text. It can use the 3D
 hardware of the NDS directly or render to buffers to be used by the 2D hardware.
@@ -36,7 +36,7 @@ hardware of the NDS directly or render to buffers to be used by the 2D hardware.
 wf-pacman -Sy blocksds-libdsf
 ```
 
-### [Woopsi](https://github.com/AntonioND/Woopsi)
+### [Woopsi](https://codeberg.org/SkyLyrac/Woopsi)
 
 Woopsi is a GUI framework for the Nintendo DS, written in C++. The aim of the
 project is to provide a windowing GUI that other programmers can use for their

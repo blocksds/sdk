@@ -25,7 +25,7 @@ You can also check the online mirror of the documentation of all libraries
 included in BlocksDS [here](../../libs).
 
 If `libnds` is too low-level for you, you can check high-level libraries like
-[Nitro Engine](https://github.com/AntonioND/nitro-engine) or
+[Nitro Engine](https://codeberg.org/SkyLyrac/nitro-engine) or
 [NightFox’s Lib](https://github.com/knightfox75/nds_nflib). They don't have
 official tutorials either, but they also come with lots of examples you can use
 as reference, and it may be easier to get started with NDS development with

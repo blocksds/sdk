@@ -46,7 +46,7 @@ wf-pacman -S toolchain-llvm-teak-llvm
 
 You can also install some third party libraries like
 [NightFox’s Lib](https://github.com/knightfox75/nds_nflib) and
-[Nitro Engine](https://github.com/AntonioND/nitro-engine) using
+[Nitro Engine](https://codeberg.org/SkyLyrac/nitro-engine) using
 `wf-pacman`:
 
 ```bash

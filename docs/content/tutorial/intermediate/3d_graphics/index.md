@@ -1317,7 +1317,7 @@ format like Wavefront OBJ, use some tool to convert it to a display list, and
 add the display list to your game as data.
 
 The following example has a `convert.sh` script that uses a conversion tool from
-[Nitro Engine](https://github.com/AntonioND/nitro-engine/tree/master/tools/obj2dl).
+[Nitro Engine](https://codeberg.org/SkyLyrac/nitro-engine/src/branch/master/tools/obj2dl).
 This script takes the OBJ file and it generates a BIN file that is added to the
 game.
 
