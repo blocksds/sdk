@@ -16,7 +16,7 @@ format used by the GPU of the NDS.
 wf-pacman -Sy blocksds-ptexconv
 ```
 
-### [ArchitectDS](https://github.com/AntonioND/architectds):
+### [ArchitectDS](https://codeberg.org/blocksds/architectds):
 
 BlocksDS comes with sample Makefiles to build projects. They don't support many
 common use-cases, like converting graphics and storing them in the filesystem.

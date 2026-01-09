@@ -59,7 +59,7 @@ A NDS ROM is divided into:
   want to use them.
 
 If you're interested in using NitroFS for your game, check the build system
-[ArchitectDS](https://github.com/AntonioND/architectds). It has been designed
+[ArchitectDS](https://codeberg.org/blocksds/architectds). It has been designed
 specifically for the DS and it is capable of taking files like PNG, MOD, etc,
 convert them, and place them in NitroFS automatically. The default Makefiles of
 BlocksDS don't support this because of the complexity of the whole process.

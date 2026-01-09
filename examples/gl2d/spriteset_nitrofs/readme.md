@@ -6,7 +6,7 @@ format. In order to know where each sub-image is located in the final image,
 a GUV file is generated. Both the GRF and GUV files need to be loaded at
 runtime.
 
-The build system used is [ArchitectDS](https://github.com/AntonioND/architectds)
+The build system used is [ArchitectDS](https://codeberg.org/blocksds/architectds)
 because of the flexibility it gives the user.
 
 In order to build this example, run:

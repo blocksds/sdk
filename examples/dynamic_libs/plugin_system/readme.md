@@ -10,7 +10,7 @@ NitroFS for this system to work, you could load the plugins from individual
 files in the SD card of the flashcard (or DSi slot). However, to make the
 example easier to build and test, the example uses NitroFS.
 
-The build system used is [ArchitectDS](https://github.com/AntonioND/architectds)
+The build system used is [ArchitectDS](https://codeberg.org/blocksds/architectds)
 because of the flexibility it gives the user. However, it is needed to run it
 three times (once for each plugin, once for the application).
 
