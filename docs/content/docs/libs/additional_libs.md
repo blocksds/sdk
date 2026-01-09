@@ -47,7 +47,7 @@ write.
 wf-pacman -Sy blocksds-libwoopsi
 ```
 
-### [PAlib](https://github.com/AntonioND/palib)
+### [PAlib](https://codeberg.org/SkyLyrac/palib)
 
 PAlib (Programmer's Arsenal library) is a Nintendo DS library used to create
 homebrew games. It is designed to be easily used by anyone. However, nowadays
@@ -58,7 +58,7 @@ projects that depend on it to be built.
 wf-pacman -Sy blocksds-palib
 ```
 
-### [µLibrary](https://github.com/AntonioND/ulibrary)
+### [µLibrary](https://codeberg.org/blocksds/ulibrary)
 
 This is a library that provides functions to create 2D games using the 3D engine
 of the Nintendo DS. The 3D GPU is more flexible than the 2D GPU.
@@ -85,7 +85,7 @@ supported: DSerial Edge, wireless access point (via DSMIDIWiFi).
 wf-pacman -Sy blocksds-dsmi
 ```
 
-### [gbajpeg](https://github.com/blocksds/gbajpeg)
+### [gbajpeg](https://codeberg.org/blocksds/gbajpeg)
 
 Library originally designed to load JPEG files on GBA with very low resource
 usage.
