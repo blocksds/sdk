@@ -1,33 +1,33 @@
 [submodule "libs/libnds"]
 	path = libs/libnds
-	url = https://github.com/blocksds/libnds
+	url = ../libnds
 [submodule "libs/dswifi"]
 	path = libs/dswifi
-	url = https://github.com/blocksds/dswifi
+	url = ../dswifi
 [submodule "libs/maxmod"]
 	path = libs/maxmod
-	url = https://github.com/blocksds/maxmod
+	url = ../maxmod
 [submodule "tools/ndstool"]
 	path = tools/ndstool
-	url = https://github.com/blocksds/ndstool
+	url = ../ndstool
 [submodule "tools/grit"]
 	path = tools/grit
-	url = https://github.com/blocksds/grit
+	url = ../grit
 [submodule "tools/mmutil"]
 	path = tools/mmutil
-	url = https://github.com/blocksds/mmutil
+	url = ../mmutil
 [submodule "tools/dldipatch"]
 	path = tools/dldipatch
-	url = https://github.com/blocksds/dldipatch
+	url = ../dldipatch
 [submodule "libs/libxm7"]
 	path = libs/libxm7
-	url = https://github.com/blocksds/libxm7
+	url = ../libxm7
 [submodule "sys/dldi_r4"]
 	path = sys/dldi_r4
-	url = https://github.com/blocksds/dldi_r4
+	url = ../dldi_r4
 [submodule "libs/libteak"]
 	path = libs/libteak
-	url = https://github.com/blocksds/libteak
+	url = ../libteak
 [submodule "tools/squeezer"]
 	path = tools/squeezer
-	url = https://github.com/blocksds/squeezer
+	url = ../squeezer
