@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2025
+# SPDX-FileContributor: Antonio Niño Díaz, 2025-2026
 
 BLOCKSDS	?= /opt/blocksds/core
 
@@ -14,6 +14,12 @@ GAME_SUBTITLE	:= Dynamic libraries
 
 INCLUDEDIRS	:= source
 NITROFSDIR	:= nitrofs
+
+# Compiler and linker flags
+
+# Add a file with a list of symbols to keep in the main binary so that dynamic
+# libraries can use them.
+LDFLAGS		:= -Wl,-T keep_symbols.ld
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile
 

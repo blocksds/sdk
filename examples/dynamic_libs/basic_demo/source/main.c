@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2025
+// SPDX-FileContributor: Antonio Niño Díaz, 2025-2026
 
 #include <errno.h>
 #include <dlfcn.h>
@@ -17,6 +17,9 @@ void wait_forever(void)
 
 __thread volatile int main_binary_tls_int;
 
+// This function isn't referenced from the main binary, but we want to keep it
+// in the main binary so that dynamic libraries can use it. Check the Makefile
+// and the file "keep_symbols.ld" in the example folder to see how to keep it.
 __attribute__((noinline)) ARM_CODE int main_binary_arm_function(int a, int b)
 {
     return a + b;
@@ -177,12 +180,6 @@ int main(int argc, char **argv)
         if (keysHeld() & KEY_START)
             break;
     }
-
-    // Ensure functions are included as part of the main binary.  Writing to
-    // REG_BLDY without enabling blending shouldn't have any effect, but it
-    // should force the compiler to not remove the code because it's a volatile
-    // pointer.
-    REG_BLDY = main_binary_arm_function(0, 0);
 
     return 0;
 }
