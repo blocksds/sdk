@@ -29,6 +29,7 @@ Default ROM icon by DVdo is marked [CC0 1.0](https://creativecommons.org/publicd
 - Epstein, Keith (KeithE)
 - Eric M. Lope BSN RN, Richard (Relminator)
 - fincs
+- Geissler, Peter (blasty)
 - Ghearing, Gabe (gabebear)
 - ichfly
 - Justburn
@@ -58,12 +59,15 @@ Additional contributions to the BlocksDS-provided version of libnds have been pr
 - asie
 - Di Giorgio, Michele
 - ds-sloth
+- edo9300
 - Epicpkmn11
+- exelotl
 - GalaxyShard
 - Kurz, Dominik (Kuratius)
 - lifehackerhansol
 - Lorenzooone
 - Niño Díaz, Antonio
+- sillysagiri
 - Veloz, Ivan
 
 In addition, the BlocksDS-provided version of libnds includes code developed by the following third parties:
