@@ -162,7 +162,7 @@ function(nds_create_rom target)
     endif()
 
     if (NOT DEFINED NDSTOOL_SUBTITLE AND NOT DEFINED NDSTOOL_AUTHOR)
-        set(NDSTOOL_FULL_TITLE "${NDSTOOL_NAME}\;Built with BlocksDS\;github.com/blocksds/sdk")
+        set(NDSTOOL_FULL_TITLE "${NDSTOOL_NAME}\;Built with BlocksDS\;blocksds.skylyrac.net")
     else()
         set(NDSTOOL_FULL_TITLE "${NDSTOOL_NAME}")
         if(DEFINED NDSTOOL_SUBTITLE)
