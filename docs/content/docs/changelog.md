@@ -22,6 +22,15 @@ weight: 6
   - Pull `dlmalloc` implementation to the libnds repository. This is no longer
     present in picolibc, it has been removed in favour of `nano-malloc`, but
     `nano-malloc` has worse performance than `dlmalloc`. @asiekierka
+  - Fix value returned by `nandInit()` on failure.
+
+- ndstool:
+
+  - Apply LoadMe patch on DSi hybrid images by default - in this case, the data
+    is placed at 0xE00, in an area used only for debug arguments.  This fixes
+    loading such images on some old carts, including MoonShell <= 2.00. @asie
+  - Add explicit option to disable the LoadMe patch, `-nl`. @asie
+  - Improve internal documentation. @asie
 
 - grit:
 
@@ -34,6 +43,8 @@ weight: 6
 - SDK:
 
   - The documentation now links to the new page with the documentation of grit.
+  - Many links have been updated or made relative so that they are more
+    resilient.
   - Add more flashcarts to the list of flashcards where DLDI is verified to work
     on the ARM7. @19tracks
   - Add test to verify that C++ unhandled exceptions are handled by the callback
@@ -42,6 +53,8 @@ weight: 6
   - Clarify that the bootstub field `arm7reboot` isn't used by libnds.
   - The upgrade guide and memory map documentation have been updated to mention
     that DTCM has been moved. @asiekierka
+  - The `specs` file used for ELF dynamic library files has been fixed so that
+    `__sync_synchronize_none` isn't added. This was a bug added in v1.15.2.
 
   - Examples:
 
@@ -54,6 +67,8 @@ weight: 6
       hardware limits.
     - New example of reading firmware user settings.
     - New example that compares Z and W depth buffering for 3D graphics.
+    - Fix basic dynamic library example. Also, there's a new way to keep symbols
+      in the main binary based on the system used in libdragon.
     - Improve background conversion settings. We weren't using SSB layout when
       converting regular backgrounds (grit uses flat layout by default).
     - Improve the example of using libnds console windows.
