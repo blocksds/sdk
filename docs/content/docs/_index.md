@@ -16,5 +16,5 @@ Welcome to the documentation of BlocksDS!
 
 If you're looking for support, check [this page](./support).
 
-[This](https://github.com/blocksds/awesome-blocksds) is a list of interesting
+[This](https://codeberg.org/blocksds/awesome-blocksds) is a list of interesting
 projects made with BlocksDS.

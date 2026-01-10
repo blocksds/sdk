@@ -78,7 +78,7 @@ From there, for example, go to `graphics_3d/volumetric_shadow` and type
 flashcart.
 
 You can also try one of the open source projects made with BlocksDS that are
-listed [here](https://github.com/blocksds/awesome-blocksds).
+listed [here](https://codeberg.org/blocksds/awesome-blocksds).
 
 {{< callout type="info" >}}
 If you get an error like `command not found: make`, you need to install it from

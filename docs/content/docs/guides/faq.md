@@ -14,7 +14,7 @@ example, go to `graphics_3d/volumetric_shadow` and type make. This will generate
 a NDS ROM that you can try with an emulator or a flashcart.
 
 You can also try one of the open source projects made with BlocksDS that are
-listed [here](https://github.com/blocksds/awesome-blocksds).
+listed [here](https://codeberg.org/blocksds/awesome-blocksds).
 
 Unfortunately, there isn't any tutorial on how to develop NDS applications or
 games from scratch. Your best bet is to take a look at the examples and to ask

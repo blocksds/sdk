@@ -120,4 +120,4 @@ folder `examples` in the root of the repository. From there, for example, go to
 that you can try with an emulator or a flashcart.
 
 You can also try one of the open source projects made with BlocksDS that are
-listed [here](https://github.com/blocksds/awesome-blocksds).
+listed [here](https://codeberg.org/blocksds/awesome-blocksds).

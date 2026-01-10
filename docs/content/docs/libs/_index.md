@@ -43,6 +43,6 @@ inspiration:
   {{< card
     icon="arrow-up-right"
     title="Open source projects"
-    link="https://github.com/blocksds/awesome-blocksds"
+    link="https://codeberg.org/blocksds/awesome-blocksds"
   >}}
 {{< /cards >}}
