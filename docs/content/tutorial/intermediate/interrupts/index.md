@@ -39,7 +39,7 @@ horizontal lines. You can read a bit more about this
 [here](https://gbadev.net/tonc/video.html#sec-blanks). You can read the timings
 for a Nintendo DS in [GBATEK](https://problemkaputt.de/gbatek.htm#dsvideostuff).
 
-This section is based on [`examples/interrupts/vbl_interrupt`](https://github.com/blocksds/sdk/tree/master/examples/interrupts/vbl_interrupt).
+This section is based on [`examples/interrupts/vbl_interrupt`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/interrupts/vbl_interrupt).
 
 Note that the VBL interrupt is special because libnds enables it even before
 `main()` is reached. We will see an example of another interrupt in the next
@@ -88,9 +88,9 @@ Note: Normally you don't need to worry about it because you'll focus on ARM9
 code, but the ARM7 requires special handling regarding interrupts. You must call
 `irqInit()` in your `main()` function if you want to use interrupts. The default
 ARM7 cores do it almost as soon as `main()` starts. You can use their code as
-[reference](https://github.com/blocksds/sdk/blob/a94e81627ab26e741f7d48d49a071f8d2785585f/sys/arm7/main_core/source/main.c#L85).
+[reference](https://codeberg.org/blocksds/sdk/src/commit/cf7cac3b8f3991e494e9d3bb0fdcad9e76c0d570/sys/arm7/main_core/source/main.c#L85).
 
-The ARM9 does this initialization in [`initSystem()`](https://github.com/blocksds/libnds/blob/01691665a5703a6c623421983df4e083de5d4f6e/source/arm9/system/initSystem.c#L64-L74),
+The ARM9 does this initialization in [`initSystem()`](https://codeberg.org/blocksds/libnds/src/commit/1c325f00e9df304d7836dbf39dc3540737e78baa/source/arm9/system/initSystem.c#L102-L111),
 which is called by the system initialization code before `main()`.
 
 ## 3. Hardware timers
@@ -109,7 +109,7 @@ accurate timer may be helpful. For example, if you're creating a music player,
 you will need to use hardware timers to keep track of the audio that has payed
 so far and how much you need to decode.
 
-This section is based on [`examples/time/timers`](https://github.com/blocksds/sdk/tree/master/examples/time/timers).
+This section is based on [`examples/time/timers`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/time/timers).
 
 ```c
 void timer0_handler(void)
@@ -179,7 +179,7 @@ int main(int argc, char **argv)
 Now that we know how to setup a timer we can apply this to calculating the exact
 FPS of an application.
 
-This section is based on [`examples/interrupts/fps_counter`](https://github.com/blocksds/sdk/tree/master/examples/interrupts/fps_counter).
+This section is based on [`examples/interrupts/fps_counter`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/interrupts/fps_counter).
 
 The idea behind a FPS counter is that you need a reliable way to measure time (a
 hardware timer) because the main loop of your application may take longer than
@@ -252,7 +252,7 @@ For more information, check [GBATEK](https://problemkaputt.de/gbatek.htm#dsinter
 
 We're going to see a practical example of how to use interrupts by creating a
 wave effect with the HBL interrupt. This section of the tutorial is based on the
-following example: [`examples/video_effects/hblank_scroll`](https://github.com/blocksds/sdk/tree/master/examples/video_effects/hblank_scroll).
+following example: [`examples/video_effects/hblank_scroll`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_effects/hblank_scroll).
 
 ![IRQ scroll effect](hblank_effect_irq.png)
 
@@ -373,8 +373,8 @@ Another important use of nested interrupts is audio mixing, but this isn't
 something you normally need to worry about. If you're curious about it, Maxmod
 is a good example of how it works:
 
-The timer 0 interrupt handler is configured [here](https://github.com/blocksds/maxmod/blob/4a81f0d8182deaffe84823d7cce759c2de60b4ce/source/ds/arm7/mm_main7.c#L183-L184).
-The implementation of the handler `mmFrame()` is [here](https://github.com/blocksds/maxmod/blob/4a81f0d8182deaffe84823d7cce759c2de60b4ce/source/ds/arm7/mm_main7.c#L216-L230):
+The timer 0 interrupt handler is configured [here](https://codeberg.org/blocksds/maxmod/src/commit/d29422eaee2db4c4e3fd82dc47cf3755c171ec3d/source/ds/arm7/main_ds7.c#L167-L168).
+The implementation of the handler `mmFrame()` is [here](https://codeberg.org/blocksds/maxmod/src/commit/d29422eaee2db4c4e3fd82dc47cf3755c171ec3d/source/ds/arm7/main_ds7.c#L198-L212):
 
 ```c
 void mmFrame(void)

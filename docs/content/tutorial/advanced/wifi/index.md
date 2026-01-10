@@ -131,11 +131,11 @@ Note that hosts can kick clients out of the game at any point after they have
 connected to the host!
 
 This example shows you how to do all of this:
-[`examples/dswifi/local_multiplayer`](https://github.com/blocksds/sdk/tree/master/examples/dswifi/local_multiplayer)
+[`examples/dswifi/local_multiplayer`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/dswifi/local_multiplayer)
 
 This other example shows how to send different types of packets between the host
 and the clients:
-[`examples/dswifi/multiplayer_packets`](https://github.com/blocksds/sdk/tree/master/examples/dswifi/multiplayer_packets)
+[`examples/dswifi/multiplayer_packets`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/dswifi/multiplayer_packets)
 
 ## 4. Basic online communications
 
@@ -146,7 +146,7 @@ general, your game will simply try to connect to the networks stored in the
 firmware, but you can also give the option to the player to connect to any AP
 that the DS can see. Check the following example to see how to do that:
 
-- [`examples/dswifi/list_access_points`](https://github.com/blocksds/sdk/tree/master/examples/dswifi/list_access_points)
+- [`examples/dswifi/list_access_points`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/dswifi/list_access_points)
 
 You will need to allow the player to type a password if the AP is using WEP or
 WPA2 encryption (WPA2 is only supported in DSi, not DS). Once the user has
@@ -157,14 +157,14 @@ connection a success, but it will also try to get an IPv6 address in the
 background (IPv6 isn't supported everywhere, so it's better to not expect an
 address just in case). Check the following two examples:
 
-- [`examples/dswifi/connection_info`](https://github.com/blocksds/sdk/tree/master/examples/dswifi/connection_info)
-- [`examples/dswifi/full_ap_demo`](https://github.com/blocksds/sdk/tree/master/examples/dswifi/full_ap_demo)
+- [`examples/dswifi/connection_info`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/dswifi/connection_info)
+- [`examples/dswifi/full_ap_demo`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/dswifi/full_ap_demo)
 
 Once the connection is ready you can start trying to connect to other devices
 and communicate with them. This example shows you how to connect to a web server
 and download the contents of a website:
 
-- [`examples/dswifi/get_website`](https://github.com/blocksds/sdk/tree/master/examples/dswifi/get_website)
+- [`examples/dswifi/get_website`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/dswifi/get_website)
 
 The code used to communicate with other devices is just standard C code, so you
 should be able to find books and tutorials of how to communicate between
@@ -187,8 +187,8 @@ wf-pacman -Sy blocksds-mbedtls blocksds-libcurl
 There are two examples of how to use the libraries to download a website using
 TLS encryption:
 
-- [`examples/dswifi/get_website_ssl`](https://github.com/blocksds/sdk/tree/master/examples/dswifi/get_website_ssl)
-- [`examples/dswifi/get_website_libcurl`](https://github.com/blocksds/sdk/tree/master/examples/dswifi/get_website_libcurl)
+- [`examples/dswifi/get_website_ssl`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/dswifi/get_website_ssl)
+- [`examples/dswifi/get_website_libcurl`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/dswifi/get_website_libcurl)
 
 There are plenty of tutorials and documentation on how to use the libraries
 online.

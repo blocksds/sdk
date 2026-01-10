@@ -4,10 +4,10 @@ weight: 8
 ---
 
 If you want to report any bugs or suggest new features and make sure they aren't
-forgotten, use the GitHub issue tracker.
+forgotten, use the Codeberg issue tracker.
 
 {{< cards cols="1" >}}
-  {{< card icon="github" link="https://github.com/blocksds/sdk/issues" title="GitHub issue tracker" >}}
+  {{< card icon="codeberg" link="https://codeberg.org/blocksds/sdk/issues" title="Codeberg issue tracker" >}}
 {{< /cards >}}
 
 If you prefer to chat with other developers in real time, the best way is to

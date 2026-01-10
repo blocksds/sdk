@@ -139,7 +139,7 @@ https://www.embecosm.com/2017/04/18/non-8-bit-char-support-in-clang-and-llvm/
 
 Related issues:
 
-- https://github.com/blocksds/sdk/issues/93
+- https://codeberg.org/blocksds/sdk/issues/93
 
 ### How well is the DSi camera supported?
 
@@ -149,7 +149,7 @@ currently provided.
 
 Related issues:
 
-- https://github.com/blocksds/sdk/issues/41
+- https://codeberg.org/blocksds/sdk/issues/41
 
 ### Which external peripherals are supported?
 

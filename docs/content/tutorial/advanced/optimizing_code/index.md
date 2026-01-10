@@ -39,7 +39,7 @@ on the level of accuracy you want:
     convert it to microseconds if you want.
 
   You can see an example of using this system here:
-  [`examples/time/profiling`](https://github.com/blocksds/sdk/tree/master/examples/time/profiling)
+  [`examples/time/profiling`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/time/profiling)
 
 ## 3. ARM and Thumb CPU modes
 

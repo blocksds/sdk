@@ -72,7 +72,7 @@ NAME          := template_arm9     # Name of the resulting NDS file
 # Banner and icon information
 GAME_TITLE    := Combined ARM7+ARM9 template
 GAME_SUBTITLE := Built with BlocksDS
-GAME_AUTHOR   := github.com/blocksds/sdk
+GAME_AUTHOR   := blocksds.skylyrac.net
 GAME_ICON     := icon.bmp
 ```
 
@@ -266,7 +266,7 @@ This repository contains most of the history of the library before the creation
 of the devkitPro git repository.
 
 There is a also a version of the CVS repository converted to git
-[in this GitHub repository](https://codeberg.org/SkyLyrac/ndslib-archive).
+[in this Codeberg repository](https://codeberg.org/SkyLyrac/ndslib-archive).
 
 #### 6.2 ARM7 changes
 
@@ -277,7 +277,7 @@ example, a missing `touchInit();` can lead to the touch screen not functioning
 as expected.
 
 When updating old homebrew with custom ARM7 binaries, it is recommended to study
-the latest version of [the default ARM7 binary](https://github.com/blocksds/sdk/tree/master/sys/arm7)
+the latest version of [the default ARM7 binary](https://codeberg.org/blocksds/sdk/src/branch/master/sys/arm7)
 to apply any necessary changes.
 
 #### 6.3 Replacing IPC with FIFO

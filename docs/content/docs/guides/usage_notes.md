@@ -146,7 +146,7 @@ size for your application. There are two ways to set it:
    .equ __dtcm_data_size, 1024
    ```
 
-You can check [this test](https://github.com/blocksds/sdk/tree/master/tests/system/dtcm_fixed_size)
+You can check [this test](https://codeberg.org/blocksds/sdk/src/branch/master/tests/system/dtcm_fixed_size)
 to experiment with this value.
 
 ### 5. Using alternative memory layouts

@@ -82,7 +82,7 @@ row/column would force you to shift all the map. If you scroll the map as you
 move around, you only ever have to load one row or column.
 
 You can explore the code of the example here:
-[`examples/graphics_2d/bg_scroll_bigmap`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_scroll_bigmap)
+[`examples/graphics_2d/bg_scroll_bigmap`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_scroll_bigmap)
 
 ### 2.2 Background with big map and big tileset
 
@@ -141,7 +141,7 @@ shown:
 </video>
 
 You can explore the code of the example here:
-[`examples/graphics_2d/bg_scroll_bigmap_bigtileset`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_scroll_bigmap_bigtileset)
+[`examples/graphics_2d/bg_scroll_bigmap_bigtileset`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_scroll_bigmap_bigtileset)
 
 This example lets you enable "debug" mode. The only difference is that it sets
 VRAM data to 0 when it unloads it. Normally you don't need to do that because it
@@ -155,7 +155,7 @@ backgrounds. In this case, all you need to do is to load rows and columns of
 pixels as they appear on the screen.
 
 This example shows you how to scroll a 16-bit bitmap:
-[`examples/graphics_2d/bg_scroll_big_bmp`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_scroll_big_bmp)
+[`examples/graphics_2d/bg_scroll_big_bmp`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_scroll_big_bmp)
 
 You could try to optimize the code by loading several rows/columns at the same
 time, for example, but this example only tries to show how to use the technique

@@ -7,7 +7,7 @@ This guide serves as a loose explanation of some design choices made during
 the development of BlocksDS.
 
 A supplementary good source for understanding its design choices is the
-[BlocksDS issue tracker](https://github.com/blocksds/sdk/issues?q=is%3Aissue),
+[BlocksDS issue tracker](https://codeberg.org/blocksds/sdk/issues),
 where many were and continue to be openly discussed.
 
 ### 1. Standardized binary build of the GCC compiler

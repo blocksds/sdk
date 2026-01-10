@@ -106,7 +106,7 @@ Something interesting you may want to know is that the ARM9 CPU doesn't have
 access to the values of the keys X and Y or the touch screen. libnds has code
 that sends this information to the ARM9 so that you don't have to do it.
 
-You can check [`examples/input/key_input`](https://github.com/blocksds/sdk/tree/master/examples/input/key_input)
+You can check [`examples/input/key_input`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/input/key_input)
 for a more interesting example.
 
 ## 3. Touch screen
@@ -154,16 +154,16 @@ int main(int argc, char **argv)
 }
 ```
 
-You can check [`examples/input/touch_input`](https://github.com/blocksds/sdk/tree/master/examples/input/touch_input)
+You can check [`examples/input/touch_input`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/input/touch_input)
 for a more interesting example.
 
 It's also possible to know the pressure applied to the touch screen. You can
-check [`examples/input/touch_pressure`](https://github.com/blocksds/sdk/tree/master/examples/input/touch_pressure)
+check [`examples/input/touch_pressure`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/input/touch_pressure)
 to see how to do it. However, the values returned by it depend on the DS model,
 and they are more accurate in DS than in DSi or 3DS.
 
 If you want an example of how to do gesture recognition you can check
-[`examples/input/gesture_recognition`](https://github.com/blocksds/sdk/tree/master/examples/input/gesture_recognition).
+[`examples/input/gesture_recognition`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/input/gesture_recognition).
 This is an advanced topic, so don't check the example if you're just getting
 started.
 
@@ -188,7 +188,7 @@ ARM7 binaries of BlocksDS will simply exit `main()` when the power button is
 pressed, which should trigger a soft reset of the console.
 
 You can see what the default ARM7 binary does in
-[this link](https://github.com/blocksds/sdk/blob/master/sys/arm7/main_core/source/main.c).
+[this link](https://codeberg.org/blocksds/sdk/src/branch/master/sys/arm7/main_core/source/main.c).
 
 ## 7. Debug button
 

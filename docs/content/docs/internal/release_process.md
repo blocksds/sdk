@@ -77,7 +77,7 @@ Docker images tagged as "latest" with the current version of the SDK in git.
 
 #### 2.7 Create a new release in the SDK repository
 
-Go to https://github.com/blocksds/sdk/releases and create a new release by
+Go to https://codeberg.org/blocksds/sdk/releases and create a new release by
 copying the changelog of the new version. Make sure to remove the line breaks at
 column 80 so that the changelog looks nicer in this web UI.
 

@@ -36,7 +36,7 @@ like `fopen()` and `fread()` switch threads automatically when they need to wait
 for the ARM7 to read data. Any thread that doesn't read from the filesystem
 needs to call `cothread_yield()`, `cothread_yield_irq()` or
 `cothread_yield_signal()` to switch threads. In practice, it's pretty easy to
-do. Check [this example](https://github.com/blocksds/sdk/tree/master/examples/filesystem/async_loading)
+do. Check [this example](https://codeberg.org/blocksds/sdk/src/branch/master/examples/filesystem/async_loading)
 to see how to load two different files using two threads at the same time.
 
 ### 3. Supported flashcarts
@@ -82,7 +82,7 @@ DLDI_MODE dldi_mode = dldiGetMode(void);
 
 This is a list of flashcarts that have been reported to work. Please, test your
 flashcart using
-[this test](https://github.com/blocksds/sdk/tree/master/tests/filesystem/dldi_arm9_arm7)
+[this test](https://codeberg.org/blocksds/sdk/src/branch/master/tests/filesystem/dldi_arm9_arm7)
 and report your findings.
 
 flashcart         | ARM9 | ARM7 | Notes

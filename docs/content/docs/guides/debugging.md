@@ -24,7 +24,7 @@ printf("This is a debug message: %d", 123);
 By default, all text sent to `stdout` and `stderr` will be directed to this
 console after it is initialized.
 
-Check [this example](https://github.com/blocksds/sdk/tree/master/examples/console/ansi_console)
+Check [this example](https://codeberg.org/blocksds/sdk/src/branch/master/examples/console/ansi_console)
 to see it in action.
 
 Note that if you initialize the console like this, it will setup the sub screen
@@ -33,7 +33,7 @@ is already using that screen for something else. You can use `consoleInit()` to
 initialize the console in a more specialized way. Check the examples to see how
 to use this function.
 
-You can check [this example](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/text_over_3d)
+You can check [this example](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/text_over_3d)
 for a more advanced setup that allows you to display text over a 3D scene. You
 can set it up over other 2D layers as well.
 
@@ -76,7 +76,7 @@ automatically insert a new line after the message):
 fprintf(stderr, "Debug message!");
 ```
 
-Remember to check the [example](https://github.com/blocksds/sdk/tree/master/examples/debug/nocash_debug)
+Remember to check the [example](https://codeberg.org/blocksds/sdk/src/branch/master/examples/debug/nocash_debug)
 to see how to do it in a real application.
 
 Note that the string can contain special parameters that will be filled in by
@@ -213,7 +213,7 @@ The exception handler is used whenever:
   shown with an error message appropriate for the situation (like "Stack
   corruption").
 
-Check [this example](https://github.com/blocksds/sdk/tree/master/examples/debug/exception_handler)
+Check [this example](https://codeberg.org/blocksds/sdk/src/branch/master/examples/debug/exception_handler)
 to see it in action. Note that this will only work in melonDS and on hardware.
 Other emulators won't emulate it at all.
 
@@ -284,7 +284,7 @@ exception to crash the game in a controlled way. You can then check the value of
 `lr` in the exception handler screen to see where the exception was triggered
 from.
 
-Check [this example](https://github.com/blocksds/sdk/tree/master/tests/system/stack_smash_protection)
+Check [this example](https://codeberg.org/blocksds/sdk/src/branch/master/tests/system/stack_smash_protection)
 to see it in action.
 
 One easy way to check how much stack is used by your functions is to add
@@ -391,4 +391,4 @@ program. Check this [link](https://en.cppreference.com/w/cpp/error/set_terminate
 for more details.
 
 There's a test to see how this system works in the BlocksDS repository
-[here](https://github.com/blocksds/sdk/tree/master/tests/system/cpp_exception).
+[here](https://codeberg.org/blocksds/sdk/src/branch/master/tests/system/cpp_exception).

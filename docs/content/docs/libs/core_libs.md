@@ -20,7 +20,7 @@ General-purpose library to use the hardware of the NDS.
   {{< card
     icon="code"
     title="Examples"
-    link="https://github.com/blocksds/sdk/tree/master/examples"
+    link="https://codeberg.org/blocksds/sdk/src/branch/master/examples"
   >}}
 {{< /cards >}}
 
@@ -38,7 +38,7 @@ or software mixing, and it runs on the ARM7.
   {{< card
     icon="code"
     title="Examples"
-    link="https://github.com/blocksds/sdk/tree/master/examples/maxmod"
+    link="https://codeberg.org/blocksds/sdk/src/branch/master/examples/maxmod"
   >}}
 {{< /cards >}}
 
@@ -56,7 +56,7 @@ multiplayer and Internet access.
   {{< card
     icon="code"
     title="Examples"
-    link="https://github.com/blocksds/sdk/tree/master/examples/dswifi"
+    link="https://codeberg.org/blocksds/sdk/src/branch/master/examples/dswifi"
   >}}
 {{< /cards >}}
 
@@ -73,7 +73,7 @@ Hardware-accelerated player of XM and MOD music files that runs on the ARM7.
   {{< card
     icon="code"
     title="Examples"
-    link="https://github.com/blocksds/sdk/tree/master/examples/libxm7"
+    link="https://codeberg.org/blocksds/sdk/src/branch/master/examples/libxm7"
   >}}
 {{< /cards >}}
 
@@ -90,7 +90,7 @@ Library to use the Teak DSP included in the DSi and 3DS consoles.
   {{< card
     icon="code"
     title="Examples"
-    link="https://github.com/blocksds/sdk/tree/master/examples/dsp"
+    link="https://codeberg.org/blocksds/sdk/src/branch/master/examples/dsp"
   >}}
 {{< /cards >}}
 
@@ -107,6 +107,6 @@ Graphics converter for GBA and NDS.
   {{< card
     icon="code"
     title="Repository"
-    link="https://github.com/blocksds/grit"
+    link="https://codeberg.org/blocksds/grit"
   >}}
 {{< /cards >}}

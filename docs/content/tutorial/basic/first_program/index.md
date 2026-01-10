@@ -16,11 +16,11 @@ that you can edit freely.
 If you have git, you can clone the following repository:
 
 ```sh
-git clone https://github.com/blocksds/sdk
+git clone https://codeberg.org/blocksds/sdk
 ```
 
 If you don't have git or you don't want to clone the repository you can also
-download it as a [ZIP archive](https://github.com/blocksds/sdk/archive/refs/heads/master.zip).
+download it as a [ZIP archive](https://codeberg.org/blocksds/sdk/archive/refs/heads/master.zip).
 
 ## 2. Getting a NDS emulator
 
@@ -86,7 +86,7 @@ programs will need to be run from the "Wonderful Toolchain Shell", which can be
 fount in the Start menu. If you're using Linux, any terminal will work.
 
 Regardless of how you have downloaded the code, open the shell and go to the
-folder [`examples/console/custom_fonts`](https://github.com/blocksds/sdk/tree/master/examples/console/custom_fonts).
+folder [`examples/console/custom_fonts`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/console/custom_fonts).
 
 From here, run the following command:
 

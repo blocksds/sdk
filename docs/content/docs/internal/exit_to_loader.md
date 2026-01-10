@@ -52,7 +52,7 @@ call `__libnds_exit()` right after `main()` returns.
 ### 3. libnds starts the exit to the loader
 
 The implementation of `__libnds_exit()` is in
-[libnds\_exit.c](https://github.com/blocksds/libnds/blob/91826293e9da6d85f77db8a631d20e6247920394/source/common/libnds_exit.c).
+[libnds\_exit.c](https://codeberg.org/blocksds/libnds/src/branch/master/source/common/libc/exit.c).
 
 The first thing it does is to look for the protocol structure in RAM.
 

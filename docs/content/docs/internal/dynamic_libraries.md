@@ -20,7 +20,7 @@ fit in RAM, or with external plugins that can be developed by users and loaded
 from the SD card of their flashcard or DSi slot.
 
 If you want to jump right to the code, check the examples
-[here](https://github.com/blocksds/sdk/tree/master/examples/dynamic_libs).
+[here](https://codeberg.org/blocksds/sdk/src/branch/master/examples/dynamic_libs).
 
 The system used by BlocksDS is heavily inspired by the one used by
 [libdragon](https://github.com/DragonMinded/libdragon/). There is more
@@ -68,7 +68,7 @@ can find more information [here](https://sourceware.org/binutils/docs/ld/ARM.htm
 Converting the ELF file to DSL is a process that involves reading all the
 sections and symbols from the ELF file and removing all information that isn't
 required to be loaded by libnds. This is done purely as a memory saving step.
-[`dsltool`](https://github.com/blocksds/sdk/tree/master/tools/dsltool) is the
+[`dsltool`](https://codeberg.org/blocksds/sdk/src/branch/master/tools/dsltool) is the
 tool in charge of this process.
 
 A DSL file contains a list of sections and a list of symbols. The sections are
@@ -143,7 +143,7 @@ will first call all global destructors of the library and then free all memory
 used by it.
 
 You can find the code of the functions in this file in
-[libnds](https://github.com/blocksds/libnds/blob/master/source/arm9/dlfcn.c).
+[libnds](https://codeberg.org/blocksds/libnds/src/branch/master/source/arm9/dlfcn.c).
 
 ### 5. Advantages over overlays
 

@@ -15,7 +15,7 @@ including additions and enhancements to the SDK which are not listed here.
 * The DTCM memory region has been moved from `0x2FF0000` to `0x2FF4000`. This
   should only break code which writes [boot stubs](../../internal/exit_to_loader),
   in which case you can either use a DMA copy or
-  [read from/write to a different memory mirror](https://github.com/blocksds/libnds/pull/199).
+  [read from/write to a different memory mirror](https://codeberg.org/blocksds/libnds/pull/199).
 
 ### Upgrading to BlocksDS 1.16.0
 
@@ -155,7 +155,7 @@ including additions and enhancements to the SDK which are not listed here.
     * It is recommended to instead provide 1bpp font tile data, which
       will be automatically unpacked to use color indices 0 and 15.
       To generate a 1bpp font, you can use grit with the `-gB1` argument;
-      see [default_font.grit](https://github.com/blocksds/libnds/blob/f3b609b3099f256502cd241b8519ecc59e4f68a6/graphics/default_font.grit) for an example.
+      see [default_font.grit](https://codeberg.org/blocksds/libnds/src/commit/f3b609b3099f256502cd241b8519ecc59e4f68a6/graphics/default_font.grit) for an example.
     * Alternatively, you can ensure that the font tiles use color indices
       0 and 15 (or 0 and 255 for 8bpp graphics) explicitly.
 

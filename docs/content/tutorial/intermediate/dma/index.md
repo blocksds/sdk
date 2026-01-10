@@ -135,7 +135,7 @@ There are several conditions that can trigger a DMA copy apart from simply
 
 We're going to see a practical example of how to use special modes by using the
 HBL start mode on the ARM9. This section of the tutorial is based on the
-following example: [`examples/video_effects/hblank_scroll_dma`](https://github.com/blocksds/sdk/tree/master/examples/video_effects/hblank_scroll_dma).
+following example: [`examples/video_effects/hblank_scroll_dma`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_effects/hblank_scroll_dma).
 
 ![DMA scroll effect](hblank_effect_dma.png)
 

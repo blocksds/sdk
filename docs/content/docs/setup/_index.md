@@ -28,5 +28,5 @@ weight: 2
 
 {{< callout type="info" >}}
 **macOS** isn't supported natively, you need to use Docker instead. We're
-[looking for help](https://github.com/blocksds/sdk/issues/205) with it.
+[looking for help](https://codeberg.org/blocksds/sdk/issues/205) with it.
 {{< /callout >}}

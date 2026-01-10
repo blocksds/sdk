@@ -107,7 +107,7 @@ We're going to build one of the templates of the SDK as a test.
 First, clone this repository to get the templates:
 
 ```bash
-git clone https://github.com/blocksds/sdk
+git clone https://codeberg.org/blocksds/sdk
 ```
 
 Go to the folder that contains the template:

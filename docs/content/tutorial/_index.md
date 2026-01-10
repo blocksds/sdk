@@ -39,7 +39,7 @@ Normally you don't need to do this, but you can get low-level information on how
 the hardware works in [GBATEK](https://problemkaputt.de/gbatek.htm).
 
 If you want to make any suggestions or submit fixes, you can check the
-repository of this tutorial [here](https://github.com/blocksds/sdk).
+repository of this tutorial [here](https://codeberg.org/blocksds/sdk).
 
 The text of this tutorial is licensed under the license
 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). Any code

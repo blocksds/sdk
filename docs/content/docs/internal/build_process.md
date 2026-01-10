@@ -68,7 +68,7 @@ The way the `twl` sections are used is explained below, in the section about
 creation of NDS ROMs.
 
 For more information, you can see the full linker scripts used by BlocksDS in
-[this folder](https://github.com/blocksds/sdk/blob/master/sys/crts).
+[this folder](https://codeberg.org/blocksds/sdk/src/branch/master/sys/crts).
 
 {{< callout type="info" >}}
 In the past, the build process involved creating `bin` files from `elf`
@@ -141,7 +141,7 @@ Because of all the custom `gcc` options required to build NDS binaries
 correctly, it is possible that new options are required after `gcc` updates, or
 old options need to be removed, etc. Most of the options can be modified in the
 makefile of a BlocksDS project. However, some of this is hidden from the user in
-`specs` files located [here](https://github.com/blocksds/sdk/tree/master/sys/crts).
+`specs` files located [here](https://codeberg.org/blocksds/sdk/src/branch/master/sys/crts).
 This is done purely for end user convenience and to reduce the amount of
 breaking changes to user project Makefiles. You can skip the `specs` files and
 copy the build options and definitions to your makefile, but that will force you
@@ -150,7 +150,7 @@ accordingly.
 
 The best way to understand how BlocksDS invokes `gcc` is to build a ROM that
 uses one of the default makefiles (located
-[here](https://github.com/blocksds/sdk/tree/master/sys/default_makefiles/)).
+[here](https://codeberg.org/blocksds/sdk/src/branch/master/sys/default_makefiles/)).
 If you build the binary with `make V=` instead of just `make`, the makefile will
 print the exact commands used at every step of the build process. You will be
 able to see which libraries are used, which compiler options are used, etc.
@@ -195,7 +195,7 @@ careful and test your code often if you decide to use it.
 
 Currently there is nobody working on a better toolchain for this architecture,
 so don't expect any improvements anytime soon. More information in
-[this link](https://github.com/blocksds/sdk/issues/93).
+[this link](https://codeberg.org/blocksds/sdk/issues/93).
 
 ### 5. NDS ROM creation
 
@@ -204,7 +204,7 @@ it:
 
 - One ARM9 `elf` file.
 - One ARM7 `elf` file. If no file is specified, `ndstool` will use the
-  [default ARM7](https://github.com/blocksds/sdk/tree/master/sys/arm7)
+  [default ARM7](https://codeberg.org/blocksds/sdk/src/branch/master/sys/arm7)
   of BlocksDS instead.
 - One or more folders to be added to the ROM filesystem. If no folder is
   provided, the filesystem will be kept emtpy.

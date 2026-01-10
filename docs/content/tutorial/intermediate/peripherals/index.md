@@ -32,7 +32,7 @@ printf("Charger connected: %s\n", charger_connected ? "Yes" : "No");
 ```
 
 You can check this code in action in this example:
-[`examples/peripherals/battery_status`](https://github.com/blocksds/sdk/tree/master/examples/peripherals/battery_status)
+[`examples/peripherals/battery_status`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/peripherals/battery_status)
 
 ## 3. Hardware divider and square root
 
@@ -54,7 +54,7 @@ helpers to do regular integer division and square root, as well as some helpers
 to do fixed point divisions and square roots.
 
 You can check this code in action in this example:
-[`examples/peripherals/maths_coprocessor`](https://github.com/blocksds/sdk/tree/master/examples/peripherals/maths_coprocessor)
+[`examples/peripherals/maths_coprocessor`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/peripherals/maths_coprocessor)
 
 ## 4. Real Time Clock
 
@@ -108,7 +108,7 @@ libnds won't affect that flag, so the change won't be detected!
 {{< /callout >}}
 
 You can check this code in action in this example:
-[`examples/time/rtc_set_get`](https://github.com/blocksds/sdk/tree/master/examples/time/rtc_set_get)
+[`examples/time/rtc_set_get`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/time/rtc_set_get)
 
 ## 5. Firmware user settings
 
@@ -131,7 +131,7 @@ The name and personal message are encoded as UTF-16LE format, not UTF-8. You can
 use function `utf16_to_utf8()` of libnds to convert it.
 
 Check the following example to see how to do this in practice:
-[`examples/firmware/user_settings`](https://github.com/blocksds/sdk/tree/master/examples/firmware/user_settings)
+[`examples/firmware/user_settings`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/firmware/user_settings)
 
 ## 6. LCD backlight
 
@@ -161,7 +161,7 @@ next time the console is turned on.
 {{< /callout >}}
 
 You can check this code in action in this example:
-[`examples/peripherals/backlight_level`](https://github.com/blocksds/sdk/tree/master/examples/peripherals/backlight_level)
+[`examples/peripherals/backlight_level`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/peripherals/backlight_level)
 
 ## 7. Microphone
 
@@ -197,7 +197,7 @@ will read the old values instead of the new ones! There are two good solutions:
   doesn't load anything to the cache, so you don't need to worry about it.
 
 You can check an example of how to record audio and play it back here:
-[`examples/audio/microphone`](https://github.com/blocksds/sdk/tree/master/examples/audio/microphone)
+[`examples/audio/microphone`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/audio/microphone)
 
 ## 8. DSi cameras
 
@@ -243,7 +243,7 @@ from libnds, but you need to handle a few things manually.
 5. When you've finished using the camera, call `cameraDeinit()`.
 
 You can check a full example of how to take photos and store them in the SD card
-here: [`examples/peripherals/camera`](https://github.com/blocksds/sdk/tree/master/examples/peripherals/camera)
+here: [`examples/peripherals/camera`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/peripherals/camera)
 
 The DSi camera official application can store photos in the SD card or in the
 internal NAND memory of the DSi. You can access the photos with libnds as well.
@@ -251,7 +251,7 @@ All you have to do is to initialize the NAND with `nandInit()` and check the
 files in path `"nand2:/photo/DCIM"`.
 
 There's a demo that displays the photos in that folder here:
-[`examples/demos/photo_slideshow`](https://github.com/blocksds/sdk/tree/master/examples/demos/photo_slideshow)
+[`examples/demos/photo_slideshow`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/demos/photo_slideshow)
 
 ## 9. Slot-2 devices
 
@@ -355,7 +355,7 @@ The Slot-2 API abstracts all of them and provides a unified API to use them:
     `PIANO_G`, `PIANO_GS`, `PIANO_A`, `PIANO_AS`, `PIANO_B` and `PIANO_C2`.
 
 Check this example to see all of this in action:
-[`examples/peripherals/slot2`](https://github.com/blocksds/sdk/tree/master/examples/peripherals/slot2)
+[`examples/peripherals/slot2`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/peripherals/slot2)
 
 ## 10. DS Motion Card
 
@@ -386,4 +386,4 @@ because you can run homebrew from the SD card of the DSi itself.
 5. Call `motion_deinit()` when you've finished using the device.
 
 Check the following example:
-[`examples/peripherals/motion_card`](https://github.com/blocksds/sdk/tree/master/examples/peripherals/motion_card)
+[`examples/peripherals/motion_card`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/peripherals/motion_card)

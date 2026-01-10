@@ -21,7 +21,7 @@ screen of the DS because the sub graphics engine doesn't support 3D. It is
 possible to display 3D on both screens by sacrificing half of the FPS of the
 application, which will be explained in detail in a future chapter. In case you
 can't wait, there is an example of how this system works here
-[`examples/video_capture/dual_screen_3d`](https://github.com/blocksds/sdk/tree/master/examples/video_capture/dual_screen_3d).
+[`examples/video_capture/dual_screen_3d`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_capture/dual_screen_3d).
 
 Another downside of using GL2D is that you need to tell the GPU what to draw
 every frame. With the 2D hardware you don't have to do anything once you've
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 The most basic thing you can do with GL2D is to draw dots, lines and polygons
 without textures. However, note that some emulators don't display dots and lines
 correctly! Check the following example for a demonstration:
-[`examples/gl2d/primitives`](https://github.com/blocksds/sdk/tree/master/examples/gl2d/primitives).
+[`examples/gl2d/primitives`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/gl2d/primitives).
 
 ![GL2D primitives](primitives.png)
 
@@ -125,7 +125,7 @@ Note that the effect of `glPolyFmt()` lasts until `glBegin2D()` is called again.
 
 You can use GL2D to display textured polygons of any size, which means you can
 use them in a similar way as 2D sprites, but much more flexible. We'll get
-started with this example: [`examples/gl2d/spriteset`](https://github.com/blocksds/sdk/tree/master/examples/gl2d/spriteset)
+started with this example: [`examples/gl2d/spriteset`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/gl2d/spriteset)
 
 GL2D uses the 3D hardware to display polygons, so images displayed by GL2D are
 just 3D textures. You can display any part of a texture in a polygon, so the
@@ -303,7 +303,7 @@ texture like this:
 glDeleteTextures(1, &ruins_texture_id);
 ```
 
-Now, let's focus on this other example: [`examples/gl2d/spriteset`](https://github.com/blocksds/sdk/tree/master/examples/gl2d/spriteset)
+Now, let's focus on this other example: [`examples/gl2d/spriteset`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/gl2d/spriteset)
 
 ![GL2D sprites tramsform](sprites_transform.gif)
 
@@ -313,7 +313,7 @@ primitives. Functions like `glSpriteRotate()`, `glSpriteRotateScaleXY()` or
 
 You can also use a `glImage` array to create animations very easily, as done in
 this example
-[`examples/gl2d/spriteset`](https://github.com/blocksds/sdk/tree/master/examples/gl2d/spriteset).
+[`examples/gl2d/spriteset`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/gl2d/spriteset).
 All you need to do is to use a variable when passing the `glImage` struct to
 `glSprite()`:
 
@@ -329,7 +329,7 @@ example, this can be used to load tile sets where each tile has a size of 16x16
 pixels. Normally this is used to draw backgrounds, but you can also use it for
 sprites.
 
-Let's check this example: [`examples/gl2d/tileset_background`](https://github.com/blocksds/sdk/tree/master/examples/gl2d/tileset_background)
+Let's check this example: [`examples/gl2d/tileset_background`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/gl2d/tileset_background)
 
 ![GL2D background](background.png)
 
@@ -448,7 +448,7 @@ glDeleteTextures(1, &tileset_texture_id);
 ```
 
 If you want to know how to use this technique for sprites, check example
-[`examples/gl2d/tileset_sprites`](https://github.com/blocksds/sdk/tree/master/examples/gl2d/tileset_sprites).
+[`examples/gl2d/tileset_sprites`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/gl2d/tileset_sprites).
 Note that this system has issues such as the fact that you don't get a header
 file with information helping you find frames inside the image. You are expected
 to arrange the frames the way you want, and it's likely you will want to have
@@ -503,4 +503,4 @@ There's a full [chapter about 3D graphics](../3d_graphics) in this tutorial,
 check it if you want to know more about how to display 3D graphics.
 
 The code of this example is here:
-[`examples/gl2d/2d_and_3d`](https://github.com/blocksds/sdk/tree/master/examples/gl2d/2d_and_3d)
+[`examples/gl2d/2d_and_3d`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/gl2d/2d_and_3d)

@@ -48,7 +48,7 @@ Both:
 In practice, the ARM7 acts as an I/O coprocessor that handles peripherals while
 the ARM9 controls all the logic of the application. BlocksDS allows you to
 customize the code that runs on the ARM7 in your application, but it comes with
-a few [pre-built ARM7 cores](https://github.com/blocksds/sdk/tree/master/sys/arm7/main_core)
+a few [pre-built ARM7 cores](https://codeberg.org/blocksds/sdk/src/branch/master/sys/arm7/main_core)
 that are good enough for most applications:
 
 - `minimal`: Minimal core with only basic libnds services.
@@ -97,7 +97,7 @@ Some reasons to NOT write a custom ARM7 core are:
   ARM7 code and data is stored in WRAM.
 
 If you want to use a custom ARM7 core in your application, check
-[this template](https://github.com/blocksds/sdk/tree/master/templates/rom_combined).
+[this template](https://codeberg.org/blocksds/sdk/src/branch/master/templates/rom_combined).
 
 ## 2. FIFO system of libnds
 
@@ -158,7 +158,7 @@ You can receive messages in two ways:
   and `fifoWaitDatamsg()`.
 
 This example shows how to send and receive messages using the FIFO system:
-[`examples/ipc/fifo_stress_test`](https://github.com/blocksds/sdk/tree/master/examples/ipc/fifo_stress_test)
+[`examples/ipc/fifo_stress_test`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/ipc/fifo_stress_test)
 
 ## 3. Sharing buffers between CPUs
 
@@ -197,7 +197,7 @@ There are two different ways to handle this issue:
     with size `size` is updated in main RAM.
 
     You can check the following example to see how to do this correctly:
-    [`examples/ipc/pass_buffer_to_arm7`](https://github.com/blocksds/sdk/tree/master/examples/ipc/pass_buffer_to_arm7)
+    [`examples/ipc/pass_buffer_to_arm7`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/ipc/pass_buffer_to_arm7)
 
   - If the ARM7 wants to send data to the ARM9, the ARM9 should flush the buffer
     **before** the ARM7 writes to it. For example, the ARM9 can allocate a
@@ -224,7 +224,7 @@ transfer text to the ARM9 so that it gets printed on the screen.
 ![ARM7 console](arm7_console.png)
 
 The code of the example is available here:
-[`examples/console/arm7_console`](https://github.com/blocksds/sdk/tree/master/examples/console/arm7_console)
+[`examples/console/arm7_console`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/console/arm7_console)
 
 You can initialize the console from the ARM9 by calling `consoleArm7Setup()`.
 You will need to provide the console instance that will receive all text from
@@ -253,7 +253,7 @@ fprintf(stderr, "ARM7 text\n");
 ```
 
 You can check the following example:
-[`examples/debug/nocash_debug`](https://github.com/blocksds/sdk/tree/master/examples/debug/nocash_debug)
+[`examples/debug/nocash_debug`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/debug/nocash_debug)
 
 The text gets printed to a special window in no$gba, and to the terminal in
 melonDS.

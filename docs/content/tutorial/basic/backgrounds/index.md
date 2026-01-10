@@ -63,7 +63,7 @@ chapters. Also, the 3D output replaces layer 0 regardless of the 2D video mode.
 ## 3. Displaying regular backgrounds
 
 We're finally going to see an example of displaying a regular background. You
-can open [`examples/graphics_2d/bg_regular_8bit`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_regular_8bit),
+can open [`examples/graphics_2d/bg_regular_8bit`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_8bit),
 if you want to have a look at the code while reading this section. You can try
 to build the example first, the output should be something like this (which you
 can scroll with the D-Pad):
@@ -163,7 +163,7 @@ is called.
 
 To finish this section let's see how to create a background that uses 16
 palettes of 16 colors instead. You can open
-[`examples/graphics_2d/bg_regular_4bit`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_regular_4bit),
+[`examples/graphics_2d/bg_regular_4bit`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_4bit),
 
 ![Regular background 4 BPP](bg_types_regular_4bit.png)
 
@@ -220,7 +220,7 @@ Affine backgrounds work almost the same as regular backgrounds, so you don't
 need to learn anything new! The main difference is that they can be rotated and
 scaled.
 
-Check [`examples/graphics_2d/bg_rotation`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_rotation)
+Check [`examples/graphics_2d/bg_rotation`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_rotation)
 if you want to have a look at the code while reading this section. If you build
 it you can rotate it, scale it and scroll it. It should look like this:
 
@@ -293,7 +293,7 @@ Extended affine backgrounds are just like affine backgrounds, but without the
 limitation of 256 tiles and the inability to flip tiles of affine backgrounds.
 It behaves like a regular background that can be rotated and scaled.
 
-Check [`examples/graphics_2d/bg_ext_rotation`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_ext_rotation).
+Check [`examples/graphics_2d/bg_ext_rotation`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_ext_rotation).
 
 There is no screenshot for this example because it's the same one as for affine
 backgrounds.
@@ -320,7 +320,7 @@ The good news is that the two previous modes were the hardest ones to
 understand! From this point, it's easier.
 
 Bitmap modes are ideal to display images that don't follow any grid-like
-pattern. Check [`examples/graphics_2d/bg_bmp_8bit`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_bmp_8bit):
+pattern. Check [`examples/graphics_2d/bg_bmp_8bit`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_bmp_8bit):
 
 ![8-bit bitmap background](bg_types_bmp_8bits.png)
 
@@ -401,7 +401,7 @@ restrictions, and it's the easiest to setup! However, it's also the slowest one
 to deal with, and the one that uses the most VRAM, so it's not very well-suited
 for regular games. It's ideal for photos, for example.
 
-Check [`examples/graphics_2d/bg_bmp_16bit`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_bmp_16bit):
+Check [`examples/graphics_2d/bg_bmp_16bit`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_bmp_16bit):
 
 ![16-bit bitmap background](bg_types_bmp_16bits.png)
 
@@ -458,7 +458,7 @@ for each buffer.
 This mode is just a larger 256-color bitmap backgrounds than the ones explained
 before. Note that only the main engine can be set in this mode.
 
-Check [`examples/graphics_2d/bg_bmp_8bit_large`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_bmp_8bit_large):
+Check [`examples/graphics_2d/bg_bmp_8bit_large`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_bmp_8bit_large):
 
 ![Large 8-bit bitmap background](bg_types_bmp_8bits_large.png)
 
@@ -530,7 +530,7 @@ everything else works exactly the same. All you need to do is repeat the setup
 you've done for the main engine.
 
 Check this example for a practical demonstration:
-[`examples/graphics_2d/bg_regular_8bit_2screens`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_regular_8bit_2screens)
+[`examples/graphics_2d/bg_regular_8bit_2screens`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_8bit_2screens)
 
 For example, if we remember how we loaded tiled backgrounds before, this is how
 you would display the same background in both screens:
@@ -683,7 +683,7 @@ most likely to be used. It will load two different images with two different
 
 ![Background extended palettes](bg_extended_palettes.png)
 
-The code of this example is here: [`examples/graphics_2d/bg_ext_palette`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_ext_palette).
+The code of this example is here: [`examples/graphics_2d/bg_ext_palette`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_ext_palette).
 
 The process to load extended palettes is a bit more difficult than loading
 regular palettes, but not by much. In short: You can't make the background

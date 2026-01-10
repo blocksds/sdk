@@ -24,7 +24,7 @@ void setBrightness(int screen, int level);
 ```
 
 You can see it in action in this example:
-[`examples/video_effects/master_brightness`](https://github.com/blocksds/sdk/tree/master/examples/video_effects/master_brightness).
+[`examples/video_effects/master_brightness`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_effects/master_brightness).
 
 ## 3. Regular windows
 
@@ -39,7 +39,7 @@ start with the regular windows:
 ![Regular windows](window_regular.png)
 
 You can check the full source code of the example here:
-[`examples/video_effects/regular_windows`](https://github.com/blocksds/sdk/tree/master/examples/video_effects/regular_windows).
+[`examples/video_effects/regular_windows`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_effects/regular_windows).
 
 As you can see, there are 3 different areas in the image. There's an inner
 rectangle that doesn't display the map, an outer border that doesn't display it
@@ -85,7 +85,7 @@ HBL-triggered DMA.
 ![Circular window](window_circular.png)
 
 You can check the full source code of the example here:
-[`examples/video_effects/circular_window`](https://github.com/blocksds/sdk/tree/master/examples/video_effects/circular_window).
+[`examples/video_effects/circular_window`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_effects/circular_window).
 
 What this example is doing is setting up DMA to be triggered every HBL and to
 copy one single value to the `REG_WIN0H` register, which controls the left and
@@ -110,7 +110,7 @@ And obtain the following effect:
 ![Object window](window_obj.png)
 
 You can check the full source code of the example here:
-[`examples/video_effects/obj_windows`](https://github.com/blocksds/sdk/tree/master/examples/video_effects/obj_windows).
+[`examples/video_effects/obj_windows`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_effects/obj_windows).
 
 You are expected to load the sprite graphics as usual, except for the palette,
 which can be ignored:
@@ -190,7 +190,7 @@ using windows.
 This example lets you play with the hardware registers that setup blending and
 fade effects:
 
-[`examples/video_effects/blending`](https://github.com/blocksds/sdk/tree/master/examples/video_effects/blending).
+[`examples/video_effects/blending`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_effects/blending).
 
 ![Blending](blending.png)
 
@@ -257,7 +257,7 @@ for example).
 
 You can check this example if you want to experiment with this effect:
 
-[`examples/video_effects/mosaic`](https://github.com/blocksds/sdk/tree/master/examples/video_effects/mosaic).
+[`examples/video_effects/mosaic`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_effects/mosaic).
 
 Enabling this effect for backgrounds is easy:
 

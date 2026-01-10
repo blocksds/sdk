@@ -83,7 +83,7 @@ Even without an MPU, mirrors can be useful:
 
 - The BIOS exception vector address as well as the pointer to the top of
   exception stack is stored at the
-  [end of main RAM](https://github.com/blocksds/libnds/blob/43714cdc0cbcedf2a3014da3793f7b09d2fe386e/include/nds/arm9/exceptions.h#L23-L27).
+  [end of main RAM](https://codeberg.org/blocksds/libnds/src/commit/1c325f00e9df304d7836dbf39dc3540737e78baa/include/nds/exceptions.h#L23-L35).
   We could calculate the right address of the end of the RAM for all DS models,
   but it's easier to access it at the last mirror of main RAM right before
   0x3000000, so that it's the same address in all models.
@@ -95,7 +95,7 @@ The regions of the address space that are cached in libnds are the ARM9 BIOS,
 and main RAM. ITCM and DTCM aren't supposed to be cached.
 
 If you want to know all the details of the MPU setup, you can check the
-[code in libnds](https://github.com/blocksds/libnds/blob/43714cdc0cbcedf2a3014da3793f7b09d2fe386e/source/arm9/system/mpu_setup.s),
+[code in libnds](https://codeberg.org/blocksds/libnds/src/commit/1c325f00e9df304d7836dbf39dc3540737e78baa/source/arm9/system/mpu_setup.s),
 which is fairly well documented.
 
 Note that slot 2 memory is normally uncached, but libnds provides helpers to use
@@ -145,7 +145,7 @@ the .nds loader:
 
 Address   | Description
 ----------|---------------------------------------------------------
-0x2FF4000 | [devkitARM bootstub structure](https://github.com/blocksds/libnds/blob/7d131d933ebab8eecf1c28a4eeb2107257f09e14/include/nds/system.h#L451-L458). Used for implementing the [exit to loader protocol](../../design/exit_to_loader/). Right after the bootstumb NDS Homebrew Menu stores a mini bootloader that attempts to boot a ROM called "BOOT.NDS" from the root of the filesystem. In total there are 0x5000 bytes reserved for the bootstub and bootloader. libnds shadows this area with DTCM, making it inaccessible through this address. It needs to be the first thing in the reserved memory area so that the stack can overflow into main RAM without affecting any other reserved information.
+0x2FF4000 | [devkitARM bootstub structure](https://codeberg.org/blocksds/libnds/src/commit/1c325f00e9df304d7836dbf39dc3540737e78baa/include/nds/system.h#L717-L724). Used for implementing the [exit to loader protocol](../../design/exit_to_loader/). Right after the bootstumb NDS Homebrew Menu stores a mini bootloader that attempts to boot a ROM called "BOOT.NDS" from the root of the filesystem. In total there are 0x5000 bytes reserved for the bootstub and bootloader. libnds shadows this area with DTCM, making it inaccessible through this address. It needs to be the first thing in the reserved memory area so that the stack can overflow into main RAM without affecting any other reserved information.
 0x2FFA000 | NDS Homebrew Menu copies its exception handler here. Its current size is smaller than 0x2000 bytes.
 0x2FFE000 | DSi only: .nds header - 0x1000 bytes.
 0x2FFF000 | libnds ARM9/ARM7 internal IPC region.
@@ -153,7 +153,7 @@ Address   | Description
 0x2FFFC80 | DS/DSi: user settings loaded from flash memory.
 0x2FFFD9C | DS/DSi: ARM9 exception vector, as well as top of stack.
 0x2FFFE00 | DS/DSi: .nds header - 0x160 bytes on DSi, 0x170 bytes on NDS.
-0x2FFFE70 | [devkitARM argv structure](https://github.com/blocksds/libnds/blob/7d131d933ebab8eecf1c28a4eeb2107257f09e14/include/nds/system.h#L435-L447). Used for implementing argument passing.
+0x2FFFE70 | [devkitARM argv structure](https://codeberg.org/blocksds/libnds/src/commit/1c325f00e9df304d7836dbf39dc3540737e78baa/include/nds/system.h#L700-L712). Used for implementing argument passing.
 
 #### 4.3. Caveats
 

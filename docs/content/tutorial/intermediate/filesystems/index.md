@@ -283,7 +283,7 @@ int main(int argc, char *argv[])
 ## 6. Example: Writing save data to the filesystem
 
 BlocksDS comes with an example of a very basic save data system:
-[`examples/filesystem/save_data`](https://github.com/blocksds/sdk/tree/master/examples/filesystem/save_data).
+[`examples/filesystem/save_data`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/filesystem/save_data).
 
 The idea is to have a global struct with the information you want to be able to
 save and restore from the filesystem. Then, you write/read the struct in one go.
@@ -386,7 +386,7 @@ wf-pacman -Sy blocksds-gbajpeg
 ```
 
 You can see the full example (including loading the file from the filesystem)
-[here](https://github.com/blocksds/gbajpeg/tree/master/example). All you have to
+[here](https://codeberg.org/blocksds/gbajpeg/src/branch/master/example). All you have to
 do in your program is to load the whole JPG file to RAM and then call this
 function:
 

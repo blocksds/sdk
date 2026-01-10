@@ -58,7 +58,7 @@ wf-pacman -Syu
 Now, clone this repository:
 
 ```bash
-git clone --recurse-submodules https://github.com/blocksds/sdk.git
+git clone --recurse-submodules https://codeberg.org/blocksds/sdk.git
 cd sdk
 ```
 

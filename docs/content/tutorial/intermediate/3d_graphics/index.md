@@ -41,7 +41,7 @@ that it can only be used in one screen. It is possible to display 3D on both
 screens by sacrificing half of the FPS of the application, which will be
 explained in detail in a future chapter. In case you can't wait, there is an
 example of how this system works here
-[`examples/video_capture/dual_screen_3d`](https://github.com/blocksds/sdk/tree/master/examples/video_capture/dual_screen_3d).
+[`examples/video_capture/dual_screen_3d`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_capture/dual_screen_3d).
 
 ## 2. Fixed point types
 
@@ -227,7 +227,7 @@ this:
 
 You can check the source code of the example here (note that it uses some
 functions we haven't seen in this chapter yet!):
-[`examples/graphics_3d/colored_polygon`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/colored_polygon)
+[`examples/graphics_3d/colored_polygon`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/colored_polygon)
 
 In this example we're drawing a single quad in which each vertex has a different
 color. If you want to see how it looks you can build the code yourself (or you
@@ -353,7 +353,7 @@ and you can use `glPopMatrix()` later to restore the previous transformations
 quickly.
 
 With that knowledge you now know about all the functions used in the previous
-example: [`examples/graphics_3d/colored_polygon`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/colored_polygon)
+example: [`examples/graphics_3d/colored_polygon`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/colored_polygon)
 
 This tutorial doesn't have any example of a complex room being drawn, but it's
 still important to understand the idea. For example, imagine you're inside a
@@ -437,7 +437,7 @@ This order is used by the GPU to decide whether the polygon is facing the camera
 or away from it. If vertices are counter-clockwise when rendered on the screen
 the GPU considers the polygon to be facing the camera.
 
-Example [`examples/graphics_3d/basic_cube`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/basic_cube)
+Example [`examples/graphics_3d/basic_cube`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/basic_cube)
 shows the effects of using back culling (on the left) or front culling (on the
 right). Back culling shows the model as expected because it doesn't draw the
 polygons that you don't normally see. Front culling hides the polygons you
@@ -465,7 +465,7 @@ Essentially, you need to:
   interleaved with the vertices of the model.
 
 The screenshot shown before corresponds to the example
-[`examples/graphics_3d/basic_texture`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/basic_texture).
+[`examples/graphics_3d/basic_texture`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/basic_texture).
 Let's see what has changed compared to the previous examples.
 
 1. We can see that there is an image in the `graphics` folder, and the
@@ -744,7 +744,7 @@ Let's see how to load paletted textures.
    ```
 
 The following example shows how to do this in practice:
-[`examples/graphics_3d/paletted_textures`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/paletted_textures).
+[`examples/graphics_3d/paletted_textures`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/paletted_textures).
 Note how the texture is loaded twice. On the left it's displayed with color 0
 set as transparent. On the right it's displayed with color 0 set as opaque:
 
@@ -775,7 +775,7 @@ data folder of your game or you can concatenate them at runtime, the choice is
 yours.
 
 You can check the following example:
-[`examples/graphics_3d/compressed_texture`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/compressed_texture).
+[`examples/graphics_3d/compressed_texture`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/compressed_texture).
 
 ![Compressed texture](texture_compressed.png)
 
@@ -834,7 +834,7 @@ You can decide the behaviour in that case when you load a texture with
   and the flip flags `GL_TEXTURE_FLIP_S` and `GL_TEXTURE_FLIP_T`.
 
 Check the following example:
-[`examples/graphics_3d/texture_edge_modes`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/texture_edge_modes).
+[`examples/graphics_3d/texture_edge_modes`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/texture_edge_modes).
 
 ![Texture edge modes](texture_edge_modes.png)
 
@@ -848,7 +848,7 @@ This tutorial won't get into many details, it will only show a simple example of
 using it:
 
 Check the following example:
-[`examples/graphics_3d/texture_matrix`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/texture_matrix).
+[`examples/graphics_3d/texture_matrix`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/texture_matrix).
 
 ![Texture matrix](texture_matrix.gif)
 
@@ -971,7 +971,7 @@ your code, giving you a lot of flexibility.
 
 If you want to see an example of how to do this, check the following example:
 
-[`examples/graphics_3d/grf_textures_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/grf_textures_nitrofs)
+[`examples/graphics_3d/grf_textures_nitrofs`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/grf_textures_nitrofs)
 
 ## 11. Alpha blending (translucency)
 
@@ -984,7 +984,7 @@ There are two ways to draw polygons that aren't fully opaque:
 
 You can create translucency effects by setting an alpha value between 1 and 30
 to polygons. Check the following example:
-[`examples/graphics_3d/translucent_polygon`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/translucent_polygon).
+[`examples/graphics_3d/translucent_polygon`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/translucent_polygon).
 
 ![Translucent polygon](translucent_polygon.png)
 
@@ -1019,7 +1019,7 @@ translucent textures allows you to specify up to 8 levels of transparency with
 ![Translucent texture](translucent_texture.png)
 
 The code of the example is here:
-[`examples/graphics_3d/translucent_texture`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/translucent_texture).
+[`examples/graphics_3d/translucent_texture`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/translucent_texture).
 
 In this case you also need to enable alpha blending:
 
@@ -1073,7 +1073,7 @@ If you don't pass this value, it will sort polygons by their Y coordinate, which
 probably isn't what you want.
 
 This example takes everything into consideration to draw a few translucent
-balls: [`examples/graphics_3d/sort_translucent_objects`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/sort_translucent_objects).
+balls: [`examples/graphics_3d/sort_translucent_objects`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/sort_translucent_objects).
 
 The following image shows the regular output of this example when balls are
 ordered correctly (left) and when they are sorted in reverse (right):
@@ -1113,7 +1113,7 @@ front culling.
 
 This is a bit complicated to see in an example with so many objects, so let's
 show it in an easier example with just one cube:
-[`examples/graphics_3d/translucent_cube`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/translucent_cube).
+[`examples/graphics_3d/translucent_cube`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/translucent_cube).
 
 ![Translucent cube](translucent_cube.png)
 
@@ -1164,7 +1164,7 @@ glAlphaFunc(25);
 ```
 
 You can check the code of the example here:
-[`examples/graphics_3d/alpha_test`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/alpha_test)
+[`examples/graphics_3d/alpha_test`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/alpha_test)
 
 ## 12. Orthogonal and perspective projections
 
@@ -1185,7 +1185,7 @@ the right:
 ![Orthogonal vs perspective projections](orthogonal_projection.png)
 
 You can check the code of the example here:
-[`examples/graphics_3d/ortho_projection`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/ortho_projection)
+[`examples/graphics_3d/ortho_projection`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/ortho_projection)
 
 This is the important part of the example:
 
@@ -1227,12 +1227,12 @@ GL2D if you are trying to draw 2D elements in your 3D scene instead of setting
 up the projection yourself.
 
 You can check the code
-[here](https://github.com/blocksds/libnds/blob/9eaccbc45b46fd20a41e0e3d32bc6c0a1364d553/source/arm9/video/gl2d.c#L68-L108)
+[here](https://codeberg.org/blocksds/libnds/blob/9eaccbc45b46fd20a41e0e3d32bc6c0a1364d553/source/arm9/video/gl2d.c#L68-L108)
 if you're curious about the issue and how it's fixed.
 
 You can also check the following example to see how different emulators and
 hardware behave when pixel-perfect accuracy is attempted:
-[`examples/gl2d/sprite_transform`](https://github.com/blocksds/sdk/tree/master/examples/gl2d/sprite_transform)
+[`examples/gl2d/sprite_transform`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/gl2d/sprite_transform)
 
 ![Pixel accuracy](pixel_accuracy.png)
 
@@ -1281,7 +1281,7 @@ const uint32_t display_list[] =
 ```
 
 This code is used to display a colored quad, and it's taken from
-[`examples/graphics_3d/display_list_creation`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/display_list_creation).
+[`examples/graphics_3d/display_list_creation`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/display_list_creation).
 
 A display list is a simple array of 32-bit elements that contains commands and
 parameters (the indentation is different for the parameters elements so that
@@ -1293,7 +1293,7 @@ it's easier to understand the code).
 
 - Next, there is a word which is a block of 4 packed GPU commands (like
   `glBegin()`, `glColor()`, `glVertex()`, ...). There are some helper defines in
-  libnds [here](https://github.com/blocksds/libnds/blob/173c19c9ee26ffc137e61b035a1fb83a8e11f64b/include/nds/arm9/videoGL.h#L380-L412).
+  libnds [here](https://codeberg.org/blocksds/libnds/blob/173c19c9ee26ffc137e61b035a1fb83a8e11f64b/include/nds/arm9/videoGL.h#L380-L412).
 
 - After each word with commands you need to add words with the parameters that
   each command needs. If a command needs more than one parameter, it must be
@@ -1321,12 +1321,12 @@ The following example has a `convert.sh` script that uses a conversion tool from
 This script takes the OBJ file and it generates a BIN file that is added to the
 game.
 
-[`examples/graphics_3d/display_list_teapot`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/display_list_teapot).
+[`examples/graphics_3d/display_list_teapot`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/display_list_teapot).
 
 You can also store the bin files in the NitroFS filesystem and load them from
 there:
 
-[`examples/graphics_3d/display_list_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/display_list_nitrofs).
+[`examples/graphics_3d/display_list_nitrofs`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/display_list_nitrofs).
 
 Also, remember the wireframe mode that we mentioned in the chapter about
 translucency? This is a perfect time to show it in action! The following images
@@ -1351,7 +1351,7 @@ like the sun:
   away.
 
 You can see an example here:
-[`examples/graphics_3d/lighting_cube`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/lighting_cube)
+[`examples/graphics_3d/lighting_cube`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/lighting_cube)
 
 ![Cube with light](lighting_cube.png)
 
@@ -1445,7 +1445,7 @@ afterwards.
 ![Emission material](material_emission.png)
 
 You can check the source code of the example here:
-[`examples/graphics_3d/lighting_materials`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/lighting_materials)
+[`examples/graphics_3d/lighting_materials`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/lighting_materials)
 
 If you want to use the shininess table, you'll need to define your `GL_SPECULAR`
 material like this:
@@ -1513,7 +1513,7 @@ right shows the same teapot with regular (decal) shading.
 ![Toon shading](toon_shading.png)
 
 The code of this example can be found here:
-[`examples/graphics_3d/toon_shading`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/toon_shading)
+[`examples/graphics_3d/toon_shading`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/toon_shading)
 
 Toon shading works by treating the output of the lights calculation as an entry into a
 shading table. You need to define the values of the entries in the table.
@@ -1559,7 +1559,7 @@ This is easier to see with an example:
 ![Modulation vs decal 2](modulation_vs_decal_2.png)
 
 The code of this example can be found here:
-[`examples/graphics_3d/modulation_vs_decal`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/modulation_vs_decal)
+[`examples/graphics_3d/modulation_vs_decal`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/modulation_vs_decal)
 
 There's more information about how the two modes work
 [in GBATEK](https://problemkaputt.de/gbatek.htm#ds3dtextureblending).
@@ -1597,7 +1597,7 @@ worry about them.
 ![Text over 3D](text_over_3d.png)
 
 The code of this example can be found here:
-[`examples/graphics_3d/text_over_3d`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/text_over_3d)
+[`examples/graphics_3d/text_over_3d`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/text_over_3d)
 
 First, you need to set the right video mode. The mode affects background layers
 1, 2 and 3 (layer 0 is used for the 3D output):
@@ -1647,7 +1647,7 @@ at the same time:
 ![2D and 3D](2d_and_3d.png)
 
 The code of this example can be found here:
-[`examples/graphics_3d/2d_and_3d`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/2d_and_3d)
+[`examples/graphics_3d/2d_and_3d`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/2d_and_3d)
 
 ## 16. Fog
 
@@ -1670,7 +1670,7 @@ the "only alpha" mode.
 ### 16.1 Color fog
 
 This is an example of the effect:
-[`examples/graphics_3d/fog`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/fog)
+[`examples/graphics_3d/fog`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/fog)
 
 ![Color fog](fog_color.png)
 
@@ -1740,7 +1740,7 @@ glPolyFmt(POLY_ALPHA(31) | POLY_CULL_BACK | POLY_FOG);
 ### 16.2 Alpha fog
 
 This is an example of the effect:
-[`examples/graphics_3d/fog_over_2d`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/fog_over_2d)
+[`examples/graphics_3d/fog_over_2d`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/fog_over_2d)
 
 ![Alpha fog](fog_alpha.png)
 
@@ -1847,7 +1847,7 @@ around the screen border for that polygon:
 ![Edge marking with different polygon IDs](edge_marking_clear_plane.png)
 
 The code of the example can be found here:
-[`examples/graphics_3d/antialiasing_and_edge_marking`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/antialiasing_and_edge_marking)
+[`examples/graphics_3d/antialiasing_and_edge_marking`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/antialiasing_and_edge_marking)
 
 ## 18. GPU memory usage
 
@@ -1953,7 +1953,7 @@ if (in)
 ```
 
 The code of the example can be found here:
-[`examples/graphics_3d/box_test`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/box_test)
+[`examples/graphics_3d/box_test`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/box_test)
 
 You can also use `BoxTestf_Asynch()` and `BoxTestResult()` if you want to do the
 test asynchronously while doing other calculations.
@@ -2001,7 +2001,7 @@ draw them (from objects that are far away to objects that are close to the
 camera). We've [already seen]({{< ref "#113-multiple-translucent-objects" >}})
 an example that does this:
 
-[`examples/graphics_3d/sort_translucent_objects`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/sort_translucent_objects)
+[`examples/graphics_3d/sort_translucent_objects`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/sort_translucent_objects)
 
 You could also use the W value as a debug value while you're setting up a fog
 effect. You could move an object around the 3D scene while printing its W value

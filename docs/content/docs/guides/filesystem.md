@@ -34,7 +34,7 @@ The `dirent.h` functions to read the contents of directories are available:
 `opendir()`, `closedir()`, `readdir()`, `rewinddir()`, `seekdir()`, `telldir()`.
 
 It's easy to find information online about how to use all of them. There are
-[examples](https://github.com/blocksds/sdk/tree/master/examples/filesystem/) of
+[examples](https://codeberg.org/blocksds/sdk/src/branch/master/examples/filesystem/) of
 using filesystem functions in the main repository of BlocksDS, you can also use
 them as reference.
 
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
 An empty NitroFS filesystem will cause `nitroFSInit()` to fail.
 {{< /callout >}}
 
-Check [this example](https://github.com/blocksds/sdk/tree/master/examples/filesystem/nitrofs)
+Check [this example](https://codeberg.org/blocksds/sdk/src/branch/master/examples/filesystem/nitrofs)
 to see how to use `NitroFS`.
 
 {{< callout type="info" >}}

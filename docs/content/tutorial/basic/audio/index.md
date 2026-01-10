@@ -45,7 +45,7 @@ in your projects.
 
 There are a few examples of Maxmod in the BlocksDS repository. This section is
 based on the following example:
-[`examples/maxmod/basic_sounds`](https://github.com/blocksds/sdk/tree/master/examples/maxmod/basic_sounds)
+[`examples/maxmod/basic_sounds`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/maxmod/basic_sounds)
 
 To use this library you just have to add your music files to a folder (for
 example, "audio") and add the folder to `AUDIODIRS` in the Makefile. The build
@@ -110,23 +110,23 @@ the filesystem. This is required if your game grows too much and it can't fit in
 RAM. This system will be explained later in the tutorial.
 
 Check the [documentation of Maxmod](https://blocksds.skylyrac.net/docs/maxmod/index.html)
-and the [examples](https://github.com/blocksds/sdk/tree/master/examples/maxmod)
+and the [examples](https://codeberg.org/blocksds/sdk/src/branch/master/examples/maxmod)
 for more information:
 
 - You can add special effects to your songs and use them as event triggers to
   synchronize the song with events in your application:
-  [`examples/maxmod/song_events`](https://github.com/blocksds/sdk/tree/master/examples/maxmod/song_events)
+  [`examples/maxmod/song_events`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/maxmod/song_events)
 
 - You can stream raw audio with Maxmod:
-  [`examples/maxmod/streaming`](https://github.com/blocksds/sdk/tree/master/examples/maxmod/streaming)
+  [`examples/maxmod/streaming`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/maxmod/streaming)
 
 - You can enable a reverberation effect:
-  [`examples/maxmod/reverb`](https://github.com/blocksds/sdk/tree/master/examples/maxmod/reverb)
+  [`examples/maxmod/reverb`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/maxmod/reverb)
 
 - You can use different playback modes to select hardware mixing, software
   mixing, or combined software and hardware mixing (called extended mixing in
   Maxmod):
-  [`examples/maxmod/audio_modes`](https://github.com/blocksds/sdk/tree/master/examples/maxmod/audio_modes)
+  [`examples/maxmod/audio_modes`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/maxmod/audio_modes)
 
 ## 3. LibXM7
 
@@ -138,7 +138,7 @@ it's probably better to stick to it.
 
 There are a few examples of LibXM7 in the BlocksDS repository. This section is
 based on the following example:
-[`examples/libxm7/basic_sound`](https://github.com/blocksds/sdk/tree/master/examples/libxm7/basic_sound)
+[`examples/libxm7/basic_sound`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/libxm7/basic_sound)
 
 The first thing to consider is that the default ARM7 core used by BlocksDS is
 built with Maxmod, not with LibXM7. If you want to use LibXM7 you will need to
@@ -272,7 +272,7 @@ You will learn how to use them to play sound effects in the next section of this
 chapter.
 
 Check the [documentation of LibXM7](https://blocksds.skylyrac.net/docs/libxm7/index.html)
-and the [examples](https://github.com/blocksds/sdk/tree/master/examples/libxm7)
+and the [examples](https://codeberg.org/blocksds/sdk/src/branch/master/examples/libxm7)
 for more information.
 
 ## 4. Sound helpers of libnds
@@ -300,7 +300,7 @@ However, this is generally fine because NDS ROMs can be very big (the biggest
 official game cartridges are 512 MB).
 
 Now, let's see how to play sounds of all types. Check the following example:
-[`examples/audio/play_sounds`](https://github.com/blocksds/sdk/tree/master/examples/audio/play_sounds)
+[`examples/audio/play_sounds`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/audio/play_sounds)
 
 The audio sample in this example has been created with **Audacity**. You can
 open any sound effect with it and export it as "Uncompressed" format, without

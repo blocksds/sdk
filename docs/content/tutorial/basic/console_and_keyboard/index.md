@@ -132,7 +132,7 @@ in your own application.
 {{< /callout >}}
 
 You can check the code of the example here:
-[`examples/console/both_screens`](https://github.com/blocksds/sdk/tree/master/examples/console/both_screens)
+[`examples/console/both_screens`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/console/both_screens)
 
 ![Console in both screens](both_screens.png)
 
@@ -146,7 +146,7 @@ printing to different parts of the same screen.
 ![Console windows](console_windows.png)
 
 You can check the code of the example here:
-[`examples/console/console_windows`](https://github.com/blocksds/sdk/tree/master/examples/console/console_windows)
+[`examples/console/console_windows`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/console/console_windows)
 
 The important part is this one:
 
@@ -191,7 +191,7 @@ functions. ANSI sequences aren't very readable, so you may prefer to use the
 functions provided by libnds instead.
 
 You can see an example of using ANSI sequences here:
-[`examples/console/ansi_console`](https://github.com/blocksds/sdk/tree/master/examples/console/ansi_console)
+[`examples/console/ansi_console`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/console/ansi_console)
 
 ![ANSI console](ansi_console.png)
 
@@ -248,14 +248,14 @@ enough.
 
 You can see an example of how to load multiple text fonts, including loading
 multiple fonts in one screen and sharing a tileset slot:
-[`examples/console/custom_font`](https://github.com/blocksds/sdk/tree/master/examples/console/custom_font)
+[`examples/console/custom_font`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/console/custom_font)
 
 ![Custom fonts](custom_fonts.png)
 
 This other example shows how to use an extended affine background instead of a
 text background. This system lets you scale and rotate the layer that holds your
 text:
-[`examples/console/console_rotscale`](https://github.com/blocksds/sdk/tree/master/examples/console/console_rotscale)
+[`examples/console/console_rotscale`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/console/console_rotscale)
 
 ![Console in affine background](console_rotscale.png)
 
@@ -302,7 +302,7 @@ The text gets printed to a special window in no$gba, and to the terminal in
 melonDS.
 
 You can check the following example to see it in action:
-[`examples/debug/nocash_debug`](https://github.com/blocksds/sdk/tree/master/examples/debug/nocash_debug)
+[`examples/debug/nocash_debug`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/debug/nocash_debug)
 
 ## 4. Keyboard
 
@@ -377,7 +377,7 @@ keyboardHide();
 ```
 
 Check the full code of the exampe here:
-[`examples/keyboard/default_keyboard`](https://github.com/blocksds/sdk/tree/master/examples/keyboard/default_keyboard)
+[`examples/keyboard/default_keyboard`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/keyboard/default_keyboard)
 
 ## 4.3 Automatic `scanf()` keyboard handling
 
@@ -423,7 +423,7 @@ better to handle keyboard presses manually.
 {{< /callout >}}
 
 You can check the full source of the example here:
-[`examples/keyboard/stdin_input`](https://github.com/blocksds/sdk/tree/master/examples/keyboard/stdin_input)
+[`examples/keyboard/stdin_input`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/keyboard/stdin_input)
 
 ## 4.4 Custom keyboards
 
@@ -601,4 +601,4 @@ keyboardInit(&customKeyboard,
 ```
 
 Check this example to see the full example:
-[`examples/keyboard/custom_keyboard`](https://github.com/blocksds/sdk/tree/master/examples/keyboard/custom_keyboard)
+[`examples/keyboard/custom_keyboard`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/keyboard/custom_keyboard)

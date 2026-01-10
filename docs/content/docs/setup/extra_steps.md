@@ -6,8 +6,8 @@ weight: 5
 ### 1. Test the installation
 
 To test that everything is working, you can try building one of the
-[examples](https://github.com/blocksds/sdk/tree/master/examples) or
-[project templates](https://github.com/blocksds/sdk/tree/master/templates)
+[examples](https://codeberg.org/blocksds/sdk/src/branch/master/examples) or
+[project templates](https://codeberg.org/blocksds/sdk/src/branch/master/templates)
 included in BlocksDS.
 
 There is a template that lets the programmer write the code for both CPUs of the

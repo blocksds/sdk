@@ -114,7 +114,7 @@ This code is used in any program unless the user explicitly provides an alternat
 
 > You must inform recipients that the Source Code Form of the Covered Software is governed by the terms of this License, and how they can obtain a copy of this License.
 
-The source code for crts is available [here](https://github.com/blocksds/sdk/tree/master/sys/crts).
+The source code for crts is available [here](https://codeberg.org/blocksds/sdk/src/branch/master/sys/crts).
 
 ### Default ARM7
 

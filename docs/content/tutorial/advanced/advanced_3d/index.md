@@ -30,7 +30,7 @@ accurate in this specific case:
 ![Depth buffering modes](depth_buffering_modes.png)
 
 You can test the example yourself here:
-[`examples/graphics_3d/depth_buffering_modes`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/depth_buffering_modes)
+[`examples/graphics_3d/depth_buffering_modes`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/depth_buffering_modes)
 
 ## 2. Billboards
 
@@ -107,7 +107,7 @@ glPopMatrix(1);
 ```
 
 You can check the example here:
-[`examples/graphics_3d/billboards`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/billboards)
+[`examples/graphics_3d/billboards`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/billboards)
 
 ## 3. Knowing if a 3D object is touched
 
@@ -169,7 +169,7 @@ Some things to consider:
   won't work in them. melonDS supports it.
 
 You can check the example here:
-[`examples/graphics_3d/picking`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/picking)
+[`examples/graphics_3d/picking`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/picking)
 
 ## 4. Point light
 
@@ -211,7 +211,7 @@ This is a pretty convincing effect in most cases. However, it becomes less
 convincing when the light source is very close to the object it illuminates.
 
 You can check the source code of the example here:
-[`examples/graphics_3d/point_light`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/point_light)
+[`examples/graphics_3d/point_light`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/point_light)
 
 ## 5. Volumetric shadow
 
@@ -266,7 +266,7 @@ The steps to use this effect are:
    ```
 
 You can check the code of the example here:
-[`examples/graphics_3d/volumetric_shadow`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/volumetric_shadow)
+[`examples/graphics_3d/volumetric_shadow`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/volumetric_shadow)
 
 You can check [GBATEK](https://problemkaputt.de/gbatek.htm#ds3dshadowpolygons)
 to get more information, and you can check the

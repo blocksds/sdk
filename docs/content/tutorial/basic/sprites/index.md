@@ -152,7 +152,7 @@ sprite mapping mode for bitmap sprites if you want to use bitmap sprites.
 ## 5. Displaying regular sprites
 
 Now, let's learn how to display sprites. You can see a more detailed example of
-regular sprites in [`examples/graphics_2d/sprites_regular`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/sprites_regular):
+regular sprites in [`examples/graphics_2d/sprites_regular`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/sprites_regular):
 
 ![Regular sprites](spr_types_regular.png)
 
@@ -253,7 +253,7 @@ Affine sprites work in a very similar way as regular sprites. The main
 difference is that you need to specify in `oamSet()` an affine index. You don't
 even need to change the instructions passed to grit.
 
-Check the example in [`examples/graphics_2d/sprites_affine`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/sprites_affine):
+Check the example in [`examples/graphics_2d/sprites_affine`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/sprites_affine):
 
 ![Affine sprites](spr_types_affine.png)
 
@@ -310,7 +310,7 @@ sprites with the 3D engine (which will be explained in another chapter).
 The main advantage of bitmap sprites is that they always use direct color (16
 bits per pixel) so you don't have any limitation due to requiring a palette.
 
-Check the example in [`examples/graphics_2d/sprites_bitmap`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/sprites_bitmap):
+Check the example in [`examples/graphics_2d/sprites_bitmap`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/sprites_bitmap):
 
 ![Bitmap sprites](spr_types_bitmap.png)
 
@@ -369,7 +369,7 @@ VRAM at once, so you'll need to load one frame per character and replace them
 whenever the animation needs to advance.
 
 This example shows how to animate a sprite with both systems:
-[`examples/graphics_2d/sprites_animated`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/sprites_animated)
+[`examples/graphics_2d/sprites_animated`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/sprites_animated)
 
 ![Animated sprites](spr_types_animated.gif)
 
@@ -413,7 +413,7 @@ This system works the same way as with backgrounds. It allows you to use up to
 
 ![Sprite extended palettes](spr_extended_palettes.png)
 
-The code of this example is here: [`examples/graphics_2d/sprites_ext_palette`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/sprites_ext_palette).
+The code of this example is here: [`examples/graphics_2d/sprites_ext_palette`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/sprites_ext_palette).
 
 The process to load the extended palettes is the same one as for backgrounds.
 You set the VRAM bank to LCD mode, copy data to it, and set it to extended

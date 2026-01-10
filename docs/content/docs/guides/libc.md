@@ -87,7 +87,7 @@ handlers.
 Functions like `fopen()` or `malloc()` need to be thread-safe, and picolibc uses
 locks to ensure that they are thread-safe. The implementation of the locking
 funtrions is platform-specific, and libnds has its implementation in
-[this file](https://github.com/blocksds/libnds/blob/25889452ac651d2e66dc652c5210cbc8b8199fc2/source/common/libc/locks.c).
+[this file](https://codeberg.org/blocksds/libnds/src/commit/25889452ac651d2e66dc652c5210cbc8b8199fc2/source/common/libc/locks.c).
 
 In general, you don't need to worry about them. However, it's possible for them
 to fail under very unusual situations and that will trigger a crash that shows

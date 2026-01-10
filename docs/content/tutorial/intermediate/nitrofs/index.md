@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 ```
 
 You can check an example of using NitroFS to read files and list files in
-directories here: [`examples/filesystem/nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/filesystem/nitrofs)
+directories here: [`examples/filesystem/nitrofs`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/filesystem/nitrofs)
 
 This chapter focuses on how to read files, how to list contents in a directory,
 and how NitroFS actually works and some common problems you may have with it.
@@ -423,13 +423,13 @@ AUDIODIRS	:= audio
 NITROFSDIR	:= nitrofs
 ```
 
-Check the example here: [`examples/maxmod/nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/maxmod/nitrofs)
+Check the example here: [`examples/maxmod/nitrofs`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/maxmod/nitrofs)
 
 ## 8. Using LibXM7 with NitroFS
 
 All you need to do is load the songs to RAM before playing them. There's an
 example of how to do that here:
-[`examples/libxm7/nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/libxm7/nitrofs)
+[`examples/libxm7/nitrofs`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/libxm7/nitrofs)
 
 ## 9. Loading GRF files
 
@@ -444,7 +444,7 @@ this format can detect if they are using an incompatible file.
 
 In order to help developers, libnds has some definitions related to the GRF
 format. It also has some helper functions to load files. They can all be found
-in [this header](https://github.com/blocksds/libnds/blob/master/include/nds/arm9/grf.h).
+in [this header](https://codeberg.org/blocksds/libnds/blob/master/include/nds/arm9/grf.h).
 
 Essentially, GRF files are RIFF files that contain multiple chunks of data
 (palettes, tile maps, textures, etc). The header of the file specify the format
@@ -459,20 +459,20 @@ see how they are configured to convert graphics into GRF files.
 
 - 2D sprites:
 
-  - [`examples/graphics_2d/sprites_grf_types`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/sprites_grf_types)
-  - [`examples/graphics_2d/sprites_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/sprites_nitrofs)
+  - [`examples/graphics_2d/sprites_grf_types`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/sprites_grf_types)
+  - [`examples/graphics_2d/sprites_nitrofs`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/sprites_nitrofs)
 
 - 2D backgrounds:
 
-  - [`examples/graphics_2d/bg_regular_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/graphics_2d/bg_regular_nitrofs)
+  - [`examples/graphics_2d/bg_regular_nitrofs`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_nitrofs)
 
 - 3D textures:
 
-  - [`examples/graphics_3d/grf_textures_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/graphics_3d/grf_textures_nitrofs)
+  - [`examples/graphics_3d/grf_textures_nitrofs`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/grf_textures_nitrofs)
 
 - There's also a demo of how to create a simple game using GRF files:
 
-  - [`examples/demos/invaders`](https://github.com/blocksds/sdk/tree/master/examples/demos/invaders)
+  - [`examples/demos/invaders`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/demos/invaders)
 
 ## 10. Using GL2D with NitroFS
 
@@ -505,7 +505,7 @@ Height  | `uint16_t`
 
 Once you load the file, the array of frames works the same way as the arrays in
 the C/H files generated with `--outputH` and `--outputC`. Check the following
-example: [`examples/gl2d/spriteset_nitrofs`](https://github.com/blocksds/sdk/tree/master/examples/gl2d/spriteset_nitrofs)
+example: [`examples/gl2d/spriteset_nitrofs`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/gl2d/spriteset_nitrofs)
 
 Note that this format doesn't contain the image itself, only the information
 about the sub-images. To store the actual texture you need to use, for example,
