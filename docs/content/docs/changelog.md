@@ -59,6 +59,10 @@ weight: 6
 - SDK:
 
   - The documentation now links to the new page with the documentation of grit.
+  - BlocksDS has migrated all repositories to [Codeberg](https://codeberg.org/blocksds).
+    The GitHub repositories will be kept around for discoverability. GitHub
+    actions and GitHub pages are still used, but the plan is to migrate away
+    from them.
   - Many links have been updated or made relative so that they are more
     resilient.
   - Add more flashcarts to the list of flashcards where DLDI is verified to work
@@ -71,6 +75,7 @@ weight: 6
     that DTCM has been moved. @asie
   - The `specs` file used for ELF dynamic library files has been fixed so that
     `__sync_synchronize_none` isn't added. This was a bug added in v1.15.2.
+  - Add a test that obtains the FAT short name of files.
 
   - Examples:
 
