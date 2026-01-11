@@ -195,7 +195,7 @@ Additional peripheral support is provided by third-party libraries:
 
 - dserial: [Slot-1 serial card](https://github.com/asiekierka/dserial)
 
-- nrio-usb: [Slot-2 USB interface](https://github.com/asiekierka/nrio-usb-examples/)
+- nrio-usb: [Slot-2 USB interface](https://codeberg.org/asie/nrio-usb-examples)
 
 ## Build process
 
