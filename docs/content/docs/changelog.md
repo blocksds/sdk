@@ -7,30 +7,46 @@ weight: 6
 
 - libnds:
 
-  - Allow developers to send cothread signals from IRQs safely with
-    `cothread_send_signal()`.
-  - Move DTCM to `0x2FF4000`, increasing the amount of available memory by
-    up to around 16 KiB. Fix `__system_bootstub` definition for DTCM at
-    `0x2FF4000`. @asiekierka
-  - Fix holding power button for 1 second not turning off the console.
-    @RocketRobz
-  - Add defines to read the battery status easier: `BATTERY_CHARGER_CONNECTED`,
-    `BATTERY_LEVEL_MASK`, `BATTERY_LEVEL_DS_HIGH` and`BATTERY_LEVEL_DS_LOW`.
-  -  Disable microphone FIFO after disabling microphone amp. @asiekierka
-  - Add note to the console documentation that background types with 8-bit map
-    entries aren't supported.
-  - Pull `dlmalloc` implementation to the libnds repository. This is no longer
-    present in picolibc, it has been removed in favour of `nano-malloc`, but
-    `nano-malloc` has worse performance than `dlmalloc`. @asiekierka
-  - Fix value returned by `nandInit()` on failure.
+  - Memory:
+
+    - Move DTCM to `0x2FF4000`, increasing the amount of available memory by
+      up to around 16 KiB. This may require slight changes to your code if
+      you're writing to or reading from the boot stub area. @asie
+    - Pull `dlmalloc` implementation to the libnds repository. This is no longer
+      present in picolibc, it has been removed in favour of `nano-malloc`.
+      This has a few consequences, which are outlined below. @asie
+    - `dlmalloc` has been updated to the latest version. This brings some
+      performance improvements on ARM9.
+    - The ARM7 environment now provides `nano-malloc` instead of `dlmalloc`. It
+      is less performant, though this should not be a problem given the purpose
+      specific nature of ARM7 code; however, it saves a few kilobytes of code
+      size.
+    - In debug builds (`-lnds9d`), heap footers have been enabled in `dlmalloc`,
+      enabling early exits when memory corruption is detected during a `free()`
+      or `realloc()`.
+
+  - Other:
+
+    - Allow developers to send cothread signals from IRQs safely with
+      `cothread_send_signal()`.
+    - Fix holding power button for 1 second not turning off the console.
+      @RocketRobz
+    - Add defines to read the battery status easier: `BATTERY_CHARGER_CONNECTED`,
+      `BATTERY_LEVEL_MASK`, `BATTERY_LEVEL_DS_HIGH` and`BATTERY_LEVEL_DS_LOW`.
+    - Disable microphone FIFO after stopping microphone capture. @asie
+    - Add note to the console documentation that background types with 8-bit map
+      entries aren't supported.
+    - Add support for programs using the `lstat()` function. @asie
+    - Add the `FAT_getShortNameFor()` function to query the FAT short file name
+      of a file or directory. @asie
+    - Fix value returned by `nandInit()` on failure.
 
 - ndstool:
 
   - Apply LoadMe patch on DSi hybrid images by default - in this case, the data
     is placed at 0xE00, in an area used only for debug arguments.  This fixes
-    loading such images on some old carts, including MoonShell <= 2.00. @asie
+    launching such images on some old carts, including MoonShell <= 2.07. @asie
   - Add explicit option to disable the LoadMe patch, `-nl`. @asie
-  - Improve internal documentation. @asie
 
 - grit:
 
@@ -52,7 +68,7 @@ weight: 6
     added to the debugging guide as well.
   - Clarify that the bootstub field `arm7reboot` isn't used by libnds.
   - The upgrade guide and memory map documentation have been updated to mention
-    that DTCM has been moved. @asiekierka
+    that DTCM has been moved. @asie
   - The `specs` file used for ELF dynamic library files has been fixed so that
     `__sync_synchronize_none` isn't added. This was a bug added in v1.15.2.
 
