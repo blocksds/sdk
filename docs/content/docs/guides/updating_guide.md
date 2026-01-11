@@ -10,6 +10,30 @@ to implement. These are documented here.
 Please refer to the [changelog](../../changelog) for a full list of changes,
 including additions and enhancements to the SDK which are not listed here.
 
+### Cloning old versions of the repository
+
+During the migration to Codeberg the git submodule URLs have been updated to
+point to the repositories in Codeberg using relative paths (so that future
+migrations don't require more changes). However, older versions of the
+repository still point to GitHub.
+
+If you want to clone old versions of BlocksDS from Codeberg without using GitHub
+for the submodules you will need to run the following two commands:
+
+```sh
+git config --global url.ssh://git@codeberg.org/blocksds/.insteadOf git@github.com:blocksds/
+git config --global url.https://codeberg.org/blocksds/.insteadOf https://github.com/blocksds/
+```
+
+They will also set the URL of all submodules to their new URLs in Codeberg.
+
+You can remove the configuration settings later if you want:
+
+```sh
+git config --global --unset url.ssh://git@codeberg.org/blocksds/.insteadOf
+git config --global --unset url.https://codeberg.org/blocksds/.insteadOf
+```
+
 ### Upgrading to BlocksDS DEV
 
 * The DTCM memory region has been moved from `0x2FF0000` to `0x2FF4000`. This
