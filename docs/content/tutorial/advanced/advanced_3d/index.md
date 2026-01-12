@@ -273,6 +273,93 @@ to get more information, and you can check the
 [Volumetric Shadow Demo](https://codeberg.org/SkyLyrac/volumetric_shadow_demo)
 by silent_code to see a more complex example that uses this technique.
 
-{{< callout type="error" >}}
-This chapter is a work in progress...
-{{< /callout >}}
+## 6. Efficient animated models
+
+In the [3D graphics](../../intermediate/3d_graphics) chapter we saw how to use
+display lists to render static 3D models in an efficient way. This system can
+also be used to display animated models, but it requires more work.
+
+[Skeletal animation](https://en.wikipedia.org/wiki/Skeletal_animation) is a
+common way to animate 3D models. With this technique, each vertex is associated
+to one or multiple bones. Each bone represents a transformation (a reorientation
+plus a translationa). When a bone is moved, all vertices associated to the bone
+are moved with it. Each bone can have a different weight with a vertex. This
+value normally goes from 0.0 to 1.0, and it represents how much a vertex is
+affected by the movement of a bone.
+
+The transformations can be done by hand, but there's a way to optimize it in the
+DS so that all transformations are done by the GPU.
+
+As we've seen before, each bone represents a transformation (a reorientation
+plus a translationa), which can be expressed as a 4x3 transformation matrix (a
+3x3 matrix for the reorientation, and a 1x3 vector for the translation).
+
+Vertices associated to a bone aren't stored with their global coordinates, but
+with their coordinates relative to the origin of the bone. That way you can load
+the matrix of a bone to the GPU, send the vertices of that bone, and they will
+be moved to the right position.
+
+If you can express all the bones of your model as 4x3 matrices, load them to the
+GPU, and switch between them while drawing your model, you have an easy way to
+draw animated models.
+
+There are two limitations for this system:
+
+- You can't use more than 30 bones because the GPU doesn't have space for more
+  matrices.
+
+- All vertices need to be associated to just one bone with a weight of 1.0. If
+  you wanted to support different combinations of weights you could also do it,
+  but it would increase the CPU usage significantly. You'd need to calculculate
+  each combination of weights and have a different matrix for each combination.
+
+The system works like this:
+
+1. Create a 3D model with your favourite 3D editor (like Blender). Animate it
+   with a skeleton as usual.
+
+2. Export the model in such a way that you create a display list and animation
+   data:
+
+   - The animation data must include the orientation and translation of each
+     bone for each frame.
+   - The display list is just a regular display list that uses `MATRIX_RESTORE`
+     commands to switch between matrices. Each vertex is associated to one bone,
+     so you must switch to that transformation before sending that vertex to the
+     GPU. Note that you can change the active matrix while in the middle of
+     drawing a polygon, vertices in a polygon don't need to use the same matrix.
+
+3. To render the model:
+
+   - Load the animation data for the frame you want to draw, convert it to 4x3
+     matrices, and load them to the GPU. You need to multiply them by the
+     current world transformation to be able to move your animated model like
+     any other of your models.
+   - Send the display list to the GPU.
+
+BlocksDS doesn't come with an example of how to do this, but there's a library
+that uses this technique: [DSMA library](codeberg.org/SkyLyrac/dsma-library).
+
+- This library expects the user to export their models in MD5 format and convert
+  them with [`md5_to_dsma`](https://codeberg.org/SkyLyrac/dsma-library/src/branch/master/tools).
+  The converter generates one DSM (DS Model) file and as many DSA (DS Animation)
+  files as animations you have for the model.
+
+- The animation data is stored as a quaternion (orientation) and a translation
+  per bone. The format is described [here](https://codeberg.org/SkyLyrac/dsma-library/src/commit/5988ef1eb6d10141728cea129306764e27849684/library/dsma.c#L11-L25).
+  This system takes up less space than a matrix (7 values vs 4x3 values), and
+  it's easier to interpolate between frames. Matrices can't be linearly
+  interpolated, but quaternions and translation vectors can.
+
+- The quaternions and vectors are converted to 4x3 matrices before displaying
+  the models. Check the code [here](https://codeberg.org/SkyLyrac/dsma-library/src/commit/5988ef1eb6d10141728cea129306764e27849684/library/dsma.c#L162-L188).
+
+The following video shows the [stress test example](https://codeberg.org/SkyLyrac/dsma-library/src/branch/master/examples/stress_test)
+displaying lots animated models with around 50% CPU usage. Each model has to
+prepare and load its own transformation matrices before drawing the model
+itself.
+
+<video controls>
+  <source src="dsma.webm" type="video/webm">
+  Your browser does not support the video tag.
+</video>
