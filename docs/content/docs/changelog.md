@@ -40,6 +40,11 @@ weight: 6
     - Add the `FAT_getShortNameFor()` function to query the FAT short file name
       of a file or directory. @asie
     - Fix value returned by `nandInit()` on failure.
+    - `lstat()` has been implemented.
+    - A new function has been added to get the short name (SFN) of a given file
+      or directory in a FAT filesystem: `FAT_getShortNameFor()`.
+    - Some SPI helpers have been turned into non-inline functions to prevent the
+      compiler from including them multiple times in binaries.
 
 - ndstool:
 
@@ -62,7 +67,8 @@ weight: 6
   - BlocksDS has migrated all repositories to [Codeberg](https://codeberg.org/blocksds).
     The GitHub repositories will be kept around for discoverability. GitHub
     actions and GitHub pages are still used, but the plan is to migrate away
-    from them.
+    from them. The updating guide now has instructions on how to clone old
+    versions of BlocksDS from the Codeberg repositories without using GitHub.
   - Many links have been updated or made relative so that they are more
     resilient.
   - Add more flashcarts to the list of flashcards where DLDI is verified to work
@@ -119,6 +125,7 @@ weight: 6
       than 256x256 pixels.
     - Mention that DMA copies in the ARM9 can happen while the CPU runs as long
       as the CPU only uses ITCM and DTCM.
+    - The tutorial is licensed under the license CC BY-SA 4.0 again.
 
 ### Version 1.16.0 (2025-12-25)
 
