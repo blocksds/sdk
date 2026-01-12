@@ -39,7 +39,7 @@ weight: 6
     - Add support for programs using the `lstat()` function. @asie
     - Add the `FAT_getShortNameFor()` function to query the FAT short file name
       of a file or directory. @asie
-    - Fix value returned by `nandInit()` on failure.
+    - Fix value returned by `nandInit()` on failure. @asie
     - `lstat()` has been implemented.
     - Some SPI helpers have been turned into non-inline functions to prevent the
       compiler from including them multiple times in binaries.
