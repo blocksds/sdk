@@ -41,8 +41,6 @@ weight: 6
       of a file or directory. @asie
     - Fix value returned by `nandInit()` on failure.
     - `lstat()` has been implemented.
-    - A new function has been added to get the short name (SFN) of a given file
-      or directory in a FAT filesystem: `FAT_getShortNameFor()`.
     - Some SPI helpers have been turned into non-inline functions to prevent the
       compiler from including them multiple times in binaries.
 
