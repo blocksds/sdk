@@ -14,7 +14,23 @@ Welcome to the documentation of BlocksDS!
   {{< card icon="code" link="internal" title="Internal documentation" >}}
 {{< /cards >}}
 
-If you're looking for support, check [this page](./support).
+There's also a list of open source projects that you can use as reference or
+inspiration:
 
-[This](https://codeberg.org/blocksds/awesome-blocksds) is a list of interesting
-projects made with BlocksDS.
+{{< cards cols="1" >}}
+  {{< card
+    icon="arrow-up-right"
+    title="Open source projects"
+    link="https://codeberg.org/blocksds/awesome-blocksds"
+  >}}
+{{< /cards >}}
+
+If you're looking for support, check this page:
+
+{{< cards cols="1" >}}
+  {{< card
+    icon="question-mark-circle"
+    link="support"
+    title="Getting support"
+  >}}
+{{< /cards >}}

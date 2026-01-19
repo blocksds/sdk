@@ -48,12 +48,20 @@ the Nintendo DS and DSi using C or C++.<br class="hx:sm:block hx:hidden" />
     style="background-color: rgba(192,255,128,0.3)"
   >}}
   {{< hextra/feature-card
+    title="Awesome list"
+    subtitle="Explore awesome projects made with BlocksDS."
+    icon="globe-alt"
+    link="https://codeberg.org/blocksds/awesome-blocksds"
+  >}}
+  {{< hextra/feature-card
     title="About BlocksDS"
+    subtitle="General information about BlocksDS."
     icon="light-bulb"
     link="docs/introduction"
   >}}
   {{< hextra/feature-card
     title="Credits"
+    subtitle="Contributors to BlocksDS."
     icon="user"
     link="docs/credits"
   >}}
