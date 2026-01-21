@@ -19,6 +19,12 @@ There are 4 DMA channels that can be setup independently, but they all work the
 same way. Channel 0 has the highest priority, channel 3 has the lowest
 priority.
 
+{{< callout type="warning" >}}
+You can use DMA to do regular copies, but it isn't always a good idea. In
+general, using `memcpy()` is recommended. BlocksDS comes with a very optimized
+`memcpy()`, and it's a lot less prone to programming errors than DMA.
+{{< /callout >}}
+
 ## 2. Regular copies
 
 DMA is a very common way to copy data from main RAM to VRAM. For example, the
@@ -69,8 +75,10 @@ sense.
 
 - A bigger problem is the cache. DMA can't access the caches, but the ARM9 uses
   the cache all the time. If you edit an array it will likely stay in the data
-  cache for a while. If you try to copy it with DMA right away, you won't be
-  able to copy it. This will be discussed in the next section of this chapter.
+  cache for a while. If you try to copy it with DMA right away, the DMA hardware
+  won't be able to read the updated values. Managing the cache takes some CPU
+  time, making the whole DMA copy process slower the first time you copy the
+  data. This will be discussed in the next section of this chapter.
 
 ## 4. DMA and data cache
 

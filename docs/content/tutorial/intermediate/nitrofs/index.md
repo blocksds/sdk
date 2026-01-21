@@ -218,7 +218,8 @@ int main(int argc, char *argv[])
 **Important note:** Remember to flush the buffer after reading a file if you're
 planning to use DMA to copy it somewhere! `DC_FlushRange(buffer, size)` should
 be enough. libnds functions like `glTexImage2D()` do this internally, but
-`dmaCopy()` expects you to have done it beforehand.
+`dmaCopy()` expects you to have done it beforehand. You don't need to flush the
+cache if you're going to use `memcpy()` or any other CPU copy function.
 
 ## 3. Navigating directories
 
