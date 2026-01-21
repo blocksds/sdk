@@ -15,9 +15,9 @@ BlocksDS and you aren't sure about what copyright notices you need to add.
 
 ## BlocksDS Logo
 
-You're free to use the BlocksDS in your applications (commercial or not) to give
-credit to the authors of BlocksDS, but you have no obligation to do it. This is
-completely optional.
+You're free to use the BlocksDS logo in your applications (commercial or not) to
+give credit to the authors of BlocksDS, but you have no obligation to do it.
+This is completely optional.
 
 The logo is licensed under [CC BY-ND 4.0](https://creativecommons.org/licenses/by-nd/4.0/).
 In short: You're allowed to use it in your projects as long as you give
