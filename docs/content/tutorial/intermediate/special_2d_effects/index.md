@@ -118,10 +118,10 @@ which can be ignored:
 ```c
 // Allocate space for the tiles and copy them there
 u16 *gfxMain = oamAllocateGfx(&oamMain, SpriteSize_64x64, SpriteColorFormat_256Color);
-dmaCopy(statueTiles, gfxMain, statueTilesLen);
+memcpy(gfxMain, statueTiles, statueTilesLen);
 
 // No need to copy the palette, this sprite won't be displayed normally
-//dmaCopy(statuePal, SPRITE_PALETTE, statuePalLen);
+//memcpy(SPRITE_PALETTE, statuePal, statuePalLen);
 
 oamSet(&oamMain, 0,
        100, 50, // X, Y

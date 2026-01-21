@@ -182,6 +182,7 @@ void SetupSprites(void)
         }
     }
 
+    // Flush the buffer so that we can use a DMA copy
     DC_FlushRange(Sprites, sizeof(SpriteEntry) * 128);
 
     dmaCopy(Sprites, OAM_SUB, 128 * sizeof(SpriteEntry));

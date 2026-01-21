@@ -110,7 +110,7 @@ void bit_unpack_4bpp(void)
     int ball_green_pal_offset = ball_red_pal_offset + BALL_COLOR_COUNT;
 
     // Place the red ball (palette, map, tile data).
-    dmaCopy(ball_redPal, BG_PALETTE + ball_red_pal_offset, ball_redPalLen);
+    memcpy(BG_PALETTE + ball_red_pal_offset, ball_redPal, ball_redPalLen);
 
     for (int y = 0; y < BALL_HEIGHT; y++)
         for (int x = 0; x < BALL_WIDTH; x++)
@@ -125,7 +125,7 @@ void bit_unpack_4bpp(void)
     swiUnpackBits(ball_redTiles, gfx_data + (ball_red_gfx_offset * 64 / 2), &unpackSettings);
 
     // Place the green ball (palette, map, tile data).
-    dmaCopy(ball_greenPal, BG_PALETTE + ball_green_pal_offset, ball_greenPalLen);
+    memcpy(BG_PALETTE + ball_green_pal_offset, ball_greenPal, ball_greenPalLen);
 
     for (int y = 0; y < BALL_HEIGHT; y++)
         for (int x = 0; x < BALL_WIDTH; x++)

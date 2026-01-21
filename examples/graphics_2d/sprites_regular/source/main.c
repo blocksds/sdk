@@ -22,14 +22,14 @@ int main(int argc, char *argv[])
 
     // Allocate space for the tiles and copy them there
     u16 *gfxMain = oamAllocateGfx(&oamMain, SpriteSize_64x64, SpriteColorFormat_256Color);
-    dmaCopy(statueTiles, gfxMain, statueTilesLen);
+    memcpy(gfxMain, statueTiles, statueTilesLen);
 
     u16 *gfxSub = oamAllocateGfx(&oamSub, SpriteSize_64x64, SpriteColorFormat_256Color);
-    dmaCopy(statueTiles, gfxSub, statueTilesLen);
+    memcpy(gfxSub, statueTiles, statueTilesLen);
 
     // Copy palette
-    dmaCopy(statuePal, SPRITE_PALETTE, statuePalLen);
-    dmaCopy(statuePal, SPRITE_PALETTE_SUB, statuePalLen);
+    memcpy(SPRITE_PALETTE, statuePal, statuePalLen);
+    memcpy(SPRITE_PALETTE_SUB, statuePal, statuePalLen);
 
     oamSet(&oamMain, 0,
            100, 50, // X, Y

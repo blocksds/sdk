@@ -41,7 +41,7 @@ void map_load(int bg_layer, int map_base, int tile_base,
     tileset_load(map_bg, tiles);
 
     // Load palette, it won't change
-    dmaCopy(palette, BG_PALETTE, palette_size);
+    memcpy(BG_PALETTE, palette, palette_size);
 
     // Keep some information about the map
     map_size_width = map_width;

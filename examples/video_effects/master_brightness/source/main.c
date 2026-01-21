@@ -25,9 +25,9 @@ int main(int argc, char **argv)
     bgSetPriority(bg, 2);
 
     // Copy background graphics
-    dmaCopy(forest_townTiles, bgGetGfxPtr(bg), forest_townTilesLen);
-    dmaCopy(forest_townMap, bgGetMapPtr(bg), forest_townMapLen);
-    dmaCopy(forest_townPal, BG_PALETTE, forest_townPalLen);
+    memcpy(bgGetGfxPtr(bg), forest_townTiles, forest_townTilesLen);
+    memcpy(bgGetMapPtr(bg), forest_townMap, forest_townMapLen);
+    memcpy(BG_PALETTE, forest_townPal, forest_townPalLen);
 
     // Setup console in the sub screen
     consoleDemoInit();

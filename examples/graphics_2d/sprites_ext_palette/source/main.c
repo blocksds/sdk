@@ -27,16 +27,16 @@ int main(int argc, char *argv[])
 
     // Allocate space for the tiles and copy them there
     u16 *gfx256ExtMainStatue = oamAllocateGfx(&oamMain, SpriteSize_64x64, SpriteColorFormat_256Color);
-    dmaCopy(statueTiles, gfx256ExtMainStatue, statueTilesLen);
+    memcpy(gfx256ExtMainStatue, statueTiles, statueTilesLen);
 
     u16 *gfx256ExtMainRuin = oamAllocateGfx(&oamMain, SpriteSize_64x64, SpriteColorFormat_256Color);
-    dmaCopy(ruinTiles, gfx256ExtMainRuin, ruinTilesLen);
+    memcpy(gfx256ExtMainRuin, ruinTiles, ruinTilesLen);
 
     u16 *gfx256ExtSubStatue = oamAllocateGfx(&oamSub, SpriteSize_64x64, SpriteColorFormat_256Color);
-    dmaCopy(statueTiles, gfx256ExtSubStatue, statueTilesLen);
+    memcpy(gfx256ExtSubStatue, statueTiles, statueTilesLen);
 
     u16 *gfx256ExtSubRuin = oamAllocateGfx(&oamSub, SpriteSize_64x64, SpriteColorFormat_256Color);
-    dmaCopy(ruinTiles, gfx256ExtSubRuin, ruinTilesLen);
+    memcpy(gfx256ExtSubRuin, ruinTiles, ruinTilesLen);
 
     const int spr_pal_main_statue = 3;
     const int spr_pal_main_ruin = 7;
@@ -50,11 +50,11 @@ int main(int argc, char *argv[])
     vramSetBankI(VRAM_I_LCD);
 
     // Copy palettes
-    dmaCopy(statuePal, VRAM_F_EXT_SPR_PALETTE[spr_pal_main_statue], statuePalLen);
-    dmaCopy(ruinPal, VRAM_F_EXT_SPR_PALETTE[spr_pal_main_ruin], ruinPalLen);
+    memcpy(VRAM_F_EXT_SPR_PALETTE[spr_pal_main_statue], statuePal, statuePalLen);
+    memcpy(VRAM_F_EXT_SPR_PALETTE[spr_pal_main_ruin], ruinPal, ruinPalLen);
 
-    dmaCopy(statuePal, VRAM_I_EXT_SPR_PALETTE[spr_pal_sub_statue], statuePalLen);
-    dmaCopy(ruinPal, VRAM_I_EXT_SPR_PALETTE[spr_pal_sub_ruin], ruinPalLen);
+    memcpy(VRAM_I_EXT_SPR_PALETTE[spr_pal_sub_statue], statuePal, statuePalLen);
+    memcpy(VRAM_I_EXT_SPR_PALETTE[spr_pal_sub_ruin], ruinPal, ruinPalLen);
 
     // Map some VRAM to be used as extended palettes
     vramSetBankF(VRAM_F_SPRITE_EXT_PALETTE);

@@ -15,9 +15,9 @@ int main(int argc, char *argv[])
 
     int bg = bgInit(0, BgType_Text8bpp, BgSize_T_256x256, 0,1);
 
-    dmaCopy(forest_townTiles, bgGetGfxPtr(bg), forest_townTilesLen);
-    dmaCopy(forest_townMap, bgGetMapPtr(bg), forest_townMapLen);
-    dmaCopy(forest_townPal, BG_PALETTE, forest_townPalLen);
+    memcpy(bgGetGfxPtr(bg), forest_townTiles, forest_townTilesLen);
+    memcpy(bgGetMapPtr(bg), forest_townMap, forest_townMapLen);
+    memcpy(BG_PALETTE, forest_townPal, forest_townPalLen);
 
     // Make the backgdrop color black. This is the color that gets drawn on the
     // screen if no background or sprite is in that part of the screen. This

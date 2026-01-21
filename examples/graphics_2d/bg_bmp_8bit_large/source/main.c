@@ -37,8 +37,8 @@ int main(int argc, char *argv[])
     int x = 0, y = 0;
 
     // Load the palette and data
-    dmaCopy(manga_bgPal, BG_PALETTE, manga_bgPalLen);
-    dmaCopy(manga_bgBitmap, bgGetGfxPtr(bg), manga_bgBitmapLen);
+    memcpy(BG_PALETTE, manga_bgPal, manga_bgPalLen);
+    memcpy(bgGetGfxPtr(bg), manga_bgBitmap, manga_bgBitmapLen);
 
     while (1)
     {

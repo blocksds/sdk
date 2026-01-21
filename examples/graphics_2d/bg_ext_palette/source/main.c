@@ -42,15 +42,15 @@ int main(int argc, char *argv[])
 
     int bg0 = bgInit(0, BgType_Text8bpp, BgSize_T_256x256, 0, 1);
 
-    dmaCopy(ponypoke_0Tiles, bgGetGfxPtr(bg0), ponypoke_0TilesLen);
-    dmaCopy(ponypoke_0Map, bgGetMapPtr(bg0), ponypoke_0MapLen);
-    dmaCopy(ponypoke_0Pal, &VRAM_E_EXT_PALETTE[0][12], ponypoke_0PalLen);
+    memcpy(bgGetGfxPtr(bg0), ponypoke_0Tiles, ponypoke_0TilesLen);
+    memcpy(bgGetMapPtr(bg0), ponypoke_0Map, ponypoke_0MapLen);
+    memcpy(&VRAM_E_EXT_PALETTE[0][12], ponypoke_0Pal, ponypoke_0PalLen);
 
     int bg1 = bgInit(1, BgType_Text8bpp, BgSize_T_256x256, 4, 4);
 
-    dmaCopy(forest_townTiles, bgGetGfxPtr(bg1), forest_townTilesLen);
-    dmaCopy(forest_townMap, bgGetMapPtr(bg1), forest_townMapLen);
-    dmaCopy(forest_townPal, &VRAM_E_EXT_PALETTE[1][7], forest_townPalLen);
+    memcpy(bgGetGfxPtr(bg1), forest_townTiles, forest_townTilesLen);
+    memcpy(bgGetMapPtr(bg1), forest_townMap, forest_townMapLen);
+    memcpy(&VRAM_E_EXT_PALETTE[1][7], forest_townPal, forest_townPalLen);
 
     // Sub engine backgrounds (including the debug console)
 
@@ -60,15 +60,15 @@ int main(int argc, char *argv[])
 
     int bg1sub = bgInitSub(1, BgType_Text8bpp, BgSize_T_256x256, 2, 2);
 
-    dmaCopy(ponypoke_0Tiles, bgGetGfxPtr(bg1sub), ponypoke_0TilesLen);
-    dmaCopy(ponypoke_0Map, bgGetMapPtr(bg1sub), ponypoke_0MapLen);
-    dmaCopy(ponypoke_0Pal, &VRAM_H_EXT_PALETTE[1][12], ponypoke_0PalLen);
+    memcpy(bgGetGfxPtr(bg1sub), ponypoke_0Tiles, ponypoke_0TilesLen);
+    memcpy(bgGetMapPtr(bg1sub), ponypoke_0Map, ponypoke_0MapLen);
+    memcpy(&VRAM_H_EXT_PALETTE[1][12], ponypoke_0Pal, ponypoke_0PalLen);
 
     int bg2sub = bgInitSub(2, BgType_Text8bpp, BgSize_T_256x256, 4, 5);
 
-    dmaCopy(forest_townTiles, bgGetGfxPtr(bg2sub), forest_townTilesLen);
-    dmaCopy(forest_townMap, bgGetMapPtr(bg2sub), forest_townMapLen);
-    dmaCopy(forest_townPal, &VRAM_H_EXT_PALETTE[2][7], forest_townPalLen);
+    memcpy(bgGetGfxPtr(bg2sub), forest_townTiles, forest_townTilesLen);
+    memcpy(bgGetMapPtr(bg2sub), forest_townMap, forest_townMapLen);
+    memcpy(&VRAM_H_EXT_PALETTE[2][7], forest_townPal, forest_townPalLen);
 
     // Setup VRAM as extended palette VRAM
 

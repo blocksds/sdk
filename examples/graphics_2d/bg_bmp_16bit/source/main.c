@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
             bgSetMapBase(bg, 8);
 
         // Draw scene. Copy background image and draw a square on top of it.
-        dmaCopy(photoBitmap, backbuffer, photoBitmapLen);
+        memcpy(backbuffer, photoBitmap, photoBitmapLen);
         for (int j = y; j < 50 + y; j++)
         {
             for (int i = x; i < 50 + x; i++)

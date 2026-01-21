@@ -17,15 +17,15 @@ int main(int argc, char *argv[])
 
     int bg = bgInit(0, BgType_Text8bpp, BgSize_T_256x256, 0,1);
 
-    dmaCopy(forest_townTiles, bgGetGfxPtr(bg), forest_townTilesLen);
-    dmaCopy(forest_townMap, bgGetMapPtr(bg), forest_townMapLen);
-    dmaCopy(forest_townPal, BG_PALETTE, forest_townPalLen);
+    memcpy(bgGetGfxPtr(bg), forest_townTiles, forest_townTilesLen);
+    memcpy(bgGetMapPtr(bg), forest_townMap, forest_townMapLen);
+    memcpy(BG_PALETTE, forest_townPal, forest_townPalLen);
 
     int bgsub = bgInitSub(0, BgType_Text8bpp, BgSize_T_256x256, 0,1);
 
-    dmaCopy(forest_townTiles, bgGetGfxPtr(bgsub), forest_townTilesLen);
-    dmaCopy(forest_townMap, bgGetMapPtr(bgsub), forest_townMapLen);
-    dmaCopy(forest_townPal, BG_PALETTE_SUB, forest_townPalLen);
+    memcpy(bgGetGfxPtr(bgsub), forest_townTiles, forest_townTilesLen);
+    memcpy(bgGetMapPtr(bgsub), forest_townMap, forest_townMapLen);
+    memcpy(BG_PALETTE_SUB, forest_townPal, forest_townPalLen);
 
     int x = 0, y = 0;
 

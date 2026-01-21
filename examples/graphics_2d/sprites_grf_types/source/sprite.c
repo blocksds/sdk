@@ -73,8 +73,7 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
             else
                 palAlloc = SPRITE_PALETTE_SUB + palIndex * 16;
 
-            DC_FlushRange(palGrf, palSize);
-            dmaCopy(palGrf, palAlloc, palSize);
+            memcpy(palAlloc, palGrf, palSize);
             break;
         }
         case 8: // 256 color
@@ -124,8 +123,7 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
                         goto exit;
                     }
 
-                    DC_FlushRange(palGrf, palSize);
-                    dmaCopy(palGrf, palAlloc, palSize);
+                    memcpy(palAlloc, palGrf, palSize);
 
                     VRAM_F_CR = old_vram_f;
                     VRAM_G_CR = old_vram_g;
@@ -138,8 +136,7 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
                         goto exit;
                     }
 
-                    DC_FlushRange(palGrf, palSize);
-                    dmaCopy(palGrf, SPRITE_PALETTE, palSize);
+                    memcpy(SPRITE_PALETTE, palGrf, palSize);
                 }
 
             }
@@ -169,8 +166,7 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
                         goto exit;
                     }
 
-                    DC_FlushRange(palGrf, palSize);
-                    dmaCopy(palGrf, palAlloc, palSize);
+                    memcpy(palAlloc, palGrf, palSize);
 
                     VRAM_I_CR = old_vram_i;
                 }
@@ -182,8 +178,7 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
                         goto exit;
                     }
 
-                    DC_FlushRange(palGrf, palSize);
-                    dmaCopy(palGrf, SPRITE_PALETTE_SUB, palSize);
+                    memcpy(SPRITE_PALETTE_SUB, palGrf, palSize);
                 }
             }
 
@@ -216,9 +211,7 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
         goto exit;
     }
 
-    // Flush cache so that DMA can be used to copy the data to VRAM
-    DC_FlushRange(gfxGrf, gfxSize);
-    dmaCopy(gfxGrf, gfxAlloc, gfxSize);
+    memcpy(gfxAlloc, gfxGrf, gfxSize);
 
     // Return information of the loaded graphics
     *gfxOut = gfxAlloc;

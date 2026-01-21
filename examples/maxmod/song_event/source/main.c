@@ -63,8 +63,8 @@ int main(int argc, char **argv)
     // Allocate space for the tiles and copy them there
     u16 *gfxMain = oamAllocateGfx(&oamMain, SpriteSize_32x32,
             SpriteColorFormat_256Color);
-    dmaCopy(ballTiles, gfxMain, ballTilesLen);
-    dmaCopy(ballPal, SPRITE_PALETTE, ballPalLen); // Copy palette
+    memcpy(gfxMain, ballTiles, ballTilesLen);
+    memcpy(SPRITE_PALETTE, ballPal, ballPalLen); // Copy palette
 
     // Init sound
     mmInitDefaultMem((mm_addr)soundbank_bin);

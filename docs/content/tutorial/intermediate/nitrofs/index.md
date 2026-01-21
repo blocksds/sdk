@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     vramSetBankA(VRAM_A_MAIN_BG);
 
     int bg = bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
-    dmaCopy(photoBitmap, bgGetGfxPtr(bg), photoBitmapLen);
+    memcpy(bgGetGfxPtr(bg), photoBitmap, photoBitmapLen);
 
     while (1)
         swiWaitForVBlank();

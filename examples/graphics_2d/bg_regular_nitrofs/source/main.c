@@ -75,12 +75,9 @@ int main(int argc, char *argv[])
 
         bg = bgInit(0, BgType_Text8bpp, BgSize_T_512x256, 0, 1);
 
-        // Flush cache so that we can use DMA to copy the data to VRAM
-        DC_FlushAll();
-
-        dmaCopy(gfxDst, bgGetGfxPtr(bg), gfxSize);
-        dmaCopy(mapDst, bgGetMapPtr(bg), mapSize);
-        dmaCopy(palDst, BG_PALETTE, palSize);
+        memcpy(bgGetGfxPtr(bg), gfxDst, gfxSize);
+        memcpy(bgGetMapPtr(bg), mapDst, mapSize);
+        memcpy(BG_PALETTE, palDst, palSize);
     }
 
     printf("PAD:   Scroll background\n");

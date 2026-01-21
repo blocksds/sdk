@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     int x = 20, y = 30;
 
     // Load the palette
-    dmaCopy(manga_bgPal, BG_PALETTE, manga_bgPalLen);
+    memcpy(BG_PALETTE, manga_bgPal, manga_bgPalLen);
 
     // Set the last color to magenta
     BG_PALETTE[255] = RGB5(31, 0, 31);
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
             bgSetMapBase(bg, 4);
 
         // Draw scene. Copy background image and draw a square on top of it.
-        dmaCopy(manga_bgBitmap, backbuffer, manga_bgBitmapLen);
+        memcpy(backbuffer, manga_bgBitmap, manga_bgBitmapLen);
 
         for (int j = y; j < 50 + y; j++)
         {

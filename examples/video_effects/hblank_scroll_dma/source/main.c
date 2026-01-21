@@ -92,9 +92,9 @@ int main(int argc, char **argv)
     int bg = bgInit(2, BgType_Text8bpp, BgSize_T_256x256, 0, 4);
     bgSetPriority(bg, 2);
 
-    dmaCopy(forest_townTiles, bgGetGfxPtr(bg), forest_townTilesLen);
-    dmaCopy(forest_townMap, bgGetMapPtr(bg), forest_townMapLen);
-    dmaCopy(forest_townPal, BG_PALETTE, forest_townPalLen);
+    memcpy(bgGetGfxPtr(bg), forest_townTiles, forest_townTilesLen);
+    memcpy(bgGetMapPtr(bg), forest_townMap, forest_townMapLen);
+    memcpy(BG_PALETTE, forest_townPal, forest_townPalLen);
 
     // Setup 3D
     // ========

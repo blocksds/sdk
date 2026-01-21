@@ -15,9 +15,9 @@ int main(int argc, char *argv[])
 
     int bg = bgInit(0, BgType_Text4bpp, BgSize_T_256x256, 0, 1);
 
-    dmaCopy(forestTiles, bgGetGfxPtr(bg), forestTilesLen);
-    dmaCopy(forestMap, bgGetMapPtr(bg), forestMapLen);
-    dmaCopy(forestPal, BG_PALETTE, forestPalLen);
+    memcpy(bgGetGfxPtr(bg), forestTiles, forestTilesLen);
+    memcpy(bgGetMapPtr(bg), forestMap, forestMapLen);
+    memcpy(BG_PALETTE, forestPal, forestPalLen);
 
     consoleDemoInit();
 

@@ -23,10 +23,10 @@ int main(int argc, char *argv[])
 
     // Allocate space for the bitmap and copy it there
     u16 *gfxMain = oamAllocateGfx(&oamMain, SpriteSize_64x64, SpriteColorFormat_Bmp);
-    dmaCopy(photoBitmap, gfxMain, photoBitmapLen);
+    memcpy(gfxMain, photoBitmap, photoBitmapLen);
 
     u16 *gfxSub = oamAllocateGfx(&oamSub, SpriteSize_64x64, SpriteColorFormat_Bmp);
-    dmaCopy(photoBitmap, gfxSub, photoBitmapLen);
+    memcpy(gfxSub, photoBitmap, photoBitmapLen);
 
     oamSet(&oamMain, 0,
            150, 70, // X, Y

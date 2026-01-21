@@ -104,12 +104,9 @@ void load_background(const char *path)
 
     int bg = bgInit(3, BgType_Text8bpp, BgSize_T_256x256, 0, 1);
 
-    // Flush cache so that we can use DMA to copy the data to VRAM
-    DC_FlushAll();
-
-    dmaCopy(gfxDst, bgGetGfxPtr(bg), gfxSize);
-    dmaCopy(mapDst, bgGetMapPtr(bg), mapSize);
-    dmaCopy(palDst, BG_PALETTE, palSize);
+    memcpy(bgGetGfxPtr(bg), gfxDst, gfxSize);
+    memcpy(bgGetMapPtr(bg), mapDst, mapSize);
+    memcpy(BG_PALETTE, palDst, palSize);
 }
 
 void *load_file(const char *filename, size_t *size_)

@@ -194,10 +194,10 @@ int main(int argc, char *argv[])
     u16 *gfxMain = oamAllocateGfx(&oamMain, SpriteSize_64x64, SpriteColorFormat_256Color);
 
     // Copy tiles to the space assigned to this sprite
-    dmaCopy(statueTiles, gfxMain, statueTilesLen);
+    memcpy(gfxMain, statueTiles, statueTilesLen);
 
     // Copy palette to the palette RAM
-    dmaCopy(statuePal, SPRITE_PALETTE, statuePalLen);
+    memcpy(SPRITE_PALETTE, statuePal, statuePalLen);
 
     oamSet(&oamMain,
            0, // Sprite ID (0 to 127)
@@ -325,7 +325,7 @@ Then, when you display the sprite:
 
 ```c
 u16 *gfxMain = oamAllocateGfx(&oamMain, SpriteSize_64x64, SpriteColorFormat_Bmp);
-dmaCopy(photoBitmap, gfxMain, photoBitmapLen);
+memcpy(gfxMain, photoBitmap, photoBitmapLen);
 
 oamSet(&oamMain, 0,
        150, 70, // X, Y

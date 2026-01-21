@@ -47,9 +47,9 @@ int main(int argc, char **argv)
     int bg = bgInit(2, BgType_Text8bpp, BgSize_T_256x256, 0, 4);
     bgSetPriority(bg, 2);
 
-    dmaCopy(forest_townTiles, bgGetGfxPtr(bg), forest_townTilesLen);
-    dmaCopy(forest_townMap, bgGetMapPtr(bg), forest_townMapLen);
-    dmaCopy(forest_townPal, BG_PALETTE, forest_townPalLen);
+    memcpy(bgGetGfxPtr(bg), forest_townTiles, forest_townTilesLen);
+    memcpy(bgGetMapPtr(bg), forest_townMap, forest_townMapLen);
+    memcpy(BG_PALETTE, forest_townPal, forest_townPalLen);
 
     // Setup 2D sprites
     // ================
@@ -60,10 +60,10 @@ int main(int argc, char **argv)
 
     // Allocate space for the tiles and copy them there
     u16 *gfxMain = oamAllocateGfx(&oamMain, SpriteSize_64x64, SpriteColorFormat_256Color);
-    dmaCopy(statueTiles, gfxMain, statueTilesLen);
+    memcpy(gfxMain, statueTiles, statueTilesLen);
 
     // Copy palette
-    dmaCopy(statuePal, SPRITE_PALETTE, statuePalLen);
+    memcpy(SPRITE_PALETTE, statuePal, statuePalLen);
 
     oamSet(&oamMain, 0,
            100, 50, // X, Y

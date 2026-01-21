@@ -143,11 +143,11 @@ int main(int argc, char *argv[])
     int bg = bgInit(0, BgType_Text8bpp, BgSize_T_512x256, 0, 1);
 
     // Copy tiles and tile map to VRAM
-    dmaCopy(forest_townTiles, bgGetGfxPtr(bg), forest_townTilesLen);
-    dmaCopy(forest_townMap, bgGetMapPtr(bg), forest_townMapLen);
+    memcpy(bgGetGfxPtr(bg), forest_townTiles, forest_townTilesLen);
+    memcpy(bgGetMapPtr(bg), forest_townMap, forest_townMapLen);
 
     // Copy palete to palette RAM
-    dmaCopy(forest_townPal, BG_PALETTE, forest_townPalLen);
+    memcpy(BG_PALETTE, forest_townPal, forest_townPalLen);
 
     // Wait forever
     while (1)
@@ -358,8 +358,8 @@ int main(int argc, char *argv[])
     int bg = bgInit(2, BgType_Bmp8, BgSize_B8_256x256, 0, 0);
 
     // Load the palette and the bitmap
-    dmaCopy(manga_bgPal, BG_PALETTE, manga_bgPalLen);
-    dmaCopy(manga_bgBitmap, bgGetGfxPtr(bg), manga_bgBitmapLen);
+    memcpy(BG_PALETTE, manga_bgPal, manga_bgPalLen);
+    memcpy(bgGetGfxPtr(bg), manga_bgBitmap, manga_bgBitmapLen);
 
     // Wait forever
     while (1)
@@ -434,7 +434,7 @@ int main(int argc, char *argv[])
     int bg = bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
 
     // Load bitmap
-    dmaCopy(photoBitmap, bgGetGfxPtr(bg), photoBitmapLen);
+    memcpy(bgGetGfxPtr(bg), photoBitmap, photoBitmapLen);
 
     while (1)
         swiWaitForVBlank();
@@ -492,8 +492,8 @@ int main(int argc, char *argv[])
     int bg = bgInit(2, BgType_Bmp8, BgSize_B8_1024x512, 0, 0);
 
     // Load the palette and the bitmap
-    dmaCopy(manga_bgPal, BG_PALETTE, manga_bgPalLen);
-    dmaCopy(manga_bgBitmap, bgGetGfxPtr(bg), manga_bgBitmapLen);
+    memcpy(BG_PALETTE, manga_bgPal, manga_bgPalLen);
+    memcpy(bgGetGfxPtr(bg), manga_bgBitmap, manga_bgBitmapLen);
 
     // Wait forever
     while (1)
@@ -562,16 +562,16 @@ int main(int argc, char *argv[])
     int bgsub = bgInitSub(0, BgType_Text8bpp, BgSize_T_256x256, 0, 1); // New
 
     // Copy tiles and tile map to VRAM (main engine)
-    dmaCopy(forest_townTiles, bgGetGfxPtr(bg), forest_townTilesLen);
-    dmaCopy(forest_townMap, bgGetMapPtr(bg), forest_townMapLen);
+    memcpy(bgGetGfxPtr(bg), forest_townTiles, forest_townTilesLen);
+    memcpy(bgGetMapPtr(bg), forest_townMap, forest_townMapLen);
 
     // Copy tiles and tile map to VRAM (sub engine)
-    dmaCopy(forest_townTiles, bgGetGfxPtr(bgsub), forest_townTilesLen); // New
-    dmaCopy(forest_townMap, bgGetMapPtr(bgsub), forest_townMapLen); // New
+    memcpy(bgGetGfxPtr(bgsub), forest_townTiles, forest_townTilesLen); // New
+    memcpy(bgGetMapPtr(bgsub), forest_townMap, forest_townMapLen); // New
 
     // Copy palete to palette RAM
-    dmaCopy(forest_townPal, BG_PALETTE, forest_townPalLen);
-    dmaCopy(forest_townPal, BG_PALETTE_SUB, forest_townPalLen); // New
+    memcpy(BG_PALETTE, forest_townPal, forest_townPalLen);
+    memcpy(BG_PALETTE_SUB, forest_townPal, forest_townPalLen); // New
 
     // Wait forever
     while (1)
@@ -707,16 +707,16 @@ vramSetBankH(VRAM_H_LCD);
 // Main engine background palettes
 
 // Background layer 0, palette 12
-dmaCopy(ponypoke_0Pal, &VRAM_E_EXT_PALETTE[0][12], ponypoke_0PalLen);
+memcpy(&VRAM_E_EXT_PALETTE[0][12], ponypoke_0Pal, ponypoke_0PalLen);
 // Background layer 1, palette 7
-dmaCopy(forest_townPal, &VRAM_E_EXT_PALETTE[1][7], forest_townPalLen);
+memcpy(&VRAM_E_EXT_PALETTE[1][7], forest_townPal, forest_townPalLen);
 
 // Sub engine background palettes
 
 // Background layer 1, palette 12
-dmaCopy(ponypoke_0Pal, &VRAM_H_EXT_PALETTE[1][12], ponypoke_0PalLen);
+memcpy(&VRAM_H_EXT_PALETTE[1][12], ponypoke_0Pal, ponypoke_0PalLen);
 // Background layer 2, palette 7
-dmaCopy(forest_townPal, &VRAM_H_EXT_PALETTE[2][7], forest_townPalLen);
+memcpy(&VRAM_H_EXT_PALETTE[2][7], forest_townPal, forest_townPalLen);
 
 // Setup VRAM as extended palette VRAM
 

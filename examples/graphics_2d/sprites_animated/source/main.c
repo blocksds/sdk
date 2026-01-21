@@ -20,7 +20,7 @@ void copy_sprite_frame(void *dst, int frame)
     uint32_t offset = frame_size * frame;
     uint8_t *base = (uint8_t *)advntTiles;
 
-    dmaCopy(base + offset, dst, frame_size);
+    memcpy(dst, base + offset, frame_size);
 }
 
 int main(int argc, char *argv[])
@@ -37,8 +37,8 @@ int main(int argc, char *argv[])
     oamInit(&oamSub, SpriteMapping_1D_32, false);
 
     // Load palette
-    dmaCopy(advntPal, SPRITE_PALETTE, advntPalLen);
-    dmaCopy(advntPal, SPRITE_PALETTE_SUB, advntPalLen);
+    memcpy(SPRITE_PALETTE, advntPal, advntPalLen);
+    memcpy(SPRITE_PALETTE_SUB, advntPal, advntPalLen);
 
     // The sprite on the main screen will only have one frame in VRAM
     u16 *gfxOneFrame = oamAllocateGfx(&oamMain, SpriteSize_32x64,

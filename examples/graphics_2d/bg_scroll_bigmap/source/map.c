@@ -35,8 +35,8 @@ void map_load(int bg_layer, int map_base, int tile_base,
     map_bg = bgInit(bg_layer, BgType_Text8bpp, BgSize_T_512x256, map_base, tile_base);
 
     // Load tiles and palette, they won't change
-    dmaCopy(tiles, bgGetGfxPtr(map_bg), tiles_size);
-    dmaCopy(palette, BG_PALETTE, palette_size);
+    memcpy(bgGetGfxPtr(map_bg), tiles, tiles_size);
+    memcpy(BG_PALETTE, palette, palette_size);
 
     // Keep some information about the map
     map_size_width = map_width;
