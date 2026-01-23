@@ -56,7 +56,8 @@ A NDS ROM is divided into:
 - Filesystem image: This is what we call NitroFS. It's just a **read-only**
   filesystem image with all the graphics, audio and data that you can't fit in
   your ARM9 and ARM7 binaries. You need to load files into main RAM when you
-  want to use them.
+  want to use them. The format of the filesystem has some limits: you can store
+  up to ~4 GiB of data, 61440 files and 4096 directories.
 
 If you're interested in using NitroFS for your game, check the build system
 [ArchitectDS](https://codeberg.org/blocksds/architectds). It has been designed
