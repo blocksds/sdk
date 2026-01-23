@@ -34,12 +34,22 @@ git config --global --unset url.ssh://git@codeberg.org/blocksds/.insteadOf
 git config --global --unset url.https://codeberg.org/blocksds/.insteadOf
 ```
 
-### Upgrading to BlocksDS DEV
+### Upgrading to BlocksDS 1.17.1
+
+* Option `-nl` of `ndstool` has been renamed to `-pass`. The LoadMe DSi hybrid
+  code has been fixed in no$gba, but not DeSmuME, so it is now disabled by
+  default. If you were using `-nl` to fix the boot bug of version 1.17.0 you can
+  remove this option from your build system.
+
+### Upgrading to BlocksDS 1.17.0
 
 * The DTCM memory region has been moved from `0x2FF0000` to `0x2FF4000`. This
   should only break code which writes [boot stubs](../../internal/exit_to_loader),
   in which case you can either use a DMA copy or
   [read from/write to a different memory mirror](https://codeberg.org/blocksds/libnds/pull/199).
+* `ndstool` now creates LoadMe DSi hybrid images by default, but this creates
+  NDS ROMs that don't work in no$gba and DeSmuME. You can pass `-nl` to
+  `ndstool` to disable it and build correct NDS ROM images.
 
 ### Upgrading to BlocksDS 1.16.0
 

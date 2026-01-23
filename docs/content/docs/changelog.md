@@ -3,6 +3,41 @@ title: 'Changelog'
 weight: 6
 ---
 
+### Version 1.17.1 (2026-XX-XX)
+
+- libnds:
+
+  - Add a compiler barrier to `glFlush()` to prevent the compiler from
+    reordering it.
+  - Create libnds-specific defines to hide most instances `__attribute__()`.
+  - Fix potential crash when `dlopen()` fails to open the library file (due to
+    calling `fclose()` with a `NULL` pointer).
+
+- Maxmod:
+
+  - Document initial mixing mode at boot.
+  - Build release and debug versions of the library.
+
+- ndstool:
+
+  - Fix boot of LoadMe DSi hybrid images in no$gba. @asie
+  - Disable LoadMe DSi hybrid images by default. They don't boot in DeSmuME.
+  - Option `-nl` has been renamed to `-nopass`, and a `-pass` option has been
+    added. This is a compatibility break.
+
+- SDK:
+
+  - Fix some linker options in the CMake build system. @asie, @ds-sloth
+  - Make the `awesome-blocksds` repository more visible in the documentation.
+  - Use `memcpy()` instead of `dmaCopy()` to load graphics data to VRAM in all
+    examples and the tutorial. `memcpy()` requires a lot less care than
+    `dmaCopy()`, so it's better to use it as an example, and let users switch to
+    DMA functions when they understand the issues that can happen when using
+    DMA to copy data.
+  - Add some warnings to the tutorial about using DMA.
+  - Mention the limits of the NitroFS format in the tutorial.
+  - Mention the release/debug versions of libraries in the tutorial.
+
 ### Version 1.17.0 (2026-01-12)
 
 - libnds:
