@@ -416,3 +416,14 @@ Some examples of how to optimize code to work well with the cache:
   active, you will need to load to the cache all the data anyway, so it could
   even be slower. Remember to profile your code when trying optimizations like
   this one.
+
+## 9. Using release builds of the libraries
+
+Some libraries have code used for debugging during the development of an
+application that can be disabled for release builds. This is generally a good
+idea as it will reduce the size of the code, helping the cache.
+
+- Define `NDEBUG` in the `CFLAGS` and `CPPFLAGS` of the build system.
+- Use the release builds of libraries instead of the debug ones. For example,
+  libnds has `libnds9.a` and `libnds9d.a`, and DSWiFi has `libdswifi9.a` and
+  `libdswifi9d.a`.
