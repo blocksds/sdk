@@ -1941,7 +1941,7 @@ This code can be used to check a box of size 1x1x1 centered around coordinates
 int in = BoxTestf(-0.5, -0.5, -0.5, // Position
                   1.0, 1.0, 1.0);   // Size
 
-printf("Is box on screen? %s", in ? "Yes" : "No");
+printf("Is box inside viewport? %s\n", in ? "Yes" : "No");
 
 if (in)
 {

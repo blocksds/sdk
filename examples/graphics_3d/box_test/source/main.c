@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2024
+// SPDX-FileContributor: Antonio Niño Díaz, 2024-2026
 
 #include <stdio.h>
 
@@ -99,6 +99,9 @@ int main(int argc, char **argv)
     float y = 0.0;
     float z = 0.0;
 
+    int vertices = 0;
+    int polygons = 0;
+
     while (1)
     {
         // Synchronize game loop to the screen refresh
@@ -114,7 +117,6 @@ int main(int argc, char **argv)
         printf("A,B,X,Y: Rotate\n");
         printf("START:   Exit to loader\n");
         printf("\n");
-        printf("This test seems to be unreliable.\n");
         printf("\n");
 
         // Handle user input
@@ -174,17 +176,30 @@ int main(int argc, char **argv)
         int in = BoxTestf(-0.5, -0.5, -0.5, // Position
                           1.0, 1.0, 1.0);   // Size
 
-        printf("Is box on screen? %s", in ? "Yes" : "No");
+        printf("Is box inside viewport? %s\n", in ? "Yes" : "No");
+        printf("\n");
+        printf("Vertex count:  %4d\n", vertices);
+        printf("Polygon count: %4d\n", polygons);
 
         glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE);
 
-        // We could use the value of "in" to call this function or not. In this
-        // example we don't call it because we want to make sure that the screen
-        // is consistent with the variable.
-        draw_box(-0.5, -0.5, -0.5, // Position
-                 1.0, 1.0, 1.0);   // Size
+        // Once we know if the box is inside the screen viewport we can decide
+        // to draw the polygons or not. This can save CPU time because we don't
+        // spend CPU time sending polygons to the GPU that will be discarded
+        // right away.
+        //
+        // In this example we always draw it so that we can double-check that
+        // the value of the variable matches the display.
+        //if (in)
+        //{
+            draw_box(-0.5, -0.5, -0.5, // Position
+                     1.0, 1.0, 1.0);   // Size
+        //}
 
         glPopMatrix(1);
+
+        glGetInt(GL_GET_VERTEX_RAM_COUNT, &vertices);
+        glGetInt(GL_GET_POLYGON_RAM_COUNT, &polygons);
 
         glFlush(0);
     }
