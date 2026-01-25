@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: 6
 ---
 
-### Version 1.17.1 (2026-XX-XX)
+### Version 1.17.1 (2026-01-25)
 
 - libnds:
 
@@ -37,6 +37,7 @@ weight: 6
   - Add some warnings to the tutorial about using DMA.
   - Mention the limits of the NitroFS format in the tutorial.
   - Mention the release/debug versions of libraries in the tutorial.
+  - The 3D box test example has been improved a bit.
 
 ### Version 1.17.0 (2026-01-12)
 
