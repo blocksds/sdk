@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2025
+// SPDX-FileContributor: Antonio Niño Díaz, 2025-2026
 
 // This example shows how to load GRF files as textures. The code doesn't have
 // any hardcoded sizes or formats, everything is read from the GRF file and the
@@ -80,22 +80,6 @@ int load_texture_grf(const char *path, int *width, int *height)
             wait_forever();
         }
 
-        // Concatenate texels and palette indices data
-
-        size_t gfx_size = (header.gfxWidth * header.gfxHeight * 2) / 8;
-        size_t pidx_size = gfx_size / 2;
-
-        gfxDst = realloc(gfxDst, gfx_size + pidx_size);
-        if (gfxDst == NULL)
-        {
-            printf("Tex4x4 texture can't be allocated\n");
-            wait_forever();
-        }
-
-        memcpy(((u8*)gfxDst) + gfx_size, pidxDst, pidx_size);
-
-        free(pidxDst);
-
         texture_format = GL_COMPRESSED;
         printf("    GL_COMPRESSED\n");
     }
@@ -104,6 +88,12 @@ int load_texture_grf(const char *path, int *width, int *height)
         if (palDst == NULL)
         {
             printf("Paletted texture without palette");
+            wait_forever();
+        }
+
+        if (pidxDst != NULL)
+        {
+            printf("Non-Tex4x4 texture with palette indices\n");
             wait_forever();
         }
 
@@ -150,14 +140,15 @@ int load_texture_grf(const char *path, int *width, int *height)
 
     glBindTexture(0, textureID);
 
-    if (glTexImage2D(0, 0, texture_format, header.gfxWidth, header.gfxHeight, 0,
-                     TEXGEN_TEXCOORD | texture_params, gfxDst) == 0)
+    if (glTexImageNtr2D(texture_format, header.gfxWidth, header.gfxHeight,
+                        TEXGEN_TEXCOORD | texture_params, gfxDst, pidxDst) == 0)
     {
         printf("Failed to load texture\n");
         wait_forever();
     }
 
     free(gfxDst);
+    free(pidxDst);
 
     if (palDst)
     {

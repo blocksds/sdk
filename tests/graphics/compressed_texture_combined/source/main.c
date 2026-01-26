@@ -2,12 +2,21 @@
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2024-2026
 
+// Using glTexImage2D() to load compressed textures isn't ideal because it
+// forces the caller to concatenate the "tex" and "idx" parts of the texture.
+// ptexconv generates individual files, so you need to concatenate them by hand.
+// glTexImageNtr2D() accepts two individual pointers (and it doesn't have 3
+// unused arguments) so it's recommended.
+//
+// This test is kept here to make sure that the old way to load GL_COMPRESSED
+// textures with glTexImage2D() doesn't break. It also tests glColorTableEXT(),
+// as it has been replaced by glColorTableNtr().
+
 #include <stdio.h>
 
 #include <nds.h>
 
-#include "neon_tex_bin.h"
-#include "neon_idx_bin.h"
+#include "neon_combined_bin.h"
 #include "neon_pal_bin.h"
 
 __attribute__((noreturn)) void wait_forever(void)
@@ -55,11 +64,7 @@ int main(int argc, char **argv)
     // Load texture
     glGenTextures(1, &textureID);
     glBindTexture(0, textureID);
-    // It's also possible to use glTexImage2D() to load a GL_COMPRESSED texture,
-    // but it forces you to concatenate the "tex" and "idx" parts in a single
-    // buffer, which makes it less flexible.
-    if (glTexImageNtr2D(GL_COMPRESSED, 128, 128, TEXGEN_TEXCOORD,
-                        neon_tex_bin, neon_idx_bin) == 0)
+    if (glTexImage2D(0, 0, GL_COMPRESSED, 128, 128, 0, TEXGEN_TEXCOORD, neon_combined_bin) == 0)
     {
         printf("Failed to load texture\n");
         wait_forever();
