@@ -269,10 +269,10 @@ int ruins_texture_id =
     glLoadSpriteSet(ruins,                  // Pointer to glImage array
                     ATLAS_NUM_IMAGES,       // Number of images
                     ATLAS_texcoords,        // Array of UV coordinates
-                    GL_RGB256,              // Texture type for glTexImage2D()
+                    GL_RGB256,              // Texture type
                     ATLAS_BITMAP_WIDTH,     // Full texture size X (image size)
                     ATLAS_BITMAP_HEIGHT,    // Full texture size Y (image size)
-                    // Parameters for glTexImage2D()
+                    // Texture parameters
                     TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT,
                     256,                    // Length of the palette to use (256 colors)
                     atlas_texturePal,       // Pointer to texture palette data
@@ -411,10 +411,10 @@ int tileset_texture_id =
                   16,           // Sprite height
                   16 * 10,      // Bitmap width (the part that contains useful images)
                   16 * 10,      // Bitmap height (the part that contains useful images)
-                  GL_RGB256,    // Texture type for glTexImage2D()
+                  GL_RGB256,    // Texture type
                   256,          // Full texture size X (image size)
                   256,          // Full texture size Y (image size)
-                  TEXGEN_TEXCOORD, // Parameters for glTexImage2D()
+                  TEXGEN_TEXCOORD, // Texture parameters
                   256,            // Length of the palette to use (256 colors)
                   tiny_16Pal,     // Pointer to texture palette data
                   tiny_16Bitmap); // Pointer to texture data

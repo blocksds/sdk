@@ -118,7 +118,7 @@ There are things which can be done to make the most out of filesystem I/O:
 #### Texture formats
 
 The `GL_RGB` texture format isn't actually supported by the hardware. When a
-texture is loaded with `glTexImage2D()` with format `GL_RGB`, it is actually
+texture is loaded with `glTexImageNtr2D()` with format `GL_RGB`, it is actually
 converted to `GL_RGBA` internally by setting the alpha bit of all pixels to 1.
 This is pretty slow, and it isn't normally needed because any graphics
 conversion tool (such as `grit`) can set the alpha bit to 1 when the image is

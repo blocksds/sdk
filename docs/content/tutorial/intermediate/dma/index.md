@@ -130,7 +130,7 @@ dmaCopy(data_in_ram, destination, size);
 This is all you need to do to ensure you can copy data to VRAM with DMA safely!
 
 In some cases you don't even need to worry about this. For example, when we
-reach the chapter of 3D graphics we will use `glTexImage2D()` to load 3D
+reach the chapter of 3D graphics we will use `glTexImageNtr2D()` to load 3D
 textures to VRAM. This function uses DMA internally, but it also flushes the
 data cache to make sure that the DMA copy works as expected. You will only have
 problems with DMA if you call the DMA copy functions directly.

@@ -529,13 +529,12 @@ Let's see what has changed compared to the previous examples.
    other types of data.
 
    ```c
-   if (glTexImage2D(
-           0, 0,     // Unused parameters (for compatibility with OpenGL)
+   if (glTexImageNtr2D(
            GL_RGBA,  // Texture format
            128, 128, // Texture size (width, height)
-           0,        // Unused parameter (for compatibility with OpenGL)
            TEXGEN_TEXCOORD,  // Texture parameters (explained later)
-           neonBitmap) == 0) // Pointer to the data
+           neonBitmap,  // Pointer to the data
+           NULL) == 0)  // Optional pointer for extra compressed texture data
    {
        printf("Failed to load texture\n");
        while (1)
@@ -543,10 +542,11 @@ Let's see what has changed compared to the previous examples.
    }
    ```
 
-   `glTexImage2D()` in libnds has 3 unused parameters because the OpenGL version
-   of this image uses them for things that aren't supported on DS. The
-   parameters have been kept in the function prototype to help porting OpenGL
-   code to libnds.
+{{< callout type="tip" >}}
+`glTexImage2D()` has 3 unused arguments in libnds because the OpenGL version of
+`glTexImage2D()` uses them for things that aren't supported on DS.
+`glTexImageNtr2D()` doesn't have unused arguments.
+{{< /callout >}}
 
 {{< callout type="warning" >}}
 While you're copying 3D textures or palettes to VRAM the GPU doesn't have access
@@ -624,10 +624,10 @@ about formats that require palettes.
   for alpha (2 bytes per pixel). It doesn't use palettes.
 
   You may see some code that uses `GL_RGB`. It is the same format internally,
-  but `glTexImage2D()` sets the alpha bit to 1 internally (which takes CPU
+  but `glTexImageNtr2D()` sets the alpha bit to 1 internally (which takes CPU
   time!). This alias can be useful if your graphics conversion program doesn't
   set the alpha bit correctly, but it's generally better to set it to 1 manually
-  before calling `glTexImage2D()`,
+  before calling `glTexImageNtr2D()`,
 
   Sample grit arguments:
 
@@ -722,9 +722,9 @@ Let's see how to load paletted textures.
    setting doesn't work with `GL_RGBA` and `GL_COMPRESSED` formats.
 
    ```c
-    if (glTexImage2D(0, 0, GL_RGB256, 64, 64, 0,
-                     TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT,
-                     statueBitmap) == 0)
+    if (glTexImageNtr2D(GL_RGB256, 64, 64,
+                        TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT,
+                        statueBitmap, NULL) == 0)
     {
         printf("Failed to load texture\n");
         wait_forever();
@@ -736,12 +736,18 @@ Let's see how to load paletted textures.
    the data there. It will ignore banks assigned to other types of data.
 
    ```c
-   if (glColorTableEXT(0, 0, statuePalLen / 2, 0, 0, statuePal) == 0)
+   if (glColorTableNtr(statuePalLen / 2, statuePal) == 0)
    {
        printf("Failed to load palette\n");
        wait_forever();
    }
    ```
+
+{{< callout type="tip" >}}
+`glColorTableEXT()` has 4 unused arguments in libnds because `glColorTable()` in
+OpenGL uses them for things that aren't supported on DS.
+`glColorTableNtr()` doesn't have unused arguments.
+{{< /callout >}}
 
 The following example shows how to do this in practice:
 [`examples/graphics_3d/paletted_textures`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/paletted_textures).
@@ -769,11 +775,6 @@ possible because the texel blocks data is always double the size as the palette
 indices data (the palette data can have any arbitrary size, so it's always
 stored separately).
 
-`glTexImage2D()` expects the texel blocks and palette indices to be provided as
-one single file. You can concatenate them manually before adding them to the
-data folder of your game or you can concatenate them at runtime, the choice is
-yours.
-
 You can check the following example:
 [`examples/graphics_3d/compressed_texture`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/compressed_texture).
 
@@ -791,29 +792,33 @@ $BLOCKSDSEXT/ptexconv/ptexconv \
 
 This generates a texture with magenta as transparent color of tex4x4 format. The
 output files are `neon_tex.bin` (texel blocks), `neon_idx.bin` (palette indices)
-and `neon_pal.bin` (palette data). Then, the script concatenates the files:
+and `neon_pal.bin` (palette data).
 
-```sh
-cat data/neon_tex.bin data/neon_idx.bin > data/neon_combined.bin
-rm data/neon_tex.bin data/neon_idx.bin
-```
-
-The actual code that loads the texture and the palette are the same as for all
-other textures with palettes:
+The actual code that loads the texture and the palette is the same as for all
+other textures with palettes. The only difference is that you need to pass an
+additional pointer to `glTexImageNtr2D()`:
 
 ```c
-if (glTexImage2D(0, 0, GL_COMPRESSED, 128, 128, 0, TEXGEN_TEXCOORD, neon_combined_bin) == 0)
+if (glTexImageNtr2D(GL_COMPRESSED, 128, 128, TEXGEN_TEXCOORD,
+                    neon_tex_bin, neon_idx_bin) == 0)
 {
     printf("Failed to load texture\n");
     wait_forever();
 }
 
-if (glColorTableEXT(0, 0, neon_pal_bin_size / 2, 0, 0, neon_pal_bin) == 0)
+if (glColorTableNtr(neon_pal_bin_size / 2, neon_pal_bin) == 0)
 {
     printf("Failed to load palette\n");
     wait_forever();
 }
 ```
+
+{{< callout type="tip" >}}
+`glTexImage2D()` forces you to provide compressed texture data (texels and
+palette indices) as one single blob. `glTexImageNtr2D()` is more flexible and it
+lets you provide compressed texture data as one or two blobs. You can keep the
+last pointer as `NULL` if you want to provide them as a single blob.
+{{< /callout >}}
 
 ## 10. Final notes about textures
 
@@ -825,7 +830,7 @@ coordinates go from 0 to 63. However, you're allowed to send values that are
 outside of those bounds (negative, or bigger than 63).
 
 You can decide the behaviour in that case when you load a texture with
-`glTexImage2D()`:
+`glTexImageNtr2D()`:
 
 - Clamp them to the texture size (default setting).
 - Wrap the coordinates and repeat the texture: `GL_TEXTURE_WRAP_S` and
@@ -859,9 +864,9 @@ The important things to consider are:
   because we are going to make the texture loop to create that effect.
 
   ```c
-  if (glTexImage2D(0, 0, GL_RGBA, 256, 256, 0,
-                   TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T,
-                   teapotBitmap) == 0)
+  if (glTexImageNtr2D(GL_RGBA, 256, 256, 0,
+                      TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T,
+                      teapotBitmap, NULL) == 0)
   ```
 
 - You need to setup the texture matrix. In this example we do a simple
@@ -899,7 +904,7 @@ Live editing of palettes is very useful:
   loop effects.
 
 - You can use them to delay loading of textures and palettes. If you pass a
-  `NULL` data pointers to `glTexImage2D()` or `glColorTableEXT()` and they will
+  `NULL` data pointer to `glTexImageNtr2D()` or `glColorTableNtr()` they will
   allocate space in VRAM, but not copy anything there. You can load data later
   with this system.
 
