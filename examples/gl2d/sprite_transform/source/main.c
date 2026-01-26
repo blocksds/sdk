@@ -36,11 +36,11 @@ int main(int argc, char **argv)
 
     texture_id[0]=
         glLoadTileSet(&texture[0], // Pointer to glImage array
-                      8, 8, // Tile size
-                      8, 8, // Bitmap size
-                      GL_RGB16,    // Texture type for glTexImage2D()
-                      8, 8, // GL texture size
-                      // Parameters for glTexImage2D()
+                      8, 8,     // Tile size
+                      8, 8,     // Bitmap size
+                      GL_RGB16, // Texture type
+                      8, 8,     // GL texture size
+                      // Texture parameters
                       TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT,
                       16,        // Length of the palette to use
                       s8Pal,     // Pointer to texture palette data
@@ -51,13 +51,13 @@ int main(int argc, char **argv)
 
     texture_id[1]=
         glLoadTileSet(&texture[1], // Pointer to glImage array
-                      16, 16, // Tile size
-                      16, 16, // Bitmap size
-                      GL_RGB16,    // Texture type for glTexImage2D()
-                      16, 16, // GL texture size
-                      // Parameters for glTexImage2D()
+                      16, 16,   // Tile size
+                      16, 16,   // Bitmap size
+                      GL_RGB16, // Texture type
+                      16, 16,   // GL texture size
+                      // Texture parameters
                       TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT,
-                      16,        // Length of the palette to use
+                      16,         // Length of the palette to use
                       s16Pal,     // Pointer to texture palette data
                       s16Bitmap); // Pointer to texture data
 
@@ -66,13 +66,13 @@ int main(int argc, char **argv)
 
     texture_id[2]=
         glLoadTileSet(&texture[2], // Pointer to glImage array
-                      64, 64, // Tile size
-                      64, 64, // Bitmap size
-                      GL_RGB16,    // Texture type for glTexImage2D()
-                      64, 64, // GL texture size
-                      // Parameters for glTexImage2D()
+                      64, 64,   // Tile size
+                      64, 64,   // Bitmap size
+                      GL_RGB16, // Texture type
+                      64, 64,   // GL texture size
+                      // Texture parameters
                       TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT,
-                      16,        // Length of the palette to use
+                      16,         // Length of the palette to use
                       s64Pal,     // Pointer to texture palette data
                       s64Bitmap); // Pointer to texture data
 

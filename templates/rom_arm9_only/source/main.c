@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     // Load texture
     glGenTextures(1, &textureID);
     glBindTexture(0, textureID);
-    glTexImage2D(0, 0, GL_RGBA, 128 , 128, 0, TEXGEN_TEXCOORD, neonBitmap);
+    glTexImageNtr2D(GL_RGBA, 128 , 128, TEXGEN_TEXCOORD, neonBitmap, NULL);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();

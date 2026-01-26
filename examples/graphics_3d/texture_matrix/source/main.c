@@ -29,9 +29,9 @@ int main(int argc, char *argv[])
     int textureID;
     glGenTextures(1, &textureID);
     glBindTexture(0, textureID);
-    if (glTexImage2D(0, 0, GL_RGBA, 256, 256, 0,
-                     TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T,
-                     teapotBitmap) == 0)
+    if (glTexImageNtr2D(GL_RGBA, 256, 256,
+                        TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T,
+                        teapotBitmap, NULL) == 0)
     {
         printf("Failed to load texture\n");
         while (1)

@@ -152,7 +152,7 @@ int load_texture_grf(const char *path, int *width, int *height)
 
     if (palDst)
     {
-        if (glColorTableEXT(0, 0, palSize / 2, 0, 0, palDst) == 0)
+        if (glColorTableNtr(palSize / 2, palDst) == 0)
         {
             printf("Failed to load palette\n");
             wait_forever();

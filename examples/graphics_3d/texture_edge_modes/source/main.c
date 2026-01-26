@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 
     // Load texture once with the default settings (no wrap or flip)
     glBindTexture(0, textureID[0]);
-    if (glTexImage2D(0, 0, GL_RGBA, 32, 32, 0, TEXGEN_TEXCOORD, neonBitmap) == 0)
+    if (glTexImageNtr2D(GL_RGBA, 32, 32, TEXGEN_TEXCOORD, neonBitmap, NULL) == 0)
     {
         printf("Failed to load texture 1\n");
         wait_forever();
@@ -71,9 +71,9 @@ int main(int argc, char **argv)
 
     // Load the same texture but this time enable wrap
     glBindTexture(0, textureID[1]);
-    if (glTexImage2D(0, 0, GL_RGBA, 32, 32, 0,
-                     TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T,
-                     neonBitmap) == 0)
+    if (glTexImageNtr2D(GL_RGBA, 32, 32,
+                        TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T,
+                        neonBitmap, NULL) == 0)
     {
         printf("Failed to load texture 2\n");
         wait_forever();
@@ -81,10 +81,10 @@ int main(int argc, char **argv)
 
     // Load the same texture but this time enable wrap and flip
     glBindTexture(0, textureID[2]);
-    if (glTexImage2D(0, 0, GL_RGBA, 32, 32, 0,
-                     TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T |
-                     GL_TEXTURE_FLIP_S | GL_TEXTURE_FLIP_T,
-                     neonBitmap) == 0)
+    if (glTexImageNtr2D(GL_RGBA, 32, 32,
+                        TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T |
+                        GL_TEXTURE_FLIP_S | GL_TEXTURE_FLIP_T,
+                        neonBitmap, NULL) == 0)
     {
         printf("Failed to load texture 3\n");
         wait_forever();

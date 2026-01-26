@@ -59,14 +59,14 @@ int main(int argc, char **argv)
 
     // Load texture once while setting color 0 as transparent
     glBindTexture(0, textureID[0]);
-    if (glTexImage2D(0, 0, GL_RGB256, 64, 64, 0,
-                     TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT,
-                     statueBitmap) == 0)
+    if (glTexImageNtr2D(GL_RGB256, 64, 64,
+                        TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT,
+                        statueBitmap, NULL) == 0)
     {
         printf("Failed to load texture 1\n");
         wait_forever();
     }
-    if (glColorTableEXT(0, 0, statuePalLen / 2, 0, 0, statuePal) == 0)
+    if (glColorTableNtr(statuePalLen / 2, statuePal) == 0)
     {
         printf("Failed to load palette 1\n");
         wait_forever();
@@ -74,12 +74,12 @@ int main(int argc, char **argv)
 
     // Load the same texture but this time don't set color 0 as transparent
     glBindTexture(0, textureID[1]);
-    if (glTexImage2D(0, 0, GL_RGB256, 64, 64, 0, TEXGEN_TEXCOORD, statueBitmap) == 0)
+    if (glTexImageNtr2D(GL_RGB256, 64, 64, TEXGEN_TEXCOORD, statueBitmap, NULL) == 0)
     {
         printf("Failed to load texture 2\n");
         wait_forever();
     }
-    if (glColorTableEXT(0, 0, statuePalLen / 2, 0, 0, statuePal) == 0)
+    if (glColorTableNtr(statuePalLen / 2, statuePal) == 0)
     {
         printf("Failed to load palette 2\n");
         wait_forever();

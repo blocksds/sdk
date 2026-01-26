@@ -44,8 +44,7 @@ int allocate_texture(int texture_index, int fill_value, size_t dimension,
 
     glBindTexture(0, textureID[texture_index]);
 
-    if (glTexImage2D(0, 0, format, dimension, 512, 0, TEXGEN_TEXCOORD,
-                     tex_buffer) == 0)
+    if (glTexImageNtr2D(format, dimension, 512, TEXGEN_TEXCOORD, tex_buffer, NULL) == 0)
         return -1;
 
     if ((format == GL_RGBA) || (format == GL_RGB))
@@ -65,9 +64,9 @@ int allocate_texture(int texture_index, int fill_value, size_t dimension,
     else if (format == GL_COMPRESSED)
         num_colors = 128; // Arbitrary value, this isn't a fixed value
 
-    if (glColorTableEXT(0, 0, num_colors, 0, 0, tex_buffer) == 0)
+    if (glColorTableNtr(num_colors, tex_buffer) == 0)
     {
-        glTexImage2D(0, 0, GL_NOTEXTURE, 0, 0, 0, 0, NULL);
+        glTexImageNtr2D(GL_NOTEXTURE, 0, 0, 0, NULL, NULL);
         return -2;
     }
 
@@ -78,13 +77,13 @@ int free_texture(int texture_index, GL_TEXTURE_TYPE_ENUM format)
 {
     glBindTexture(0, textureID[texture_index]);
 
-    if (glTexImage2D(0, 0, GL_NOTEXTURE, 0, 0, 0, 0, NULL) == 0)
+    if (glTexImageNtr2D(GL_NOTEXTURE, 0, 0, 0, NULL, NULL) == 0)
         return -1;
 
     if ((format == GL_RGBA) || (format == GL_RGB))
         return 0;
 
-    if (glColorTableEXT(0, 0, 0, 0, 0, NULL) == 0)
+    if (glColorTableNtr(0, NULL) == 0)
         return -2;
 
     return 0;
@@ -96,8 +95,8 @@ void do_teximage2d_tests(void)
 {
     // Note that "0" is a valid size. It's equivalent to TEXTURE_SIZE_8.
 
-    printf("glTexImage2D() tests\n");
-    printf("====================\n");
+    printf("glTexImageNtr2D() tests\n");
+    printf("=======================\n");
     printf("\n");
 
     glBindTexture(0, textureID[0]);
@@ -106,7 +105,7 @@ void do_teximage2d_tests(void)
 
     vramSetPrimaryBanks(VRAM_A_LCD, VRAM_B_LCD, VRAM_C_LCD, VRAM_D_LCD);
 
-    if (glTexImage2D(0, 0, GL_RGBA, 128, 128, 0, TEXGEN_TEXCOORD, tex_buffer) == 1)
+    if (glTexImageNtr2D(GL_RGBA, 128, 128, TEXGEN_TEXCOORD, tex_buffer, NULL) == 1)
     {
         printf("%d: Allocation should have failed\n", __LINE__);
         wait_forever();
@@ -116,19 +115,19 @@ void do_teximage2d_tests(void)
 
     // Try to allocate with sizes that are negative
 
-    if (glTexImage2D(0, 0, GL_RGBA, -128, 128, 0, TEXGEN_TEXCOORD, tex_buffer) == 1)
+    if (glTexImageNtr2D(GL_RGBA, -128, 128, TEXGEN_TEXCOORD, tex_buffer, NULL) == 1)
     {
         printf("%d: Allocation should have failed\n", __LINE__);
         wait_forever();
     }
 
-    if (glTexImage2D(0, 0, GL_RGBA, 128, -128, 0, TEXGEN_TEXCOORD, tex_buffer) == 1)
+    if (glTexImageNtr2D(GL_RGBA, 128, -128, TEXGEN_TEXCOORD, tex_buffer, NULL) == 1)
     {
         printf("%d: Allocation should have failed\n", __LINE__);
         wait_forever();
     }
 
-    if (glTexImage2D(0, 0, GL_RGBA, -128, -128, 0, TEXGEN_TEXCOORD, tex_buffer) == 1)
+    if (glTexImageNtr2D(GL_RGBA, -128, -128, TEXGEN_TEXCOORD, tex_buffer, NULL) == 1)
     {
         printf("%d: Allocation should have failed\n", __LINE__);
         wait_forever();
@@ -136,12 +135,12 @@ void do_teximage2d_tests(void)
 
     // Try to allocate a texture with valid sizes, then deallocate it
 
-    if (glTexImage2D(0, 0, GL_RGBA, 128, 128, 0, TEXGEN_TEXCOORD, tex_buffer) == 0)
+    if (glTexImageNtr2D(GL_RGBA, 128, 128, TEXGEN_TEXCOORD, tex_buffer, NULL) == 0)
     {
         printf("%d: Allocation should have succeeded\n", __LINE__);
         wait_forever();
     }
-    if (glTexImage2D(0, 0, GL_NOTEXTURE, 0, 0, 0, TEXGEN_TEXCOORD, NULL) == 0)
+    if (glTexImageNtr2D(GL_NOTEXTURE, 0, 0, TEXGEN_TEXCOORD, NULL, NULL) == 0)
     {
         printf("%d: Deallocation should have succeeded\n", __LINE__);
         wait_forever();
@@ -149,13 +148,13 @@ void do_teximage2d_tests(void)
 
     // Try to allocate with sizes that aren't power of two
 
-    if (glTexImage2D(0, 0, GL_RGBA, 57, 128, 0, TEXGEN_TEXCOORD, tex_buffer) == 1)
+    if (glTexImageNtr2D(GL_RGBA, 57, 128, TEXGEN_TEXCOORD, tex_buffer, NULL) == 1)
     {
         printf("%d: Allocation should have failed\n", __LINE__);
         wait_forever();
     }
 
-    if (glTexImage2D(0, 0, GL_RGBA, 128, 57, 0, TEXGEN_TEXCOORD, tex_buffer) == 1)
+    if (glTexImageNtr2D(GL_RGBA, 128, 57, TEXGEN_TEXCOORD, tex_buffer, NULL) == 1)
     {
         printf("%d: Allocation should have failed\n", __LINE__);
         wait_forever();
@@ -163,13 +162,13 @@ void do_teximage2d_tests(void)
 
     // Try to allocate textures with sizes that are too big
 
-    if (glTexImage2D(0, 0, GL_RGBA, 2048, 128, 0, TEXGEN_TEXCOORD, tex_buffer) == 1)
+    if (glTexImageNtr2D(GL_RGBA, 2048, 128, TEXGEN_TEXCOORD, tex_buffer, NULL) == 1)
     {
         printf("%d: Allocation should have failed\n", __LINE__);
         wait_forever();
     }
 
-    if (glTexImage2D(0, 0, GL_RGBA, 128, 2048, 0, TEXGEN_TEXCOORD, tex_buffer) == 1)
+    if (glTexImageNtr2D(GL_RGBA, 128, 2048, TEXGEN_TEXCOORD, tex_buffer, NULL) == 1)
     {
         printf("%d: Allocation should have failed\n", __LINE__);
         wait_forever();
@@ -177,7 +176,7 @@ void do_teximage2d_tests(void)
 
     // Try to allocate with an invalid format
 
-    if (glTexImage2D(0, 0, 51, 128, 128, 0, TEXGEN_TEXCOORD, tex_buffer) == 1)
+    if (glTexImageNtr2D(51, 128, 128, TEXGEN_TEXCOORD, tex_buffer, NULL) == 1)
     {
         printf("%d: Allocation should have failed\n", __LINE__);
         wait_forever();
@@ -186,12 +185,12 @@ void do_teximage2d_tests(void)
     // Try to allocate with a NULL pointer (allocate texture but don't copy
     // data to it).
 
-    if (glTexImage2D(0, 0, GL_RGBA, 128, 128, 0, TEXGEN_TEXCOORD, NULL) == 0)
+    if (glTexImageNtr2D(GL_RGBA, 128, 128, TEXGEN_TEXCOORD, NULL, NULL) == 0)
     {
         printf("%d: Allocation should have succeeded\n", __LINE__);
         wait_forever();
     }
-    if (glTexImage2D(0, 0, GL_NOTEXTURE, 0, 0, 0, TEXGEN_TEXCOORD, NULL) == 0)
+    if (glTexImageNtr2D(GL_NOTEXTURE, 0, 0, TEXGEN_TEXCOORD, NULL, NULL) == 0)
     {
         printf("%d: Deallocation should have succeeded\n", __LINE__);
         wait_forever();
@@ -201,7 +200,7 @@ void do_teximage2d_tests(void)
 
     glBindTexture(0, 0);
 
-    if (glTexImage2D(0, 0, GL_RGBA, 128, 128, 0, TEXGEN_TEXCOORD, tex_buffer) == 1)
+    if (glTexImageNtr2D(GL_RGBA, 128, 128, TEXGEN_TEXCOORD, tex_buffer, NULL) == 1)
     {
         printf("%d: Allocation should have failed\n", __LINE__);
         wait_forever();
@@ -213,7 +212,7 @@ void do_teximage2d_tests(void)
 
 void do_colortableext_tests(void)
 {
-    printf("glColorTableEXT() tests\n");
+    printf("glColorTableNtr() tests\n");
     printf("=======================\n");
     printf("\n");
 
@@ -224,7 +223,7 @@ void do_colortableext_tests(void)
     vramSetBankE(VRAM_E_LCD);
     vramSetBankF(VRAM_F_LCD);
 
-    if (glColorTableEXT(0, 0, 64, 0, 0, tex_buffer) == 1)
+    if (glColorTableNtr(64, tex_buffer) == 1)
     {
         printf("%d: Allocation should have failed\n", __LINE__);
         wait_forever();
@@ -235,7 +234,7 @@ void do_colortableext_tests(void)
 
     // Try to allocate with a negative size
 
-    if (glColorTableEXT(0, 0, -64, 0, 0, tex_buffer) == 1)
+    if (glColorTableNtr(-64, tex_buffer) == 1)
     {
         printf("%d: Allocation should have failed\n", __LINE__);
         wait_forever();
@@ -243,12 +242,12 @@ void do_colortableext_tests(void)
 
     // Try to allocate a texture with a valid size, then deallocate it
 
-    if (glColorTableEXT(0, 0, 64, 0, 0, tex_buffer) == 0)
+    if (glColorTableNtr(64, tex_buffer) == 0)
     {
         printf("%d: Allocation should have succeeded\n", __LINE__);
         wait_forever();
     }
-    if (glColorTableEXT(0, 0, 0, 0, 0, NULL) == 0)
+    if (glColorTableNtr(0, NULL) == 0)
     {
         printf("%d: Deallocation should have succeeded\n", __LINE__);
         wait_forever();
@@ -258,7 +257,7 @@ void do_colortableext_tests(void)
 
     glBindTexture(0, 0);
 
-    if (glColorTableEXT(0, 0, 64, 0, 0, tex_buffer) == 1)
+    if (glColorTableNtr(64, tex_buffer) == 1)
     {
         printf("%d: Allocation should have failed\n", __LINE__);
         wait_forever();

@@ -64,19 +64,19 @@ int main(int argc, char **argv)
     glGenTextures(2, &textureID[0]);
 
     glBindTexture(0, textureID[0]);
-    if (glTexImage2D(0, 0, GL_RGBA, 128, 128, 0, TEXGEN_TEXCOORD, neonBitmap) == 0)
+    if (glTexImageNtr2D(GL_RGBA, 128, 128, TEXGEN_TEXCOORD, neonBitmap, NULL) == 0)
     {
         printf("Failed to load texture 1\n");
         wait_forever();
     }
 
     glBindTexture(0, textureID[1]);
-    if (glTexImage2D(0, 0, GL_RGB8_A5, 128, 128, 0, TEXGEN_TEXCOORD, neon2Bitmap) == 0)
+    if (glTexImageNtr2D(GL_RGB8_A5, 128, 128, TEXGEN_TEXCOORD, neon2Bitmap, NULL) == 0)
     {
         printf("Failed to load texture 2\n");
         wait_forever();
     }
-    if (glColorTableEXT(0, 0, 8, 0, 0, neon2Pal) == 0)
+    if (glColorTableNtr(8, neon2Pal) == 0)
     {
         printf("Failed to load palette 2\n");
         wait_forever();

@@ -64,7 +64,7 @@ int main(int argc, char **argv)
         printf("Failed to load texture\n");
         wait_forever();
     }
-    if (glColorTableEXT(0, 0, neon_pal_bin_size / 2, 0, 0, neon_pal_bin) == 0)
+    if (glColorTableNtr(neon_pal_bin_size / 2, neon_pal_bin) == 0)
     {
         printf("Failed to load palette\n");
         wait_forever();

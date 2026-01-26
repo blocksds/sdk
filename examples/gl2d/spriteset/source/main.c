@@ -44,10 +44,10 @@ int main(int argc, char **argv)
         glLoadSpriteSet(ruins,    // Pointer to glImage array
                         ATLAS_NUM_IMAGES, // Number of images
                         ATLAS_texcoords,  // Array of UV coordinates
-                        GL_RGB256,    // Texture type for glTexImage2D()
+                        GL_RGB256,        // Texture type
                         ATLAS_BITMAP_WIDTH,  // Full texture size X (image size)
                         ATLAS_BITMAP_HEIGHT, // Full texture size Y (image size)
-                        // Parameters for glTexImage2D()
+                        // Texture parameters
                         TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT,
                         256,          // Length of the palette to use (256 colors)
                         atlas_texturePal,     // Pointer to texture palette data

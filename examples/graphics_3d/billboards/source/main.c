@@ -64,14 +64,14 @@ int main(int argc, char **argv)
 
     // Load ball texture
     glBindTexture(0, textureID[0]);
-    if (glTexImage2D(0, 0, GL_RGB256, 32, 32, 0,
-                     TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT,
-                     ballBitmap) == 0)
+    if (glTexImageNtr2D(GL_RGB256, 32, 32,
+                        TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT,
+                        ballBitmap, NULL) == 0)
     {
         printf("Failed to load texture 1\n");
         wait_forever();
     }
-    if (glColorTableEXT(0, 0, ballPalLen / 2, 0, 0, ballPal) == 0)
+    if (glColorTableNtr(ballPalLen / 2, ballPal) == 0)
     {
         printf("Failed to load palette 1\n");
         wait_forever();
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 
     // Load ground texture
     glBindTexture(0, textureID[1]);
-    if (glTexImage2D(0, 0, GL_RGBA, 128, 128, 0, TEXGEN_TEXCOORD, neonBitmap) == 0)
+    if (glTexImageNtr2D(GL_RGBA, 128, 128, TEXGEN_TEXCOORD, neonBitmap, NULL) == 0)
     {
         printf("Failed to load texture 2\n");
         wait_forever();

@@ -48,10 +48,10 @@ int main(int argc, char **argv)
                       64,           // Sprite height
                       22 * 6,       // Bitmap width (the part that contains useful images)
                       64,           // Bitmap height (the part that contains useful images)
-                      GL_RGB256,    // Texture type for glTexImage2D()
+                      GL_RGB256,    // Texture type
                       256,          // Full texture size X (image size)
                       64,           // Full texture size Y (image size)
-                      // Parameters for glTexImage2D()
+                      // Texture parameters
                       TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT,
                       256,          // Length of the palette to use (256 colors)
                       advntPal,     // Pointer to texture palette data

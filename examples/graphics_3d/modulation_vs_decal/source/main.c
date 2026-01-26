@@ -69,15 +69,15 @@ int main(int argc, char **argv)
     glGenTextures(1, &textureID);
 
     glBindTexture(0, textureID);
-    if (glTexImage2D(0, 0, GL_RGB8_A5, 256, 256, 0,
-                     TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T |
-                     GL_TEXTURE_FLIP_S | GL_TEXTURE_FLIP_T,
-                     teapotBitmap) == 0)
+    if (glTexImageNtr2D(GL_RGB8_A5, 256, 256,
+                        TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T |
+                        GL_TEXTURE_FLIP_S | GL_TEXTURE_FLIP_T,
+                        teapotBitmap, NULL) == 0)
     {
         printf("Failed to load texture\n");
         wait_forever();
     }
-    if (glColorTableEXT(0, 0, 8, 0, 0, teapotPal) == 0)
+    if (glColorTableNtr(8, teapotPal) == 0)
     {
         printf("Failed to load palette\n");
         wait_forever();

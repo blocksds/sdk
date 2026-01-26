@@ -141,10 +141,10 @@ glImage *gl2d_load_nitrofs_sprite_set(int *texture_id, int *texture_frames,
         glLoadSpriteSet(images,             // Pointer to glImage array
                         *texture_frames,    // Number of images
                         texture_guv + 4,    // Array of UV coordinates
-                        GL_RGB256,      // Texture type for glTexImage2D()
+                        GL_RGB256,      // Texture type
                         texture_width,  // Full texture size X (image size)
                         texture_height, // Full texture size Y (image size)
-                        // Parameters for glTexImage2D()
+                        // Texture parameters
                         TEXGEN_TEXCOORD | GL_TEXTURE_COLOR0_TRANSPARENT,
                         header.palAttr, // Length of the palette to use
                         palDst,  // Pointer to texture palette data
