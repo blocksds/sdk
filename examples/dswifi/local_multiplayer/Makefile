@@ -5,11 +5,10 @@
 BLOCKSDS	?= /opt/blocksds/core
 
 # User config
+NAME	:= dswifi_local_multiplayer
 
 ifeq ($(DEBUG),1)
-    NAME	:= dswifi_local_multiplayer_debug
-else
-    NAME	:= dswifi_local_multiplayer
+NAME	:= $(NAME)_debug
 endif
 
 GAME_TITLE	:= Local multiplayer demo
