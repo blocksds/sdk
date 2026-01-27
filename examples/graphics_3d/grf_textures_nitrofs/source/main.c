@@ -53,7 +53,10 @@ int load_texture_grf(const char *path, int *width, int *height)
     }
 
     int texture_format;
-    int texture_params = 0;;
+    int texture_params = 0;
+
+    if (header.flags & GRF_FLAG_COLOR0_TRANSPARENT)
+        texture_params |= GL_TEXTURE_COLOR0_TRANSPARENT;
 
     if (header.gfxAttr == 16) // GL_RGBA
     {
@@ -101,17 +104,14 @@ int load_texture_grf(const char *path, int *width, int *height)
         {
             case 8:
                 texture_format = GL_RGB256;
-                texture_params = GL_TEXTURE_COLOR0_TRANSPARENT;
                 printf("    GL_RGB256\n");
                 break;
             case 4:
                 texture_format = GL_RGB16;
-                texture_params = GL_TEXTURE_COLOR0_TRANSPARENT;
                 printf("    GL_RGB16\n");
                 break;
             case 2:
                 texture_format = GL_RGB4;
-                texture_params = GL_TEXTURE_COLOR0_TRANSPARENT;
                 printf("    GL_RGB4\n");
                 break;
             case GRF_TEXFMT_A5I3:
@@ -213,14 +213,15 @@ int main(int argc, char **argv)
         int id;
     } texture_info_t;
 
-#define NUM_TEXTURES 4
+#define NUM_TEXTURES 5
 
     texture_info_t tex[NUM_TEXTURES] = { 0 };
 
     tex[0].id = load_texture_grf("tex/neon_png.grf", &tex[0].width, &tex[0].height);
-    tex[1].id = load_texture_grf("tex/statue_png.grf", &tex[1].width, &tex[1].height);
-    tex[2].id = load_texture_grf("tex/teapot_png.grf", &tex[2].width, &tex[2].height);
-    tex[3].id = load_texture_grf("tex/compressed_png.grf", &tex[3].width, &tex[3].height);
+    tex[1].id = load_texture_grf("tex/statue_transparent_png.grf", &tex[1].width, &tex[1].height);
+    tex[2].id = load_texture_grf("tex/statue_opaque_png.grf", &tex[2].width, &tex[2].height);
+    tex[3].id = load_texture_grf("tex/teapot_png.grf", &tex[3].width, &tex[3].height);
+    tex[4].id = load_texture_grf("tex/compressed_png.grf", &tex[4].width, &tex[4].height);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
