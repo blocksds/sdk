@@ -14,12 +14,12 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
 
     int ret = 0;
 
-    void *gfxGrf = NULL;
-    void *palGrf = NULL;
+    void *gfxData = NULL;
+    void *palData = NULL;
     size_t gfxSize, palSize;
     GRFHeader header = { 0 };
-    GRFError err = grfLoadPath(path, &header, &gfxGrf, &gfxSize, NULL, NULL,
-                               &palGrf, &palSize);
+    GRFError err = grfLoadPath(path, &header, &gfxData, &gfxSize, NULL, NULL,
+                               &palData, &palSize);
     if (err != GRF_NO_ERROR)
     {
         printf("grferr: %d\n", err);
@@ -27,7 +27,7 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
         goto exit;
     }
 
-    if (gfxGrf == NULL)
+    if (gfxData == NULL)
     {
         ret = -3;
         goto exit;
@@ -53,7 +53,7 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
                 break;
 
             // If the GRF file had no palette, fail
-            if (palGrf == NULL)
+            if (palData == NULL)
             {
                 ret = -5;
                 goto exit;
@@ -73,7 +73,7 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
             else
                 palAlloc = SPRITE_PALETTE_SUB + palIndex * 16;
 
-            memcpy(palAlloc, palGrf, palSize);
+            memcpy(palAlloc, palData, palSize);
             break;
         }
         case 8: // 256 color
@@ -85,7 +85,7 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
                 break;
 
             // If the GRF file had no palette, fail
-            if (palGrf == NULL)
+            if (palData == NULL)
             {
                 ret = -7;
                 goto exit;
@@ -123,7 +123,7 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
                         goto exit;
                     }
 
-                    memcpy(palAlloc, palGrf, palSize);
+                    memcpy(palAlloc, palData, palSize);
 
                     VRAM_F_CR = old_vram_f;
                     VRAM_G_CR = old_vram_g;
@@ -136,7 +136,7 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
                         goto exit;
                     }
 
-                    memcpy(SPRITE_PALETTE, palGrf, palSize);
+                    memcpy(SPRITE_PALETTE, palData, palSize);
                 }
 
             }
@@ -166,7 +166,7 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
                         goto exit;
                     }
 
-                    memcpy(palAlloc, palGrf, palSize);
+                    memcpy(palAlloc, palData, palSize);
 
                     VRAM_I_CR = old_vram_i;
                 }
@@ -178,7 +178,7 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
                         goto exit;
                     }
 
-                    memcpy(SPRITE_PALETTE_SUB, palGrf, palSize);
+                    memcpy(SPRITE_PALETTE_SUB, palData, palSize);
                 }
             }
 
@@ -211,7 +211,7 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
         goto exit;
     }
 
-    memcpy(gfxAlloc, gfxGrf, gfxSize);
+    memcpy(gfxAlloc, gfxData, gfxSize);
 
     // Return information of the loaded graphics
     *gfxOut = gfxAlloc;
@@ -222,8 +222,8 @@ int oamLoadGfxGrf(OamState *oam, const char *path, int palIndex, void **gfxOut,
 
     ret = 0;
 exit:
-    free(gfxGrf);
-    free(palGrf);
+    free(gfxData);
+    free(palData);
 
     return ret;
 }
