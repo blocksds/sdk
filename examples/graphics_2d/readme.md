@@ -8,7 +8,9 @@ libnds.
 - `bg_bmp_8bit_large`: It displays a large paletted 8 bpp bitmap in video mode 6.
 - `bg_ext_palette`: It displays 8 bpp tiled backgrounds using extended palettes.
 - `bg_ext_rotation`: It displays an extended affine background.
+- `bg_grf_types`: It loads all types of background from GRF files.
 - `bg_regular_4bit`: It displays a regular 4 bpp tiled background.
+- `bg_regular_4bit_metamap`: It displays a 4 bpp tiled background that uses metatiles.
 - `bg_regular_8bit`: It displays a regular 8 bpp tiled background.
 - `bg_regular_8bit_2screens`: It displays a regular 8 bpp tiled background in both screens.
 - `bg_regular_nitrofs`: It loads a regular 8 bpp tiled background from NitroFS.
