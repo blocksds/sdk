@@ -751,3 +751,72 @@ tell grit the palette index to be used by the background:
 
 And that's it! As you can see, it requires a bit of additional setup, but it's a
 very simple way to make your 2D graphics look a lot better.
+
+## 15. Meta maps
+
+Meta maps are a way to compress tile maps in your ROM. The Nintendo DS only
+supports 8x8 pixel tiles, but there are situations in which you don't need that
+much detail. For example, in the Pokémon games for Game Boy and Game Boy
+Advance, the size of the characters is 16x16 pixels, and the map is also
+designed using 16x16 pixel tiles.
+
+In this screenshot, each pink square contains a 16x16 meta tile composed of four
+8x8 tiles.
+
+![Meta map example](metamap_example.png)
+
+If you look carefully you can see the meta tiles that form the trees, the grass,
+even the signpost, etc. Some elements, like the buildings, are more complicated
+and they are composed by meta tiles that aren't repeated often. Some elements,
+like the grass, are reused all the time.
+
+In some cases, elements are placed in different background layers completely.
+For example, the roof of the buildings is usually placed in a different layer
+than the walls so that characters can be on top of the walls of the building,
+but under the roof. This also means that you need fewer combinations of
+metatiles: if your meta tiles are transparent in the parts not covered by the
+building, you can place them on top of any background (grass, dirt, water...).
+
+In practice, meta maps work like this:
+
+- The developer decides the size of a meta tile. In this example the size is
+  2x2 tiles of 8x8 pixels (so the size of a meta tile is 16x16 pixels).
+- The designer designs the meta tiles as 16x16 tiles. Then, the meta tiles are
+  used to create the final meta map.
+- When the developer wants to display the meta map in the console, the program
+  needs to expand each 16x16 meta tile into the 8x8 tiles that form it to obtain
+  the final result.
+
+![Meta map explanation](metamap.png)
+
+How does this save memory? Imagine you have a map with size 1024x1024 pixels.
+Each tile map entry is 16-bit wide (2 bytes). The size of the map will change
+depending on how many tiles are required to define it:
+
+- **8x8 tiles.** Map size is 128x128 tiles: 128 * 128 * 2 = 32 KiB
+- **16x16 meta tiles.** Meta map size is 64x64 meta tiles: 64 * 64 * 2 = 8 KiB
+- **32x32 meta tiles.** Meta map size is 32x32 meta tiles: 32 * 32 * 2 = 2 KiB
+
+Big meta tiles can reduce the size of a map by a lot. Of course, this comparison
+doesn't include the space required to store the meta tiles!
+
+- **16x16 meta tiles.** 2 * 2 * 2 = 8 B per meta tile
+- **32x32 meta tiles.** 4 * 4 * 2 = 32 B per meta tile
+
+This means that you will only save space as long as there is enough repetition
+in your meta map. If you use the same meta tiles often you will be able to save
+a lot of memory. If you have lots of different meta tiles you will end up
+needing even more memory than with a regular 8x8 tile map (and you should just
+use a regular map without meta tiles!).
+
+You can use grit to convert images into maps that use metatiles:
+
+```sh
+# 4 bpp, tiles, export map, SSB layout, set magenta as transparent, 2x2 meta tiles
+-gt -gB4 -mR4 -mLs -gTFFOOFF -Mh2 -Mw2
+```
+
+The new options are `-Mh2 -Mw2`. They set the meta tile size to 2x2 tiles.
+
+If you want to see how to load a map like this one, check the following example:
+[`examples/graphics_2d/bg_regular_4bit_metamap`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_4bit_metamap).

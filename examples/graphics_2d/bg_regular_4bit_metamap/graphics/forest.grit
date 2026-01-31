@@ -1,2 +1,2 @@
-# 4 bpp, tiles, export map, SSB layout, set magenta as transparent
+# 4 bpp, tiles, export map, SSB layout, set magenta as transparent, 2x2 meta tiles
 -gt -gB4 -mR4 -mLs -gTFFOOFF -Mh2 -Mw2
