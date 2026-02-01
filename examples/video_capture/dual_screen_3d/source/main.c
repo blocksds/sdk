@@ -284,7 +284,7 @@ int main(int argc, char *argv[])
         {
             lcdMainOnTop();
 
-            videoSetMode(MODE_FB2);
+            videoSetMode(MODE_VRAM_C);
             videoSetModeSub(MODE_0_2D | DISPLAY_SPR_ACTIVE | DISPLAY_SPR_2D_BMP_256);
 
             vramSetBankC(VRAM_C_LCD);
@@ -337,7 +337,7 @@ int main(int argc, char *argv[])
         {
             lcdMainOnBottom();
 
-            videoSetMode(MODE_FB3);
+            videoSetMode(MODE_VRAM_D);
             videoSetModeSub(MODE_5_2D | DISPLAY_BG2_ACTIVE);
 
             vramSetBankC(VRAM_C_SUB_BG_0x06200000);

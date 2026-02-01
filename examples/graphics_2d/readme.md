@@ -25,5 +25,5 @@ libnds.
 - `sprites_ext_palette`: It displays 8 bpp sprites using extended palettes.
 - `sprites_grf_types`: It loads all types of sprites from GRF files.
 - `sprites_nitrofs`: It loads 8 bpp sprites from NitroFS.
-- `video_mode_fb`: Uses the direct VRAM display video mode.
 - `video_mode_fifo`: Uses the direct main RAM display video mode.
+- `video_mode_vram`: Uses the direct VRAM display video mode.

@@ -12,7 +12,7 @@
 #include "neon.h"
 
 // NOTE: You can enable or disable this define. When the define is enabled,
-// the demo uses MODE_5_3D. When it isn't, it uses MODE_FB2.
+// the demo uses MODE_5_3D. When it isn't, it uses MODE_VRAM_C.
 #define USE_3D_MODE
 
 // It uses VRAM banks as follows:
@@ -34,9 +34,9 @@
 //
 // - If USE_3D_MODE is not defined:
 //
-//   - MODE_FB2 renders the contents of VRAM_C as a bitmap on the screen. This
-//     makes it easier to setup, but it's less flexible as you can't use other
-//     layers on top of it.
+//   - MODE_VRAM_C renders the contents of VRAM_C as a bitmap on the screen.
+//     This makes it easier to setup, but it's less flexible as you can't use
+//     other layers on top of it.
 
 void DrawCube(void)
 {
@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
     REG_BG2X = 0;
     REG_BG2Y = 0;
 #else
-    videoSetMode(MODE_FB2);
+    videoSetMode(MODE_VRAM_C);
     vramSetBankC(VRAM_C_LCD);
 #endif
 

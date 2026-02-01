@@ -21,10 +21,10 @@
 
 int main(int argc, char *argv[])
 {
-    // MODE_FB1 tells the main engine to display the contents of VRAM_B as a
+    // MODE_VRAM_B tells the main engine to display the contents of VRAM_B as a
     // 16-bit background (and VRAM_B must be in LCD mode).
     vramSetBankB(VRAM_B_LCD);
-    videoSetMode(MODE_FB1);
+    videoSetMode(MODE_VRAM_B);
 
     // Show the demo console in the bottom screen
     consoleDemoInit();

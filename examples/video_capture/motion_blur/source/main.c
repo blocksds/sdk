@@ -202,7 +202,7 @@ int main(int argc, char *argv[])
     powerOn(POWER_ALL);
 
     // Setup the main screen output to be the contents of VRAM_D
-    videoSetMode(MODE_FB3);
+    videoSetMode(MODE_VRAM_D);
 
     vramSetBankA(VRAM_A_TEXTURE);
     vramSetBankD(VRAM_D_LCD);
@@ -261,9 +261,9 @@ int main(int argc, char *argv[])
         swiWaitForVBlank();
 
         // This will take the current 3D output, blend it with the image stored
-        // in VRAM D, and save the result in VRAM D. The video mode is MODE_FB3,
-        // so the contents of VRAM D are displayed directly on the screen. This
-        // way we only require one VRAM bank for this effect.
+        // in VRAM D, and save the result in VRAM D. The video mode is
+        // MODE_VRAM_D, so the contents of VRAM D are displayed directly on the
+        // screen. This way we only require one VRAM bank for this effect.
 
         REG_DISPCAPCNT =
             // Destination is VRAM_D
