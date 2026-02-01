@@ -6,10 +6,10 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
+NAME	:= dswifi_multiplayer_packets
+
 ifeq ($(DEBUG),1)
-    NAME	:= dswifi_multiplayer_packets_debug
-else
-    NAME	:= dswifi_multiplayer_packets
+NAME	:= $(NAME)_debug
 endif
 
 GAME_TITLE	:= Multiplayer packets

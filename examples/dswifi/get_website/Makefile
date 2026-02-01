@@ -6,10 +6,10 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
+NAME	:= dswifi_get_website
+
 ifeq ($(DEBUG),1)
-    NAME	:= dswifi_get_website_debug
-else
-    NAME	:= dswifi_get_website
+NAME	:= $(NAME)_debug
 endif
 
 GAME_TITLE	:= Get website

@@ -6,10 +6,10 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
+NAME	:= dswifi_full_ap_demo
+
 ifeq ($(DEBUG),1)
-    NAME	:= dswifi_full_ap_demo_debug
-else
-    NAME	:= dswifi_full_ap_demo
+NAME	:= $(NAME)_debug
 endif
 
 GAME_TITLE	:= Full AP demo
