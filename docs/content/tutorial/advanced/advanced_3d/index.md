@@ -18,7 +18,8 @@ Z-buffering distributes depth values uniformly between the near plane and the
 far plane, so it works better when your polygons are distributed uniformly
 between them. W-buffering is more accurate for polygons close to the near plane,
 and less accurate for polygons close to the far plane. This may make it more
-useful for regular 3D scenes.
+useful for regular 3D scenes. In the DS, depth values go from 0 (near plane) to
+0x7FFF (far plane).
 
 The GPU uses fixed point for all its calculations, and it's easy to see
 [Z-fighting](https://en.wikipedia.org/wiki/Z-fighting) between polygons that
@@ -32,7 +33,80 @@ accurate in this specific case:
 You can test the example yourself here:
 [`examples/graphics_3d/depth_buffering_modes`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/depth_buffering_modes)
 
-## 2. Billboards
+## 3. Clear bitmap
+
+Normally the background of the 3D scene is a background with a solid color that
+can be set with `glClearColor()`. This background has a fixed depth value that
+can be adjusted by calling `glClearDepth()`:
+
+```c
+glClearColor(20, 10, 10, 31); // RGB15(20, 10, 10). Alpha = 31
+glClearDepth(0x7FFF);
+```
+
+The GPU also lets you use a bitmap as a clear plane instead of a solid color.
+The bitmap image is stored in texture slot 2 (normally VRAM C) and the depth map
+is stored in texture slot 3 (normally VRAM D).
+
+```c
+// Set banks to LCD mode so that the CPU can access them
+vramSetBankC(VRAM_C_LCD);
+vramSetBankD(VRAM_D_LCD);
+
+// Load bitmap (16-bit RGBA format)
+memcpy(VRAM_C, image, image_size);
+
+// Load depth map
+memcpy(VRAM_D, depth_map, depth_map_size);
+
+vramSetBankC(VRAM_C_TEXTURE_SLOT2); // Same as VRAM_C_TEXTURE
+vramSetBankD(VRAM_D_TEXTURE_SLOT3); // Same as VRAM_D_TEXTURE
+```
+
+Now you can enable the bitmap with:
+
+```c
+glEnable(GL_CLEAR_BMP);
+```
+
+After that, the clear color and depth specified by `glClearColor()` and
+`glClearDepth()` will be ignored.
+
+Now you need to be careful so that libnds doesn't load textures to VRAM C or D
+and overwrites your data. For that, you need to lock them. Normally, libnds
+allocates textures to any VRAM bank used for textures. We need to lock banks C
+and D so that libnds knows textures can't be loaded to them:
+
+```c
+glLockVRAMBank(VRAM_C);
+glLockVRAMBank(VRAM_D);
+```
+
+You can see this in action in the following example:
+[`examples/graphics_3d/clear_plane_bitmap`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/clear_plane_bitmap)
+
+It setups the depth map as a pattern of squares that have the depth of the near
+plane or the far plane:
+
+![Clear plane bitmap](clear_plane_bitmap.png)
+
+In practice, the clear bitmap isn't very useful:
+
+- The image is a 16-bit bitmap, which is very big, and not very flexible. You
+  can use polygons to display 2D elements in your 3D scene very easily. You can
+  use any texture format with your polygons, so you can use paletted formats,
+  which take less space than 16-bit images.
+
+- If you want a 2D background you can just use the 2D hardware and display it
+  behind the 3D scene. This gives you a lot more flexibility in the format of
+  your data, and you can use VRAM banks other than A, B, C or D.
+
+- The depth map is very hard to get right. Depth values depend on your
+  perspective (depth values depend on the depth of your near and far planes) and
+  whether you use Z-buffering or W-buffering. You will need to create your depth
+  map by trial and error.
+
+## 4. Billboards
 
 Billboards are 2D objects that are displayed in a 3D scene, but always facing
 the camera.
@@ -109,7 +183,7 @@ glPopMatrix(1);
 You can check the example here:
 [`examples/graphics_3d/billboards`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/billboards)
 
-## 3. Knowing if a 3D object is touched
+## 5. Knowing if a 3D object is touched
 
 Knowing what 3D object is under a point of the screen can be useful. For
 example, if you're pressing the touch screen, you may want to know which object
@@ -171,7 +245,7 @@ Some things to consider:
 You can check the example here:
 [`examples/graphics_3d/picking`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/picking)
 
-## 4. Point light
+## 6. Point light
 
 The GPU of the Nintendo DS only supports directional light:
 
@@ -213,7 +287,7 @@ convincing when the light source is very close to the object it illuminates.
 You can check the source code of the example here:
 [`examples/graphics_3d/point_light`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_3d/point_light)
 
-## 5. Volumetric shadow
+## 7. Volumetric shadow
 
 Volumetric shadows allow you to display scenes in which parts of a model are
 shadowed while others are displayed normally. For example, the following image
@@ -271,9 +345,9 @@ You can check the code of the example here:
 You can check [GBATEK](https://problemkaputt.de/gbatek.htm#ds3dshadowpolygons)
 to get more information, and you can check the
 [Volumetric Shadow Demo](https://codeberg.org/SkyLyrac/volumetric_shadow_demo)
-by silent_code to see a more complex example that uses this technique.
+by **silent_code** to see a more complex example that uses this technique.
 
-## 6. Efficient animated models
+## 8. Efficient animated models
 
 In the [3D graphics](../../intermediate/3d_graphics) chapter we saw how to use
 display lists to render static 3D models in an efficient way. This system can
