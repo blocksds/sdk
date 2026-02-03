@@ -5,6 +5,7 @@
 BLOCKSDS	?= /opt/blocksds/core
 
 # User config
+NAME	:= dswifi_local_multiplayer
 
 NAME	:= dswifi_local_multiplayer
 
