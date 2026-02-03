@@ -150,6 +150,20 @@ int main(int argc, char *argv[])
 
     glEnable(GL_TEXTURE_2D | GL_ANTIALIAS);
 
+    // Lock the banks used for video capture. Textures can't be allocated to
+    // locked banks.
+    //
+    // When libnds allocates textures it looks for all banks used for textures.
+    // However, in this demo, the same banks we use to store the video capture
+    // are also used for textures. We don't want libnds to load anything there,
+    // so we need to lock them.
+    //
+    // This isn't a problem in this example, but it can become a problem if this
+    // example is used as starting point for a bigger program that loads
+    // textures dynamically.
+    glLockVRAMBank(VRAM_B);
+    glLockVRAMBank(VRAM_C);
+
     // Setup the rear plane. It must have a unique polygon ID for antialias to
     // work.
     glClearPolyID(63);

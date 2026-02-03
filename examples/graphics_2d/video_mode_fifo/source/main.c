@@ -46,7 +46,6 @@ void vbl_handler(void)
         DMA_DST_FIX |   // Fix the destination address to REG_DISP_MMEM_FIFO
         DMA_REPEAT |    // Don't stop after the first transfer
         DMA_COPY_WORDS | 4; // Copy 4 words each time (8 pixels)
-
 }
 
 int main(int argc, char *argv[])
