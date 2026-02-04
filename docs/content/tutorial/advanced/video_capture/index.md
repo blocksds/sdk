@@ -23,6 +23,9 @@ shows how the components of the main video engine work together:
 
 ![Video system diagram](ds_video_diagram.png)
 
+Note that the sub graphics engine doesn't support 3D, video capture or the
+special video display modes.
+
 The two most important settings of this diagram are:
 
 - The switch to select BG0 or the 3D output with `DISPCNT.3`. Applications that
@@ -37,11 +40,14 @@ The two most important settings of this diagram are:
   - The contents of VRAM banks A, B, C or D as a 16-bit background.
   - Data stored in main RAM transferred to the display with a special DMA copy.
 
-Before learning how to use the video capture component, we need to understand
-how the additional video modes work.
+There are some advanced ways to do video capture, like blending a user-provided
+framebuffer with the output of the video engines. We will start with easier
+examples that don't combine multiple inputs, and see some more advanced examles
+later.
 
-The sub graphics engine doesn't support 3D, video capture or the special video
-display modes.
+However, before learning how to use the video capture system, we need to
+understand how the additional video modes work. They are required for some
+advanced configurations that involve video capture.
 
 ## 3. Special video display modes
 
@@ -131,6 +137,57 @@ This is an example of how to do it in practice:
 
 It's also possible to use this system to provide the input B of the video
 capture system and mix it with the output of the 2D or 3D engines.
+
+## 4. Simple capture
+
+The most basic way to use the video capture system is to capture the display,
+save it to VRAM, and display it later. You can keep using the main and sub video
+engines as usual.
+
+In this case all we need to do is to capture the output of the 3D and 2D video
+engines, so we need to use source A of the video capture system, which lets us
+choose what to capture. The steps are:
+
+- Set one of VRAM A, B, C or D to LCD mode. It will be used to store the
+  captured image.
+
+  ```c
+  vramSetBankC(VRAM_C_LCD);
+  ```
+
+- Start the video capture, which will capture the following frame. You can
+  capture the 3D otuput with `DCAP_SRC_A_3DONLY` or the combined 3D+2D output
+  with `DCAP_SRC_A_COMPOSITED`:
+
+  ```c
+  REG_DISPCAPCNT =
+      // Destination is VRAM_C
+      DCAP_BANK(DCAP_BANK_VRAM_C) |
+      // Size = 256x192
+      DCAP_SIZE(DCAP_SIZE_256x192) |
+      // Capture source A only
+      DCAP_MODE(DCAP_MODE_A) |
+      // Source A = 3D rendered image
+      DCAP_SRC_A(DCAP_SRC_A_3DONLY) |
+      // Enable capture
+      DCAP_ENABLE;
+  ```
+
+You can see this system in action in the following example, which lets you
+experiment with the 3D and 3D+2D capture modes:
+[`examples/video_capture/simple_capture`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_capture/simple_capture)
+
+{{< callout type="tip" >}}
+You can capture the 3D output with `DCAP_SRC_A_3DONLY` even if you don't display
+it directly in background layer 0. For example, you can use `MODE_0_2D` instead
+of `MODE_0_3D` and the video capture system will still be able to capture the 3D
+output. However, `DCAP_SRC_A_COMPOSITED` won't capture it!
+{{< /callout >}}
+
+Once you have this basic capture system working, you can even save the result to
+the SD card as a screenshot! The following example uses lodepng to save the
+captured image as a PNG file:
+[`examples/video_capture/png_screenshot`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_capture/png_screenshot)
 
 {{< callout type="error" >}}
 This chapter is a work in progress...
