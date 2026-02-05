@@ -9,7 +9,7 @@ The main video engine of the DS has a very flexible video capture system. It
 allows you to capture either the 3D output of the GPU or the full video output
 of the main video engine and save it to one of the main VRAM banks (A, B, C or
 D). This output can then be processed by the application or displayed right
-away.
+away. A very popular way to use it is to display 3D graphics on both screens.
 
 This chapter will explain how this system works in detail and it will show a few
 examples of things that can be done with it (like displaying 3D graphics on both
@@ -188,6 +188,128 @@ Once you have this basic capture system working, you can even save the result to
 the SD card as a screenshot! The following example uses lodepng to save the
 captured image as a PNG file:
 [`examples/video_capture/png_screenshot`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_capture/png_screenshot)
+
+## 5. Dual screen 3D
+
+This is probably the most popular way to use the video capture system. The idea
+is to render the 3D scene of one screen in odd frames and the other screen in
+even frames.
+
+![Dual 3D example](dual_screen_3d.png)
+
+There are a few big disadvantages of doing this:
+
+- You need to dedicate at least one main VRAM bank (A, B, C or D) as destination
+  of the captured 3D output:
+
+  - You have less space for textures just when you are going to display more 3D
+    objects.
+
+  - Most dual 3D setups involve dedicating two main VRAM banks as framebuffers
+    because it it's easier and it doesn't involve any manual copy.
+
+  - You can create a system in which you only use a main VRAM bank, but you need
+    to allocate your framebuffers in main RAM, and you need to do a DMA copy per
+    frame to copy the captured contents of the VRAM bank to the right
+    framebuffer.
+
+- The overall framerate of your game will drop to 30 FPS because the GPU can
+  only output 60 3D frames per second, and you have to split them between the
+  two screens.
+
+- Some implementations of dual 3D are very sensitive to frame drops. If the
+  application slows down, the contents of the screen may end up switching
+  screens.
+
+In this tutorial we're only going to see a simple implementation of dual 3D
+graphics using 2 VRAM banks in a way that is resistant to frame drops:
+[`examples/video_capture/dual_screen_3d`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_capture/dual_screen_3d)
+
+Let's see how the graphics rendering code works. This code alternates between
+two configurations, and it requires alternating the output of the main and sub
+video engines between the top and bottom screens:
+
+- **Configuration 1:**
+
+  - Main engine is on the top screen.
+
+    ```c
+    lcdMainOnTop();
+    ```
+
+  - Main engine: VRAM C is in LCD mode. The engine is set to direct VRAM C
+    display mode. VRAM C is the destination of the video capture, and it
+    captures the 3D output only.
+
+    ```c
+    videoSetMode(MODE_VRAM_C);
+    vramSetBankC(VRAM_C_LCD);
+
+    REG_DISPCAPCNT =
+        // Destination is VRAM_C
+        DCAP_BANK(DCAP_BANK_VRAM_C) |
+        // Size = 256x192
+        DCAP_SIZE(DCAP_SIZE_256x192) |
+        // Capture source A only
+        DCAP_MODE(DCAP_MODE_A) |
+        // Source A = 3D rendered image
+        DCAP_SRC_A(DCAP_SRC_A_3DONLY) |
+        // Enable capture
+        DCAP_ENABLE;
+    ```
+
+  - Sub engine: VRAM D is displayed as a matrix of 16-bit bitmap sprites. VRAM D
+    can't be used as background VRAM in the sub engine.
+
+    ```c
+    videoSetModeSub(MODE_0_2D | DISPLAY_SPR_ACTIVE | DISPLAY_SPR_2D_BMP_256);
+    vramSetBankD(VRAM_D_SUB_SPRITE_0x06600000);
+    ```
+
+- **Configuration 2:**
+
+  - Main engine is on the bottom screen.
+
+    ```c
+    lcdMainOnBottom();
+    ```
+
+  - Main engine: Same as configuration 1, but using VRAM D.
+
+    ```c
+    videoSetMode(MODE_VRAM_D);
+    vramSetBankD(VRAM_D_LCD);
+
+    REG_DISPCAPCNT =
+        // Destination is VRAM_D
+        DCAP_BANK(DCAP_BANK_VRAM_D) |
+        // Size = 256x192
+        DCAP_SIZE(DCAP_SIZE_256x192) |
+        // Capture source A only
+        DCAP_MODE(DCAP_MODE_A) |
+        // Source A = 3D rendered image
+        DCAP_SRC_A(DCAP_SRC_A_3DONLY) |
+        // Enable capture
+        DCAP_ENABLE;
+    ```
+
+  - Sub engine: VRAM C is displayed as a 16-bit bitmap.
+
+    ```c
+    videoSetModeSub(MODE_5_2D | DISPLAY_BG2_ACTIVE);
+    vramSetBankC(VRAM_C_SUB_BG_0x06200000);
+    ```
+
+This example lets you simulate frame drops too. If you hold the A button the
+main loop will be stuck in a loop that doesn't let the rendering code be
+executed. This is an extreme example of dropping frames, and you can see that
+the screens stop being updated but the image remain stable.
+
+The reason why this is stable is that the same bank is used as framebuffer of
+the main engine and as destination of the 3D output. Normally, the main engine
+displays the outdated data stored in VRAM while it captures the following frame.
+If the rendering code is delayed, the captured frame will replace the outdated
+data and it will be displayed instead, which would have happened anyway.
 
 {{< callout type="error" >}}
 This chapter is a work in progress...
