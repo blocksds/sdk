@@ -203,13 +203,20 @@ int main(int argc, char *argv[])
 {
     powerOn(POWER_ALL);
 
-    REG_BG2CNT = BG_BMP16_256x256;
-    REG_BG2PA = 1 << 8;
-    REG_BG2PB = 0;
-    REG_BG2PC = 0;
-    REG_BG2PD = 1 << 8;
-    REG_BG2X = 0;
-    REG_BG2Y = 0;
+    // Reset the VRAM banks setup so that we can load the console to VRAM H
+    vramSetPrimaryBanks(VRAM_A_LCD, VRAM_B_LCD, VRAM_C_LCD, VRAM_D_LCD);
+
+    videoSetMode(MODE_5_2D);
+    videoSetModeSub(MODE_0_2D);
+
+    // Initialize console
+    vramSetBankH(VRAM_H_SUB_BG);
+    consoleInit(NULL, 3, BgType_Text4bpp, BgSize_T_256x256, 4, 0, false, true);
+
+    // Initialize the background layer we will use to display the captured 3D
+    // scene.
+    bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
+    bgUpdate();
 
     glInit();
 
@@ -245,9 +252,9 @@ int main(int argc, char *argv[])
     glLight(0, RGB15(31, 31, 31),
             floattov10(-0.6), floattov10(-0.6), floattov10(-0.6));
 
-    int frame = 0;
+    printf("START: Exit to loader\n");
 
-    bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
+    int frame = 0;
 
     while (1)
     {
