@@ -206,7 +206,7 @@ int main(int argc, char *argv[])
     // Reset the VRAM banks setup so that we can load the console to VRAM H
     vramSetPrimaryBanks(VRAM_A_LCD, VRAM_B_LCD, VRAM_C_LCD, VRAM_D_LCD);
 
-    videoSetMode(MODE_5_2D);
+    videoSetMode(MODE_5_3D);
     videoSetModeSub(MODE_0_2D);
 
     // Initialize console
@@ -216,7 +216,6 @@ int main(int argc, char *argv[])
     // Initialize the background layer we will use to display the captured 3D
     // scene.
     bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
-    bgUpdate();
 
     glInit();
 
@@ -277,8 +276,6 @@ int main(int argc, char *argv[])
 
         if (frame & 1)
         {
-            videoSetMode(MODE_5_3D | DISPLAY_BG2_ACTIVE);
-
             vramSetBankC(VRAM_C_LCD);
             vramSetBankD(VRAM_D_MAIN_BG_0x06000000);
 
@@ -320,8 +317,6 @@ int main(int argc, char *argv[])
         }
         else
         {
-            videoSetMode(MODE_5_3D | DISPLAY_BG2_ACTIVE);
-
             vramSetBankC(VRAM_C_MAIN_BG_0x06000000);
             vramSetBankD(VRAM_D_LCD);
 
