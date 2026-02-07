@@ -260,9 +260,10 @@ However, this memory region is small (16 KiB) and the start of DTCM may contain
 variables that you have asked the compiler to place in DTCM. This means that, in
 practice, your stack isn't that big.
 
-You should be very careful and avoid allocating big arrays in structs. This is
-especially true if your code is running in an interrupt handler. `printf()` uses
-a lot of stack to work, so it can be a cause for crashes.
+You should be very careful and avoid allocating big arrays and structs on the
+stack. This is especially true if your code is running in an interrupt handler.
+`printf()` uses a lot of stack to work, for example, so it can be a cause for
+crashes.
 
 You should allocate anything bigger than one or two KBs on the heap with
 `malloc()` or similar functions.
