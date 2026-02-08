@@ -196,18 +196,14 @@ int main(int argc, char *argv[])
 
     powerOn(POWER_ALL);
 
+    videoSetMode(0);
+
     SetupSprites();
 
-    REG_BG2CNT_SUB = BG_BMP16_256x256;
-    REG_BG2PA_SUB = 1 << 8;
-    REG_BG2PB_SUB = 0;
-    REG_BG2PC_SUB = 0;
-    REG_BG2PD_SUB = 1 << 8;
-    REG_BG2X_SUB = 0;
-    REG_BG2Y_SUB = 0;
-
-    videoSetMode(0);
-    videoSetModeSub(0);
+    // Initialize the background layer we will use to display the captured 3D
+    // scene on the sub screen
+    videoSetModeSub(MODE_5_2D);
+    bgInitSub(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
 
     glInit();
 
