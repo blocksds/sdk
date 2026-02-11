@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2008, 2019, 2024
+// SPDX-FileContributor: Antonio Niño Díaz, 2008, 2019, 2024-2026
 
 // Render to Texture example
 
@@ -11,9 +11,12 @@
 // This is created automatically from neon.png and neon.grit
 #include "neon.h"
 
-// NOTE: You can enable or disable this define. When the define is enabled,
-// the demo uses MODE_5_3D. When it isn't, it uses MODE_VRAM_C.
-#define USE_3D_MODE
+// NOTE: You can enable or disable this variable. When it's enabled, the demo
+// uses MODE_5_3D. When it isn't, it uses MODE_VRAM_C.
+//
+// The demo is only stable with drops in FPS when this variable is disabled! It
+// isn't recommended to enable it.
+static bool use_3d_mode = false;
 
 // It uses VRAM banks as follows:
 //
@@ -23,7 +26,7 @@
 //
 // The BGs of the main screen are used as follows:
 //
-// - If USE_3D_MODE is defined, it alternates between:
+// - If use_3d_mode is enabled, it alternates between:
 //
 //   - BG 0: Rendered texture output, hidden under BG 2.
 //   - BG 2: Renders the contents of VRAM_C captured during the previous frame.
@@ -32,13 +35,13 @@
 //
 //   - BG 0: Displays the currently drawn 3D scene, which is captured to VRAM_C.
 //
-// - If USE_3D_MODE is not defined:
+// - If use_3d_mode is not enabled:
 //
 //   - MODE_VRAM_C renders the contents of VRAM_C as a bitmap on the screen.
 //     This makes it easier to setup, but it's less flexible as you can't use
 //     other layers on top of it.
 
-void DrawCube(void)
+static void DrawCube(void)
 {
     int bx = floattov16(-0.5);
     int ex = floattov16(0.5);
@@ -118,15 +121,8 @@ void DrawCube(void)
     glEnd();
 }
 
-int main(int argc, char *argv[])
+static void set_3d_mode_config(void)
 {
-    int textureID;
-    float rotateX = 0.0;
-    float rotateY = 0.0;
-
-    powerOn(POWER_ALL);
-
-#ifdef USE_3D_MODE
     videoSetMode(MODE_5_3D | DISPLAY_BG2_ACTIVE);
     REG_BG0CNT |= BG_PRIORITY_1;
     REG_BG2CNT = BG_BMP16_256x256 | BG_PRIORITY_0;
@@ -136,10 +132,26 @@ int main(int argc, char *argv[])
     REG_BG2PD = 1 << 8;
     REG_BG2X = 0;
     REG_BG2Y = 0;
-#else
+}
+
+static void set_vram_mode_config(void)
+{
     videoSetMode(MODE_VRAM_C);
     vramSetBankC(VRAM_C_LCD);
-#endif
+}
+
+int main(int argc, char *argv[])
+{
+    int textureID;
+    float rotateX = 0.0;
+    float rotateY = 0.0;
+
+    powerOn(POWER_ALL);
+
+    if (use_3d_mode)
+        set_3d_mode_config();
+    else
+        set_vram_mode_config();
 
     videoSetModeSub(MODE_0_2D);
     vramSetBankH(VRAM_H_SUB_BG);
@@ -199,8 +211,12 @@ int main(int argc, char *argv[])
     printf("\n");
     printf("\n");
     printf("\n");
-    printf("A/B:   Scale small cube\n");
-    printf("PAD:   Rotate small cube\n");
+    printf("A/B:    Scale small cube\n");
+    printf("SELECT: Drop framerate\n");
+    printf("PAD:    Rotate small cube\n");
+    printf("L:      Set 3D mode\n");
+    printf("R:      Set VRAM mode\n");
+    printf("\n");
     printf("START: Exit to loader");
 
     consoleSetCursor(NULL, 0, 23);
@@ -216,6 +232,9 @@ int main(int argc, char *argv[])
         // frame. This ensures that emulators and hardware have time to
         // synchronize during the first frame. If not, screens may be switched.
         swiWaitForVBlank();
+
+        consoleSetCursor(NULL, 0, 16);
+        printf("Mode: %s\n", use_3d_mode ? "3D  " : "VRAM");
 
         scanKeys();
         u16 keys = keysHeld();
@@ -234,6 +253,31 @@ int main(int argc, char *argv[])
         if (keys & KEY_B)
             scale -= 0.01;
 
+        if (keys & KEY_L)
+        {
+            use_3d_mode = true;
+            set_3d_mode_config();
+        }
+        if (keys & KEY_R)
+        {
+            use_3d_mode = false;
+            set_vram_mode_config();
+        }
+
+        // If the user presses SELECT, wait in a loop until the button is
+        // released. This is a test to see that a framerate drop won't cause
+        // any issues.
+        if (keys & KEY_SELECT)
+        {
+            while (1)
+            {
+                swiWaitForVBlank();
+                scanKeys();
+                if (!(keysHeld() & KEY_SELECT))
+                    break;
+            }
+        }
+
         if (keys & KEY_START)
             break;
 
@@ -243,9 +287,9 @@ int main(int argc, char *argv[])
         if (frame & 1)
         {
             vramSetBankB(VRAM_B_LCD);
-#ifdef USE_3D_MODE
-            vramSetBankC(VRAM_C_MAIN_BG_0x06000000);
-#endif
+            if (use_3d_mode)
+                vramSetBankC(VRAM_C_MAIN_BG_0x06000000);
+
             REG_DISPCAPCNT =
                 // Destination is VRAM_B
                 DCAP_BANK(DCAP_BANK_VRAM_B) |
@@ -306,9 +350,9 @@ int main(int argc, char *argv[])
         else
         {
             vramSetBankB(VRAM_B_TEXTURE);
-#ifdef USE_3D_MODE
-            vramSetBankC(VRAM_C_LCD);
-#endif
+            if (use_3d_mode)
+                vramSetBankC(VRAM_C_LCD);
+
             REG_DISPCAPCNT =
                 // Destination is VRAM_C
                 DCAP_BANK(DCAP_BANK_VRAM_C) |
