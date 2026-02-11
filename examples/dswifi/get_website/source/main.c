@@ -60,8 +60,7 @@ void getHttp(const char *url, const char *path, int family)
         printf("- Canonical Name:\n  %s\n", rp->ai_canonname);
         if (rp->ai_family == AF_INET)
         {
-            // This should never happen because we have explicitly asked for
-            // IPv6 addresses, but let's keep it here for reference.
+            // This should never happen if we have asked for IPv6 addresses
             printf("- AF_INET\n");
 
             sinp = (struct sockaddr_in *)rp->ai_addr;
