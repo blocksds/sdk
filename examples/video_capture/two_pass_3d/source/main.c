@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2024
+// SPDX-FileContributor: Antonio Niño Díaz, 2024-2026
 
 // Two-pass 3D example. This example uses the video capture hardware to increase
 // the number of polygons that can be drawn on one screen. It shows one way of
@@ -21,6 +21,16 @@
 
 // This is created automatically from neon.png and neon.grit
 #include "neon.h"
+
+// Align this to 4 bytes because we will use DMA to copy words from this buffer.
+u16 framebuffer[2][256 * 192] ALIGN(4);
+
+// Index of the framebuffer currently displayed.
+volatile u8 framebuffer_displayed = 0;
+
+// The main loop sets this to true when the next frame is available to be
+// displayed.
+volatile bool framebuffer_next_ready = false;
 
 void DrawTexturedCube(void)
 {
@@ -199,6 +209,33 @@ void DrawScene(void)
     glPopMatrix(1);
 }
 
+void vbl_handler(void)
+{
+    dmaStopSafe(2);
+
+    // Switch the rendered buffer only when the main loop has finished drawing
+    // the next frame.
+    if (framebuffer_next_ready)
+    {
+        framebuffer_next_ready = false;
+        framebuffer_displayed ^= 1;
+    }
+
+    void *fb = framebuffer[framebuffer_displayed];
+
+    // The source address must be in main RAM.
+    REG_DMA_SRC(2) = (uintptr_t)fb;
+    // The destination must be REG_DISP_MMEM_FIFO.
+    REG_DMA_DEST(2) = (uintptr_t)&REG_DISP_MMEM_FIFO;
+
+    REG_DMA_CR(2) =
+        DMA_DISP_FIFO | // Set direct FIFO display mode
+        DMA_SRC_INC |   // Increment the source address each time
+        DMA_DST_FIX |   // Fix the destination address to REG_DISP_MMEM_FIFO
+        DMA_REPEAT |    // Don't stop after the first transfer
+        DMA_COPY_WORDS | 4; // Copy 4 words each time (8 pixels)
+}
+
 int main(int argc, char *argv[])
 {
     powerOn(POWER_ALL);
@@ -206,16 +243,17 @@ int main(int argc, char *argv[])
     // Reset the VRAM banks setup so that we can load the console to VRAM H
     vramSetPrimaryBanks(VRAM_A_LCD, VRAM_B_LCD, VRAM_C_LCD, VRAM_D_LCD);
 
-    videoSetMode(MODE_5_3D);
     videoSetModeSub(MODE_0_2D);
 
     // Initialize console
     vramSetBankH(VRAM_H_SUB_BG);
     consoleInit(NULL, 3, BgType_Text4bpp, BgSize_T_256x256, 4, 0, false, true);
 
-    // Initialize the background layer we will use to display the captured 3D
-    // scene.
-    bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
+    // Setup main engine to display from main RAM
+    videoSetMode(MODE_FIFO);
+
+    // Use VRAM D as destination of our video captures
+    vramSetBankD(VRAM_D_LCD);
 
     glInit();
 
@@ -251,8 +289,11 @@ int main(int argc, char *argv[])
     glLight(0, RGB15(31, 31, 31),
             floattov10(-0.6), floattov10(-0.6), floattov10(-0.6));
 
+    irqSet(IRQ_VBLANK, vbl_handler);
+
     printf("START: Exit to loader\n");
 
+    const int horizontal_split = 128;
     int frame = 0;
 
     while (1)
@@ -268,93 +309,106 @@ int main(int argc, char *argv[])
         if (keys & KEY_START)
             break;
 
-        rx += 1;
-        ry += 1;
-
-        rotateX += 1;
-        rotateY -= 1;
-
-        if (frame & 1)
+        // If the user presses A, wait in a loop until the button is released.
+        // This is a test to see that a framerate drop won't cause any issues.
+        if (keys & KEY_A)
         {
-            vramSetBankC(VRAM_C_LCD);
-            vramSetBankD(VRAM_D_MAIN_BG_0x06000000);
+            while (1)
+            {
+                swiWaitForVBlank();
+                scanKeys();
+                if (!(keysHeld() & KEY_A))
+                    break;
+            }
+        }
 
-            bgSetPriority(2, 1);
-            bgSetPriority(0, 0);
+        REG_DISPCAPCNT =
+            // Destination is VRAM_D
+            DCAP_BANK(DCAP_BANK_VRAM_D) |
+            // Size = 256x192
+            DCAP_SIZE(DCAP_SIZE_256x192) |
+            // Capture source A only
+            DCAP_MODE(DCAP_MODE_A) |
+            // Source A = 3D rendered image
+            DCAP_SRC_A(DCAP_SRC_A_3DONLY) |
+            // Enable capture
+            DCAP_ENABLE;
 
-            REG_DISPCAPCNT =
-                // Destination is VRAM_C
-                DCAP_BANK(DCAP_BANK_VRAM_C) |
-                // Size = 256x192
-                DCAP_SIZE(DCAP_SIZE_256x192) |
-                // Capture source A only
-                DCAP_MODE(DCAP_MODE_A) |
-                // Source A = 3D rendered image
-                DCAP_SRC_A(DCAP_SRC_A_3DONLY) |
-                // Enable capture
-                DCAP_ENABLE;
+        if (frame == 0)
+        {
+            const int split = horizontal_split;
 
-            glViewport(0, 0, 127, 191);
+            // Copy the last left side projection
 
-            // Non-transparent scene (bottom)
-            // ------------------------------
+            const u16 *fb_src = VRAM_D;
+            u16 *fb_dst = framebuffer[framebuffer_displayed ^ 1];
 
-            // Blue background
-            glClearColor(7, 7, 20, 31);
+            for (int j = 0; j < 192; j++)
+            {
+                dmaCopy(fb_src, fb_dst, split * sizeof(u16));
+                fb_src += 256;
+                fb_dst += 256;
+            }
+
+            // Setup left side projection
+
+            glViewport(0, 0, split - 1, 191);
 
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
 
-            glFrustumf32(-128 * 3, 0 * 3, 96 * 3, -96 * 3,
+            glFrustumf32(-128 * 3, (-128 + split) * 3, 96 * 3, -96 * 3,
                          floattof32(0.1), floattof32(40));
-
-            glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
-
-            DrawScene();
-
-            glFlush(0);
         }
         else
         {
-            vramSetBankC(VRAM_C_MAIN_BG_0x06000000);
-            vramSetBankD(VRAM_D_LCD);
+            const int split = horizontal_split;
 
-            bgSetPriority(2, 0);
-            bgSetPriority(0, 1);
+            // Copy the last right side projection
 
-            REG_DISPCAPCNT =
-                // Destination is VRAM_D
-                DCAP_BANK(DCAP_BANK_VRAM_D) |
-                // Size = 256x192
-                DCAP_SIZE(DCAP_SIZE_256x192) |
-                // Capture source A only
-                DCAP_MODE(DCAP_MODE_A) |
-                // Source A = 3D rendered image
-                DCAP_SRC_A(DCAP_SRC_A_3DONLY) |
-                // Enable capture
-                DCAP_ENABLE;
+            const u16 *fb_src = VRAM_D + split;
+            u16 *fb_dst = framebuffer[framebuffer_displayed ^ 1] + split;
 
-            glViewport(128, 0, 255, 191);
+            for (int j = 0; j < 192; j++)
+            {
+                dmaCopy(fb_src, fb_dst, (256 - split) * sizeof(u16));
+                fb_src += 256;
+                fb_dst += 256;
+            }
 
-            // Transparent scene (top)
-            // -----------------------
+            // Setup right side projection
 
-            // Transparent background
-            glClearColor(0, 0, 0, 0);
+            glViewport(split, 0, 255, 191);
 
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
 
-            glFrustumf32(0 * 3, 128 * 3, 96 * 3, -96 * 3,
+            glFrustumf32((-128 + split) * 3, (-128 + 256) * 3, 96 * 3, -96 * 3,
                          floattof32(0.1), floattof32(40));
 
-            glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
+            framebuffer_next_ready = true;
+        }
 
-            DrawScene();
+        // Draw the 3D scene as usual regardless of which side we're drawing
 
-            glFlush(0);
+        glClearColor(7, 7, 20, 31);
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+        DrawScene();
+
+        glFlush(0);
+
+        // Only update the scene every other frame
+
+        if (frame == 1)
+        {
+            rx += 2;
+            ry += 2;
+
+            rotateX += 2;
+            rotateY -= 2;
         }
 
         frame ^= 1;
