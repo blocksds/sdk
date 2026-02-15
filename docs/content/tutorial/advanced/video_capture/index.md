@@ -311,6 +311,150 @@ displays the outdated data stored in VRAM while it captures the following frame.
 If the rendering code is delayed, the captured frame will replace the outdated
 data and it will be displayed instead, which would have happened anyway.
 
+## 6. Two-pass 3D
+
+The GPU of the DS can only render up to 2048 triangles (or 1536 quads) per
+frame, which is usually enough. However, in some specific cases, it can be
+restrictive, and you may want to combine the 3D output of multiple frames in one
+single image.
+
+There's a very important thing to consider: you can combine the graphics output,
+but the depth buffer is lost between two frames. This restriction may make you
+think of one solution: sort the polygons by their distance to the camera and
+draw the far polygons in the first frame, the near polygons in the second frame,
+and display the second frame over the first one.
+
+The problem is that this isn't the optimal way to do it:
+
+- You need to spend CPU time sorting your polygons by depth.
+
+- If you think about it, the most optimal way to distribute polygons between two
+  frames is a way that makes each frame render a similar number of pixels per
+  scanline. Far polygons usually belong to the background, which takes up a lot
+  more space on the screen than near polygons, which usually belong to smaller
+  objects. The GPU has a limit of how many pixels it can render per scanline,
+  and this distribution will make it very easy to reach the limit in the
+  background frame while you leave a lot of unused time in the near-polygons
+  frame.
+
+A better way to distribute the work is to draw the left and right halves of the
+screen in alternate frames. This has some advantages:
+
+- There are no issues related to the depth buffer. You can just draw your
+  polygons as you would do in a regular game without two-pass 3D. You don't need
+  to sort objects in any specific way.
+
+- Your horizontal lines are half the length as usual, so it's harder to reach
+  the limit of pixels that the GPU can draw in a scanline.
+
+- You can set the screen division at any coordinate, it doesn't have to be right
+  in the middle.
+
+The following example uses the left/right split:
+[`examples/video_capture/two_pass_3d`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_capture/two_pass_3d)
+
+![Two-pass 3D](two_pass_3d.png)
+
+This example works by using the FIFO display mode, so the 3D output is always
+hidden. There are two framebuffers in main RAM (active and backbuffer). It
+works the following way:
+
+- Even frames:
+
+  - The 3D projection and viewport are setup to draw the left half of the 3D
+    scene.
+
+    ```c
+    const int split = 128;
+
+    glViewport(0, 0, split - 1, 191);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    glFrustumf32(-128 * 3, (-128 + split) * 3, 96 * 3, -96 * 3,
+                 floattof32(0.1), floattof32(40));
+    ```
+
+  - The 3D scene is rendered and captured directly to VRAM D:
+
+    ```c
+    REG_DISPCAPCNT =
+        // Destination is VRAM_D
+        DCAP_BANK(DCAP_BANK_VRAM_D) |
+        // Size = 256x192
+        DCAP_SIZE(DCAP_SIZE_256x192) |
+        // Capture source A only
+        DCAP_MODE(DCAP_MODE_A) |
+        // Source A = 3D rendered image
+        DCAP_SRC_A(DCAP_SRC_A_3DONLY) |
+        // Enable capture
+        DCAP_ENABLE;
+    ```
+
+  - The right half of VRAM D (captured the previous frame) is copied to the
+    backbuffer in main RAM.
+
+- Odd frames:
+
+  - The 3D projection and viewport are setup to draw the right half of the 3D
+    scene.
+
+    ```c
+    const int split = 128;
+
+    glViewport(split, 0, 255, 191);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    glFrustumf32((-128 + split) * 3, (-128 + 256) * 3, 96 * 3, -96 * 3,
+                 floattof32(0.1), floattof32(40));
+    ```
+
+  - The 3D scene is rendered and captured directly to VRAM D with the same
+    setup as before.
+
+  - The left half of VRAM D (captured the previous frame) is copied to the
+    backbuffer in main RAM.
+
+  - The backbuffer and active buffer are flipped.
+
+    ```c
+    framebuffer_next_ready = true;
+    ```
+
+In order for the FIFO display mode to work, a new DMA transfer starts every
+frame in the VBL handler:
+
+```c
+dmaStopSafe(2);
+
+// [...]
+
+void *fb = framebuffer[framebuffer_displayed];
+
+// The source address must be in main RAM.
+REG_DMA_SRC(2) = (uintptr_t)fb;
+// The destination must be REG_DISP_MMEM_FIFO.
+REG_DMA_DEST(2) = (uintptr_t)&REG_DISP_MMEM_FIFO;
+
+REG_DMA_CR(2) =
+    DMA_DISP_FIFO | // Set direct FIFO display mode
+    DMA_SRC_INC |   // Increment the source address each time
+    DMA_DST_FIX |   // Fix the destination address to REG_DISP_MMEM_FIFO
+    DMA_REPEAT |    // Don't stop after the first transfer
+    DMA_COPY_WORDS | 4; // Copy 4 words each time (8 pixels)
+```
+
+You should update your logic at 30 FPS at most. If you update the state of your
+game after drawing one half of the screen but before drawing the next one, you
+will get inconsistent graphics on both halves.
+
+Check the source code of the example if you want to see the full logic of this
+process. Note that this system makes the graphics safe even if the framerate
+drops temporarily.
+
 {{< callout type="error" >}}
 This chapter is a work in progress...
 {{< /callout >}}
