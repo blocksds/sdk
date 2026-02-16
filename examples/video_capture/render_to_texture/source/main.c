@@ -2,7 +2,8 @@
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2008, 2019, 2024-2026
 
-// Render to Texture example
+// Render to Texture example originally published in the GBADEV forums in 2008
+// by AntonioND, with some suggestions by DiscoStew.
 
 #include <stdio.h>
 
@@ -205,22 +206,17 @@ int main(int argc, char *argv[])
     glLight(0, RGB15(31, 31, 31),
             floattov10(-0.6), floattov10(-0.6), floattov10(-0.6));
 
-    printf("     RTT Demo by AntonioND\n");
-    printf("\n");
-    printf("    http://www.skylyrac.net\n");
+    printf("Render to Texture example\n");
     printf("\n");
     printf("\n");
     printf("\n");
     printf("A/B:    Scale small cube\n");
     printf("SELECT: Drop framerate\n");
     printf("PAD:    Rotate small cube\n");
-    printf("L:      Set 3D mode\n");
-    printf("R:      Set VRAM mode\n");
+    printf("L:      Set 3D mode (unstable)\n");
+    printf("R:      Set VRAM mode (stable)\n");
     printf("\n");
     printf("START: Exit to loader");
-
-    consoleSetCursor(NULL, 0, 23);
-    printf("Thanks to DiscoStew. ;)");
 
     int frame = 0;
     float rx = 30, ry = 0;
@@ -234,7 +230,7 @@ int main(int argc, char *argv[])
         swiWaitForVBlank();
 
         consoleSetCursor(NULL, 0, 16);
-        printf("Mode: %s\n", use_3d_mode ? "3D  " : "VRAM");
+        printf("Current mode: %s\n", use_3d_mode ? "3D  " : "VRAM");
 
         scanKeys();
         u16 keys = keysHeld();
