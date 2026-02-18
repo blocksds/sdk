@@ -455,6 +455,128 @@ Check the source code of the example if you want to see the full logic of this
 process. Note that this system makes the graphics safe even if the framerate
 drops temporarily.
 
+## 7. Render to Texture
+
+This technique lets you render a 3D scene and use it as a texture to be used in
+a different scene. For example, you could render a living room with a TV, and
+the TV is displaying a different 3D scene.
+
+There's an example of how to do it here:
+[`examples/video_capture/render_to_texture`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_capture/render_to_texture)
+
+![Render to Texture](render_to_texture.png)
+
+This example shows two ways of achieving this effect, but only one of them is
+stable in case of FPS drops. We'll only discuss the stable version here.
+
+This example uses VRAM C as the framebuffer that gets displayed on the main
+screen (the 3D output is never displayed directly on the screen):
+
+```c
+videoSetMode(MODE_VRAM_C);
+vramSetBankC(VRAM_C_LCD);
+```
+
+Frames work the following way:
+
+- Odd frames: VRAM B is set as destination of the video capture. The video
+  capture is configured to capture the 3D image only:
+
+  ```c
+  vramSetBankB(VRAM_B_LCD);
+
+  REG_DISPCAPCNT =
+      // Destination is VRAM_B
+      DCAP_BANK(DCAP_BANK_VRAM_B) |
+      // Size = 256x192
+      DCAP_SIZE(DCAP_SIZE_256x192) |
+      // Capture source A only
+      DCAP_MODE(DCAP_MODE_A) |
+      // Source A = 3D rendered image
+      DCAP_SRC_A(DCAP_SRC_A_3DONLY) |
+      // Enable capture
+      DCAP_ENABLE;
+  ```
+
+- Even frames: VRAM B is setup as texture VRAM. We will use it when drawing the
+  3D scene. The 3D scene is captured to VRAM C.
+
+  ```c
+  vramSetBankB(VRAM_B_TEXTURE);
+
+  REG_DISPCAPCNT =
+      // Destination is VRAM_C
+      DCAP_BANK(DCAP_BANK_VRAM_C) |
+      // Size = 256x192
+      DCAP_SIZE(DCAP_SIZE_256x192) |
+      // Capture source A only
+      DCAP_MODE(DCAP_MODE_A) |
+      // Source A = 3D rendered image
+      DCAP_SRC_A(DCAP_SRC_A_3DONLY) |
+      // Enable capture
+      DCAP_ENABLE;
+  ```
+
+The two scenes are organized like this:
+
+- When drawing the full scene we set the viewport to the full screen:
+
+  ```c
+  glViewport(0, 0, 255, 191);
+  ```
+
+  When we want to use the captured scene as a texture we need to set it as
+  active texture with a bit of special code:
+
+  ```c
+  // When calling glBindTexture(), the GFX_TEX_FORMAT
+  // command is only sent when the new texture isn't
+  // currently active. By calling it with an invalid
+  // texture we make sure that any future call to
+  // glBindTexture() will actually send that command and
+  // replace the manual command below.
+  glBindTexture(0, -1);
+
+  // The captured texture is 256x192, stored in VRAM_B,
+  // and is in RGBA format. It is needed to use 256x256 as
+  // size, as only power of two sizes are supported.
+  GFX_TEX_FORMAT = (GL_RGBA << 26)
+                 | (TEXTURE_SIZE_256 << 20)
+                 | (TEXTURE_SIZE_256 << 23)
+                 | ((((uintptr_t)VRAM_B) >> 3) & 0xFFFF);
+  ```
+
+- When drawing the texture scene, we setup the viewport to the size of the
+  texture used in the model (like the TV). In this case, the cube is using a
+  128x128 pixels texture, so we render the full 256x192 scene, but we only focus
+  on the top-left 128x128 pixels of it:
+
+  ```c
+  glViewport(0, 64, 128, 191);
+  ```
+
+Important note: The texture allocator of libnds looks for any VRAM bank setup as
+texture storage when a new texture is loaded. In this render to texture example
+we are alternating VRAM B between LCD and texture mode, so it's possible that
+libnds uses it as destination of textures if you load textures on the fly.
+
+This isn't a problem in this example because textures are only loaded at the
+start of the program, but you should make sure to lock your VRAM banks in your
+applications. Locking a bank will ensure that libnds doesn't try to allocate
+textures or texture palettes to it:
+
+```c
+glLockVRAMBank(VRAM_B);
+glLockVRAMBank(VRAM_C);
+```
+
+You can unlock them with:
+
+```c
+glUnlockVRAMBank(VRAM_B);
+glUnlockVRAMBank(VRAM_C);
+```
+
 {{< callout type="error" >}}
 This chapter is a work in progress...
 {{< /callout >}}
