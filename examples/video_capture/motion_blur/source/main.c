@@ -251,8 +251,8 @@ int main(int argc, char *argv[])
     glFrustumf32(-128 * 3, 128 * 3, 96 * 3, -96 * 3,
                  floattof32(0.1), floattof32(40));
 
-    int eva = 3;
-    int evb = 12;
+    int eva = 5;
+    int evb = 14;
 
     while (1)
     {
