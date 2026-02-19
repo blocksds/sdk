@@ -577,6 +577,60 @@ glUnlockVRAMBank(VRAM_B);
 glUnlockVRAMBank(VRAM_C);
 ```
 
-{{< callout type="error" >}}
-This chapter is a work in progress...
-{{< /callout >}}
+## 8. Motion blur
+
+So far we have only seen how to capture the 3D output and display it again.
+However, the diagram at the beginning of the chapter shows that the capture
+hardware can actually take two inputs, blend them, and save the result to VRAM.
+
+Check the following example:
+[`examples/video_capture/motion_blur`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_capture/motion_blur)
+
+![Motion blur](motion_blur.png)
+
+The example takes the 3D output of the GPU, blends it with the contents in VRAM
+D, and saves the output in VRAM D. The main engine has been setup in direct VRAM
+D rendering mode, so only one VRAM bank needs to be used to achieve this effect.
+
+```c
+videoSetMode(MODE_VRAM_D);
+vramSetBankD(VRAM_D_LCD);
+```
+
+Every frame is the result of the current 3D output plus the previously
+displayed output. This means that the blur effect is added on top of the blur
+of the previous frame. Depending on the settings, it's possible that the blur of
+the previous frames doesn't disappear from the screen at all.
+
+All you need to do is to start the video capture every frame with the same
+settings:
+
+```c
+int eva = 5;
+int evb = 14;
+
+REG_DISPCAPCNT =
+    // Destination is VRAM_D
+    DCAP_BANK(DCAP_BANK_VRAM_D) |
+    // Size = 256x192
+    DCAP_SIZE(DCAP_SIZE_256x192) |
+    // Capture sources A and B blended
+    DCAP_MODE(DCAP_MODE_BLEND) |
+    // Blending factors for sources A and B (max is 16)
+    DCAP_A(eva) | DCAP_B(evb) |
+    // Source A = 3D rendered image
+    DCAP_SRC_A(DCAP_SRC_A_3DONLY) |
+    // Source B = VRAM D
+    DCAP_SRC_B(DCAP_SRC_B_VRAM) |
+    DCAP_SRC_ADDR(DCAP_BANK_VRAM_D) |
+    // Enable capture
+    DCAP_ENABLE;
+```
+
+The resulting image is calculated as `(3D_output * eva + previous_capture * evb)
+/ 16`. You will need to find the values of `eva` and `evb` by trial and error,
+and it's a good idea to test it in emulators and hardware while deciding what
+values to use.
+
+And that's it! Note that this effect looks better when you have the screen full
+of 3D objects instead of a plain black background!
