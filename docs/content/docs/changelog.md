@@ -3,6 +3,96 @@ title: 'Changelog'
 weight: 6
 ---
 
+### Version 1.18.0 (2026-02-XX)
+
+- libnds:
+
+  - `glTexImageNtr2D()` introduced. This is an improved version of
+    `glTexImage2D()` with fewer arguments and better support for textures in
+    `GL_COMPRESSED` format. There is no plan to deprecate or remove the old
+    function.
+  - `glColorTableNtr()`, `glColorSubTableNtr()` and `glGetColorTableEXT()` have
+    been added. They work like `glColorTableEXT()`, `glColorSubTableEXT()` and
+    `glGetColorTableNtr()`, but with fewer unused arguments. There is no plan to
+    deprecate or remove the old functions.
+  - The new simplified videoGL functions are used in the GL2D library code.
+  - The GRF format definitions have been updated. Now there's support for flag
+    `GRF_FLAG_COLOR0_TRANSPARENT`, which specifies if a texture has to be loaded
+    with color 0 transparent or not. Also, there are new definitions related to
+    2D background formats. The previous definitions weren't enough to define all
+    possible configurations.
+  - DMA channels are now stopped safely during the system initialization.
+  - New NDMA and DMA register definitions have been added to be consistent with
+    the rest of the register definitions. For example, `REG_DMA0_SRC` is now
+    preferred instead of `DMA0_SRC`. There is no plan to remove the old
+    definitions.
+  - The definitions related to `REG_DISPCNT` have been reorganized and improved.
+    Defines `MODE_VRAM_A/B/C/D` have been added because `MODE_FB0/1/2/3` weren't
+    very clear.
+  - Improved the checks of `bgInit()` and `bgInitSub()` that validate the input
+    values in debug builds of libnds.
+  - Fix `grfLoadMemEx()` still expecting the size field in GRF chunks. @dvdo
+  - Mark some fields in background structs as `volatile`.
+  - Improve documentation of `bgInit()`, `bgInitSub()`, `DISPLAY_CHAR_BASE()`
+    and `DISPLAY_SCREEN_BASE()`.
+  - Fixed the diagram of the background video modes to show video mode 6 layers
+    correctly.
+  - Fix out-of-bounds reads when handling escape sequences in the console code.
+    @trustytrojan:
+
+- DSWiFi:
+
+  - Use new NDMA register definitions.
+  - Update the documentation to use functions that support IPv6. The
+    introduction of the documentation of Internet mode has been updated to
+    mention that DSi mode is supported.
+
+- Maxmod:
+
+  - Use new DMA register definitions.
+  - GBA: Rename default mix buffer and mix rate define.
+
+- ndstool:
+
+  - Fix twl region SHA1 hashes in fix header command. @edo9300
+
+- grit:
+
+  - Support GRF flag to define color 0 as transparent in textures.
+  - Improve background type definitions in GRF format. Previously it wasn't
+    possible to define a map with flat layout but 4 bpp format.
+
+- SDK:
+
+  - Tutorial:
+
+    - Add chapter about the video capture hardware and how to use to display 3D
+      graphics in both screens, how to render to texture, etc.
+    - Add section about loading backgrounds that use metatiles.
+    - Add section about using the 3D clear bitmap.
+
+  - Examples:
+
+    - The 3D examples now use `glTexImageNtr2D()` instead of `glTexImage2D()`.
+      This helps simplify the examples that use `GL_COMPRESSED` textures.
+    - The example that loads 3D textures in GFR format has been improved to load
+      256-color textures with and withot color 0 transparent.
+    - New example of loading backgrounds from GRF files.
+    - New example of loading backgrounds that use metatiles converted by grit.
+    - New example of using the 3D clear bitmap with depth map.
+    - New examples of direct VRAM display and FIFO display modes.
+    - Use the `MODE_VRAM_A/B/C/D` defines instead of `MODE_FB0/1/2/3`.
+    - Simplify logic that generates ROM names in debug and non-debug builds.
+      @steveschnepp
+    - In the render-to-texture example, lock the VRAM banks used as video
+      capture output to prevent it from accidentally being used as destination
+      for new textures. Also, improve the example so that the two modes can be
+      selected at runtime instead of only as a build option.
+    - Improve the two-pass 3D example to make it stable even during FPS drops.
+    - Improve the setup code in the dual 3D example.
+    - Remove unnecessary LibXM7 ARM7 core from the capture audio example. @asie
+    - Improve the blending settings in the motion blur example.
+
 ### Version 1.17.1 (2026-01-25)
 
 - libnds:
