@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
     // Initialize layer 0 as a regular (text) background with 256 colors (8 bpp)
     // and size 512x256. The last 0 is the map base and the 1 is the tile base.
     // We'll talk about that in a minute.
-    int bg = bgInit(0, BgType_Text8bpp, BgSize_T_512x256, 0, 1);
+    int bg = bgInitHidden(0, BgType_Text8bpp, BgSize_T_512x256, 0, 1);
 
     // Copy tiles and tile map to VRAM
     memcpy(bgGetGfxPtr(bg), forest_townTiles, forest_townTilesLen);
@@ -149,11 +149,19 @@ int main(int argc, char *argv[])
     // Copy palete to palette RAM
     memcpy(BG_PALETTE, forest_townPal, forest_townPalLen);
 
+    // Display the background when all graphics are loaded
+    bgShow(bg);
+
     // Wait forever
     while (1)
         swiWaitForVBlank();
 }
 ```
+
+`bgInitHidden()` sets up the background layer, but it doesn't display it yet.
+Normally you don't want to display the background while the data is being copied
+to VRAM. When the data is loaded, you can use `bgShow()` to display the
+background. If you use `bgInit()` the layer will be displayed right away.
 
 The example `examples/graphics_2d/bg_regular_8bit` also shows you how to scroll
 the background with `bgSetScroll(bg, x, y)`. The most important thing to
@@ -179,7 +187,7 @@ And the second one is the way to setup the background (use `BgType_Text4bpp`
 instead of `BgType_Text8bpp`):
 
 ```c
-int bg = bgInit(0, BgType_Text4bpp, BgSize_T_256x256, 0, 1);
+int bg = bgInitHidden(0, BgType_Text4bpp, BgSize_T_256x256, 0, 1);
 ```
 
 ## 4. Tile bases and map bases
@@ -247,7 +255,7 @@ you initialize the background:
 ```c
 videoSetMode(MODE_2_2D);
 
-int bg = bgInit(2, BgType_Rotation, BgSize_R_256x256, 0, 1);
+int bg = bgInitHidden(2, BgType_Rotation, BgSize_R_256x256, 0, 1);
 ```
 
 Video mode 2 sets layers 0 and 1 as regular backgrounds and layers 2 and 3 as
@@ -308,7 +316,7 @@ The only things to consider is that:
   ```c
   videoSetMode(MODE_5_2D);
 
-  int bg = bgInit(2, BgType_ExRotation, BgSize_ER_256x256, 0, 1);
+  int bg = bgInitHidden(2, BgType_ExRotation, BgSize_ER_256x256, 0, 1);
   ```
 
   Mode 5 sets layers 0 and 1 as regular backgrounds and layers 2 and 3 as
@@ -355,11 +363,14 @@ int main(int argc, char *argv[])
     vramSetBankA(VRAM_A_MAIN_BG);
 
     // Setup layer 2 as an 8-bit bitmap background with size 256x256
-    int bg = bgInit(2, BgType_Bmp8, BgSize_B8_256x256, 0, 0);
+    int bg = bgInitHidden(2, BgType_Bmp8, BgSize_B8_256x256, 0, 0);
 
     // Load the palette and the bitmap
     memcpy(BG_PALETTE, manga_bgPal, manga_bgPalLen);
     memcpy(bgGetGfxPtr(bg), manga_bgBitmap, manga_bgBitmapLen);
+
+    // Display the background when all graphics are loaded
+    bgShow(bg);
 
     // Wait forever
     while (1)
@@ -431,10 +442,13 @@ int main(int argc, char *argv[])
     vramSetBankA(VRAM_A_MAIN_BG);
 
     // Setup layer 2 as a 16-bit bitmap
-    int bg = bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
+    int bg = bgInitHidden(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
 
     // Load bitmap
     memcpy(bgGetGfxPtr(bg), photoBitmap, photoBitmapLen);
+
+    // Display the background when all graphics are loaded
+    bgShow(bg);
 
     while (1)
         swiWaitForVBlank();
@@ -489,11 +503,14 @@ int main(int argc, char *argv[])
                         VRAM_D_MAIN_BG_0x06060000);
 
     // Valid sizes are 1024x512 and 512x1024
-    int bg = bgInit(2, BgType_Bmp8, BgSize_B8_1024x512, 0, 0);
+    int bg = bgInitHidden(2, BgType_Bmp8, BgSize_B8_1024x512, 0, 0);
 
     // Load the palette and the bitmap
     memcpy(BG_PALETTE, manga_bgPal, manga_bgPalLen);
     memcpy(bgGetGfxPtr(bg), manga_bgBitmap, manga_bgBitmapLen);
+
+    // Display the background when all graphics are loaded
+    bgShow(bg);
 
     // Wait forever
     while (1)
@@ -507,8 +524,8 @@ afterwards).
 One trick that you can use is that, if you don't need the full size of the
 bitmap, you can use VRAM banks for other things, and it will work. For example,
 if you want a 1024x256 background you can assign VRAM A and B as main engine
-background RAM, tell `bgInit()` that you want a 1024x512 bitmap, and the 2D
-engine will only be able to use those banks for the bitmap. You'll be free to
+background RAM, tell `bgInitHidden()` that you want a 1024x512 bitmap, and the
+2D engine will only be able to use those banks for the bitmap. You'll be free to
 use VRAM C and D for other things.
 
 ## 10. Background priorities
@@ -558,8 +575,8 @@ int main(int argc, char *argv[])
     // Initialize layer 0 as a regular (text) background with 256 colors (8 bpp)
     // and size 256x256. The last 0 is the map base and the 1 is the tile base.
     // We'll talk about that in a minute.
-    int bg = bgInit(0, BgType_Text8bpp, BgSize_T_256x256, 0, 1);
-    int bgsub = bgInitSub(0, BgType_Text8bpp, BgSize_T_256x256, 0, 1); // New
+    int bg = bgInitHidden(0, BgType_Text8bpp, BgSize_T_256x256, 0, 1);
+    int bgsub = bgInitHiddenSub(0, BgType_Text8bpp, BgSize_T_256x256, 0, 1); // New
 
     // Copy tiles and tile map to VRAM (main engine)
     memcpy(bgGetGfxPtr(bg), forest_townTiles, forest_townTilesLen);
@@ -572,6 +589,10 @@ int main(int argc, char *argv[])
     // Copy palete to palette RAM
     memcpy(BG_PALETTE, forest_townPal, forest_townPalLen);
     memcpy(BG_PALETTE_SUB, forest_townPal, forest_townPalLen); // New
+
+    // Display the backgrounds when all graphics are loaded
+    bgShow(bg);
+    bgShow(bgsub);
 
     // Wait forever
     while (1)
@@ -597,8 +618,8 @@ The resulting code would be:
 ```c
 videoSetMode(MODE_0_2D);
 
-bgInit(0, BgType_Text8bpp, BgSize_T_512x512, 0, 1);
-bgInit(1, BgType_Text8bpp, BgSize_T_256x256, 4, 2);
+bgInitHidden(0, BgType_Text8bpp, BgSize_T_512x512, 0, 1);
+bgInitHidden(1, BgType_Text8bpp, BgSize_T_256x256, 4, 2);
 ```
 
 You can experiment with it here:
