@@ -3,7 +3,7 @@
 # For example, VERSION=v0.11.1
 
 # Tag submodules
-git submodule foreach 'git tag $VERSION-blocks ; git push origin $VERSION-blocks'
+git submodule foreach 'git tag $VERSION-blocks ; git push origin $VERSION-blocks ; git push github $VERSION-blocks'
 
 # Tag main repository
-git tag $VERSION ; git push origin $VERSION
+git tag $VERSION ; git push origin $VERSION ; git push github $VERSION
