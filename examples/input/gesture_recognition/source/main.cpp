@@ -36,7 +36,7 @@ static int reference_bg;
 
 void initBackground()
 {
-    reference_bg = bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
+    reference_bg = bgInitHidden(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
 }
 
 void showBackground()

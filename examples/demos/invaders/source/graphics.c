@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2024
+// SPDX-FileContributor: Antonio Niño Díaz, 2024-2026
 
 #include <gl2d.h>
 #include <nds.h>
@@ -102,11 +102,13 @@ void load_background(const char *path)
         wait_forever();
     }
 
-    int bg = bgInit(3, BgType_Text8bpp, BgSize_T_256x256, 0, 1);
+    int bg = bgInitHidden(3, BgType_Text8bpp, BgSize_T_256x256, 0, 1);
 
     memcpy(bgGetGfxPtr(bg), gfxDst, gfxSize);
     memcpy(bgGetMapPtr(bg), mapDst, mapSize);
     memcpy(BG_PALETTE, palDst, palSize);
+
+    bgShow(bg);
 }
 
 void *load_file(const char *filename, size_t *size_)

@@ -13,7 +13,9 @@ int main(int argc, char *argv[])
 
     vramSetPrimaryBanks(VRAM_A_MAIN_BG, VRAM_B_LCD, VRAM_C_LCD, VRAM_D_LCD);
 
-    int bg = bgInit(0, BgType_Text4bpp, BgSize_T_256x256, 0, 1);
+    // Setup background layer
+
+    int bg = bgInitHidden(0, BgType_Text4bpp, BgSize_T_256x256, 0, 1);
 
     memcpy(bgGetGfxPtr(bg), forestTiles, forestTilesLen);
     memcpy(BG_PALETTE, forestPal, forestPalLen);
@@ -68,6 +70,10 @@ int main(int argc, char *argv[])
             vram_map[ty * 32 + tx] = tile;
         }
     }
+
+    // Display background when all of its data is ready
+
+    bgShow(bg);
 
     consoleDemoInit();
 

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2024
+// SPDX-FileContributor: Antonio Niño Díaz, 2024-2026
 
 #include <filesystem.h>
 #include <nds.h>
@@ -73,11 +73,13 @@ int main(int argc, char *argv[])
             wait_forever();
         }
 
-        bg = bgInit(0, BgType_Text8bpp, BgSize_T_512x256, 0, 1);
+        bg = bgInitHidden(0, BgType_Text8bpp, BgSize_T_512x256, 0, 1);
 
         memcpy(bgGetGfxPtr(bg), gfxDst, gfxSize);
         memcpy(bgGetMapPtr(bg), mapDst, mapSize);
         memcpy(BG_PALETTE, palDst, palSize);
+
+        bgShow(bg);
     }
 
     printf("PAD:   Scroll background\n");

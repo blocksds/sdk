@@ -233,7 +233,7 @@ int backgroundLoadGrf(const char *path, int layer, BgType type, int map_base, in
 
     // Setup background layer
 
-    int bg = bgInit(layer, type, size, map_base, tile_base);
+    int bg = bgInitHidden(layer, type, size, map_base, tile_base);
 
     // Copy background graphics
 
@@ -244,6 +244,10 @@ int backgroundLoadGrf(const char *path, int layer, BgType type, int map_base, in
 
     if (mapData)
         memcpy(bgGetMapPtr(bg), mapData, mapSize);
+
+    // Display the background when it's ready
+
+    bgShow(bg);
 
     // Cleanup
 

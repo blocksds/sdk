@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2024-2025
+// SPDX-FileContributor: Antonio Niño Díaz, 2024-2026
 
 #include <nds.h>
 
@@ -15,17 +15,20 @@ int main(int argc, char *argv[])
     vramSetPrimaryBanks(VRAM_A_MAIN_BG, VRAM_B_LCD,
                         VRAM_C_SUB_BG, VRAM_D_LCD);
 
-    int bg = bgInit(0, BgType_Text8bpp, BgSize_T_256x256, 0,1);
+    int bg = bgInitHidden(0, BgType_Text8bpp, BgSize_T_256x256, 0,1);
 
     memcpy(bgGetGfxPtr(bg), forest_townTiles, forest_townTilesLen);
     memcpy(bgGetMapPtr(bg), forest_townMap, forest_townMapLen);
     memcpy(BG_PALETTE, forest_townPal, forest_townPalLen);
 
-    int bgsub = bgInitSub(0, BgType_Text8bpp, BgSize_T_256x256, 0,1);
+    int bgsub = bgInitHiddenSub(0, BgType_Text8bpp, BgSize_T_256x256, 0,1);
 
     memcpy(bgGetGfxPtr(bgsub), forest_townTiles, forest_townTilesLen);
     memcpy(bgGetMapPtr(bgsub), forest_townMap, forest_townMapLen);
     memcpy(BG_PALETTE_SUB, forest_townPal, forest_townPalLen);
+
+    bgShow(bg);
+    bgShow(bgsub);
 
     int x = 0, y = 0;
 

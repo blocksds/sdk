@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2024-2025
+// SPDX-FileContributor: Antonio Niño Díaz, 2024-2026
 
 // This example shows how to change the brightness of the screen. The registers
 // affect all the graphics output (2D and 3D), and it's different from changing
@@ -21,13 +21,16 @@ int main(int argc, char **argv)
     vramSetBankA(VRAM_A_MAIN_BG);
 
     // Setup background
-    int bg = bgInit(2, BgType_Text8bpp, BgSize_T_256x256, 0, 4);
+    int bg = bgInitHidden(2, BgType_Text8bpp, BgSize_T_256x256, 0, 4);
     bgSetPriority(bg, 2);
 
     // Copy background graphics
     memcpy(bgGetGfxPtr(bg), forest_townTiles, forest_townTilesLen);
     memcpy(bgGetMapPtr(bg), forest_townMap, forest_townMapLen);
     memcpy(BG_PALETTE, forest_townPal, forest_townPalLen);
+
+    // Display background once all data is loaded
+    bgShow(bg);
 
     // Setup console in the sub screen
     consoleDemoInit();

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2024-2025
+// SPDX-FileContributor: Antonio Niño Díaz, 2024-2026
 
 // This example sets up a DMA channel to copy data to horizontal scroll
 // registers during every horizontal blanking period. It changes the horizontal
@@ -89,12 +89,14 @@ int main(int argc, char **argv)
     // Setup 2D background
     // ===================
 
-    int bg = bgInit(2, BgType_Text8bpp, BgSize_T_256x256, 0, 4);
+    int bg = bgInitHidden(2, BgType_Text8bpp, BgSize_T_256x256, 0, 4);
     bgSetPriority(bg, 2);
 
     memcpy(bgGetGfxPtr(bg), forest_townTiles, forest_townTilesLen);
     memcpy(bgGetMapPtr(bg), forest_townMap, forest_townMapLen);
     memcpy(BG_PALETTE, forest_townPal, forest_townPalLen);
+
+    bgShow(bg);
 
     // Setup 3D
     // ========

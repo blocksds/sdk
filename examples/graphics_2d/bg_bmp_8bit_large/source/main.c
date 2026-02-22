@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2024-2025
+// SPDX-FileContributor: Antonio Niño Díaz, 2024-2026
 
 #include <nds.h>
 
@@ -29,16 +29,19 @@ int main(int argc, char *argv[])
                         VRAM_D_MAIN_BG_0x06060000);
 
     // Valid sizes are 1024x512 and 512x1024
-    int bg = bgInit(2, BgType_Bmp8, BgSize_B8_1024x512, 0, 0);
+    int bg = bgInitHidden(2, BgType_Bmp8, BgSize_B8_1024x512, 0, 0);
+
+    // Load the palette and data
+    memcpy(bgGetGfxPtr(bg), manga_bgBitmap, manga_bgBitmapLen);
+    memcpy(BG_PALETTE, manga_bgPal, manga_bgPalLen);
+
+    // Display the background after we've loaded its data
+    bgShow(bg);
 
     printf("PAD:   Scroll\n");
     printf("START: Exit to loader\n");
 
     int x = 0, y = 0;
-
-    // Load the palette and data
-    memcpy(BG_PALETTE, manga_bgPal, manga_bgPalLen);
-    memcpy(bgGetGfxPtr(bg), manga_bgBitmap, manga_bgBitmapLen);
 
     while (1)
     {

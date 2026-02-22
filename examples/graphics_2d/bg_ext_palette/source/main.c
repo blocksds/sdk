@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2024
+// SPDX-FileContributor: Antonio Niño Díaz, 2024-2026
 
 #include <nds.h>
 
@@ -40,13 +40,13 @@ int main(int argc, char *argv[])
 
     // Main engine backgrounds
 
-    int bg0 = bgInit(0, BgType_Text8bpp, BgSize_T_256x256, 0, 1);
+    int bg0 = bgInitHidden(0, BgType_Text8bpp, BgSize_T_256x256, 0, 1);
 
     memcpy(bgGetGfxPtr(bg0), ponypoke_0Tiles, ponypoke_0TilesLen);
     memcpy(bgGetMapPtr(bg0), ponypoke_0Map, ponypoke_0MapLen);
     memcpy(&VRAM_E_EXT_PALETTE[0][12], ponypoke_0Pal, ponypoke_0PalLen);
 
-    int bg1 = bgInit(1, BgType_Text8bpp, BgSize_T_256x256, 4, 4);
+    int bg1 = bgInitHidden(1, BgType_Text8bpp, BgSize_T_256x256, 4, 4);
 
     memcpy(bgGetGfxPtr(bg1), forest_townTiles, forest_townTilesLen);
     memcpy(bgGetMapPtr(bg1), forest_townMap, forest_townMapLen);
@@ -58,13 +58,13 @@ int main(int argc, char *argv[])
 
     consoleInit(NULL, 0, BgType_Text4bpp, BgSize_T_256x256, 0, 1, false, true);
 
-    int bg1sub = bgInitSub(1, BgType_Text8bpp, BgSize_T_256x256, 2, 2);
+    int bg1sub = bgInitHiddenSub(1, BgType_Text8bpp, BgSize_T_256x256, 2, 2);
 
     memcpy(bgGetGfxPtr(bg1sub), ponypoke_0Tiles, ponypoke_0TilesLen);
     memcpy(bgGetMapPtr(bg1sub), ponypoke_0Map, ponypoke_0MapLen);
     memcpy(&VRAM_H_EXT_PALETTE[1][12], ponypoke_0Pal, ponypoke_0PalLen);
 
-    int bg2sub = bgInitSub(2, BgType_Text8bpp, BgSize_T_256x256, 4, 5);
+    int bg2sub = bgInitHiddenSub(2, BgType_Text8bpp, BgSize_T_256x256, 4, 5);
 
     memcpy(bgGetGfxPtr(bg2sub), forest_townTiles, forest_townTilesLen);
     memcpy(bgGetMapPtr(bg2sub), forest_townMap, forest_townMapLen);
@@ -74,6 +74,13 @@ int main(int argc, char *argv[])
 
     vramSetBankE(VRAM_E_BG_EXT_PALETTE);
     vramSetBankH(VRAM_H_SUB_BG_EXT_PALETTE);
+
+    // Display backgrounds only when all of them are ready
+
+    bgShow(bg0);
+    bgShow(bg1);
+    bgShow(bg1sub);
+    bgShow(bg2sub);
 
     printf("PAD:   Scroll backgrounds\n");
     printf("START: Exit to loader\n");

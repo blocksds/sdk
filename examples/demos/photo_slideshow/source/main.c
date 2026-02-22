@@ -188,9 +188,8 @@ int main()
 
     // allocate a 16 bitpp 512x256 background, of which we'll
     // only use a 320x240 area
-    bg = bgInit(2, BgType_Bmp16, BgSize_B16_512x256, 0, 0);
+    bg = bgInitHidden(2, BgType_Bmp16, BgSize_B16_512x256, 0, 0);
     backbuffer = bgGetGfxPtr(bg);
-    bgHide(bg);
 
     consoleDemoInit();
 
