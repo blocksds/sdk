@@ -15,6 +15,9 @@ weight: 6
     been added. They work like `glColorTableEXT()`, `glColorSubTableEXT()` and
     `glGetColorTableNtr()`, but with fewer unused arguments. There is no plan to
     deprecate or remove the old functions.
+  - `bgInitHidden()` and `bgInitHiddenSub()` have been implemented. They are
+    like `bgInit()` and `bgInitSub()`, but they keep the layer hidden so that it
+    can be setup without graphical artifacts on the screen.
   - The new simplified videoGL functions are used in the GL2D library code.
   - The GRF format definitions have been updated. Now there's support for flag
     `GRF_FLAG_COLOR0_TRANSPARENT`, which specifies if a texture has to be loaded
@@ -70,6 +73,8 @@ weight: 6
       graphics in both screens, how to render to texture, etc.
     - Add section about loading backgrounds that use metatiles.
     - Add section about using the 3D clear bitmap.
+    - Update the 2D backgrounds section to use `bgInitHidden()` and
+      `bgInitHiddenSub()` instead of `bgInit()` and `bgInitSub()`.
 
   - Examples:
 
@@ -90,6 +95,7 @@ weight: 6
       selected at runtime instead of only as a build option.
     - Improve the two-pass 3D example to make it stable even during FPS drops.
     - Improve the setup code in the dual 3D example.
+    - Update the 2D examples to use `bgInitHidden()` and `bgInitHiddenSub()`.
     - Remove unnecessary LibXM7 ARM7 core from the capture audio example. @asie
     - Improve the blending settings in the motion blur example.
 
