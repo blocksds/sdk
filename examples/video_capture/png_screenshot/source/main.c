@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
     // Sub screen setup
     // ----------------
 
-    videoSetModeSub(MODE_5_2D | DISPLAY_BG2_ACTIVE);
+    videoSetModeSub(MODE_5_2D);
 
     bgInitSub(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
 
