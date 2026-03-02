@@ -87,21 +87,22 @@ INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path)) \
 
 LIBDIRSFLAGS	:= $(foreach path,$(LIBDIRS),-L$(path)/lib)
 
-ASFLAGS		+= -x assembler-with-cpp $(INCLUDEFLAGS) $(DEFINES) \
+ASFLAGS		:= -x assembler-with-cpp $(INCLUDEFLAGS) $(DEFINES) \
 		   $(ARCH) -ffunction-sections -fdata-sections \
-		   -specs=$(SPECS)
+		   -specs=$(SPECS) $(ASFLAGS)
 
-CFLAGS		+= $(WARNFLAGS) $(INCLUDEFLAGS) $(DEFINES) \
+CFLAGS		:= $(WARNFLAGS) $(INCLUDEFLAGS) $(DEFINES) \
 		   $(ARCH) -O2 -ffunction-sections -fdata-sections \
-		   -specs=$(SPECS)
+		   -specs=$(SPECS) $(CFLAGS)
 
-CXXFLAGS	+= $(WARNFLAGS) $(INCLUDEFLAGS) $(DEFINES) \
+CXXFLAGS	:= $(WARNFLAGS) $(INCLUDEFLAGS) $(DEFINES) \
 		   $(ARCH) -O2 -ffunction-sections -fdata-sections \
 		   -fno-exceptions -fno-rtti \
-		   -specs=$(SPECS)
+		   -specs=$(SPECS) $(CXXFLAGS)
 
-LDFLAGS		+= $(ARCH) $(LIBDIRSFLAGS) -Wl,-Map,$(MAP) $(DEFINES) \
-		   -Wl,--start-group $(LIBS) -Wl,--end-group -specs=$(SPECS)
+LDFLAGS		:= $(ARCH) $(LIBDIRSFLAGS) -Wl,-Map,$(MAP) $(DEFINES) \
+		   -Wl,--start-group $(LIBS) -Wl,--end-group -specs=$(SPECS) \
+		   $(LDFLAGS)
 
 # Intermediate build files
 # ------------------------

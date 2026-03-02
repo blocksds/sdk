@@ -84,23 +84,23 @@ INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path)) \
 
 LIBDIRSFLAGS	:= $(foreach path,$(LIBDIRS),-L$(path)/lib)
 
-ASFLAGS		+= -x assembler-with-cpp $(DEFINES) $(ARCH) \
+ASFLAGS		:= -x assembler-with-cpp $(DEFINES) $(ARCH) \
 		    $(INCLUDEFLAGS) \
-		    -integrated-as -nostdlib -ffreestanding -fno-builtin
+		    -integrated-as -nostdlib -ffreestanding -fno-builtin $(ASFLAGS)
 
-CFLAGS		+= -std=gnu17 $(WARNFLAGS) $(DEFINES) $(ARCH) \
+CFLAGS		:= -std=gnu17 $(WARNFLAGS) $(DEFINES) $(ARCH) \
 		    $(INCLUDEFLAGS) -O2 \
-		    -integrated-as -nostdlib -ffreestanding -fno-builtin
+		    -integrated-as -nostdlib -ffreestanding -fno-builtin $(CFLAGS)
 
-CXXFLAGS	+= -std=gnu++17 $(WARNFLAGS) $(DEFINES) $(ARCH) \
+CXXFLAGS	:= -std=gnu++17 $(WARNFLAGS) $(DEFINES) $(ARCH) \
 		    $(INCLUDEFLAGS) -O2 \
 		    -integrated-as -nostdlib -ffreestanding -fno-builtin \
-		    -fno-rtti -fno-exceptions
+		    -fno-rtti -fno-exceptions $(CXXFLAGS)
 
-LDFLAGS		+= $(LIBDIRSFLAGS) \
+LDFLAGS		:= $(LIBDIRSFLAGS) \
 		   -Map $(MAP) -nostdlib \
 		   -T $(BLOCKSDS)/libs/libteak/teak.ld \
-		   --start-group $(LIBS) --end-group
+		   --start-group $(LIBS) --end-group $(LDFLAGS)
 
 # Intermediate build files
 # ------------------------
