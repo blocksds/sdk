@@ -35,7 +35,7 @@ weight: 6
 
 - SDK:
 
-  - THe old makefiles prepend the `ASFLAGS`, `CFLAGS` and `CXXFLAGS` provided by
+  - The old makefiles prepend the `ASFLAGS`, `CFLAGS` and `CXXFLAGS` provided by
     the user to the default flags. This meant that the default flags would
     always override the user-provided flags. Now the user-defined flags are
     appended to the default flags so that they can override the defaults.
