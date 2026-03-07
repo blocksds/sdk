@@ -15,6 +15,7 @@ void wait_forever(void)
         swiWaitForVBlank();
 }
 
+volatile int main_binary_int;
 __thread volatile int main_binary_tls_int;
 
 // This function isn't referenced from the main binary, but we want to keep it
@@ -92,12 +93,12 @@ int main(int argc, char **argv)
         printf("dlsym(operation_arm): %s\n", err);
         wait_forever();
     }
-    fnptrvoid *test_tls_symbols = dlsym(h, "test_tls_symbols");
-    printf("test_tls_symbols: %p\n", test_tls_symbols);
+    fnptrvoid *test_symbols = dlsym(h, "test_symbols");
+    printf("test_symbols: %p\n", test_symbols);
     err = dlerror();
     if (err != NULL)
     {
-        printf("dlsym(test_tls_symbols): %s\n", err);
+        printf("dlsym(test_symbols): %s\n", err);
         wait_forever();
     }
     fnptr2int *arm_tail_call = dlsym(h, "arm_tail_call");
@@ -134,10 +135,11 @@ int main(int argc, char **argv)
     printf("Result = %d\n", res);
     printf("\n");
 
-    printf("Calling test_tls_symbols()...\n");
+    printf("Calling test_symbols()...\n");
+    main_binary_int = 123789;
     errno = 7654321;
     main_binary_tls_int = 45678;
-    test_tls_symbols();
+    test_symbols();
     printf("\n");
 
     printf("arm_tail_call(23, 12) = %d\n", arm_tail_call(23, 12));

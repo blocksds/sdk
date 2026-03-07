@@ -19,6 +19,7 @@ typedef int (*fpointer)(int, int);
 fpointer operation_fn;
 
 // Some things that are present in the main binary
+extern int main_binary_int;
 extern __thread int main_binary_tls_int;
 int main_binary_arm_function(int a, int b);
 
@@ -103,11 +104,12 @@ ARM_CODE SYM_PUBLIC int operation_arm(int value)
     return res;
 }
 
-SYM_PUBLIC void test_tls_symbols(void)
+SYM_PUBLIC void test_symbols(void)
 {
-    printf("  main_binary_tls_int = %d\n"
+    printf("  main_binary_int = %d\n"
+           "  main_binary_tls_int = %d\n"
            "  errno = %d\n",
-           main_binary_tls_int, errno);
+           main_binary_int, main_binary_tls_int, errno);
 }
 
 ARM_CODE SYM_PUBLIC int arm_tail_call(int a, int b)
