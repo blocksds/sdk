@@ -16,12 +16,14 @@ weight: 6
   - Some updates for picolibc 1.8.12. @asie
   - Add placeholders for `clock_gettime()` and `clock_settime()`. They simply
     return an error, but that's enough for MbedTLS and libcurl to work.
+  - Remove `machine/_types.h`, which is now in picolibc.
 
 - DSWiFi:
 
   - Allow inlining `htons()` and `htonl()`. Reorganize some headers. @asie
   - Create `sys/ioctl.h` header so that it gets included before the one of
-    picolibc to prevent function definition conflicts.
+    picolibc to prevent function definition conflicts. This header is included
+    from `sys/socket.h` for backwards-compatibility.
 
 - Maxmod:
 
