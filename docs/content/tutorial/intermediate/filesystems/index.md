@@ -244,7 +244,7 @@ For example, if most of what you do is use NitroFS to load game graphics and
 audio, but you sometimes write saved data to the same folder that contains your
 ROM, you can do:
 
-```
+```c
 int main(int argc, char *argv[])
 {
     bool init_ok = fatInitDefault();
