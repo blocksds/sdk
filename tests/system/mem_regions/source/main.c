@@ -26,7 +26,7 @@ volatile int num2 = 3;
 const uintptr_t itcm_base = 0x01000000;
 const uintptr_t itcm_end = itcm_base + (32 * 1024) - 1;
 
-const uintptr_t dtcm_base = 0x02FF0000;
+const uintptr_t dtcm_base = 0x02FF4000;
 const uintptr_t dtcm_end = dtcm_base + (16 * 1024) - 1;
 
 int main(int argc, char **argv)
