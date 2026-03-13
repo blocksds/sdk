@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Zlib
 //
 // Copyright (C) 2025 Antonio Niño Díaz
+// Copyright (C) 2026 trustytrojan
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -157,7 +158,7 @@ void sym_print_table(void)
     }
 }
 
-int sym_table_save_to_file(FILE *f)
+int sym_table_save_to_file(FILE *f, bool ignore_unresolved_symbols)
 {
     dsl_symbol_table header = {
         .num_symbols = elf_symbols_num,
@@ -173,6 +174,10 @@ int sym_table_save_to_file(FILE *f)
     // We're going to start writing strings right after the symbol array.
     uint32_t offset = sizeof(dsl_symbol_table)
                     + sizeof(dsl_symbol) * elf_symbols_num;
+
+    // For convenience, collect all unresolved symbol names and print all at once
+    const char **unresolved_symbols = NULL;
+    int unresolved_symbol_count = 0;
 
     for (size_t i = 0; i < elf_symbols_num; i++)
     {
@@ -209,14 +214,20 @@ int sym_table_save_to_file(FILE *f)
             uint32_t sym_addr = main_binary_get_symbol_value(sym_name);
             if (sym_addr == UINT32_MAX)
             {
-                ERROR("Symbol not found: [%s]\n", sym_name);
-                return -1;
+                unresolved_symbols = realloc(unresolved_symbols, unresolved_symbol_count + 1);
+                unresolved_symbols[unresolved_symbol_count] = sym_name;
+                ++unresolved_symbol_count;
+
+                // Mark symbol as unresolved. Applications are responsible for resolving this symbol.
+                sym.attributes |= DSL_SYMBOL_UNRESOLVED;
             }
+            else
+            {
+                VERBOSE("Symbol found: 0x%08X\n", sym_addr);
 
-            VERBOSE("Symbol found: 0x%08X\n", sym_addr);
-
-            sym.value = sym_addr;
-            sym.attributes |= DSL_SYMBOL_MAIN_BINARY;
+                sym.value = sym_addr;
+                sym.attributes |= DSL_SYMBOL_MAIN_BINARY;
+            }
         }
 
         // Allocate space for this name
@@ -228,6 +239,22 @@ int sym_table_save_to_file(FILE *f)
             return -1;
         }
     }
+
+    if (unresolved_symbol_count > 0)
+    {
+        ERROR("Symbols not found: [%s", unresolved_symbols[0]);
+        for (int i = 1; i < unresolved_symbol_count; ++i)
+            ERROR(" %s", unresolved_symbols[i]);
+        ERROR("]\n");
+
+        if (!ignore_unresolved_symbols)
+            return -1;
+
+        INFO("Ignoring unresolved symbols; they will be need to be resolved at runtime.\n");
+    }
+
+    if (unresolved_symbols != NULL)
+        free(unresolved_symbols);
 
     for (size_t i = 0; i < elf_symbols_num; i++)
     {

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Zlib
 //
 // Copyright (C) 2025 Antonio Niño Díaz
+// Copyright (C) 2026 trustytrojan
 
 #include <assert.h>
 #include <stdbool.h>
@@ -28,6 +29,7 @@ void usage(void)
          "  -i input.elf       ELF file of the dynamic library.\n"
          "  -o output.dsl      Path to DSL file to be created.\n"
          "  -m main_binary.elf Optional main binary ELF file to resolve symbols\n"
+         "  -u                 Ignore unresolved symbols\n"
          "  -v                 Enable verbose logging\n"
          "  -V                 Print version string and exit\n"
     );
@@ -57,6 +59,7 @@ int main(int argc, char *argv[])
     const char *in_file = NULL;
     const char *out_file = NULL;
     const char *main_binary_file = NULL;
+    bool ignore_unresolved_symbols = false;
 
     for (int i = 1; i < argc; i++)
     {
@@ -77,6 +80,10 @@ int main(int argc, char *argv[])
             i++;
             if (i < argc)
                 main_binary_file = argv[i];
+        }
+        else if (strcmp(argv[i], "-u") == 0)
+        {
+            ignore_unresolved_symbols = true;
         }
         else if (strcmp(argv[i], "-h") == 0)
         {
@@ -533,7 +540,7 @@ int main(int argc, char *argv[])
 
     VERBOSE("Saving symbol table...\n");
 
-    if (sym_table_save_to_file(f_dsl) != 0)
+    if (sym_table_save_to_file(f_dsl, ignore_unresolved_symbols) != 0)
     {
         ERROR("Failed to save symbol table!\n");
         goto error;

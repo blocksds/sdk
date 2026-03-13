@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Zlib
 //
 // Copyright (C) 2025 Antonio Niño Díaz
+// Copyright (C) 2026 trustytrojan
 
 #ifndef SYM_TABLE_H__
 #define SYM_TABLE_H__
@@ -21,6 +22,6 @@ void sym_clear_unused(void);
 void sym_sort_table(void);
 void sym_clear_table(void);
 void sym_print_table(void);
-int sym_table_save_to_file(FILE *f);
+int sym_table_save_to_file(FILE *f, bool ignore_unresolved_symbols);
 
 #endif // SYM_TABLE_H__
