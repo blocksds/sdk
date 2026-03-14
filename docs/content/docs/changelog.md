@@ -3,6 +3,55 @@ title: 'Changelog'
 weight: 6
 ---
 
+### Version DEV (2026-XX-XX)
+
+- libnds:
+
+  - Properly address main binary globals when loading DSLs. `R_ARM_ABS32` and
+    `R_ARM_TARGET1` didn't work properly. @trustytrojan
+  - Implement veneer generation for `R_ARM_JUMP24` jump to Thumb. Previously,
+    `dlopen()` would just fail on this kind of relocations. @trustytrojan
+  - Avoid pulling in libc keyboard code if keyboard not used by program. Saves
+    around 2 KiB of RAM in those cases. @asie
+  - Add new macros to add functions and variables to ITCM and DTCM. The new
+    macros add all the symbols to their own individual sections so that the
+    linker can use `--gc-sections` properly. The old macros have been updated as
+    well, but they work worse than the new macros. @PoroCYon
+  - Modularize all dirent filesystem functions (`opendir()`, `closedir()`...)
+    and functions like `access()`, `chdir()` and `getcwd()`.
+  - Reorganize code related to filesystem system calls and rename some files.
+  - Optimize `fat_utime()` to call `fat_utimes()` directly instead of
+    `utimes()`. @asie
+  - Surround attribute names with double-underscores to prevent collisions with
+    macro names. @PoroCYon
+
+- Maxmod:
+
+  - Add functions to get the currently active handlers. @copyrat90
+  - Add a per-tick callback event. @copyrat90
+
+- DSWiFi:
+
+  - TWL: Implement timeouts for SDIO transfer functions: melonDS doesn't
+    implement CMD3, CMD5 or CMD7 in SDIO mode. @PoroCYon
+  - TWL: Fix length alignment calculation in BMI read/write payloads. @PoroCYon
+  - TWL: Make BMI commands only write to mbox[0xff] for very last byte: Writing
+    all BMI command data to `MBOX[0xff]` greatly confuses melonDS. @PoroCYon
+  - TWL: Drain entire packet buffer: melonDS sends `READY_EVENT` and
+    `REG_DOMAIN_EVENT` at the same time, DSWiFi only sees one IRQ. @PoroCYon
+  - TWL: Fallback to CMD52 if CMD53 fails. @PoroCYon
+
+- SDK:
+
+  - Improve the basic dynamic library demo so that the dynamic library uses a
+    regular variable from the main binary. Previously it only used a variable
+    from a TLS section.
+  - Fix the DTCM/ITCM regions test. The DTCM memory addresses hadn't been
+    updated.
+  - Add an option to ignore unresolved symbols in dsltool. @trustytrojan
+  - Add support to the CMake build system for DSL files. Function
+    `blocksds_create_dsl` has been added. @trustytrojan
+
 ### Version 1.18.1 (2026-03-07)
 
 - libnds:
