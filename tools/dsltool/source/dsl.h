@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Zlib
 //
 // Copyright (C) 2025 Antonio Niño Díaz
+// Copyright (C) 2026 trustytrojan
 
 #ifndef LIBNDS_DSL_H__
 #define LIBNDS_DSL_H__
@@ -123,6 +124,7 @@ static_assert(sizeof(dsl_header) == 12);
 
 #define DSL_SYMBOL_PUBLIC       1 ///< If not set, the symbol is private
 #define DSL_SYMBOL_MAIN_BINARY  2 ///< If set, the symbol is in the main binary
+#define DSL_SYMBOL_UNRESOLVED   4 ///< If set, the symbol must be resolved at runtime
 
 /// DSL symbol
 typedef struct {
