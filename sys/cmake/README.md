@@ -11,7 +11,7 @@ This will define CMake variables `BLOCKSDS` (a path to the BLOCKSDS core directo
 #### nds_create_rom
 The toolchain file provides a new CMake function `nds_create_rom`. This takes your main executable target as well as arguments specifying the NDS header. All arguments are optional. An example:
 
-```
+```cmake
 nds_create_rom(my_target
     NAME "My Cool Game"
     SUBTITLE "An Example Project"
@@ -20,6 +20,25 @@ nds_create_rom(my_target
     ARM7 "${CMAKE_CURRENT_SOURCE_DIR}/arm7.elf"
     NITROFS "${CMAKE_CURRENT_SOURCE_DIR}/nitrofs-dir"
 )
+```
+
+#### blocksds_create_dsl
+This function lets you easily turn an existing `STATIC` library target in your CMake project into a DSL file in one command.
+
+Here's a minimum working example, assuming you have source files `app.cpp` and `lib.cpp`:
+```cmake
+cmake_minimum_required(VERSION 3.21)
+project(blocks-testbench LANGUAGES CXX)
+
+# Define the main NDS program as usual
+add_executable(my_app app.cpp)
+nds_create_rom(my_app)
+
+# Instead of doing anything sophisticated, we simply tell CMake to create a STATIC library.
+add_library(my_lib STATIC lib.cpp)
+
+# Pass the STATIC library target to blocksds_create_dsl(), along with our main NDS binary for missing symbols
+blocksds_create_dsl(my_lib MAIN_TARGET my_app)
 ```
 
 #### Toolchain file selection
