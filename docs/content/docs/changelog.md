@@ -7,6 +7,14 @@ weight: 6
 
 - libnds:
 
+  - Added a system to attach custom filesystems to libnds. The developer of the
+    application needs to define a `device_io_t` struct with callbacks that do
+    the filesystem-specific work. Then, the developer has to call
+    `deviceIoAdd()` to make libnds start using the fileystem. This interface has
+    been designed in a way that doesn't pull in all the filesystem-related code
+    of the FAT and NitroFS implementations, only the functions that are actually
+    used. For user-provided filesystems, all functions are always included in
+    the final binary.
   - Properly address main binary globals when loading DSLs. `R_ARM_ABS32` and
     `R_ARM_TARGET1` didn't work properly. @trustytrojan
   - Implement veneer generation for `R_ARM_JUMP24` jump to Thumb. Previously,
@@ -43,6 +51,8 @@ weight: 6
 
 - SDK:
 
+  - Add an example of how to use the new device I/O interface to add a new
+    device that uses [littlefs](https://github.com/littlefs-project/littlefs).
   - Improve the basic dynamic library demo so that the dynamic library uses a
     regular variable from the main binary. Previously it only used a variable
     from a TLS section.
