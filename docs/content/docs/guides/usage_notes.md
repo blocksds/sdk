@@ -17,20 +17,23 @@ combinations of libraries:
 | ---                     | ---             | --- |
 `arm7_dswifi.elf`         | DSWiFi          |
 `arm7_dswifi_libxm7.elf`  | DSWiFi + LibXM7 |
-`arm7_dswifi_maxmod.elf`  | DSWiFi + Maxmod | Default core for AMR9 projects
+`arm7_dswifi_maxmod.elf`  | DSWiFi + Maxmod |
 `arm7_libxm7.elf`         | LibXM7          |
-`arm7_maxmod.elf`         | Maxmod          |
+`arm7_maxmod.elf`         | Maxmod          | Default core for AMR9 projects
 `arm7_minimal.elf`        | Only libnds     |
 
 Debug versions are also available, just add a `_debug` to the basename, such as  `arm7_dswifi_debug.elf` or `arm7_dswifi_libxm7_debug.elf`.
+
+If you try to use DSWiFi, but you don't use a core that supports DSWiFi, the
+ARM9 will hang when it tries to communicate with the ARM7.
 
 They are all installed to `$BLOCKSDS/sys/arm7/main_core/*.elf`. If you want to
 select a different core, edit the path of `ARM7ELF` in your Makefile to select
 the right one.
 
-There is also `$BLOCKSDS/sys/default_arm7/arm7.elf`, which is kept there for
-backwards compatibility with older Makefiles. This is the same as the DSWiFi +
-Maxmod core.
+Note: There is also `$BLOCKSDS/sys/default_arm7/arm7.elf`, which is kept there
+for backwards compatibility with older Makefiles. This is the same as the DSWiFi
++ Maxmod core.
 
 Remember to give credit correctly according to the libraries you have present in
 the ARM7, even if you aren't using them!
