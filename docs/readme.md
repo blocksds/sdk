@@ -10,7 +10,7 @@ The documentation of the libraries included in BlocksDS is built with
 
 - **Hugo**
 
-  Follow the [installation guide](https://gohugo.io/categories/installation/).
+  Follow the [installation guide](https://gohugo.io/installation/).
   You need the extended version of Hugo.
 
 - **Hextra**
