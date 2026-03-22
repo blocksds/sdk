@@ -340,13 +340,13 @@ static int littlefs_isatty(int fd)
 
 // -----------------------------------------------------------------------------
 
+// This callback receives paths without drive names. For example, it can receive
+// "/" or ".", but not "lfs:/".
 static int littlefs_chdir(const char *name)
 {
     // littlefs doesn't suppor chdir()
 
     if (strcmp(name, "/") == 0)
-        return 0;
-    if (strcmp(name, "lfs:/") == 0)
         return 0;
     if (strcmp(name, ".") == 0)
         return 0;
