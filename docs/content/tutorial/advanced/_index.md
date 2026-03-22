@@ -11,4 +11,5 @@ need once you start working on more complicated projects.
   {{< card icon="cube" link="advanced_3d" title="Advanced 3D techniques" >}}
   {{< card icon="clock" link="optimizing_code" title="Optimizing code" >}}
   {{< card icon="clipboard" link="video_capture" title="Video capture" >}}
+  {{< card icon="cog" link="device_io" title="User-defined filesystems" >}}
 {{< /cards >}}
