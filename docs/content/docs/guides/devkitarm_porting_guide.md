@@ -359,3 +359,43 @@ recommended to send pointers to it which have not been processed by
   without using `extern`. More information is available [here](https://gcc.gnu.org/gcc-10/porting_to.html).
 * GCC 14 and above consider as errors some situations which were previously treated as warnings,
   such as implicit function definitions. More information is available [here](https://gcc.gnu.org/gcc-14/porting_to.html).
+
+### 7. Projects using `devoptab`
+
+The `devoptab` interface is a custom interface present in the newlib fork of
+devkitPro, available from `<sys/iosupport.h>`. You can check the code
+[here](https://github.com/devkitPro/newlib/blob/c7dbfcd15c6992cede5376af15d64afce2c6fdb1/newlib/libc/include/sys/iosupport.h).
+
+The idea is that you can create your own `devoptab_t` struct and you can
+register it with `AddDevice()`:
+
+```c
+devoptab_t nitroFSdevoptab =
+{
+    // ...
+};
+
+AddDevice(&nitroFSdevoptab);
+```
+
+You can see an example of how NitroFS used to be registered in this
+[link](https://github.com/devkitPro/libfilesystem/blob/88c191cece4fa17daa0ddd2c76eb92165161481d/source/nitrofs.c).
+
+Unfortunately, it isn't possible to create a compatible 100% interface in
+BlocksDS because the design depends on newlib, and BlocksDS depends on picolibc.
+However, BlocksDS provides a similar interface to achieve the same thing, and it
+should be possible to adapt code using devoptab to use the device I/O interface
+of BlocksDS.
+
+However, note that the interface in BlocksDS is more memory-efficient than the
+one in devkitPro. In devkitPro all platforms use this interface to add their
+filesystems, but that forces the linker to include all the code of the
+implementation of that filesystem. In BlocksDS the default filesystems of the DS
+are treated as special cases, and the linker is only forced to add the code of
+functions that are actually used by the application, saving memory.
+
+You can check an example of how to use the device I/O interface
+[here](https://codeberg.org/blocksds/sdk/src/branch/master/examples/filesystem/device_io_basic).
+
+There's a section in the BlocksDS tutorial explaining it in more detail. You can
+check it [here](../../../tutorial/advanced/device_io).
