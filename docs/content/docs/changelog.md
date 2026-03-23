@@ -3,6 +3,30 @@ title: 'Changelog'
 weight: 6
 ---
 
+### Version 1.19.1 (2026-03-23)
+
+- libnds:
+
+  - Make `<sys/dirent.h>` more compatible with picolibc to fix C++ filesystem
+    code. @asiekierka
+  - Add a symbol resolver callback for libraries that may depend on symbols
+    present in custom locations (or in other dynamic libraries). @trustytrojan
+
+- grit:
+
+  - Fix remaining C++ warnings. Add lots of error checks to the code that reads
+    and writes from the filesystem.
+
+- SDK:
+
+  - Add an example that uses C++ to iterate through directories and read files.
+  - Add new chapter to the tutorial to explain how to use the device I/O
+    interface.
+  - Mention the device I/O interface in the migration guide from devkitARM.
+  - Improve the littlefs example.
+  - Stop enforcing C and C++ standard versions when building the tools. Instead,
+    let the compiler pick the default one.
+
 ### Version 1.19.0 (2026-03-16)
 
 - libnds:
