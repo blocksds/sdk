@@ -18,17 +18,11 @@ ENV LC_ALL=C.UTF-8
 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-        ca-certificates curl git make
+        ca-certificates curl git make && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
-RUN mkdir -p /opt/wonderful/
-ADD https://wonderful.asie.pl/bootstrap/wf-bootstrap-x86_64.tar.gz /opt/wonderful/
-ADD https://wonderful.asie.pl/bootstrap/wf-bootstrap-aarch64.tar.gz /opt/wonderful/
-# Note that the downloads are cached; no impact if it's a multi-platform build.
-# Needed because Docker's TARGETARCH doesn't match Linux's `uname -m` format.
-
-RUN cd /opt/wonderful/ && \
-    tar xzvf wf-bootstrap-$(uname -m).tar.gz && \
-    rm wf-bootstrap-*.tar.gz
+RUN mkdir -p /opt/wonderful/ && \
+    curl -L https://wonderful.asie.pl/bootstrap/wf-bootstrap-$(uname -m).tar.gz | tar xzC /opt/wonderful
 
 ENV PATH=/opt/wonderful/bin:$PATH
 
