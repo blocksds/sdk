@@ -35,6 +35,42 @@ BlocksDS comes Maxmod and LibXM7, two libraries that can play music on the DS.
 Most of the time you'll be using Maxmod for everything, but you can definitely
 replace it by using LibXM7 for music and libnds for sound effects.
 
+{{< callout type="important" >}}
+Music players for DS don't generally support music in formats like MP3. You're
+generally expected to use tracked music in formats like MOD, XM, S3M or IT, and
+leave WAV for short sound effects.
+{{< /callout >}}
+
+If you have music in other formats, there are some options:
+
+ - MIDI files can be converted to MOD/XM/S3M/IT with tools like
+   [OpenMPT](https://openmpt.org/), but the result isn't perfect and it may need
+   a bit of manual editing.
+
+ - WAV files are too big to be practical. You may be able to stream them from
+   the cartridge, but it's discouraged.
+
+ - MP3, OGG and similar files can't be played with Maxmod or LibXM7. There have
+   been some attempts at playing MP3 files, but it's discouraged to use them
+   because they have issues:
+
+   - Advanced Sound Library (ASlib), which is included in
+     [PAlib](https://codeberg.org/SkyLyrac/palib), uses the ARM7 to decode MP3
+     files, but the license of the library isn't clear.
+
+   - The [nocash mp3 decoder](https://problemkaputt.de/mp3.htm) can't be built
+     with regular toolchains, and it doesn't include a license.
+
+You can write your own music players, of course! If you really want to play
+music in some format you can write the code yourself, but that's a pretty big
+project. If all you want to do is to create a game you won't have time to create
+a music player to go with the game.
+
+If you need to get some music for your game, check [The Mod Archive](modarchive.org/),
+which has a huge collection of music in formats supported by Maxmod and LibXM7.
+A big part of the songs are available under permissive licenses and you may be
+able to use them in your games (remember to give credit to the authors!).
+
 ## 2. Maxmod
 
 This is the most common option. Maxmod is a pretty flexible library that lets
