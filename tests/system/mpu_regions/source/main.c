@@ -132,17 +132,12 @@ int main(int argc, char **argv)
     printf("MPU regions:\n");
     printf("============\n");
 
-    uint32_t regions[8] = {
-        CP15_GetRegion0(), CP15_GetRegion1(), CP15_GetRegion2(), CP15_GetRegion3(),
-        CP15_GetRegion4(), CP15_GetRegion5(), CP15_GetRegion6(), CP15_GetRegion7()
-    };
-
     uint32_t data_cacheable = CP15_GetDataCachable();
     uint32_t instruction_cacheable = CP15_GetInstructionCachable();
 
     for (int i = 0; i < 8; i++)
     {
-        uint32_t region = regions[i];
+        uint32_t region = CP15_GetRegion(i);
 
         bool enabled = region & CP15_CONFIG_REGION_ENABLE ? true : false;
         uintptr_t base = region & CP15_CONFIG_REGION_BASE_MASK;
