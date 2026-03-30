@@ -113,3 +113,45 @@ Load it in an emulator or in your console, you should get something like this:
 
 Congratulations! Now you can start learning how to create your own games and
 applications for the DS.
+
+## 5. How to start your project
+
+The recommended way to start your own project is to copy one of the
+[templates](https://codeberg.org/blocksds/sdk/src/branch/master/templates) or
+[examples](https://codeberg.org/blocksds/sdk/src/branch/master/examples), delete
+the pre-existing code and assets, and start from there. The templates are small
+examples themselves, and they show how to add music, graphics and data to a
+simple demo.
+
+The main difference between the templates and the examples is that the templates
+include a full build system (the Makefile), but the examples have a minimal
+Makefile that depends on some reference Makefiles installed with BlocksDS. The
+templates give you full freedom to modify the build system, but you are also
+responsible for updating it when it changes in BlocksDS (very rarely). The
+build system of the examples gives you far less freedom, but you don't need to
+worry about it because it gets upgraded when you upgrade BlocksDS. If you're a
+beginner, it may be easier to start with an example than with a template.
+
+You can adjust the title and icon of a game by changing the following lines in
+the Makefile:
+
+```make
+# Name of the resulting NDS file
+NAME            := template_arm9
+
+# Text that appears in the main menu of ROM loaders and the DS firmware
+GAME_TITLE      := ARM9 only template
+GAME_SUBTITLE   := Built with BlocksDS
+GAME_AUTHOR     := blocksds.skylyrac.net
+
+# Game icon (normally PNG or BMP). Animated GIF supported in DSi-compatible ROMs
+GAME_ICON       := icon.gif
+```
+
+Note that the makefiles have some strong limitations. They are good enough for
+small projects, but they don't support some very useful features, like
+converting images and storing the result in the filesystem. You will need to do
+this kind of conversions yourself by hand. However, there's an alternative build
+system called [ArchitectDS](https://codeberg.org/blocksds/architectds) that
+supports this kind of conversions, and it may be easier to use it than creating
+your own conversion scripts for a Makefile.
