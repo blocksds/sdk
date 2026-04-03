@@ -6,6 +6,7 @@ libnds.
 - `bg_bmp_16bit`: It displays a 16 bpp bitmap.
 - `bg_bmp_8bit`: It displays a paletted 8 bpp bitmap.
 - `bg_bmp_8bit_large`: It displays a large paletted 8 bpp bitmap in video mode 6.
+- `bg_display_control_steps`: It shows how to use the tileset/tilemap steps in `DISPCNT`.
 - `bg_ext_palette`: It displays 8 bpp tiled backgrounds using extended palettes.
 - `bg_ext_rotation`: It displays an extended affine background.
 - `bg_grf_types`: It loads all types of background from GRF files.
