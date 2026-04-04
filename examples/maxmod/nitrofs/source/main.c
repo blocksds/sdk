@@ -40,8 +40,8 @@ int main(int argc, char **argv)
         while (1)
         {
             swiWaitForVBlank();
-            uint16_t keys = keysDown();
-            if (keys & KEY_START)
+            scanKeys();
+            if (keysHeld() & KEY_START)
                 return 0;
         }
     }
