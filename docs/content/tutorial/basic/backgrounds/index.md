@@ -212,15 +212,52 @@ Bitmap backgrounds use the same system for map slots, but they don't use tile
 slots (because they aren't formed of tiles!).
 
 This system lets you have multiple backgrounds on one screen with a lot of
-flexibility.  If you have a very small background that uses very few tiles it
+flexibility. If you have a very small background that uses very few tiles it
 will require just one map slot and one tile slot (you can even share the tile
 slot with another map). If you have a very big background with the maximum
 number of tiles you will need to assign more slots to it.
 
 This whole system is very complicated and error-prone, so I recommend you to use
-this tool by mtheall & JustBurn:
+this tool by mtheall and JustBurn:
 
 https://mtheall.com/vram.html
+
+![VRAM tool](vram_tool.png)
+
+Additionally, the main graphics engine supports adding a global fixed offset to
+all tile maps and tile set slots.
+
+Normally, tile maps go from index 0 to 31 and they can be placed in addresses
+`0x06000000` to `0x0600FFFF` (64 KiB). Tile sets go from index 0 to 15, and they
+can be placed in addresses `0x06000000` to `0x0603FFFF` (256 KiB). However,
+background VRAM can go up to address `0x0607FFFF` (512 KiB) in the main engine.
+The global fixed offset lets you select the starting address used for tile set
+or tile maps so that you can use any location in VRAM to store them. You will
+only be able to use 64 KiB for tile maps and 256 KiB for tile sets, but you can
+select where in VRAM they are located.
+
+This is done by setting the base steps like this:
+
+```c
+videoSetMode(MODE_0_2D | DISPLAY_CHAR_BASE(1) | DISPLAY_SCREEN_BASE(2));
+```
+
+Each step adds an offset of 64 KiB to tile set or tile map slot bases. For
+example:
+
+Tile set step | Tile set base | Address
+--------------|---------------|------------
+            0 |             0 | `0x6000000`
+            0 |             2 | `0x6001000`
+            1 |             0 | `0x6010000`
+            1 |             2 | `0x6011000`
+
+This can be useful if you're using the initial slots of background VRAM for bitmap
+backgrounds and you need to use the top addresses of background VRAM for tiled
+backgrounds.
+
+Check [`examples/graphics_2d/bg_display_control_steps`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_display_control_steps)
+to see a practical example that uses this feature.
 
 ## 5. Displaying affine backgrounds
 
