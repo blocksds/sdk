@@ -6,7 +6,8 @@ cascade:
 ---
 
 Welcome to the tutorial of BlocksDS. It will show you how to use the libraries
-of the SDK to create your own applications using the C programming language.
+of the SDK to create your own applications using the C or C++ programming
+languages.
 
 <div class="hx:mt-6"></div>
 
