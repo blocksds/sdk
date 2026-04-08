@@ -6,9 +6,7 @@ cascade:
 ---
 
 Welcome to the tutorial of BlocksDS. It will show you how to use the libraries
-of the SDK to create your own applications. This tutorial assumes that you
-already know how to program in C. If not, you should first learn the basics of C
-programming.
+of the SDK to create your own applications using the C programming language.
 
 <div class="hx:mt-6"></div>
 
@@ -34,9 +32,6 @@ programming.
 {{< /cards >}}
 
 <div class="hx:mt-6"></div>
-
-Normally you don't need to do this, but you can get low-level information on how
-the hardware works in [GBATEK](https://problemkaputt.de/gbatek.htm).
 
 If you want to make any suggestions or submit fixes, you can check the
 repository of this tutorial [here](https://codeberg.org/blocksds/sdk).

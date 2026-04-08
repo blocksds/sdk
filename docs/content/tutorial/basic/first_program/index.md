@@ -3,7 +3,25 @@ title: Your first program
 weight: 1
 ---
 
-## 1. Setting up the environment
+## 1. Introduction
+
+BlocksDS is a collection of tools and libraries that allow you to develop
+applications for the Nintendo DS using C and C++. However, this tutorial
+doesn't teach how to use any programming language. You will need to learn at
+least basic C by yourself if you don't know it already.
+
+If you aren't familiar with the capabilities of the Nintendo DS, you should read
+[Nintendo DS Architecture](https://www.copetti.org/writings/consoles/nintendo-ds/)
+by Rodrigo Copetti first. It explains them without getting into a lot of detail,
+which is very useful to get a general idea of what you can do with the console.
+
+Also, I recommend you to save the link to [GBATEK](https://problemkaputt.de/gbatek.htm)
+in case you need low-level information about the hardware. It's unlikely you
+will need that kind of information because the libraries abstract the hardware
+to make your life easier, but it can be good to know this hardware reference
+exists in case you need it.
+
+## 2. Setting up the environment
 
 The first thing we need to do is setup the development environment that we're
 going to use. If you haven't installed BlocksDS yet, follow the instructions
@@ -22,7 +40,7 @@ git clone https://codeberg.org/blocksds/sdk
 If you don't have git or you don't want to clone the repository you can also
 download it as a [ZIP archive](https://codeberg.org/blocksds/sdk/archive/refs/heads/master.zip).
 
-## 2. Getting a NDS emulator
+## 3. Getting a NDS emulator
 
 Most of the time you will use emulators to test your applications and games
 while you develop them. The following three emulators are recommended.
@@ -51,7 +69,7 @@ very widespread and available in many platforms. I encourage you to test
 everything with DeSmuMe to maximize the number of people that can enjoy your
 creations. It doesn't emulate DSi mode features.
 
-## 3. Testing on hardware
+## 4. Testing on hardware
 
 Regardless of how many emulators you have, eventually you'll need to test on
 hardware to ensure that everything works as expected. Depending on which model
@@ -59,23 +77,24 @@ of NDS you own, there are two options:
 
 - **Slot-1 flashcarts**
 
-Slot-1 flashcarts are cartridges shaped like a regular NDS game that have a
-microSD slot where you can copy your NDS ROMs. There are many models, and there
-isn't any specific model that can be recommended. All slot-1 flashcarts will
-work on any Nintendo DS or DS Lite consoles, but only some models will work on
-Nintendo DSi or 3DS consoles. My advice is to search information online to
-decide which one to buy.
+This option is the best option if you own a Nintendo DS or DS Lite.  Slot-1
+flashcarts are cartridges shaped like a regular NDS game that have a microSD
+slot where you can copy your NDS ROMs. There are many models, and there isn't
+any specific model that can be recommended. All slot-1 flashcarts will work on
+any Nintendo DS or DS Lite consoles, but only some models will work on Nintendo
+DSi or 3DS consoles. My advice is to search information online to decide which
+one to buy.
 
-This option is the best option if you own a Nintendo DS or DS Lite. If you own a
-DSi or 3DS, this option can still work, but you won't be able to take advantage
-of any of the additional power of the consoles.
+If you own a DSi or 3DS, you should get a [DSPico](https://www.lnh-team.org/).
+Otherwise, you won't be able to access DSi-only features. Other flashcards will
+only be able to load ROMs in DS backwards-compatibility mode.
 
 - **DSi custom firmware**
 
 If you have a Nintendo DSi or 3DS you can install a custom firmware that lets
 you run NDS ROMs stored in the SD slot of the console.
 
-## 4. Building your first NDS program
+## 5. Building your first NDS program
 
 Now that you have the toolchain installed, the examples downloaded, and some way
 to run your NDS ROMs, we are going to try to build a very simple demo to check
@@ -114,7 +133,7 @@ Load it in an emulator or in your console, you should get something like this:
 Congratulations! Now you can start learning how to create your own games and
 applications for the DS.
 
-## 5. How to start your project
+## 6. How to start your project
 
 The recommended way to start your own project is to copy one of the
 [templates](https://codeberg.org/blocksds/sdk/src/branch/master/templates) or
