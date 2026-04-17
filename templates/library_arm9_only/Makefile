@@ -67,9 +67,9 @@ ifneq ($(GFXDIRS),)
     INCLUDEDIRS	+= $(addprefix $(BUILDDIR)/,$(GFXDIRS))
 endif
 
-SOURCES_S	:= $(shell find -L $(SOURCEDIRS) -name "*.s")
-SOURCES_C	:= $(shell find -L $(SOURCEDIRS) -name "*.c")
-SOURCES_CPP	:= $(shell find -L $(SOURCEDIRS) -name "*.cpp")
+SOURCES_S	+= $(shell find -L $(SOURCEDIRS) -name "*.s")
+SOURCES_C	+= $(shell find -L $(SOURCEDIRS) -name "*.c")
+SOURCES_CPP	+= $(shell find -L $(SOURCEDIRS) -name "*.cpp")
 
 # Compiler and linker flags
 # -------------------------
