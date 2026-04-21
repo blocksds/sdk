@@ -3,6 +3,97 @@ title: 'Changelog'
 weight: 6
 ---
 
+### Version DEV (2026-04-XX)
+
+- libnds:
+
+  - Improve support of `DISPCNT` tileset/tilemap base steps in the background
+    functions. Functions like `bgGetMapPtr()` will now check the current setting
+    when calculating addresses instead of assuming that the steps are zero.
+  - Fix handling of files when `O_CREAT` is used in `open()` in FAT filesystems.
+    Thanks to @lifehackerhansol for the proposed fix.
+  - Use the right console when the pointer is not `NULL`. Functions
+    `consoleSetCursor()`, `consoleAddToCursor()`, `consoleGetCursor()` and
+    `consoleSetColor()` always operated on the current console, even if a
+    different console had been provided as a pointer.
+  - Timers are now stopped before being set up in `timerStart()`.
+  - Improve the default exception handler by using MPU information to determine
+    code/data regions instead of checking hardcoded regions.
+  - Fix `oamSet()` not setting `isHidden` flag and skipping initialization
+    altogether. @BlueTheDuck.
+  - Add functions `CP15_GetRegion()` and `CP15_SetRegion()` to manipulate MPU
+    regions easier. Previously, it was needed to use functions like
+    `CP15_GetRegion0()` or `CP15_SetRegion2()`, which forced the user to encode
+    the region number in the function name. The new functions are more flexible
+    as they take the region number as an argument.
+  - Wait for LCD initialization bit in `initSystem()` when the code is running
+    on a DSi.
+  - Add placeholders for `wait()` and `waitpid()` to improve compatibility with
+    cross-platform code.
+  - The `elapsed[]` array used by the timer functions is now private.
+  - Fix build warnings in ARM7 code that uses the TCM macros found in
+    `ndstypes.h`. Now they are defined as empty in ARM7 code.
+  - Move implementation of some background-related functions out of the header.
+    The functions are likely to be used in several parts of a regular
+    application, so it's better to not have them as `static inline`, which would
+    cause multiple copies to appear in the binary.
+  - Use file descriptors (`int`) instead of `FILE` pointers when opening the NDS
+    ROM to be used for NitroFS. THis saves a few KBs in the final ROM in the
+    unusual case of an application that doesn't use any of the functions that
+    use `FILE`.
+  - Improve internal libnds names of MPU region names for clarity.
+  - Add some CP15 defines to access TCM information without using magic numbers.
+  - Remove calls to `setvbuf()` with no effect in the ARM9 console code.
+  - Use `NDEBUG` instead of nonexistent `DEBUG` in `dlmalloc` setting
+    configuration.
+
+- Maxmod:
+
+  - Fix `mmEffectVolume()` in the DS mixer.
+  - Add more information to the song error callback `MMCB_SONGERROR`.
+  - Add define `MM_SFXHAND_INVALID`, which represents and invalid `mm_sfxhand`.
+
+- mmutil:
+
+  - Add a new NDS demo ROM to the repository. The code of the old demo had been
+    lost, and the demo wasn't too flexible so it needed to be improved anyway.
+  - Refactor code that generates a self-contained NDS demo ROM with `-b -d`.
+    Instead of including the soundbank as data in the ROM, it is now included as
+    part of its NitroFS filesystem, which allows it to be as big as needed.
+    Also, the new code uses `ndstool` to build the ROM instead of having custom
+    code to generate a NDS header. The old strategy couldn't work in DSi mode,
+    so it would have been impossible to support loading the demo from the SD
+    slot of the DSi. Thew new system allows the ROM to work from anywhere.
+
+- SDK:
+
+  - Reduced size of Docker images. @pgattic
+  - Allow selecting individual source code files in the default Makefiles.
+    Previously it was only possible to select folders by setting `SOURCES_S`,
+    `SOURCES_C` and `SOURCES_CPP`, and the Makefile would search for all source
+    code files in that folder and its subfolders.
+  - Add support for generating `compile_commands.json` files to the default
+    makefiles. It can be enabled by setting the `COMPDB` variable to 1.
+
+  - Tutorial:
+
+    - Improve the "first program" chapter with information of how to get started
+      with a template/example and how to use the user settings in the default
+      Makefiles.
+    - Mention incompatible audio file formats in the audio chapter.
+    - Mention the global tileset/tilemap step in the backgrounds chapter.
+
+  - Examples:
+
+    - Add an example of using DISPCNT tileset and tilemap steps.
+    - Update key state in wait loop in the Maxmod NitroFS example so that it
+      actually ends when the user presses a key.
+
+  - Tests:
+
+    - Add test to verify some parts of the default exception handler.
+    - Simplify the test that checks MPU regions.
+
 ### Version 1.19.1 (2026-03-23)
 
 - libnds:
