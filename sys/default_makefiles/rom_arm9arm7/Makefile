@@ -1,9 +1,10 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2023
+# SPDX-FileContributor: Antonio Niño Díaz, 2023-2026
 
 BLOCKSDS	?= /opt/blocksds/core
 BLOCKSDSEXT	?= /opt/blocksds/external
+WONDERFUL_TOOLCHAIN	?= /opt/wonderful
 
 # User config
 # ===========
@@ -14,6 +15,9 @@ GAME_TITLE	?= Template
 GAME_SUBTITLE	?= Built with BlocksDS
 GAME_AUTHOR	?= blocksds.skylyrac.net
 GAME_ICON	?= $(BLOCKSDS)/sys/icon.gif
+
+# A compile_commands.json file is created if this is set to 1
+COMPDB		?= 0
 
 # DLDI and internal SD slot of DSi
 # --------------------------------
@@ -60,13 +64,23 @@ clean:
 	@echo "  CLEAN"
 	$(V)$(MAKE) -f Makefile.arm9 clean --no-print-directory
 	$(V)$(MAKE) -f Makefile.arm7 clean --no-print-directory
-	$(V)$(RM) $(ROM) build $(SDIMAGE)
+	$(V)$(RM) $(ROM) build $(SDIMAGE) compile_commands.json
 
 arm9:
-	$(V)$(MAKE) -f Makefile.arm9 --no-print-directory
+	$(V)+$(MAKE) -f Makefile.arm9 COMPDB=$(COMPDB) --no-print-directory
 
 arm7:
-	$(V)$(MAKE) -f Makefile.arm7 --no-print-directory
+	$(V)+$(MAKE) -f Makefile.arm7 COMPDB=$(COMPDB) --no-print-directory
+
+ifeq ($(COMPDB),1)
+# Add an additional dependency to the "all" rule
+all: compile_commands.json
+
+compile_commands.json: arm9 arm7
+	@echo "  MERGE   compile_commands.json"
+	$(V)$(WONDERFUL_TOOLCHAIN)/bin/wf-compile-commands-merge $@ \
+		build/*/compile_commands.json
+endif
 
 ifneq ($(strip $(NITROFSDIR)),)
 # Additional arguments for ndstool

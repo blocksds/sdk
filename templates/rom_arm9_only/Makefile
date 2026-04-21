@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2023-2024
+# SPDX-FileContributor: Antonio Niño Díaz, 2023-2026
 
 export BLOCKSDS			?= /opt/blocksds/core
 export BLOCKSDSEXT		?= /opt/blocksds/external
@@ -17,6 +17,9 @@ GAME_TITLE	:= ARM9 only template
 GAME_SUBTITLE	:= Built with BlocksDS
 GAME_AUTHOR	:= blocksds.skylyrac.net
 GAME_ICON	:= icon.gif
+
+# A compile_commands.json file is created if this is set to 1
+COMPDB		:= 0
 
 # DLDI and internal SD slot of DSi
 # --------------------------------
@@ -217,7 +220,7 @@ dump: $(DUMP)
 
 clean:
 	@echo "  CLEAN"
-	$(V)$(RM) $(ROM) $(DUMP) build $(SDIMAGE)
+	$(V)$(RM) $(ROM) $(DUMP) build $(SDIMAGE) compile_commands.json
 
 sdimage:
 	@echo "  MKFATIMG $(SDIMAGE) $(SDROOT)"
@@ -228,8 +231,46 @@ dldipatch: $(ROM)
 	$(V)$(BLOCKSDS)/tools/dldipatch/dldipatch patch \
 		$(BLOCKSDS)/sys/dldi_r4/r4tf.dldi $(ROM)
 
+ifeq ($(COMPDB),1)
+# Add an additional dependency to the "all" rule
+all: compile_commands.json
+
+compile_commands.json: $(OBJS)
+	@echo "  MERGE   compile_commands.json"
+	$(V)$(WONDERFUL_TOOLCHAIN)/bin/wf-compile-commands-merge $@ $(patsubst %.o,%.cc.json,$^)
+endif
+
 # Rules
 # -----
+
+ifeq ($(COMPDB),1)
+
+$(BUILDDIR)/%.s.o : %.s
+	@echo "  AS      $<"
+	@$(MKDIR) -p $(@D)
+	$(V)$(CC) $(ASFLAGS) -MMD -MP -c -MJ $(patsubst %.o,%.cc.json,$@) -o $@ $<
+
+$(BUILDDIR)/%.c.o : %.c
+	@echo "  CC      $<"
+	@$(MKDIR) -p $(@D)
+	$(V)$(CC) $(CFLAGS) -MMD -MP -c -MJ $(patsubst %.o,%.cc.json,$@) -o $@ $<
+
+$(BUILDDIR)/%.arm.c.o : %.arm.c
+	@echo "  CC      $<"
+	@$(MKDIR) -p $(@D)
+	$(V)$(CC) $(CFLAGS) -MMD -MP -marm -mlong-calls -c -MJ $(patsubst %.o,%.cc.json,$@) -o $@ $<
+
+$(BUILDDIR)/%.cpp.o : %.cpp
+	@echo "  CXX     $<"
+	@$(MKDIR) -p $(@D)
+	$(V)$(CXX) $(CXXFLAGS) -MMD -MP -c -MJ $(patsubst %.o,%.cc.json,$@) -o $@ $<
+
+$(BUILDDIR)/%.arm.cpp.o : %.arm.cpp
+	@echo "  CXX     $<"
+	@$(MKDIR) -p $(@D)
+	$(V)$(CXX) $(CXXFLAGS) -MMD -MP -marm -mlong-calls -c -MJ $(patsubst %.o,%.cc.json,$@) -o $@ $<
+
+else
 
 $(BUILDDIR)/%.s.o : %.s
 	@echo "  AS      $<"
@@ -255,6 +296,8 @@ $(BUILDDIR)/%.arm.cpp.o : %.arm.cpp
 	@echo "  CXX     $<"
 	@$(MKDIR) -p $(@D)
 	$(V)$(CXX) $(CXXFLAGS) -MMD -MP -marm -mlong-calls -c -o $@ $<
+
+endif
 
 $(BUILDDIR)/%.bin.o $(BUILDDIR)/%_bin.h : %.bin
 	@echo "  BIN2C   $<"
