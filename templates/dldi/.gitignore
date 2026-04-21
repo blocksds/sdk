@@ -1,2 +1,3 @@
 *.dldi
 build/
+compile_commands.json

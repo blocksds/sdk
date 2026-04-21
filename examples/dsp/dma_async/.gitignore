@@ -2,3 +2,4 @@
 *.sav
 build
 arm9/data/teak_tlf.bin
+compile_commands.json
