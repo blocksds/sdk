@@ -64,6 +64,9 @@ weight: 6
     code to generate a NDS header. The old strategy couldn't work in DSi mode,
     so it would have been impossible to support loading the demo from the SD
     slot of the DSi. Thew new system allows the ROM to work from anywhere.
+  - Add a new GBA demo ROM to the repository. The source code of the old demo
+    was in assembly, so it needed to be rewritten anyway. Also, the old demo was
+    less flexible than the new one.
 
 - SDK:
 
