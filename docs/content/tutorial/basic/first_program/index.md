@@ -176,7 +176,9 @@ supports this kind of conversions, and it may be easier to use it than creating
 your own conversion scripts for a Makefile.
 
 {{< callout type="tip" >}}
-If your IDE supports `compile_commands.json` files and you're using the default
-BlocksDS Makefiles you can set the variable `COMPDB` in your Makefile to 1 to
-generate a `compile_commands.json` file during the build process of a NDS ROM.
+If your IDE supports `compile_commands.json` files (like VSCode and VSCodium
+with the clangd extension) and you're using the default BlocksDS Makefiles you
+can set the variable `COMPDB` in your Makefile to 1 to generate a
+`compile_commands.json` file when you  build a NDS ROM. This will help the
+autocompletion tooling of your IDE.
 {{< /callout >}}
