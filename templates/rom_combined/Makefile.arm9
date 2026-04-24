@@ -90,6 +90,8 @@ SOURCES_CPP	+= $(shell find -L $(SOURCEDIRS) -name "*.cpp")
 # Compiler and linker flags
 # -------------------------
 
+DEFINES		+= -D__NDS__ -D__BLOCKSDS__ -DARM9
+
 ARCH		:= -mthumb -mcpu=arm946e-s+nofp
 
 SPECS		:= $(BLOCKSDS)/sys/crts/ds_arm9.specs
