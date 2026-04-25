@@ -3,11 +3,12 @@
         {
             "name": "Wonderful (gcc-arm-none-eabi)",
             "includePath": [
-                "${env:WONDERFUL_TOOLCHAIN}/gcc-arm-none-eabi/arm-none-eabi/include/**",
+                "/opt/wonderful/toolchain/gcc-arm-none-eabi/arm-none-eabi/include/**",
+                "/opt/wonderful/toolchain/gcc-arm-none-eabi/arm-none-eabi/include/c++/**",
                 "${workspaceFolder}/**"
             ],
             "defines": [],
-            "compilerPath": "${env:WONDERFUL_TOOLCHAIN}/toolchain/gcc-arm-none-eabi/bin/arm-none-eabi-gcc",
+            "compilerPath": "/opt/wonderful/toolchain/gcc-arm-none-eabi/bin/arm-none-eabi-gcc",
             "intelliSenseMode": "gcc-arm",
             "compileCommands": "${workspaceFolder}/compile_commands.json"
         }
