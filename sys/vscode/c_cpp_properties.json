@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        {
+            "name": "Wonderful (gcc-arm-none-eabi)",
+            "includePath": [
+                "${env:WONDERFUL_TOOLCHAIN}/gcc-arm-none-eabi/arm-none-eabi/include/**",
+                "${workspaceFolder}/**"
+            ],
+            "defines": [],
+            "compilerPath": "${env:WONDERFUL_TOOLCHAIN}/toolchain/gcc-arm-none-eabi/bin/arm-none-eabi-gcc",
+            "intelliSenseMode": "gcc-arm",
+            "compileCommands": "${workspaceFolder}/compile_commands.json"
+        }
+    ],
+    "version": 4
+}
