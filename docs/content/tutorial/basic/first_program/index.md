@@ -175,10 +175,20 @@ system called [ArchitectDS](https://codeberg.org/blocksds/architectds) that
 supports this kind of conversions, and it may be easier to use it than creating
 your own conversion scripts for a Makefile.
 
-{{< callout type="tip" >}}
-If your IDE supports `compile_commands.json` files (like VSCode and VSCodium
-with the clangd extension) and you're using the default BlocksDS Makefiles you
-can set the variable `COMPDB` in your Makefile to 1 to generate a
-`compile_commands.json` file when you  build a NDS ROM. This will help the
-autocompletion tooling of your IDE.
-{{< /callout >}}
+## 7. IDE integration with VSCode or VSCodium
+
+BlocksDS provides reference configuration files for VSCode and VSCodium, you can
+find them in [`sys/vscode`](https://codeberg.org/blocksds/sdk/src/branch/master/sys/vscode).
+If you want to use them, copy them to the folder of your project in a folder
+called `.vscode`. This sets the compiler include paths and it recommends the
+installation of the `clangd` extension.
+
+Once you have the `clangd` extension you will need to enable the generation of
+`compile_commands.json` files at build time. If you're using the default
+BlocksDS Makefiles you can set the variable `COMPDB` in your Makefile to 1.
+
+Once you're done, build your project with `make`, and open the folder in your
+IDE. It will now be able to find the right system headers, which will make
+autocompletion work.
+
+![VSCodium](vscodium.png)
