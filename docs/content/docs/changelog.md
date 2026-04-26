@@ -82,6 +82,8 @@ weight: 6
     `compile_commands.json` files have all the relevant defines.
   - Add some sample VSCode/VSCodium configuration files and a section to the
     tutorial about how to use them.
+  - Remove link from documentation to avoid readers from potentially clicking on
+    it. @19tracks
 
   - Tutorial:
 
