@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: 6
 ---
 
-### Version DEV (2026-04-XX)
+### Version 1.20.0 (2026-04-26)
 
 - libnds:
 
@@ -77,6 +77,11 @@ weight: 6
     code files in that folder and its subfolders.
   - Add support for generating `compile_commands.json` files to the default
     makefiles. It can be enabled by setting the `COMPDB` variable to 1.
+  - Some defines have been re-added to the default Makefiles. They were in the
+    `specs` files, but it's needed to add them to the Makefile so that the
+    `compile_commands.json` files have all the relevant defines.
+  - Add some sample VSCode/VSCodium configuration files and a section to the
+    tutorial about how to use them.
 
   - Tutorial:
 
