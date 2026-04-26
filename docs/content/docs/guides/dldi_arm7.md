@@ -92,4 +92,4 @@ SuperCard DSONE   | Yes  | Yes  |
 SuperCard DSTWO   | Yes  | Yes  |
 Original R4       | Yes  | Yes  |
 DSpico            | Yes  | Yes  |
-R4i Gold 3DS Plus | Yes  | Yes  | Confusable name; stickers say "www.r4ids.cn"
+R4i Gold 3DS Plus | Yes  | Yes  |
