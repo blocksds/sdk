@@ -126,6 +126,11 @@ Nintendo DS rom tool (BlocksDS v1.8.1-blocks)
 by Rafael Vuijk, Dave Murphy, Alexei Karpenko
 ```
 
+{{< callout type="tip" >}}
+To do a verbose build, run `VERBOSE=1 make` instead. It will print the full
+commands that are being run by the build system.
+{{< /callout >}}
+
 Load it in an emulator or in your console, you should get something like this:
 
 ![Custom fonts](custom_fonts.png)
@@ -142,6 +147,12 @@ the pre-existing code and assets, and start from there. The templates are small
 examples themselves, and they show how to add music, graphics and data to a
 simple demo.
 
+There is a template that lets the programmer write the code for both CPUs of the
+NDS (`rom_combined`) and a template that uses the default ARM7 core that comes
+with Blocks DS and lets the programmer focus on the ARM9 core (`rom_arm9`).
+There are also two templates to create static libraries. Similarly, most
+examples only have ARM9 code, and some of them also have ARM7 code.
+
 The main difference between the templates and the examples is that the templates
 include a full build system (the Makefile), but the examples have a minimal
 Makefile that depends on some reference Makefiles installed with BlocksDS. The
@@ -151,8 +162,87 @@ build system of the examples gives you far less freedom, but you don't need to
 worry about it because it gets upgraded when you upgrade BlocksDS. If you're a
 beginner, it may be easier to start with an example than with a template.
 
-You can adjust the title and icon of a game by changing the following lines in
-the Makefile:
+Note that the makefiles have some strong limitations. They are good enough for
+small projects, but they don't support some very useful features, like
+converting images and storing the result in the filesystem. You will need to do
+this kind of conversions yourself by hand. However, there's an alternative build
+system called [ArchitectDS](https://codeberg.org/blocksds/architectds) that
+supports this kind of conversions, and it may be easier to use it than creating
+your own conversion scripts for a Makefile.
+
+## 7. Understanding the default Makefiles
+
+The default makefiles use the following variables to look for project files:
+
+- `SOURCEDIRS` is a list of folders that contain source code files. All
+  subfolders are also included in the search by default. You can modify the
+  search command. For example, you can set the depth of the search if you want:
+
+  ```make
+  SOURCES_S	+= $(shell find -L $(SOURCEDIRS) -name "*.s")
+  SOURCES_C	+= $(shell find -L $(SOURCEDIRS) -name "*.c" -mindepth 1 -maxdepth 2)
+  ```
+
+  Also, you can specify individual files instead. For example, this will look
+  for all files in the `source` folder (including subfolders) and it will also
+  build the file `common/common.c`:
+
+  ```make
+  SOURCEDIRS := source
+  SOURCES_C  := common/common.c
+  ```
+
+- `INCLUDEDIRS` is a list of additional directories that the compiler will use
+  as search paths when looking for headers. For example, if you have a folder
+  called `includes` with a file called `header.h`, and you have a file called
+  `source/main.c`, you can do the following:
+
+  ```make
+  INCLUDEDIRS := include
+  ```
+
+  ```c
+  #include "header.h"
+
+  int main(void)
+  {
+    // ...
+  }
+  ```
+
+- `GFXDIRS` is a list of folders that contain graphics. The default behaviour is
+  to look for `.png` files in all the folders (and subfolders). All `.png` files
+  with an associated `.grit` file will be converted and added to the project.
+  To learn how to use the converted data, check the 2D and 3D graphics chapters
+  of the tutorial.
+
+- `BINDIRS` is a list of directories that contain binary files that the
+  developer wants to add to the ROM. The Makefile looks for all `.bin` files in
+  this list of folders, including subfolders.
+
+- `AUDIODIRS` is a list of folders that contain audio data to be played back
+  with Maxmod. All folders and subfolders are searched. The formats supported
+  are `.mod`, `.xm`, `.it`, `.s3m` and `.wav`. Check the AUDIO CHAPTER TODO LINK
+
+- `NITROFSDIR` is a list of directories that contain files that need to be added
+  as to the filesystem of the ROM. All directories listed in this variable are
+  combined into a single filesystem. Check the NitroFS chapter to see how to
+  access the files from your code.
+
+The templates that support both CPUs have multiple makefiles: one for each CPU,
+and one to combine the result. In this case, `NITROFSDIR` is in the Makefile
+that combines the output. The ARM9 makefile supports all other variables, and
+the ARM7 only supports the variables related to source code files and data, but
+not graphics or audio files.
+
+**Important note:**: The paths used in `SOURCEDIRS`, `GFXDIRS` and `BINDIRS`
+must be inside the folder of the project. That means you can't use `..` in a
+path to go one level up from the Makefile. If you really need to use folders
+outside of the folder of the project, create a symlink to the destination, or
+build the other code as a static library and link it with the project.
+
+Finally, you can adjust the title and icon of a game by changing the following
+lines in the Makefile:
 
 ```make
 # Name of the resulting NDS file
@@ -167,15 +257,7 @@ GAME_AUTHOR     := blocksds.skylyrac.net
 GAME_ICON       := icon.gif
 ```
 
-Note that the makefiles have some strong limitations. They are good enough for
-small projects, but they don't support some very useful features, like
-converting images and storing the result in the filesystem. You will need to do
-this kind of conversions yourself by hand. However, there's an alternative build
-system called [ArchitectDS](https://codeberg.org/blocksds/architectds) that
-supports this kind of conversions, and it may be easier to use it than creating
-your own conversion scripts for a Makefile.
-
-## 7. IDE integration with VSCode or VSCodium
+## 8. IDE integration with VSCode or VSCodium
 
 BlocksDS provides reference configuration files for VSCode and VSCodium, you can
 find them in [`sys/vscode`](https://codeberg.org/blocksds/sdk/src/branch/master/sys/vscode).

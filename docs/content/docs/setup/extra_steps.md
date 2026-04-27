@@ -10,42 +10,26 @@ To test that everything is working, you can try building one of the
 [project templates](https://codeberg.org/blocksds/sdk/src/branch/master/templates)
 included in BlocksDS.
 
-There is a template that lets the programmer write the code for both CPUs of the
-NDS (`rom_combined`) and a template that uses the default ARM7 core that comes
-with Blocks DS and lets the programmer focus on the ARM9 core (`rom_arm9`).
-There are also two templates to create static libraries.
-
-For example, go to the combined template folder and build it:
+For example, go to the ARM9-only template folder and try to build it:
 
 ```bash
-cd templates/rom_combined
+cd templates/rom_arm9_only
 make
 ```
 
-This should have generated a NDS ROM that you can run on any emulator or
-flashcart.
+### 2. Check the tutorial of BlocksDS
 
-To do a verbose build, run `make` like this (this also works for the Makefile of
-the SDK):
+BlocksDS has a [tutorial](../../../tutorial) that shows you how to use libnds to
+use all features of the Nintendo DS. If you're new to the Nintendo DS, this is a
+good way to see what kind of things you can do.
 
-```bash
-VERBOSE=1 make
-```
-
-**NOTE:** The paths in the Makefile that refer to source code, includes,
-graphics, data, etc, must be inside the folder of the project. That means you
-can't use `..` in a path to go one level up from the Makefile. If you really
-need to use folders outside of the folder of the project, create a symlink to
-the destination, or build the other code as a static library and link it with
-the project.
-
-### 2. Additional libraries and tools
+### 3. Additional libraries and tools
 
 There are several libraries and tools that aren't installed by default. They are
 listed in the links you can find [here](../../libs). They all get installed to
 `BLOCKSDSEXT`.
 
-### 3. Keeping multiple versions of BlocksDS
+### 4. Keeping multiple versions of BlocksDS
 
 You may keep multiple versions of this SDK in your PC. The location of the
 active SDK is expected to be in the environment variables `BLOCKSDS` and
