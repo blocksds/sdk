@@ -507,6 +507,6 @@ static bool littlefs_isdrive(const char *name)
     if ((c < 0) || (c > 9))
         return false;
 
-    return false;
+    return true;
 }
 ```
