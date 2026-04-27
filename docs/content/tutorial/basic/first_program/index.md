@@ -206,7 +206,7 @@ The default makefiles use the following variables to look for project files:
 
   int main(void)
   {
-    // ...
+      // ...
   }
   ```
 
@@ -235,7 +235,7 @@ that combines the output. The ARM9 makefile supports all other variables, and
 the ARM7 only supports the variables related to source code files and data, but
 not graphics or audio files.
 
-**Important note:**: The paths used in `SOURCEDIRS`, `GFXDIRS` and `BINDIRS`
+**Important note:** The paths used in `SOURCEDIRS`, `GFXDIRS` and `BINDIRS`
 must be inside the folder of the project. That means you can't use `..` in a
 path to go one level up from the Makefile. If you really need to use folders
 outside of the folder of the project, create a symlink to the destination, or
@@ -274,3 +274,52 @@ IDE. It will now be able to find the right system headers, which will make
 autocompletion work.
 
 ![VSCodium](vscodium.png)
+
+## 9. Using additional libraries
+
+This is slightly more advanced, but it's here so that you're aware of it.
+BlocksDS and Wonderful Toolchain provide several libraries that you can use in
+your own projects but aren't available by default. The documentation of BlocksDS
+has information about each individual library, check [this page](../../../docs/libs).
+It mentions the specific commands you need to run to install each library in
+your system.
+
+In general, you need to install a package with the library and add it to the
+Makefile so that your project can use it. You can get a list of available
+packages, including libraries, by running:
+
+```sh
+wf-pacman -Sl
+```
+
+For example, you can install NFLib like this:
+
+```sh
+wf-pacman -Syu blocksds-nflib
+```
+
+If you want to use NFLib in your project, add it to the Makefile like this:
+
+```make
+LIBS        += -lnflib -ldswifi9 -lnds9 -lc
+LIBDIRS     += $(BLOCKSDSEXT)/nflib \
+               $(BLOCKSDS)/libs/dswifi \
+               $(BLOCKSDS)/libs/libnds
+```
+
+NFLib is a third-party library so it's available in the `BLOCKSDSEXT` folder,
+while the core libraries of BlocksDS are available at `BLOCKSDS`. All core
+libraries are installed by default, and all of the third-party libraries need to
+be installed manually.
+
+**Important note:** Some ARM9 libraries have a corresponding ARM7 part. If
+you're using an ARM9-only template, you need to select the right pre-built ARM7
+binary. For example, if you use DSWiFi in the ARM9, make sure that you're using
+an ARM7 binary with support for DSWiFi and Maxmod (the default one only supports
+Maxmod):
+
+```make
+ARM7ELF    := $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi_maxmod.elf
+```
+
+The list of supported ARM7 cores is [here](../../../docs/guides/usage_notes).
