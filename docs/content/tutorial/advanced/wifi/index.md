@@ -190,5 +190,8 @@ TLS encryption:
 - [`examples/dswifi/get_website_ssl`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/dswifi/get_website_ssl)
 - [`examples/dswifi/get_website_libcurl`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/dswifi/get_website_libcurl)
 
-There are plenty of tutorials and documentation on how to use the libraries
-online.
+Please, check the Makefile of the examples to see how to link the libraries with
+the examples.
+
+If you want to learn how to use Mbed TLS or libcurl, there are plenty of
+tutorials and documentation about them online.
