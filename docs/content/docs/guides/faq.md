@@ -7,6 +7,9 @@ weight: 1
 
 ### I've just installed BlocksDS, now what?
 
+BlocksDS has a [tutorial](../../../tutorial) that shows you how to use libnds to
+use all features of the Nintendo DS.
+
 The first step is to build one of the examples included with BlocksDS. If you
 have installed the `blocksds-docs` package with `wf-pacman`, the examples are
 located in `/opt/wonderful/thirdparty/blocksds/core/examples/`. From there, for
@@ -16,20 +19,18 @@ a NDS ROM that you can try with an emulator or a flashcart.
 You can also try one of the open source projects made with BlocksDS that are
 listed [here](https://codeberg.org/blocksds/awesome-blocksds).
 
-Unfortunately, there isn't any tutorial on how to develop NDS applications or
-games from scratch. Your best bet is to take a look at the examples and to ask
-other developers if you get stuck. Check the "getting support" section of the
-documentation [here](../../support).
-
-You can also check the online mirror of the documentation of all libraries
-included in BlocksDS [here](../../libs).
-
-If `libnds` is too low-level for you, you can check high-level libraries like
-[Nitro Engine](https://codeberg.org/SkyLyrac/nitro-engine) or
+Also if `libnds` is too low-level for you, you can check high-level libraries
+like [Nitro Engine](https://codeberg.org/SkyLyrac/nitro-engine) or
 [NightFox’s Lib](https://github.com/knightfox75/nds_nflib). They don't have
 official tutorials either, but they also come with lots of examples you can use
 as reference, and it may be easier to get started with NDS development with
 them.
+
+If you want to see the documentation of libraries included in BlocksDS, check
+[this link](../../libs).
+
+Finally, if you want help from other developers, check the "getting support"
+section of the documentation [here](../../support).
 
 ### Where can I find low-level NDS hardware documentation?
 
