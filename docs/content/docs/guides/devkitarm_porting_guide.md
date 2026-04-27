@@ -383,9 +383,9 @@ You can see an example of how NitroFS used to be registered in this
 
 Unfortunately, it isn't possible to create a compatible 100% interface in
 BlocksDS because the design depends on newlib, and BlocksDS depends on picolibc.
-However, BlocksDS provides a similar interface to achieve the same thing, and it
-should be possible to adapt code using devoptab to use the device I/O interface
-of BlocksDS.
+BlocksDS provides a similar interface to achieve the same thing, and it should
+be possible to adapt code using devoptab to use the device I/O interface of
+BlocksDS.
 
 However, note that the interface in BlocksDS is more memory-efficient than the
 one in devkitPro. In devkitPro all platforms use this interface to add their
