@@ -24,6 +24,14 @@ General-purpose library to use the hardware of the NDS.
   >}}
 {{< /cards >}}
 
+This library is linked by default. You may need to do do it manually if you
+modify the Makefile. Use `-lnds9` in the ARM9, `-lnds7` in the ARM7:
+
+```make
+LIBS    += -lnds9
+LIBDIRS += $(BLOCKSDS)/libs/libnds
+```
+
 ### Maxmod
 
 Music player that can play MOD, S3M, XM, IT and WAV files. It can use hardware
@@ -41,6 +49,14 @@ or software mixing, and it runs on the ARM7.
     link="https://codeberg.org/blocksds/sdk/src/branch/master/examples/maxmod"
   >}}
 {{< /cards >}}
+
+This library is linked by default. You may need to do do it manually if you
+modify the Makefile. Use `-lmm9` in the ARM9, `-lmm7` in the ARM7:
+
+```make
+LIBS    += -lmm9
+LIBDIRS += $(BLOCKSDS)/libs/maxmod
+```
 
 ### DSWiFi
 
@@ -60,6 +76,13 @@ multiplayer and Internet access.
   >}}
 {{< /cards >}}
 
+Link it with `-ldswifi9` in the ARM9 and `-ldswifi7` in the ARM7:
+
+```make
+LIBS    += -ldswifi9
+LIBDIRS += $(BLOCKSDS)/libs/dswifi
+```
+
 ### LibXM7
 
 Hardware-accelerated player of XM and MOD music files that runs on the ARM7.
@@ -77,6 +100,13 @@ Hardware-accelerated player of XM and MOD music files that runs on the ARM7.
   >}}
 {{< /cards >}}
 
+Link it with `-lxm79` in the ARM9 and `-lxm77` in the ARM7:
+
+```make
+LIBS    += -ldswifi9
+LIBDIRS += $(BLOCKSDS)/libs/libxm7
+```
+
 ### libteak
 
 Library to use the Teak DSP included in the DSi and 3DS consoles.
@@ -93,6 +123,13 @@ Library to use the Teak DSP included in the DSi and 3DS consoles.
     link="https://codeberg.org/blocksds/sdk/src/branch/master/examples/dsp"
   >}}
 {{< /cards >}}
+
+Link it with:
+
+```make
+LIBS    += -lteak
+LIBDIRS += $(BLOCKSDS)/libs/libteak
+```
 
 ### Grit
 

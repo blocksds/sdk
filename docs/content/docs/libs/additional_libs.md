@@ -13,8 +13,17 @@ Library designed to make development of 2D games easy, with support for sprites,
 backgrounds (even "infinite" maps), and it also has limited 2D graphics support
 using the 3D engine.
 
+Install it with:
+
 ```sh
 wf-pacman -Sy blocksds-nflib
+```
+
+Link it with:
+
+```make
+LIBS    += -lnflib
+LIBDIRS += $(BLOCKSDSEXT)/nflib
 ```
 
 ### [Nitro Engine](https://codeberg.org/SkyLyrac/nitro-engine)
@@ -23,8 +32,17 @@ Library to create 3D applications. It supports dual screen 3D, static and
 animated models, supports all texture types, and has basic 2D support using the
 3D hardware. It's compatible with NightFox's Lib.
 
+Install it with:
+
 ```sh
 wf-pacman -Sy blocksds-nitroengine
+```
+
+Link it with:
+
+```make
+LIBS    += -lNE
+LIBDIRS += $(BLOCKSDSEXT)/nitro-engine \
 ```
 
 ### [LibDSF](https://codeberg.org/SkyLyrac/libdsf)
@@ -32,8 +50,17 @@ wf-pacman -Sy blocksds-nitroengine
 Library that uses pre-converted TTF fonts to render text. It can use the 3D
 hardware of the NDS directly or render to buffers to be used by the 2D hardware.
 
+Install it with:
+
 ```sh
 wf-pacman -Sy blocksds-libdsf
+```
+
+Link it with:
+
+```make
+LIBS    += -ldsf
+LIBDIRS += $(BLOCKSDSEXT)/libdsf
 ```
 
 ### [Woopsi](https://codeberg.org/SkyLyrac/Woopsi)
@@ -43,8 +70,17 @@ project is to provide a windowing GUI that other programmers can use for their
 applications, decreasing the tedious amount of custom code that they have to
 write.
 
+Install it with:
+
 ```sh
 wf-pacman -Sy blocksds-libwoopsi
+```
+
+Link it with:
+
+```make
+LIBS    += -lwoopsi
+LIBDIRS += $(BLOCKSDSEXT)/libwoopsi
 ```
 
 ### [PAlib](https://codeberg.org/SkyLyrac/palib)
@@ -54,8 +90,17 @@ homebrew games. It is designed to be easily used by anyone. However, nowadays
 there are better alternatives and PAlib should only be used to build old
 projects that depend on it to be built.
 
+Install it with:
+
 ```sh
 wf-pacman -Sy blocksds-palib
+```
+
+Link it with:
+
+```make
+LIBS    += -lpa9
+LIBDIRS += $(BLOCKSDSEXT)/palib
 ```
 
 ### [µLibrary](https://codeberg.org/blocksds/ulibrary)
@@ -63,8 +108,17 @@ wf-pacman -Sy blocksds-palib
 This is a library that provides functions to create 2D games using the 3D engine
 of the Nintendo DS. The 3D GPU is more flexible than the 2D GPU.
 
+Install it with:
+
 ```sh
 wf-pacman -Sy blocksds-ulibrary
+```
+
+Link it with:
+
+```make
+LIBS    += -lul -lpng -lz
+LIBDIRS += $(BLOCKSDSEXT)/ulibrary
 ```
 
 ### [DSerial](https://github.com/asiekierka/dserial)
@@ -72,8 +126,17 @@ wf-pacman -Sy blocksds-ulibrary
 The final version of the DSerial card library, extracted from libdsmi and
 adapted for BlocksDS.
 
+Install it with:
+
 ```sh
 wf-pacman -Sy blocksds-dserial
+```
+
+Link it with `-ldserial9` or `-ldserial7`, the right one for your CPU:
+
+```make
+LIBS    += -ldserial9
+LIBDIRS += $(BLOCKSDSEXT)/dserial
 ```
 
 ### [DSMI library](https://github.com/NitrousTracker/dsmi)
@@ -81,8 +144,17 @@ wf-pacman -Sy blocksds-dserial
 It provides MIDI support for the DS. The following communication methods are
 supported: DSerial Edge, wireless access point (via DSMIDIWiFi).
 
+Install it with:
+
 ```sh
 wf-pacman -Sy blocksds-dsmi
+```
+
+Link it with:
+
+```make
+LIBS    += -ldsmi
+LIBDIRS += $(BLOCKSDSEXT)/dsmi
 ```
 
 ### [gbajpeg](https://codeberg.org/blocksds/gbajpeg)
@@ -90,6 +162,15 @@ wf-pacman -Sy blocksds-dsmi
 Library originally designed to load JPEG files on GBA with very low resource
 usage.
 
+Install it with:
+
 ```sh
 wf-pacman -Sy blocksds-gbajpeg
+```
+
+Link it with:
+
+```make
+LIBS    += -lgbajpeg
+LIBDIRS += $(BLOCKSDSEXT)/gbajpeg
 ```
