@@ -34,6 +34,14 @@ git config --global --unset url.ssh://git@codeberg.org/blocksds/.insteadOf
 git config --global --unset url.https://codeberg.org/blocksds/.insteadOf
 ```
 
+### Upgrading to BlocksDS 1.19.0
+
+* When using section macros such as `ITCM_CODE`, `DTCM_BSS`, etc. you may now see a warning message akin to
+  `ignoring attribute 'section (".itcm.text...")' because it conflicts with previous 'section (".itcm.text...")'`.
+  This is caused by a change which places each section macro-annotated function and variable in an unique
+  section for garbage collection purposes. You can fix this by either removing the duplicate macro from the declaration
+  or making use of alternate `ITCM_FUNC(my_function)`, `DTCM_BSS_VAR(my_variable)`, etc. macros.
+
 ### Upgrading to BlocksDS 1.17.1
 
 * Option `-nl` of `ndstool` has been renamed to `-pass`. The LoadMe DSi hybrid
