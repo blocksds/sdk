@@ -3,7 +3,7 @@
 # This script must be called from the docs/ folder of the sdk repository.
 #
 # This script depends on having hugo in your system. It has been tested with
-# v0.152.2 of hugo-extended.
+# v0.161.0 of hugo-extended.
 
 set -e
 set -x
@@ -14,7 +14,7 @@ if [ ! -d themes/hextra ]; then
     cd themes
     git clone https://codeberg.org/blocksds/hextra --depth=1
     cd hextra
-    git checkout 9466af337f3a54e77b68c9852a568b79038ff0ef
+    git checkout 6ee265e06df7f12e9dec6ea381a7d95e590fe79c
     cd ../..
 fi
 

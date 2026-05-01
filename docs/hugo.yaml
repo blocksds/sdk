@@ -76,3 +76,8 @@ params:
     displayCopyright: true
     displayPoweredBy: false
     width: narrow
+
+security:
+  http:
+    urls:
+      - '(?i)^https?://[a-z]'
