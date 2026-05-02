@@ -77,6 +77,54 @@ rename this file to a name that you can remember. Once you have it on the cartri
 launch the Homebrew Menu, then launch your homebrew program with it. NDS Homebrew
 Menu will make sure that the loaded ROM receives the information it needs.
 
+### Can't I save game and load data like official games?
+
+Official games use the cartridge protocol in a way that works in emulators, but
+doesn't work in flashcarts:
+
+- Official cartridges support some commands to read data from the cartridge, but
+  flashcarts use a completely different set of commands to read from their SD
+  cards.
+
+- Official cartridges support different save systems, so each game has different
+  code to save and read saved data. Flashcarts need to save data to the SD card,
+  so the same commands won't work.
+
+When loaders load official games they look for the code that accesses the
+cartridge. They do it in different ways. Some of them may look for blocks of
+code in the game, others may keep a list of locations of routines to patch.
+Once the routines are found, the code that accesses the official cartridge is
+replaced by code that accesses the flashcart.
+
+This can't work in homebrew games because they use completely different code.
+Loaders can't find any code to patch, so the homebrew game needs to access the
+flashcart in other ways. The way to do it is:
+
+- To read data from the cartridge we use the NitroFS library. This library is
+  a compatibility layer that uses different sets of commands depending on the
+  system it detects. In emulators (or if your game is in an official cartridge!)
+  it uses official commands. In flashcarts it uses a DLDI driver to access the
+  SD card and read from the ROM, which is stored in the SD card. Also, NitroFS
+  needs to know where the ROM is located. The loader uses the `argv` protocol to
+  tell the location of the ROM to the game before booting.
+
+- To save and read saved data the application is expected to create a save file
+  by itself with `fopen()` and other standard C functions.
+
+In short, flashcart loaders load official games and homebrew games in different
+ways:
+
+- Official games are patched to replace official routines by flashcart-specific
+  routines.
+
+- Homebrew games are patched with the DLDI driver of the flashcart. Then, the
+  location of the game in the SD card is passed to the game using the `argv`
+  protocol.
+
+You can learn more about [NitroFS](../../../tutorial/intermediate/nitrofs) and
+using the [filesystems](../../../tutorial/intermediate/filesystems) of the DS in
+their chapters of the tutorial.
+
 ### Is libnds an outdated library?
 
 Short answer: No. BlocksDS considers libnds a core library of the SDK, and it
