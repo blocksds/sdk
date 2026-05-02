@@ -119,7 +119,7 @@ DEFINES		+= -D__NDS__ -D__BLOCKSDS__ -DARM9
 
 ARCH		:= -mthumb -mcpu=arm946e-s+nofp
 
-SPECS		:= $(BLOCKSDS)/sys/crts/ds_arm9.specs
+SPECS		?= $(BLOCKSDS)/sys/crts/ds_arm9.specs
 
 WARNFLAGS	:= -Wall
 
