@@ -145,7 +145,7 @@ It is possible to store the sound bank (with your sound effects and music) in
 the filesystem. This is required if your game grows too much and it can't fit in
 RAM. This system will be explained later in the tutorial.
 
-Check the [documentation of Maxmod](https://blocksds.skylyrac.net/docs/maxmod/index.html)
+Check the [documentation of Maxmod](https://blocksds.skylyrac.net/maxmod/index.html)
 and the [examples](https://codeberg.org/blocksds/sdk/src/branch/master/examples/maxmod)
 for more information:
 
