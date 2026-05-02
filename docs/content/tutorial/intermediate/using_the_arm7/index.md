@@ -45,10 +45,14 @@ Both:
 - DSi NDMA (each CPU has 4 channels, they aren't shared).
 - DSi NWRAM memory and settings.
 
-In practice, the ARM7 acts as an I/O coprocessor that handles peripherals while
-the ARM9 controls all the logic of the application. BlocksDS allows you to
-customize the code that runs on the ARM7 in your application, but it comes with
-a few [pre-built ARM7 cores](https://codeberg.org/blocksds/sdk/src/branch/master/sys/arm7/main_core)
+In practice, the ARM7 doesn't act as a second CPU, it acts as an I/O coprocessor
+that handles peripherals while the ARM9 controls all the logic of the
+application.
+
+Official developers weren't able to customize the code running on the ARM7, but
+BlocksDS allows you to do it!
+
+BlocksDS comes with a few [pre-built ARM7 cores](https://codeberg.org/blocksds/sdk/src/branch/master/sys/arm7/main_core)
 that are good enough for most applications:
 
 - `minimal`: Minimal core with only basic libnds services.
@@ -58,6 +62,11 @@ that are good enough for most applications:
 - `libxm7`: Libnds and LibXM7.
 - `dswifi_maxmod`: Libnds, DSWiFi and Maxmod.
 - `dswifi_libxm7`: Libnds, DSWiFi and LibXM7.
+
+All cores have a `_debug` version with debug symbols and extra checks.
+
+If the default cores aren't enough for what you're trying to create, you can
+write your own custom ARM7 code.
 
 Some reasons to write a custom ARM7 core are:
 
