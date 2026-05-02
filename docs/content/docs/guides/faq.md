@@ -77,7 +77,7 @@ rename this file to a name that you can remember. Once you have it on the cartri
 launch the Homebrew Menu, then launch your homebrew program with it. NDS Homebrew
 Menu will make sure that the loaded ROM receives the information it needs.
 
-### Can't I save game and load data like official games?
+### Why do I need to use NitroFS, DLDI and argv?
 
 Official games use the cartridge protocol in a way that works in emulators, but
 doesn't work in flashcarts:
