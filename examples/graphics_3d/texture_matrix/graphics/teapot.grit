@@ -1,2 +1,2 @@
-# 16-bit palette, no transparency
+# 16-bit texture, no transparency
 -gx -gb -gB16 -gT!
