@@ -29,8 +29,17 @@ ASSERT((__svc_stack_size & 3) == 0, "__svc_stack_size must be a multiple of 4");
 PROVIDE(__irq_stack_size = 0x100);
 ASSERT((__irq_stack_size & 3) == 0, "__irq_stack_size must be a multiple of 4");
 
+PHDRS {
+    crt0  PT_LOAD FLAGS(7);
+    arm7  PT_LOAD FLAGS(7);
+    arm7i PT_LOAD FLAGS(0x100007); /* (DSi flag for ndstool | 7) */
+}
+
 MEMORY {
-    iwram : ORIGIN = 0x03800000 - __shared_wram_size, LENGTH = 65536 + __shared_wram_size	
+    iwram : ORIGIN = 0x03800000 - __shared_wram_size, LENGTH = 65536 + __shared_wram_size
+
+    twl_ewram : ORIGIN = 0x02e80000, LENGTH = 512K - 64K
+    twl_iwram : ORIGIN = 0x03000000, LENGTH = 256K
 }
 
 __iwram_start	=	ORIGIN(iwram);
@@ -46,36 +55,75 @@ __irq_vector	=	0x04000000 - 4;
 
 SECTIONS
 {
+    .twl :
+    {
+        __arm7i_lma__ = LOADADDR(.twl);
+        __arm7i_start__ = .;
+        *(.twl)
+        *(.twl.text .twl.text.*)
+        *(.twl.rodata .twl.rodata.*)
+        *(.twl.data .twl.data.*)
+        *.twl*(.text .stub .text.* .gnu.linkonce.t.*)
+        *.twl*(.rodata)
+        *.twl*(.roda)
+        *.twl*(.rodata.*)
+        *.twl*(.data)
+        *.twl*(.data.*)
+        *.twl*(.gnu.linkonce.d*)
+        . = ALIGN(4);
+        __arm7i_end__ = .;
+    } >twl_iwram :arm7i
+
+    .twl_bss ALIGN(4) (NOLOAD) :
+    {
+        __twl_bss_start__ = .;
+        *(.twl_bss .twl_bss.*)
+        *(.twl.bss .twl.bss.*)
+        *.twl.*(.dynbss)
+        *.twl.*(.gnu.linkonce.b*)
+        *.twl.*(.bss*)
+        *.twl.*(COMMON)
+        . = ALIGN(4);
+        __twl_bss_end__ = .;
+    } >twl_iwram :NONE
+
+    .twl_noinit ALIGN(4) (NOLOAD):
+    {
+        __twl_noinit_start__ = ABSOLUTE(.);
+        *(.twl_noinit .twl_noinit.*)
+        *(.twl.noinit .twl.noinit.*)
+        *.twl*(.noinit)
+        *.twl*(.noinit.*)
+        *.twl*(.gnu.linkonce.n.*)
+        . = ALIGN(4);
+        __twl_noinit_end__ = ABSOLUTE(.);
+        __twl_end__ = ABSOLUTE(.);
+    } >twl_iwram :NONE
+
     .crt0	:
     {
-        __text_start = . ;
         KEEP (*(.crt0))
-        . = ALIGN(4);  /* REQUIRED. LD is flaky without it. */
-    } >iwram = 0xff
+        . = ALIGN(4);
+    } >iwram = 0xff :crt0
 
-    .init           :
+    .text :
     {
+        __arm7_lma__ = LOADADDR(.text);
+        __arm7_start__ = .;
         KEEP (*(SORT_NONE(.init)))
-    } >iwram = 0xff
-
-    .plt : { *(.plt) } >iwram = 0xff
-
-    .text :   /* ALIGN (4): */
-    {
+        *(.plt)
         *(.text .stub .text.* .gnu.linkonce.t.*)
         KEEP (*(.text.*personality*))
         /* .gnu.warning sections are handled specially by elf32.em.  */
         *(.gnu.warning)
         *(.glue_7t) *(.glue_7) *(.v4_bx)
-        . = ALIGN(4);  /* REQUIRED. LD is flaky without it. */
+        . = ALIGN(4);
     } >iwram = 0xff
 
     .fini           :
     {
         KEEP (*(.fini))
     } >iwram =0xff
-
-    __text_end = . ;
 
     .rodata :
     {
@@ -85,13 +133,16 @@ SECTIONS
         *(.rodata.*)
         *(.gnu.linkonce.r*)
         SORT(CONSTRUCTORS)
-        . = ALIGN(4);   /* REQUIRED. LD is flaky without it. */
+        . = ALIGN(4);
     } >iwram = 0xff
 
     .ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >iwram
-    __exidx_start = .;
-    .ARM.exidx   : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) } >iwram
-    __exidx_end = .;
+
+    .ARM.exidx   : {
+        __exidx_start = .;
+        *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+        __exidx_end = .;
+    } >iwram
 
     /* Ensure the __preinit_array_start label is properly aligned.  We
        could instead move the label definition inside the section, but
@@ -175,7 +226,6 @@ SECTIONS
         *(.gnu.linkonce.d*)
         CONSTRUCTORS
         . = ALIGN(4);
-        __data_end = ABSOLUTE(.);
     } >iwram = 0xff
 
     .tdata ALIGN(4) :
@@ -200,17 +250,16 @@ SECTIONS
 
     __tbss_size = __tbss_end - __tbss_start ;
 
-    __arm7_end__ = .;
-
-    .bss ALIGN(4) :
+    .bss ALIGN(4) (NOLOAD) :
     {
+        __arm7_end__ = .;
         __bss_start = ABSOLUTE(.);
         __bss_start__ = ABSOLUTE(.);
         *(.dynbss)
         *(.gnu.linkonce.b*)
         *(.bss*)
         *(COMMON)
-        . = ALIGN(4);    /* REQUIRED. LD is flaky without it. */
+        . = ALIGN(4);
         __bss_end__ = ABSOLUTE(.);
     } >iwram
 
@@ -218,7 +267,7 @@ SECTIONS
     {
         __noinit_start = ABSOLUTE(.);
         *(.noinit .noinit.* .gnu.linkonce.n.*)
-        . = ALIGN(4);    /* REQUIRED. LD is flaky without it. */
+        . = ALIGN(4);
         __noinit_end = ABSOLUTE(.);
     } >iwram
 
@@ -227,12 +276,17 @@ SECTIONS
     {
         __tls_start = ABSOLUTE(.);
         . = . + __tdata_size + __tbss_size;
+        . = ALIGN(4);
          __tls_end = ABSOLUTE(.);
         __end__ = ABSOLUTE(.);
     } >iwram
 
+    __tls_size = __tls_end - __tls_start;
+
     HIDDEN(__arm7_size__ = __arm7_end__ - __arm7_start__);
+    HIDDEN(__arm7i_size__ = __arm7i_end__ - __arm7i_start__);
     HIDDEN(__bss_size__ = __bss_end__ - __bss_start__);
+    HIDDEN(__twl_bss_size__ = __twl_bss_end__ - __twl_bss_start__);
 
     /* Stabs debugging sections.  */
     .stab          0 : { *(.stab) }

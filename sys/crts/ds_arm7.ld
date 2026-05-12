@@ -144,7 +144,7 @@ SECTIONS
         __exidx_start = .;
         *(.ARM.exidx* .gnu.linkonce.armexidx.*)
         __exidx_end = .;
-     } >iwram AT>ewram
+    } >iwram AT>ewram
 
     /* Ensure the __preinit_array_start label is properly aligned.  We
        could instead move the label definition inside the section, but
