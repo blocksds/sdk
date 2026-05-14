@@ -31,3 +31,6 @@
 [submodule "tools/squeezer"]
 	path = tools/squeezer
 	url = ../squeezer
+[submodule "libs/libath6k"]
+	path = libs/libath6k
+	url = ../libath6k
