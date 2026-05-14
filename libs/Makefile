@@ -4,8 +4,10 @@
 
 WONDERFUL_TOOLCHAIN	?= /opt/wonderful
 LLVM_TEAK_PATH		?= $(WONDERFUL_TOOLCHAIN)/toolchain/llvm-teak/bin/
+XTENSA_ELF_PATH		?= $(WONDERFUL_TOOLCHAIN)/toolchain/gcc-xtensa-elf/bin/
 
 LLVM_TEAK_CLANG_VERSION	:= $(shell $(LLVM_TEAK_PATH)clang --version 2> /dev/null)
+XTENSA_ELF_GCC_VERSION	:= $(shell $(XTENSA_ELF_PATH)xtensa-elf-gcc --version 2> /dev/null)
 
 # Tools
 # -----
@@ -37,9 +39,9 @@ endif
 # Build targets
 # =============
 
-.PHONY: all clean dswifi install libnds libteak libxm7 maxmod version
+.PHONY: all clean dswifi install libath6k libnds libteak libxm7 maxmod version
 
-all: dswifi libnds libxm7 libteak maxmod version
+all: dswifi libath6k libnds libxm7 libteak maxmod version
 
 dswifi: libnds
 	+$(MAKE) -C dswifi
@@ -59,6 +61,13 @@ endif
 
 libxm7: libnds
 	+$(MAKE) -C libxm7
+
+libath6k:
+ifeq ($(strip $(XTENSA_ELF_GCC_VERSION)),)
+	@echo "Skipping libath6k: toolchain-gcc-xtensa-elf not found"
+else
+	+$(MAKE) -C libath6k
+endif
 
 maxmod:
 	+$(MAKE) -C maxmod ds
@@ -84,6 +93,11 @@ ifeq ($(strip $(LLVM_TEAK_CLANG_VERSION)),)
 else
 	+$(MAKE) -C libteak install INSTALLDIR=$(INSTALLDIR_ABS)/libteak
 endif
+ifeq ($(strip $(XTENSA_ELF_GCC_VERSION)),)
+	@echo "Skipping libath6k: toolchain-gcc-xtensa-elf not found"
+else
+	+$(MAKE) -C libath6k install INSTALLDIR=$(INSTALLDIR_ABS)/libath6k
+endif
 
 # Clean target
 # ============
@@ -97,4 +111,9 @@ ifeq ($(strip $(LLVM_TEAK_CLANG_VERSION)),)
 	@echo "Skipping libteak: toolchain-llvm-teak-llvm not found"
 else
 	+$(MAKE) -C libteak clean
+endif
+ifeq ($(strip $(XTENSA_ELF_GCC_VERSION)),)
+	@echo "Skipping libath6k: toolchain-gcc-xtensa-elf not found"
+else
+	+$(MAKE) -C libath6k clean
 endif
