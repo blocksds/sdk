@@ -5,6 +5,7 @@ libraries included in BlocksDS. The folders contain examples that relate to one
 specific area:
 
 - `audio`: How to use the audio functions of libnds (without external libraries).
+- `atheros`: How to load custom code to the WiFi chip of the DSi.
 - `bios`: How to use the services provided by the BIOS.
 - `compression`: Decompressing data included in your application.
 - `cmake`: How to use CMake to build projects using BlocksDS.
