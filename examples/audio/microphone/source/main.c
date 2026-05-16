@@ -68,6 +68,11 @@ void microphone_handler(void *completed_buffer, int length)
     recording_pointer += length;
 }
 
+uint32_t clip(uint32_t val, uint32_t max) {
+    if (val > max) return max - 1;
+    else return val; 
+}
+
 int main(int argc, char *argv[])
 {
     // Setup the top screen to display the waveform as a bitmap
@@ -109,19 +114,39 @@ int main(int argc, char *argv[])
 
         // Divide the buffer into 256 steps (but there are two channels, so
         // consider that too).
+        consoleClear();
         int step = (MICROPHONE_BUFFER_SIZE / 2) / 256;
+        int y = 0, prev_y = 0;
         for (int i = 0; i < 256; i ++)
         {
             // Convert from signed 16 bits to 0-191
             s32 val = wave_buf[i * step];
-            int y = ((0x8000 + val) * 192) >> 16;
+            y = ((0x8000 + val) * 192) >> 16;
+            if(i > 0) {
+                prev_y = ((0x8000 + wave_buf[(i - 1) * step]) * 192) >> 16;
+                for(int k = 0; k != (y - prev_y);) {
+                    if((y - prev_y) < 0) {
+                        if(k < ((y - prev_y) / 2)) {
+                            bg_buf[clip(clip(y - k, 191)  * 256 + (i - 1), 256*192)] = RGB15(0, 31, 0) | BIT(15);
+                        } else {
+                            bg_buf[clip(clip(y - k, 191)  * 256 + (i), 256*192)] = RGB15(0, 31, 0) | BIT(15);
+                        }
+                        k--;
+                    } else {
+                        if(k > ((y - prev_y) / 2)) {
+                            bg_buf[clip(clip(y - k, 191)  * 256 + (i - 1), 256*192)] = RGB15(0, 31, 0) | BIT(15);
+                        } else {
+                            bg_buf[clip(clip(y - k, 191)  * 256 + (i), 256*192)] = RGB15(0, 31, 0) | BIT(15);
+                        }
+                        k++;
+                    }
+                }
+            }
             bg_buf[y * 256 + i] = RGB15(0, 31, 0) | BIT(15);
         }
-
-        consoleClear();
-
         printf("A: Record\n");
         printf("B: Play\n");
+        printf("X: Pause\n");
         printf("\n");
 
         if (recording)
@@ -148,6 +173,16 @@ int main(int argc, char *argv[])
 
             soundPlaySample(playback_buffer, SoundFormat_16Bit, SOUND_BUFFER_SIZE,
                             SAMPLE_RATE, 127, 64, false, 0);
+        }
+
+        if (keys_down & KEY_X)
+        {
+            printf("\nPress X to resume...");
+            while(1) {
+                scanKeys();
+                keys_down = keysDown();
+                if(keys_down & KEY_X) break;
+            }
         }
 
         if (keys_down & KEY_START)
