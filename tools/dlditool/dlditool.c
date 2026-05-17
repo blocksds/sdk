@@ -162,7 +162,7 @@ FILE *openDLDIFile(const char *argv0, char *dldiFileName ) {
 
 	// add .dldi extension to filename
 	if (!stringEndsWith (dldiFileName, dldiFileExtension)) {
-		strcat (dldiFileName, dldiFileExtension);
+		snprintf(dldiFileName + strlen(dldiFileName), sizeof(dldiFileExtension), "%s", dldiFileExtension);
 	}
 
 	printf ("Trying \"%s\"\n", dldiFileName);
@@ -182,10 +182,7 @@ FILE *openDLDIFile(const char *argv0, char *dldiFileName ) {
 	
 
 	if ( NULL != dldiPATH ) {
-		strcpy(appPath,dldiPATH);
-		if ( appPath[strlen(appPath)] != '\\' &&  appPath[strlen(appPath)] != '/' )
-			strcat(appPath,"/");
-		strcat ( appPath, dldiFileName );
+		snprintf(appPath, MAXPATHLEN, "%s/%s", dldiPATH, dldiFileName);
 		
 		printf ("Trying \"%s\"\n", appPath);
 		dldiFile = fopen(appPath,"rb");
@@ -205,12 +202,11 @@ FILE *openDLDIFile(const char *argv0, char *dldiFileName ) {
 
 	if ( NULL != lastSlash ) {
 		*(lastSlash++) = '\0';
-		strcpy(appPath, argv0);
-		strcpy(appName, lastSlash);
-		strcat(appPath, "/");
+		snprintf(appPath, MAXPATHLEN, "%s/", argv0);
+		snprintf(appName, MAXPATHLEN, "%s", lastSlash);
 	} else {
 		strcpy(appPath, "");
-		strcpy(appName, argv0);
+		snprintf(appName, MAXPATHLEN, "%s", argv0);
 	}
 			 
 
@@ -231,16 +227,14 @@ FILE *openDLDIFile(const char *argv0, char *dldiFileName ) {
 			if ( NULL != nextPATH )
 				*(nextPATH++) = '\0'; // terminate string, point to next component
 
-			strcpy(appPath,thisPATH);
-			strcat(appPath,"/");
-			strcpy(appPathName,appPath);
-			strcat(appPathName,appName);		// add application name
+			snprintf(appPath, MAXPATHLEN, "%s/", thisPATH);
+			snprintf(appPathName, MAXPATHLEN, "%s%s", appPath, appName);	// add application name
 
 			if ( stat(appPathName,&buf) == 0 )	// if it exists we found the path
 				break;
 			
 			thisPATH = nextPATH;
-			strcpy(appPath,"");		// empty path
+			appPath[0] = '\0';		// empty path
 			if ( thisPATH == NULL) break;
 		}
 	}
