@@ -46,8 +46,9 @@ uint16_t temporary_buffer[MICROPHONE_BUFFER_SIZE];
 
 // This flag controls whether the callback will copy data to the recording
 // buffer or if it will just ignore them (they will still be displayed on the
-// top screen!).
-bool recording = false;
+// top screen!) and the second flag is to pause the waveform being drawn.
+// The third on the other hand is to enable linear interpolation.
+bool recording = false, Pause = false, linear = true;
 
 void microphone_handler(void *completed_buffer, int length)
 {
@@ -68,8 +69,9 @@ void microphone_handler(void *completed_buffer, int length)
     recording_pointer += length;
 }
 
-uint32_t clip(uint32_t val, uint32_t max) {
-    if (val > max) return max - 1;
+uint32_t clip(uint32_t val, uint32_t min, uint32_t max) {
+    if (val > max) return max;
+    else if (val < min) return min;
     else return val; 
 }
 
@@ -106,53 +108,60 @@ int main(int argc, char *argv[])
         // uncached mirror so that we don't load the buffer to the data cache.
         // We need the buffer to not be cached so that the ARM7 can use it
         // normally (the ARM7 can't see the ARM9 cache).
-        s16 *wave_buf = memUncached(temporary_buffer);
+        if(!Pause) {
+            s16 *wave_buf = memUncached(temporary_buffer);
 
-        // Clear background
-        uint16_t *bg_buf = bgGetGfxPtr(bg);
-        memset(bg_buf, 0, 256 * 192 * 2);
+            // Clear background
+            uint16_t *bg_buf = bgGetGfxPtr(bg);
+            memset(bg_buf, 0, 256 * 192 * 2);
 
-        // Divide the buffer into 256 steps (but there are two channels, so
-        // consider that too).
-        consoleClear();
-        int step = (MICROPHONE_BUFFER_SIZE / 2) / 256;
-        int y = 0, prev_y = 0;
-        for (int i = 0; i < 256; i ++)
-        {
-            // Convert from signed 16 bits to 0-191
-            s32 val = wave_buf[i * step];
-            y = ((0x8000 + val) * 192) >> 16;
-            if(i > 0) {
-                prev_y = ((0x8000 + wave_buf[(i - 1) * step]) * 192) >> 16;
-                for(int k = 0; k != (y - prev_y);) {
-                    if((y - prev_y) < 0) {
-                        if(k < ((y - prev_y) / 2)) {
-                            bg_buf[clip(clip(y - k, 191)  * 256 + (i - 1), 256*192)] = RGB15(0, 31, 0) | BIT(15);
+            // Divide the buffer into 256 steps (but there are two channels, so
+            // consider that too).
+            int step = (MICROPHONE_BUFFER_SIZE / 2) / 256;
+            int y = 0, prev_y = 0;
+            for (int i = 0; i < 256; i ++)
+            {
+                // Convert from signed 16 bits to 0-191
+                s32 val = wave_buf[i * step];
+                y = ((0x8000 + val) * 192) >> 16;
+                if(i > 0 && linear) {
+                    prev_y = ((0x8000 + wave_buf[(i - 1) * step]) * 192) >> 16;
+                    for(int k = 0; k != (y - prev_y);) {
+                        if((y - prev_y) < 0) {
+                            if(k < ((y - prev_y) / 2)) {
+                                bg_buf[clip(clip(y - k, 0, 191)  * 256 + (i - 1), 0, 256*192)] = RGB15(0, 31, 0) | BIT(15);
+                            } else {
+                                bg_buf[clip(clip(y - k, 0, 191)  * 256 + (i), 0, 256*192)] = RGB15(0, 31, 0) | BIT(15);
+                            }
+                            k--;
                         } else {
-                            bg_buf[clip(clip(y - k, 191)  * 256 + (i), 256*192)] = RGB15(0, 31, 0) | BIT(15);
+                            if(k > ((y - prev_y) / 2)) {
+                                bg_buf[clip(clip(y - k, 0, 191)  * 256 + (i - 1), 0, 256*192)] = RGB15(0, 31, 0) | BIT(15);
+                            } else {
+                                bg_buf[clip(clip(y - k, 0, 191)  * 256 + (i), 0, 256*192)] = RGB15(0, 31, 0) | BIT(15);
+                            }
+                            k++;
                         }
-                        k--;
-                    } else {
-                        if(k > ((y - prev_y) / 2)) {
-                            bg_buf[clip(clip(y - k, 191)  * 256 + (i - 1), 256*192)] = RGB15(0, 31, 0) | BIT(15);
-                        } else {
-                            bg_buf[clip(clip(y - k, 191)  * 256 + (i), 256*192)] = RGB15(0, 31, 0) | BIT(15);
-                        }
-                        k++;
                     }
                 }
+                bg_buf[y * 256 + i] = RGB15(0, 31, 0) | BIT(15);
             }
-            bg_buf[y * 256 + i] = RGB15(0, 31, 0) | BIT(15);
         }
+        consoleClear();
+
         printf("A: Record\n");
         printf("B: Play\n");
-        printf("X: Pause\n");
+        printf("X: Pause/resume\n");
+        printf("Y: Toggle interpolation\n");
         printf("\n");
 
         if (recording)
             printf("Recording... %u/%u\n", recording_pointer, SOUND_BUFFER_SIZE);
+        else if(Pause)
+            printf("\nPress X to resume...");
         else
             printf("Ready!\n");
+
 
         scanKeys();
         uint16_t keys_down = keysDown();
@@ -177,12 +186,12 @@ int main(int argc, char *argv[])
 
         if (keys_down & KEY_X)
         {
-            printf("\nPress X to resume...");
-            while(1) {
-                scanKeys();
-                keys_down = keysDown();
-                if(keys_down & KEY_X) break;
-            }
+            Pause = !Pause;
+        }
+
+        if (keys_down & KEY_Y)
+        {
+            linear = !linear;
         }
 
         if (keys_down & KEY_START)
