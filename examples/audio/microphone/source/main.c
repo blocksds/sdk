@@ -48,6 +48,10 @@ uint16_t temporary_buffer[MICROPHONE_BUFFER_SIZE];
 // buffer or if it will just ignore them (they will still be displayed on the
 // top screen!).
 bool recording = false;
+// This pauses the waveform being drawn.
+bool pause_ = false;
+// This enables linear interpolation when drawing the waveform.
+bool linear = true;
 
 void microphone_handler(void *completed_buffer, int length)
 {
@@ -66,6 +70,89 @@ void microphone_handler(void *completed_buffer, int length)
     dmaCopy(completed_buffer, recording_buffer + recording_pointer, length);
 
     recording_pointer += length;
+}
+
+uint32_t clip(uint32_t val, uint32_t min, uint32_t max)
+{
+    if (val > max)
+        return max;
+    else if (val < min)
+        return min;
+    else
+        return val;
+}
+
+void draw_wave(uint16_t *bg_buf)
+{
+    const uint16_t color = RGB15(0, 31, 0) | BIT(15);
+
+    // Draw waveform on the main screen. We need to read the buffer from an
+    // uncached mirror so that we don't load the buffer to the data cache.
+    // We need the buffer to not be cached so that the ARM7 can use it
+    // normally (the ARM7 can't see the ARM9 cache).
+    s16 *wave_buf = memUncached(temporary_buffer);
+
+    // Clear background
+    memset(bg_buf, 0, 256 * 192 * 2);
+
+    // Divide the buffer into 256 steps (but there are two channels, so
+    // consider that too).
+    int step = (MICROPHONE_BUFFER_SIZE / 2) / 256;
+    int y = 0, prev_y = 0;
+    for (int i = 0; i < 256; i ++)
+    {
+        // Convert from signed 16 bits to 0-191
+        s32 val = wave_buf[i * step];
+        y = ((0x8000 + val) * 192) >> 16;
+
+        if (linear)
+        {
+            // Join dots with a line
+            if (i > 0)
+            {
+                prev_y = ((0x8000 + wave_buf[(i - 1) * step]) * 192) >> 16;
+
+                for (int k = 0; k != (y - prev_y); )
+                {
+                    if ((y - prev_y) < 0)
+                    {
+                        if (k < ((y - prev_y) / 2))
+                        {
+                            int xx = i - 1;
+                            int yy = clip(y - k, 0, 191);
+                            bg_buf[yy * 256 + xx] = color;
+                        }
+                        else
+                        {
+                            int xx = i;
+                            int yy = clip(y - k, 0, 191);
+                            bg_buf[yy * 256 + xx] = color;
+                        }
+                        k--;
+                    }
+                    else
+                    {
+                        if (k > ((y - prev_y) / 2))
+                        {
+                            int xx = i - 1;
+                            int yy = clip(y - k, 0, 191);
+                            bg_buf[yy  * 256 + xx] = color;
+                        }
+                        else
+                        {
+                            int xx = i;
+                            int yy = clip(y - k, 0, 191);
+                            bg_buf[yy * 256 + xx] = color;
+                        }
+                        k++;
+                    }
+                }
+            }
+        }
+
+        // Draw dots with the measured samples
+        bg_buf[y * 256 + i] = color;
+    }
 }
 
 int main(int argc, char *argv[])
@@ -97,35 +184,25 @@ int main(int argc, char *argv[])
     {
         swiWaitForVBlank();
 
-        // Draw waveform on the main screen. We need to read the buffer from an
-        // uncached mirror so that we don't load the buffer to the data cache.
-        // We need the buffer to not be cached so that the ARM7 can use it
-        // normally (the ARM7 can't see the ARM9 cache).
-        s16 *wave_buf = memUncached(temporary_buffer);
-
-        // Clear background
-        uint16_t *bg_buf = bgGetGfxPtr(bg);
-        memset(bg_buf, 0, 256 * 192 * 2);
-
-        // Divide the buffer into 256 steps (but there are two channels, so
-        // consider that too).
-        int step = (MICROPHONE_BUFFER_SIZE / 2) / 256;
-        for (int i = 0; i < 256; i ++)
+        if (!pause_)
         {
-            // Convert from signed 16 bits to 0-191
-            s32 val = wave_buf[i * step];
-            int y = ((0x8000 + val) * 192) >> 16;
-            bg_buf[y * 256 + i] = RGB15(0, 31, 0) | BIT(15);
+            // Redraw waveform on the main screen
+            uint16_t *bg_buf = bgGetGfxPtr(bg);
+            draw_wave(bg_buf);
         }
 
         consoleClear();
 
         printf("A: Record\n");
         printf("B: Play\n");
+        printf("X: Pause/resume\n");
+        printf("Y: Toggle interpolation\n");
         printf("\n");
 
         if (recording)
             printf("Recording... %u/%u\n", recording_pointer, SOUND_BUFFER_SIZE);
+        else if (pause_)
+            printf("\nPress X to resume...");
         else
             printf("Ready!\n");
 
@@ -148,6 +225,16 @@ int main(int argc, char *argv[])
 
             soundPlaySample(playback_buffer, SoundFormat_16Bit, SOUND_BUFFER_SIZE,
                             SAMPLE_RATE, 127, 64, false, 0);
+        }
+
+        if (keys_down & KEY_X)
+        {
+            pause_ = !pause_;
+        }
+
+        if (keys_down & KEY_Y)
+        {
+            linear = !linear;
         }
 
         if (keys_down & KEY_START)
