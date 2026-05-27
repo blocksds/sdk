@@ -300,6 +300,12 @@ The Slot-2 API abstracts all of them and provides a unified API to use them:
    3DS consoles running in DSi mode.
    {{< /callout >}}
 
+   {{< callout type="warning" >}}
+   Slot-2 RAM can only be written in 32-bit and 16-bit units. Be careful when
+   using that RAM as general-purpose RAM for your application. DSi debugger RAM
+   doesn't have this limitation and it can be written in 8-bit units.
+   {{< /callout >}}
+
 4. You can detect if the device supports rumble by checking if flag
    `SLOT2_PERIPHERAL_RUMBLE_ANY` is set. Then you can use function
    `rumbleGetMaxRawStrength()` to detect the maximum strength supported by the
