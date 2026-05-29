@@ -72,10 +72,10 @@ install: all
 
 ds_arm7_vram_crt0.o: ds_arm7_crt0.s
 	@echo "  AS.7    $@"
-	$(V)$(CC) $(ASFLAGS) $(ARCHARM7) $(INCLUDEFLAGS) $(DEFINESARM7) -DVRAM -c -o $@ $<
+	$(V)$(CC) $(ASFLAGS) $(ARCHARM7) $(INCLUDEFLAGS) $(DEFINESARM7) -DVRAM_OR_IWRAM -c -o $@ $<
 
-# They are the same, but it's more intuitive to have two files than to remember
-# that the VRAM crt0 works with the IWRAM linkerscript.
+# The IWRAM and VRAM crt0s are the same, but it's more intuitive to have two
+# files than to remember that they both use the same file.
 ds_arm7_iwram_crt0.o: ds_arm7_vram_crt0.o
 	@echo "  CP      $@"
 	$(V)$(CP) $< $@

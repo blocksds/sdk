@@ -28,7 +28,7 @@ _start:
     msr     cpsr, r0
     ldr     sp, =__sp_usr   // Set system and user stack
 
-#ifndef VRAM
+#ifndef VRAM_OR_IWRAM
 
     adr     r1, __sync_start    // Perform ARM7<->ARM9 sync code
     ldr     r2, =__arm7_start__
@@ -47,11 +47,13 @@ _start:
     ldr     r3, =__arm7_size__
     bl      CopyMem
 
-#else
+#else // #ifdef VRAM_OR_IWRAM
+
+    // VRAM and IWRAM linkerscripts don't use TWL sections
 
     bl      __sync_start
 
-#endif
+#endif // VRAM_OR_IWRAM
 
     ldr     r0, =__bss_start__  // Clear BSS section to 0x00
     ldr     r1, =__bss_size__
@@ -62,7 +64,7 @@ _start:
     ldr     r1, =__dsimode      // Set DSi mode flag
     strb    r10, [r1]
 
-#ifndef VRAM
+#ifndef VRAM_OR_IWRAM
 
     ldr     r1, =0x02ffe1d8     // Get ARM7i LMA from header
     ldr     r1, [r1]
@@ -74,7 +76,7 @@ _start:
     ldr     r1, =__twl_bss_size__
     bl      ClearMem
 
-#endif
+#endif // VRAM_OR_IWRAM
 
 NotTWL:
 
@@ -131,10 +133,10 @@ NotTWL:
 _blx_r3_stub:
     bx      r3
 
-#ifndef VRAM
+#ifndef VRAM_OR_IWRAM
 arm7lma:
     .word   __arm7_lma__ - .
-#endif
+#endif // VRAM_OR_IWRAM
     .pool
 
 // -----------------------------------------------------------------------------
