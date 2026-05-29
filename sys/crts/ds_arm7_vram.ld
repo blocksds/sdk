@@ -5,6 +5,13 @@
 
 /* SPDX-License-Identifier: MPL-2.0 AND FSFAP */
 
+/*
+ * NOTE: This linkerscript only works in DS mode. The TWL sections are present
+ * in the file so that they can be discarded by ndstool. If ndstool can't
+ * identify TWL-only code, it will all be included in the DS sections, and the
+ * ARM7 binary will be too big (it will include the NAND and SD drivers, etc).
+ */
+
 OUTPUT_FORMAT("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 OUTPUT_ARCH(arm)
 ENTRY(_start)
@@ -218,7 +225,6 @@ SECTIONS
         . = ALIGN(4);   /* REQUIRED. LD is flaky without it. */
     } >vram = 0xff
     .got            : { *(.got.plt) *(.got) } >vram = 0
-
 
     .data ALIGN(4) : 	{
         __data_start = ABSOLUTE(.);

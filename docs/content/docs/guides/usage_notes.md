@@ -171,6 +171,8 @@ ARM7 makefile:
   in VRAM from the start.
 
 Note that the IWRAM and VRAM options aren't supported for DSi applications.
+Pass option `-h 0x200` to `ndstool` to force the ROM to be NDS-only and remove
+DSi code.
 
 #### ARM9 options
 
