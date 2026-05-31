@@ -6,17 +6,15 @@
 
 #include <nds.h>
 
-ITCM_CODE __attribute__((noinline))
-int test_function(int a, int b)
+__attribute__((noinline))
+int ITCM_FUNC(test_function)(int a, int b)
 {
     return a + b;
 }
 
-DTCM_DATA
-int dtcm_data_var = 12345;
+int DTCM_DATA_VAR(dtcm_data_var) = 12345;
 
-DTCM_BSS
-int dtcm_bss_var = 0;
+int DTCM_BSS_VAR(dtcm_bss_var) = 0;
 
 volatile int num1 = 2;
 volatile int num2 = 3;
