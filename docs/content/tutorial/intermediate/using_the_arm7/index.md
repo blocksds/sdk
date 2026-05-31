@@ -199,6 +199,18 @@ There are two different ways to handle this issue:
   slower than using the cache, and this system forces the ARM9 to do uncached
   accesses to RAM for every read and write.
 
+  Also, you need to keep in mind that any variable that you access from an
+  uncached mirror must not be accessed from a cached address. Similarly, you
+  shouldn't access any variable in the same cache line as the variable you want
+  to access from an uncached mirror. In practice, that means that any struct or
+  variable that you want to access from both CPUs must be aligned to
+  `CACHE_LINE_SIZE` bytes, and you must ensure that the rest of the cache line
+  doesn't have any other variable or struct. The size of any shared buffer must
+  be exactly a multiple of `CACHE_LINE_SIZE`. If not, if there is a variable in
+  the same cache line, there will be issues if the whole line is loaded to the
+  cache and it is later evicted from cache and updated in RAM when you didn't
+  expect it.
+
 - Manage the data cache yourself.
 
   - If the ARM9 wants to send data to the ARM7 it should call
