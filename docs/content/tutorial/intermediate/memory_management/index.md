@@ -72,22 +72,23 @@ In fact, the DSi is more restrictive than the DS. DS ARM9 binaries can have a
 size of around 3.7 MiB. In DSi that's reduced to 2.75 MiB.
 
 There are special tags that you can add to your code and data to make it
-available only when the application runs on a DSi: `TWL_CODE`, `TWL_DATA` and
-`TWL_BSS`. This is added to `twl` sections, and they have their own limits.
+available only when the application runs on a DSi: `TWL_FUNC`, `TWL_DATA_VAR`
+and `TWL_BSS_VAR` (there are other similar macros in libnds, but they are
+discouraged). This is added to `twl` sections, and they have their own limits.
 For example, you can do this if the code and data will only be used in DSi
 consoles:
 
 ```c
-TWL_DATA const char *enemy_name = "Big boss";
+const char *TWL_DATA_VAR(enemy_name) = "Big boss";
 
 typedef struct {
     int x, y;
     int health;
 } Enemy;
 
-TWL_BSS Enemy enemies[50];
+Enemy TWL_BSS_VAR(enemies)[50];
 
-TWL_CODE int myfunction(int a, int b)
+int TWL_FUNC(myfunction)(int a, int b)
 {
     return a + b;
 }

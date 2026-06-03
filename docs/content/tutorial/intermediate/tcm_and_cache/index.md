@@ -60,20 +60,21 @@ default. Note that the ARM7 can't access DTCM or ITCM!
 
 The main difference with the cache is that you need to manage DTCM and ITCM by
 hand. There are some macros in libnds that you can use to place code or data in
-DCTM and ITCM.
+DCTM and ITCM. The following macros are the recommended ones, (there are others
+that can cause linking issues in some cases):
 
 ```c
 /// Used to place a function in ITCM
-#define ITCM_CODE __attribute__((section(".itcm.text"), long_call))
+#define ITCM_FUNC(x) __attribute__((__section__(".itcm.text." LIBNDS_STRINGIFY(x)))) x
 /// Used to place initialized data in ITCM
-#define ITCM_DATA __attribute__((section(".itcm.data")))
+#define ITCM_DATA_VAR(x) __attribute__((__section__(".itcm.data." LIBNDS_STRINGIFY(x)))) x
 /// Used to place uninitialized data in ITCM
-#define ITCM_BSS  __attribute__((section(".itcm.bss")))
+#define ITCM_BSS_VAR(x) __attribute__((__section__(".itcm.bss." LIBNDS_STRINGIFY(x)))) x
 
 /// Used to place initialized data in DTCM
-#define DTCM_DATA __attribute__((section(".dtcm")))
+#define DTCM_DATA_VAR(x) __attribute__((__section__(".dtcm." LIBNDS_STRINGIFY(x)))) x
 /// Used to place uninitialized data in DTCM
-#define DTCM_BSS __attribute__((section(".sbss")))
+#define DTCM_BSS_VAR(x) __attribute__((__section__(".sbss." LIBNDS_STRINGIFY(x)))) x
 ```
 
 DTCM can only hold data (the CPU can't fetch instructions from it), but ITCM can
@@ -85,15 +86,15 @@ compiler takes care of this kind of details for you.
 If you want to place things in ITCM or DTCM, you can do it this way:
 
 ```c
-ITCM_CODE __attribute__((noinline))
-int test_function(int a, int b)
+__attribute__((noinline))
+int ITCM_FUNC(test_function)(int a, int b)
 {
     return a + b;
 }
 
-DTCM_DATA int dtcm_data_var = 12345;
+int DTCM_DATA_VAR(dtcm_data_var) = 12345;
 
-DTCM_BSS int dtcm_bss_var = 0;
+int DTCM_BSS_VAR(dtcm_bss_var) = 0;
 ```
 
 BSS is used for variables that start as zero, DATA is used for variables that
