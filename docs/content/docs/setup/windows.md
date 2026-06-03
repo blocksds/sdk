@@ -12,7 +12,7 @@ If you want to use it in WSL, follow the instructions for Linux instead.
 
 Follow the instructions in this link:
 
-https://wonderful.asie.pl/wiki/doku.php?id=getting_started:windows
+https://wonderful.asie.pl/wiki/doku.php?id=getting_started
 
 ### Add the BlocksDS repository to `wf-pacman`
 

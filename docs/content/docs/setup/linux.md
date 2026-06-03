@@ -11,7 +11,7 @@ If you don't want to build the SDK from source, this is the easiest option.
 
 Follow the instructions in this link:
 
-https://wonderful.asie.pl/wiki/doku.php?id=getting_started:linux
+https://wonderful.asie.pl/wiki/doku.php?id=getting_started
 
 ### Add the BlocksDS repository to `wf-pacman`
 

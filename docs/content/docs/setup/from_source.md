@@ -23,7 +23,7 @@ sudo apt-get install -y --no-install-recommends build-essential
 
 Follow the instructions in this link:
 
-https://wonderful.asie.pl/wiki/doku.php?id=getting_started:linux
+https://wonderful.asie.pl/wiki/doku.php?id=getting_started
 
 ### Install the ARM toolchain
 
