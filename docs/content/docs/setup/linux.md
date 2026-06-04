@@ -35,12 +35,25 @@ To install the documentation and examples you can install:
 wf-pacman -S blocksds-docs
 ```
 
-Install the following if you plan to develop binaries for the DSP of the DSi
-(you can skip this now and do it in the future if you need it):
+### Additional experimental toolchains
+
+The following two toolchains aren't relevant for most users of BlocksDS. The
+toolchains are very experimental, and they are mainly interesting for people
+that want to improve them, not for people wanting to create actual applications.
+
+The DSi has two additional CPUs supported by BlocksDS:
+
+- Teak: A DSP mostly used for audio (but rarely used in official games).
+- Xtensa: A CPU present in the WiFi board of the DSi.
+
+You can install both toolchains by running this:
 
 ```bash
-wf-pacman -S toolchain-llvm-teak-llvm
+wf-pacman -S toolchain-llvm-teak-llvm toolchain-gcc-xtensa-elf
 ```
+
+When they are present, the build system of BlocksDS will build additional
+libraries and examples.
 
 ### Install third-party libraries (Optional)
 
