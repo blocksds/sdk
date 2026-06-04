@@ -102,6 +102,15 @@ press one key, `keysDown()` and `keysHeld()` return 1 for one frame. Then,
 when you release the key, `keysHeld()` becomes 0, and `keysUp()` becomes 1 for
 one frame.
 
+{{< callout type="important" >}}
+Note for advanced users: You must call `scanKeys()` in the same loop where you
+handle your game logic. If you don't, any desync may cause you to miss
+`keysDown()` and `keysUp()` events. For example, don't call `scanKeys()` in a
+vertical blanking interrupt handler. If your game logic drops frames, you will
+call `scanKeys()` more than once before the game logic sees "just pressed" and
+"just released" events.
+{{< /callout >}}
+
 Something interesting you may want to know is that the ARM9 CPU doesn't have
 access to the values of the keys X and Y or the touch screen. libnds has code
 that sends this information to the ARM9 so that you don't have to do it.

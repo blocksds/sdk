@@ -84,6 +84,13 @@ too much time copying data in this handler you may block other interrupts for
 too long. Check the nested interrupts section below to see how to work around
 this issue.
 
+{{< callout type="warning" >}}
+Don't call `scanKeys()` in a VBL handler. If your game logic drops frames, you
+will call `scanKeys()` more than once before the game logic sees the state of
+`keysDown()` and `keysUp()` and you may miss "just pressed" and "just released"
+events.
+{{< /callout >}}
+
 Note: Normally you don't need to worry about it because you'll focus on ARM9
 code, but the ARM7 requires special handling regarding interrupts. You must call
 `irqInit()` in your `main()` function if you want to use interrupts. The default
