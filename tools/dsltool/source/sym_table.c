@@ -214,7 +214,7 @@ int sym_table_save_to_file(FILE *f, bool ignore_unresolved_symbols)
             uint32_t sym_addr = main_binary_get_symbol_value(sym_name);
             if (sym_addr == UINT32_MAX)
             {
-                unresolved_symbols = realloc(unresolved_symbols, unresolved_symbol_count + 1);
+                unresolved_symbols = realloc(unresolved_symbols, (unresolved_symbol_count + 1) * sizeof(char *));
                 unresolved_symbols[unresolved_symbol_count] = sym_name;
                 ++unresolved_symbol_count;
 

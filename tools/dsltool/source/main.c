@@ -389,14 +389,15 @@ int main(int argc, char *argv[])
 
             if ((type == R_ARM_ABS32) || (type == R_ARM_THM_CALL) ||
                 (type == R_ARM_CALL) || (type == R_ARM_TLS_LE32) ||
-                (type == R_ARM_JUMP24) || (type == R_ARM_TARGET1))
+                (type == R_ARM_JUMP24) || (type == R_ARM_TARGET1) ||
+                (type == R_ARM_V4BX))
             {
                 sym_set_as_used(symbol_index);
             }
             else
             {
                 // For more information, check the AAELF32 documentation:
-                // https://github.com/ARM-software/abi-aa/blob/4492d1570eb70c8fd146623e0db65b2d241f12e7/aaelf32/aaelf32.rst
+                // https://github.com/ARM-software/abi-aa/blob/087483cc79262fb5caf7734b69fa59a6637c4692/aaelf32/aaelf32.rst#561relocation-codes
                 ERROR("Invalid relocation. Index %zu. Type %u\n", r, type);
                 goto error;
             }
