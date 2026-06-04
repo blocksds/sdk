@@ -37,9 +37,11 @@ wf-pacman -S blocksds-docs
 
 ### Additional experimental toolchains
 
-The following two toolchains aren't relevant for most users of BlocksDS. The
-toolchains are very experimental, and they are mainly interesting for people
-that want to improve them, not for people wanting to create actual applications.
+**Advanced users only!**
+
+The following two toolchains aren't relevant for most users of BlocksDS. They
+are very experimental, and they are mainly interesting for people that want to
+improve them, not for people wanting to create actual applications.
 
 The DSi has two additional CPUs supported by BlocksDS:
 
@@ -54,6 +56,7 @@ wf-pacman -S toolchain-llvm-teak-llvm toolchain-gcc-xtensa-elf
 
 When they are present, the build system of BlocksDS will build additional
 libraries and examples.
+
 
 ### Install third-party libraries (Optional)
 

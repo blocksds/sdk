@@ -35,11 +35,26 @@ wf-pacman -Syu
 wf-pacman -S toolchain-gcc-arm-none-eabi
 ```
 
+### Add the BlocksDS repository to `wf-pacman`
+
+This isn't strictly required if you're building everything from source, but you
+may want to install some pre-built BlocksDS packages even if you build the rest
+from source.
+
+```bash
+wf-pacman -Syu wf-tools
+wf-config repo enable blocksds
+wf-pacman -Syu
+```
+
 ### Additional experimental toolchains
 
-The following two toolchains aren't relevant for most users of BlocksDS. The
-toolchains are very experimental, and they are mainly interesting for people
-that want to improve them, not for people wanting to create actual applications.
+**Advanced users only!**
+
+The following two toolchains aren't relevant for most users of BlocksDS. They
+are very experimental, and they are mainly interesting for people that want to
+improve them, not for people wanting to create actual applications.
+
 Also, they are only available in Linux at the moment.
 
 The DSi has two additional CPUs supported by BlocksDS:
@@ -55,18 +70,6 @@ wf-pacman -S toolchain-llvm-teak-llvm toolchain-gcc-xtensa-elf
 
 When they are present, the build system of BlocksDS will build additional
 libraries and examples.
-
-### Add the BlocksDS repository to `wf-pacman`
-
-This isn't strictly required if you're building everything from source, but you
-may want to install some pre-built BlocksDS packages even if you build the rest
-from source.
-
-```bash
-wf-pacman -Syu wf-tools
-wf-config repo enable blocksds
-wf-pacman -Syu
-```
 
 ### Clone the main repository of BlocksDS
 
