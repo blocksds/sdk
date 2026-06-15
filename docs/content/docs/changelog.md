@@ -3,6 +3,80 @@ title: 'Changelog'
 weight: 6
 ---
 
+### Version 1.21.0 (2026-06-XX)
+
+- libnds:
+
+  - Small FatFs update.
+
+- Maxmod
+
+  - Add missing target `ds` to list of phony targets.
+
+- DSWiFi:
+
+  - Small refactor of internal code to allow users from loading custom code in
+    the Xtensa CPU of the WiFi board in DSi consoles. This code is still a
+    prototype and it may change. @PoroCYon
+
+- libath6k:
+
+  - This is a new library designed to contain helpers to develop code for the
+    Xtensa CPU of the WiFi boards of DSi consoles. For now it's a placeholder
+    with some register definitions.
+
+- SDK:
+
+  - Small update to dldipatch to build in macOS. @asie
+  - binutils has been updated to 2.46.1 in Wonferful Toolchain. @asie
+  - The default makefiles now allow the developer to override the specs file.
+    @edo9300
+  - The alternative ARM7 linkerscripts (VRAM/IWRAM) have been updated to build
+    again.  They haven't been tested, so they may still be broken.
+  - libath6k has been added as a new submodule.
+  - There is a new makefile to build Xtensa binaries.
+  - A new example has been added showing how to build and load an Xtensa binary.
+    This is based on [Emulator Examination](https://www.pouet.net/prod.php?which=105928)
+    by PoroCYon.
+  - Reduce the size of the Docker images by cleaning the Wonderful package
+    cache. This should save ~130-140MB on the slim image, and even more on the
+    full image. @asie
+  - Improvements in the microphone example: the waveform can now be drawn with
+    linear interpolation and it can be paused. @abdelali221
+  - The ITCM/DTCM test has been updated to use the new macros.
+  - Support `R_ARM_V4BX` relocation type in `dsltool` and fix a memory error.
+    @trustytrojan
+
+  - Documentation:
+
+    - Mention the tutorial in the FAQ.
+    - Hextra has been updated to version 0.12.2+git. @asie
+    - The updating guide now mentions the new macros to move code/data to
+      ITCM/DTCM/TWL sections. @asie
+    - A new section has been added to explain the differences in loading data
+      and saving data in official games and homebrew applications.
+    - The setup instructions have been updated to mention the Xtensa toolchain
+      of Wonderful Toolchain. Also, the instructions to install the Teak and
+      Xtensa toolchains have been clarified.
+
+  - Tutorial:
+
+    - The documentation about how to use the makefiles of BlocksDS has been
+      moved to the tutorial and improved.
+    - The tutorial now mentions how to link additional libraries provided by
+      BlocksDS.
+    - Improvements in the explanation of what each prebuilt ARM7 core does.
+    - Added an explanation about how cache affects shared memory between CPUs.
+    - Added a warning about how writing to Slot-2 RAM can only be done in 16 and
+      32-bit units.
+    - The tutorial now warns against using `scanKeys()` outside of the
+      application main logic loop.
+    - The examples that use macros to move code/data to `twl` sections have been
+      updated.
+    - Small logic fix in device I/O sample code.
+    - Small fix in input sample code. @nithitsuki
+    - Minor rewording of some paragraphs and fixed links.
+
 ### Version 1.20.0 (2026-04-26)
 
 - libnds:
