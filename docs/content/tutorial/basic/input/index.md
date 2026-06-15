@@ -64,7 +64,7 @@ int main(int argc, char **argv)
             printf("A is pressed\n");
 
         // Print message if up and B are pressed at the same time
-        if ((keys_held & KEY_B) && (keys_held & KEY_UP)
+        if ((keys_held & KEY_B) && (keys_held & KEY_UP))
             printf("Combination is pressed\n");
     }
 }
