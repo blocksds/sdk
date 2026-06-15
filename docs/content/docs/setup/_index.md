@@ -27,6 +27,8 @@ weight: 2
 {{< /card >}}
 
 {{< callout type="info" >}}
-**macOS** isn't supported natively, you need to use Docker instead. We're
-[looking for help](https://codeberg.org/blocksds/sdk/issues/205) with it.
+**macOS** is now supported natively. Support for it has been added very
+recently so there may be issues with it. Follow the instructions to install it
+in Linux. If you find issues, report them in the
+[issue tracker](https://codeberg.org/blocksds/sdk/issues).
 {{< /callout >}}

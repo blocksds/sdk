@@ -27,6 +27,7 @@ weight: 6
 
 - SDK:
 
+  - Initial prototype macOS support. @asie
   - Small update to dldipatch to build in macOS. @asie
   - binutils has been updated to 2.46.1 in Wonferful Toolchain. @asie
   - The default makefiles now allow the developer to override the specs file.
