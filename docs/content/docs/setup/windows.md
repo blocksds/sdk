@@ -3,7 +3,7 @@ title: 'Windows'
 weight: 1
 ---
 
-The following instructions describe how to install BlocksDS on Windows natively.
+This page describes how to install BlocksDS on Windows natively in x64\_86 CPUs.
 If you want to use it in WSL, follow the instructions for Linux instead.
 
 {{% steps %}}

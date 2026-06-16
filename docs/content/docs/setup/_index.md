@@ -6,12 +6,12 @@ weight: 2
 {{< cards cols="1" >}}
   {{< card
     title="🪟 Windows"
-    subtitle="Instructions to install BlocksDS natively in Windows."
+    subtitle="Instructions to install BlocksDS natively in Windows (x86\_64)."
     link="windows"
   >}}
   {{< card
     title="🐧 Linux"
-    subtitle="For Linux, WSL, MinGW, or any similar environment."
+    subtitle="For Linux, WSL, MinGW, or any similar environment (x86\_64, AArch64)."
     link="linux"
   >}}
   {{< card

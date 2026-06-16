@@ -3,7 +3,8 @@ title: 'Linux'
 weight: 2
 ---
 
-If you don't want to build the SDK from source, this is the easiest option.
+If you don't want to build the SDK from source, this is the easiest option. The
+supported architectures are x86\_64 and AArch64.
 
 {{% steps %}}
 
