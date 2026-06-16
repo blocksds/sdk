@@ -55,7 +55,7 @@ WORKDIR /work/
 FROM base-cross-compiler AS blocksds-dev
 
 # Install all additional BlocksDS packages
-RUN wf-pacman -S --noconfirm blocksds-default blocksds-extra \
+RUN wf-pacman -S --noconfirm blocksds-default blocksds-extra && \
     wf-config clean-caches --all
 
 # Install Teak toolchain only in the dev image
