@@ -3,6 +3,12 @@ title: 'Changelog'
 weight: 6
 ---
 
+### Version 1.21.1 (2026-06-16)
+
+- SDK:
+
+  - Fix Docker image build.
+
 ### Version 1.21.0 (2026-06-16)
 
 - libnds:
