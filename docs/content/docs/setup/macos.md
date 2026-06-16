@@ -1,0 +1,109 @@
+---
+title: 'macOS'
+weight: 3
+---
+
+If you want to install the toolchain in macOS natively. Only AArch64 is
+supported.
+
+{{< callout type="info" >}}
+Native support for macOS is very recent, so there may be issues with it. Please,
+report them in the [issue tracker](https://codeberg.org/blocksds/sdk/issues).
+{{< /callout >}}
+
+{{% steps %}}
+
+### Install Wonderful Toolchain
+
+Follow the instructions in this link:
+
+https://wonderful.asie.pl/wiki/doku.php?id=getting_started
+
+### Add the BlocksDS repository to `wf-pacman`
+
+```bash
+export PATH=/opt/wonderful/bin:$PATH
+
+wf-pacman -Syu wf-tools
+wf-config repo enable blocksds
+wf-pacman -Syu
+```
+
+### Install the ARM toolchain and BlocksDS
+
+```bash
+wf-pacman -S blocksds-toolchain
+```
+
+To install the documentation and examples you can install:
+
+```bash
+wf-pacman -S blocksds-docs
+```
+
+### Install third-party libraries (Optional)
+
+You can also install some third party libraries like
+[NightFox’s Lib](https://github.com/knightfox75/nds_nflib) and
+[Nitro Engine](https://codeberg.org/SkyLyrac/nitro-engine) using
+`wf-pacman`:
+
+```bash
+wf-pacman -S blocksds-nflib blocksds-nitroengine
+```
+
+You can get a full list of packages by running:
+
+```bash
+wf-pacman -Sl
+```
+
+### Setup environment variables
+
+`wf-pacman` installs BlocksDS in `/opt/wonderful/thirdparty/blocksds/`.  This
+isn't the standard location (`wf-pacman` can only write files to
+`/opt/wonderful/`) so you need to do one of the two following options:
+
+1. Create a symlink (note that this doesn't work with MinGW):
+
+   ```bash
+   ln -s /opt/wonderful/thirdparty/blocksds /opt/blocksds
+   ```
+
+1. Set your environment variables correctly:
+
+   ```bash
+   source /opt/wonderful/bin/wf-env
+   ```
+
+   You can do it manually instead if you prefer:
+
+   ```bash
+   export BLOCKSDS=/opt/wonderful/thirdparty/blocksds/core
+   export BLOCKSDSEXT=/opt/wonderful/thirdparty/blocksds/external
+   ```
+
+{{% /steps %}}
+
+### How to update the SDK
+
+When you want to update the packages, run:
+
+```bash
+wf-pacman -Syu
+```
+
+### How to build projects
+
+Now you can try to build one of the BlocksDS examples. From the shell, run:
+
+```bash
+cd /opt/wonderful/thirdparty/blocksds/core/examples/
+```
+
+From there, for example, go to `graphics_3d/volumetric_shadow` and type
+`make`. This will generate a NDS ROM that you can try with an emulator or a
+flashcart.
+
+You can also try one of the open source projects made with BlocksDS that are
+listed [here](https://codeberg.org/blocksds/awesome-blocksds).

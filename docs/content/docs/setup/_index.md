@@ -15,8 +15,13 @@ weight: 2
     link="linux"
   >}}
   {{< card
+    title="🍎 macOS"
+    subtitle="Install BlocksDS in macOS (AArch64)."
+    link="macos"
+  >}}
+  {{< card
     title="🐳 Docker"
-    subtitle="Docker images that can be used in any OS (including macOS) or in automated pipelines."
+    subtitle="Docker images that can be used in any OS or in automated pipelines."
     link="docker"
   >}}
   {{< card
@@ -25,10 +30,3 @@ weight: 2
     link="from_source"
   >}}
 {{< /card >}}
-
-{{< callout type="info" >}}
-**macOS** is now supported natively. Support for it has been added very
-recently so there may be issues with it. Follow the instructions to install it
-in Linux. If you find issues, report them in the
-[issue tracker](https://codeberg.org/blocksds/sdk/issues).
-{{< /callout >}}

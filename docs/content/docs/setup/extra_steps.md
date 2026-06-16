@@ -1,6 +1,6 @@
 ---
 title: 'Post-installation steps'
-weight: 5
+weight: 6
 ---
 
 ### 1. Test the installation
