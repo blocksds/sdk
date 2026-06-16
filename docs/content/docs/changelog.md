@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: 6
 ---
 
-### Version 1.21.0 (2026-06-XX)
+### Version 1.21.0 (2026-06-16)
 
 - libnds:
 
@@ -50,7 +50,9 @@ weight: 6
 
   - Documentation:
 
-    - Mention the tutorial in the FAQ.
+    - Add setup guide for macOS.
+    - Mention the supported CPU architectures for the supported OSes.
+    - Mention the existence of the tutorial in the FAQ.
     - Hextra has been updated to version 0.12.2+git. @asie
     - The updating guide now mentions the new macros to move code/data to
       ITCM/DTCM/TWL sections. @asie
