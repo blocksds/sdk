@@ -64,7 +64,7 @@ wf-pacman -Sl
 isn't the standard location (`wf-pacman` can only write files to
 `/opt/wonderful/`) so you need to do one of the two following options:
 
-1. Create a symlink (note that this doesn't work with MinGW):
+1. Create a symlink:
 
    ```bash
    ln -s /opt/wonderful/thirdparty/blocksds /opt/blocksds
