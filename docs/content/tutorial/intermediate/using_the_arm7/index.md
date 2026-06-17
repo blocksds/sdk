@@ -108,6 +108,13 @@ Some reasons to NOT write a custom ARM7 core are:
 If you want to use a custom ARM7 core in your application, check
 [this template](https://codeberg.org/blocksds/sdk/src/branch/master/templates/rom_combined).
 
+{{< callout type="tip" >}}
+Most I/O registers (like `REG_IME` or `REG_IE`) are present in both the ARM9 and
+ARM7 as different per-CPU registers. Modifying a register from one CPU only
+affects that CPU. The exceptions are the FIFO IPC registers and the DSi SCFG
+registers.
+{{< /callout >}}
+
 ## 2. FIFO system of libnds
 
 Libnds comes with a FIFO system that can be used to send messages between the
