@@ -172,7 +172,7 @@ to do it:
   `REG_BLDALPHA` lets you specify alpha blending settings. Register `REG_BLDY`
   lets you specify fade settings.
 
-- Individually select sprites to be blended with individual per-sprite
+- Individually select tiled sprites to be blended with individual per-sprite
   transparency settings. This mode overrides the blending mode specified in
   `REG_BLDCNT` for any sprite set to alpha blending mode. The values in
   `REG_BLDALPHA` will be used to setup the effect.
@@ -184,6 +184,12 @@ to do it:
   set to alpha blending mode will use alpha blending and the rest will do fade
   to white.
 
+- Set the translucency of bitmap sprites. Bitmap sprites can't be set to
+  blending mode (they are mutually exclusive). However, bitmap sprites don't use
+  a palette, and that field is instead used as alpha value of the sprite. This
+  setting ignores the blending registers `REG_BLDY` and `REG_BLDALPHA`, as well
+  as the mode in `REG_BLDCNT`.
+
 Note: The effects can be restricted to one specific region of the screen by
 using windows.
 
@@ -193,6 +199,8 @@ fade effects:
 [`examples/video_effects/blending`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/video_effects/blending).
 
 ![Blending](blending.png)
+
+### 5.1 Using the system registers
 
 Setting up the effects is actually very easy.
 
@@ -241,6 +249,34 @@ Finally, this is the way to enable alpha blending mode for individual sprites:
 // setting in REG_BLDCNT.
 oamSetBlendMode(&oamMain, 1, SpriteMode_Blended);
 ```
+
+### 5.2 Blending bitmap sprites
+
+You can set the alpha value of a bitmap sprite directly with `oamSet()`:
+
+```c
+oamSet(&oamMain, 2,
+       20, 70, // X, Y
+       0, // Priority
+       15, // Palette index, but it is the alpha value of bitmap sprites
+       SpriteSize_64x64, SpriteColorFormat_Bmp, // Size, format
+       gfxMainBmp, // Graphics offset
+       -1, // Affine index
+       false, // Double size
+       false, // Hide
+       false, false, // H flip, V flip
+       false); // Mosaic
+```
+
+If you want to adjust the alpha value later, all you have to do is call
+`oamSetAlpha()`:
+
+```c
+oamSetAlpha(&oamMain, 2, spr_alpha); // 0 to 15
+```
+
+The values of `REG_BLDY` and `REG_BLDALPHA` are ignored, as well as the blending
+mode in `REG_BLDCNT`.
 
 ## 6. Mosaic
 
