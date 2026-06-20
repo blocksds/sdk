@@ -71,7 +71,24 @@ which has a huge collection of music in formats supported by Maxmod and LibXM7.
 A big part of the songs are available under permissive licenses and you may be
 able to use them in your games (remember to give credit to the authors!).
 
-## 2. Maxmod
+## 2. Notes about composing music
+
+When you play music with Maxmod or LibXM7, it may not sound the same way as when
+you were composing it. Maxmod doesn't do any interpolation when using software
+mixing, and the audio hardware mixer of the DS doesn't do any hardware
+interpolation on the output. However, module trackers usually enable
+interpolation so that music sounds better.
+
+If you want a closer result to the real output of the GBA you need to disable
+any kind of interpolation and filtering.
+
+For example, in OpenMPT you need to go to `View > Setup`. Select the `Mixer` tab
+and change the interpolation mode to "no interpolation", as well as set volume
+ramping to 0:
+
+![OpenMPT mixer settings](openmpt_mixer.png "Correct mixer settings for OpenMPT")
+
+## 3. Maxmod
 
 This is the most common option. Maxmod is a pretty flexible library that lets
 you combine the hardware-mixed sound channels and software-mixed channels in
@@ -164,7 +181,7 @@ for more information:
   Maxmod):
   [`examples/maxmod/audio_modes`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/maxmod/audio_modes)
 
-## 3. LibXM7
+## 4. LibXM7
 
 LibXM7 is less powerful than Maxmod (it can only play XM and MOD files, and no
 sound effects), but it has a very big advantage over Maxmod: it can play
@@ -311,7 +328,7 @@ Check the [documentation of LibXM7](https://blocksds.skylyrac.net/docs/libxm7/in
 and the [examples](https://codeberg.org/blocksds/sdk/src/branch/master/examples/libxm7)
 for more information.
 
-## 4. Sound helpers of libnds
+## 5. Sound helpers of libnds
 
 The sound helpers of libnds allow you to use all of the features provided by the
 hardware channels of the DS. All channels (0 to 15) support playing PCM formats
