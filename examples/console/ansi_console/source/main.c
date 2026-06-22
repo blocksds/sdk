@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2023
+// SPDX-FileContributor: Antonio Niño Díaz, 2023-2026
 
 // Information about ANSI escape codes:
 //
@@ -16,6 +16,10 @@
 int main(int argc, char **argv)
 {
     consoleDemoInit();
+
+    // Enable improved standard color handling. By default, libnds supports
+    // a single color command format that doesn't follow the standard.
+    consoleEnhancedColorHandler(NULL);
 
     // Clear console: [2J
     printf("\x1b[2J");
@@ -38,15 +42,31 @@ int main(int argc, char **argv)
     // Move cursor to a specific location to start printing colored text
     printf("\x1b[14;4H");
 
-    // Colors (30 to 37): Black, Red, Green, Yellow, Blue, Magenta, Cyan, White
-    // Setting intensity to 1 will make them brighter.
-    char c = 'A';
-    for (int intensity = 0; intensity < 2; intensity++)
-        for (int color = 30; color < 38; color++)
-            printf("\x1b[%d;%dm%c", color, intensity, c++);
+    // Color commands are a list of numbers separated by ';'.
+    //
+    // - Command 0 resets all attributes to the default.
+    // - Commands 30 to 37 are foreground colors.
+    // - Commands 40 to 37 are background colors.
+    // - Command 1 will make them brighter (intense).
+    // - Command 22 will make them dimmer (normal intensity).
+    // - Commands 90 to 97 are bright (intense) foreground colors.
+    // - Commands 100 to 107 are bright (intense) background colors.
+    //
+    // Notes:
+    // - The default console doesn't support background colors.
+    // - libnds supports up to 3 commands in the same escape sequence.
+    // - Colors: Black, Red, Green, Yellow, Blue, Magenta, Cyan, White
 
-    // Reset color to white
-    printf("\x1b[39;0m");
+    char c = 'A';
+    for (int color = 30; color <= 37; color++)
+        printf("\x1b[1;%dm%c", color , c++);
+    for (int color = 30; color <= 37; color++)
+        printf("\x1b[22;%dm%c", color , c++);
+    for (int color = 90; color <= 97; color++)
+        printf("\x1b[%dm%c", color , c++);
+
+    // Reset all color settings
+    printf("\x1b[39m");
 
     printf("\x1b[23;0HPress START to exit to loader");
 
