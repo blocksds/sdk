@@ -6,6 +6,7 @@
 // standard system call functions. This can be useful if you're porting an
 // application that uses stdin for input.
 
+#include <fcntl.h>
 #include <stdio.h>
 #include <sys/ioctl.h>
 
@@ -21,12 +22,12 @@ int main(int argc, char **argv)
     keyboardShow();
 
     // Enable non-blocking mode
-    int opt = 1;
-    ioctl(STDIN_FILENO, FIONBIO, &opt);
+    int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+    fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 
-    // You can also do it like this (if you include <fcntl.h>):
-    //int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
-    //fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
+    // You can also do it like this:
+    //int opt = 1;
+    //ioctl(STDIN_FILENO, FIONBIO, &opt);
 
     char string[256];
     string[0] = '\0';
@@ -65,14 +66,11 @@ int main(int argc, char **argv)
 
         if (keys & KEY_SELECT)
         {
+            memset(string, 0, sizeof(string));
+
             // This will read whatever is in the FIFO buffer until there are no
             // more characters to be read or until a '\n' character is found.
-            ssize_t chars = read(STDIN_FILENO, string, sizeof(string) - 1);
-            if (chars > 0)
-            {
-                // Make sure that the string has a valid terminator.
-                string[chars] = '\0';
-            }
+            fread(string, sizeof(string) - 1, 1, stdin);
         }
 
         if (keys & KEY_START)
