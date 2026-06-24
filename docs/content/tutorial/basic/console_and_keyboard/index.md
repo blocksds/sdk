@@ -423,7 +423,7 @@ better to handle keyboard presses manually.
 {{< /callout >}}
 
 You can check the full source of the example here:
-[`examples/keyboard/stdin_input`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/keyboard/stdin_input)
+[`examples/keyboard/stdin_scanf`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/keyboard/stdin_scanf)
 
 ## 4.4 Custom keyboards
 
