@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2023
-
-// This example shows how to use scanf() to do a blocking keyboard read.
+// SPDX-FileContributor: Antonio Niño Díaz, 2023-2026
 
 #include <stdio.h>
 
@@ -53,7 +51,13 @@ int main(int argc, char **argv)
             printf("Name: ");
             // This will show the keyboard, wait for the user to input a string,
             // and return when the user presses "return".
-            scanf("%255s", string);
+            // Note: The resulting string will have a '\n' at the end.
+            ssize_t chars = read(STDIN_FILENO, string, sizeof(string) - 1);
+            if (chars > 0)
+            {
+                // Make sure that the string has a valid terminator.
+                string[chars] = '\0';
+            }
         }
 
         if (keys & KEY_START)
