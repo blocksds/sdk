@@ -188,7 +188,8 @@ A list of all ANSI escape sequences is available
 
 Most things you can do with ANSI sequences in libnds can also be done with other
 functions. ANSI sequences aren't very readable, so you may prefer to use the
-functions provided by libnds instead.
+functions provided by libnds instead. ANSI sequences are mostly useful when
+you're porting command line applications from PC to DS.
 
 You can see an example of using ANSI sequences here:
 [`examples/console/ansi_console`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/console/ansi_console)
@@ -317,8 +318,18 @@ The keyboard included in libnds can work in two different ways:
 - You can manually initialize the keyboard, decide when to display it on the
   screen, manage key presses and close it manually when required.
 
-- You can manually initialize the keyboard and use `scanf()`, which will display
-  the keyboard, wait for the user to press "return", and close it automatically.
+- You can manually initialize the keyboard and use standard functions like
+  `scanf()`, `read()` of `fread()`.
+
+  - Blocking mode: `scanf()` and `read()` will display the keyboard (if it
+    wasn't on the screen already), wait for the user to press "return", and
+    close it automatically if it wasn't visible beforehand.
+
+  - Non-blocking mode: `read()` and `fread()` can be used to read the contents
+    of the keyboard input buffer. Key presses are logged in by libnds when the
+    user presses the keyboard and they can be retrieved from the buffer with
+    `read()` or `fread()`. You must display the keyboard manually and allow it
+    to update regularly, as it is explained below.
 
 The default keyboard is loaded to background layer 3 but, unlike the console, it
 doesn't initialize any hardware and it requires you to setup a video mode that
@@ -379,7 +390,7 @@ keyboardHide();
 Check the full code of the exampe here:
 [`examples/keyboard/default_keyboard`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/keyboard/default_keyboard)
 
-## 4.3 Automatic `scanf()` keyboard handling
+## 4.3 Blocking keyboard input with `scanf()`
 
 First, initialize the keyboard and load its graphics to VRAM, but keep the
 pointer to the keyboard instance:
@@ -425,7 +436,107 @@ better to handle keyboard presses manually.
 You can check the full source of the example here:
 [`examples/keyboard/stdin_scanf`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/keyboard/stdin_scanf)
 
-## 4.4 Custom keyboards
+## 4.4 Blocking and non-blocking keyboard input with `read()`
+
+You can use `read()` the same way as `scanf()`. It will bring up the keyboard if
+it was hidden, it will wait for the user to type characters, and it will hide
+the keyboard if needed when it's done. The only difference is that the last
+snippet of code looks like this:
+
+```c
+// Note: The resulting string will have a '\n' at the end.
+ssize_t chars = read(STDIN_FILENO, string, sizeof(string) - 1);
+if (chars > 0)
+{
+    // Make sure that the string has a valid terminator.
+    string[chars] = '\0';
+}
+```
+
+You can check the full source of the example here:
+[`examples/keyboard/stdin_read_blocking`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/keyboard/stdin_read_blocking)
+
+However, the most interesting thing you can do with `read()` is to do
+non-blocking reads. In non-blocking mode the user presses keyboard keys anytime
+and they get registered in an internal FIFO buffer. When you call `read()`, the
+contents of that FIFO buffer are read up to the amount of characters requested.
+If there aren't enough characters in the buffer it will return right away with
+the number of characters that have actually been read.
+
+Once you have initialized the keyboard (for example, with `keyboardDemoInit()`)
+you can enter non-blocking mode with one of the following two options:
+
+```c
+#include <sys/ioctl.h>
+
+int opt = 1;
+ioctl(STDIN_FILENO, FIONBIO, &opt);
+```
+
+Or:
+
+```c
+#include <fcntl.h>
+
+int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
+```
+
+In non-blocking mode you need to give the keyboard handler the chance to check
+the keyboard state and add characters to the FIFO if the user is pressing some
+key. For that, you need to call the following two functions regularly:
+
+```c
+scanKeys();
+keyboardFifoUpdate();
+```
+
+You can use `ioctl()` to determine how many characters are stored in the
+keyboard FIFO:
+
+```c
+int bytes_available = 0;
+if (ioctl(STDIN_FILENO, FIONREAD, &bytes_available) < 0)
+    printf("Error\n");
+else
+    printf("Available bytes: %d\n", bytes_available);
+
+```
+
+Once you're ready to read from the FIFO, simply use `read()`:
+
+```c
+ssize_t chars = read(STDIN_FILENO, string, sizeof(string) - 1);
+if (chars > 0)
+{
+    // Make sure that the string has a valid terminator.
+    string[chars] = '\0';
+}
+```
+
+This will stop whenever there's a `\n` character or when the FIFO is empty, even
+if more characters have been requested.
+
+You can check the full source of the example here:
+[`examples/keyboard/stdin_read_nonblocking`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/keyboard/stdin_read_nonblocking)
+
+## 4.5 Non-blocking keyboard input with `fread()`
+
+You can also use `fread()` in non-blocking way. The only difference with
+`read()` is in the last snippet:
+
+```c
+memset(string, 0, sizeof(string));
+fread(string, sizeof(string) - 1, 1, stdin);
+```
+
+This will read whatever is in the FIFO buffer until there are no more characters
+to be read or until a `\n` character is found.
+
+You can check the full source of the example here:
+[`examples/keyboard/stdin_fread_nonblocking`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/keyboard/stdin_fread_nonblocking)
+
+## 4.6 Custom keyboards
 
 You can create your own keyboard, but it requires a lot more manual work than
 in the case of a text console. For example, this is a custom keyboard based on
