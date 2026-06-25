@@ -538,6 +538,8 @@ static device_io_t littlefs_device =
     .get_attr = NULL,
     .set_attr = NULL,
     .get_short_name_for = NULL,
+    .ioctl = NULL,
+    .fcntl = NULL,
 };
 
 // -----------------------------------------------------------------------------
