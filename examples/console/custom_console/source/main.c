@@ -14,7 +14,6 @@
 #include <custom_font_4x6.h>
 #include <custom_font_4x8.h>
 #include <custom_font_6x8.h>
-// TODO: Support switching fonts at runtime
 
 static PrintConsole topScreen;
 static PrintConsole bottomScreen;
@@ -32,49 +31,60 @@ static ConsoleFont customFont =
     .numChars = 256,
 };
 
-static int console_bgscroll = 0;
-static uint16_t console_palette[256];
-
-// Size of an individual character
-#define CHARACTER_WIDTH     4
-#define CHARACTER_HEIGHT    6
-
-// How characters are arranged in the font bitmap image
-#define CHARSET_COLUMNS     32
-#define CHARSET_ROWS        8
-
 // Real size of the console (it's just the size of the screen)
 #define CONSOLE_WIDTH       256
 #define CONSOLE_HEIGHT      192
-
-// Number of columns and rows available
-#define CONSOLE_COLUMNS     (CONSOLE_WIDTH / CHARACTER_WIDTH)
-#define CONSOLE_ROWS        (CONSOLE_HEIGHT / CHARACTER_HEIGHT)
 
 // Size of the background layer used for the terminal
 #define BACKGROUND_WIDTH    256
 #define BACKGROUND_HEIGHT   256
 
-void setup_console_palette(void)
+typedef struct
 {
-    // Colors 0-15 correspond to the ANSI and aixterm naming
-    console_palette[0] = RGB15(0, 0, 0);     // 30 normal black
-    console_palette[1] = RGB15(15, 0, 0);    // 31 normal red
-    console_palette[2] = RGB15(0, 15, 0);    // 32 normal green
-    console_palette[3] = RGB15(15, 15, 0);   // 33 normal yellow
-    console_palette[4] = RGB15(0, 0, 15);    // 34 normal blue
-    console_palette[5] = RGB15(15, 0, 15);   // 35 normal magenta
-    console_palette[6] = RGB15(0, 15, 15);   // 36 normal cyan
-    console_palette[7] = RGB15(24, 24, 24);  // 37 normal white
+    uint16_t palette[256];
 
-    console_palette[8] = RGB15(15, 15, 15);  // 40 bright black
-    console_palette[9] = RGB15(31, 0, 0);    // 41 bright red
-    console_palette[10] = RGB15(0, 31, 0);   // 42 bright green
-    console_palette[11] = RGB15(31, 31, 0);  // 43 bright yellow
-    console_palette[12] = RGB15(0, 0, 31);   // 44 bright blue
-    console_palette[13] = RGB15(31, 0, 31);  // 45 bright magenta
-    console_palette[14] = RGB15(0, 31, 31);  // 46 bright cyan
-    console_palette[15] = RGB15(31, 31, 31); // 47 bright white
+    // Size of an individual character
+    int character_width;
+    int character_height;
+
+    // How characters are arranged in the font bitmap image
+    int charset_columns;
+    int charset_rows;
+
+    // Number of columns and rows available
+    int columns;
+    int rows;
+
+    int bgscroll;
+
+    const void *font_bitmap;
+}
+console_user_info_t;
+
+static console_user_info_t console_user_info;
+
+void setup_console_palette(PrintConsole *console)
+{
+    console_user_info_t *info = console->userData;
+
+    // Colors 0-15 correspond to the ANSI and aixterm naming
+    info->palette[0] = RGB15(0, 0, 0);     // 30 normal black
+    info->palette[1] = RGB15(15, 0, 0);    // 31 normal red
+    info->palette[2] = RGB15(0, 15, 0);    // 32 normal green
+    info->palette[3] = RGB15(15, 15, 0);   // 33 normal yellow
+    info->palette[4] = RGB15(0, 0, 15);    // 34 normal blue
+    info->palette[5] = RGB15(15, 0, 15);   // 35 normal magenta
+    info->palette[6] = RGB15(0, 15, 15);   // 36 normal cyan
+    info->palette[7] = RGB15(24, 24, 24);  // 37 normal white
+
+    info->palette[8] = RGB15(15, 15, 15);  // 40 bright black
+    info->palette[9] = RGB15(31, 0, 0);    // 41 bright red
+    info->palette[10] = RGB15(0, 31, 0);   // 42 bright green
+    info->palette[11] = RGB15(31, 31, 0);  // 43 bright yellow
+    info->palette[12] = RGB15(0, 0, 31);   // 44 bright blue
+    info->palette[13] = RGB15(31, 0, 31);  // 45 bright magenta
+    info->palette[14] = RGB15(0, 31, 31);  // 46 bright cyan
+    info->palette[15] = RGB15(31, 31, 31); // 47 bright white
 
     // Colors 16-231 are a 6x6x6 color cube
     for (int red = 0; red < 6; red++)
@@ -102,7 +112,7 @@ void setup_console_palette(void)
                 else
                     b = 0;
 
-                console_palette[code] = RGB15(r >> 3, g >> 3, b >> 3);
+                info->palette[code] = RGB15(r >> 3, g >> 3, b >> 3);
             }
         }
     }
@@ -112,12 +122,14 @@ void setup_console_palette(void)
     {
         int level = gray * 10 + 8;
         int code = 232 + gray;
-        console_palette[code] = RGB15(level >> 3, level >> 3, level >> 3);
+        info->palette[code] = RGB15(level >> 3, level >> 3, level >> 3);
     }
 }
 
 static void custom_console_print_char(PrintConsole *console, char c, int x, int y)
 {
+    console_user_info_t *info = console->userData;
+
     uint16_t foreground = 0;
     uint16_t background = 0;
 
@@ -129,7 +141,7 @@ static void custom_console_print_char(PrintConsole *console, char c, int x, int 
     }
     else
     {
-        foreground = console_palette[console->fontCurPal] | BIT(15);
+        foreground = info->palette[console->fontCurPal] | BIT(15);
     }
 
     if (console->sgrBackgroundIsRgb)
@@ -140,27 +152,27 @@ static void custom_console_print_char(PrintConsole *console, char c, int x, int 
     }
     else
     {
-        background = console_palette[console->backgroundCurPal] | BIT(15);
+        background = info->palette[console->backgroundCurPal] | BIT(15);
     }
 
     vu16 *dst = bgGetGfxPtr(console->bgId);
 
-    int char_x = (c % CHARSET_COLUMNS) * CHARACTER_WIDTH;
-    int char_y = (c / CHARSET_COLUMNS) * CHARACTER_HEIGHT;
+    int char_x = (c % info->charset_columns) * info->character_width;
+    int char_y = (c / info->charset_columns) * info->character_height;
 
-    u16 *src = (u16 *)&custom_font_4x6Bitmap[0];
+    const u16 *src = info->font_bitmap;
 
-    for (int j = 0; j < CHARACTER_HEIGHT; j++)
+    for (int j = 0; j < info->character_height; j++)
     {
-        for (int i = 0; i < CHARACTER_WIDTH; i++)
+        for (int i = 0; i < info->character_width; i++)
         {
-            int dst_x = i + (x * CHARACTER_WIDTH);
-            int dst_y = (console_bgscroll + j + (y * CHARACTER_HEIGHT)) % BACKGROUND_HEIGHT;
+            int dst_x = i + (x * info->character_width);
+            int dst_y = (info->bgscroll + j + (y * info->character_height)) % BACKGROUND_HEIGHT;
             vu16 *dst_ = dst + (dst_y * CONSOLE_WIDTH) + dst_x;
 
             int src_x = char_x + i;
             int src_y = char_y + j;
-            u16 *src_ = src + (src_y * (CHARSET_COLUMNS * CHARACTER_WIDTH)) + src_x;
+            const u16 *src_ = src + (src_y * (info->charset_columns * info->character_width)) + src_x;
 
             uint16_t color;
 
@@ -176,16 +188,18 @@ static void custom_console_print_char(PrintConsole *console, char c, int x, int 
 
 static void custom_console_print_empty(PrintConsole *console, int x, int y)
 {
-    uint16_t background = console_palette[CONSOLE_BLACK] | BIT(15);
+    console_user_info_t *info = console->userData;
+
+    uint16_t background = info->palette[CONSOLE_BLACK] | BIT(15);
 
     vu16 *dst = bgGetGfxPtr(console->bgId);
 
-    for (int j = 0; j < CHARACTER_HEIGHT; j++)
+    for (int j = 0; j < info->character_height; j++)
     {
-        for (int i = 0; i < CHARACTER_WIDTH; i++)
+        for (int i = 0; i < info->character_width; i++)
         {
-            int dst_x = i + (x * CHARACTER_WIDTH);
-            int dst_y = (console_bgscroll + j + (y * CHARACTER_HEIGHT)) % BACKGROUND_HEIGHT;
+            int dst_x = i + (x * info->character_width);
+            int dst_y = (info->bgscroll + j + (y * info->character_height)) % BACKGROUND_HEIGHT;
             vu16 *dst_ = dst + (dst_y * CONSOLE_WIDTH) + dst_x;
             *dst_ = background;
         }
@@ -194,15 +208,17 @@ static void custom_console_print_empty(PrintConsole *console, int x, int y)
 
 static void custom_console_new_row(PrintConsole *console)
 {
+    console_user_info_t *info = console->userData;
+
     console->cursorY++;
 
     if (console->cursorY >= console->windowHeight)
     {
         console->cursorY = console->windowHeight - 1;
 
-        console_bgscroll = (console_bgscroll + CHARACTER_HEIGHT) % BACKGROUND_HEIGHT;
+        info->bgscroll = (info->bgscroll + info->character_height) % BACKGROUND_HEIGHT;
 
-        bgSetScroll(console->bgId, 0, console_bgscroll);
+        bgSetScroll(console->bgId, 0, info->bgscroll);
         bgUpdate();
 
         for (int i = 0; i < console->windowWidth; i++)
@@ -302,10 +318,8 @@ void wait_for_input(void)
     }
 }
 
-void setup_console_top(void)
+void setup_console_top(const void *font_bitmap, int character_width, int character_height)
 {
-    setup_console_palette();
-
     videoSetMode(MODE_5_2D);
     vramSetBankA(VRAM_A_MAIN_BG);
 
@@ -316,6 +330,19 @@ void setup_console_top(void)
         for (int i = 0; i < BACKGROUND_WIDTH; i++)
             *bmp++ = RGB5(0, 0, 0) | BIT(15);
     }
+
+    console_user_info.character_width  = character_width;
+    console_user_info.character_height = character_height;
+
+    console_user_info.charset_columns = 32;
+    console_user_info.charset_rows    = 8;
+
+    console_user_info.columns = CONSOLE_WIDTH / console_user_info.character_width;
+    console_user_info.rows    = CONSOLE_HEIGHT / console_user_info.character_height;
+
+    console_user_info.bgscroll = 0;
+
+    console_user_info.font_bitmap = font_bitmap;
 
     consoleInitEx(&topScreen,
                   2,                  // Background layer
@@ -328,10 +355,13 @@ void setup_console_top(void)
                   true,               // Main screen
                   false);             // Don't load graphics
 
-    topScreen.consoleWidth = CONSOLE_COLUMNS;
-    topScreen.consoleHeight = CONSOLE_ROWS;
-    topScreen.windowWidth = CONSOLE_COLUMNS;
-    topScreen.windowHeight = CONSOLE_ROWS;
+    topScreen.userData = &console_user_info;
+    topScreen.consoleWidth = console_user_info.columns;
+    topScreen.consoleHeight = console_user_info.rows;
+    topScreen.windowWidth = console_user_info.columns;
+    topScreen.windowHeight = console_user_info.rows;
+
+    setup_console_palette(&topScreen);
 
     // Allow color commands
     consoleEnhancedColorHandler(&topScreen);
@@ -343,6 +373,10 @@ void setup_console_top(void)
 
     // Enable wrap so that we can scroll the terminal efficiently
     bgWrapOn(topScreen.bgId);
+
+    // Reset scroll
+    bgSetScroll(topScreen.bgId, 0, 0);
+    bgUpdate();
 }
 
 void setup_console_bottom(void)
@@ -357,7 +391,10 @@ int main(int argc, char **argv)
     defaultExceptionHandler();
     consoleDebugInit(DebugDevice_NOCASH);
 
-    setup_console_top();
+    setup_console_top(&custom_font_4x6Bitmap[0], 4, 6);
+    // TODO
+    //setup_console_top(&custom_font_4x8Bitmap[0], 4, 8);
+    //setup_console_top(&custom_font_6x8Bitmap[0], 6, 8);
     setup_console_bottom();
 
     // Print instructions to the bottom screen
@@ -400,7 +437,7 @@ int main(int argc, char **argv)
                 }
 
                 // Only add a newline if 32 characters are narrower than the screen
-                if (CHARACTER_WIDTH < 8)
+                if (console_user_info.character_width < 8)
                     printf("\n");
             }
         }
