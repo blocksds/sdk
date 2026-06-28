@@ -1,6 +1,3 @@
-# 16 bpp, bitmap, set alpha bit to 1, black is transparent
-#-gB16 -gb -gT000000
-
 # 1bpp
 -gB1
 

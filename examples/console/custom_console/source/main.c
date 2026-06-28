@@ -11,23 +11,49 @@
 
 #include <nds.h>
 
-#include <custom_font.h>
+#include <custom_font_4x6.h>
+#include <custom_font_4x8.h>
+#include <custom_font_6x8.h>
+// TODO: Support switching fonts at runtime
 
 static PrintConsole topScreen;
 static PrintConsole bottomScreen;
 
+// We need a custom font to specify the ASCII offset and the number of
+// characters. The other fields aren't used because we're rendering everything
+// in custom functions.
 static ConsoleFont customFont =
 {
-    .gfx = (u16 *)custom_fontTiles,
+    .gfx = NULL,
     .pal = NULL,
     .numColors = 0,
     .bpp = 16,
     .asciiOffset = 0,
-    .numChars = 128,
+    .numChars = 256,
 };
 
 static int console_bgscroll = 0;
 static uint16_t console_palette[256];
+
+// Size of an individual character
+#define CHARACTER_WIDTH     4
+#define CHARACTER_HEIGHT    6
+
+// How characters are arranged in the font bitmap image
+#define CHARSET_COLUMNS     32
+#define CHARSET_ROWS        8
+
+// Real size of the console (it's just the size of the screen)
+#define CONSOLE_WIDTH       256
+#define CONSOLE_HEIGHT      192
+
+// Number of columns and rows available
+#define CONSOLE_COLUMNS     (CONSOLE_WIDTH / CHARACTER_WIDTH)
+#define CONSOLE_ROWS        (CONSOLE_HEIGHT / CHARACTER_HEIGHT)
+
+// Size of the background layer used for the terminal
+#define BACKGROUND_WIDTH    256
+#define BACKGROUND_HEIGHT   256
 
 void setup_console_palette(void)
 {
@@ -117,35 +143,34 @@ static void custom_console_print_char(PrintConsole *console, char c, int x, int 
         background = console_palette[console->backgroundCurPal] | BIT(15);
     }
 
-    y = (y + (console_bgscroll / 8)) & ((256 / 8) - 1);
-
     vu16 *dst = bgGetGfxPtr(console->bgId);
-    dst += ((y * 8) * 256) + (x * 8);
 
-    // Size of a font character in 1 BPP mode in bytes
-    const size_t size_char_1bpp = 8 * 8 / 8;
+    int char_x = (c % CHARSET_COLUMNS) * CHARACTER_WIDTH;
+    int char_y = (c / CHARSET_COLUMNS) * CHARACTER_HEIGHT;
 
-    u8 *src = (u8 *)&custom_fontTiles[0];
-    src += c * size_char_1bpp;
+    u16 *src = (u16 *)&custom_font_4x6Bitmap[0];
 
-    for (int j = 0; j < 8; j++)
+    for (int j = 0; j < CHARACTER_HEIGHT; j++)
     {
-        u8 row_bits = *src;
-
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < CHARACTER_WIDTH; i++)
         {
+            int dst_x = i + (x * CHARACTER_WIDTH);
+            int dst_y = (console_bgscroll + j + (y * CHARACTER_HEIGHT)) % BACKGROUND_HEIGHT;
+            vu16 *dst_ = dst + (dst_y * CONSOLE_WIDTH) + dst_x;
+
+            int src_x = char_x + i;
+            int src_y = char_y + j;
+            u16 *src_ = src + (src_y * (CHARSET_COLUMNS * CHARACTER_WIDTH)) + src_x;
+
             uint16_t color;
 
-            if (row_bits & BIT(i))
+            if (*src_)
                 color = foreground;
             else
                 color = background;
 
-            *dst++ = color;
+            *dst_ = color;
         }
-
-        src++;
-        dst += 256 - 8;
     }
 }
 
@@ -153,17 +178,17 @@ static void custom_console_print_empty(PrintConsole *console, int x, int y)
 {
     uint16_t background = console_palette[CONSOLE_BLACK] | BIT(15);
 
-    y = (y + (console_bgscroll / 8)) & ((256 / 8) - 1);
-
     vu16 *dst = bgGetGfxPtr(console->bgId);
-    dst += ((y * 8) * 256) + (x * 8);
 
-    for (int j = 0; j < 8; j++)
+    for (int j = 0; j < CHARACTER_HEIGHT; j++)
     {
-        for (int i = 0; i < 8; i++)
-            *dst++ = background;
-
-        dst += 256 - 8;
+        for (int i = 0; i < CHARACTER_WIDTH; i++)
+        {
+            int dst_x = i + (x * CHARACTER_WIDTH);
+            int dst_y = (console_bgscroll + j + (y * CHARACTER_HEIGHT)) % BACKGROUND_HEIGHT;
+            vu16 *dst_ = dst + (dst_y * CONSOLE_WIDTH) + dst_x;
+            *dst_ = background;
+        }
     }
 }
 
@@ -175,7 +200,8 @@ static void custom_console_new_row(PrintConsole *console)
     {
         console->cursorY = console->windowHeight - 1;
 
-        console_bgscroll += 8;
+        console_bgscroll = (console_bgscroll + CHARACTER_HEIGHT) % BACKGROUND_HEIGHT;
+
         bgSetScroll(console->bgId, 0, console_bgscroll);
         bgUpdate();
 
@@ -190,7 +216,7 @@ static void custom_console_new_row(PrintConsole *console)
 
 static bool custom_console_print(void *con, char c)
 {
-    if (c == 0)
+    if (c == '\0')
         return true;
 
     PrintConsole *console = con;
@@ -283,6 +309,14 @@ void setup_console_top(void)
     videoSetMode(MODE_5_2D);
     vramSetBankA(VRAM_A_MAIN_BG);
 
+    // Clear background layer
+    vu16 *bmp = BG_BMP_RAM_MAIN(0);
+    for (int j = 0; j < BACKGROUND_HEIGHT; j++)
+    {
+        for (int i = 0; i < BACKGROUND_WIDTH; i++)
+            *bmp++ = RGB5(0, 0, 0) | BIT(15);
+    }
+
     consoleInitEx(&topScreen,
                   2,                  // Background layer
                   BgType_Bmp16,       // 16 BPP bitmap mode
@@ -293,6 +327,11 @@ void setup_console_top(void)
                   0,                  // Start from character 0 of the tile base
                   true,               // Main screen
                   false);             // Don't load graphics
+
+    topScreen.consoleWidth = CONSOLE_COLUMNS;
+    topScreen.consoleHeight = CONSOLE_ROWS;
+    topScreen.windowWidth = CONSOLE_COLUMNS;
+    topScreen.windowHeight = CONSOLE_ROWS;
 
     // Allow color commands
     consoleEnhancedColorHandler(&topScreen);
@@ -339,6 +378,37 @@ int main(int argc, char **argv)
 
     while (1)
     {
+        {
+            printf("Characters:\n");
+            printf("\n");
+
+            printf("\x1b[0m");
+            for (int j = 0; j < 8; j++)
+            {
+                for (int i = 0; i < 32; i++)
+                {
+                    char c = i + j * 32;
+
+                    // Skip special characters
+                    if ((c == '\0') || (c == '\n') || (c == '\r') ||
+                        (c == '\t') || (c == '\b'))
+                    {
+                        c = ' ';
+                    }
+
+                    printf("%c", c);
+                }
+
+                // Only add a newline if 32 characters are narrower than the screen
+                if (CHARACTER_WIDTH < 8)
+                    printf("\n");
+            }
+        }
+
+        printf("\x1b[0m");
+        wait_for_input();
+        printf("\x1b[2J");
+
         {
             printf("16-color palette:\n");
             printf("\n");
@@ -405,7 +475,7 @@ int main(int argc, char **argv)
                             red, green, blue, red, green, blue);
 
                         count++;
-                        if (count == 3)
+                        if (count == 4)
                         {
                             printf("\n");
                             count = 0;
@@ -438,7 +508,7 @@ int main(int argc, char **argv)
                             red, green, blue, red, green, blue);
 
                         count++;
-                        if (count == 3)
+                        if (count == 4)
                         {
                             printf("\n");
                             count = 0;
