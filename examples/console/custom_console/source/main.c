@@ -11,9 +11,12 @@
 
 #include <nds.h>
 
-#include <custom_font_4x6.h>
-#include <custom_font_4x8.h>
-#include <custom_font_6x8.h>
+#include <regular_size/custom_font_8x8.h>
+
+#include <unusual_sizes/custom_font_4x6.h>
+#include <unusual_sizes/custom_font_4x8.h>
+#include <unusual_sizes/custom_font_6x8.h>
+#include <unusual_sizes/custom_font_6x10.h>
 
 static PrintConsole topScreen;
 static PrintConsole bottomScreen;
@@ -63,7 +66,7 @@ console_user_info_t;
 
 static console_user_info_t console_user_info;
 
-void setup_console_palette(PrintConsole *console)
+static void setup_console_palette(PrintConsole *console)
 {
     console_user_info_t *info = console->userData;
 
@@ -224,8 +227,12 @@ static void custom_console_new_row(PrintConsole *console)
         for (int i = 0; i < console->windowWidth; i++)
         {
             custom_console_print_empty(console,
-                                      console->windowX + i,
-                                      console->windowY + console->windowHeight - 1);
+                                       console->windowX + i,
+                                       console->windowY + console->windowHeight - 1);
+            // Clear two rows just in case. This is needed for some sizes
+            custom_console_print_empty(console,
+                                       console->windowX + i,
+                                       console->windowY + console->windowHeight);
         }
     }
 }
@@ -302,23 +309,8 @@ static bool custom_console_print(void *con, char c)
     return true;
 }
 
-void wait_for_input(void)
-{
-    while (1)
-    {
-        scanKeys();
-
-        uint16_t keys = keysDown();
-        if (keys & KEY_A)
-            break;
-        if (keys & KEY_START)
-            exit(0);
-
-        swiWaitForVBlank();
-    }
-}
-
-void setup_console_top(const void *font_bitmap, int character_width, int character_height)
+static void setup_console_top(const void *font_bitmap, int character_width,
+                              int character_height)
 {
     videoSetMode(MODE_5_2D);
     vramSetBankA(VRAM_A_MAIN_BG);
@@ -379,11 +371,242 @@ void setup_console_top(const void *font_bitmap, int character_width, int charact
     bgUpdate();
 }
 
-void setup_console_bottom(void)
+static void setup_console_top_font_index(int index)
+{
+    struct {
+        const void *bitmap;
+        int char_width;
+        int char_height;
+    } font[] = {
+        { &custom_font_4x6Bitmap[0], 4, 6 },
+        { &custom_font_4x8Bitmap[0], 4, 8 },
+        { &custom_font_6x8Bitmap[0], 6, 8 },
+        { &custom_font_6x10Bitmap[0], 6, 10 },
+        { &custom_font_8x8Bitmap[0], 8, 8 },
+    };
+
+    setup_console_top(font[index].bitmap,
+                      font[index].char_width, font[index].char_height);
+
+    consoleSelect(&bottomScreen);
+    consoleSetCursor(&bottomScreen, 0, 4);
+    printf("Current size: %dx%d  \n", font[index].char_width, font[index].char_height);
+    consoleSelect(&topScreen);
+}
+
+static void setup_console_bottom(void)
 {
     videoSetModeSub(MODE_0_2D);
     vramSetBankC(VRAM_C_SUB_BG);
     consoleInit(&bottomScreen, 3, BgType_Text4bpp, BgSize_T_256x256, 31, 0, false, true);
+}
+
+static int selected_font = 0;
+
+static bool wait_for_input(void)
+{
+    while (1)
+    {
+        scanKeys();
+
+        uint16_t keys = keysDown();
+
+        if (keys & KEY_A)
+            return true;
+
+        bool refresh_font = false;
+
+        if (keys & KEY_LEFT)
+        {
+            if (selected_font > 0)
+            {
+                selected_font--;
+                refresh_font = true;
+            }
+        }
+        else if (keys & KEY_RIGHT)
+        {
+            if (selected_font < 4)
+            {
+                selected_font++;
+                refresh_font = true;
+            }
+        }
+
+        if (refresh_font)
+        {
+            setup_console_top_font_index(selected_font);
+            return false;
+        }
+
+        if (keys & KEY_START)
+            exit(0);
+
+        swiWaitForVBlank();
+    }
+}
+
+static void print_scene(int index)
+{
+    // Reset all color settings
+    printf("\x1b[0m");
+    // Clear screen
+    printf("\x1b[2J");
+
+    if (index == 0)
+    {
+        printf("Characters:\n");
+        printf("\n");
+
+        printf("\x1b[0m");
+        for (int j = 0; j < 8; j++)
+        {
+            for (int i = 0; i < 32; i++)
+            {
+                char c = i + j * 32;
+
+                // Skip special characters
+                if ((c == '\0') || (c == '\n') || (c == '\r') ||
+                    (c == '\t') || (c == '\b'))
+                {
+                    c = ' ';
+                }
+
+                printf("%c", c);
+            }
+
+            // Only add a newline if 32 characters are narrower than the screen
+            if (console_user_info.character_width < 8)
+                printf("\n");
+        }
+    }
+    else if (index == 1)
+    {
+        printf("16-color palette:\n");
+        printf("\n");
+
+        printf("\x1b[22m");
+        for (int i = 0; i <= 7; i++)
+            printf("\x1b[%dm%X", 30 + i, i);
+        for (int i = 0; i <= 7; i++)
+            printf("\x1b[%dm%X", 90 + i, i);
+        printf("\n");
+
+        printf("\x1b[0m");
+        for (int i = 0; i <= 7; i++)
+            printf("\x1b[%dm%X", 40 + i, i);
+        for (int i = 0; i <= 7; i++)
+            printf("\x1b[%dm%X", 100 + i, i);
+        printf("\n");
+    }
+    else if (index == 2)
+    {
+        printf("256-color palette (foreground):\n");
+        printf("\n");
+
+        for (int i = 0; i < 256; i++)
+            printf("\x1b[38;5;%dm%02X", i, i);
+    }
+    else if (index == 3)
+    {
+        printf("256-color palette (background):\n");
+        printf("\n");
+
+        for (int i = 0; i < 256; i++)
+            printf("\x1b[48;5;%dm%02X", i, i);
+    }
+    else if (index == 4)
+    {
+        printf("24 bit mode (foreground):\n");
+        printf("\n");
+
+        int count = 0;
+
+        for (int r = 1; r < 5; r++)
+        {
+            for (int g = 1; g < 5; g++)
+            {
+                for (int b = 1; b < 5; b++)
+                {
+                    int red = r * 63;
+                    int green = g * 63;
+                    int blue = b * 63;
+                    printf("\x1b[38;2;%d;%d;%dm%02X,%02X,%02X  ",
+                        red, green, blue, red, green, blue);
+
+                    count++;
+                    if (count == 4)
+                    {
+                        printf("\n");
+                        count = 0;
+                    }
+                }
+            }
+        }
+    }
+    else if (index == 5)
+    {
+        printf("24 bit mode (background):\n");
+        printf("\n");
+
+        int count = 0;
+
+        for (int r = 1; r < 5; r++)
+        {
+            for (int g = 1; g < 5; g++)
+            {
+                for (int b = 1; b < 5; b++)
+                {
+                    int red = r * 63;
+                    int green = g * 63;
+                    int blue = b * 63;
+                    printf("\x1b[48;2;%d;%d;%dm%02X,%02X,%02X\x1b[0m  ",
+                        red, green, blue, red, green, blue);
+
+                    count++;
+                    if (count == 4)
+                    {
+                        printf("\n");
+                        count = 0;
+                    }
+                }
+            }
+        }
+    }
+    else if (index == 6)
+    {
+        consoleSetCursor(&topScreen, 0, 21);
+
+        printf("\x1b[0m");
+        for (int i = 0; i < 256; i++)
+        {
+            printf("\x1b[38;5;%dm", i);
+            printf("This is a test string %d\n", i);
+            swiWaitForVBlank();
+        }
+
+        printf("\x1b[0m");
+        for (int i = 0; i < 256; i++)
+        {
+            printf("\x1b[48;5;%dm", i);
+            printf("This is a test string %d\n", i);
+            swiWaitForVBlank();
+        }
+
+        printf("\x1b[0m");
+        consoleSetCursor(&topScreen, 5, 9);
+        printf("                   ");
+        consoleSetCursor(&topScreen, 5, 10);
+        printf("    You can also   ");
+        consoleSetCursor(&topScreen, 5, 11);
+        printf("                   ");
+        consoleSetCursor(&topScreen, 5, 12);
+        printf("  move the cursor. ");
+        consoleSetCursor(&topScreen, 5, 13);
+        printf("                   ");
+    }
+
+    printf("\x1b[0m");
 }
 
 int main(int argc, char **argv)
@@ -391,209 +614,34 @@ int main(int argc, char **argv)
     defaultExceptionHandler();
     consoleDebugInit(DebugDevice_NOCASH);
 
-    setup_console_top(&custom_font_4x6Bitmap[0], 4, 6);
-    // TODO
-    //setup_console_top(&custom_font_4x8Bitmap[0], 4, 8);
-    //setup_console_top(&custom_font_6x8Bitmap[0], 6, 8);
-    setup_console_bottom();
-
     // Print instructions to the bottom screen
 
-    consoleSelect(&bottomScreen);
-    printf("A: Next screen");
-    consoleSetCursor(&bottomScreen, 0, 23);
-    printf("START: Exit to loader");
+    setup_console_bottom();
 
-    // Print several patterns to the bottom screen
+    consoleSelect(&bottomScreen);
+    printf("A:          Next screen\n");
+    printf("Left/Right: Change font\n");
+    consoleSetCursor(&bottomScreen, 0, 23);
+    printf("START:      Exit to loader");
+
+    // Print several patterns to the top screen
+
+    setup_console_top_font_index(0);
 
     consoleSelect(&topScreen);
 
-    // Reset all color settings
-    printf("\x1b[0m");
-    // Clear screen
-    printf("\x1b[2J");
+    int index = 0;
 
     while (1)
     {
+        print_scene(index);
+
+        if (wait_for_input())
         {
-            printf("Characters:\n");
-            printf("\n");
-
-            printf("\x1b[0m");
-            for (int j = 0; j < 8; j++)
-            {
-                for (int i = 0; i < 32; i++)
-                {
-                    char c = i + j * 32;
-
-                    // Skip special characters
-                    if ((c == '\0') || (c == '\n') || (c == '\r') ||
-                        (c == '\t') || (c == '\b'))
-                    {
-                        c = ' ';
-                    }
-
-                    printf("%c", c);
-                }
-
-                // Only add a newline if 32 characters are narrower than the screen
-                if (console_user_info.character_width < 8)
-                    printf("\n");
-            }
+            index++;
+            if (index == 7)
+                index = 0;
         }
-
-        printf("\x1b[0m");
-        wait_for_input();
-        printf("\x1b[2J");
-
-        {
-            printf("16-color palette:\n");
-            printf("\n");
-
-            printf("\x1b[22m");
-            for (int i = 0; i <= 7; i++)
-                printf("\x1b[%dm%X", 30 + i, i);
-            for (int i = 0; i <= 7; i++)
-                printf("\x1b[%dm%X", 90 + i, i);
-            printf("\n");
-
-            printf("\x1b[0m");
-            for (int i = 0; i <= 7; i++)
-                printf("\x1b[%dm%X", 40 + i, i);
-            for (int i = 0; i <= 7; i++)
-                printf("\x1b[%dm%X", 100 + i, i);
-            printf("\n");
-        }
-
-        printf("\x1b[0m");
-        wait_for_input();
-        printf("\x1b[2J");
-
-        {
-            printf("256-color palette (foreground):\n");
-            printf("\n");
-
-            for (int i = 0; i < 256; i++)
-                printf("\x1b[38;5;%dm%02X", i, i);
-        }
-
-        printf("\x1b[0m");
-        wait_for_input();
-        printf("\x1b[2J");
-
-        {
-            printf("256-color palette (background):\n");
-            printf("\n");
-
-            for (int i = 0; i < 256; i++)
-                printf("\x1b[48;5;%dm%02X", i, i);
-        }
-
-        printf("\x1b[0m");
-        wait_for_input();
-        printf("\x1b[2J");
-
-        {
-            printf("24 bit mode (foreground):\n");
-            printf("\n");
-
-            int count = 0;
-
-            for (int r = 1; r < 5; r++)
-            {
-                for (int g = 1; g < 5; g++)
-                {
-                    for (int b = 1; b < 5; b++)
-                    {
-                        int red = r * 63;
-                        int green = g * 63;
-                        int blue = b * 63;
-                        printf("\x1b[38;2;%d;%d;%dm%02X,%02X,%02X  ",
-                            red, green, blue, red, green, blue);
-
-                        count++;
-                        if (count == 4)
-                        {
-                            printf("\n");
-                            count = 0;
-                        }
-                    }
-                }
-            }
-        }
-
-        printf("\x1b[0m");
-        wait_for_input();
-        printf("\x1b[2J");
-
-        {
-            printf("24 bit mode (background):\n");
-            printf("\n");
-
-            int count = 0;
-
-            for (int r = 1; r < 5; r++)
-            {
-                for (int g = 1; g < 5; g++)
-                {
-                    for (int b = 1; b < 5; b++)
-                    {
-                        int red = r * 63;
-                        int green = g * 63;
-                        int blue = b * 63;
-                        printf("\x1b[48;2;%d;%d;%dm%02X,%02X,%02X\x1b[0m  ",
-                            red, green, blue, red, green, blue);
-
-                        count++;
-                        if (count == 4)
-                        {
-                            printf("\n");
-                            count = 0;
-                        }
-                    }
-                }
-            }
-        }
-
-        printf("\x1b[0m");
-        wait_for_input();
-        printf("\x1b[2J");
-
-        {
-            consoleSetCursor(&topScreen, 0, 21);
-
-            printf("\x1b[0m");
-            for (int i = 0; i < 256; i++)
-            {
-                printf("\x1b[38;5;%dm", i);
-                printf("This is a test string %d\n", i);
-                swiWaitForVBlank();
-            }
-
-            printf("\x1b[0m");
-            for (int i = 0; i < 256; i++)
-            {
-                printf("\x1b[48;5;%dm", i);
-                printf("This is a test string %d\n", i);
-                swiWaitForVBlank();
-            }
-
-            printf("\x1b[0m");
-            consoleSetCursor(&topScreen, 5, 9);
-            printf("                   ");
-            consoleSetCursor(&topScreen, 5, 10);
-            printf("    You can also   ");
-            consoleSetCursor(&topScreen, 5, 11);
-            printf("                   ");
-            consoleSetCursor(&topScreen, 5, 12);
-            printf("  move the cursor. ");
-            consoleSetCursor(&topScreen, 5, 13);
-            printf("                   ");
-        }
-
-        printf("\x1b[0m");
-        wait_for_input();
-        printf("\x1b[2J");
     }
 
     return 0;
