@@ -229,7 +229,8 @@ static void custom_console_new_row(PrintConsole *console)
             custom_console_print_empty(console,
                                        console->windowX + i,
                                        console->windowY + console->windowHeight - 1);
-            // Clear two rows just in case. This is needed for some sizes
+            // Clear two rows just in case. This is needed for sizes that don't
+            // divide the screen in an exact number of rows.
             custom_console_print_empty(console,
                                        console->windowX + i,
                                        console->windowY + console->windowHeight);
@@ -611,9 +612,6 @@ static void print_scene(int index)
 
 int main(int argc, char **argv)
 {
-    defaultExceptionHandler();
-    consoleDebugInit(DebugDevice_NOCASH);
-
     // Print instructions to the bottom screen
 
     setup_console_bottom();
