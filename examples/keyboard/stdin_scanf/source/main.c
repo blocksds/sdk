@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2023
+// SPDX-FileContributor: Antonio Niño Díaz, 2023-2026
 
 // This example shows how to use scanf() to do a blocking keyboard read.
 
@@ -16,6 +16,21 @@ void on_key_pressed(int key)
       printf("%c", key);
 }
 
+
+int handle_keyboard_events(void *arg)
+{
+    while (1)
+    {
+        scanKeys();
+
+        int kc = keyboardUpdate();
+        if (kc != NOKEY)
+            keyboardFifoPutc(kc);
+
+        cothread_yield_irq(IRQ_VBLANK);
+    }
+}
+
 int main(int argc, char **argv)
 {
     consoleDemoInit();
@@ -24,12 +39,14 @@ int main(int argc, char **argv)
     Keyboard *kbd = keyboardDemoInit();
     kbd->OnKeyPressed = on_key_pressed;
 
+    cothread_create(handle_keyboard_events, NULL, 0, 0);
+
     char string[256];
     string[0] = '\0';
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
         scanKeys();
 
