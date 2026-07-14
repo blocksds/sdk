@@ -107,11 +107,11 @@ SECTIONS
         __twl_end__ = ABSOLUTE(.);
     } >twl_iwram :NONE
 
-    .crt0	:
+    .crt0 :
     {
         KEEP (*(.crt0))
         . = ALIGN(4);
-    } >iwram = 0xff :crt0
+    } >iwram :crt0 =0xff
 
     .text :
     {
@@ -127,7 +127,7 @@ SECTIONS
         . = ALIGN(4);
     } >iwram = 0xff
 
-    .fini           :
+    .fini :
     {
         KEEP (*(.fini))
     } >iwram =0xff
