@@ -3,6 +3,184 @@ title: 'Changelog'
 weight: 6
 ---
 
+### Version 1.22.0 (2026-07-XX)
+
+- libnds:
+
+  - FatFs has been updated to R0.16p2. @asie
+  - Fix mutex handling in FatFs system callbacks. The function was attempting to
+    acquire the lock only once instead of waiting for a while before giving up.
+    The new code waits until the lock is acquired. The bug caused disk read
+    errors when using filesystem functions from more than one thread.
+  - The ARM9 console code has received lots of internal changes:
+
+    - Two superfluous fflush() calls have been removed. `stdout` and `stderr`
+      aren't buffered, so they aren't needed. Also, this fixes a crash when
+      `consoleSelect()` is called from interrupt handlers (like when the
+      ARM7 calls consoleFlush()).
+    - The old handler of ANSI CSI escape sequences (Control Sequence Introducer)
+      was incorrect. However, the incorrect behaviour has been there for 18
+      years. [This patch](https://codeberg.org/blocksds/libnds/commit/a35c0d8aca35d8198d2bc71411b69f2722efb133)
+      added a half-correct handler (it only supported handling one command
+      instead of multiple commands, while
+      [this patch](https://codeberg.org/blocksds/libnds/commit/5e1b1091af6fd435d8f3ad948d8ee1db79a2830f)
+      introduced the buggy behaviour (it forced the commands to be in a specific
+      order, and the intensity command doesn't behave like it should). However,
+      all DS applications that use color in the console depend on the buggy
+      behaviour, so it has been kept as the default behaviour.
+    - `consoleEnhancedColorHandler()` has been introduced. It switches the CSI
+      handler to support an arbitrary list of commands (up to a maximum of
+      `LIBNDS_CONSOLE_MAX_ANSI_PARAMS`). This handler also supports 256-color
+      and direct 24-bit color modes. The information is saved in new fields
+      added to the `PrintConsole` struct. However, the default console of libnds
+      doesn't support more than 16 colors, so the other modes only work in
+      custom consoles.
+    - Longer ANSI escape sequences can be used. This is important when using
+      direct 24-bit color mode, as it uses fairly long escape sequences.
+    - The type used to store CSI commands has been changed from `int` to
+      `uint8_t` to save space in the stack.
+    - Two new hooks have been added to the `PrintConsole` struct. The user can
+      use `HandleSgrCodes` to handle all SGR commands with custom code and
+      completely replace the code of libnds. `HandleEscapeSequence` is called
+      whenever an unknown escape sequence is found.
+    - The `PrintConsole` struct now has a `userData` pointer that can be used by
+      the user to point to any custom data used by custom consoles. This pointer
+      is always ignored by libnds.
+    - `consoleSetBackgroundColor()` has been added, which can be used to set the
+      background color without using ANSI escape sequences.
+    - Sequences `ESC [ n A`, `ESC [ n B`, `ESC [ n C` and `ESC [ n D` have been
+      fixed. They now move the cursor at least one character (0 is treated as 1)
+      and a missing number moves the cursor one character, as expected.
+    - Allow debug console init before regular console init. Calling
+      `consoleInit()` or similar after calling `consoleDebugInit()`,
+      `consoleSetCustomStdout()` or `consoleSetCustomStderr()` no longer
+      overwrites the handlers.
+    - It is now possible to use a custom `putc` handler even if no font has been
+      defined. This can be useful for custom consoles that rely on custom
+      drawing code.
+    - The console buffer is no longer cleared on init unless it is also loading
+      font graphics. We shouldn't assume that we know how to clear the console
+      if we aren't loading graphics with a known format.
+    - The type of the background ID has been changed from `int` to `s8` to save
+      some space.
+
+  - Some `termios` placeholder functions have been implemented.
+  - A new 64-bit system tick counter has been implemented. It relies on a
+    hardware timer, which has been setup with a divider of 64, which gives it a
+    resolution of approximately 1.9 microseconds. Currently, it needs to be
+    enabled with `systemCounterSetup()`. Note that it isn't advisable to use it
+    for now, it should be considered to be prototype code.
+  - `sleep()` and `usleep()` have been implemented. They use the tick counter
+    internally.
+  - `stdout` and `stderr` have been turned into buffered file streams. This is
+    an internal change that shouldn't affect any user, but it makes picolibc
+    treat them differently, and it fixes `fileno(stdout)` and `fileno(stderr)`.
+  - `stdin` has also been modified:
+
+    - libnds now implements a FIFO buffer that holds characters read from the
+      libnds keyboard. It's also possible to push characters manually to the
+      buffer if the keyboard of libnds isn't used. When using a custom
+      keyboard, `keyboardFifoStart()` needs to be called first, and
+      `keyboardFifoPutc()` can be used to add characters to the FIFO, while
+      `keyboardFifoUnputc()` can be used to delete the last character.
+    - `fileno(stdin)` now works.
+    - Addeds support for ioctl(). Only FIONBIO and FIONREAD are supported.
+    - Added support for fcntl(). Only flag O_NONBLOCK is supported.
+    - Addeds support for non-blocking keyboard input while using system calls
+      like `write(STDIN_FILENO, buffer, size)`. This requires the user to
+      call `keyboardFifoUpdate()` regularly. It can be done in the main
+      application loop or in a second thread.
+
+  - The keyboard of libnds has also received some improvements:
+
+    - Normally, every key pressed in the keyboard corresponds to an integer
+      value, which is pushed to the `stdin` FIFO buffer as a `char`. The new
+      hook `OnKeyPutc` is called whenever a key is pressed. It allows the
+      developer to detect specific key pressed and push multiple characters to
+      the `stdin` buffer. This can be useful if the keyboard needs to generate
+      ANSI sequences (which isn't normally required by applications).
+    - The code has been refactored to not rely on `keysDown()` or `keysUp()`, so
+      `keyboardUpdate()` will work even if it's called at a different rate than
+      `scanKeys()`.
+    - When `read(STDIN_FILENO ...)` is used to do a blocking read, it no longer
+      updates the keyboard automatically. Instead, the developer must have a
+      different thread that updates the keyboard and calls `keyboardFifoPutc()`
+      to add characters to the `stdin` FIFO. Also, the function no longer blocks
+      or starts the keyboard if the FIFO has enough characters to fulfill the
+      requested read. Instead, it only blocks if more characters have been
+      requested than the ones that are available.
+    - The old behaviour of the CTRL and ALT keys isn't very useful. They simply
+      detect a key press and pass it to the FIFO buffer. However, it isn't
+      possible to press two keys at once with the touch screen, so two new modes
+      have been added to the keyboard. One of them keeps CTRL/ALT held until any
+      other key is pressed. The other one keeps them pressed until they are
+      pressed again. Variables `ctrlPressed` and `altPressed` can be read to
+      detect their current state.
+    - In `getc()`, don't call `keyboardShow()` if the keyboard is already
+      visible.
+    - Add `keyboardIsVisible()` to check if the keyboard is visible or not.
+    - Some minor cleanup, like using escape characters (like `\b`) instead of
+      integer values in enum values.
+
+  - `ioctl()` and `fcntl()` are now supported for any file descriptor, not just
+    DSWiFi socket descriptors. They have been added to the `device_io_t` struct
+    so that custom devices can also add support for them.
+  - The headers `fcntl.h` and `sys/ioctl.h` have been added to libnds (with a
+    basic set of defines, enough to build some projects like Bunjalloo) so that
+    they are used as reference between all libraries.
+  - Support `R_ARM_V4BX` static relocation type at runtime in DSL files.
+    @trustytrojan
+  - Header `sys/statvfs.h` has been removed from libnds as picolibc comes with
+    its own version of the header now. @asie
+
+- DSWiFi:
+
+  - Use the new `ioctl()` and `fcntl()` hooks of libnds. Some definitions and
+    headers are now in libnds so the corresponding headers have been removed.
+  - Arm the TSF compare when the firmware leaves it unprogrammed. A DSi booting
+    an NDS flashcart in DS-compat mode sometimes inherits garbage, and host mode
+    silently airs no beacons at all - the API reports success, the state machine
+    reaches AP mode, but no console can ever find the room. @tymalo
+
+- Maxmod:
+
+  - Add details to the documentation about how to setup OpenMPT to sound more
+    like Maxmod would.
+  - Small change to support bigger BPM values in the future.
+
+- mmutil:
+
+  - Fail with a proper error message when some XM songs have values in the
+    header that don't fit in 8-bit integers. This needs to be fixed in the
+    future.
+
+- SDK:
+
+  - picolibc has been updated. `fopencookie()` is now supported. @asie
+  - Updated the updating guide.
+
+  - Tutorial:
+
+    - Mention that most I/O registers are per-CPU, not shared between CPUs.
+    - Improve alpha blending section to show how to use transparency with bitmap
+      sprites without using EVA/EVB/EVY.
+    - Mention how to make OpenMPT sound more like Maxmod would sound.
+    - Update keyboard tutorial to mention how to do blocking and non-blocking
+      reads from `stdin` with `read()`, `fread()` and `scanf()`.
+
+  - Examples:
+
+    - Add an example of how to implement a custom console with the libnds API.
+      The console uses a bitmap background instead of tiled background, and it
+      shows how to use 256-color and direct 24-bit color modes. It also supports
+      multiple font sizes, which can be changed at runtime.
+    - Improve alpha blending example to show how to use transparency with bitmap
+      sprites without using EVA/EVB/EVY.
+    - Update ANSI console example to use compliant escape sequences.
+    - Add examples to show how to use `fread(stdin)`, `read(STDIN_FILENO)` and
+      `scanf()` in non-blocking and blocking modes.
+    - Update the device I/O example to show the new `ioctl` and `fcntl` hooks.
+
 ### Version 1.21.1 (2026-06-16)
 
 - SDK:

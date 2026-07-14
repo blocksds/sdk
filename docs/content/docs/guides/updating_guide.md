@@ -34,6 +34,19 @@ git config --global --unset url.ssh://git@codeberg.org/blocksds/.insteadOf
 git config --global --unset url.https://codeberg.org/blocksds/.insteadOf
 ```
 
+### Upgrading to BlocksDS 1.22.0
+
+- When `read(stdin, ...)` is used to do a blocking read, it no longer updates
+  the keyboard automatically. Instead, the developer must have a different
+  thread that updates the keyboard and calls `keyboardFifoPutc()` to add
+  characters to the `stdin` FIFO. Also, the function no longer blocks or starts
+  the keyboard if the FIFO has enough characters to fulfill the requested read.
+  Instead, it only blocks if more characters have been requested than the ones
+  that are available.
+- The console buffer is no longer cleared on init unless it is also loading font
+  graphics. We shouldn't assume that we know how to clear the console if we
+  aren't loading graphics with a known format.
+
 ### Upgrading to BlocksDS 1.19.0
 
 * When using section macros such as `ITCM_CODE`, `DTCM_BSS`, etc. you may now see a warning message akin to
