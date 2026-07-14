@@ -158,6 +158,7 @@ weight: 6
 
   - picolibc has been updated. `fopencookie()` is now supported. @asie
   - Updated the updating guide.
+  - Fix the VRAM and IWRAM ARM7 linkerscripts. @lifehackerhansol
 
   - Tutorial:
 
