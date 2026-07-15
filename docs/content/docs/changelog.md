@@ -181,6 +181,7 @@ weight: 6
     - Add examples to show how to use `fread(stdin)`, `read(STDIN_FILENO)` and
       `scanf()` in non-blocking and blocking modes.
     - Update the device I/O example to show the new `ioctl` and `fcntl` hooks.
+    - Update certificate of `example.com` used in the Mbed TLS example.
 
 ### Version 1.21.1 (2026-06-16)
 
