@@ -84,9 +84,9 @@ weight: 6
       `keyboardFifoPutc()` can be used to add characters to the FIFO, while
       `keyboardFifoUnputc()` can be used to delete the last character.
     - `fileno(stdin)` now works.
-    - Addeds support for ioctl(). Only FIONBIO and FIONREAD are supported.
-    - Added support for fcntl(). Only flag O_NONBLOCK is supported.
-    - Addeds support for non-blocking keyboard input while using system calls
+    - Added support for ioctl(). Only `FIONBIO` and `FIONREAD` are supported.
+    - Added support for fcntl(). Only flag `O_NONBLOCK` is supported.
+    - Added support for non-blocking keyboard input while using system calls
       like `write(STDIN_FILENO, buffer, size)`. This requires the user to
       call `keyboardFifoUpdate()` regularly. It can be done in the main
       application loop or in a second thread.
