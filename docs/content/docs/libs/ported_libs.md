@@ -104,3 +104,25 @@ LIBDIRS += $(BLOCKSDSEXT)/mbedtls $(BLOCKSDSEXT)/libcurl
 
 Check [this example](https://codeberg.org/blocksds/sdk/src/branch/master/examples/dswifi/get_website_libcurl)
 for more details.
+
+### [ncurses](https://invisible-island.net/ncurses)
+
+ncurses (new curses) is a programming library for creating textual user
+interfaces (TUIs) that work across a wide variety of terminals.
+
+Install it with:
+
+```sh
+wf-pacman -Sy blocksds-ncurses
+```
+
+Link it with:
+
+```make
+LIBS        += -lncurses
+LIBDIRS     += $(BLOCKSDSEXT)/ncurses
+INCLUDEDIRS += $(BLOCKSDSEXT)/ncurses/include/ncurses
+```
+
+Check [this example](https://codeberg.org/blocksds/sdk/src/branch/master/examples/console/using_ncurses)
+for more details.
