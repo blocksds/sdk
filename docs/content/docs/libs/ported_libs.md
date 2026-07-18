@@ -80,6 +80,9 @@ LIBS    += -lmbedcrypto -lmbedtls -lmbedx509
 LIBDIRS += $(BLOCKSDSEXT)/mbedtls
 ```
 
+Check [this example](https://codeberg.org/blocksds/sdk/src/branch/master/examples/dswifi/get_website_ssl)
+for more details.
+
 ### [libcurl](https://curl.se/libcurl)
 
 libcurl is a free and easy-to-use client-side URL transfer library, supporting
@@ -98,3 +101,6 @@ Link it with:
 LIBS    += -lmbedcrypto -lmbedtls -lmbedx509 -lcurl -lz
 LIBDIRS += $(BLOCKSDSEXT)/mbedtls $(BLOCKSDSEXT)/libcurl
 ```
+
+Check [this example](https://codeberg.org/blocksds/sdk/src/branch/master/examples/dswifi/get_website_libcurl)
+for more details.
