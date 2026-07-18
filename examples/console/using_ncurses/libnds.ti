@@ -1,0 +1,123 @@
+# https://www.man7.org/linux/man-pages/man5/terminfo.5.html
+
+# Base terminal without color support
+# ===================================
+
+libnds|libnds console (base),
+# Number of columns and lines for the default font (6x8)
+	cols#42,
+	lines#24,
+# The cursor wraps when it reaches the rightmost column
+	am,
+# Pad character does not exist
+	npc,
+# Clear to end of line
+	el=\E[0K,
+# Clear to end of screen
+	ed=\E[0J,
+# Clear to beginning of line
+	el1=\E[1K,
+#
+# Representation of some keys in stdin
+# ------------------------------------
+#
+# Carriage return and newline characters
+	cr=\r,
+	nel=\n,
+# Audible signal character (bell)
+	bel=^G,
+# '\t' Tab to next 8-space hardware tab stop
+	ht=^I,
+# '\b' Backspace key
+	kbs=^H,
+# Representation of key return in stdin
+	kent=\EOM,
+# Representation of key up in stdin
+	kcuu1=\E[A,
+# Representation of key down in stdin
+	kcud1=\E[B,
+# Representation of key right in stdin
+	kcuf1=\E[C,
+# Representation of key left in stdin
+	kcub1=\E[D,
+#
+# Tell ncurses how to move the cursor
+# -----------------------------------
+#
+# Set cursor position
+	cup=\E[%p1%d;%p2%dH,
+# Move cursor up one space
+	cuu1=\E[A,
+# Move down one line
+	cud1=\E[B,
+# Move right one space
+	cuf1=\E[C,
+# Move left one space
+	cub1=\E[D,
+# Request the terminal to print the cursor coordinates
+	u7=\E[6n,
+# Message returned by the terminal to print the cursor coordinates
+	u6=\E[%p1%d;%p2%dR,
+# Our mouse supports press/release events and drag events (but not wheel). Note
+# that XM is a non-standard capability:
+# https://manpages.debian.org/unstable/ncurses-doc/mouse.3ncurses.en.html
+# https://www.man7.org/linux/man-pages/man5/user_caps.5.html
+	XM=\E[?1002%?%p1%{1}%=%th%el%;,
+#
+# Tell ncurses how to set text attributes
+# ---------------------------------------
+#
+# Reset foreground and background colors to their default values
+	op=\E[39;49m,
+# Reset all attributes
+	sgr0=\E[0m,
+# Define video attributes (only bold and dim supported)
+	sgr=\E[0%?%p1%p6%|%t;1%;%?%p5%|%t;22%;m,
+# Bold
+#	bold=\E[1m,
+#
+# Mouse support
+# -------------
+#
+# Number of mouse buttons
+	btns#1,
+# Mouse event
+	kmous=\E[M,
+
+# Terminal with 8 color support
+# =============================
+
+libnds-color|libnds console (8 colors),
+	use=libnds,
+# Number of colors and color pairs (8-color mode)
+	colors#8,
+	pairs#64,
+# Set background and foreground colors (8-color mode)
+	setab=\E[4%p1%dm,
+	setaf=\E[3%p1%dm,
+
+# Terminal with 256 color support
+# ===============================
+
+libnds-256color|libnds console (256 colors),
+	use=libnds,
+# Number of colors and color pairs (256-color mode)
+	colors#0x100,
+	pairs#1000,
+# Set background and foreground colors (256-color mode)
+	setab=\E[48;5;%p1%dm,
+	setaf=\E[38;5;%p1%dm,
+
+# Terminal with direct color support
+# ==================================
+
+# TODO
+#libnds-direct|libnds console (direct color),
+#	use=libnds,
+#	colors#0x1000000, pairs#0x8000,
+#	initc@,
+#	setab=\E[%?%p1%{8}%<%t4%p1%d%e48\:2\:\:%p1%{65536}%/%d\:%p1
+#			%{256}%/%{255}%&%d\:%p1%{255}%&%d%;m,
+#	setaf=\E[%?%p1%{8}%<%t3%p1%d%e38\:2\:\:%p1%{65536}%/%d\:%p1
+#			%{256}%/%{255}%&%d\:%p1%{255}%&%d%;m,
+#	setb@, setf@,

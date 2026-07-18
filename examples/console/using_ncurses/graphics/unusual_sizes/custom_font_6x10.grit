@@ -1,0 +1,8 @@
+# 1 bpp, bitmap, set alpha bit to 1, black is transparent
+-gB16 -gb -gT000000
+
+# Don't generate a tilemap
+-m!
+
+# Don't generate a palette
+-p!

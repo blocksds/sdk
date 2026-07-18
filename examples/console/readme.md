@@ -9,3 +9,4 @@ This folder contains examples of how to use the console API of libnds.
 - `console_windows`: Use windows to display text in a small part of the screen.
 - `custom_console`: Use a custom console renderer that supports more color modes.
 - `custom_font`: Use a custom font made by the user.
+- `using_ncurses`: How to use ncurses with a custom console and keyboard.
