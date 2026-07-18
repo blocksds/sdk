@@ -144,7 +144,11 @@ static void custom_console_print_char(PrintConsole *console, char c, int x, int 
     }
     else
     {
-        foreground = info->palette[console->fontCurPal] | BIT(15);
+        int index = console->fontCurPal;
+        if ((console->sgrIntensity) && (index < 8))
+            index += 8;
+
+        foreground = info->palette[index] | BIT(15);
     }
 
     if (console->sgrBackgroundIsRgb)
@@ -454,12 +458,14 @@ static void print_scene(int index)
     // Clear screen
     printf("\x1b[2J");
 
+    // Use bright text
+    printf("\x1b[1m");
+
     if (index == 0)
     {
         printf("Characters:\n");
         printf("\n");
 
-        printf("\x1b[0m");
         for (int j = 0; j < 8; j++)
         {
             for (int i = 0; i < 32; i++)
@@ -493,7 +499,7 @@ static void print_scene(int index)
             printf("\x1b[%dm%X", 90 + i, i);
         printf("\n");
 
-        printf("\x1b[0m");
+        printf("\x1b[1m");
         for (int i = 0; i <= 7; i++)
             printf("\x1b[%dm%X", 40 + i, i);
         for (int i = 0; i <= 7; i++)
@@ -586,7 +592,7 @@ static void print_scene(int index)
             swiWaitForVBlank();
         }
 
-        printf("\x1b[0m");
+        printf("\x1b[0;1m");
         for (int i = 0; i < 256; i++)
         {
             printf("\x1b[48;5;%dm", i);
@@ -594,7 +600,7 @@ static void print_scene(int index)
             swiWaitForVBlank();
         }
 
-        printf("\x1b[0m");
+        printf("\x1b[0;1m");
         consoleSetCursor(&topScreen, 5, 9);
         printf("                   ");
         consoleSetCursor(&topScreen, 5, 10);
@@ -613,6 +619,7 @@ static void print_scene(int index)
 int main(int argc, char **argv)
 {
     // Print instructions to the bottom screen
+    consoleDebugInit(DebugDevice_NOCASH);
 
     setup_console_bottom();
 
