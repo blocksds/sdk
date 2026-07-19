@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: 6
 ---
 
-### Version 1.22.1 (2026-07-XX)
+### Version 1.22.1 (2026-07-19)
 
 - libnds:
 
