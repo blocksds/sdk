@@ -191,10 +191,20 @@ functions. ANSI sequences aren't very readable, so you may prefer to use the
 functions provided by libnds instead. ANSI sequences are mostly useful when
 you're porting command line applications from PC to DS.
 
+ANSI sequences support has been present in libnds from the start, but the
+commands that change the color of the text were incorrect. Unfortunately we need
+to keep the old broken behaviour as the default in libnds so that we don't break
+all programs that rely on the broken behaviour. To enable the correct behaviour
+(and any additional command added to libnds since then) you need to call
+function `consoleEnhancedColorHandler()`.
+
 You can see an example of using ANSI sequences here:
 [`examples/console/ansi_console`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/console/ansi_console)
 
 ![ANSI console](ansi_console.png)
+
+Note that libnds has some hooks that are called if libnds detects unknown escape
+sequences. You can handle them yourself if needed.
 
 ## 2.5 Custom fonts
 
@@ -280,6 +290,29 @@ used when writing new text to the screen.
 Using a 8 bpp tiled background will prevent you from changing the color of the
 text with `consoleSetColor()` or ANSI sequences.
 {{< /callout >}}
+
+## 2.6 Custom consoles
+
+In some cases the default console of libnds may not be enough for your needs.
+For example, even though libnds supports 256-color and direct 24-bit color
+commands for foreground and background, the default console of libnds only
+supports rendering 16 colors, and it doesn't allow you to change the color of
+the background. The main reason for the limitations is that libnds uses tiled
+backgrounds in a very simplistic way. Also, this restricts libnds to 8x8 pixel
+fonts.
+
+It is possible to use libnds to redirect `stdout` to your own custom console so
+that you can use any graphics mode you want, any font size you want, and any
+additional command you want.
+
+The following example shows how to use a 16-bit bitmap background for the
+console, which makes it significantly slower than the default libnds console,
+buti t supports 8-color commands, 256-color commands and direct 24-bit color
+commands:
+
+[`examples/console/custom_console`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/console/custom_console)
+
+![Custom console](custom_console.png)
 
 ## 3. Debug console
 
@@ -536,7 +569,23 @@ to be read or until a `\n` character is found.
 You can check the full source of the example here:
 [`examples/keyboard/stdin_fread_nonblocking`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/keyboard/stdin_fread_nonblocking)
 
-## 4.6 Custom keyboards
+## 4.6 Manual handling of `stdin` FIFO
+
+Normally the libnds keyboard pushes characters to the `stdin` FIFO automatically
+with `keyboardFifoUpdate()` or with blocking calls to `read()` or `scanf()`. If
+required, the user can also use `keyboardFifoPutc()`, `keyboardFifoUnputc()` to
+add or remove characters from it (to read from it, use `read()`).
+
+One big limitation of the keyboard of libnds is that it can only push a single
+character to the FIFO per key press. If you want to do special handling with it
+(for example, to push an ANSI escape sequence) you can create your own handler
+of key presses.
+
+Assign your function to the hook `OnKeyPutc` of the keyboard. This will prevent
+libnds from pushing any character to the FIFO. Instead, you are expected to call
+`keyboardFifoPutc()` from the hook to push characters as required.
+
+## 4.7 Custom keyboards
 
 You can create your own keyboard, but it requires a lot more manual work than
 in the case of a text console. For example, this is a custom keyboard based on
@@ -713,3 +762,26 @@ keyboardInit(&customKeyboard,
 
 Check this example to see the full example:
 [`examples/keyboard/custom_keyboard`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/keyboard/custom_keyboard)
+
+## 5. Using ncurses
+
+ncurses is a library used to develop cross-platform textual user interfaces in a
+terminal. Custom consoles and keybards give you enough freedom to make them
+ANSI-compatible. However, this requires quite a bit of code, so it must all be
+done in user code, not in libnds.
+
+Essentially, you need:
+
+- A console that can understand enough ANSI escape sequences to let ncurses move
+  the cursor around, change the text settings, etc.
+- A keyboard that takes keyboard key codes and converts them to ANSI sequences
+  with the hook `OnKeyPutc` and function `keyboardFifoPutc()`.
+- A terminfo file that tells ncurses how the console and keyboard work.
+
+If you want an example of how to implement all of that, check the following
+example. It can be built for DS and PC, the only difference is that you need to
+compile several extra files in the DS build, and you need to call a function
+that sets up the environment (which isn't needed on PC):
+[`examples/console/using_ncurses`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/using_ncurses/ansi_console)
+
+![ncurses example](ncurses_example.png)
