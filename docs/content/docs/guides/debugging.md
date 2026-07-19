@@ -115,6 +115,8 @@ expression fails on the ARM9, it will stop the program and print an error
 message on the screen. On the ARM7 it will print a message to the no$gba/melonDS
 console and stop execution.
 
+![Assert handler](../assert_handler.png)
+
 It's always a good idea to use this function in your code to warn the developer
 about problems that need to be fixed, but that can't happen during normal
 execution of the program. For errors that may happen during normal execution of
