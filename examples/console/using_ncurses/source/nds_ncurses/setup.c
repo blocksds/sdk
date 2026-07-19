@@ -15,9 +15,9 @@
 void nds_setup_input_output(void)
 {
     defaultExceptionHandler();
-//#ifdef DEBUG
+#ifdef DEBUG
     consoleDebugInit(DebugDevice_NOCASH);
-//#endif
+#endif
 
     // Initialize system timer for code that uses sleep() and usleep()
     systemCounterSetup();
@@ -69,13 +69,17 @@ static char *envs[] =
 
 #if 0
     // TERMCAP describes the capabilities of the terminal, but it's a much more
-    // limited way of describing the capabilities of a terminal.
+    // limited way of describing the capabilities of a terminal than terminfo.
     //
-    // To enable support for this you need to build ncurses with the following
-    // option: --disable-database
+    // To enable support for this you need to build ncurses with option
+    // --disable-database, which isn't used in the default build of BlocksDS.
+    //
+    // Note that TERMCAP can also point to a file instead of containing the
+    // terminal description.
     //
     //   https://man.cat-v.org/unix_10th/5/termcap
     //   https://www.gnu.org/software/termutils/manual/termcap-1.3/html_mono/termcap.html
+    //   https://www.man7.org/linux/man-pages/man5/termcap.5.html
     "TERMCAP=DS|libnds-256color|libnds console:" // Terminal name
 
     "co#42:li#24:"  // Number of columns and lines for the default font (6x8)

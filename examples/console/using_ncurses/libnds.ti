@@ -3,6 +3,8 @@
 # SPDX-FileContributor: Antonio Niño Díaz, 2026
 
 # https://www.man7.org/linux/man-pages/man5/terminfo.5.html
+# https://invisible-island.net/xterm/terminfo.html
+# https://github.com/GNOME/vte/blob/master/src/terminfo/terminfo.src
 
 # Base terminal without color support
 # ===================================
@@ -116,7 +118,10 @@ libnds-256color|libnds console (256 colors),
 # ==================================
 
 # TODO
+# https://stackoverflow.com/a/63611791
+
 #libnds-direct|libnds console (direct color),
+#	RGB,
 #	use=libnds,
 #	colors#0x1000000, pairs#0x8000,
 #	initc@,
