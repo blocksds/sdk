@@ -7,7 +7,7 @@ weight: 6
 
 - libnds:
 
-  - Don't load graphics in consoleSetFont() if they don't exist.
+  - Don't load graphics in `consoleSetFont()` if they don't exist.
   - The escape sequence handler hook function prototype has changed to also
     receive a pointer to the current console. This is a compatibility break, but
     the hook was added in version 1.22.0, so it has very low impact.
