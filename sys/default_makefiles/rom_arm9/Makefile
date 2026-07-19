@@ -48,6 +48,8 @@ DEFINES		?=
 # Libraries
 # ---------
 
+# Remember to use an ARM7 core with dswifi if you use it on the ARM9
+#ARM7ELF		:= $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi_maxmod.elf
 ARM7ELF		?= $(BLOCKSDS)/sys/arm7/main_core/arm7_maxmod.elf
 
 LIBS		?= -lnds9
