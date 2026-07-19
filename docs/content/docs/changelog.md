@@ -17,9 +17,23 @@ weight: 6
   - `keyboardFifoGetc()` and `keyboardFifoStoredCharacters()` are now public,
     they may be useful for people using custom keyboards and not using OS
     functions like `read()`.
+  - Update keyboard internally in blocking `stdin` reads. Instead of expecting
+    the user to create a thread that updates the keyboard, do it here. It can
+    become very awkward to have a thread that calls `scanKeys()` that isn't the
+    main thread. This reverts the change in version 1.22.0 that required a
+    second thread to update the keyboard.
+
+- DSWiFi:
+
+  - Use SHA1 implementation from DSi BIOS instead of Mbed TLS to reduce the size
+    of the binary by 4 kiB. @asie
+  - Remove a redundant definition of `fcntl()`.
+  - Replace the only `printf()` in the code by a `libndsCrash()`.
 
 - SDK:
 
+  - Use integer printf in default ARM7 core to save 6 kiB from the final binary.
+    @asie
   - ncurses has been ported to BlocksDS. It has been added to the documentation
     page of third-party ported libraries.
   - The tutorial now mentions the console and keyboard improvements of version
@@ -29,6 +43,11 @@ weight: 6
     prototype and to use bright colors explicitly.
   - The debugging guide now has a screenshot of how the assert handler looks
     like.
+  - The ARM9+Teak default makefiles now use the ARM7 core without DSWiFi by
+    default to match the behaviour of other Makefiles. This is a compatibility
+    break.
+  - Update examples that do blocking reads from `stdin` to not create a thread
+    to update the keyboard.
 
 ### Version 1.22.0 (2026-07-15)
 
