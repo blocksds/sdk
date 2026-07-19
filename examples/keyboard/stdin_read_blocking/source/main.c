@@ -29,6 +29,8 @@ int main(int argc, char **argv)
     {
         cothread_yield_irq(IRQ_VBLANK);
 
+        scanKeys();
+
         uint16_t keys = keysDown();
 
         consoleClear();
