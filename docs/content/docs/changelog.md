@@ -3,6 +3,33 @@ title: 'Changelog'
 weight: 6
 ---
 
+### Version 1.22.1 (2026-07-XX)
+
+- libnds:
+
+  - Don't load graphics in consoleSetFont() if they don't exist.
+  - The escape sequence handler hook function prototype has changed to also
+    receive a pointer to the current console. This is a compatibility break, but
+    the hook was added in version 1.22.0, so it has very low impact.
+  - Use non-bright colors by default in the console in enhanced SGR mode. This
+    is a compatibility break, but the enhanced SGR mode was also added in
+    version 1.22.0, so it has low impact.
+  - `keyboardFifoGetc()` and `keyboardFifoStoredCharacters()` are now public,
+    they may be useful for people using custom keyboards and not using OS
+    functions like `read()`.
+
+- SDK:
+
+  - ncurses has been ported to BlocksDS. It has been added to the documentation
+    page of third-party ported libraries.
+  - The tutorial now mentions the console and keyboard improvements of version
+    1.22.0 and 1.22.1.
+  - There's a new example that shows how to use ncurses in BlocksDS.
+  - The custom console example has been updated to use the new hook function
+    prototype and to use bright colors explicitly.
+  - The debugging guide now has a screenshot of how the assert handler looks
+    like.
+
 ### Version 1.22.0 (2026-07-15)
 
 - libnds:
