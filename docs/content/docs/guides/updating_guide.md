@@ -34,6 +34,16 @@ git config --global --unset url.ssh://git@codeberg.org/blocksds/.insteadOf
 git config --global --unset url.https://codeberg.org/blocksds/.insteadOf
 ```
 
+### Upgrading to BlocksDS 1.22.1
+
+- When `read(stdin, ...)` is used to do a blocking read, it updates the keyboard
+  automatically again. It can become very awkward to have a thread that calls
+  `scanKeys()` that isn't the main thread.
+- The ARM9+Teak default makefiles were still using the ARM7 core with WiFi
+  support by default. Now, WiFi support has been removed to match the other
+  makefiles. If needed, the ARM7 core with WiFi support can be selected in the
+  user makefile.
+
 ### Upgrading to BlocksDS 1.22.0
 
 - When `read(stdin, ...)` is used to do a blocking read, it no longer updates
