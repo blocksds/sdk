@@ -26,6 +26,8 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
+    soundEnable();
+
     mmInitDefaultMem((mm_addr)soundbank_bin);
 
     mmLoad(MOD_PARALLAX_80599);
@@ -41,8 +43,6 @@ int main(int argc, char **argv)
     printf("R: Stop\n");
     printf("\n");
     printf("START: Return to loader\n");
-
-    soundEnable();
 
     mmStart(MOD_PARALLAX_80599, MM_PLAY_LOOP);
 

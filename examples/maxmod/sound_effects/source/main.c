@@ -15,6 +15,8 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
+    soundEnable();
+
     mmInitDefaultMem((mm_addr)soundbank_bin);
 
     // Use extended mode (software + hardware mixing)
@@ -31,8 +33,6 @@ int main(int argc, char **argv)
 
     // Make the test song almost mute
     mmSetModuleVolume(4);
-
-    soundEnable();
 
     swiWaitForVBlank();
 

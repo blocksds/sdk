@@ -55,6 +55,8 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
+    soundEnable();
+
     // Init video
     videoSetMode(MODE_0_2D);
     oamInit(&oamMain, SpriteMapping_1D_32, false);
@@ -72,8 +74,6 @@ int main(int argc, char **argv)
     mmSetEventHandler(songEventHandler);
 
     mmLoad(MOD_K_JOSE___GETAWAY);
-
-    soundEnable();
 
     mmStart(MOD_K_JOSE___GETAWAY, MM_PLAY_LOOP);
 

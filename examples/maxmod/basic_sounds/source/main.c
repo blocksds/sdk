@@ -24,6 +24,8 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
+    soundEnable();
+
     mmInitDefaultMem((mm_addr)soundbank_bin);
 
     mmLoad(MOD_PARALLAX_80599);
@@ -43,8 +45,6 @@ int main(int argc, char **argv)
 
     // Load sound effects
     mmLoadEffect(SFX_FIRE_EXPLOSION);
-
-    soundEnable();
 
     bool playing = false;
 

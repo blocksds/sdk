@@ -48,6 +48,8 @@ int main(int argc, char **argv)
     printf("\n");
     printf("START: Return to loader\n");
 
+    soundEnable();
+
     bool songs_loaded = true;
 
     u16 res;
@@ -72,8 +74,6 @@ int main(int argc, char **argv)
 
     // Ensure that the ARM7 can see the LibXM7 initialized data
     DC_FlushAll();
-
-    soundEnable();
 
     bool playing = false;
 

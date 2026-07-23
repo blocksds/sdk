@@ -68,6 +68,8 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
+    soundEnable();
+
     mmInitDefaultMem((mm_addr)soundbank_bin);
 
     mmLoad(MOD_JOINT_PEOPLE);
@@ -85,8 +87,6 @@ int main(int argc, char **argv)
         printf("Error while initializing reverb\n");
         return 1;
     }
-
-    soundEnable();
 
     mmStart(MOD_JOINT_PEOPLE, MM_PLAY_LOOP);
 

@@ -65,6 +65,8 @@ static XM7_ModuleManager_Type module;
 
 int main(int argc, char **argv)
 {
+    soundEnable();
+
     // Setup the top screen to display the waveform as a bitmap
     videoSetMode(MODE_5_2D);
     vramSetBankA(VRAM_A_MAIN_BG_0x06000000);
@@ -96,8 +98,6 @@ int main(int argc, char **argv)
     // the ARM7 can use them without issues. We also need to ensure that the
     // ARM7 sees the updated values of the structure setup by LibXM7.
     DC_FlushAll();
-
-    soundEnable();
 
     song_start(&module);
 

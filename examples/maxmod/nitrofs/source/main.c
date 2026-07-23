@@ -50,6 +50,8 @@ int main(int argc, char **argv)
     printf("\n");
     printf("\n");
 
+    soundEnable();
+
     printf("X: haen pyykit by Lasse\n");
     printf("Y: Parallax Glacier by Raina\n");
     printf("\n");
@@ -60,8 +62,6 @@ int main(int argc, char **argv)
 
     mmLoad(MOD_PARALLAX_80599);
     mmLoad(MOD_LASSE_HAEN_PYYKIT);
-
-    soundEnable();
 
     bool playing = false;
 
