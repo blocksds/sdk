@@ -3,6 +3,44 @@ title: 'Changelog'
 weight: 6
 ---
 
+### Version 1.22.2 (2026-07-XX)
+
+- libnds:
+
+  - Check `SCFG_EXT` when initializing SDMMC devices. This reports a useful
+    error message when the entrypoint used to run DS ROMs in DSi mode doesn't
+    have permission to use the devices. Reported by @edo9300.
+  - Update link to GRF format documentation.
+  - Remove `fcntl.h` header from libnds to avoid mismatches in defines between
+    the ones used by picolibc and libnds. DSWiFi still works because lwIP
+    doesn't redefine values already defined in `lwipopts.h`, and that header
+    includes `fcntl.h`.
+
+- grit:
+
+  - Fix `cldib_save()`. This function didn't autodetect the image format to
+    use, so libplum failed to save the image. Now, it detects PNG, GIF and BMP
+    extensions and uses the right format to save images. However, this only
+    affects the `-fx` option, which is still broken: it only exports correctly
+    the tiles used by the first image passed on the command line, the other
+    tiles are exported as black tiles. Note that the shared tiles exported as
+    binary data are correct, this only affects the PNG/GIF/BMP file that can
+    optionally be exported with `-fx`.
+  - Fail when sharing graphics between images that have different formats
+    internally in grit. This shouldn't be possible when using grit normally.
+  - Some internal changes so that `dib2plum()` creates a copy of the original
+    image so that the original isn't modified when changing the format of the
+    image before passing it to libplum.
+  - Use `lprintf()` instead of `fprintf()` for consistency.
+
+- SDK:
+
+  - Remove `-thumb-interwork` from all makefiles that still had it. Reported by
+    @asie.
+  - In some audio examples, call `enabledSound()` before initializing other
+    audio libraries. This isn't strictly required, but it makes more logical
+    sense.
+
 ### Version 1.22.1 (2026-07-19)
 
 - libnds:
