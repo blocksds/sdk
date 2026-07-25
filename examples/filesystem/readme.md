@@ -10,4 +10,5 @@ This folder contains examples of how to use the filesystems available on the DS
 - `file_attributes`: It shows how to access file attributes of FAT filesystems.
 - `nitrofs`: It shows how to access files and directories in NitroFS.
 - `nitrofs_cpp`: It shows how to access files and directories in NitroFS using C++.
+- `nitrofs_posix`: It shows how to access files in NitroFS using POSIX functions.
 - `save_data`: It shows how to save data to the SD card and load it back.
