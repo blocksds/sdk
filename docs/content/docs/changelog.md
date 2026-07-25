@@ -14,7 +14,7 @@ weight: 6
   - Remove `fcntl.h` header from libnds to avoid mismatches in defines between
     the ones used by picolibc and libnds. DSWiFi still works because lwIP
     doesn't redefine values already defined in `lwipopts.h`, and that header
-    includes `fcntl.h`.
+    includes `fcntl.h`. Reported by @Gapagapi1.
   - Fix a buffer overflow in the `nocashWrite()` and `nocashMessage()` ASM
     functions that caused a crash if a message was at least 120 characters long.
   - Refactor `nocashWrite()` and `nocashMessage()`. The ARM9 functions
