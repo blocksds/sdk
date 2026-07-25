@@ -5,6 +5,7 @@
 // This example shows how to download a website using only IPv4, only IPv6, or
 // using whatever is available.
 
+#include <errno.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -184,6 +185,16 @@ void getHttp(const char *url, const char *path, int family)
             // The socket has been closed.
             printf("Other side closed connection!\n");
             break;
+        }
+        else
+        {
+            // If we have received some data, and the server stops transmitting
+            // data, maybe it hasn't closed the connection.
+            if (response_buffer_ptr > 0)
+            {
+                perror("read");
+                break;
+            }
         }
 
         // Try to determine the length of the response
@@ -663,8 +674,27 @@ connect:
         }
 
         consoleSelect(&bottomScreen);
-
         getHttp("www.example.com", "/", family);
+
+        consoleSelect(&topScreen);
+
+        printf("\n");
+        printf("Press A to continue\n");
+        printf("\n");
+
+        while (1)
+        {
+            cothread_yield_irq(IRQ_VBLANK);
+
+            scanKeys();
+            u16 keys = keysDown();
+
+            if (keys & KEY_A)
+                break;
+        }
+
+        consoleSelect(&bottomScreen);
+        getHttp("www.akkit.org", "/dswifi/example1.php", family);
 
         consoleSelect(&topScreen);
 
