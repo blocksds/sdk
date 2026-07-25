@@ -15,6 +15,13 @@ weight: 6
     the ones used by picolibc and libnds. DSWiFi still works because lwIP
     doesn't redefine values already defined in `lwipopts.h`, and that header
     includes `fcntl.h`.
+  - Fix a buffer overflow in the `nocashWrite()` and `nocashMessage()` ASM
+    functions that caused a crash if a message was at least 120 characters long.
+  - Refactor `nocashWrite()` and `nocashMessage()`. The ARM9 functions
+    are now in C, and they use a different system to send messages to the
+    emulator, which is more efficient. The ARM7 functions have been kept
+    unchanged because melonDS doesn't support the new system in the ARM7, only
+    in the ARM9.
 
 - grit:
 
@@ -40,6 +47,7 @@ weight: 6
   - In some audio examples, call `enabledSound()` before initializing other
     audio libraries. This isn't strictly required, but it makes more logical
     sense.
+  - Add an example of reading files with POSIX functions like `read()`.
 
 ### Version 1.22.1 (2026-07-19)
 
