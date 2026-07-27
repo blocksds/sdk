@@ -5,6 +5,7 @@ libnds.
 
 - `bg_bmp_16bit`: It displays a 16 bpp bitmap.
 - `bg_bmp_8bit`: It displays a paletted 8 bpp bitmap.
+- `bg_bmp_8bit_shared_pal`: It displays two paletted 8 bpp bitmaps with a shared palette.
 - `bg_bmp_8bit_large`: It displays a large paletted 8 bpp bitmap in video mode 6.
 - `bg_display_control_steps`: It shows how to use the tileset/tilemap steps in `DISPCNT`.
 - `bg_ext_palette`: It displays 8 bpp tiled backgrounds using extended palettes.
@@ -12,8 +13,12 @@ libnds.
 - `bg_grf_types`: It loads all types of background from GRF files.
 - `bg_regular_4bit`: It displays a regular 4 bpp tiled background.
 - `bg_regular_4bit_metamap`: It displays a 4 bpp tiled background that uses metatiles.
+- `bg_regular_4bit_shared_pal`: Displays two 4 bpp tiled backgrounds with shared palette.
+- `bg_regular_4bit_shared_pal_tileset`: Shows two 4 bpp tiled backgrounds with shared palette and tile set.
 - `bg_regular_8bit`: It displays a regular 8 bpp tiled background.
 - `bg_regular_8bit_2screens`: It displays a regular 8 bpp tiled background in both screens.
+- `bg_regular_8bit_shared_pal`: Displays two 8 bpp tiled backgrounds with shared palette.
+- `bg_regular_8bit_shared_pal_tileset`: Shows two 8 bpp tiled backgrounds with shared palette and tile set.
 - `bg_regular_nitrofs`: It loads a regular 8 bpp tiled background from NitroFS.
 - `bg_rotation`: It displays a background with rotation and scaling (affine).
 - `bg_scroll_big_bmp`: It scrolls an 8 bpp bitmap bigger than the hardware limits.
