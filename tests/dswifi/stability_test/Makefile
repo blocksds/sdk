@@ -1,0 +1,33 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Antonio Niño Díaz, 2024-2026
+
+BLOCKSDS	?= /opt/blocksds/core
+
+# User config
+
+NAME	:= tests_dswifi_stability
+
+ifeq ($(DEBUG),1)
+NAME	:= $(NAME)_debug
+endif
+
+GAME_TITLE	:= Stability test
+GAME_SUBTITLE	:= Tests: DSWiFi
+
+# Libraries
+# ---------
+
+ifeq ($(DEBUG),1)
+    DEFINES := -DDSWIFI_LOGS
+    ARM7ELF	:= $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi_debug.elf
+    LIBS	:= -ldswifi9d_noip -lnds9d
+else
+    ARM7ELF	:= $(BLOCKSDS)/sys/arm7/main_core/arm7_dswifi.elf
+    LIBS	:= -ldswifi9_noip -lnds9
+endif
+
+LIBDIRS		:= $(BLOCKSDS)/libs/dswifi \
+			   $(BLOCKSDS)/libs/libnds
+
+include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile
