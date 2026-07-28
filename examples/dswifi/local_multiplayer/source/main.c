@@ -304,7 +304,7 @@ bool AccessPointSelectionMenu(void)
         if (keys & KEY_B)
             return false;
 
-        // Get find out how many APs there are in the area
+        // Get number of APs in the area
         int count = Wifi_GetNumAP();
 
         consoleClear();

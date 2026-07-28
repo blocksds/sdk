@@ -263,7 +263,7 @@ void access_point_selection_menu(void)
         scanKeys();
         uint16_t keys = keysDown();
 
-        // Get find out how many APs there are in the area
+        // Get number of APs in the area
         int count = Wifi_GetNumAP();
 
         consoleClear();
