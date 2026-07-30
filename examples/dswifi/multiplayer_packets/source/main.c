@@ -145,9 +145,9 @@ void FromClientPacketHandler(Wifi_MPPacketType type, int aid, int base, int len)
             if ((len - i) > 1)
                 consolePrintChar((data >> 8) & 0xFF);
         }
-    }
 
-    consolePrintChar('\n');
+        consolePrintChar('\n');
+    }
 
     consoleSelect(&bottomScreen);
 }
