@@ -39,86 +39,115 @@ void PrepareMultiplayerReplyFrame(void)
     Wifi_MultiplayerClientReplyTxFrame(&client_packet, sizeof(client_packet));
 }
 
+static void print_string(const char *s)
+{
+    while (1)
+    {
+        char c = *s++;
+        if (c == '\0')
+            break;
+        consolePrintChar(c);
+    }
+}
+
 void FromHostPacketHandler(Wifi_MPPacketType type, int base, int len)
 {
-    consoleSelect(&topScreen);
+    // We can't use printf() from this function because it runs inside an IRQ
+    // handler. printf() uses TLS, and IRQ handlers can't access TLS.
 
-    printf("[H] ");
+    consoleSelect(&topScreen);
 
     if (type == WIFI_MPTYPE_CMD)
     {
-        printf("C: ");
-
         pkt_host_to_client packet;
 
         if (len == sizeof(packet))
         {
             Wifi_RxRawReadPacket(base, sizeof(packet), &packet);
-            printf("%08X", (unsigned int)packet.count);
+
+            char str[64];
+            snprintf(str, sizeof(str), "[H] C: %08X\n",
+                     (unsigned int)packet.count);
+            print_string(str);
         }
         else
         {
-            printf("Bad size (%u != %u)\n", len, sizeof(packet));
+            char str[64];
+            snprintf(str, sizeof(str), "[H] C: Bad size (%u != %u)\n",
+                     len, sizeof(packet));
+            print_string(str);
         }
     }
     else if (type == WIFI_MPTYPE_DATA)
     {
-        printf("D: ");
+        print_string("[H] D: ");
 
         for (int i = 0; i < len; i += 2)
         {
             u16 data;
             Wifi_RxRawReadPacket(base + i, sizeof(data), &data);
 
-            printf("%c", data & 0xFF);
+            consolePrintChar( data & 0xFF);
             if ((len - i) > 1)
-                printf("%c", (data >> 8) & 0xFF);
+                consolePrintChar((data >> 8) & 0xFF);
         }
-    }
 
-    printf("\n");
+        consolePrintChar('\n');
+    }
 
     consoleSelect(&bottomScreen);
 }
 
 void FromClientPacketHandler(Wifi_MPPacketType type, int aid, int base, int len)
 {
+    // We can't use printf() from this function because it runs inside an IRQ
+    // handler. printf() uses TLS, and IRQ handlers can't access TLS.
+
     consoleSelect(&topScreen);
 
-    printf("[C %d] ", aid);
+    char str[64];
+    snprintf(str, sizeof(str), "[C %d] ", aid);
+    print_string(str);
 
     if (type == WIFI_MPTYPE_REPLY)
     {
-        printf("C: ");
+        print_string("C: ");
 
         pkt_client_to_host packet;
 
         if (len == sizeof(packet))
         {
             Wifi_RxRawReadPacket(base, sizeof(packet), &packet);
-            printf("%08X", (unsigned int)packet.uncount);
+
+            char str[64];
+            snprintf(str, sizeof(str), "[L] C: %08X\n",
+                     (unsigned int)packet.uncount);
+            print_string(str);
         }
         else
         {
-            printf("Bad size (%u != %u)\n", len, sizeof(packet));
+            char str[64];
+            snprintf(str, sizeof(str), "[L] C: Bad size (%u != %u)\n",
+                     len, sizeof(packet));
+            print_string(str);
         }
     }
     else if (type == WIFI_MPTYPE_DATA)
     {
-        printf("D: ");
+        print_string("D: ");
 
         for (int i = 0; i < len; i += 2)
         {
             u16 data;
             Wifi_RxRawReadPacket(base + i, sizeof(data), &data);
 
-            printf("%c", data & 0xFF);
+            consolePrintChar(data & 0xFF);
             if ((len - i) > 1)
-                printf("%c", (data >> 8) & 0xFF);
+                consolePrintChar((data >> 8) & 0xFF);
         }
     }
 
-    printf("\n");
+    consolePrintChar('\n');
 
     consoleSelect(&bottomScreen);
 }
