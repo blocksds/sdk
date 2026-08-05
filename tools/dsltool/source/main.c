@@ -310,6 +310,15 @@ int main(int argc, char *argv[])
                 unknown = false;
             }
 
+            // The empty symbol name is usually an anonymous section header.
+            // ".LC" symbols are compiler-generated "local data" symbols that
+            // already contain a relative address to the data in the binary.
+            // libnds will handle these relocations properly at runtime.
+            if (!*sym_name || !strncmp(sym_name, ".LC", 3))
+            {
+                unknown = false;
+            }
+
             VERBOSE("%zu: \"%s\" = %u%s%s\n", s, sym_name, sym->st_value,
                     public ? " [Public]" : "", unknown ? " [Unknown]": "");
 
