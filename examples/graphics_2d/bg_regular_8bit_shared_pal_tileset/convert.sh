@@ -7,7 +7,7 @@ GRIT="$BLOCKSDS/tools/grit/grit"
 rm -rf graphics_source
 mkdir graphics_source
 
-# Eexport as C files
+# Export as C files
 # 8 bpp, tiled mode, set magenta as transparent
 # Export map, SSB layout
 # Use a shared palette and shared graphics (tile set)
