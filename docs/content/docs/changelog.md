@@ -3,6 +3,87 @@ title: 'Changelog'
 weight: 6
 ---
 
+### Version 1.22.3 (2026-08-08)
+
+- libnds:
+
+  - In previous versions, `__aeabi_read_tp()` showed an error message when it
+    was used while the CPU is in IRQ mode, but only in debug builds. This could
+    have caused hard-to-detect bugs in projects that never do a debug build, so
+    the error message is now active always.
+  - The default debug exception handler used `printf()`, which caused an
+    infinite exception loop in debug builds when an exception happened in IRQ
+    mode in debug builds. Now the handler uses custom print routines that don't
+    require thread-local storage (TLS).
+
+- DSWiFi:
+
+  - Add notes to the documentation to mention that `printf()` can't be used from
+    packet handlers, as well as any function that requires TLS.
+  - Stop multiplayer CMD frames from sharing the TX buffer with non-CMD frames.
+    The CMD machinery retries autonomously from interrupt context: on a
+    failed exchange, `Wifi_Intr_MultiplayCmdDone` re-runs the CMD builder. If
+    there was another non-CMD frame in the queue, it would already have been
+    copied to the TX buffer, and it would be corrupted. @silverdempa
+  - Remove reference to outdated `ASSOCSTATUS_CONNECTED` in the documentation.
+
+- grit:
+
+   - When generating a merged palette, exit with an error message if the palette
+     is too big instead of simply showing a warning that can be easily missed.
+   - Fix and document behaviour of `-fx`. Previously, it took the path of an
+     image that contained a tile set. Then, it used it as base to generate a new
+     tile set from the original file and the other input files passed to grit.
+     Finally, it saved the resulting tileset to the same file.
+
+     - The save step is buggy, and the only tiles that are saved correctly are
+       the ones of the first input image. This remains broken, and it prints an
+       error message if it is attempted.
+
+     - The behaviour itself doesn't make a lot of sense. Normally you want to
+       take a tileset as input or as output, but the build process shouldn't
+       overwrite a file that has been used as input.
+
+       The new behaviour is that "-fx" tries to load a file. If the file exists,
+       it will use it as base tileset for the conversion process as before. If
+       the file doesn't exist, it will be created at the end of the conversion
+       process. However, this is still broken.
+
+   - Add status log messages that print the number of tiles processed.
+   - Fix a log message to show the right WARNING prefix.
+   - Remove some outdated comments that talked about freeimage.
+
+- SDK:
+
+  - Handle symbols with empty or `.LC`-prefixed names in `dsltool`.
+    @trustytrojan
+  - Add new section to the tutorial about how to convert with shared graphics.
+  - Fix some Doxygen warnings.
+  - Update updating guide with mention about the `__aeabi_read_tp()` issue.
+
+  - Examples:
+
+    - Add examples of how to convert graphics sharing palette or tile sets with
+      grit and ArchitectDS. The following examples have been added:
+
+      - 4 bpp tiled background, shared palette.
+      - 4 bpp tiled background, shared palette, shared tile set.
+      - 8 bpp tiled background, shared palette.
+      - 8 bpp tiled background, shared palette, shared tile set.
+      - 8 bpp tiled background, shared palette, shared tile set, in GRF files.
+      - 8 bpp bitmap background, shared palette.
+
+    - Improve `get_website` DSWiFi example. The connection to the server is now
+      closed correctly. Also, now it downloads two websites instead of one.
+    - Fix `multiplayer_packets` example. It used to use `printf()` in the packet
+      handlers, which isn't allowed because it requires thread-local
+      storage (TLS). This only caused an error message in debug builds, release
+      builds didn't detect the problem.
+
+  - Tests:
+
+    - Add a stability test of local communications using DSWiFi.
+
 ### Version 1.22.2 (2026-07-25)
 
 - libnds:

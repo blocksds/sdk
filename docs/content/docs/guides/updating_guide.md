@@ -34,6 +34,13 @@ git config --global --unset url.ssh://git@codeberg.org/blocksds/.insteadOf
 git config --global --unset url.https://codeberg.org/blocksds/.insteadOf
 ```
 
+### Upgrading to BlocksDS 1.22.3
+
+- In previous versions, `__aeabi_read_tp()` showed an error message when it was
+  used while the CPU is in IRQ mode, but only in debug builds. This could have
+  caused hard-to-detect bugs in projects that never do a debug build, so the
+  error message is now active always.
+
 ### Upgrading to BlocksDS 1.22.1
 
 - When `read(stdin, ...)` is used to do a blocking read, it updates the keyboard
