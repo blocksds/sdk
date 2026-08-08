@@ -469,6 +469,7 @@ see how they are configured to convert graphics into GRF files.
 
   - [`examples/graphics_2d/bg_grf_types`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_grf_types)
   - [`examples/graphics_2d/bg_regular_nitrofs`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_nitrofs)
+  - [`examples/graphics_2d/bg_regular_8bit_grf_shared_pal_tileset`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_8bit_grf_shared_pal_tileset)
 
 - 3D textures:
 

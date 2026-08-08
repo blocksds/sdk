@@ -666,29 +666,76 @@ https://mtheall.com/vram.html#T0=1&NT0=256&MB0=0&TB0=1&S0=3&T1=1&NT1=128&MB1=4&T
 It's possible to use multiple layers sharing tile sets or tile maps. Sharing
 tile sets is very common and it allows you to save a lot of space in the final
 ROM in a very convenient way. Sharing tile maps doesn't make sense in general.
+Check the next section to see how to do this.
 
-Sharing palettes is mandatory, though. There is only one 256-color palette. You
-can split it into 16 palettes of 16 colors each, and you can be clever about
-how you share palettes in both modes, but this is inconvenient.
+## 13. Sharing graphics
+
+If you want to display multiple backgrounds in one screen, sharing palettes is
+usually mandatory. There is only one 256-color palette. You can split it into 16
+palettes of 16 colors each, and you can be clever about how you share palettes
+in both modes, but this is inconvenient. You can bypass this restriction by
+using extended palettes (which will be explained later), but sometimes it can
+still be needed to share it between different layers.
+
+It's possible to convert multiple images in one invocation of `grit` and tell it
+to create a combined palette for all of them. This is useful for both bitmap and
+tiled background modes.
+
+In a similar way, it's possible to convert multiple images in one invocation of
+`grit` and ask it to generate a shared tile set. For example, you could convert
+all the overground maps of a volcano region of your game with a shared tile set
+and palette. That way you only need a different tile map per image, saving space
+in your ROM.
 
 The current Makefiles of BlocksDS don't allow you to convert PNG files and share
-tile sets or palettes. You can do it if you run the tool manually.  Check
-options `-S` and `-pS` from the documentation of grit if you're curious about
-it. The command line interface of grit for shared graphics is a bit restrictive.
-If you can't get used to it and want an alternative, check this out:
-[SuperFamiconv](https://github.com/Optiroc/SuperFamiconv)
+tile sets or palettes. You can do it if you run `grit` manually or if you use
+ArchitectDS. If you want to see how to do it, check the examples:
 
-This tool is provided in the Wonderful Toolchain packages:
+- 8-bit bitmap images, shared palette:
+  [`examples/graphics_2d/bg_bmp_8bit_shared_pal`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_bmp_8bit_shared_pal).
+
+- 4-bit tiled images, shared palette:
+  [`examples/graphics_2d/bg_regular_4bit_shared_pal`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_4bit_shared_pal).
+
+- 4-bit tiled images, shared palette and tile set:
+  [`examples/graphics_2d/bg_regular_4bit_shared_pal_tileset`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_4bit_shared_pal_tileset).
+
+- 8-bit tiled images, shared palette:
+  [`examples/graphics_2d/bg_regular_8bit_shared_pal`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_8bit_shared_pal).
+
+- 8-bit tiled images, shared palette and tile set:
+  [`examples/graphics_2d/bg_regular_8bit_shared_pal_tileset`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_8bit_shared_pal_tileset).
+
+The examples contain a folder called `graphics` with images and a single `.grit`
+file that contains the options to be used for all the files in the folder. For
+example:
+
+```sh
+# 4 bpp, tiled mode, set magenta as transparent
+-gB4 -gt -gTFFOOFF
+
+# Export map, SSB layout, reduce tile set with options optimized for 4 bpp map
+-m -mLs -mR4
+
+# Use a shared palette and shared graphics (tile set)
+-pS -gS
+```
+
+The interesting options are `-pS` for shared palette and `-gS` for shared
+graphics. In bitmap mode, shared graphics can't be used. In tiled mode, shared
+graphics means shared tile set.
+
+Note: The command line interface of grit for shared graphics isn't as flexible
+as it could be (for example, you can't force it to use a specific palette, it
+needs to build it by itself). If you want an alternative tool, check
+[SuperFamiconv](https://github.com/Optiroc/SuperFamiconv) which is provided in
+the Wonderful Toolchain packages:
 
 ```sh
 wf-pacman -Sy wonderful-superfamiconv
 ```
 
-Because of the limitations of grit we're going to skip any real code example in
-this section. Instead, wait for the section about extended palettes. They will
-allow us to have background layers that don't need to share palettes.
-
-## 13. Backdrop color
+## 14. Backdrop color
 
 This is a small detail, but it can be unexpected.
 
@@ -725,7 +772,7 @@ The only exception is 16-bit backgrounds. They don't use the background palette
 memory, so you can use `gT!` or not depending on whether you want it to have
 some transparent pixels or not.
 
-## 14. Extended palettes
+## 15. Extended palettes
 
 If you want to display multiple 2D background layers, the limitation of having
 one single palette is very restrictive. Extended palettes allow you to have up
@@ -810,7 +857,7 @@ tell grit the palette index to be used by the background:
 And that's it! As you can see, it requires a bit of additional setup, but it's a
 very simple way to make your 2D graphics look a lot better.
 
-## 15. Meta maps
+## 16. Meta maps
 
 Meta maps are a way to compress tile maps in your ROM. The Nintendo DS only
 supports 8x8 pixel tiles, but there are situations in which you don't need that
