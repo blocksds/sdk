@@ -17,6 +17,7 @@ libnds.
 - `bg_regular_4bit_shared_pal_tileset`: Shows two 4 bpp tiled backgrounds with shared palette and tile set.
 - `bg_regular_8bit`: It displays a regular 8 bpp tiled background.
 - `bg_regular_8bit_2screens`: It displays a regular 8 bpp tiled background in both screens.
+- `bg_regular_8bit_grf_shared_pal_tileset`: It converts backgrounds to GRF files with shared graphics.
 - `bg_regular_8bit_shared_pal`: Displays two 8 bpp tiled backgrounds with shared palette.
 - `bg_regular_8bit_shared_pal_tileset`: Shows two 8 bpp tiled backgrounds with shared palette and tile set.
 - `bg_regular_nitrofs`: It loads a regular 8 bpp tiled background from NitroFS.
