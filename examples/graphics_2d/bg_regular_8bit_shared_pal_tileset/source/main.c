@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     int bg = bgInitHidden(2, BgType_Text8bpp, BgSize_T_512x256, 0, 1);
     int bgsub = bgInitHiddenSub(2, BgType_Text8bpp, BgSize_T_256x256, 0, 1);
 
-    // Load one tile set and tile map to the main engine
+    // Load different tile maps to the main and sub engines
 
     memcpy(bgGetMapPtr(bg), forest_townMap, forest_townMapLen);
     memcpy(bgGetMapPtr(bgsub), forestMap, forestMapLen);
