@@ -55,6 +55,8 @@ weight: 6
 
 - SDK:
 
+  - The Wonderful Toolchain's ARM toolchain component has been updated to
+    binutils 2.47, GCC 16.2.0, and picolibc 1.8.12. @asie
   - Handle symbols with empty or `.LC`-prefixed names in `dsltool`.
     @trustytrojan
   - Add new section to the tutorial about how to convert with shared graphics.
