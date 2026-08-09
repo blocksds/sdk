@@ -1,5 +1,5 @@
 # 8 bpp, tiled mode, set magenta as transparent
--gB8 -gt -gTFFOOFF
+-gB8 -gt -gTFF00FF
 
 # Export map, SSB layout
 -m -mLs

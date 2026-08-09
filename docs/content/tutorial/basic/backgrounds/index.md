@@ -461,7 +461,7 @@ This is how you convert graphics for this format:
 ```
 
 `-gB16` sets the bit depth to 16 bits, `-gb` generates a bitmap, and `-gT!`
-removes all transparency from the final image (you can use `-gTFFOOFF` or
+removes all transparency from the final image (you can use `-gTFF00FF` or
 similar arguments if you want some pixels to be transparent!).
 
 ```c
@@ -712,7 +712,7 @@ example:
 
 ```sh
 # 4 bpp, tiled mode, set magenta as transparent
--gB4 -gt -gTFFOOFF
+-gB4 -gt -gTFF00FF
 
 # Export map, SSB layout, reduce tile set with options optimized for 4 bpp map
 -m -mLs -mR4
@@ -918,7 +918,7 @@ You can use grit to convert images into maps that use metatiles:
 
 ```sh
 # 4 bpp, tiles, export map, SSB layout, set magenta as transparent, 2x2 meta tiles
--gt -gB4 -mR4 -mLs -gTFFOOFF -Mh2 -Mw2
+-gt -gB4 -mR4 -mLs -gTFF00FF -Mh2 -Mw2
 ```
 
 The new options are `-Mh2 -Mw2`. They set the meta tile size to 2x2 tiles.

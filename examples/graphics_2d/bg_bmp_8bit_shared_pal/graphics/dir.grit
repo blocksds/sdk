@@ -1,5 +1,5 @@
 # 8 bpp, bitmap mode, set magenta as transparent
--gB8 -gb -gTFFOOFF
+-gB8 -gb -gTFF00FF
 
 # Use a shared palette
 -pS

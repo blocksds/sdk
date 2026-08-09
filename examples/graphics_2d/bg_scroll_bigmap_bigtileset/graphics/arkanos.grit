@@ -1,5 +1,5 @@
 # 8 bpp, tiles, export map, flat layout, set magenta as transparent
--gB8 -gt -m -mLf -gTFFOOFF
+-gB8 -gt -m -mLf -gTFF00FF
 
 # Custom format: Use 16 bit map entries, all 16 bits are the tile index
 -mB16:i16
