@@ -8,8 +8,6 @@
 
 #include <nds.h>
 
-int32_t atan2f16(int32_t y0,int32_t x0);
-
 __attribute__((noreturn)) void wait_forever(void)
 {
     printf("\n");
@@ -29,13 +27,13 @@ __attribute__((noreturn)) void wait_forever(void)
 void test(float y, float x)
 {
     float a1 = atan2(y, x);
-    float a2 = (float)atan2f16(y * (1 << 16), x * (1 << 16)) / (1 << 12);
+    float a2 = (float)atan2_f32(y * (1 << 16), x * (1 << 16)) / (1 << 12);
     float e = a1 - a2;
 
     int ulp = (int32_t)round(e * (1 << 12));
     if (ulp != 0)
     {
-        printf("atan2f   atan2f16 (%.6f, %.6f)", y, x);
+        printf("atan2f   atan2_f32 (%.6f, %.6f)", y, x);
         printf("%.6f %.6f\n", a1, a2);
         printf("error %e, %d ulp\n",e, ulp);
         wait_forever();
@@ -52,7 +50,7 @@ void test_all(void)
     while (y < (1 << 15))
     {
         float a1 = atan2(y,x);
-        double a2 = (double)atan2f16(y * (1 << 16), x * (1 << 16)) / (1 << 12);
+        double a2 = (double)atan2_f32(y * (1 << 16), x * (1 << 16)) / (1 << 12);
         double diff = a1 - a2;
         diff = diff < 0 ? -diff : diff;
 
@@ -111,7 +109,7 @@ int main(int argc, char **argv)
     int32_t y = (~0u) >> 1;
     int32_t x = y;
     float a1 = atan2(y, x);
-    double a2 = (double)atan2f16(y, x) / (1 << 12);
+    double a2 = (double)atan2_f32(y, x) / (1 << 12);
     double diff = a1 - a2;
     diff = diff < 0 ? -diff :diff;
     if (diff > 1)
@@ -148,13 +146,13 @@ int main(int argc, char **argv)
         {
             hw_iterations++;
 
-            volatile int32_t r = atan2f16(fx, (1 << 12));
+            volatile int32_t r = atan2_f32(fx, (1 << 12));
             (void)r;
         }
         hw_time += cpuEndTiming();
     }
 
-    printf("atan2f16 time:\n  (%lu per op)\n",  hw_time / hw_iterations);
+    printf("atan2_f32 time:\n  (%lu per op)\n",  hw_time / hw_iterations);
 
     printf("\n");
 
