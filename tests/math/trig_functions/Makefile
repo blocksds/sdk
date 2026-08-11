@@ -6,8 +6,8 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= atan2_test
-GAME_TITLE	:= Test for atan2 functions
+NAME		:= trig_functions_test
+GAME_TITLE	:= Test for trig functions
 GAME_SUBTITLE	:= Tests: Math
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile
