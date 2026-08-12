@@ -26,8 +26,8 @@ __attribute__((noreturn)) void wait_forever(void)
 
 void test(float y, float x)
 {
-    float a1 = atan2(y, x);
-    float a2 = (float)atan2_f32(y * (1 << 16), x * (1 << 16)) / (1 << 12);
+    float a1 = atan2(floor(y * (1 << 16)), floor(x * (1 << 16)));
+    float a2 = (float)atan2_f32(floor(y * (1 << 16)), floor(x * (1 << 16))) / (1 << 12);
     float e = a1 - a2;
 
     int ulp = (int32_t)round(e * (1 << 12));
@@ -49,8 +49,8 @@ void test_all(void)
 
     while (y < (1 << 15))
     {
-        float a1 = atan2(y,x);
-        double a2 = (double)atan2_f32(y * (1 << 16), x * (1 << 16)) / (1 << 12);
+        float a1 = atan2(floor(y * (1 << 16)),floor(x * (1 << 16)));
+        double a2 = (double)atan2_f32(floor(y * (1 << 16)), floor(x * (1 << 16))) / (1 << 12);
         double diff = a1 - a2;
         diff = diff < 0 ? -diff : diff;
 
@@ -70,8 +70,8 @@ void test_all(void)
             break;
         }
 
-        float xn = (x - tan(0.01) * y);
-        float yn = (tan(0.01) * x + y);
+        float xn = (x - tanf(0.01f) * y);
+        float yn = (tanf(0.01f) * x + y);
         x = xn;
         y = yn;
     }
