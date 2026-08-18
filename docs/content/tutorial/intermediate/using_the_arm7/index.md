@@ -196,7 +196,7 @@ There are two different ways to handle this issue:
 
 - The ARM9 can use a pointer to the buffer that is uncached. Main RAM is
   cached, but there are mirrors that can access main RAM bypassing the cache.
-  You can usse the `memUncached()` helper of libnds to get the uncached mirror
+  You can use the `memUncached()` helper of libnds to get the uncached mirror
   of an address inside main RAM, and `memCached()` to get the cached address of
   an uncached mirror.
 
