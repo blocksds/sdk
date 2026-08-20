@@ -105,15 +105,27 @@ int main(int argc, char **argv)
     test(-1.0, 0.001);
     test(0.0001, 1.0);
     test(0.001, 1.0);
+    {
+        int32_t y = (~0u) >> 1;
+        int32_t x = y;
+        float a1 = atan2(y, x);
+        double a2 = (double)atan2_f32(y, x) / (1 << 12);
+        double diff = a1 - a2;
+        diff = diff < 0 ? -diff :diff;
+        if (diff > 1)
+            printf("failed: y %ld, x %ld, diff %f\n", y, x, diff);
+    }
+    {
+        int32_t y = INT32_MIN;
+        int32_t x = 1<<12;
+        float a1 = atan2(y, x);
+        double a2 = (double)atan2_f32(y, x) / (1 << 12);
+        double diff = a1 - a2;
+        diff = diff < 0 ? -diff :diff;
+        if (diff > 1)
+            printf("failed: y %ld, x %ld, diff %f\n", y, x, diff);
+    }
 
-    int32_t y = (~0u) >> 1;
-    int32_t x = y;
-    float a1 = atan2(y, x);
-    double a2 = (double)atan2_f32(y, x) / (1 << 12);
-    double diff = a1 - a2;
-    diff = diff < 0 ? -diff :diff;
-    if (diff > 1)
-        printf("%f, %f, %f\n", a1, a2, diff);
 
     printf("Testing all cases...\n\n");
 
