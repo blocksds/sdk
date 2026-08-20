@@ -9,14 +9,14 @@ mkdir graphics_source
 
 # Specify the image with the reference palette
 # Export as C files
-# 8 bpp, tiled mode, set magenta as transparent
+# 8 bpp, tiled mode
 # Export map, SSB layout
 # Destination folder for the converted non-shared data files
 # File name (without extension) to be used for shared data
 $GRIT assets/rainbow_image.png \
-    -fw assets/rainbow_palette.gif \
+    -fw assets/rainbow_palette.png \
     -ftc -W3 \
-    -gB8 -gt -gT000000 \
+    -gB8 -gt \
     -m -mLs -mRt \
     -Dgraphics_source \
     -Ographics_source/shared \
