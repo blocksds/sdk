@@ -1,0 +1,8 @@
+# 8 bpp, tiled mode, don't specify transparent color
+-gB8 -gt
+
+# Export map, SSB layout
+-m -mLs
+
+# Use a shared palette
+-pS
