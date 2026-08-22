@@ -26,10 +26,11 @@
 
 int main(int argc, char *argv[])
 {
-    videoSetMode(MODE_0_2D);
-    videoSetModeSub(MODE_0_2D);
+    consoleDemoInit();
 
-    vramSetPrimaryBanks(VRAM_A_MAIN_BG, VRAM_B_LCD, VRAM_C_SUB_BG, VRAM_D_LCD);
+    videoSetMode(MODE_0_2D);
+
+    vramSetBankA(VRAM_A_MAIN_BG);
 
     // Setup the background
 
@@ -42,6 +43,9 @@ int main(int argc, char *argv[])
     // Show it
 
     bgShow(bg);
+
+    printf("PAD:   Scroll background\n");
+    printf("START: Exit to loader\n");
 
     int x = 0, y = 0;
 
