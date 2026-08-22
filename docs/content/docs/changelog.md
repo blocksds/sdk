@@ -3,6 +3,65 @@ title: 'Changelog'
 weight: 6
 ---
 
+### Version 1.23.0 (2026-XX-XX)
+
+- libnds:
+
+  - Fix SCFG checks in SD/MMC initialization code. They prevented it to work
+    when the NDS ROMs were loaded from entrypoints with locked SCFG registers.
+  - Fix legacy console color commands (SGR commands).
+  - Fix `ftruncate()` and `truncate()`. Reported by @edo9300.
+  - Add an optimized fixed point `atan2()` to libnds as `atan2_f32()`. @Kuratius
+  - Implement `atanLerp()`. It had been in libnds as unfinished commented code
+    for a long time.
+  - Comment-out some I2C functions that aren't implemented.
+  - Fix some comments.
+
+- grit:
+
+  - Improve support of external palettes and tilesets:
+
+    - Option `-fx` has been fixed. It loads a tileset from an image (for
+      example, in PNG format) and its palette. Then, it converts all the
+      provided images using that tileset. Note that `-pS` and `-gS` need to be
+      used to export the shared palette and tileset. If the images use tiles
+      that aren't in the reference tileset, the conversion will fail.
+    - Option `-fw` has been implemented. It loads a palette from an image and it
+      uses it as palette to convert all the provided images. Note that `-pS`
+      needs to be used to export the shared palette. If the images use colors
+      that aren't in the reference palette, the conversion will fail.
+    - Currently, `-fw` and `-fx` can't be used at the same time.
+    - `-gT` and `-pT` aren't supported when an external palette is provided, the
+      transparent color is color index 0. However, they are supported when an
+      external tileset is provided.
+
+  - Make the palette merging code ignore the palette alpha channel, which is
+    meaningless, to merge palettes correctly.
+  - When converting to paletted formats from true color formats, grit used to
+    compare 8 bits per RGB channel when looking for a color in a palette.
+    However, the GBA and NDS only support 5 bits per channel, so grit now
+    ignores the bottom 3 bits when doing comparisons. However, it prints warning
+    log messages whenever a comparison isn't exact.
+  - Initialize palette correctly when loading images with libplum.
+  - Some minor code cleanups and additional log messages.
+
+- SDK:
+
+  - Fix some typos in the documentation.
+
+  - Examples:
+
+    - Fix transparent color in grit files in some examples. They were using
+      `FFOOFF` instead of `FF00FF`.
+    - New example of how to convert images using an external reference palette,
+      and another one that shows how to convert it with an external reference
+      tileset.
+
+  - Tests:
+
+    - New test for `atan2_f32()`. @Kuratius
+    - New test for the trigonometric functions of libnds.
+
 ### Version 1.22.3 (2026-08-08)
 
 - libnds:
