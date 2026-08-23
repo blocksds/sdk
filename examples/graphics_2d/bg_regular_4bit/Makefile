@@ -13,6 +13,6 @@ GAME_SUBTITLE	:= 2D graphics: BGs
 # Source code paths
 # -----------------
 
-GFXDIRS		:= graphics
+BINDIRS		:= data
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile

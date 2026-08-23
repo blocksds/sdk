@@ -175,19 +175,46 @@ palettes of 16 colors instead. You can open
 
 ![Regular background 4 BPP](bg_types_regular_4bit.png)
 
-There are only two differences you need to check. The first one is the grit
-file:
+There are only two differences you need to check. The first one is the way to
+setup the background (use `BgType_Text4bpp` instead of `BgType_Text8bpp`):
+
+```c
+int bg = bgInitHidden(0, BgType_Text4bpp, BgSize_T_256x256, 0, 1);
+```
+
+The second one is the grit file:
 
 ```sh
 # 4 bpp, tiles, export map, ssb layout, not compressed, set magenta as transparent
 -gt -gB4 -mR4 -mLs -gTFF00FF
 ```
 
-And the second one is the way to setup the background (use `BgType_Text4bpp`
-instead of `BgType_Text8bpp`):
+{{< callout type="warning" >}}
+If you want to use 4 bpp graphics, the palette of your image must be arranged
+so that it's formed of 16 palettes of 16 colors. This is inconvenient, so it's
+better to use [SuperFamiconv](https://github.com/Optiroc/SuperFamiconv).
+{{< /callout >}}
 
-```c
-int bg = bgInitHidden(0, BgType_Text4bpp, BgSize_T_256x256, 0, 1);
+[SuperFamiconv](https://github.com/Optiroc/SuperFamiconv) is provided in the
+Wonderful Toolchain packages:
+
+```sh
+wf-pacman -Sy wonderful-superfamiconv
+```
+
+The default mode for GBA graphics is 16 palettes of 16 colors, so you can
+convert the image like this:
+
+```sh
+SUPERFAMICONV=/opt/wonderful/bin/wf-superfamiconv
+
+${SUPERFAMICONV} --verbose \
+    --mode gba \
+    --color-zero FF00FF \
+    --in-image assets/forest.png \
+    --out-palette data/palette.bin \
+    --out-tiles data/tiles.bin \
+    --out-map data/map.bin
 ```
 
 ## 4. Tile bases and map bases
