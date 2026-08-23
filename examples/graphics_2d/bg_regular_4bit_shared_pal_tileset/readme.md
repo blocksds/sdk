@@ -1,18 +1,12 @@
-# Loading backgrounds with shared palettes and tile sets
+# Use 4 bpp backgrounds with shared palette and tileset
 
-This example shows how to load backgrounds that share a palette and tile set.
+The map has been created with [Tiled](https://www.mapeditor.org/). You can find
+the Tiled project files in the `tiled_project` folder.
 
-The build system used is [ArchitectDS](https://codeberg.org/blocksds/architectds)
-because of the flexibility it gives the user.
+The map has been exported as a `PNG` file and split into two halves.
 
-In order to build this example, run:
+## Information about `tiny-16.png`
 
-```bash
-python3 build.py
-```
-
-To clean the build results, run:
-
-```bash
-python3 build.py --clean
-```
+Author:  FuwanekoGames
+License: CC-BY 3.0
+Source:  https://opengameart.org/content/tiny16-tileset

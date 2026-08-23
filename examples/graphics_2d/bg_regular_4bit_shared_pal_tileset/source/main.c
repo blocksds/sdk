@@ -11,9 +11,10 @@
 
 #include <nds.h>
 
-#include "grit/forest.h"
-#include "grit/forest_town.h"
-#include "grit/shared_data.h"
+#include "palette_bin.h"
+#include "tileset_bin.h"
+#include "map_1_bin.h"
+#include "map_2_bin.h"
 
 int main(int argc, char *argv[])
 {
@@ -24,23 +25,23 @@ int main(int argc, char *argv[])
 
     // Setup one background on each engine
 
-    int bg = bgInitHidden(2, BgType_Text4bpp, BgSize_T_512x256, 0, 1);
+    int bg = bgInitHidden(2, BgType_Text4bpp, BgSize_T_256x256, 0, 1);
     int bgsub = bgInitHiddenSub(2, BgType_Text4bpp, BgSize_T_256x256, 0, 1);
 
-    // Load one tile set and tile map to the main engine
+    // Load one tile map to each
 
-    memcpy(bgGetMapPtr(bg), forest_townMap, forest_townMapLen);
-    memcpy(bgGetMapPtr(bgsub), forestMap, forestMapLen);
+    memcpy(bgGetMapPtr(bg), map_1_bin, map_1_bin_size);
+    memcpy(bgGetMapPtr(bgsub), map_2_bin, map_2_bin_size);
 
     // Load the same tileset to the main and sub engines
 
-    memcpy(bgGetGfxPtr(bg), shared_dataTiles, shared_dataTilesLen);
-    memcpy(bgGetGfxPtr(bgsub), shared_dataTiles, shared_dataTilesLen);
+    memcpy(bgGetGfxPtr(bg), tileset_bin, tileset_bin_size);
+    memcpy(bgGetGfxPtr(bgsub), tileset_bin, tileset_bin_size);
 
     // Load the same palette to the main and sub engines
 
-    memcpy(BG_PALETTE, shared_dataPal, shared_dataPalLen);
-    memcpy(BG_PALETTE_SUB, shared_dataPal, shared_dataPalLen);
+    memcpy(BG_PALETTE, palette_bin, palette_bin_size);
+    memcpy(BG_PALETTE_SUB, palette_bin, palette_bin_size);
 
     // Show the backgrounds
 

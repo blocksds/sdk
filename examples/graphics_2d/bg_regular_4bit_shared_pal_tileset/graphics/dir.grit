@@ -1,8 +1,0 @@
-# 4 bpp, tiled mode, set magenta as transparent
--gB4 -gt -gTFF00FF
-
-# Export map, SSB layout, reduce tile set with options optimized for 4 bpp map
--m -mLs -mR4
-
-# Use a shared palette and shared graphics (tile set)
--pS -gS

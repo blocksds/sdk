@@ -12,7 +12,6 @@ libnds.
 - `bg_ext_rotation`: It displays an extended affine background.
 - `bg_grf_types`: It loads all types of background from GRF files.
 - `bg_regular_4bit`: It displays a regular 4 bpp tiled background.
-- `bg_regular_4bit_shared_pal`: Displays two 4 bpp tiled backgrounds with shared palette.
 - `bg_regular_4bit_shared_pal_tileset`: Shows two 4 bpp tiled backgrounds with shared palette and tile set.
 - `bg_regular_8bit`: It displays a regular 8 bpp tiled background.
 - `bg_regular_8bit_2screens`: It displays a regular 8 bpp tiled background in both screens.
