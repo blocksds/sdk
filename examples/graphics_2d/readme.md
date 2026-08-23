@@ -12,7 +12,6 @@ libnds.
 - `bg_ext_rotation`: It displays an extended affine background.
 - `bg_grf_types`: It loads all types of background from GRF files.
 - `bg_regular_4bit`: It displays a regular 4 bpp tiled background.
-- `bg_regular_4bit_metamap`: It displays a 4 bpp tiled background that uses metatiles.
 - `bg_regular_4bit_shared_pal`: Displays two 4 bpp tiled backgrounds with shared palette.
 - `bg_regular_4bit_shared_pal_tileset`: Shows two 4 bpp tiled backgrounds with shared palette and tile set.
 - `bg_regular_8bit`: It displays a regular 8 bpp tiled background.
@@ -22,6 +21,7 @@ libnds.
 - `bg_regular_8bit_preexisting_tileset`: Converts an image using another image's tileset as reference.
 - `bg_regular_8bit_shared_pal`: Displays two 8 bpp tiled backgrounds with shared palette.
 - `bg_regular_8bit_shared_pal_tileset`: Shows two 8 bpp tiled backgrounds with shared palette and tile set.
+- `bg_regular_metamap`: It displays a 8 bpp tiled background that uses metatiles.
 - `bg_regular_nitrofs`: It loads a regular 8 bpp tiled background from NitroFS.
 - `bg_rotation`: It displays a background with rotation and scaling (affine).
 - `bg_scroll_big_bmp`: It scrolls an 8 bpp bitmap bigger than the hardware limits.

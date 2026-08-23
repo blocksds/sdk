@@ -6,7 +6,7 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= bg_regular_4bit_metamap
+NAME		:= bg_regular_metamap
 GAME_TITLE	:= Background with metatiles
 GAME_SUBTITLE	:= 2D graphics: BGs
 

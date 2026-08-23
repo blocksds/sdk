@@ -917,11 +917,11 @@ use a regular map without meta tiles!).
 You can use grit to convert images into maps that use metatiles:
 
 ```sh
-# 4 bpp, tiles, export map, SSB layout, set magenta as transparent, 2x2 meta tiles
--gt -gB4 -mR4 -mLs -gTFF00FF -Mh2 -Mw2
+# 8 bpp, tiles, export map, SSB layout, set magenta as transparent, 2x2 meta tiles
+-gB8 -gt -m -mLs -gTFF00FF -Mh2 -Mw2
 ```
 
 The new options are `-Mh2 -Mw2`. They set the meta tile size to 2x2 tiles.
 
 If you want to see how to load a map like this one, check the following example:
-[`examples/graphics_2d/bg_regular_4bit_metamap`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_4bit_metamap).
+[`examples/graphics_2d/bg_regular_metamap`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_metamap).
