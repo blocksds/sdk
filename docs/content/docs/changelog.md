@@ -3,7 +3,7 @@ title: 'Changelog'
 weight: 6
 ---
 
-### Version 1.23.0 (2026-XX-XX)
+### Version 1.23.0 (2026-08-24)
 
 - libnds:
 
@@ -49,13 +49,33 @@ weight: 6
 
   - Fix some typos in the documentation.
 
+  - Tutorial:
+
+    - Mention how to convert images to use multiple extended palettes in one
+      image.
+    - Mention the problems when converting 4 bpp backgrounds with grit, how to
+      convert them with SuperFamiconv, and how to use the result with some
+      examples.
+    - There's a new section that compares grit with ptexconv and SuperFamiconv.
+
   - Examples:
 
+    - The `bg_regular_4bit` and `bg_grf_types` have been refactored to use
+      ptexconv instead of grit to convert 4 bpp backgrounds. ptexconv supports
+      easy conversions from aribtrary images to images with 16 palettes of 16
+      colors, grit makes it more difficult. `bg_regular_4bit_shared_pal_tileset`
+      has been refactored to use SuperFamiconv, which also converts to 4 bpp
+      correctly, and has good support for shared palettes and tile sets.
+    - Add example of how to convert an image to use multiple extended palettes
+      with ptexconv.
     - Fix transparent color in grit files in some examples. They were using
       `FFOOFF` instead of `FF00FF`.
     - New example of how to convert images using an external reference palette,
       and another one that shows how to convert it with an external reference
       tileset.
+    - Make the metamap example use 8 bpp instead of 4 bpp. 8 bpp is easier to
+      use from grit.
+    - Print some missing controls in some examples.
 
   - Tests:
 
