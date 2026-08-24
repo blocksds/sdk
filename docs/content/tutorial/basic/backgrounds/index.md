@@ -895,6 +895,28 @@ tell grit the palette index to be used by the background:
 And that's it! As you can see, it requires a bit of additional setup, but it's a
 very simple way to make your 2D graphics look a lot better.
 
+However, there's a more powerful way to use extended palettes: you can make a
+single background use multiple 256 color palettes. For this you need to use
+ptexconv, and you can get a result like this one:
+
+![Background that uses multiple extended palettes](bg_extended_palettes_one_image.png)
+
+The code of this example is here: [`examples/graphics_2d/bg_ext_palette_multiple`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_ext_palette_multiple).
+
+The `ptxc` file contents are the following ones:
+
+```sh
+# Generate background, 8 bpp extended affine format, 16 palettes
+-gb -bA -p 16
+```
+
+The main difference is that instead of copying just one palette you need to copy
+all of them:
+
+```c
+memcpy(&VRAM_E_EXT_PALETTE[0][0], photo_png_pal_bin, photo_png_pal_bin_size);
+```
+
 ## 16. Meta maps
 
 Meta maps are a way to compress tile maps in your ROM. The Nintendo DS only
