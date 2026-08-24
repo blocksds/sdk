@@ -217,6 +217,24 @@ ${SUPERFAMICONV} --verbose \
     --out-map data/map.bin
 ```
 
+Another option is [ptexconv](https://github.com/Garhoogin/ptexconv). This tool
+is supported by ArchitectDS by default, and you can convert an image to 4 bpp
+format with a `ptxc` file like this one:
+
+```sh
+# Generate background, 4 bpp mode, 16 palettes
+-gb -bt4 -p 16
+
+# Export binary files
+-ob
+
+# Set magenta as transparent
+-k FF00FF
+
+# Compress to a maximum of 1024 tiles
+-cc 1024
+```
+
 ## 4. Tile bases and map bases
 
 The purpose of palette VRAM is very clear: It contains palettes. However, the
