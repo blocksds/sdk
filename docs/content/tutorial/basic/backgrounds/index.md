@@ -704,9 +704,12 @@ in both modes, but this is inconvenient. You can bypass this restriction by
 using extended palettes (which will be explained later), but sometimes it can
 still be needed to share it between different layers.
 
+### 13.1 grit
+
 It's possible to convert multiple images in one invocation of `grit` and tell it
 to create a combined palette for all of them. This is useful for both bitmap and
-tiled background modes.
+tiled background modes. All you have to do is to provide multiple images to grit
+when you run it.
 
 In a similar way, it's possible to convert multiple images in one invocation of
 `grit` and ask it to generate a shared tile set. For example, you could convert
@@ -721,12 +724,6 @@ ArchitectDS. If you want to see how to do it, check the examples:
 - 8-bit bitmap images, shared palette:
   [`examples/graphics_2d/bg_bmp_8bit_shared_pal`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_bmp_8bit_shared_pal).
 
-- 4-bit tiled images, shared palette:
-  [`examples/graphics_2d/bg_regular_4bit_shared_pal`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_4bit_shared_pal).
-
-- 4-bit tiled images, shared palette and tile set:
-  [`examples/graphics_2d/bg_regular_4bit_shared_pal_tileset`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_4bit_shared_pal_tileset).
-
 - 8-bit tiled images, shared palette:
   [`examples/graphics_2d/bg_regular_8bit_shared_pal`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_8bit_shared_pal).
 
@@ -738,11 +735,11 @@ file that contains the options to be used for all the files in the folder. For
 example:
 
 ```sh
-# 4 bpp, tiled mode, set magenta as transparent
--gB4 -gt -gTFF00FF
+# 8 bpp, tiled mode, set magenta as transparent
+-gB8 -gt -gTFF00FF
 
-# Export map, SSB layout, reduce tile set with options optimized for 4 bpp map
--m -mLs -mR4
+# Export map, SSB layout
+-m -mLs
 
 # Use a shared palette and shared graphics (tile set)
 -pS -gS
@@ -752,15 +749,29 @@ The interesting options are `-pS` for shared palette and `-gS` for shared
 graphics. In bitmap mode, shared graphics can't be used. In tiled mode, shared
 graphics means shared tile set.
 
-Note: The command line interface of grit for shared graphics isn't as flexible
-as it could be (for example, you can't force it to use a specific palette, it
-needs to build it by itself). If you want an alternative tool, check
-[SuperFamiconv](https://github.com/Optiroc/SuperFamiconv) which is provided in
-the Wonderful Toolchain packages:
+### 13.2 SuperFamiconv
+
+The command line interface of grit for shared graphics doesn't support the
+situation in which you already have a PNG image with a predefined palette or a
+predefined tileset, which you want to use as reference to convert images into
+tilemaps.
+
+[SuperFamiconv](https://github.com/Optiroc/SuperFamiconv) supports this, and it
+is provided in the Wonderful Toolchain packages:
 
 ```sh
 wf-pacman -Sy wonderful-superfamiconv
 ```
+
+However, it works in a very different way. grit expects a list of images and it
+converts them together to generate a common palette and tileset. Check the
+following example for an in-depth explanation of how it works. There is a PNG
+with a tileset and a Tiled project that uses it to build a map. Check the
+`convert.sh` script to see the steps needed to create a shared 4 bpp palette, a
+shared tileset, and two different maps:
+
+- 4-bit tiled images, shared palette and tile set:
+  [`examples/graphics_2d/bg_regular_4bit_shared_pal_tileset`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_4bit_shared_pal_tileset).
 
 ## 14. Backdrop color
 
