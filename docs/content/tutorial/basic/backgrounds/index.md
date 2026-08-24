@@ -230,9 +230,6 @@ format with a `ptxc` file like this one:
 
 # Set magenta as transparent
 -k FF00FF
-
-# Compress to a maximum of 1024 tiles
--cc 1024
 ```
 
 ## 4. Tile bases and map bases
