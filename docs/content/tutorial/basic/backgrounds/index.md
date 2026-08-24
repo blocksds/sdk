@@ -12,6 +12,23 @@ main character is formed of sprites, and the forest is drawn with backgrounds.
 The introduction of [this chapter of Tonc](https://gbadev.net/tonc/regbg.html)
 may be interesting to read.
 
+To use your graphics in a DS you need to convert them. You can do this in many
+ways, but the most convenient way is to keep your images as regular images (like
+PNG or JPG files) and to convert them at build time with specific conversion
+tools. You could export them directly from your graphics design program, but
+that is less maintainable, and it's likely you will forget to update the
+converted data after updating the image. Unfortunately, there isn't a single
+graphics conversion tool that lets you do everything.
+
+Most BlocksDS examples use [grit](https://blocksds.skylyrac.net/grit/index.html),
+which comes with BlocksDS by default, and it's supported by the default
+Makefiles for the most common conversions. However, it doesn't support every
+graphics conversion that you may want. [SuperFamiconv](https://github.com/Optiroc/SuperFamiconv)
+and [ptexconv](https://github.com/Garhoogin/ptexconv) can do things that grit
+can't, so it's a good idea to know the differences between them. If you're
+curious about it, check the [comparison table](#17-graphics-conversion-tools)
+now, but you should wait for now, as most differences are very specific.
+
 ## 2. 2D video modes
 
 Both graphics engines of the DS can display up to 4 backgrounds per screen. The
@@ -190,20 +207,17 @@ The second one is the grit file:
 ```
 
 {{< callout type="warning" >}}
-If you want to use 4 bpp graphics, the palette of your image must be arranged
-so that it's formed of 16 palettes of 16 colors. This is inconvenient, so it's
-better to use [SuperFamiconv](https://github.com/Optiroc/SuperFamiconv).
+If you want to convert 4 bpp graphics with grit, the palette of your image must
+be arranged so that it's formed of 16 palettes of 16 colors.
 {{< /callout >}}
 
-[SuperFamiconv](https://github.com/Optiroc/SuperFamiconv) is provided in the
-Wonderful Toolchain packages:
-
-```sh
-wf-pacman -Sy wonderful-superfamiconv
-```
+Arranging the palette correctly to be used by grit is inconvenient. It can be
+difficult to do it with some graphics design programs, so it's better to use
+[SuperFamiconv](https://github.com/Optiroc/SuperFamiconv), which generates the
+16 palettes by itself.
 
 The default mode for GBA graphics is 16 palettes of 16 colors, so you can
-convert the image like this:
+convert the image like this (the default mode for GBA is 4 bpp):
 
 ```sh
 SUPERFAMICONV=/opt/wonderful/bin/wf-superfamiconv
@@ -769,14 +783,7 @@ graphics means shared tile set.
 The command line interface of grit for shared graphics doesn't support the
 situation in which you already have a PNG image with a predefined palette or a
 predefined tileset, which you want to use as reference to convert images into
-tilemaps.
-
-[SuperFamiconv](https://github.com/Optiroc/SuperFamiconv) supports this, and it
-is provided in the Wonderful Toolchain packages:
-
-```sh
-wf-pacman -Sy wonderful-superfamiconv
-```
+tilemaps. Thankfully, SuperFamiconv supports this.
 
 However, it works in a very different way. grit expects a list of images and it
 converts them together to generate a common palette and tileset. Check the
@@ -1000,3 +1007,124 @@ The new options are `-Mh2 -Mw2`. They set the meta tile size to 2x2 tiles.
 
 If you want to see how to load a map like this one, check the following example:
 [`examples/graphics_2d/bg_regular_metamap`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/graphics_2d/bg_regular_metamap).
+
+## 17. Graphics conversion tools
+
+BlocksDS comes with **grit** by default.
+
+You can install **ptexconv** from the BlocksDS packages:
+
+```sh
+wf-pacman -Sy blocksds-ptexconv
+
+# Check that it's installed correctly
+/opt/blocksds/external/ptexconv/ptexconv
+```
+
+You can install **SuperFamiconv** from the Wonderful Toolchain packages:
+
+```sh
+wf-pacman -Sy wonderful-superfamiconv
+
+# Check that it's installed correctly
+/opt/wonderful/bin/wf-superfamiconv --help
+```
+
+Their main differences are:
+
+- **grit**
+
+  - Pros:
+
+    - It supports `.grit` configuration files by default, where you can save the
+      conversion settings of all your images in a convenient way.
+    - It supports most 2D and 3D texture formats of the DS.
+    - It can convert true color images to paletted formats. It reduces the number
+      of colors of the image to fit in the desired palette size.
+    - It supports generating meta maps.
+    - It supports taking a reference image as a palette or tile set. This is
+      useful if you want to create your own tile set as a '.png' file and use a
+      tool like Tiled to create your maps.
+    - It supports the compression supported by the BIOS.
+    - It supports GRF format.
+    - It supports getting multiple images as input to create a shared palette or
+      tile set from scratch.
+
+  - Cons:
+
+    - Converting images to 4 bpp format is very inconvenient, grit requires that
+      the palette of the image is manually split into 16 palettes of 16 colors.
+    - It doesn't support Tex4x4 3D texture format.
+    - It doesn't support exporting backgrounds that use multiple extended
+      palettes.
+    - It doesn't support step-by-step conversions.
+
+- **ptexconv**
+
+  - Pros:
+
+    - It supports `.ptxc` configuration files, but only when it is used from
+      ArchitectDS.
+    - It supports the Tex4x4 3D texture format, which is the smallest texture
+      format. It uses lossy compression, so it isn't useful for any texture.
+    - It ignores the original palette of an image. It always treats them as true
+      color images, and it reduces the number of colors to fit into the desired
+      palette size. This is normally the behaviour that you want.
+    - Converting images to 4 bpp format is easy. It can generate 4 bpp groups of
+      palettes automatically,
+    - It supports the compression supported by the BIOS.
+    - It supports GRF format.
+    - It supports exporting images to use multiple extended palettes, up to 16
+      palettes of 256 colors (`-bA -p 16`).
+
+  - Cons:
+
+    - It supports a reference palette and tile set (`-fp`, `-wp`, `-wc`), but
+      only as binary files, not as `.png` files.
+    - It ignores the original palette of an image, so you need to provide a
+      reference palette if you want to keep the colors of the palette in a
+      specific order.
+    - It doesn't support getting multiple images as input to create a shared
+      palette or tile set scratch.
+    - It doesn't support step-by-step conversions.
+
+- **SuperFamiconv**
+
+  - Pros:
+
+    - It only supports the 2D formats of the DS, not the 3D texture formats.
+    - Converting images to 4 bpp format is easy. It can generate 4 bpp groups of
+      palettes automatically.
+    - It supports taking a reference image as a palette or tile set.
+    - It supports converting step-by-step. You can generate a palette file from
+      a PNG file that contains your colors in order. Then you can use it with
+      another PNG file that contains your tile set, and generate a tile set
+      file. Finally, you can use both to generate the final map. This gives you
+      very fine control over your maps, as you can know exactly the tile index
+      of all your tiles.
+    - It can export palettes and tile sets as '.png' files, which can be useful
+      for debugging.
+
+  - Cons:
+
+    - It supports a reference palette and tile set, but only as binary files,
+      not as `.png` files.
+    - It doesn't support 3D texture formats.
+    - It doesn't support any type of compression.
+    - It doesn't support GRF format.
+    - It doesn't support getting multiple images as input to create a shared
+      palette or tile set from scratch.
+    - It doesn't support exporting backgrounds that use multiple extended
+      palettes.
+
+In short, you can achieve almost everything with grit or ptexconv, but you may
+need the other tool for some specific things.
+
+- Use grit or ptexconv for regular conversion of individual images, or if you
+  want to provide your own palette or tile set as input.
+- Use grit if you want to convert multiple images in one run so that grit can
+  generate a shared palette and/or tile set from scratch.
+- Use ptexconv if you want to generate Tex4x4 textures, or if you want to
+  generate backgrounds that use multiple 256 color palettes.
+- Use SuperFamiconv if you want very detailed control of how palettes, tile sets
+  and tile maps are generated.
