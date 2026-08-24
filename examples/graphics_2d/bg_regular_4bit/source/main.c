@@ -4,10 +4,9 @@
 
 #include <nds.h>
 
-// The following files are generated with script "convert.sh"
-#include "palette_bin.h"
-#include "tiles_bin.h"
-#include "map_bin.h"
+#include "ptexconv/forest_png_chr_bin.h"
+#include "ptexconv/forest_png_pal_bin.h"
+#include "ptexconv/forest_png_scr_bin.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,9 +16,9 @@ int main(int argc, char *argv[])
 
     int bg = bgInitHidden(0, BgType_Text4bpp, BgSize_T_256x256, 0, 1);
 
-    memcpy(bgGetGfxPtr(bg), tiles_bin, tiles_bin_size);
-    memcpy(bgGetMapPtr(bg), map_bin, map_bin_size);
-    memcpy(BG_PALETTE, palette_bin, palette_bin_size);
+    memcpy(bgGetGfxPtr(bg), forest_png_chr_bin, forest_png_chr_bin_size);
+    memcpy(bgGetMapPtr(bg), forest_png_scr_bin, forest_png_scr_bin_size);
+    memcpy(BG_PALETTE, forest_png_pal_bin, forest_png_pal_bin_size);
 
     bgShow(bg);
 

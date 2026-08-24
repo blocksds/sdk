@@ -1,0 +1,5 @@
+# Generate background, 4 bpp mode, 16 palettes
+-gb -bt4 -p 16
+
+# Set magenta as transparent
+-k FF00FF
