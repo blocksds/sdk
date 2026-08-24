@@ -7,7 +7,8 @@
 from architectds import *
 
 nitrofs = NitroFS()
-nitrofs.add_grit(['graphics'])
+nitrofs.add_grit(['graphics/grit'], 'bg')
+nitrofs.add_ptexconv(['graphics/ptexconv'], 'bg')
 nitrofs.generate_image()
 
 arm9 = Arm9Binary(

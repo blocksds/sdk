@@ -1,0 +1,11 @@
+# Generate background, 4 bpp mode, 16 palettes
+-gb -bt4 -p 16
+
+# Export GRF file
+-og
+
+# Set magenta as transparent
+-k FF00FF
+
+# Compress to a maximum of 1024 tiles
+-cc 1024

@@ -301,7 +301,7 @@ int main(int argc, char *argv[])
     {
         {
             .title = "Regular map: 4 bpp",
-            .path = "grit/bg_regular_4bpp_png.grf",
+            .path = "bg/bg_regular_4bpp_png.grf",
             .bg_layer = 0,
             .type = BgType_Text4bpp,
             .map_base = 0,
@@ -309,7 +309,7 @@ int main(int argc, char *argv[])
         },
         {
             .title = "Regular map: 8 bpp",
-            .path = "grit/bg_regular_8bpp_png.grf",
+            .path = "bg/bg_regular_8bpp_png.grf",
             .bg_layer = 0,
             .type = BgType_Text8bpp,
             .map_base = 0,
@@ -317,7 +317,7 @@ int main(int argc, char *argv[])
         },
         {
             .title = "Affine map",
-            .path = "grit/bg_rotation_png.grf",
+            .path = "bg/bg_rotation_png.grf",
             .bg_layer = 2,
             .type = BgType_Rotation,
             .map_base = 0,
@@ -325,7 +325,7 @@ int main(int argc, char *argv[])
         },
         {
             .title = "Extended affine map",
-            .path = "grit/bg_ext_rotation_png.grf",
+            .path = "bg/bg_ext_rotation_png.grf",
             .bg_layer = 3,
             .type =  BgType_ExRotation,
             .map_base = 0,
@@ -333,7 +333,7 @@ int main(int argc, char *argv[])
         },
         {
             .title = "Bitmap: 8 bpp",
-            .path = "grit/bmp_8bit_png.grf",
+            .path = "bg/bmp_8bit_png.grf",
             .bg_layer = 3,
             .type = BgType_Bmp8,
             .map_base = 0,
@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
         },
         {
             .title = "Bitmap: 16 bpp",
-            .path = "grit/bmp_16bit_png.grf",
+            .path = "bg/bmp_16bit_png.grf",
             .bg_layer = 3,
             .type = BgType_Bmp16,
             .map_base = 0,
