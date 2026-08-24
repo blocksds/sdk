@@ -1,0 +1,2 @@
+# Generate background, 8 bpp extended affine format, 16 palettes
+-gb -bA -p 16
