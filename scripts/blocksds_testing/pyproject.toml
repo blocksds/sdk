@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blocksds_testing"
+version = "0.1.0"
+authors = [
+    { name = "Antonio Niño Díaz", email = "antonio_nd@proton.me" },
+]
+description = "A basic wrapper to run BlocksDS tests using libretro.py and melonds-ds."
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "libretro.py",
+    "pillow"
+]
+license = "CC0-1.0"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Topic :: Software Development :: Testing",
+]
