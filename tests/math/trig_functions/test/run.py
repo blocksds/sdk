@@ -32,29 +32,29 @@ print(f'NDS ROM: {rom_path}')
 
 os.makedirs('build', exist_ok=True)
 
-ref_1 = Image.open('test/reference_1.png')
-ref_2 = Image.open('test/reference_2.png')
-ref_3 = Image.open('test/reference_3.png')
+ref_1 = Image.open('test/reference_1.png').convert('RGB')
+ref_2 = Image.open('test/reference_2.png').convert('RGB')
+ref_3 = Image.open('test/reference_3.png').convert('RGB')
 
 log_driver = UnformattedLogDriver()
 with blocksds_test_session(rom_path, generate_input, log_driver) as session:
     for i in range(500):
         session.run()
 
-    res_1 = Image.frombytes('RGBA', (256, 384), session.video.screenshot().data.obj)
-    res_1.save('build/result_1.png', "PNG")
+    res_1 = Image.frombytes('RGBA', (256, 384), session.video.screenshot().data.obj).convert('RGB')
+    res_1.save('build/result_1.png', 'PNG')
 
     for i in range(500):
         session.run()
 
-    res_2 = Image.frombytes('RGBA', (256, 384), session.video.screenshot().data.obj)
-    res_2.save('build/result_2.png', "PNG")
+    res_2 = Image.frombytes('RGBA', (256, 384), session.video.screenshot().data.obj).convert('RGB')
+    res_2.save('build/result_2.png', 'PNG')
 
     for i in range(500):
         session.run()
 
-    res_3 = Image.frombytes('RGBA', (256, 384), session.video.screenshot().data.obj)
-    res_3.save('build/result_3.png', "PNG")
+    res_3 = Image.frombytes('RGBA', (256, 384), session.video.screenshot().data.obj).convert('RGB')
+    res_3.save('build/result_3.png', 'PNG')
 
     logs = [r.message for r in log_driver.records]
     assert logs is not None
@@ -62,17 +62,17 @@ with blocksds_test_session(rom_path, generate_input, log_driver) as session:
     blocksds_test_assert_no_errors_in_logs(logs)
 
 diff = ImageChops.difference(ref_1, res_1)
-if diff.getbbox():
+if diff.getbbox() is not None:
     print('ERROR: Reference 1 mismatch')
     assert False
 
 diff = ImageChops.difference(ref_2, res_2)
-if diff.getbbox():
+if diff.getbbox() is not None:
     print('ERROR: Reference 2 mismatch')
     assert False
 
 diff = ImageChops.difference(ref_3, res_3)
-if diff.getbbox():
+if diff.getbbox() is not None:
     print('ERROR: Reference 3 mismatch')
     assert False
 
