@@ -105,6 +105,7 @@ def save_screenshot(session, name):
     os.makedirs('build', exist_ok=True)
     path = os.path.join('build', name)
 
+    # Convert to RGB to ensure that we compare images with the same format
     img = Image.frombytes('RGBA', (256, 384), session.video.screenshot().data.obj).convert('RGB')
     img.save(path, 'PNG')
 
@@ -112,8 +113,11 @@ def save_screenshot(session, name):
 
 def compare_image_with_reference(img, name):
     path = os.path.join('test', name)
+    # Convert to RGB to ensure that we compare images with the same format
     ref = Image.open(path).convert('RGB')
 
+    # This function doesn't behave properly unless the format of both images is
+    # the same.
     diff = ImageChops.difference(img, ref)
     if diff.getbbox() is not None:
         print(f'ERROR: {path} comparison failed')
