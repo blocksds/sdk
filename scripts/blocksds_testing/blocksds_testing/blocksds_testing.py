@@ -12,10 +12,21 @@ from libretro.drivers import (ArrayAudioDriver, ArrayVideoDriver,
                               DictOptionDriver, IterableInputDriver,
                               StandardContentDriver)
 
+def delete_all_screenshots():
+    files = os.listdir('build')
+    rom_path = None
+    for f in files:
+        if f.lower().endswith('.png'):
+            path = os.path.join('build', f)
+            os.remove(path)
+
 def session_start(game, input_gen=None, log_driver=None):
     blobs_path = os.environ['BLOCKSDS_TESTING_BLOBS']
 
     assert os.path.isabs(blobs_path)
+
+    # Clear screenshots from previous tests
+    delete_all_screenshots()
 
     core_path = os.path.join(blobs_path, 'melondsds_libretro.so')
 
@@ -90,18 +101,20 @@ def find_rom(dir_path=None):
             break
 
     assert rom_path is not None
-    print(f'NDS ROM: {rom_path}')
+    print(f'[*] NDS ROM: {rom_path}')
     return rom_path
 
-def save_screenshot(session, path):
-    dir_path = os.path.dirname(path)
-    os.makedirs(dir_path, exist_ok=True)
+def save_screenshot(session, name):
+    os.makedirs('build', exist_ok=True)
+    path = os.path.join('build', name)
 
     img = Image.frombytes('RGBA', (256, 384), session.video.screenshot().data.obj).convert('RGB')
     img.save(path, 'PNG')
+
     return img
 
-def compare_image_with_reference(img, path):
+def compare_image_with_reference(img, name):
+    path = os.path.join('test', name)
     ref = Image.open(path).convert('RGB')
 
     diff = ImageChops.difference(img, ref)
