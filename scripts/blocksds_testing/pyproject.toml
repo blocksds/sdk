@@ -20,3 +20,8 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "Topic :: Software Development :: Testing",
 ]
+
+[project.urls]
+Homepage = "https://blocksds.skylyrac.net"
+Repository = "https://codeberg.org/blocksds/sdk"
+Issues = "https://codeberg.org/blocksds/sdk/issues"
