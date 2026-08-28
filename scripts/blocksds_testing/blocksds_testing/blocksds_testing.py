@@ -5,12 +5,14 @@
 import os
 import shutil
 
+from PIL import Image, ImageChops
+
 from libretro import Session, TempDirPathDriver
 from libretro.drivers import (ArrayAudioDriver, ArrayVideoDriver,
                               DictOptionDriver, IterableInputDriver,
                               StandardContentDriver)
 
-def blocksds_test_session(game, input_gen=None, log=None) -> Session:
+def session_start(game, input_gen=None, log_driver=None):
     blobs_path = os.environ['BLOCKSDS_TESTING_BLOBS']
 
     assert os.path.isabs(blobs_path)
@@ -61,9 +63,48 @@ def blocksds_test_session(game, input_gen=None, log=None) -> Session:
         video=ArrayVideoDriver(),
         options=DictOptionDriver(variables=options),
         path=path_driver,
-        log=log,
+        log=log_driver,
     )
 
-def blocksds_test_assert_no_errors_in_logs(logs):
+def session_run_frames(session, frames):
+    for i in range(frames):
+        session.run()
+
+def assert_no_errors_in_logs(log_driver):
+    logs = [r.message for r in log_driver.records]
+
+    assert logs is not None
+    assert len(logs) > 0
     assert not any('data abort' in log for log in logs)
     assert not any('Failed to load' in log for log in logs)
+
+def find_rom(dir_path=None):
+    if dir_path is None:
+        dir_path = os.getcwd()
+
+    files = os.listdir(dir_path)
+    rom_path = None
+    for f in files:
+        if f.lower().endswith('.nds'):
+            rom_path = f
+            break
+
+    assert rom_path is not None
+    print(f'NDS ROM: {rom_path}')
+    return rom_path
+
+def save_screenshot(session, path):
+    dir_path = os.path.dirname(path)
+    os.makedirs(dir_path, exist_ok=True)
+
+    img = Image.frombytes('RGBA', (256, 384), session.video.screenshot().data.obj).convert('RGB')
+    img.save(path, 'PNG')
+    return img
+
+def compare_image_with_reference(img, path):
+    ref = Image.open(path).convert('RGB')
+
+    diff = ImageChops.difference(img, ref)
+    if diff.getbbox() is not None:
+        print(f'ERROR: {path} comparison failed')
+        assert False

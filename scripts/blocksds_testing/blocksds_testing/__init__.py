@@ -2,10 +2,9 @@
 #
 # SPDX-FileContributor: Antonio Niño Díaz, 2026
 
-from .blocksds_testing import (blocksds_test_session,
-                               blocksds_test_assert_no_errors_in_logs,
-                               AUTHOR_STRING, VERSION_STRING)
+from .blocksds_testing import (session_start, session_run_frames,
+                               assert_no_errors_in_logs, find_rom,
+                               save_screenshot, compare_image_with_reference)
 
-__all__ = ['blocksds_test_session', 'blocksds_test_assert_no_errors_in_logs']
-__author__ = AUTHOR_STRING
-__version__ = VERSION_STRING
+__all__ = ['session_start', 'session_run_frames', 'assert_no_errors_in_logs',
+           'find_rom', 'save_screenshot', 'compare_image_with_reference']
