@@ -94,6 +94,9 @@ def find_rom(dir_path=None):
     return rom_path
 
 def delete_all_screenshots():
+    if not os.path.exists('build'):
+        return
+
     files = os.listdir('build')
     rom_path = None
     for f in files:
