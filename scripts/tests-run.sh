@@ -33,32 +33,31 @@ dirs=`find examples tests -iname run.py`
 for dir in $dirs; do
     dir=${dir%*/test/run.py}  # Remove the trailing "/run.py"
 
-    echo ""
     echo "[###] TEST START: $dir"
-    echo ""
 
     # Switch current folder
 
-    pushd $dir
+    pushd $dir > /dev/null
 
     # Build ROM
 
     if [ -f "build.py" ]; then
-        python3 build.py --clean --build
+        python3 build.py --clean --build 1>test-build.log 2>&1
     else
-        make clean
-        make -j`nproc`
+        make clean > /dev/null
+        make -j`nproc` 1>test-build.log 2>&1
     fi
+
+    mv test-build.log build/
 
     # Run test
 
-    python3 test/run.py
+    python3 "test/run.py" 1>build/test-run.log 2>&1
 
     # Done!
 
-    popd
+    popd > /dev/null
 
-    echo ""
     echo "[###] TEST END: $dir"
     echo ""
 done
