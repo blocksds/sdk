@@ -4,7 +4,9 @@
 
 from .blocksds_testing import (session_start, session_run_frames,
                                assert_no_errors_in_logs, find_rom,
-                               save_screenshot, compare_image_with_reference)
+                               delete_all_screenshots, save_screenshot,
+                               compare_image_with_reference)
 
 __all__ = ['session_start', 'session_run_frames', 'assert_no_errors_in_logs',
-           'find_rom', 'save_screenshot', 'compare_image_with_reference']
+           'find_rom', 'delete_all_screenshots',
+           'save_screenshot', 'compare_image_with_reference']

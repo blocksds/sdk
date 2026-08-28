@@ -7,6 +7,8 @@ import blocksds_testing as bt
 from itertools import repeat
 from libretro import JoypadState, UnformattedLogDriver
 
+bt.delete_all_screenshots()
+
 def generate_input():
     yield from repeat(0, 50)
 
