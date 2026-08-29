@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
 
     bgShow(bg);
 
+    printf("A:     Rotate palette\n");
     printf("START: Exit to loader\n");
 
     int x = 0, y = 0;
@@ -49,21 +50,23 @@ int main(int argc, char *argv[])
     {
         swiWaitForVBlank();
 
-        const int num_colors = shared_dataPalLen / sizeof(u16);
-        for (int i = 0; i < num_colors; i++)
-            BG_PALETTE[i] = ((u16*)shared_dataPal)[(i + color_shift) & (num_colors - 1)];
-        color_shift--;
+        scanKeys();
+
+        u16 keys_held = keysHeld();
+        if (keys_held & KEY_START)
+            break;
+
+        if (keys_held & KEY_A)
+        {
+            const int num_colors = shared_dataPalLen / sizeof(u16);
+            for (int i = 0; i < num_colors; i++)
+                BG_PALETTE[i] = ((u16*)shared_dataPal)[(i + color_shift) & (num_colors - 1)];
+            color_shift--;
+        }
 
         bgSetScroll(bg, x, y);
 
         bgUpdate();
-
-        scanKeys();
-
-        u16 keys_held = keysHeld();
-
-        if (keys_held & KEY_START)
-            break;
     }
 
     return 0;
