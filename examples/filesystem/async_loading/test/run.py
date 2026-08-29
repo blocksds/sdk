@@ -4,8 +4,7 @@
 
 import blocksds_testing as bt
 
-from itertools import repeat
-from libretro import JoypadState, UnformattedLogDriver
+from libretro import UnformattedLogDriver
 
 bt.delete_all_screenshots()
 
