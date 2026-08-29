@@ -21,7 +21,7 @@ blocksds_version_at_most = $(shell expr $(BLOCKSDS_VERSION_FULL) \<= $(call bloc
 # Use it like this: $(eval $(call error_if_blocksds_version_different, 1, 12, 2))
 define error_if_blocksds_version_different
     ifneq ($(call blocksds_version_equals, $1, $2, $3), 1)
-        $$(error Version of BlocksDS doesn't match)
+        $$(error Version of BlocksDS doesn't match. Expected version is $(strip $1).$(strip $2).$(strip $3))
     endif
 endef
 
@@ -29,7 +29,7 @@ endef
 # Use it like this: $(eval $(call error_if_blocksds_version_less_than, 1, 12, 2))
 define error_if_blocksds_version_less_than
     ifneq ($(call blocksds_version_at_least, $1, $2, $3), 1)
-        $$(error Version of BlocksDS is too small)
+        $$(error Version of BlocksDS is too old. Min version is $(strip $1).$(strip $2).$(strip $3))
     endif
 endef
 
@@ -37,6 +37,6 @@ endef
 # Use it like this: $(eval $(call error_if_blocksds_version_greater_than, 1, 12, 2))
 define error_if_blocksds_version_greater_than
     ifneq ($(call blocksds_version_at_most, $1, $2, $3), 1)
-        $$(error Version of BlocksDS is too big)
+        $$(error Version of BlocksDS is too new. Max version is $(strip $1).$(strip $2).$(strip $3))
     endif
 endef
