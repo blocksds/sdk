@@ -78,6 +78,12 @@ def assert_no_errors_in_logs(log_driver):
     assert not any('data abort' in log for log in logs)
     assert not any('Failed to load' in log for log in logs)
 
+def string_is_in_logs(log_driver, string):
+    logs = [r.message for r in log_driver.records]
+
+    assert logs is not None
+    assert any(string in log for log in logs)
+
 def find_rom(dir_path=None):
     if dir_path is None:
         dir_path = os.getcwd()
