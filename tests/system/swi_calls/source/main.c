@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 
     printf("\n");
     printf("swiDelay()");
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 4; i++)
     {
         swiDelay(0xFFFFFF);
         printf(".");
