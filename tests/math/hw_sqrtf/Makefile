@@ -1,13 +1,13 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2024
+# SPDX-FileContributor: Antonio Niño Díaz, 2024-2026
 
 BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= tests_sys_hw_math
-GAME_TITLE	:= Hardware Math routines
-GAME_SUBTITLE	:= Tests: System
+NAME		:= hw_sqrtf_test
+GAME_TITLE	:= Test for hw_sqrtf
+GAME_SUBTITLE	:= Tests: Math
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile
