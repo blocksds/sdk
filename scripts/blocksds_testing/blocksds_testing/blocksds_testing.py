@@ -110,12 +110,16 @@ def delete_all_screenshots():
             path = os.path.join('build', f)
             os.remove(path)
 
-def save_screenshot(session, name):
+def save_screenshot(session, name, box=None):
     os.makedirs('build', exist_ok=True)
     path = os.path.join('build', name)
 
     # Convert to RGB to ensure that we compare images with the same format
     img = Image.frombytes('RGBA', (256, 384), session.video.screenshot().data.obj).convert('RGB')
+
+    if box is not None:
+        img = img.crop(box)
+
     img.save(path, 'PNG')
 
     return img
