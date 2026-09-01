@@ -66,7 +66,7 @@ music in some format you can write the code yourself, but that's a pretty big
 project. If all you want to do is to create a game you won't have time to create
 a music player to go with the game.
 
-If you need to get some music for your game, check [The Mod Archive](modarchive.org/),
+If you need to get some music for your game, check [The Mod Archive](https://modarchive.org/),
 which has a huge collection of music in formats supported by Maxmod and LibXM7.
 A big part of the songs are available under permissive licenses and you may be
 able to use them in your games (remember to give credit to the authors!).
