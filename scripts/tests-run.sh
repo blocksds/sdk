@@ -26,14 +26,17 @@
 # After that, you're ready to run this script **from the root of the SDK
 # repository**.
 
-set -e
+DEFAULT="\033[0m"
+RED="\033[31m"
+GREEN="\033[32m"
+BOLD="\033[1m"
 
 dirs=`find examples tests -iname run.py`
 
 for dir in $dirs; do
     dir=${dir%*/test/run.py}  # Remove the trailing "/run.py"
 
-    echo "[###] TEST START: $dir"
+    printf "${BOLD}[#####] TEST START: ${dir}${DEFAULT}\n"
 
     # Switch current folder
 
@@ -48,16 +51,36 @@ for dir in $dirs; do
         make -j`nproc` 1>test-build.log 2>&1
     fi
 
+    rc=$?
+
     mv test-build.log build/
 
-    # Run test
+    if [ $rc -ne 0 ]; then
+        printf "${RED}${BOLD}[#] BUILD FAILED: LOG START${DEFAULT}\n"
+        cat build/test-build.log
+        printf "${RED}${BOLD}[#] BUILD FAILED: LOG END${DEFAULT}\n"
+    else
+        printf "${GREEN}${BOLD}[#] BUILD SUCCEEDED${DEFAULT}\n"
 
-    python3 "test/run.py" 1>build/test-run.log 2>&1
+        # Run test if the build has succeeded
+
+        python3 "test/run.py" 1>build/test-run.log 2>&1
+
+        rc=$?
+
+        if [ $rc -ne 0 ]; then
+            printf "${RED}${BOLD}[#] RUN FAILED: LOG START${DEFAULT}\n"
+            cat build/test-run.log
+            printf "${RED}${BOLD}[#] RUN FAILED: LOG END${DEFAULT}\n"
+        else
+            printf "${GREEN}${BOLD}[#] RUN SUCCEEDED${DEFAULT}\n"
+        fi
+    fi
 
     # Done!
 
     popd > /dev/null
 
-    echo "[###] TEST END: $dir"
-    echo ""
+    printf "${BOLD}[#####] TEST END: ${dir}${DEFAULT}\n"
+    printf "\n"
 done
