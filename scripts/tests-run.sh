@@ -31,6 +31,9 @@ RED="\033[31m"
 GREEN="\033[32m"
 BOLD="\033[1m"
 
+TESTS_SUCCESS=0
+TESTS_TOTAL=0
+
 dirs=`find examples tests -iname run.py`
 
 for dir in $dirs; do
@@ -74,6 +77,8 @@ for dir in $dirs; do
             printf "${RED}${BOLD}[#] RUN FAILED: LOG END${DEFAULT}\n"
         else
             printf "${GREEN}${BOLD}[#] RUN SUCCEEDED${DEFAULT}\n"
+
+            TESTS_SUCCESS=$(( TESTS_SUCCESS + 1 ))
         fi
     fi
 
@@ -83,4 +88,16 @@ for dir in $dirs; do
 
     printf "${BOLD}[#####] TEST END: ${dir}${DEFAULT}\n"
     printf "\n"
+
+    TESTS_TOTAL=$(( TESTS_TOTAL + 1 ))
 done
+
+TESTS_FAILURE=$(( TESTS_TOTAL - TESTS_SUCCESS ))
+
+printf "${BOLD}[#] TESTS TOTAL:  ${TESTS_TOTAL}${DEFAULT}\n"
+printf "${BOLD}[#] TESTS OK:     ${TESTS_SUCCESS}${DEFAULT}\n"
+if [ ${TESTS_FAILURE} -ne 0 ]; then
+    printf "${RED}${BOLD}[#] TESTS FAILED: ${TESTS_FAILURE}${DEFAULT}\n"
+else
+    printf "${BOLD}[#] TESTS FAILED: ${TESTS_FAILURE}${DEFAULT}\n"
+fi
