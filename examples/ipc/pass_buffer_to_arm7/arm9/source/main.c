@@ -22,6 +22,9 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
+    // Make sure that the test results are always the same
+    srand(0);
+
     const uint32_t buffer_size = 123; // Words
     uint32_t *buffer = calloc(sizeof(uint32_t), buffer_size + 1);
     if (buffer == NULL)
