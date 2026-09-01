@@ -84,8 +84,8 @@ int main(int argc, char **argv)
 
     glViewport(0, 0, 255, 191);
 
-    int angle_x = 0;
-    int angle_z = 0;
+    int angle_x = 1 << 10;
+    int angle_z = 1 << 10;
 
     float x = 0.0;
     float y = 0.0;
