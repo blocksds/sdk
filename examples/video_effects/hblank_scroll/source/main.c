@@ -132,6 +132,7 @@ int main(int argc, char **argv)
         consoleClear();
 
         // Print some controls
+        printf("A:     Animate wave\n");
         printf("PAD:   Rotate quad\n");
         printf("START: Exit to loader\n");
         printf("\n");
@@ -159,9 +160,12 @@ int main(int argc, char **argv)
         // Animate wave effect
         // -------------------
 
-        angle_offset++;
-        if (angle_offset >= degreesToAngle(360))
-            angle_offset -= degreesToAngle(360);
+        if (keys & KEY_A)
+        {
+            angle_offset++;
+            if (angle_offset >= degreesToAngle(360))
+                angle_offset -= degreesToAngle(360);
+        }
 
         // Render 3D scene
         // ---------------
