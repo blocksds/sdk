@@ -2,12 +2,13 @@
 
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Antonio Niño Díaz, 2024
+# SPDX-FileContributor: Antonio Niño Díaz, 2024-2026
 
 from architectds import *
 
 nitrofs = NitroFS()
-nitrofs.add_grit(['graphics'])
+nitrofs.add_grit(['graphics/grit'], 'spr')
+nitrofs.add_ptexconv(['graphics/ptexconv'], 'spr')
 nitrofs.generate_image()
 
 arm9 = Arm9Binary(

@@ -1,0 +1,17 @@
+# Generate background, 4 bpp mode, 1 palette
+-gb -bt4 -p 1
+
+# Do not output screen data (tile map)
+-ns
+
+# Don't optimize tiles (this is a sprite!)
+-cn
+
+# Export GRF file
+-og
+
+# Set black as transparent
+-k 000000
+
+# Allow all compression types supported by the BIOS
+-cbios

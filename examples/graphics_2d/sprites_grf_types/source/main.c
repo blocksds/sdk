@@ -36,7 +36,7 @@ void load_sprites_16_colors(void)
 
     int palette_index = 4;
 
-    ret = oamLoadGfxGrf(&oamMain, "grit/tiles_16_png.grf", palette_index,
+    ret = oamLoadGfxGrf(&oamMain, "spr/tiles_16_png.grf", palette_index,
                         &gfx16Main, &size, &format);
     if (ret != 0)
     {
@@ -56,7 +56,7 @@ void load_sprites_16_colors(void)
         false, false, // H flip, V flip
         false); // Mosaic
 
-    ret = oamLoadGfxGrf(&oamSub, "grit/tiles_16_png.grf", palette_index,
+    ret = oamLoadGfxGrf(&oamSub, "spr/tiles_16_png.grf", palette_index,
                         &gfx16Sub, &size, &format);
     if (ret != 0)
     {
@@ -85,7 +85,7 @@ void load_sprites_256_colors(void)
     SpriteSize size;
     SpriteColorFormat format;
 
-    ret = oamLoadGfxGrf(&oamMain, "grit/tiles_256_png.grf", 0, &gfx256Main,
+    ret = oamLoadGfxGrf(&oamMain, "spr/tiles_256_png.grf", 0, &gfx256Main,
                         &size, &format);
     if (ret != 0)
     {
@@ -101,7 +101,7 @@ void load_sprites_256_colors(void)
         size, format, gfx256Main,
         -1, false, false, false, false, false);
 
-    ret = oamLoadGfxGrf(&oamSub, "grit/tiles_256_png.grf", 0, &gfx256Sub,
+    ret = oamLoadGfxGrf(&oamSub, "spr/tiles_256_png.grf", 0, &gfx256Sub,
                         &size, &format);
     if (ret != 0)
     {
@@ -132,7 +132,7 @@ void load_sprites_256_colors_extended_palettes(void)
 
     int palette_index = 4;
 
-    ret = oamLoadGfxGrf(&oamMain, "grit/tiles_256_png.grf", palette_index,
+    ret = oamLoadGfxGrf(&oamMain, "spr/tiles_256_png.grf", palette_index,
                         &gfx256ExtMain, &size, &format);
     if (ret != 0)
     {
@@ -148,7 +148,7 @@ void load_sprites_256_colors_extended_palettes(void)
         size, format, gfx256ExtMain,
         -1, false, false, false, false, false);
 
-    ret = oamLoadGfxGrf(&oamSub, "grit/tiles_256_png.grf", palette_index,
+    ret = oamLoadGfxGrf(&oamSub, "spr/tiles_256_png.grf", palette_index,
                         &gfx256ExtSub, &size, &format);
     if (ret != 0)
     {
@@ -177,7 +177,7 @@ void load_sprites_bitmap(void)
     SpriteSize size;
     SpriteColorFormat format;
 
-    ret = oamLoadGfxGrf(&oamMain, "grit/bitmap_png.grf", 0,
+    ret = oamLoadGfxGrf(&oamMain, "spr/bitmap_png.grf", 0,
                         &gfxBmpMain, &size, &format);
     if (ret != 0)
     {
@@ -193,7 +193,7 @@ void load_sprites_bitmap(void)
         size, format, gfxBmpMain,
         -1, false, false, false, false, false);
 
-    ret = oamLoadGfxGrf(&oamSub, "grit/bitmap_png.grf", 0,
+    ret = oamLoadGfxGrf(&oamSub, "spr/bitmap_png.grf", 0,
                         &gfxBmpSub, &size, &format);
     if (ret != 0)
     {
