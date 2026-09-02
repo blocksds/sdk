@@ -45,6 +45,8 @@
 
 int main(int argc, char *argv[])
 {
+    srand(0); // Get the same results every time the test runs
+
     consoleDemoInit();
 
     videoSetMode(MODE_0_2D);

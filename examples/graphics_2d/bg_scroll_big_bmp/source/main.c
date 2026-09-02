@@ -17,6 +17,8 @@
 
 int main(int argc, char *argv[])
 {
+    srand(0); // Get the same results every time the test runs
+
     consoleDemoInit();
 
     // Use mode 5 so that we can use layer 2 as a bitmap
