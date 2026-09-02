@@ -66,7 +66,7 @@ int main(int argc, char **argv)
     printf("\n");
 
     fnptr1int *operation_set = dlsym(h_calculator, "operation_set");
-    printf("operation_set: %p\n", operation_set);
+    printf("operation_set: %s\n", (operation_set == NULL) ? "NULL" : "Found");
     err = dlerror();
     if (err != NULL)
     {
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
     }
 
     fnptr2int *operation_run = dlsym(h_calculator, "operation_run");
-    printf("operation_run: %p\n", operation_run);
+    printf("operation_run: %s\n", (operation_run == NULL) ? "NULL" : "Found");
     err = dlerror();
     if (err != NULL)
     {
@@ -83,7 +83,7 @@ int main(int argc, char **argv)
         wait_forever();
     }
     fnptr1int *operation_arm = dlsym(h_calculator, "operation_arm");
-    printf("operation_arm: %p\n", operation_arm);
+    printf("operation_arm: %s\n", (operation_arm == NULL) ? "NULL" : "Found");
     err = dlerror();
     if (err != NULL)
     {
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
         wait_forever();
     }
     fnrot13 *cypher_rot13 = dlsym(h_cypher, "cypher_rot13");
-    printf("cypher_rot13: %p\n", cypher_rot13);
+    printf("cypher_rot13: %s\n", (cypher_rot13 == NULL) ? "NULL" : "Found");
     err = dlerror();
     if (err != NULL)
     {

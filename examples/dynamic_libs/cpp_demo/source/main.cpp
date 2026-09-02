@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     printf("\n");
 
     VoidFn my_print = (VoidFn)dlsym(h, "_Z10print_textv");
-    printf("_Z10print_textv: %p\n", my_print);
+    printf("_Z10print_textv: %s\n", (my_print == NULL) ? "NULL" : "Found");
     err = dlerror();
     if (err != NULL)
     {

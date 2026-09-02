@@ -69,7 +69,7 @@ int main(int argc, char **argv)
     printf("\n");
 
     fnptr1int *operation_set = dlsym(h, "operation_set");
-    printf("operation_set: %p\n", operation_set);
+    printf("operation_set: %s\n", (operation_set == NULL) ? "NULL" : "Found");
     err = dlerror();
     if (err != NULL)
     {
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
     }
 
     fnptr2int *operation_run = dlsym(h, "operation_run");
-    printf("operation_run: %p\n", operation_run);
+    printf("operation_run: %s\n", (operation_run == NULL) ? "NULL" : "Found");
     err = dlerror();
     if (err != NULL)
     {
@@ -86,7 +86,7 @@ int main(int argc, char **argv)
         wait_forever();
     }
     fnptr1int *operation_arm = dlsym(h, "operation_arm");
-    printf("operation_arm: %p\n", operation_arm);
+    printf("operation_arm: %s\n", (operation_arm == NULL) ? "NULL" : "Found");
     err = dlerror();
     if (err != NULL)
     {
@@ -94,7 +94,7 @@ int main(int argc, char **argv)
         wait_forever();
     }
     fnptrvoid *test_symbols = dlsym(h, "test_symbols");
-    printf("test_symbols: %p\n", test_symbols);
+    printf("test_symbols: %s\n", (test_symbols == NULL) ? "NULL" : "Found");
     err = dlerror();
     if (err != NULL)
     {
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
         wait_forever();
     }
     fnptr2int *arm_tail_call = dlsym(h, "arm_tail_call");
-    printf("arm_tail_call: %p\n", arm_tail_call);
+    printf("arm_tail_call: %s\n", (arm_tail_call == NULL) ? "NULL" : "Found");
     err = dlerror();
     if (err != NULL)
     {
