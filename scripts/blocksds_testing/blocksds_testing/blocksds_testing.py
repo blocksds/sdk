@@ -145,6 +145,10 @@ def compare_image_with_reference(img, name):
 
 def touch(x, y):
     '''Use normal DS screen coordinates. x = 0 .. 255, y = 0 .. 191'''
+
+    # Some information about how this works:
+    # https://github.com/libretro/RetroArch/blob/0eb4107a35737c806e39ba5d9070e1d5417c4c84/libretro-common/include/libretro.h#L262-L305
+
     x = int((((x / 255) - 0.5) * 2) * 0x7FFF)
     y = int((y / 191) * 0x7FFF)
     return x, y
