@@ -12,7 +12,7 @@ from libretro.drivers import (ArrayAudioDriver, ArrayVideoDriver,
                               DictOptionDriver, IterableInputDriver,
                               StandardContentDriver)
 
-def session_start(game, input_gen=None, log_driver=None):
+def session_start(game, input_gen=None, log_driver=None, user_options=None):
     blobs_path = os.environ['BLOCKSDS_TESTING_BLOBS']
 
     assert os.path.isabs(blobs_path)
@@ -38,13 +38,20 @@ def session_start(game, input_gen=None, log_driver=None):
     os.makedirs(core_save_dir, exist_ok=True)
     os.makedirs(dldi_sd_card_sync_path, exist_ok=True)
 
-    options = {
+    default_options = {
         'melonds_jit_enable': 'disabled',
         'melonds_homebrew_sync_sdcard_to_host': 'enabled',
         'melonds_console_mode' : 'ds',
         'melonds_dsi_nand_path' : 'nand.bin',
         'melonds_firmware_dsi_path' : 'dsfirmware.bin',
+        'melonds_show_cursor': 'disabled',
     }
+
+    if user_options is not None:
+        # User options override the default options
+        options = default_options | user_options
+    else:
+        options = default_options
 
     if not os.path.exists(os.path.join(system_dir, b'nand.bin')):
         os.symlink(os.path.join(blobs_path, 'nand.bin'), os.path.join(system_dir, b'nand.bin'))
