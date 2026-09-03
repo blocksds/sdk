@@ -135,3 +135,9 @@ def compare_image_with_reference(img, name):
     if diff.getbbox() is not None:
         print(f'ERROR: {path} comparison failed')
         assert False
+
+def touch(x, y):
+    '''Use normal DS screen coordinates. x = 0 .. 255, y = 0 .. 191'''
+    x = int((((x / 255) - 0.5) * 2) * 0x7FFF)
+    y = int((y / 191) * 0x7FFF)
+    return x, y
