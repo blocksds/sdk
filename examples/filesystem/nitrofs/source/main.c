@@ -325,6 +325,9 @@ int main(int argc, char **argv)
     // that exists.
 
     {
+        consoleClear();
+        printf("Testing access to files...\n\n");
+
         if (access("d1/doesnt_exist.txt", F_OK) == 0)
         {
             printf("access() should have failed!");
