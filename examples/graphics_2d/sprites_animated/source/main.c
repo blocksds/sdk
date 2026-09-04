@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2024
+// SPDX-FileContributor: Antonio Niño Díaz, 2024-2026
 
 // There are two main ways to animate a sprite: we can either load all frames
 // to VRAM from the start (high VRAM usage, low CPU usage), or we can load one
@@ -78,6 +78,7 @@ int main(int argc, char *argv[])
            false, false, // H flip, V flip
            false); // Mosaic
 
+    printf("A:     Animate\n");
     printf("START: Exit to loader\n");
 
     int frame = 0;
@@ -90,26 +91,36 @@ int main(int argc, char *argv[])
         oamUpdate(&oamMain);
         oamUpdate(&oamSub);
 
-        delay++;
-        if (delay > 20)
-        {
-            delay = 0;
-
-            frame++;
-            if (frame > 5)
-                frame = 0;
-
-            // Copy a new frame for the pointer in the main screen
-            copy_sprite_frame(gfxOneFrame, frame);
-
-            // Point the sprite in the sub screen to a new pre-loaded frame
-            oamSetGfx(&oamSub, 0, SpriteSize_32x64, SpriteColorFormat_256Color,
-                      gfxAllFrames[frame]);
-        }
-
         scanKeys();
 
         u16 keys_held = keysHeld();
+
+        if (keys_held & KEY_A)
+        {
+            delay--;
+            if (delay <= 0)
+            {
+                delay = 20;
+
+                frame++;
+                if (frame > 5)
+                    frame = 0;
+
+                // Copy a new frame for the pointer in the main screen
+                copy_sprite_frame(gfxOneFrame, frame);
+
+                // Point the sprite in the sub screen to a new pre-loaded frame
+                oamSetGfx(&oamSub, 0, SpriteSize_32x64, SpriteColorFormat_256Color,
+                          gfxAllFrames[frame]);
+            }
+        }
+        else
+        {
+            // When the user releases the button, remove the delay to the next
+            // frame. That way, when the user presses it again, the sprite will
+            // change image right when the user presses it again.
+            delay = 0;
+        }
 
         if (keys_held & KEY_START)
             break;
