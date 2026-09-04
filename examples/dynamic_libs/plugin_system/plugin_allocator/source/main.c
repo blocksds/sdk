@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2025
+// SPDX-FileContributor: Antonio Niño Díaz, 2025-2026
 
 #include <stddef.h>
 
@@ -36,7 +36,7 @@ SYM_PUBLIC int PLUGIN_Run(int argument)
 
     void *p = my_malloc(argument);
 
-    my_printf("[P][A] malloc(): %p\n", p);
+    my_printf("[P][A] malloc(): %s\n", p ? "Ok" : "Failed!");
 
     my_free(p);
 

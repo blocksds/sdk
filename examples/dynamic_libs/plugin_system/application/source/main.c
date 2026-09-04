@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2025
+// SPDX-FileContributor: Antonio Niño Díaz, 2025-2026
 
 #include <dirent.h>
 #include <dlfcn.h>
@@ -52,7 +52,7 @@ void load_plugin(int index, const char *path)
 
     {
         PLUGIN_SetInterfacePrintf *setifprintf = dlsym(h, "PLUGIN_SetInterfacePrintf");
-        printf("PLUGIN_SetInterfacePrintf: %p\n", setifprintf);
+        printf("PLUGIN_SetInterfacePrintf: %s\n", setifprintf ? "Yes" : "No");
         if (setifprintf != NULL)
         {
             setifprintf(printf);
@@ -61,7 +61,7 @@ void load_plugin(int index, const char *path)
 
     {
         PLUGIN_SetInterfaceMalloc *setifmalloc = dlsym(h, "PLUGIN_SetInterfaceMalloc");
-        printf("PLUGIN_SetInterfaceMalloc: %p\n", setifmalloc);
+        printf("PLUGIN_SetInterfaceMalloc: %s\n", setifmalloc ? "Yes" : "No");
         if (setifmalloc != NULL)
         {
             setifmalloc(malloc, free);
@@ -70,7 +70,7 @@ void load_plugin(int index, const char *path)
 
     {
         PLUGIN_SetInterfaceTime *setiftime = dlsym(h, "PLUGIN_SetInterfaceTime");
-        printf("PLUGIN_SetInterfaceTime: %p\n", setiftime);
+        printf("PLUGIN_SetInterfaceTime: %s\n", setiftime ? "Yes" : "No");
         if (setiftime != NULL)
         {
             setiftime(time);
@@ -81,7 +81,7 @@ void load_plugin(int index, const char *path)
 
     {
         plugin_run[index] = dlsym(h, "PLUGIN_Run");
-        printf("PLUGIN_Run: %p\n", plugin_run[index]);
+        printf("PLUGIN_Run: %s\n", plugin_run[index] ? "Yes" : "No");
         err = dlerror();
         if (err != NULL)
         {
@@ -91,10 +91,15 @@ void load_plugin(int index, const char *path)
     }
 
     plugin_handles[index] = h;
+
+    printf("\n");
 }
 
 void load_all_plugins(const char *folder)
 {
+    printf("Searching folder: %s\n", folder);
+    printf("\n");
+
     if (chdir(folder) != 0)
     {
         perror("chdir()");
@@ -152,6 +157,20 @@ void free_all_plugins(void)
 
 // -----------------------------------------------
 
+void synchronize_seconds(void)
+{
+    time_t reference = time(NULL);
+
+    while (1)
+    {
+        time_t now = time(NULL);
+        if (reference != now)
+            break;
+
+        swiWaitForVBlank();
+    }
+}
+
 int main(int argc, char **argv)
 {
     defaultExceptionHandler();
@@ -177,10 +196,19 @@ int main(int argc, char **argv)
         wait_forever();
     }
 
+    printf("nitroFSInit() ok!\n");
+    printf("\n");
+
+    // This example checks the RTC. Automated tests require consistency in all
+    // runs of the test, so we wait here until the second changes. This isn't
+    // required in normal applications, so feel free to remove it.
+    synchronize_seconds();
+
     // Load all plugins from the "/dsl" folder in the SD card
     load_all_plugins("dsl");
 
-    printf("Press START to exit to loader\n");
+    printf("A:     Run all plugins\n");
+    printf("START: Exit to loader\n");
 
     consoleSelect(&bottomScreen);
 
@@ -192,15 +220,20 @@ int main(int argc, char **argv)
 
         scanKeys();
 
-        if (keysHeld() & KEY_START)
+        u16 keys_held = keysHeld();
+
+        if (keys_held & KEY_START)
             break;
 
-        printf("Iteration: %d\n", iteration);
+        if (keys_held & KEY_A)
+        {
+            printf("Iteration: %d\n", iteration);
 
-        for (int i = 0; i < number_of_plugins; i++)
-            plugin_run[i](iteration);
+            for (int i = 0; i < number_of_plugins; i++)
+                plugin_run[i](iteration);
 
-        iteration++;
+            iteration++;
+        }
     }
 
     free_all_plugins();
