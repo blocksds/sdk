@@ -53,7 +53,7 @@ for dir in $dirs; do
         make clean > /dev/null
         make -j`nproc` 1>test-build.log 2>&1
     elif [ -f "build.sh" ]; then
-        mkdir build
+        mkdir -p build
         bash clean.sh 1>test-build.log 2>&1
         bash build.sh 1>test-build.log 2>&1
     else
