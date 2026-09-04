@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 bash clean.sh
 
 pushd plugin_allocator
@@ -18,3 +20,5 @@ cp plugin_time/time.dsl application/nitrofs/dsl
 pushd application
 python3 build.py
 popd
+
+cp application/*.nds .
