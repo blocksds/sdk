@@ -10,9 +10,13 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
+    keysSetRepeat(7, 5); // After 10 frames, repeat every 5 frames
+
     while (1)
     {
-        swiWaitForVBlank();
+        // Slow things down so that we can see things on the screen
+        for (int i = 0; i < 10; i++)
+            swiWaitForVBlank();
 
         scanKeys();
 
