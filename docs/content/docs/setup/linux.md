@@ -55,8 +55,8 @@ You can install both toolchains by running this:
 wf-pacman -S toolchain-llvm-teak-llvm toolchain-gcc-xtensa-elf
 ```
 
-When they are present, the build system of BlocksDS will build additional
-libraries and examples.
+When they are present, you will be able to build additional libraries and
+examples.
 
 
 ### Install third-party libraries (Optional)

@@ -11,7 +11,8 @@ you want to always use the cutting edge version of BlocksDS.
 ### Install host tools
 
 You need to install a cross compiler to build applications for NDS. You also
-need to build a few host tools, including a C/C++ compiler.
+need to install a few host tools, including a C/C++ compiler to compile tools
+like graphics converters.
 
 If you're on Ubuntu run the following command:
 
