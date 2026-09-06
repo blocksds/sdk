@@ -109,10 +109,10 @@ int main(int argc, char **argv)
         printf("Current TLF: %s\n", tlf_name);
         printf("\n");
         printf("\n");
+        printf("A:      Increase counter\n");
         printf("L:      Load TLF1\n");
         printf("R:      Load TLF2\n");
         printf("PAD:    Change values\n");
-        printf("\n");
         printf("\n");
         printf("START:  Exit to loader\n");
         printf("\n");
@@ -156,7 +156,10 @@ int main(int argc, char **argv)
 
         printf("CMD: %u %d %d\n", cmd0, cmd1, cmd2);
 
-        cmd0++; // Heartbeat
+        if (keys & KEY_A)
+        {
+            cmd0++; // Heartbeat
+        }
 
         if (dspSendDataReady(0))
             dspSendData(0, cmd0);

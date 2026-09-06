@@ -48,7 +48,10 @@ int main(int argc, char **argv)
 
         consoleClear();
 
-        cmd0 = count++;
+        if (keys & KEY_A)
+        {
+            cmd0 = count++;
+        }
 
         if (keys & KEY_TOUCH)
         {
@@ -59,9 +62,8 @@ int main(int argc, char **argv)
             cmd2 = touch.py;
         }
 
-        printf("Press the touch screen to\n"
-               "change the values sent to\n"
-               "the DSP.\n\n\n");
+        printf("A:     Increase counter\n");
+        printf("Touch: Change values\n\n\n");
 
         printf("CMD: %u %u %u\n\n\n", cmd0, cmd1, cmd2);
 

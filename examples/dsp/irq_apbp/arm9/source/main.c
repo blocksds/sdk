@@ -48,10 +48,16 @@ int main(int argc, char **argv)
 
         // Heartbeat counter
 
-        cmd0 = count++;
+        if (keys & KEY_A)
+        {
+            cmd0 = count++;
+        }
 
-        printf("A: Send message to channel 1\n");
-        printf("B: Send message to channel 2\n");
+        printf("A: Increase counter\n");
+        printf("X: Send message to channel 1\n");
+        printf("Y: Send message to channel 2\n");
+        printf("\n");
+        printf("START: Exit to loader\n");
         printf("\n");
 
         printf("CMD: %u\n\n", cmd0);
@@ -59,13 +65,13 @@ int main(int argc, char **argv)
         if (dspSendDataReady(0))
             dspSendData(0, cmd0);
 
-        if (keys & KEY_A)
+        if (keys & KEY_X)
         {
             if (dspSendDataReady(1))
                 dspSendData(1, 0);
         }
 
-        if (keys & KEY_B)
+        if (keys & KEY_Y)
         {
             if (dspSendDataReady(2))
                 dspSendData(2, 0);
@@ -82,8 +88,6 @@ int main(int argc, char **argv)
             rep2 = dspReceiveData(2);
 
         printf("REP: %u 0x%04X 0x%04X\n\n", rep0, rep1, rep2);
-
-        printf("Press START to exit");
     }
 
     return 0;
