@@ -9,10 +9,11 @@ from PIL import Image, ImageChops
 
 from libretro import Session, TempDirPathDriver
 from libretro.drivers import (ArrayAudioDriver, ArrayVideoDriver,
-                              DictOptionDriver, IterableInputDriver,
-                              StandardContentDriver)
+                              DictOptionDriver, GeneratorMicrophoneDriver,
+                              IterableInputDriver, StandardContentDriver)
 
-def session_start(game, input_gen=None, log_driver=None, user_options=None):
+def session_start(game, input_gen=None, log_driver=None, user_options=None, *,
+                  microphone_gen=None):
     blobs_path = os.environ['BLOCKSDS_TESTING_BLOBS']
 
     assert os.path.isabs(blobs_path)
@@ -61,6 +62,10 @@ def session_start(game, input_gen=None, log_driver=None, user_options=None):
         os.symlink(os.path.join(blobs_path, 'bios7.bin'), os.path.join(system_dir, b'bios7.bin'))
         os.symlink(os.path.join(blobs_path, 'bios9.bin'), os.path.join(system_dir, b'bios9.bin'))
 
+    mic = None
+    if microphone_gen is not None:
+        mic = GeneratorMicrophoneDriver(microphone_gen)
+
     return Session(
         core=core_path,
         game=game,
@@ -68,6 +73,7 @@ def session_start(game, input_gen=None, log_driver=None, user_options=None):
         audio=ArrayAudioDriver(),
         input=IterableInputDriver(input_gen),
         video=ArrayVideoDriver(),
+        mic=mic,
         options=DictOptionDriver(variables=options),
         path=path_driver,
         log=log_driver,
