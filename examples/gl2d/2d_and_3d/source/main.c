@@ -80,8 +80,8 @@ int main(int argc, char **argv)
     // Initialize OpenGL to some sensible defaults
     glScreen2D();
 
-    int angle_x = 0;
-    int angle_z = 0;
+    int angle_x = 135;
+    int angle_z = 225;
 
     while (1)
     {
@@ -94,7 +94,8 @@ int main(int argc, char **argv)
         consoleClear();
 
         // Print some controls
-        printf("START:   Exit to loader\n");
+        printf("A:     Rotate cube\n");
+        printf("START: Exit to loader\n");
         printf("\n");
 
         // Handle user input
@@ -103,8 +104,15 @@ int main(int argc, char **argv)
         scanKeys();
 
         uint16_t keys = keysHeld();
+
         if (keys & KEY_START)
             break;
+
+        if (keys & KEY_A)
+        {
+            angle_x++;
+            angle_z++;
+        }
 
         // Render 3D scene
         // ---------------
@@ -119,11 +127,9 @@ int main(int argc, char **argv)
                   0.0, 0.0, 0.0,  // Look at
                   0.0, 1.0, 0.0); // Up
 
+        glRotateZ(-45);
         glRotateY(angle_z);
         glRotateX(angle_x);
-
-        angle_x ++;
-        angle_z ++;
 
         glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE | POLY_ID(0));
 
