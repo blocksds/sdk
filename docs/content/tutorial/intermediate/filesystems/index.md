@@ -138,6 +138,12 @@ if you want to enable write access to it (if not, `fatInitDefault()` is enough).
 To disable read-only mode, call `nandInit(false)`. You should check for errors
 the same way as with `fatInitDefault()` and `nitroFSInit()`.
 
+{{< callout type="warning" >}}
+You can write to NAND, but nobody likes an application that writes to NAND for
+no reason. Please, only write to NAND if you have a very good reason to do it.
+Use the SD card for everything if possible.
+{{< /callout >}}
+
 ## 4. Accessing the filesystems
 
 When you initialize multiple filesystems it's important to know what's the
