@@ -13,7 +13,7 @@ from libretro.drivers import (ArrayAudioDriver, ArrayVideoDriver,
                               IterableInputDriver, StandardContentDriver)
 
 def session_start(game, input_gen=None, log_driver=None, user_options=None, *,
-                  microphone_gen=None):
+                  microphone_gen=None, sensor=None):
     blobs_path = os.environ['BLOCKSDS_TESTING_BLOBS']
 
     assert os.path.isabs(blobs_path)
@@ -74,6 +74,7 @@ def session_start(game, input_gen=None, log_driver=None, user_options=None, *,
         input=IterableInputDriver(input_gen),
         video=ArrayVideoDriver(),
         mic=mic,
+        sensor=sensor,
         options=DictOptionDriver(variables=options),
         path=path_driver,
         log=log_driver,
