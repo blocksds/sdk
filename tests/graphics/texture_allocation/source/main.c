@@ -615,29 +615,29 @@ void do_allocation_stress_test_internal(bool gl_compressed_allowed)
 
         if (action == 0) // Allocate all textures
         {
-            printf("#");
+            //printf("#");
             for (int i = 0; i < NUM_TEXTURES; i++)
                 allocate_random_texture(gl_compressed_allowed);
         }
         else if (action == 1) // Free all textures
         {
-            printf("_");
+            //printf("_");
             for (int i = 0; i < NUM_TEXTURES; i++)
                 free_random_texture();
         }
         else if (action & 1)
         {
-            printf("+");
+            //printf("+");
             allocate_random_texture(gl_compressed_allowed);
         }
         else
         {
-            printf("-");
+            //printf("-");
             free_random_texture();
         }
     }
 
-    printf("\n");
+    //printf("\n");
 }
 
 void do_allocation_stress_test(void)
