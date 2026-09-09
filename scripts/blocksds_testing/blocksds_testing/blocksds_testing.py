@@ -13,7 +13,8 @@ from libretro.drivers import (ArrayAudioDriver, ArrayVideoDriver,
                               IterableInputDriver, StandardContentDriver)
 
 def session_start(game, input_gen=None, log_driver=None, user_options=None, *,
-                  microphone_gen=None, sensor=None):
+                  microphone_gen=None, sensor=None, user_dldi_root=None,
+                  user_dsi_sd_image=None):
     blobs_path = os.environ['BLOCKSDS_TESTING_BLOBS']
 
     assert os.path.isabs(blobs_path)
@@ -30,8 +31,10 @@ def session_start(game, input_gen=None, log_driver=None, user_options=None, *,
     core_system_dir = os.path.join(system_dir, 'melonDS DS')
     core_save_dir = os.path.join(save_dir, 'melonDS DS')
     wfcsettings_path = os.path.join(core_system_dir, 'wfcsettings.bin')
-    dldi_sd_card_path = os.path.join(core_save_dir, 'dldi_sd_card.bin')
+
+    dldi_sd_card_path = os.path.join(core_save_dir, 'dldi_sd_card.bin') # Unused
     dldi_sd_card_sync_path = os.path.join(core_save_dir, 'dldi_sd_card')
+    dsi_sd_card_path = os.path.join(core_save_dir, 'dsi_sd_card.bin')
 
     print('[*] Test dir:', testdir)
 
@@ -46,6 +49,13 @@ def session_start(game, input_gen=None, log_driver=None, user_options=None, *,
         'melonds_dsi_nand_path' : 'nand.bin',
         'melonds_firmware_dsi_path' : 'dsfirmware.bin',
         'melonds_show_cursor': 'disabled',
+
+        #"melonds_dsi_sdcard_readonly": "disabled",
+        "melonds_dsi_sdcard": "enabled",
+        "melonds_dsi_sdcard_sync_sdcard_to_host": "enabled",
+
+        "melonds_homebrew_sdcard": "enabled",
+        "melonds_homebrew_sync_sdcard_to_host": "enabled",
     }
 
     if user_options is not None:
@@ -61,6 +71,12 @@ def session_start(game, input_gen=None, log_driver=None, user_options=None, *,
         os.symlink(os.path.join(blobs_path, 'bios9i.bin'), os.path.join(system_dir, 'dsi_bios9.bin'))
         os.symlink(os.path.join(blobs_path, 'bios7.bin'), os.path.join(system_dir, 'bios7.bin'))
         os.symlink(os.path.join(blobs_path, 'bios9.bin'), os.path.join(system_dir, 'bios9.bin'))
+
+    if user_dldi_root is not None:
+        shutil.copytree(user_dldi_root, dldi_sd_card_sync_path, dirs_exist_ok=True)
+
+    if user_dsi_sd_image is not None:
+        shutil.copyfile(user_dsi_sd_image, dsi_sd_card_path)
 
     mic = None
     if microphone_gen is not None:
