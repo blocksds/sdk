@@ -53,6 +53,12 @@ int main(int argc, char **argv)
     printf("DLDI name: %s\n", io_dldi_data->friendlyName);
     printf("DSi mode: %d\n", isDSiMode());
 
+    if (argc < 1)
+    {
+        printf("ERROR: argv[0] not available");
+        wait_forever();
+    }
+
     bool init_ok = fatInitDefault();
     if (!init_ok)
     {
