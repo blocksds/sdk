@@ -277,8 +277,11 @@ int main(int argc, char *argv[])
         if (keys & KEY_START)
             break;
 
-        rx += 1;
-        ry += 1;
+        if ((keys & KEY_X) == 0)
+        {
+            rx += 1;
+            ry += 1;
+        }
 
         if (frame & 1)
         {

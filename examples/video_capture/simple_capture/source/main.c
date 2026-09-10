@@ -170,9 +170,13 @@ int main(int argc, char *argv[])
 
         scanKeys();
         u16 keys = keysDown();
+        u16 keys_held = keysHeld();
 
-        rotateX += 3;
-        rotateY += 1;
+        if ((keys_held & KEY_SELECT) == 0)
+        {
+            rotateX += 3;
+            rotateY += 1;
+        }
 
         if (keys & KEY_START)
             break;

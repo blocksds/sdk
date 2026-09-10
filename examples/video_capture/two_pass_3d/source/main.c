@@ -404,11 +404,14 @@ int main(int argc, char *argv[])
 
         if (frame == 1)
         {
-            rx += 2;
-            ry += 2;
+            if ((keys & KEY_B) == 0)
+            {
+                rx += 2;
+                ry += 2;
 
-            rotateX += 2;
-            rotateY -= 2;
+                rotateX += 2;
+                rotateY -= 2;
+            }
         }
 
         frame ^= 1;

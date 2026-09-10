@@ -270,11 +270,14 @@ int main(int argc, char *argv[])
             }
         }
 
-        rx += 1;
-        ry += 1;
+        if ((keys & KEY_B) == 0)
+        {
+            rx += 1;
+            ry += 1;
 
-        rotateX += 1;
-        rotateY -= 1;
+            rotateX += 1;
+            rotateY -= 1;
+        }
 
         if (frame & 1)
         {

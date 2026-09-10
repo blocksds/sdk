@@ -286,6 +286,7 @@ int main(int argc, char *argv[])
 
         scanKeys();
         u16 keys = keysDown();
+        u16 keys_held = keysHeld();
 
         if (keys & KEY_START)
             break;
@@ -300,11 +301,14 @@ int main(int argc, char *argv[])
         if ((keys & KEY_RIGHT) && (evb < 16))
             evb++;
 
-        rx += 1;
-        ry += 1;
+        if ((keys_held & KEY_B) == 0)
+        {
+            rx += 1;
+            ry += 1;
 
-        rotateX += 1;
-        rotateY -= 1;
+            rotateX += 1;
+            rotateY -= 1;
+        }
 
         // Print controls
 
