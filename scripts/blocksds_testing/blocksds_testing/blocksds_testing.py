@@ -111,8 +111,10 @@ def assert_no_errors_in_logs(log_driver):
 def string_is_in_logs(log_driver, string):
     logs = [r.message for r in log_driver.records]
 
-    assert logs is not None
-    assert any(string in log for log in logs)
+    if logs is None:
+        return False
+
+    return any(string in log for log in logs)
 
 def find_rom(dir_path=None):
     if dir_path is None:
