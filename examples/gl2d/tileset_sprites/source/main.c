@@ -61,6 +61,7 @@ int main(int argc, char **argv)
         printf("Failed to load texture: %d\n", character_texture_id);
 
     // Print some controls
+    printf("A:      Animate\n");
     printf("START:  Exit to loader\n");
     printf("\n");
 
@@ -80,6 +81,20 @@ int main(int argc, char **argv)
         uint16_t keys = keysHeld();
         if (keys & KEY_START)
             break;
+
+        if (keys & KEY_A)
+        {
+            // Animate (change animation frame every 10 frames)
+            delay++;
+            if (delay == 10)
+            {
+                delay = 0;
+
+                frame++;
+                if (frame == 6)
+                    frame = 0;
+            }
+        }
 
         // Render 3D scene
         // ---------------
@@ -108,17 +123,6 @@ int main(int argc, char **argv)
 
             // Draw animated sprite
             glSprite(200, 0, GL_FLIP_NONE, &character[frame]);
-
-            // Animate (change animation frame every 10 frames)
-            delay++;
-            if (delay == 10)
-            {
-                delay = 0;
-
-                frame++;
-                if (frame == 6)
-                    frame = 0;
-            }
 
             // Draw a rotated and scaled sprite
             glSpriteRotateScaleXY(40, 150, // Position
