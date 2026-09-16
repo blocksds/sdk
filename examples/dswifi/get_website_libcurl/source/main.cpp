@@ -83,6 +83,9 @@ int main(int argc, char *argv[])
 
     defaultExceptionHandler();
 
+    // Redirect stderr to the no$gba debug console
+    consoleDebugInit(DebugDevice_NOCASH);
+
     videoSetMode(MODE_0_2D);
     videoSetModeSub(MODE_0_2D);
 
@@ -122,6 +125,17 @@ int main(int argc, char *argv[])
     Wifi_DisableWifi();
 
     printf("\nPress START to exit!\n");
+
+    // This code is used to test the example automatically.
+    {
+        // This prints the fetched data to the debug console so that the example
+        // can be tested automatically. However, the WiFi hardware also prints
+        // debug logs, so we need to wait for a few frames for the WiFi to be
+        // turned off.
+        cothread_yield_irq(IRQ_VBLANK);
+        cothread_yield_irq(IRQ_VBLANK);
+        fprintf(stderr, "%s", buffer.c_str());
+    }
 
     while (1)
     {
