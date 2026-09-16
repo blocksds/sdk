@@ -1,6 +1,6 @@
 ---
 title: 'Migrating from devkitARM'
-weight: 11
+weight: 12
 ---
 
 ### 1. Introduction

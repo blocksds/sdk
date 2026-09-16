@@ -1,6 +1,6 @@
 ---
 title: 'Usage notes'
-weight: 5
+weight: 3
 ---
 
 ### 1. Introduction

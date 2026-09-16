@@ -1,6 +1,6 @@
 ---
 title: 'Updating guide'
-weight: 8
+weight: 9
 ---
 
 Newer BlocksDS versions occasionally introduce breaking changes which require
