@@ -266,6 +266,9 @@ static void getWebsiteSSL(const char *certs, const char *host, const char *path)
         printf("%s", (char *) buf);
         consoleSelect(&topScreen);
 
+        // Send the result to the automated test script
+        fprintf(stderr, "%s", buf);
+
         cothread_yield();
     }
 
@@ -283,6 +286,7 @@ exit:
         char error_buf[100];
         mbedtls_strerror(ret, error_buf, 100);
         printf("\n%s\n", error_buf);
+        fprintf(stderr, "%s\n", error_buf);
     }
 
     mbedtls_net_free(&server_fd);
@@ -296,6 +300,9 @@ exit:
 int main(int argc, char *argv[])
 {
     defaultExceptionHandler();
+
+    // Redirect stderr to the no$gba debug console
+    consoleDebugInit(DebugDevice_NOCASH);
 
     videoSetMode(MODE_0_2D);
     videoSetModeSub(MODE_0_2D);
@@ -334,6 +341,9 @@ int main(int argc, char *argv[])
     printf("B: akkit.org (incorrect certs)\n");
     printf("Y: wikipedia.org\n");
     printf("X: example.com\n");
+
+    // Tell the automated test to continue
+    fprintf(stderr, "[TEST] Select option\n");
 
     while (1)
     {

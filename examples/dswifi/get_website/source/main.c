@@ -269,6 +269,9 @@ void getHttp(const char *url, const char *path, int family)
         printf("%s\n", response_buffer);
     printf("---------- (%d bytes)\n", response_buffer_ptr);
 
+    // Send result to the automated test script
+    fprintf(stderr, "%s", response_buffer);
+
     printf("Website: %s%s", url, path);
 }
 
@@ -458,6 +461,9 @@ void on_key_pressed(int key)
 
 int main(int argc, char *argv[])
 {
+    // Redirect stderr to the no$gba debug console
+    consoleDebugInit(DebugDevice_NOCASH);
+
     videoSetMode(MODE_0_2D);
     videoSetModeSub(MODE_0_2D);
 
@@ -646,6 +652,9 @@ connect:
         printf("  X: Using IPv6\n");
         printf("  Y: Using IPv4 or IPv6\n");
         printf("\n");
+
+        // Tell the automated test to continue
+        fprintf(stderr, "[TEST] Select IP type\n");
 
         int family;
 

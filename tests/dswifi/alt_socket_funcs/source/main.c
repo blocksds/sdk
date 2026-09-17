@@ -191,6 +191,9 @@ void getHttp(const char *url, const char *path)
         printf("%s\n", response_buffer);
     printf("---------- (%d bytes)\n", response_buffer_ptr);
 
+    // Send result to the automated test script
+    fprintf(stderr, "%s", response_buffer);
+
     printf("Website: %s%s", url, path);
 }
 
@@ -338,6 +341,9 @@ int main(int argc, char *argv[])
 {
     PrintConsole topScreen;
     PrintConsole bottomScreen;
+
+    // Redirect stderr to the no$gba debug console
+    consoleDebugInit(DebugDevice_NOCASH);
 
     videoSetMode(MODE_0_2D);
     videoSetModeSub(MODE_0_2D);
@@ -497,6 +503,9 @@ connect:
 
         printf("\n");
         printf("Press A to fetch a website\n");
+
+        // Tell the automated test to continue
+        fprintf(stderr, "[TEST] Select option\n");
 
         while (1)
         {

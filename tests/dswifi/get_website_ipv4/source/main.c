@@ -188,15 +188,21 @@ void getHttp(const char *url, const char *path)
         printf("%s\n", response_buffer);
     printf("---------- (%d bytes)\n", response_buffer_ptr);
 
+    // Send result to the automated test script
+    fprintf(stderr, "%s", response_buffer);
+
     printf("Website: %s%s", url, path);
 }
 
 int main(int argc, char *argv[])
 {
-    defaultExceptionHandler();
-
     PrintConsole topScreen;
     PrintConsole bottomScreen;
+
+    defaultExceptionHandler();
+
+    // Redirect stderr to the no$gba debug console
+    consoleDebugInit(DebugDevice_NOCASH);
 
     videoSetMode(MODE_0_2D);
     videoSetModeSub(MODE_0_2D);
