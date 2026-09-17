@@ -71,13 +71,14 @@ int main(int argc, char **argv)
         printf("\n");
 
         // Print general information
-        printf("A: Set time+date\n");
-        printf("B: Set time\n");
-        printf("Pad: Adjust time\n");
+        printf("A:      Set time+date\n");
+        printf("B:      Set time\n");
+        printf("PAD:    Adjust time\n");
+        printf("SELECT: Set predefined time\n");
         printf("\n");
         printf("Last write ok = %lu\n", ok);
         printf("\n");
-        printf("Press START to exit");
+        printf("START: Exit to loader");
 
         scanKeys();
 
@@ -98,6 +99,16 @@ int main(int argc, char **argv)
             };
 
             fifoSendDatamsg(FIFO_USER_02, sizeof(rtc_time), (void *)&rtc_time);
+        }
+
+        if (keys & KEY_SELECT)
+        {
+            rtc_time_and_date.year = 2023 - 2000;
+            rtc_time_and_date.month = 3;
+            rtc_time_and_date.day = 14;
+            rtc_time_and_date.hours = 0;
+            rtc_time_and_date.minutes = 13;
+            rtc_time_and_date.seconds = 23;
         }
 
         if (keys & KEY_LEFT)
