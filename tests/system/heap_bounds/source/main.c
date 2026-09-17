@@ -16,6 +16,9 @@ int main(int argc, char **argv)
     PrintConsole topScreen;
     PrintConsole bottomScreen;
 
+    // Redirect stderr to the no$gba debug console
+    consoleDebugInit(DebugDevice_NOCASH);
+
     videoSetMode(MODE_0_2D);
     videoSetModeSub(MODE_0_2D);
 
@@ -57,8 +60,16 @@ int main(int argc, char **argv)
 
     // This should succeed because we're allocating less space than available.
     p = malloc(heap_grow_size - (128 * 1024));
+    {
         printf("malloc(max - 128 KB): %p\n", p);
         printf("Heap end: %p\n", getHeapEnd());
+
+        if (p == NULL)
+        {
+            printf("Failed to allocate\n");
+            goto end;
+        }
+    }
     free(p);
 
     printf("\n");
@@ -66,18 +77,34 @@ int main(int argc, char **argv)
     // Reserve some space. This should work because nothing is currently
     // allocated in the last 512 KB of RAM: sbrk() should have reduced the size
     // of the heap after the last free().
-    printf("Heap end: %p\n", getHeapEnd());
-    ret = reduceHeapSize(512 * 1024);
-    printf("reduceHeapSize(512 KB): %d\n", ret);
-    printf("Heap limit: %p\n", getHeapLimit());
+    {
+        printf("Heap end: %p\n", getHeapEnd());
+        ret = reduceHeapSize(512 * 1024);
+        printf("reduceHeapSize(512 KB): %d\n", ret);
+        printf("Heap limit: %p\n", getHeapLimit());
+
+        if (ret != 0)
+        {
+            printf("Failed to grow stack\n");
+            goto end;
+        }
+    }
 
     printf("\n");
 
     // This is the same malloc as before, but now it should fail because of the
     // reserved space. If this works, reduceHeapSize() didn't do its job.
     p = malloc(heap_grow_size - (128 * 1024));
+    {
         printf("malloc(max - 128 KB): %p\n", p);
         printf("Heap end: %p\n", getHeapEnd());
+
+        if (p != NULL)
+        {
+            printf("malloc should have failed!\n");
+            goto end;
+        }
+    }
     free(p);
 
     printf("\n");
@@ -86,23 +113,50 @@ int main(int argc, char **argv)
     // while that space is in use. The allocation should fail, but the reduction
     // shouldn't.
     p = malloc(heap_grow_size - (1 * 1024 * 1024));
+    {
         printf("malloc(max - 1 MB): %p\n", p);
         printf("Heap end: %p\n", getHeapEnd());
+
+        if (p == NULL)
+        {
+            printf("malloc failed!\n");
+            goto end;
+        }
+
         ret = reduceHeapSize(2 * 1024 * 1024);
         printf("reduceHeapSize(2 MB): %d\n", ret);
         printf("Heap limit: %p\n", getHeapLimit());
+
+        if (ret == 0)
+        {
+            printf("Stack shouldn't have grown!\n");
+            goto end;
+        }
+    }
     free(p);
     printf("free()\n");
 
     printf("\n");
 
     // After the free, the reduction should succeed.
-    printf("Heap end: %p\n", getHeapEnd());
-    ret = reduceHeapSize(2 * 1024 * 1024);
-    printf("reduceHeapSize(2 MB): %d\n", ret);
-    printf("Heap limit: %p\n", getHeapLimit());
+    {
+        printf("Heap end: %p\n", getHeapEnd());
+        ret = reduceHeapSize(2 * 1024 * 1024);
+        printf("reduceHeapSize(2 MB): %d\n", ret);
+        printf("Heap limit: %p\n", getHeapLimit());
+
+        if (ret != 0)
+        {
+            printf("Failed to grow stack\n");
+            goto end;
+        }
+    }
 
     // End of tests
+
+    fprintf(stderr, "[TEST] Success\n");
+
+end:
 
     consoleSelect(&topScreen);
 
