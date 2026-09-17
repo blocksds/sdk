@@ -511,6 +511,12 @@ static void print_scene(int index)
         printf("256-color palette (foreground):\n");
         printf("\n");
 
+        // Use dim colors, otherwise colors 0 to 7 are rendered as their bright
+        // color version, which matches colors 8 to 15 (which is the correct
+        // behaviour). With dim colors all 16 colors are displayed differently,
+        // which is the desired behavior for this example.
+        printf("\x1b[22m");
+
         for (int i = 0; i < 256; i++)
             printf("\x1b[38;5;%dm%02X", i, i);
     }
