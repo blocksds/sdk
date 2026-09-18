@@ -47,6 +47,9 @@ popd
 # Build the melonds-ds core
 pushd ../melonds-ds
 
+    # This is the commit that the tests currently use
+    git checkout 86c37f3ea4d00d8887016bb0aa9e722bb9edba9b
+
     cmake -B build
     cmake --build build # Get dependencies and build
 
