@@ -69,9 +69,12 @@ void printGestures()
     // Draw a square on the bottom screen to highlight the stroke.
     glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE | POLY_ID(0));
 
-    for (u16 i = 0; i < SCREEN_HEIGHT; ++i) {
-        for (u16 j = 0; j < SCREEN_WIDTH; ++j) {
-            if (screen[i][j]) {
+    for (int j = 0; j < SCREEN_HEIGHT; ++j)
+    {
+        for (int i = 0; i < SCREEN_WIDTH; ++i)
+        {
+            if (screen[j][i])
+            {
                 glBoxFilled(
                     i - TOUCH_BOX_RADIUS,
                     j - TOUCH_BOX_RADIUS,
@@ -87,9 +90,11 @@ void printGestures()
 
 void clearGestures()
 {
-    for (u16 i = 0; i < SCREEN_HEIGHT; ++i) {
-        for (u16 j = 0; j < SCREEN_WIDTH; ++j) {
-            screen[i][j] = 0;
+    for (int j = 0; j < SCREEN_HEIGHT; ++j)
+    {
+        for (int i = 0; i < SCREEN_WIDTH; ++i)
+        {
+            screen[j][i] = 0;
         }
     }
 }
@@ -153,14 +158,14 @@ int main(int argc, char **argv)
         uint16_t keys_down = keysDown();
 
         // Handle key presses.
-        if (keys_down & KEY_START) {
+        if (keys_down & KEY_START)
             break;
-        }
 
         // If pen down, update touch input.
         if (keys_held & KEY_TOUCH)
         {
-            if (clear) {
+            if (clear)
+            {
                 clearGestures();
                 clear = 0;
             }
@@ -170,9 +175,12 @@ int main(int argc, char **argv)
             stroke[strokeLength].y = (double) touch_pos.py;
             strokeLength++;
 
-            screen[touch_pos.px][touch_pos.py] = 1;
-        } else {
-            if (strokeLength > 0) {
+            screen[touch_pos.py][touch_pos.px] = 1;
+        }
+        else
+        {
+            if (strokeLength > 0)
+            {
                 addGesture(ndrec, stroke, strokeLength);
                 strokeLength = 0;
             }
@@ -202,7 +210,8 @@ int main(int argc, char **argv)
             scrollBackground(x, 0);
         }
 
-        if (keys_down & KEY_A) {
+        if (keys_down & KEY_A)
+        {
             Result res = recognize(ndrec);
             printf("Result: %s (score: %.2f)\n", res.name, res.score);
             flushGestures(ndrec);

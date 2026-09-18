@@ -76,13 +76,13 @@ std::vector<Multistroke> multistrokesLUT = {
     Multistroke(
         "N",
         {{ Point{177, 92}, Point{177, 2}},
-		 { Point{182, 1}, Point{246, 95}},
-		 { Point{247, 87}, Point{247, 1}}}
+         { Point{182, 1}, Point{246, 95}},
+         { Point{247, 87}, Point{247, 1}}}
     ),
     Multistroke(
         "D",
         {{ Point{345,9}, Point{345,87}},
-		 { Point{351,8}, Point{363,8}, Point{372,9}, Point{380,11}, Point{386,14}, Point{391,17}, Point{394,22}, Point{397,28}, Point{399,34}, Point{400,42}, Point{400,50}, Point{400,56}, Point{399,61}, Point{397,66}, Point{394,70}, Point{391,74}, Point{386,78}, Point{382,81}, Point{377,83}, Point{372,85}, Point{367,87}, Point{360,87}, Point{355,88}, Point{349,87}}}
+         { Point{351,8}, Point{363,8}, Point{372,9}, Point{380,11}, Point{386,14}, Point{391,17}, Point{394,22}, Point{397,28}, Point{399,34}, Point{400,42}, Point{400,50}, Point{400,56}, Point{399,61}, Point{397,66}, Point{394,70}, Point{391,74}, Point{386,78}, Point{382,81}, Point{377,83}, Point{372,85}, Point{367,87}, Point{360,87}, Point{355,88}, Point{349,87}}}
     ),
     Multistroke(
         "P",
@@ -103,13 +103,13 @@ std::vector<Multistroke> multistrokesLUT = {
     Multistroke(
         "I",
         {{ Point{371,149}, Point{371,221}},
-		 { Point{341,149}, Point{401,149}},
-		 { Point{341,221}, Point{401,221}}}
+         { Point{341,149}, Point{401,149}},
+         { Point{341,221}, Point{401,221}}}
     ),
     Multistroke(
         "exclamation",
         {{ Point{526,142}, Point{526,204}},
-		 { Point{526,221}}}
+         { Point{526,221}}}
     ),
     Multistroke(
         "line",
@@ -132,18 +132,18 @@ std::vector<Multistroke> multistrokesLUT = {
     Multistroke(
         "pitchfork",
         {{ Point{38,470}, Point{36,476}, Point{36,482}, Point{37,489}, Point{39,496}, Point{42,500}, Point{46,503}, Point{50,507}, Point{56,509}, Point{63,509}, Point{70,508}, Point{75,506}, Point{79,503}, Point{82,499}, Point{85,493}, Point{87,487}, Point{88,480}, Point{88,474}, Point{87,468}},
-		 { Point{62,464}, Point{62,571}}}
+         { Point{62,464}, Point{62,571}}}
     ),
     Multistroke(
         "asterisk",
         {{ Point{325,499}, Point{417,557}},
-		 { Point{417,499}, Point{325,557}},
+         { Point{417,499}, Point{325,557}},
          { Point{371,486}, Point{371,571}}}
     ),
     Multistroke(
         "half-note",
         {{ Point{546,465}, Point{546,531}},
-		 { Point{540,530}, Point{536,529}, Point{533,528}, Point{529,529}, Point{524,530}, Point{520,532}, Point{515,535}, Point{511,539}, Point{508,545}, Point{506,548}, Point{506,554}, Point{509,558}, Point{512,561}, Point{517,564}, Point{521,564}, Point{527,563}, Point{531,560}, Point{535,557}, Point{538,553}, Point{542,548}, Point{544,544}, Point{546,540}, Point{546,536}}}
+         { Point{540,530}, Point{536,529}, Point{533,528}, Point{529,529}, Point{524,530}, Point{520,532}, Point{515,535}, Point{511,539}, Point{508,545}, Point{506,548}, Point{506,554}, Point{509,558}, Point{512,561}, Point{517,564}, Point{521,564}, Point{527,563}, Point{531,560}, Point{535,557}, Point{538,553}, Point{542,548}, Point{544,544}, Point{546,540}, Point{546,536}}}
     ),
 };
 
