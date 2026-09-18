@@ -27,6 +27,39 @@ version number for the release at this point.
 You should be doing this regularly, anyway, but it's always a good idea to build
 and run a few tests to make sure that things aren't broken in an obvious way.
 
+To run the automated tests, you need to setup your environment if you haven't
+done it before:
+
+```bash
+bash scripts/tests-setup-environment.sh
+```
+Now run the automated tests. You need to run the following script from the root
+of the SDK repository:
+
+```bash
+bash scripts/tests-run.sh
+```
+
+There are some tests and examples that can't be automated. You should run them
+manually if if you consider it necessary. For example:
+
+- Audio examples: `examples/audio`, `examples/maxmod`, `examples/libxm7`
+- Local multiplayer examples: `examples/dswifi/local_multiplayer` and
+  `examples/dswifi/multiplayer_packets`
+- Microphone example: `examples/audio/microphone`
+- DSi camera: `examples/peripherals/camera`
+- Data cache operations test: `tests/cache/data_cache_ops`
+- Slot-2 peripherals (other than RAM): `examples/peripherals/slot2`
+- DSP examples: `examples/dsp`
+- Atheros examples: `examples/atheros`
+
+There are also some tests that have been automated, but benefit strongly from
+being tested on hardware:
+
+- DSWiFi (WiFi hardware emulation isn't perfect): `examples/dswifi/get_website_libcurl`
+- Filesystem (NAND access is tricky): `examples/filesystems/all_filesystems`
+- Exit to loader (different loaders work in different ways): `tests/system/exit_to_loader`
+
 #### 2.3 Tag all repositories
 
 It's only really required to tag the `blocksds/sdk` repository, but all other
