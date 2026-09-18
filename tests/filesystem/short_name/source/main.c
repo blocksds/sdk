@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2023
+// SPDX-FileContributor: Antonio Niño Díaz, 2023-2026
 // SPDX-FileContributor: Adrian "asie" Siekierka, 2026
 
 #include <stdio.h>
@@ -25,9 +25,9 @@ int main(int argc, char **argv)
         goto exit;
     }
 
-    if (argc < 1 || !argv || !argv[0])
+    if ((argc < 1) || (argv == NULL) || (argv[0] == NULL))
     {
-        perror("missing argv");
+        printf("ERROR: missing argv");
         goto exit;
     }
 
@@ -36,10 +36,11 @@ int main(int argc, char **argv)
         perror("FAT_getShortNameFor()");
         goto exit;
     }
-    printf("\nFAT_getShortNameFor(argv[0])\n%s\n", buf);
+
+    printf("\n\nFAT_getShortNameFor(argv[0])\n\n%s\n\n", buf);
 
 exit:
-    printf("\nPress START to exit to loader\n");
+    printf("\n\nPress START to exit to loader\n");
 
     while (1)
     {
