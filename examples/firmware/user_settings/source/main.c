@@ -45,8 +45,9 @@ int main(int argc, char **argv)
                         PersonalData->messageLen * sizeof(char16_t));
     if (len < 0)
         strcpy(message, "#Decode error#");
-    printf("  Message:\n\n%s\n", message);
-    printf("\n");
+    printf("  Message:\n\n%s", message);
+
+    consoleSetCursor(NULL, 0, 11);
 
     printf("  Alarm time: %u:%02u\n", PersonalData->alarmHour, PersonalData->alarmMinute);
     printf("  GBA screen: %s\n", PersonalData->gbaScreen ? "Lower" : "Upper");

@@ -33,6 +33,8 @@ int counter;
 
 int run_test(void *arg)
 {
+    bool test_done = false;
+
     while (1)
     {
         printf("%d : Thread %p\n", counter++, arg);
@@ -48,6 +50,19 @@ int run_test(void *arg)
         set_registers_and_yield(&array_in[0], &array_out[0]);
 
         compare_arrays(&array_in[0], &array_out[0], arg);
+
+        if (test_done == false)
+        {
+            if (counter > 30000)
+            {
+                // Reaching this point means that the program hasn't crashed
+                // after a long time. If any check fails in any thread, the
+                // application will hang in that thread and it will never print
+                // this message.
+                test_done = true;
+                fprintf(stderr, "[TEST] Test passed\n");
+            }
+        }
     }
 
     return 0;
@@ -90,6 +105,8 @@ int main(int argc, char **argv)
 
     consoleInit(&topScreen, 3,BgType_Text4bpp, BgSize_T_256x256, 31, 0, true, true);
     consoleInit(&bottomScreen, 3,BgType_Text4bpp, BgSize_T_256x256, 31, 0, false, true);
+
+    consoleDebugInit(DebugDevice_NOCASH);
 
     cothread_create(run_test, (void *)0, 0, COTHREAD_DETACHED);
     cothread_create(run_test, (void *)1, 0, COTHREAD_DETACHED);

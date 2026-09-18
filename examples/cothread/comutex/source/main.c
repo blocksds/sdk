@@ -48,11 +48,15 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
+    consoleDebugInit(DebugDevice_NOCASH);
+
     cothread_create(entrypoint_consumer, NULL, 0, COTHREAD_DETACHED);
     cothread_create(entrypoint_producer, NULL, 0, COTHREAD_DETACHED);
 
     consoleSetCursor(NULL, 0, 18);
     printf("Press START to exit to loader\n");
+
+    bool test_passed = false;
 
     while (1)
     {
@@ -67,6 +71,19 @@ int main(int argc, char **argv)
 
         if (keysDown() & KEY_START)
             break;
+
+        if (test_passed == false)
+        {
+            if (total_produced > 1000000)
+            {
+                int diff = total_produced - total_consumed;
+                if ((count == diff) && (diff >= -1) && (diff <= 1))
+                {
+                    test_passed = true;
+                    fprintf(stderr, "[TEST] Test passed\n");
+                }
+            }
+        }
     }
 
     return 0;

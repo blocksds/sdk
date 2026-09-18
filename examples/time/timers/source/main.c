@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2023-2024
+// SPDX-FileContributor: Antonio Niño Díaz, 2023-2026
 
 #include <stdio.h>
 #include <time.h>
@@ -44,6 +44,8 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
+    consoleDebugInit(DebugDevice_NOCASH);
+
     // Timer 0 will be called every second. This is a long time to wait, so a
     // big divider is required so that the timer counter can fit enough ticks to
     // count up to a second.
@@ -61,6 +63,8 @@ int main(int argc, char **argv)
     // have fired so that we can check if it's happening at the expected rate.
     timerStart(2, ClockDivider_1, TIMER_FREQ(TIMER_2_TARGET), timer2_handler);
     timerStart(3, ClockDivider_64, TIMER_FREQ_64(TIMER_3_TARGET), timer3_handler);
+
+    int frames_left_for_test = 300; // 5 seconds
 
     while (1)
     {
@@ -92,6 +96,35 @@ int main(int argc, char **argv)
 
         if (keysDown() & KEY_START)
             break;
+
+        // Automated testing code
+        if (frames_left_for_test > 0)
+        {
+            frames_left_for_test--;
+            if (frames_left_for_test == 0)
+            {
+                bool passed = true;
+
+                if ((timer3_count_per_second < (TIMER_3_TARGET - 1)) ||
+                    (timer3_count_per_second > (TIMER_3_TARGET + 1)))
+                    passed = false;
+
+                if ((timer2_count_per_second < (TIMER_2_TARGET - 1)) ||
+                    (timer2_count_per_second > (TIMER_2_TARGET + 1)))
+                    passed = false;
+
+                if ((timer1_count < 24) || (timer1_count > 26))
+                    passed = false;
+
+                if (timer0_count != 5)
+                    passed = false;
+
+                if (passed)
+                    fprintf(stderr, "[TEST] Test passed\n");
+                else
+                    fprintf(stderr, "[TEST] Test failed\n");
+            }
+        }
     }
 
     return 0;
