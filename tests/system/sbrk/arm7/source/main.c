@@ -26,7 +26,7 @@ const uintptr_t end = (uintptr_t)__end__;
 extern char __twl_end__[];
 const uintptr_t twl_end = (uintptr_t)__twl_end__;
 
-void FIFO_UserValue32Handler(u32 address, void *userdata)
+void FIFO_UserValue32Handler(void)
 {
     consolePrintf("DS Mode\n");
     consolePrintf("\n");
@@ -46,15 +46,60 @@ void FIFO_UserValue32Handler(u32 address, void *userdata)
     consolePrintf("heap size:     %u B\n", dsi_heap_end - dsi_heap_start);
     consolePrintf("\n");
 
-    consolePrintf("Tests\n");
+    // Tests
+
+    void *alloc_array[7] = { NULL };
+
+    alloc_array[0] = malloc(1024);
+    alloc_array[1] = malloc(16 * 1024);
+    alloc_array[2] = malloc(32 * 1024);
+    alloc_array[3] = malloc(32 * 1024);
+    alloc_array[4] = malloc(64 * 1024);
+    alloc_array[5] = malloc(64 * 1024);
+    alloc_array[6] = malloc(128 * 1024);
+
+    consolePrintf("malloc(1 KB):   0x%x\n", (unsigned int)alloc_array[0]);
+    consolePrintf("malloc(16 KB):  0x%x\n", (unsigned int)alloc_array[1]);
+    consolePrintf("malloc(32 KB):  0x%x\n", (unsigned int)alloc_array[2]);
+    consolePrintf("malloc(32 KB):  0x%x\n", (unsigned int)alloc_array[3]);
+    consolePrintf("malloc(64 KB):  0x%x\n", (unsigned int)alloc_array[4]);
+    consolePrintf("malloc(64 KB):  0x%x\n", (unsigned int)alloc_array[5]);
+    consolePrintf("malloc(128 KB): 0x%x\n", (unsigned int)alloc_array[6]);
     consolePrintf("\n");
-    consolePrintf("malloc(1 KB):   0x%x\n", (unsigned int)malloc(1024));
-    consolePrintf("malloc(16 KB):  0x%x\n", (unsigned int)malloc(16 * 1024));
-    consolePrintf("malloc(32 KB):  0x%x\n", (unsigned int)malloc(32 * 1024));
-    consolePrintf("malloc(32 KB):  0x%x\n", (unsigned int)malloc(32 * 1024));
-    consolePrintf("malloc(64 KB):  0x%x\n", (unsigned int)malloc(64 * 1024));
-    consolePrintf("malloc(64 KB):  0x%x\n", (unsigned int)malloc(64 * 1024));
-    consolePrintf("malloc(128 KB): 0x%x\n", (unsigned int)malloc(128 * 1024));
+
+    bool success = false;
+
+    if (isDSiMode())
+    {
+        if ((alloc_array[0] != NULL) && (alloc_array[1] != NULL) &&
+            (alloc_array[2] != NULL) && (alloc_array[3] != NULL) &&
+            (alloc_array[4] != NULL) && (alloc_array[5] != NULL) &&
+            (alloc_array[6] == NULL))
+        {
+            success = true;
+        }
+    }
+    else
+    {
+        if ((alloc_array[0] != NULL) && (alloc_array[1] != NULL) &&
+            (alloc_array[2] != NULL) && (alloc_array[3] == NULL) &&
+            (alloc_array[4] == NULL) && (alloc_array[5] == NULL) &&
+            (alloc_array[6] == NULL))
+        {
+            success = true;
+        }
+    }
+
+    if (success)
+    {
+        consolePrintf("PASSED\n");
+        fprintf(stderr, "[TEST] ARM7 PASSED\n");
+    }
+    else
+    {
+        consolePrintf("FAILED\n");
+        fprintf(stderr, "[TEST] ARM7 FAILED\n");
+    }
 
     consoleFlush();
 }
@@ -95,9 +140,6 @@ int main(int argc, char *argv[])
     irqSet(IRQ_VBLANK, vblank_handler);
     irqEnable(IRQ_VBLANK);
 
-    // Setup the FIFO handler
-    fifoSetValue32Handler(FIFO_USER_01, FIFO_UserValue32Handler, 0);
-
     while (!exit_loop)
     {
         const uint16_t key_mask = KEY_SELECT | KEY_START | KEY_L | KEY_R;
@@ -105,6 +147,12 @@ int main(int argc, char *argv[])
 
         if ((keys_pressed & key_mask) == key_mask)
             exit_loop = true;
+
+        if (fifoCheckValue32(FIFO_USER_01))
+        {
+            fifoGetValue32(FIFO_USER_01);
+            FIFO_UserValue32Handler();
+        }
 
         swiWaitForVBlank();
     }

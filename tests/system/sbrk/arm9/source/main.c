@@ -12,6 +12,10 @@ int main(int argc, char **argv)
     PrintConsole topScreen;
     PrintConsole bottomScreen;
 
+    // Redirect stderr to the no$gba debug console. By default both stdout and
+    // stderr are redirected to the libnds console.
+    consoleDebugInit(DebugDevice_NOCASH);
+
     videoSetMode(MODE_0_2D);
     videoSetModeSub(MODE_0_2D);
 
@@ -48,17 +52,67 @@ int main(int argc, char **argv)
     printf("heap size:       %u B\n", heap_end - heap_start);
     printf("\n");
 
-    printf("Tests\n");
+    // Tests
+
+    void *alloc_array[9] = { NULL };
+
+    alloc_array[0] = malloc(1024);
+    alloc_array[1] = malloc(512 * 1024);
+    alloc_array[2] = malloc(1 * 1024 * 1024);
+    alloc_array[3] = malloc(1 * 1024 * 1024);
+    alloc_array[4] = malloc(1 * 1024 * 1024);
+    alloc_array[5] = malloc(2 * 1024 * 1024);
+    alloc_array[6] = malloc(4 * 1024 * 1024);
+    alloc_array[7] = malloc(4 * 1024 * 1024);
+    alloc_array[8] = malloc(8 * 1024 * 1024);
+
+    printf("malloc(1 KB):   0x%x\n", (unsigned int)alloc_array[0]);
+    printf("malloc(512 KB): 0x%x\n", (unsigned int)alloc_array[1]);
+    printf("malloc(1 MB):   0x%x\n", (unsigned int)alloc_array[2]);
+    printf("malloc(1 MB):   0x%x\n", (unsigned int)alloc_array[3]);
+    printf("malloc(1 MB):   0x%x\n", (unsigned int)alloc_array[4]);
+    printf("malloc(2 MB):   0x%x\n", (unsigned int)alloc_array[5]);
+    printf("malloc(4 MB):   0x%x\n", (unsigned int)alloc_array[6]);
+    printf("malloc(4 MB):   0x%x\n", (unsigned int)alloc_array[7]);
+    printf("malloc(8 MB):   0x%x\n", (unsigned int)alloc_array[8]);
     printf("\n");
-    printf("malloc(1 KB):   0x%x\n", (unsigned int)malloc(1024));
-    printf("malloc(512 KB): 0x%x\n", (unsigned int)malloc(512 * 1024));
-    printf("malloc(1 MB):   0x%x\n", (unsigned int)malloc(1 * 1024 * 1024));
-    printf("malloc(1 MB):   0x%x\n", (unsigned int)malloc(1 * 1024 * 1024));
-    printf("malloc(1 MB):   0x%x\n", (unsigned int)malloc(1 * 1024 * 1024));
-    printf("malloc(2 MB):   0x%x\n", (unsigned int)malloc(2 * 1024 * 1024));
-    printf("malloc(4 MB):   0x%x\n", (unsigned int)malloc(4 * 1024 * 1024));
-    printf("malloc(4 MB):   0x%x\n", (unsigned int)malloc(4 * 1024 * 1024));
-    printf("malloc(8 MB):   0x%x\n", (unsigned int)malloc(8 * 1024 * 1024));
+
+    bool success = false;
+
+    if (isDSiMode())
+    {
+        if ((alloc_array[0] != NULL) && (alloc_array[1] != NULL) &&
+            (alloc_array[2] != NULL) && (alloc_array[3] != NULL) &&
+            (alloc_array[4] != NULL) && (alloc_array[5] != NULL) &&
+            (alloc_array[6] != NULL) && (alloc_array[7] != NULL) &&
+            (alloc_array[8] == NULL))
+        {
+            success = true;
+        }
+    }
+    else
+    {
+        if ((alloc_array[0] != NULL) && (alloc_array[1] != NULL) &&
+            (alloc_array[2] != NULL) && (alloc_array[3] != NULL) &&
+            (alloc_array[4] != NULL) && (alloc_array[5] == NULL) &&
+            (alloc_array[6] == NULL) && (alloc_array[7] == NULL) &&
+            (alloc_array[8] == NULL))
+        {
+            success = true;
+        }
+    }
+
+    if (success)
+    {
+        printf("PASSED\n");
+        fprintf(stderr, "[TEST] ARM9 PASSED\n");
+    }
+    else
+    {
+        printf("FAILED\n");
+        fprintf(stderr, "[TEST] ARM9 FAILED\n");
+    }
+
     printf("\n");
 
     printf("Press START to exit");
