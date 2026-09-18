@@ -7,8 +7,8 @@ BlocksDS, as with any open-source development kit for a complex embedded device,
 
 ### BlocksDS Logo
 
-BlocksDS Logo © 2025 by [Megan Gozzard](https://megangozzard.co.uk) is licensed
-under [CC BY-ND 4.0](https://creativecommons.org/licenses/by-nd/4.0/)
+BlocksDS Logo © 2025 by [Megan Gozzard](https://www.instagram.com/megangozzard)
+is licensed under [CC BY-ND 4.0](https://creativecommons.org/licenses/by-nd/4.0/)
 
 ### Default ROM icon
 
