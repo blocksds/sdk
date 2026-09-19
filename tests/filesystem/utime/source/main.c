@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2023
+// SPDX-FileContributor: Antonio Niño Díaz, 2023-2026
 // SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 #include <errno.h>
@@ -13,28 +13,25 @@
 #include <nds/arm9/dldi.h>
 #include <fat.h>
 
-void wait_press_button_a(void)
+__attribute__((noreturn)) void wait_forever(void)
 {
-    while(1)
+    printf("\nPress START to exit to loader\n");
+
+    while (1)
     {
         swiWaitForVBlank();
 
         scanKeys();
-
-        if (keysDown() & KEY_A)
-            break;
+        if (keysDown() & KEY_START)
+            exit(0);
     }
 }
 
-void wait_forever(void)
+void check_date_time(const char *filename, const char *reference_mtime)
 {
-    while(1)
-        swiWaitForVBlank();
-}
+    struct stat st = { 0 };
 
-void print_date_time(char *filename)
-{
-    struct stat st;
+    printf("stat(%s)\n", filename);
 
     if (stat(filename, &st) != 0)
     {
@@ -42,13 +39,31 @@ void print_date_time(char *filename)
         wait_forever();
     }
 
-    printf("time: %s\n", ctime(&st.st_mtime));
+    char mtime_str[30];
+    char ctime_str[30];
+
+    ctime_r(&st.st_mtime, mtime_str);
+    mtime_str[strlen(mtime_str) - 1] = '\0';
+    ctime_r(&st.st_ctime, ctime_str);
+    ctime_str[strlen(ctime_str) - 1] = '\0';
+
+    printf("mtime: %s\nctime: %s\nsize: %lu B\n", mtime_str, ctime_str, st.st_size);
+
+    if (reference_mtime != NULL)
+    {
+        if (strcmp(mtime_str, reference_mtime) != 0)
+        {
+            printf("ERROR: Date mismatch\n[%s]\n[%s]", mtime_str, reference_mtime);
+            fprintf(stderr, "[TEST] Test failed\n");
+            wait_forever();
+        }
+    }
 }
 
 int main(int argc, char **argv)
 {
-    struct utimbuf times;
     consoleDemoInit();
+    consoleDebugInit(DebugDevice_NOCASH);
 
     printf("DLDI name: %s\n", io_dldi_data->friendlyName);
     printf("DSi mode: %d\n", isDSiMode());
@@ -66,8 +81,13 @@ int main(int argc, char **argv)
         wait_forever();
     }
 
-    printf("\nstat()\n");
-    print_date_time(argv[0]);
+    // ----------------
+
+    check_date_time(argv[0], NULL);
+
+    // ----------------
+
+    struct utimbuf times;
 
     printf("\nutime(946717840)\n");
     times.modtime = 946717840;
@@ -76,7 +96,9 @@ int main(int argc, char **argv)
         perror("utime()");
         wait_forever();
     }
-    print_date_time(argv[0]);
+    check_date_time(argv[0], "Sat Jan  1 09:10:40 2000");
+
+    // ----------------
 
     printf("\nutime(1100991600)\n");
     times.modtime = 1100991600;
@@ -85,20 +107,13 @@ int main(int argc, char **argv)
         perror("utime()");
         wait_forever();
     }
-    print_date_time(argv[0]);
+    check_date_time(argv[0], "Sat Nov 20 23:00:00 2004");
 
-    printf("\nPress START to exit to loader\n");
+    // ----------------
 
-    while (1)
-    {
-        swiWaitForVBlank();
+    fprintf(stderr, "[TEST] Test passed\n");
 
-        scanKeys();
-
-        uint32_t keys_down = keysDown();
-        if (keys_down & KEY_START)
-            break;
-    }
+    wait_forever();
 
     return 0;
 }
