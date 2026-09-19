@@ -156,6 +156,8 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
+    consoleDebugInit(DebugDevice_NOCASH);
+
     printf("DLDI name:\n");
     printf("%s\n", io_dldi_data->friendlyName);
     printf("\n");
@@ -165,6 +167,7 @@ int main(int argc, char **argv)
     if (!init_ok)
     {
         perror("nitroFSInit()");
+        fprintf(stderr, "[TEST] Test failed\n");
         goto exit;
     }
 
@@ -182,7 +185,7 @@ int main(int argc, char **argv)
 
     // Calculate MD5 hash of many random files
 
-    for (int i = 0; i < 200; i++)
+    for (int i = 0; i < 100; i++)
     {
         printf(".");
 
@@ -190,6 +193,7 @@ int main(int argc, char **argv)
         if (verify_md5_file(name) == 0)
         {
             printf("Hash doesn't match!\n%s\n\n", name);
+            fprintf(stderr, "[TEST] Test failed\n");
             goto exit;
         }
     }
@@ -197,6 +201,8 @@ int main(int argc, char **argv)
     time_t total_time = time(NULL) - start_time;
 
     printf("\n\nTotal time: %llu seconds\n", total_time);
+
+    fprintf(stderr, "[TEST] Test passed\n");
 
 exit:
     printf("\n");

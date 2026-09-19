@@ -174,9 +174,31 @@ int main(int argc, char **argv)
         if ((keys_held & KEY_SELECT) && (keys_held & KEY_START))
             break;
 
+        const u16 mask_load = KEY_A | KEY_B | KEY_X | KEY_Y;
+        if ((keys_held & mask_load) == mask_load)
+        {
+            if (!load_data(save_path))
+            {
+                printf("Can't load saved data!\n");
+                goto error;
+            }
+        }
+
+        const u16 mask_save = KEY_A | KEY_B | KEY_L | KEY_R;
+        if ((keys_held & mask_save) == mask_save)
+        {
+            if (!save_data(save_path))
+            {
+                printf("Can't save data!\n");
+                goto error;
+            }
+        }
+
         consoleClear();
 
         printf("SELECT + START: Save and exit\n");
+        printf("A + B + L + R:  Save\n");
+        printf("A + B + X + Y:  Load data\n");
         printf("\n");
 
         const char *key_name[15] = {
