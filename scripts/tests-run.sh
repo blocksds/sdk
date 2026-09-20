@@ -34,6 +34,8 @@ BOLD="\033[1m"
 TESTS_SUCCESS=0
 TESTS_TOTAL=0
 
+FAILED_TESTS=()
+
 dirs=`find examples tests -iname run.py`
 
 for dir in $dirs; do
@@ -71,6 +73,8 @@ for dir in $dirs; do
         printf "${RED}${BOLD}[#] BUILD FAILED: LOG START${DEFAULT}\n"
         cat build/test-build.log
         printf "${RED}${BOLD}[#] BUILD FAILED: LOG END${DEFAULT}\n"
+
+        FAILED_TESTS+=("$dir")
     else
         printf "${GREEN}${BOLD}[#] BUILD SUCCEEDED${DEFAULT}\n"
 
@@ -84,6 +88,8 @@ for dir in $dirs; do
             printf "${RED}${BOLD}[#] RUN FAILED: LOG START${DEFAULT}\n"
             cat build/test-run.log
             printf "${RED}${BOLD}[#] RUN FAILED: LOG END${DEFAULT}\n"
+
+            FAILED_TESTS+=("$dir")
         else
             printf "${GREEN}${BOLD}[#] RUN SUCCEEDED${DEFAULT}\n"
 
@@ -106,7 +112,12 @@ TESTS_FAILURE=$(( TESTS_TOTAL - TESTS_SUCCESS ))
 printf "${BOLD}[#] TESTS TOTAL:  ${TESTS_TOTAL}${DEFAULT}\n"
 printf "${BOLD}[#] TESTS OK:     ${TESTS_SUCCESS}${DEFAULT}\n"
 if [ ${TESTS_FAILURE} -ne 0 ]; then
-    printf "${RED}${BOLD}[#] TESTS FAILED: ${TESTS_FAILURE}${DEFAULT}\n"
+    printf "${RED}${BOLD}[#] TESTS FAILED: ${TESTS_FAILURE}${DEFAULT}\n\n"
+
+    for entry in ${FAILED_TESTS[@]}
+    do
+        echo -e "$entry"
+    done
 else
     printf "${BOLD}[#] TESTS FAILED: ${TESTS_FAILURE}${DEFAULT}\n"
 fi
