@@ -539,7 +539,7 @@ int main(int argc, char **argv)
 
         if (st.st_size != 10)
         {
-            printf("Invalid size: %d != 10\n", st.st_size);
+            printf("Invalid size: %lu != 10\n", st.st_size);
             wait_forever();
         }
 
@@ -559,7 +559,7 @@ int main(int argc, char **argv)
 
         if (st.st_size != 1024)
         {
-            printf("Invalid size: %d != 1024\n", st.st_size);
+            printf("Invalid size: %lu != 1024\n", st.st_size);
             wait_forever();
         }
     }
