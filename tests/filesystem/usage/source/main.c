@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2023
+// SPDX-FileContributor: Antonio Niño Díaz, 2023-2026
 
 #include <dirent.h>
 
@@ -18,6 +18,8 @@ PrintConsole bottomScreen;
 
 void wait_press_button_a(void)
 {
+    printf("Press A to continue\n");
+
     while(1)
     {
         swiWaitForVBlank();
@@ -31,7 +33,7 @@ void wait_press_button_a(void)
 
 void wait_forever(void)
 {
-    while(1)
+    while (1)
         swiWaitForVBlank();
 }
 
@@ -80,8 +82,7 @@ void dir_list(void)
 
     closedir(dirp);
 
-    consoleSetCursor(NULL, 0, 23);
-    printf("Num entries: %d ", num_entries);
+    printf("\nNum entries: %d\n\n", num_entries);
 
     wait_press_button_a();
 
@@ -176,6 +177,8 @@ int main(int argc, char **argv)
     // Change the current working directory to the base directory used for
     // testing.
 
+    printf("chdir to test directory...\n\n");
+
     chdir("fstest");
 
     char *cwd = getcwd(NULL, 0);
@@ -216,10 +219,12 @@ int main(int argc, char **argv)
 
     // Print contents of a file. Then, write more contents to it, and close it.
 
+    printf("Original contents:\n\n");
+
     fcat("d2_remove.txt");
 
     {
-        printf("Append data\n");
+        printf("\nAppending data...\n\n");
 
         FILE *f = fopen("d2_remove.txt", "a");
         if (f == NULL)
@@ -248,10 +253,14 @@ int main(int argc, char **argv)
     // Reopen the same file and print the contents again to verify that new data
     // was written to it correctly.
 
+    printf("\nNew contents:\n\n");
+
     fcat("d2_remove.txt");
 
     // Delete the file and list the contents of the directory again (which
     // should be empty now).
+
+    printf("\nDeleting...\n\n");
 
     unlink("d2_remove.txt");
 
@@ -260,6 +269,8 @@ int main(int argc, char **argv)
     dir_list();
 
     // Try to open the file after closing it, which should fail.
+
+    printf("Try to open deleted file...\n\n");
 
     {
         FILE *f = fopen("d2_remove.txt", "r");
@@ -271,6 +282,8 @@ int main(int argc, char **argv)
     }
 
     // Try opening files in all possible modes. Only 'r' and 'r+' should fail
+
+    printf("Opening files in all modes...\n\n");
 
     {
         FILE *f;
@@ -337,6 +350,8 @@ int main(int argc, char **argv)
             wait_forever();
         }
 
+        wait_press_button_a();
+
         dir_list();
     }
 
@@ -351,12 +366,12 @@ int main(int argc, char **argv)
     dir_list();
 
     {
+        printf("Original contents:\n\n");
+
         const char *path = "long_file.txt";
         fcat(path);
 
-        printf("\n\n");
-
-        printf("cat: %s\n", path);
+        printf("\nOpening again...\n\n");
 
         FILE *f = fopen(path, "r");
         if (f == NULL)
@@ -383,6 +398,8 @@ int main(int argc, char **argv)
 
         rewind(f);
 
+        printf("\nSeeking middle of the file...\n\n");
+
         long remaining_size = size - (size / 2);
         ret = fseek(f, size / 2, SEEK_CUR);
         if (ret != 0)
@@ -406,7 +423,7 @@ int main(int argc, char **argv)
         }
         buffer[remaining_size - 1] = '\0';
 
-        printf("[%s]\n", buffer);
+        printf("[%s]\n\n", buffer);
 
         int res = fclose(f);
         if (res != 0)
@@ -424,26 +441,27 @@ int main(int argc, char **argv)
     {
         consoleClear();
 
+        printf("Getting file information...\n\n");
+
         struct stat st;
         if (stat("d1", &st) != 0)
         {
             perror("stat(d1)");
             wait_forever();
         }
-        printf("d1:\n\n  size = %lu\n  type = %s\n  date = %lld\n\n",
+        // Don't print the date, it will change every time the test runs
+        printf("d1:\n\n  size = %lu\n  type = %s\n\n",
                 st.st_size,
-                (st.st_mode & S_IFDIR) ? "Dir" : "File",
-                st.st_mtim.tv_sec);
+                (st.st_mode & S_IFDIR) ? "Dir" : "File");
 
         if (stat("f1.txt", &st) != 0)
         {
             perror("stat(d1)");
             wait_forever();
         }
-        printf("f1.txt:\n\n  size = %lu\n  type = %s\n  date = %lld\n",
+        printf("f1.txt:\n\n  size = %lu\n  type = %s\n\n",
                 st.st_size,
-                (st.st_mode & S_IFDIR) ? "Dir" : "File",
-                st.st_mtim.tv_sec);
+                (st.st_mode & S_IFDIR) ? "Dir" : "File");
     }
     wait_press_button_a();
 
@@ -453,6 +471,8 @@ int main(int argc, char **argv)
     consoleClear();
 
     {
+        printf("Creating folders...\n\n");
+
         if (mkdir("f1.txt", S_IRWXU | S_IRWXG | S_IRWXO) == 0)
         {
             printf("Folder created with same name as file!");
@@ -465,7 +485,7 @@ int main(int argc, char **argv)
             wait_forever();
         }
 
-        printf("Folder created\n");
+        printf("Folder created\n\n");
 
         if (rename("long_file.txt", "new_dir/renamed.txt") != 0)
         {
@@ -473,27 +493,34 @@ int main(int argc, char **argv)
             wait_forever();
         }
 
-        printf("File renamed\n");
+        printf("File renamed\n\n");
     }
+
     wait_press_button_a();
 
     // Check access to a file that doesn't exist. Then, check access to a file
     // that exists, and truncate it. Check that the size is the expected one.
 
     {
+        consoleClear();
+
+        printf("Testing access to files...\n\n");
+
+        const char *path = "new_dir/renamed.txt";
+
         if (access("new_dir/doesnt_exist.txt", F_OK) == 0)
         {
             printf("access() should have failed!");
             wait_forever();
         }
 
-        const char *path = "new_dir/renamed.txt";
-
         if (access(path, F_OK) != 0)
         {
             perror("access");
             wait_forever();
         }
+
+        printf("Testing truncate()...\n\n");
 
         if (truncate(path, 10) != 0)
         {
@@ -507,10 +534,14 @@ int main(int argc, char **argv)
             perror("stat(renamed.txt)");
             wait_forever();
         }
-        printf("stat:\n\n  size = %lu\n  type = %s\n  date = %lld\n\n",
-                st.st_size,
-                (st.st_mode & S_IFDIR) ? "Dir" : "File",
-                st.st_mtim.tv_sec);
+        printf("stat:\n\n  size = %lu\n  type = %s\n\n",
+                st.st_size, (st.st_mode & S_IFDIR) ? "Dir" : "File");
+
+        if (st.st_size != 10)
+        {
+            printf("Invalid size: %d != 10\n", st.st_size);
+            wait_forever();
+        }
 
         if (truncate(path, 1024) != 0)
         {
@@ -523,10 +554,14 @@ int main(int argc, char **argv)
             perror("stat(renamed.txt)");
             wait_forever();
         }
-        printf("stat:\n\n  size = %lu\n  type = %s\n  date = %lld\n\n",
-                st.st_size,
-                (st.st_mode & S_IFDIR) ? "Dir" : "File",
-                st.st_mtim.tv_sec);
+        printf("stat:\n\n  size = %lu\n  type = %s\n\n",
+                st.st_size, (st.st_mode & S_IFDIR) ? "Dir" : "File");
+
+        if (st.st_size != 1024)
+        {
+            printf("Invalid size: %d != 1024\n", st.st_size);
+            wait_forever();
+        }
     }
     wait_press_button_a();
 
