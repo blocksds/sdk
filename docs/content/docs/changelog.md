@@ -3,6 +3,122 @@ title: 'Changelog'
 weight: 6
 ---
 
+### Version DEV (2026-XX-XX)
+
+- libnds:
+
+  - Fix date/time conversion from FatFs to libc `stat()` struct fields. The date
+    and time values were switched in the conversion helper.
+  - Remove an incorrect check in `truncate()`, which prevented it from working
+    at all.
+  - Fix SD card initialization in melonDS. Move code that enables SCFG bits
+    related to the SD/NAND to the `TMIO_Init()` function. This fixes a bug
+    discovered by @edo9300, which will eventually be fixed in melonDS, but we
+    need a fix in libnds for versions of melonDS without the fix.
+  - Refactor code that prints assertions so that it doesn't use `printf()`,
+    which uses TLS (thread-local storage). ARM7 assertions are printed from an
+    ARM9 IRQ handler, with no access to TLS, so we need at least a way to print
+    the ARM7 assertions without using `printf()`. This change fixes an infinite
+    crash loop that would be caused when the ARM9 tries to print an ARM7 crash
+    message, but the ARM9 crashes itself when trying to access TLS.
+  - Add 64 by 64 divide helper (`divmod64_asynch()`, `divmod64_result()`,
+    `div64_64()`). @Kuratius
+  - Optimize quadrant correction in `atan2_f32()`. @Kuratius
+  - Initialize some local variables to 0 to prevent bugs.
+
+- Maxmod:
+
+  - Update documentation related to mmutil.
+
+- mmutil:
+
+  - Improve code that resamples instruments. @Aikku93
+  - Clean and document instrument flags `%o` and `%c`. They must be in the
+    instrument name, and they only affect NDS hardware sampling mode.
+  - Improve code that reads XM pattern data to fix XM files saved with
+    NitrousTracker.
+  - Delete GBA/NDS demo ROMs before creating a new one.
+
+- SDK:
+
+  - Add initial scripts to test most of the examples and tests automatically.
+
+    - They depend on [libretro.py](https://github.com/JesseTG/libretro.py) and
+      [melonDS DS](https://github.com/JesseTG/melonds-ds). The core runs in
+      headless mode, so it can run in any machine and it doesn't have to spend
+      any time setting up any emulator graphical interface.
+    - BlocksDS now has a python package called `blocksds_testing` with wrappers
+      for `libretro.py` so that test runner scripts are shorter. It supports
+      pressing keys, using the touch screen, having a DLDI and SD filesystems,
+      microphone input and solar sensor input, and it's also possible to select
+      between DS and DSi modes. There's also a helper to translate key names to
+      screen coordinates for the default keyboard of libnds.
+    - Some of the tests currently require BIOS, NAND and firmware dumps. They
+      aren't distributed in the BlocksDS repository, but It's very easy to dump
+      the files from your own console.
+    - Currently there is no way to test audio-related examples, so the examples
+      about libnds audio, Maxmod and LibXM7 aren't automated yet.
+    - There are two ways to verify that a test has passed:
+
+      - Take screenshots during the test execution and compare them with
+        reference screenshots. The screenshot can be restricted to only part of
+        the screen.
+      - Check the emulator debug logs and look for specific "test passed" or
+        "test failed" strings printed by the test code.
+
+    - The test runner script looks for any known build system in each test
+      folder. It cleans the test, builds it and then runs it. It supports:
+
+      - `Makefile`: Default build system of BlocksDS.
+      - `build.py`: ArchitectDS.
+      - `build.sh / clean.sh`: Generic build script that uses other build
+        systems internally, but it may also copy files around or do some special
+        handling.
+
+  - Examples and tests:
+
+    - Lots of examples and tests have been modified so that they can be tested
+      reliably. Now, some of them:
+
+      - Require the user to press a button to animate things displayed on the
+        screen so that the animation step doesn't depend on how long the
+        application took to start.
+      - Print debug messages to the emulator debug console like "test passed",
+        which is useful in tests that have different results each run (like the
+        DSWiFi examples that download websites, which print the request
+        timestamp).
+      - Have been fundamentally modified so that the new calculated values are
+        useful for an automatic test, like the dynamic library examples, which
+        printed the exact address where some functions were loaded.
+      - Have reduced waiting times.
+      - The random seed is fixed so that the tests are reproducible.
+
+    - The `default_keyboard` example now lets the user select the keyboard
+      modifiers mode (it can be set to regular or sticky mode).
+    - A new test that converts 4 BPP graphics with grit has been introduced.
+      This is discouraged (ptexconv is better at generating palettes) but it's a
+      good idea to have it as a regression test.
+    - Fix the 256 color screen in the custom console example. The first 8 colors
+      were displayed as bright colors instead of their regular intensity.
+    - Fix canvas limits in gesture recognition example. The buffer was flipped
+      and it wasn't possible to draw in points with x greater than 192.
+    - The `hw_sqrtf()` test has been moved to the math tests folder.
+    - The `utime` test doesn't crash anymore when `argv` isn't provided.
+
+  - Documentation:
+
+    - A new contribution guide has been added.
+    - Fix links to The Mod Archive (reported by @Wolfvak and @asie) and Megan
+      Gozzard's websites from the documentation.
+    - The tutorial now has a warning telling users to avoid writing to NAND in
+      their applications.
+    - The release process page has been updated to mention the new automated
+      test scripts.
+    - The "getting support" page has been updated.
+
+  - Makefile error checks now print the reference version instead of just
+    saying that the check has failed. Reported by @edo9300
+
 ### Version 1.23.0 (2026-08-24)
 
 - libnds:
