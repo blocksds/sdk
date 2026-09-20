@@ -114,7 +114,7 @@ weight: 6
     - The `hw_sqrtf()` test has been moved to the math tests folder.
     - The `utime` test doesn't crash anymore when `argv` isn't provided.
     - Add test to verify the locations and sizes of DTCM and ITCM.
-    - Allow the "all_filesystems" example to work without NAND so that it can
+    - Allow the `all_filesystems` example to work without NAND so that it can
       run on no$gba.
 
   - Documentation:
