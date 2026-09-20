@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2023
+// SPDX-FileContributor: Antonio Niño Díaz, 2023-2026
 // SPDX-FileContributor: Adrian "asie" Siekierka, 2025
 
 #include <errno.h>
@@ -13,12 +13,11 @@
 
 void wait_press_button_a(void)
 {
-    while(1)
+    while (1)
     {
         swiWaitForVBlank();
 
         scanKeys();
-
         if (keysDown() & KEY_A)
             break;
     }
@@ -26,7 +25,7 @@ void wait_press_button_a(void)
 
 void wait_forever(void)
 {
-    while(1)
+    while (1)
         swiWaitForVBlank();
 }
 
@@ -55,26 +54,29 @@ int main(int argc, char **argv)
 
     printf("Drive: %s\n", root_path);
 
+    printf("\nGet volume label...\n");
     if (!fatGetVolumeLabel(root_path, label))
     {
-        printf("fatGetVolumeLabel() failed");
+        printf("\nfatGetVolumeLabel() failed");
         wait_forever();
     }
-    printf("\nfatGetVolumeLabel()\n\"%s\"\n", label);
+    printf("Result: \"%s\"\n", label);
 
+    printf("\nSet volume label: \"BLOCKSDS\"\n");
     if (!fatSetVolumeLabel(root_path, "BLOCKSDS"))
     {
         printf("fatSetVolumeLabel() failed");
         wait_forever();
     }
-    printf("\nfatSetVolumeLabel()\n");
+    printf("OK!\n");
 
+    printf("\nGet volume label...\n");
     if (!fatGetVolumeLabel(root_path, label))
     {
-        perror("fatGetVolumeLabel()");
+        printf("\nfatGetVolumeLabel() failed");
         wait_forever();
     }
-    printf("\nfatGetVolumeLabel()\n\"%s\"\n", label);
+    printf("Result: \"%s\"\n", label);
 
     printf("\nPress START to exit to loader\n");
 
