@@ -24,7 +24,6 @@ void wait_press_button_a(void)
         swiWaitForVBlank();
 
         scanKeys();
-
         if (keysDown() & KEY_A)
             break;
     }
@@ -32,8 +31,16 @@ void wait_press_button_a(void)
 
 void wait_forever(void)
 {
+    printf("\nPress START to exit\n");
+
     while (1)
+    {
         swiWaitForVBlank();
+
+        scanKeys();
+        if (keysDown() & KEY_START)
+            break;
+    }
 }
 
 void dir_list(void)
@@ -134,6 +141,8 @@ int main(int argc, char **argv)
     init_ok = nitroFSInit(NULL);
     if (!init_ok)
     {
+        // NitroFS should work everywhere, this is a real issue that should hang
+        // the example.
         perror("nitroFSInit()");
         wait_forever();
     }
@@ -144,7 +153,7 @@ int main(int argc, char **argv)
         if (!init_ok)
         {
             perror("nandInit()");
-            wait_forever();
+            // We may be running in an emulator, don't hang the execution
         }
     }
 
