@@ -15,6 +15,12 @@ weight: 6
     related to the SD/NAND to the `TMIO_Init()` function. This fixes a bug
     discovered by @edo9300, which will eventually be fixed in melonDS, but we
     need a fix in libnds for versions of melonDS without the fix.
+  - Add workarounds to avoid filesystem-related issues in no$gba. no$gba doesn't
+    support single-block SD read commands, only multi-block read commands, so
+    they are now disabled when no$gba is detected. Also, no$gba provides a valid
+    device list, but it points to a location in NAND, which is a problem because
+    NAND doesn't work with the driver in libnds. Device list parsing has been
+    disabled in no$gba.
   - Refactor code that prints assertions so that it doesn't use `printf()`,
     which uses TLS (thread-local storage). ARM7 assertions are printed from an
     ARM9 IRQ handler, with no access to TLS, so we need at least a way to print
@@ -43,6 +49,9 @@ weight: 6
 
   - Add initial scripts to test most of the examples and tests automatically.
 
+    - In total, 183 examples and tests are now tested automatically. There are
+      47 more that haven't been automated, so about 80% of the them have been
+      automated.
     - They depend on [libretro.py](https://github.com/JesseTG/libretro.py) and
       [melonDS DS](https://github.com/JesseTG/melonds-ds). The core runs in
       headless mode, so it can run in any machine and it doesn't have to spend
@@ -104,6 +113,9 @@ weight: 6
       and it wasn't possible to draw in points with x greater than 192.
     - The `hw_sqrtf()` test has been moved to the math tests folder.
     - The `utime` test doesn't crash anymore when `argv` isn't provided.
+    - Add test to verify the locations and sizes of DTCM and ITCM.
+    - Allow the "all_filesystems" example to work without NAND so that it can
+      run on no$gba.
 
   - Documentation:
 
