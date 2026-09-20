@@ -3,23 +3,26 @@
 #
 # SPDX-FileContributor: Antonio Niño Díaz, 2026
 
-# Note: This script assumes that the architectds and melonds-ds repositories
-# are in the same directory as the sdk repository.
+# 1. Before running the script, install venv and the dependencies of melonDS DS:
 #
-#   https://codeberg.org/blocksds/architectds
-#   https://github.com/JesseTG/melonds-ds
+#      sudo apt install python3-venv cmake pkg-config
+#
+# 2. This script assumes that the architectds and melonds-ds repositories are in
+#    the same directory as the sdk repository.
+#
+#      https://codeberg.org/blocksds/architectds
+#      https://github.com/JesseTG/melonds-ds
+#
+#    If they aren't found, they will be cloned instead.
 
 set -e
 
 # Delete any pre-existing virtual environment
-rm -rf venv
+rm -rf env
 
 # Prepare folder to hold all required blobs
 mkdir -p test_blobs
 export BLOCKSDS_TESTING_BLOBS=$PWD/test_blobs
-
-# Install venv and dependencies of melonds-ds
-sudo apt install python3-venv cmake pkg-config
 
 # Create and activate a virtual environment
 python3 -m venv env
@@ -37,6 +40,15 @@ pushd scripts/blocksds_testing/
 popd
 
 # Create and install ArchitectDS wheel
+
+if [ -d "../architectds" ]; then
+
+    pushd ..
+    git clone https://codeberg.org/blocksds/architectds
+    popd
+
+fi
+
 pushd ../architectds
 
     python -m build
@@ -44,7 +56,16 @@ pushd ../architectds
 
 popd
 
-# Build the melonds-ds core
+# Build the melonDS DS core
+
+if [ -d "../melonds-ds" ]; then
+
+    pushd ..
+    git clone https://github.com/JesseTG/melonds-ds
+    popd
+
+fi
+
 pushd ../melonds-ds
 
     # This is the commit that the tests currently use
@@ -63,4 +84,4 @@ echo "Copy the following files to $BLOCKSDS_TESTING_BLOBS"
 echo ""
 echo "    bios7.bin, bios7i.bin, bios9.bin, bios9i.bin, dsfirmware.bin, nand.bin"
 echo ""
-echo "Also, you need to setup the default melonDS Access Point in the firmware."
+echo "IMPORTANT: You need to setup the default melonDS Access Point in the firmware."

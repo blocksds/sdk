@@ -1,1 +1,3 @@
 compile_commands.json
+env/
+test_blobs/
