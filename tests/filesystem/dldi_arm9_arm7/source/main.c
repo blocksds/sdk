@@ -66,6 +66,7 @@ int main(int argc, char **argv)
     printf("A: Autodetect\n");
     printf("L: Force ARM7\n");
     printf("R: Force ARM9\n");
+    printf("\n");
 
     while (1)
     {
