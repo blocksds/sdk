@@ -60,6 +60,9 @@ being tested on hardware:
 - Filesystem (NAND access is tricky): `examples/filesystems/all_filesystems`
 - Exit to loader (different loaders work in different ways): `tests/system/exit_to_loader`
 
+Also, you should test at least `examples/filesystems/all_filesystems` in no$gba
+and DeSmuME.
+
 #### 2.3 Tag all repositories
 
 It's only really required to tag the `blocksds/sdk` repository, but all other
