@@ -1,6 +1,6 @@
 // SPDX-License-Identiier: CC0-1.0
 //
-// SPDX-FileContributor: Michele Di Giorgio, 2024
+// SPDX-FileContributor: Michele Di Giorgio, 2024-2026
 // SPDX-FileContributor: Antonio Niño Díaz, 2025
 
 #include <maxmod9.h>
@@ -15,6 +15,20 @@ const mm_word bitDepth = 16;
 const mm_word samplingRate = 32768;  // Hertz
 const mm_word reverbDelayLeft = 500; // milliseconds
 const mm_word reverbDelayRight = 520; // milliseconds
+
+__attribute__((noreturn)) void wait_forever(void)
+{
+    printf("\nPress START to return to loader\n");
+
+    while (1)
+    {
+        swiWaitForVBlank();
+
+        scanKeys();
+        if (keysDown() & KEY_START)
+            exit(1);
+    }
+}
 
 int initReverb()
 {
@@ -68,24 +82,35 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
-    soundEnable();
-
-    mmInitDefaultMem((mm_addr)soundbank_bin);
-
-    mmLoad(MOD_JOINT_PEOPLE);
-
     printf("maxmod reverb example\n");
     printf("=====================\n");
     printf("\n");
+
+    soundEnable();
+
+    if (!mmInitDefaultMem((mm_addr)soundbank_bin))
+    {
+        printf("mmInitDefaultMem() failed\n");
+        wait_forever();
+    }
+
+    int ret = mmLoad(MOD_JOINT_PEOPLE);
+    if (ret != 0)
+    {
+        printf("mmLoad(): %d\n", ret);
+        wait_forever();
+    }
+
     printf("A: Enable reverb\n");
     printf("B: Disable reverb\n");
     printf("\n");
     printf("START: Return to loader\n");
 
     // Init reverb
-    if (initReverb() != 0) {
+    if (initReverb() != 0)
+    {
         printf("Error while initializing reverb\n");
-        return 1;
+        wait_forever();
     }
 
     mmStart(MOD_JOINT_PEOPLE, MM_PLAY_LOOP);
@@ -123,6 +148,13 @@ int main(int argc, char **argv)
     }
 
     mmStop();
+
+    ret = mmUnload(MOD_JOINT_PEOPLE);
+    if (ret != 0)
+    {
+        printf("mmUnload(): %d\n", ret);
+        wait_forever();
+    }
 
     soundDisable();
 

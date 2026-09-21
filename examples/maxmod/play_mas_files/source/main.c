@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2024
+// SPDX-FileContributor: Antonio Niño Díaz, 2024-2026
 
 #include <stdio.h>
 
@@ -8,15 +8,17 @@
 #include <nds.h>
 #include <maxmod9.h>
 
-__attribute__((noreturn)) void WaitLoop(void)
+__attribute__((noreturn)) void wait_forever(void)
 {
-    printf("Press START to exit");
+    printf("\nPress START to return to loader\n");
+
     while (1)
     {
         swiWaitForVBlank();
+
         scanKeys();
-        if (keysHeld() & KEY_START)
-            exit(0);
+        if (keysDown() & KEY_START)
+            exit(1);
     }
 }
 
@@ -87,10 +89,14 @@ int main(int argc, char **argv)
     // Setup sub screen for the text console
     consoleDemoInit();
 
+    printf("Maxmod MAS demo\n");
+    printf("===============\n");
+    printf("\n");
+
     if (!nitroFSInit(NULL))
     {
         printf("nitroFSInit failed.\n");
-        WaitLoop();
+        wait_forever();
     }
 
     // Setup Maxmod
@@ -100,7 +106,7 @@ int main(int argc, char **argv)
     size_t size;
 
     if (!file_load("nitro:/mas/music/joint_people_mod.mas", &module, &size))
-        WaitLoop();
+        wait_forever();
 
     // Flush the cache so that the ARM7 can see the module data. The ARM7 is the
     // one that will actually play the module.
@@ -110,9 +116,6 @@ int main(int argc, char **argv)
 
     consoleClear();
 
-    printf("Maxmod MAS demo\n");
-    printf("===============\n");
-    printf("\n");
     printf("START: Exit to loader\n");
     printf("\n");
 
@@ -128,6 +131,8 @@ int main(int argc, char **argv)
         if (keys & KEY_START)
             break;
     }
+
+    mmStop();
 
     free(module);
 

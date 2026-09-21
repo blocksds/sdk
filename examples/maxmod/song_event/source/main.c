@@ -1,5 +1,6 @@
 // SPDX-License-Identiier: CC0-1.0
 //
+// SPDX-FileContributor: Antonio Niño Díaz, 2026
 // SPDX-FileContributor: Michele Di Giorgio, 2024
 
 // Example usage of maxmod song event. The ball moves in different positions
@@ -23,10 +24,25 @@
 int spriteX = 80;
 int spriteY = 80;
 
+__attribute__((noreturn)) void wait_forever(void)
+{
+    printf("\nPress START to return to loader\n");
+
+    while (1)
+    {
+        swiWaitForVBlank();
+
+        scanKeys();
+        if (keysDown() & KEY_START)
+            exit(1);
+    }
+}
+
 // Callback function that handles the song event
 mm_word songEventHandler(mm_word message, mm_word param)
 {
-    switch (message) {
+    switch (message)
+    {
         case MMCB_SONGMESSAGE:
             if (param == 1) {
                 spriteX = 60;
@@ -55,6 +71,10 @@ int main(int argc, char **argv)
 {
     consoleDemoInit();
 
+    printf("maxmod song event example\n");
+    printf("=========================\n");
+    printf("\n");
+
     soundEnable();
 
     // Init video
@@ -69,17 +89,23 @@ int main(int argc, char **argv)
     memcpy(SPRITE_PALETTE, ballPal, ballPalLen); // Copy palette
 
     // Init sound
-    mmInitDefaultMem((mm_addr)soundbank_bin);
+    if (!mmInitDefaultMem((mm_addr)soundbank_bin))
+    {
+        printf("mmInitDefaultMem() failed\n");
+        wait_forever();
+    }
 
     mmSetEventHandler(songEventHandler);
 
-    mmLoad(MOD_K_JOSE___GETAWAY);
+    int ret = mmLoad(MOD_K_JOSE___GETAWAY);
+    if (ret != 0)
+    {
+        printf("mmLoad(): %d\n", ret);
+        wait_forever();
+    }
 
     mmStart(MOD_K_JOSE___GETAWAY, MM_PLAY_LOOP);
 
-    printf("maxmod song event example\n");
-    printf("=========================\n");
-    printf("\n");
     printf("START: Return to loader\n");
 
     oamSet(&oamMain, 0,
@@ -119,6 +145,14 @@ int main(int argc, char **argv)
     }
 
     mmStop();
+
+    ret = mmUnload(MOD_K_JOSE___GETAWAY);
+    if (ret != 0)
+    {
+        printf("mmUnload(): %d\n", ret);
+        wait_forever();
+    }
+
     soundDisable();
 
     oamFreeGfx(&oamMain, gfxMain);

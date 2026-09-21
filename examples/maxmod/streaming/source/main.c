@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Michele Di Giorgio, 2024
+// SPDX-FileContributor: Michele Di Giorgio, 2024-2026
 // SPDX-FileContributor: Antonio Niño Díaz, 2025
 //
 // Example usage of maxmod streaming. The example opens a WAV file and streams
@@ -194,10 +194,18 @@ mm_stream_formats getMMStreamType(uint16_t numChannels, uint16_t bitsPerSample)
     return MM_STREAM_8BIT_MONO;
 }
 
-void waitForever(void)
+__attribute__((noreturn)) void waitForever(void)
 {
+    printf("\nPress START to return to loader\n");
+
     while (1)
+    {
         swiWaitForVBlank();
+
+        scanKeys();
+        if (keysDown() & KEY_START)
+            exit(1);
+    }
 }
 
 int main(int argc, char **argv)
@@ -291,7 +299,11 @@ int main(int argc, char **argv)
         .mem_bank     = 0,
         .fifo_channel = FIFO_MAXMOD
     };
-    mmInit(&mmSys);
+    if (!mmInit(&mmSys))
+    {
+        printf("mmInit() failed\n");
+        waitForever();
+    }
 
     // Open the stream
     mm_stream stream =

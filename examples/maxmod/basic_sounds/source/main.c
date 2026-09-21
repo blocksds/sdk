@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2023
+// SPDX-FileContributor: Antonio Niño Díaz, 2023-2026
 // SPDX-FileContributor: Michele Di Giorgio, 2024
 
 #include <stdbool.h>
@@ -20,20 +20,50 @@
 //
 // http://modarchive.org/index.php?request=view_by_moduleid&query=163194
 
+__attribute__((noreturn)) void wait_forever(void)
+{
+    printf("\nPress START to return to loader\n");
+
+    while (1)
+    {
+        swiWaitForVBlank();
+
+        scanKeys();
+        if (keysDown() & KEY_START)
+            exit(1);
+    }
+}
+
 int main(int argc, char **argv)
 {
     consoleDemoInit();
 
-    soundEnable();
-
-    mmInitDefaultMem((mm_addr)soundbank_bin);
-
-    mmLoad(MOD_PARALLAX_80599);
-    mmLoad(MOD_LASSE_HAEN_PYYKIT);
-
     printf("maxmod basic sounds example\n");
     printf("===========================\n");
     printf("\n");
+
+    soundEnable();
+
+    if (!mmInitDefaultMem((mm_addr)soundbank_bin))
+    {
+        printf("mmInitDefaultMem() failed\n");
+        wait_forever();
+    }
+
+    int ret = mmLoad(MOD_PARALLAX_80599);
+    if (ret != 0)
+    {
+        printf("mmLoad(1): %d\n", ret);
+        wait_forever();
+    }
+
+    ret = mmLoad(MOD_LASSE_HAEN_PYYKIT);
+    if (ret != 0)
+    {
+        printf("mmLoad(2): %d\n", ret);
+        wait_forever();
+    }
+
     printf("X: haen pyykit by Lasse\n");
     printf("Y: Parallax Glacier by Raina\n");
     printf("B: Stop song\n");
@@ -44,7 +74,12 @@ int main(int argc, char **argv)
     printf("START: Return to loader\n");
 
     // Load sound effects
-    mmLoadEffect(SFX_FIRE_EXPLOSION);
+    ret = mmLoadEffect(SFX_FIRE_EXPLOSION);
+    if (ret != 0)
+    {
+        printf("mmLoadEffect(): %d\n", ret);
+        wait_forever();
+    }
 
     bool playing = false;
 
@@ -114,6 +149,27 @@ int main(int argc, char **argv)
 
         if (keys_down & KEY_START)
             break;
+    }
+
+    ret = mmUnload(MOD_PARALLAX_80599);
+    if (ret != 0)
+    {
+        printf("mmUnload(1): %d\n", ret);
+        wait_forever();
+    }
+
+    ret = mmUnload(MOD_LASSE_HAEN_PYYKIT);
+    if (ret != 0)
+    {
+        printf("mmUnload(2): %d\n", ret);
+        wait_forever();
+    }
+
+    ret = mmUnloadEffect(SFX_FIRE_EXPLOSION);
+    if (ret != 0)
+    {
+        printf("mmUnloadEffect(): %d\n", ret);
+        wait_forever();
     }
 
     soundDisable();
