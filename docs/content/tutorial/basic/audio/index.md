@@ -132,17 +132,39 @@ To use your songs and sound effects, first you need to initialize audio with
 You can initialize Maxmod with:
 
 ```c
-mmInitDefaultMem((mm_addr)soundbank_bin);
+if (!mmInitDefaultMem((mm_addr)soundbank_bin))
+{
+    printf("mmInitDefaultMem() failed\n");
+    wait_forever();
+}
 ```
 
 After the library is initialized you need to load specific songs and sound
 effects before you can use them. For example:
 
 ```c
-mmLoad(MOD_PARALLAX_80599);
-mmLoad(MOD_LASSE_HAEN_PYYKIT);
+int ret;
 
-mmLoadEffect(SFX_FIRE_EXPLOSION);
+ret = mmLoad(MOD_PARALLAX_80599);
+if (ret != 0)
+{
+    printf("mmLoad(1): %d\n", ret);
+    wait_forever();
+}
+
+ret = mmLoad(MOD_LASSE_HAEN_PYYKIT);
+if (ret != 0)
+{
+    printf("mmLoad(2): %d\n", ret);
+    wait_forever();
+}
+
+ret = mmLoadEffect(SFX_FIRE_EXPLOSION);
+if (ret != 0)
+{
+    printf("mmLoadEffect(): %d\n", ret);
+    wait_forever();
+}
 ```
 
 Now, you can play songs with `mmStart(MOD_LASSE_HAEN_PYYKIT, MM_PLAY_LOOP)`, for
@@ -161,6 +183,31 @@ contains the starting point and end of the part that loops.
 It is possible to store the sound bank (with your sound effects and music) in
 the filesystem. This is required if your game grows too much and it can't fit in
 RAM. This system will be explained later in the tutorial.
+
+Once you're done with the songs and effects, you need to unload them:
+
+```c
+ret = mmUnload(MOD_PARALLAX_80599);
+if (ret != 0)
+{
+    printf("mmUnload(1): %d\n", ret);
+    wait_forever();
+}
+
+ret = mmUnload(MOD_LASSE_HAEN_PYYKIT);
+if (ret != 0)
+{
+    printf("mmUnload(2): %d\n", ret);
+    wait_forever();
+}
+
+ret = mmUnloadEffect(SFX_FIRE_EXPLOSION);
+if (ret != 0)
+{
+    printf("mmUnloadEffect(): %d\n", ret);
+    wait_forever();
+}
+```
 
 Check the [documentation of Maxmod](https://blocksds.skylyrac.net/maxmod/index.html)
 and the [examples](https://codeberg.org/blocksds/sdk/src/branch/master/examples/maxmod)
