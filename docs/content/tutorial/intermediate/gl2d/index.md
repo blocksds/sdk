@@ -337,6 +337,12 @@ This image is composed of tiles from this tileset:
 
 ![Original tileset](bg_tileset.png)
 
+{{< callout type="warning" >}}
+Using this system to draw backgrounds is usually a bad idea.
+[Scroll down](#6-mixing-2d-hardware-with-gl2d) to see how to use the 2D hardware
+to render backgrounds while you use GL2D to draw sprites.
+{{< /callout >}}
+
 You need to pad the tileset up to sizes that are powers of two, and convert it
 with grit as usual:
 
@@ -504,3 +510,36 @@ check it if you want to know more about how to display 3D graphics.
 
 The code of this example is here:
 [`examples/gl2d/2d_and_3d`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/gl2d/2d_and_3d)
+
+## 6. Mixing 2D hardware with GL2D
+
+<!--
+If you change the title (or section number) of this section, go to the tiled
+backgrounds section of this chapter and adjust the link too.
+-->
+
+Using GL2D to draw sprites can be a great idea, so you may think about using it
+to draw tiled backgrounds too. Just render some quads, right?
+
+Well, if you do the math, you need to cover a screen with a resolution of
+256x192, and you probably want to use 8x8 tiles to match what the 2D hardware
+can do. Then you need to add an extra row or column so that you can scroll it
+without gaps. The result, for a fully optimized engine that doesn't draw
+polygons outside of the screen: `((256 / 8) + 1) * ((192 / 8) + 1) = 825 quads`
+
+The 3D hardware has a limit of 2048 polygons per frame, and 6144 vertices per
+frame. GL2D can only render individual quads (and quad strips wouldn't be useful
+to draw tile backgrounds in general, you can't change texture coordinates
+freely). This means that you'd be using `825 / 2048 = 40.3%` of all available
+polygons, and `(825 * 4) / 6144 = 53.7%` of all available vertices. And this
+doesn't include the CPU time that the program needs to spend sending commands to
+the GPU to draw the quads.
+
+On the other hand, the 2D hardware can draw up to 4 tiled background layers
+without using any CPU time.
+
+If you want to learn how to combine the 3D output of GL2D with 2D backgrounds,
+you can check [this section](..//3d_graphics#15-combining-2d-and-3d-on-the-same-screen)
+of the 3D chapter of the tutorial. You can do things like:
+
+![2D and 3D](../3d_graphics/2d_and_3d.png)

@@ -1571,6 +1571,11 @@ There's more information about how the two modes work
 
 ## 15. Combining 2D and 3D on the same screen
 
+<!--
+If you change the title (or section number) of this section, go to the GL2D
+chapter and adjust the link too.
+-->
+
 Sometimes it can be useful to combine 2D backgrounds of sprites and 3D graphics
 on the same screen. For example:
 
@@ -1648,6 +1653,11 @@ polygons and the clear plane.
 
 This is an example of how to display 2D sprites and backgrounds and 3D polygons
 at the same time:
+
+<!--
+If you change the name or location of this image, go to the GL2D chapter and
+adjust the link too.
+-->
 
 ![2D and 3D](2d_and_3d.png)
 
