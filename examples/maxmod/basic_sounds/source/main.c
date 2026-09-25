@@ -89,8 +89,8 @@ int main(int argc, char **argv)
 
         consoleSetCursor(NULL, 0, 15);
         printf("Current position:\n"
-               "    Pattern: %u    \n"
-               "    Row:     %u    ",
+               "    Pattern: %lu    \n"
+               "    Row:     %lu    ",
                mmGetPosition(), mmGetPositionRow());
 
         scanKeys();
