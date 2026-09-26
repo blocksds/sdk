@@ -17,6 +17,14 @@
 
 set -e
 
+# Install dependencies
+export PATH=$PATH:/opt/wonderful/bin
+wf-pacman -Syu \
+    blocksds-libcurl blocksds-mbedtls blocksds-ncurses \
+    blocksds-ptexconv \
+    toolchain-llvm-teak-llvm \
+    wf-nnpack wf-superfamiconv \
+
 # Delete any pre-existing virtual environment
 rm -rf env
 
