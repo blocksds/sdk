@@ -41,7 +41,7 @@ popd
 
 # Create and install ArchitectDS wheel
 
-if [ -d "../architectds" ]; then
+if [ ! -d "../architectds" ]; then
 
     pushd ..
     git clone https://codeberg.org/blocksds/architectds
@@ -58,7 +58,7 @@ popd
 
 # Build the melonDS DS core
 
-if [ -d "../melonds-ds" ]; then
+if [ ! -d "../melonds-ds" ]; then
 
     pushd ..
     git clone https://github.com/JesseTG/melonds-ds
