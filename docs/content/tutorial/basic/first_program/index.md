@@ -25,7 +25,7 @@ exists in case you need it.
 
 The first thing we need to do is setup the development environment that we're
 going to use. If you haven't installed BlocksDS yet, follow the instructions
-[here](https://blocksds.skylyrac.net/docs/setup/options/).
+[here](https://blocksds.skylyrac.net/docs/setup/).
 
 You will also need the examples of BlocksDS. I encourage you to edit the
 examples and experiment with them, so I advise you to get a copy of the examples
@@ -105,7 +105,7 @@ programs will need to be run from the "Wonderful Toolchain Shell", which can be
 fount in the Start menu. If you're using Linux, any terminal will work.
 
 Regardless of how you have downloaded the code, open the shell and go to the
-folder [`examples/console/custom_fonts`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/console/custom_fonts).
+folder [`examples/console/custom_font`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/console/custom_font).
 
 From here, run the following command:
 
