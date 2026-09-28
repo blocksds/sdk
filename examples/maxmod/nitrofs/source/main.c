@@ -2,6 +2,15 @@
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2023-2026
 
+// This example shows how to use a soundbank stored in NitroFS. Samples and
+// modules have an ID that you need to use to load them and play them. Normally,
+// the Makefiles of BlocksDS generate a header with definitions. However, when
+// the soundbank is saved to NitroFS, the makefiles also add a dictionary with
+// names and their IDs to the soundbank, so you don't need to use the header.
+//
+// Using the definitions from the header is faster, but it can also be less
+// flexible.
+
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -9,6 +18,8 @@
 #include <maxmod9.h>
 #include <nds.h>
 
+// This is only needed for MOD_xxx and SFX_xxx definitions. If you don't use
+// them, you can remove this include.
 #include "soundbank.h"
 
 // - lasse_haen_pyykit.xm
@@ -60,18 +71,13 @@ int main(int argc, char **argv)
 
     soundEnable();
 
-    printf("X: haen pyykit by Lasse\n");
-    printf("Y: Parallax Glacier by Raina\n");
-    printf("\n");
-    printf("B: Stop song\n");
-    printf("\n");
-
     if (!mmInitDefault("nitro:/soundbank.bin"))
     {
         printf("mmInitDefault() failed\n");
         wait_forever();
     }
 
+    // Load a module using the ID from the definitions header
     int ret = mmLoad(MOD_PARALLAX_80599);
     if (ret != 0)
     {
@@ -79,12 +85,53 @@ int main(int argc, char **argv)
         wait_forever();
     }
 
-    ret = mmLoad(MOD_LASSE_HAEN_PYYKIT);
+    // Load a module using the ID from soundbank dictionary
+    mm_word lasse_haen_pyykit_id = mmGetModuleIdByName("lasse_haen_pyykit.xm");
+    if (lasse_haen_pyykit_id == 0xFFFFFFFF)
+    {
+        printf("mmGetModuleIdByName(): %ld\n", lasse_haen_pyykit_id);
+        wait_forever();
+    }
+
+    ret = mmLoad(lasse_haen_pyykit_id);
     if (ret != 0)
     {
         printf("mmLoad(2): %d\n", ret);
         wait_forever();
     }
+
+    // Load a sound effect using the ID from the definitions header
+    ret = mmLoadEffect(SFX_FIRE_EXPLOSION);
+    if (ret != 0)
+    {
+        printf("mmLoadEffect(1): %d\n", ret);
+        wait_forever();
+    }
+
+    // Load a sound effect using the ID from soundbank dictionary
+    mm_word nature = mmGetSampleIdByName("nature.wav");
+    if (nature == 0xFFFFFFFF)
+    {
+        printf("mmGetSampleIdByName(): %ld\n", nature);
+        wait_forever();
+    }
+
+    ret = mmLoadEffect(nature);
+    if (ret != 0)
+    {
+        printf("mmLoadEffect(2): %d\n", ret);
+        wait_forever();
+    }
+
+    printf("X: haen pyykit by Lasse\n");
+    printf("Y: Parallax Glacier by Raina\n");
+    printf("\n");
+    printf("B: Stop song\n");
+    printf("\n");
+    printf("L: Play explosion\n");
+    printf("R: Play nature\n");
+    printf("\n");
+    printf("A: Stop sound effects\n");
 
     bool playing = false;
 
@@ -123,6 +170,15 @@ int main(int argc, char **argv)
             playing = true;
         }
 
+        if (keys_down & KEY_A)
+            mmEffectCancelAll();
+
+        if (keys_down & KEY_L)
+            mmEffect(SFX_FIRE_EXPLOSION);
+
+        if (keys_down & KEY_R)
+            mmEffect(nature);
+
         if (keys_down & KEY_START)
             break;
     }
@@ -134,10 +190,24 @@ int main(int argc, char **argv)
         wait_forever();
     }
 
-    ret = mmUnload(MOD_LASSE_HAEN_PYYKIT);
+    ret = mmUnload(lasse_haen_pyykit_id);
     if (ret != 0)
     {
         printf("mmUnload(2): %d\n", ret);
+        wait_forever();
+    }
+
+    ret = mmUnloadEffect(SFX_FIRE_EXPLOSION);
+    if (ret != 0)
+    {
+        printf("mmUnloadEffect(1): %d\n", ret);
+        wait_forever();
+    }
+
+    ret = mmUnloadEffect(nature);
+    if (ret != 0)
+    {
+        printf("mmUnloadEffect(2): %d\n", ret);
         wait_forever();
     }
 
