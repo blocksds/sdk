@@ -1,0 +1,2 @@
+This is here so that the NitroFS filesystem isn't empty and the Makefile
+adds the Maxmod soundbank to NitroFS.
