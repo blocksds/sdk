@@ -68,8 +68,10 @@ ROM		:= $(NAME).nds
 SOUNDBANKINFODIR	:= $(BUILDDIR)/maxmod
 ifeq ($(strip $(NITROFSDIR)),)
     SOUNDBANKDIR	:= $(BUILDDIR)/maxmod
+    MMUTIL_FLAGS    :=
 else
     SOUNDBANKDIR	:= $(BUILDDIR)/maxmod_nitrofs
+    MMUTIL_FLAGS    := -D
 endif
 
 # Tools
@@ -320,7 +322,7 @@ $(SOUNDBANKINFODIR)/soundbank.h: $(SOURCES_AUDIO)
 	@echo "  MMUTIL  $^"
 	@$(MKDIR) -p $(SOUNDBANKDIR)
 	@$(MKDIR) -p $(SOUNDBANKINFODIR)
-	$(V)$(BLOCKSDS)/tools/mmutil/mmutil $^ -d \
+	$(V)$(BLOCKSDS)/tools/mmutil/mmutil $^ -d $(MMUTIL_FLAGS) \
 		-o$(SOUNDBANKDIR)/soundbank.bin -h$(SOUNDBANKINFODIR)/soundbank.h
 
 ifeq ($(strip $(NITROFSDIR)),)
