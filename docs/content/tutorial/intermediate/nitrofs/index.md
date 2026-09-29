@@ -426,7 +426,52 @@ AUDIODIRS	:= audio
 NITROFSDIR	:= nitrofs
 ```
 
-Check the example here: [`examples/maxmod/nitrofs`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/maxmod/nitrofs)
+When the soundbank is saved in NitroFS, the makefile also enables the dictionary
+of names of samples and modules. This dictionary lets you determine the ID of a
+sample/module from their original file name, or the file name from their ID.
+
+If you want, you can remove the include that contains the `MOD_xxx` and
+`SFX_xxx` definitions:
+
+```c
+#include "soundbank.h"
+```
+
+You can replace it by `mmGetSampleIdByName()` and `mmGetModuleIdByName()`. For
+example, if you have this:
+
+```c
+ret = mmLoad(MOD_LASSE_HAEN_PYYKIT);
+if (ret != 0)
+{
+    printf("mmLoad(): %d\n", ret);
+    wait_forever();
+}
+```
+
+you can replace it with:
+
+```c
+// Load a module using the ID from soundbank dictionary
+mm_word lasse_haen_pyykit_id = mmGetModuleIdByName("lasse_haen_pyykit.xm");
+if (lasse_haen_pyykit_id == 0xFFFFFFFF)
+{
+    printf("mmGetModuleIdByName(): %ld\n", lasse_haen_pyykit_id);
+    wait_forever();
+}
+
+ret = mmLoad(lasse_haen_pyykit_id);
+if (ret != 0)
+{
+    printf("mmLoad(): %d\n", ret);
+    wait_forever();
+}
+```
+
+You can do the same change for your sound effects.
+
+Check the example here for more details:
+[`examples/maxmod/nitrofs`](https://codeberg.org/blocksds/sdk/src/branch/master/examples/maxmod/nitrofs)
 
 ## 8. Using LibXM7 with NitroFS
 
