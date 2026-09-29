@@ -454,7 +454,7 @@ you can replace it with:
 ```c
 // Load a module using the ID from soundbank dictionary
 mm_word lasse_haen_pyykit_id = mmGetModuleIdByName("lasse_haen_pyykit.xm");
-if (lasse_haen_pyykit_id == 0xFFFFFFFF)
+if (lasse_haen_pyykit_id == -1)
 {
     printf("mmGetModuleIdByName(): %ld\n", lasse_haen_pyykit_id);
     wait_forever();

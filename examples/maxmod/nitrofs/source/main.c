@@ -86,8 +86,8 @@ int main(int argc, char **argv)
     }
 
     // Load a module using the ID from soundbank dictionary
-    mm_word lasse_haen_pyykit_id = mmGetModuleIdByName("lasse_haen_pyykit.xm");
-    if (lasse_haen_pyykit_id == 0xFFFFFFFF)
+    mm_sword lasse_haen_pyykit_id = mmGetModuleIdByName("lasse_haen_pyykit.xm");
+    if (lasse_haen_pyykit_id == -1)
     {
         printf("mmGetModuleIdByName(): %ld\n", lasse_haen_pyykit_id);
         wait_forever();
@@ -109,8 +109,8 @@ int main(int argc, char **argv)
     }
 
     // Load a sound effect using the ID from soundbank dictionary
-    mm_word nature = mmGetSampleIdByName("nature.wav");
-    if (nature == 0xFFFFFFFF)
+    mm_sword nature = mmGetSampleIdByName("nature.wav");
+    if (nature == -1)
     {
         printf("mmGetSampleIdByName(): %ld\n", nature);
         wait_forever();
