@@ -3,6 +3,150 @@ title: 'Changelog'
 weight: 6
 ---
 
+### Version DEV (2026-XX-XX)
+
+- libnds:
+
+  - Add workaround for NAND initialization in no$gba. @edo9300
+  - Reintroduce device list support in no$gba. @edo9300
+  - Simplify the `is_nocashgba()` check to make it faster. @edo9300
+  - Simplify the no$gba check in `SDMMC_readSectorsCrypt()`. @edo9300
+  - Check the value of `__STDC_VERSION__` correctly.
+
+- Maxmod:
+
+  - Fix reverb disable and stop functions. It wasn't possible to stop the effect
+    completely, only enable it.
+  - Add support for setting the tempo and pitch of jingles, not just the main
+    song.
+
+  - GBA:
+
+    - Add a version of the mixer in C. This isn't meant to be used by real
+      applications, it's meant to be used as documentation, to understand how
+      the assembly mixer works, and as base to port Maxmod to other platforms.
+    - `mmFrame()` has been modified to improve jingle playback. Previously, tick
+      events in jingles were only updated with a 60 Hz resolution (once per
+      frame). With the new code, ticks are handled the same way for the main
+      song and the jingle.
+    - The values of `mmModuleCount` and `mmSampleCount` are set to 0 in
+      `mmEnd()`.
+
+  - A new "Headless" platform has been added.
+
+    - This is a generic platform that doesn't output sound on any specific audio
+      device, it can only save samples to a user-provided buffer. The user is in
+      charge of providing the buffer to the audio hardware (if any).
+    - This platform allows arbitrary sample rates.
+    - The main header for this platform is `maxmod_headless.h`.
+
+  - There's a new WAV renderer tool.
+
+    - This tool takes a soundbank as input and generates a WAV file with the
+      first song in the soundbank.
+    - There's a new section in the documentation for this platform.
+
+  - There's a new demo application that uses headless Maxmod with SDL3.
+
+    - This application can run in any platform supported by SDL3.
+    - The new CMake build system created for this demo has been tested on Linux
+      and with Emscripten (to generate a WASM binary that can run on web
+      browsers).
+    - This demo shows the name of modules and samples on the screen.
+
+  - There are new functions to read the dictionary of samples and modules that
+    can be added to soundbanks. Functions `mmGetSampleIdByName()` and
+    `mmGetModuleIdByName()` can determine the ID of of a song or sample from
+    their original file name, and functions `mmGetSampleNameById()` and
+    `mmGetModuleNameById()` can get the file name from their IDs.
+
+  - There are a few small changes to make Maxmod work in 64-bit platforms:
+
+    - Use `uintptr_t` to cast from pointers to integers so that the code can be
+      built for 64-bit platforms.
+    - Mark the `msl_head_data` struct as packed to fix its size in 64-bit
+      platforms.
+    - Use `stdint.h` types to define the types in `mm_types.h` to ensure that
+      they have the right size in all platforms. This will cause some warnings
+      in user code that uses `printf()` to print `mm_word` variables (and other
+      types).
+    - New static asserts have been added to check the size of all MAS and MSL
+      struct definitions and ensure that it doesn't change accidentally.
+
+  - All common functions have been deduplicated from the platform headers. They
+    are now in `maxmod_common.h`.
+  - The documentation has been reorganized. All common sections have been
+    deduplicated. If there are functions that behave differently in different
+    platforms, there are warning and notes about it.
+  - Expand size of some fields in the MAS file header to fit all possible values
+    supported by XM files. This is a breaking change with the old format, still
+    used by devkitPro's `mmutil`. If needed, Maxmod can be built defining
+    `MM_MMUTIL_DEVKITPRO_COMPAT` to assume that files use the old format.
+
+  - Some small cleanup changes:
+
+    - The global pitch and tempo variables for clarity. They don't affect
+      jingles, so they should clarify that they only affect the main song.
+    - `mmEffectExt()` has been removed from the header, it wasn't implemented.
+    - The type of `sampleTable` in the `msl_head` struct has been fixed. It
+      isn't a pointer, it's an offset.
+
+- mmutil:
+
+  - The project has migrated from C to C++. This has caused several warnings,
+    which have also been fixed.
+  - Now it's possible to embed a dictionary that lists all the names of modules
+    and samples and their IDs. This can be used at runtime instead of the
+    definitions header. In some cases, it isn't even possible to use the header,
+    so this is an alternative. It is disabled by default, and it can be enabled
+    with `-D`.
+  - Samples of module files that start with `#` were added to the definitions
+    header like sound effects. This wasn't in the documentation, and it has been
+    added now.
+  - Expand size of some fields in the MAS file header to fit all possible values
+    supported by XM files. Like Maxmod, mmutil can be built with
+    `MM_MMUTIL_DEVKITPRO_COMPAT` to generate files with the old format. In that
+    case, it will crash with an error message if any song uses values that are
+    too big to fit.
+  - The version number has been increased from `0x18` to `0x19`.
+
+- ndstool:
+
+  - Check the value of `__STDC_VERSION__` correctly.
+
+- SDK:
+
+  - picolibc has been updated. @asie
+  - In the default ARM9-only makefiles, add `-D` to `mmutil` invocation when the
+    soundbank is saved to NitroFS. This adds the names of samples and modules to
+    the soundbank.
+
+  - Tests:
+
+    - Added a note to the release process guide about which tests to run on
+      no$gba and DeSmuME.
+    - Fix inverted directory condition in `tests-setup-environment.sh`. @asie
+    - Fix some scripts that generate filesystem images. Reported by @asie.
+    - Add a test to ensure that the dictionary of names of samples and modules
+      works as expected.
+
+  - Tutorial:
+
+    - Add error checks to Maxmod section.
+    - Discourage users of GL2D from drawing tiled backgrounds with GL2D, and
+      suggest them to use the 2D hardware instead.
+    - Fixed some links.
+
+  - Examples:
+
+    - The NitroFS Maxmod example has been improved. It now shows how to play
+      sound effects, and it shows how to load modules and samples using the
+      definitions header and the soundbank names dictionary.
+    - All Maxmod examples now do proper error checks, and they free the
+      resources used by Maxmod when exiting the example so that users that copy
+      the examples can see how to do it properly from the start.
+    - Fix warnings related to `printf()` in Maxmod examples.
+
 ### Version 1.24.0 (2026-09-21)
 
 - libnds:
