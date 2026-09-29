@@ -117,6 +117,8 @@ weight: 6
 - SDK:
 
   - picolibc has been updated. @asie
+  - Add `-z noexecstack` to the `.specs` files to fix a linker warning about
+    having an executable stack.
   - In the default ARM9-only makefiles, add `-D` to `mmutil` invocation when the
     soundbank is saved to NitroFS. This adds the names of samples and modules to
     the soundbank.
@@ -132,6 +134,8 @@ weight: 6
 
   - Tutorial:
 
+    - Mention how to use the new Maxmod soundbank dictionary when using a
+      soundbank from NitroFS.
     - Add error checks to Maxmod section.
     - Discourage users of GL2D from drawing tiled backgrounds with GL2D, and
       suggest them to use the 2D hardware instead.
