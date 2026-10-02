@@ -11,7 +11,13 @@ weight: 6
   - Reintroduce device list support in no$gba. @edo9300
   - Simplify the `is_nocashgba()` check to make it faster. @edo9300
   - Simplify the no$gba check in `SDMMC_readSectorsCrypt()`. @edo9300
+  - Workaround for no$gba to use multi-block writes in SDMMC. @edo9300
   - Check the value of `__STDC_VERSION__` correctly.
+
+- DSWiFi:
+
+  - Mention that hangs in `Wifi_InitDefault()` may hang if the ARM7 core doesn't
+    have support for DSWiFi.
 
 - Maxmod:
 
@@ -19,6 +25,10 @@ weight: 6
     completely, only enable it.
   - Add support for setting the tempo and pitch of jingles, not just the main
     song.
+  - Return error codes from `mmEffectVolume()`, `mmEffectPanning()`,
+    `mmEffectRate()`, `mmEffectScaleRate()` and  `mmEffectRelease()`, except
+    for NDS mode from the ARM9.
+  - Clamp maximum sound effect volume to 255.
 
   - GBA:
 
@@ -31,6 +41,12 @@ weight: 6
       song and the jingle.
     - The values of `mmModuleCount` and `mmSampleCount` are set to 0 in
       `mmEnd()`.
+
+  - NDS:
+
+    - If `mmInitDefault()` is called, it keeps an open `FILE` pointer to the
+      soundbank instead of saving the path to the soundbank and opening/closing
+      it every time the application needs to load data, which increases speed.
 
   - A new "Headless" platform has been added.
 
@@ -53,6 +69,13 @@ weight: 6
       and with Emscripten (to generate a WASM binary that can run on web
       browsers).
     - This demo shows the name of modules and samples on the screen.
+
+  - A new test suite has been added.
+
+    - The tests are integrated in the CMake files with CTest, but they rely on
+      some external shell scripts too.
+    - The tests have been taken from [UMOD Player](https://codeberg.org/SkyLyrac/umod-player)
+      with some modifications to work with Maxmod.
 
   - There are new functions to read the dictionary of samples and modules that
     can be added to soundbanks. Functions `mmGetSampleIdByName()` and
@@ -139,6 +162,8 @@ weight: 6
     - Add error checks to Maxmod section.
     - Discourage users of GL2D from drawing tiled backgrounds with GL2D, and
       suggest them to use the 2D hardware instead.
+    - Mention that hangs in `Wifi_InitDefault()` may hang if the ARM7 core
+      doesn't have support for DSWiFi.
     - Fixed some links.
 
   - Examples:
