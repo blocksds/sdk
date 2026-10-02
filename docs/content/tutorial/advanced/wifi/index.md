@@ -39,6 +39,11 @@ tutorials in the library documentation instead. This chapter will focus on
 understanding how to use them at a very high level to create an application, as
 well as some other libraries you can use with BlocksDS (Mbed TLS and libcurl).
 
+{{< callout type="warning" >}}
+If your program hangs after calling `Wifi_InitDefault()`, make sure that your
+ARM7 core has been built with DSWiFi support!
+{{< /callout >}}
+
 ## 2. Differences between local and online communications
 
 You may think that once you have an application that supports local multiplayer
