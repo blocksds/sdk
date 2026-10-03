@@ -25,10 +25,12 @@ weight: 6
     completely, only enable it.
   - Add support for setting the tempo and pitch of jingles, not just the main
     song.
-  - Return error codes from `mmEffectVolume()`, `mmEffectPanning()`,
-    `mmEffectRate()`, `mmEffectScaleRate()` and  `mmEffectRelease()`, except
-    for NDS mode from the ARM9.
+  - Return error codes from `mmStart()`, `mmJingleStart()`, `mmEffectVolume()`,
+    `mmEffectPanning()`, `mmEffectRate()`, `mmEffectScaleRate()` and
+    `mmEffectRelease()`, except for NDS mode from the ARM9.
   - Clamp maximum sound effect volume to 255.
+  - If a module isn't being played, don't allow to modify the position of the
+    module with `mmSetPositionEx()`, `mmSetPosition()` or `mmPosition()`.
 
   - GBA:
 
