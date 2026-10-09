@@ -18,19 +18,10 @@ weight: 6
 
   - Mention that hangs in `Wifi_InitDefault()` may hang if the ARM7 core doesn't
     have support for DSWiFi.
+  - Prevent `Wifi_Update()` from being nested, which can cause issues. Reported
+    by @birowsi.
 
 - Maxmod:
-
-  - Fix reverb disable and stop functions. It wasn't possible to stop the effect
-    completely, only enable it.
-  - Add support for setting the tempo and pitch of jingles, not just the main
-    song.
-  - Return error codes from `mmStart()`, `mmJingleStart()`, `mmEffectVolume()`,
-    `mmEffectPanning()`, `mmEffectRate()`, `mmEffectScaleRate()` and
-    `mmEffectRelease()`, except for NDS mode from the ARM9.
-  - Clamp maximum sound effect volume to 255.
-  - If a module isn't being played, don't allow to modify the position of the
-    module with `mmSetPositionEx()`, `mmSetPosition()` or `mmPosition()`.
 
   - GBA:
 
@@ -76,14 +67,17 @@ weight: 6
 
     - The tests are integrated in the CMake files with CTest, but they rely on
       some external shell scripts too.
-    - The tests have been taken from [UMOD Player](https://codeberg.org/SkyLyrac/umod-player)
-      with some modifications to work with Maxmod.
+    - The MOD test files have been taken from [UMOD Player](https://codeberg.org/SkyLyrac/umod-player)
+      with some modifications to work with Maxmod. Then, they have been adapted
+      to test S3M, IT and XM as well.
 
-  - There are new functions to read the dictionary of samples and modules that
-    can be added to soundbanks. Functions `mmGetSampleIdByName()` and
-    `mmGetModuleIdByName()` can determine the ID of of a song or sample from
-    their original file name, and functions `mmGetSampleNameById()` and
-    `mmGetModuleNameById()` can get the file name from their IDs.
+  - MSL files (soundbanks) now can have a dictionary of song and sample names.
+
+    - There are new functions to read the dictionary of samples and modules that
+      can be added to soundbanks. Functions `mmGetSampleIdByName()` and
+      `mmGetModuleIdByName()` can determine the ID of of a song or sample from
+      their original file name, and functions `mmGetSampleNameById()` and
+      `mmGetModuleNameById()` can get the file name from their IDs.
 
   - There are a few small changes to make Maxmod work in 64-bit platforms:
 
@@ -98,42 +92,109 @@ weight: 6
     - New static asserts have been added to check the size of all MAS and MSL
       struct definitions and ensure that it doesn't change accidentally.
 
-  - All common functions have been deduplicated from the platform headers. They
-    are now in `maxmod_common.h`.
-  - The documentation has been reorganized. All common sections have been
-    deduplicated. If there are functions that behave differently in different
-    platforms, there are warning and notes about it.
-  - Expand size of some fields in the MAS file header to fit all possible values
-    supported by XM files. This is a breaking change with the old format, still
-    used by devkitPro's `mmutil`. If needed, Maxmod can be built defining
-    `MM_MMUTIL_DEVKITPRO_COMPAT` to assume that files use the old format.
+  - Documentation changes:
 
-  - Some small cleanup changes:
+    - The documentation has been reorganized. All common sections have been
+      deduplicated. If there are functions that behave differently in different
+      platforms, there are warning and notes about it.
+    - The documentation now has a page of unsupported features of all supported
+      formats.
+    - Add a guide of supported/unsupported features of the audio files supported
+      by Maxmod.
 
+  - Some fixes:
+
+    - Fix reverb disable and stop functions in NDS mode. It wasn't possible to
+      stop the effect completely, only enable it.
+    - Fixed the global volume effect `Vxx` for S3M files.
+    - The type of `sampleTable` in the `msl_head` struct has been fixed. It
+      isn't a pointer, it's an offset.
+    - Clamp maximum sound effect volume to 255.
+    - If a module isn't being played, don't allow to modify the position of the
+      module with `mmSetPositionEx()`, `mmSetPosition()` or `mmPosition()`.
+
+  - Some general changes:
+
+    - Add support for setting the tempo and pitch of jingles, not just the main
+      song.
+    - Return error codes from functions `mmStart()`, `mmJingleStart()`,
+      `mmEffectVolume()`, `mmEffectPanning()`, `mmEffectRate()`,
+      `mmEffectScaleRate()` and `mmEffectRelease()`, except for NDS mode from
+      the ARM9.
+    - All common functions have been deduplicated from the platform headers.
+      They are now in `maxmod_common.h`.
     - The global pitch and tempo variables for clarity. They don't affect
       jingles, so they should clarify that they only affect the main song.
     - `mmEffectExt()` has been removed from the header, it wasn't implemented.
-    - The type of `sampleTable` in the `msl_head` struct has been fixed. It
-      isn't a pointer, it's an offset.
+    - Clarify the meaning of the not implemented "old effects" flag in the IT
+      format.
+
+  - And an optional break of the soundbank format:
+
+    - Expand size of some fields in the MAS file header to fit all possible
+      values supported by XM files. This is a breaking change with the old
+      format, still used by devkitPro's `mmutil`. If needed, Maxmod can be built
+      defining `MM_MMUTIL_DEVKITPRO_COMPAT` to assume that files use the old
+      format.
 
 - mmutil:
 
-  - The project has migrated from C to C++. This has caused several warnings,
-    which have also been fixed.
-  - Now it's possible to embed a dictionary that lists all the names of modules
-    and samples and their IDs. This can be used at runtime instead of the
-    definitions header. In some cases, it isn't even possible to use the header,
-    so this is an alternative. It is disabled by default, and it can be enabled
-    with `-D`.
-  - Samples of module files that start with `#` were added to the definitions
-    header like sound effects. This wasn't in the documentation, and it has been
-    added now.
-  - Expand size of some fields in the MAS file header to fit all possible values
-    supported by XM files. Like Maxmod, mmutil can be built with
-    `MM_MMUTIL_DEVKITPRO_COMPAT` to generate files with the old format. In that
-    case, it will crash with an error message if any song uses values that are
-    too big to fit.
-  - The version number has been increased from `0x18` to `0x19`.
+  - General:
+
+    - The project has migrated from C to C++. This has caused several warnings,
+      which have also been fixed.
+    - Now it's possible to embed a dictionary that lists all the names of
+      modules and samples and their IDs. This can be used at runtime instead of
+      the definitions header. In some cases, it isn't even possible to use the
+      header, so this is an alternative. It is disabled by default, and it can
+      be enabled with `-D`.
+    - The text now uses ANSI color. Warnings are yellow, errors are red, verbose
+      messages are cyan. Color can be disabled by using the `NO_COLOR`
+      environment variable, defined [here](https://no-color.org).
+    - The formatting of verbose output tables has been improved. This was hidden
+      behind a `SUPER_ASCII` flag, which has been removed to simplify the code.
+    - Expand size of some fields in the MAS file header to fit all possible
+      values supported by XM files. Like Maxmod, mmutil can be built with
+      `MM_MMUTIL_DEVKITPRO_COMPAT` to generate files with the old format. In
+      that case, it will crash with an error message if any song uses values
+      that are too big to fit.
+    - The version number has been increased from `0x18` to `0x19`, but only if
+      `MM_MMUTIL_DEVKITPRO_COMPAT` is not defined.
+
+  - Module files:
+
+    - Samples of module files that start with `#` were added to the definitions
+      header like sound effects. This wasn't in the documentation, and it has
+      been added now.
+    - Add warnings for all unsupported MOD, S3M, IT and XM effects.
+    - In verbose mode, show messages whenever sound event effects are found in a
+      song.
+
+  - IT:
+
+    - Show a warning when converting IT files with "old effects" flag enabled
+      because Maxmod ignores it and it may help debug playback issues.
+
+  - S3M:
+
+    - Show error messages (but don't exit) if Adlib instruments are used in the
+      file.
+    - Fix overflow in effect `Xnn` (set panning) that caused `X80` (fully
+      right) to be treated as `X00` (fully left).
+    - Fix effect `Cnn` (pattern break) when the destination row is higher than
+      the limit (63). Now it's ignored, as expected.
+    - Ignore `Vxx` (global volume) effects with a volume greater than 64.
+    - Print a warning when converting S3M files with "amiga limits" flag
+      enabled.  It is currently ignored, and implementing it requires changes to
+      some effects as well.
+    - Print warnings when unsupported effects are found (`S1x`, `S2x`, `S5x`,
+      `Yxx`, `Zxx`).
+
+  - WAV:
+
+    - Improve error messages when a WAV file has an unsupported format, and show
+      it even outside of verbose mode. Show warnings and verbose messages when
+      unknown chunks are found.
 
 - ndstool:
 
