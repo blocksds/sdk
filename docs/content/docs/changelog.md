@@ -112,6 +112,11 @@ weight: 6
     - Clamp maximum sound effect volume to 255.
     - If a module isn't being played, don't allow to modify the position of the
       module with `mmSetPositionEx()`, `mmSetPosition()` or `mmPosition()`.
+    - The tremor effect `Txx` in XM files has been fixed. It was partly broken
+      during the translation from ASM to C, but the original ASM was broken too.
+      The new code behaves like in OpenMPT.
+    - In XM files, the volume command `uxx` (set vibrato speed) now doesn't
+      update the vibrato effect, as expected by FastTracker 2.
 
   - Some general changes:
 
@@ -121,11 +126,13 @@ weight: 6
       `mmEffectVolume()`, `mmEffectPanning()`, `mmEffectRate()`,
       `mmEffectScaleRate()` and `mmEffectRelease()`, except for NDS mode from
       the ARM9.
+    - Tremor effect support has been added for S3M files.
     - All common functions have been deduplicated from the platform headers.
       They are now in `maxmod_common.h`.
     - The global pitch and tempo variables for clarity. They don't affect
       jingles, so they should clarify that they only affect the main song.
     - `mmEffectExt()` has been removed from the header, it wasn't implemented.
+    - Added enums of sound effect IDs used in MAS files.
     - Clarify the meaning of the not implemented "old effects" flag in the IT
       format.
 
@@ -160,6 +167,7 @@ weight: 6
       that are too big to fit.
     - The version number has been increased from `0x18` to `0x19`, but only if
       `MM_MMUTIL_DEVKITPRO_COMPAT` is not defined.
+    - Added enums of sound effect IDs used in MAS files.
 
   - Module files:
 
@@ -169,6 +177,13 @@ weight: 6
     - Add warnings for all unsupported MOD, S3M, IT and XM effects.
     - In verbose mode, show messages whenever sound event effects are found in a
       song.
+
+  - XM:
+
+    - Emulate FastTracker 2 bugs in panning slide commands in the volume column
+      so that Maxmod doesn't need to spend CPU cycles doing it.
+    - Fix "continue" in Fine Portamento Up/Down (`E10`, E20`) and Extra Fine
+      Portamento Up/Down (`X10`, X20`).
 
   - IT:
 
@@ -183,12 +198,11 @@ weight: 6
       right) to be treated as `X00` (fully left).
     - Fix effect `Cnn` (pattern break) when the destination row is higher than
       the limit (63). Now it's ignored, as expected.
-    - Ignore `Vxx` (global volume) effects with a volume greater than 64.
+    - Ignore `Vxx` (global volume) effects with a volume greater than 64 so that
+      Maxmod doesn't have to do it.
     - Print a warning when converting S3M files with "amiga limits" flag
       enabled.  It is currently ignored, and implementing it requires changes to
       some effects as well.
-    - Print warnings when unsupported effects are found (`S1x`, `S2x`, `S5x`,
-      `Yxx`, `Zxx`).
 
   - WAV:
 
