@@ -117,6 +117,8 @@ weight: 6
       The new code behaves like in OpenMPT.
     - In XM files, the volume command `uxx` (set vibrato speed) now doesn't
       update the vibrato effect, as expected by FastTracker 2.
+    - Fix Note Delay effect when the parameter is higher or equal than the speed
+      of the playback.
 
   - Some general changes:
 
@@ -126,13 +128,18 @@ weight: 6
       `mmEffectVolume()`, `mmEffectPanning()`, `mmEffectRate()`,
       `mmEffectScaleRate()` and `mmEffectRelease()`, except for NDS mode from
       the ARM9.
-    - Tremor effect support has been added for S3M files.
+    - Add support for tremolo and vibrato waveform commands for MOD, XM, S3M and
+      IT formats.
+    - Tremor effect support has been added for S3M and XM files.
+    - Set Vibrato Waveform and Set Tremolo Waveform effects now work for
+      MOD/S3M/IT/XM. The retrigger/continue modes of XM/MOD are supported.
     - All common functions have been deduplicated from the platform headers.
       They are now in `maxmod_common.h`.
     - The global pitch and tempo variables for clarity. They don't affect
       jingles, so they should clarify that they only affect the main song.
     - `mmEffectExt()` has been removed from the header, it wasn't implemented.
     - Added enums of sound effect IDs used in MAS files.
+    - Added enums of all possible waveform types used in MAS files.
     - Clarify the meaning of the not implemented "old effects" flag in the IT
       format.
 
@@ -165,18 +172,39 @@ weight: 6
       `MM_MMUTIL_DEVKITPRO_COMPAT` to generate files with the old format. In
       that case, it will crash with an error message if any song uses values
       that are too big to fit.
+    - A new "extra" log level mode has been added after "verbose". Run `mmutil`
+      with `-v -v` to enable it.
+    - A new option has been added to skip the "overwrite?" prompt that appears
+      if the output file already exists. Using option `-y` will overwrite the
+      file without asking for confirmation.
     - The version number has been increased from `0x18` to `0x19`, but only if
       `MM_MMUTIL_DEVKITPRO_COMPAT` is not defined.
     - Added enums of sound effect IDs used in MAS files.
+    - Added enums of all possible waveform types used in MAS files.
 
   - Module files:
 
+    - Add support for tremolo and vibrato waveform commands for MOD, XM, S3M and
+      IT formats.
     - Samples of module files that start with `#` were added to the definitions
       header like sound effects. This wasn't in the documentation, and it has
       been added now.
     - Add warnings for all unsupported MOD, S3M, IT and XM effects.
+    - If Pattern Loop is found in a pattern without a previous Pattern Loop
+      Start, print a warning.
     - In verbose mode, show messages whenever sound event effects are found in a
       song.
+    - Warn about portamento up/down effects in MOD/XM files that are clamped to
+      make room for fine and extra fine portamento effects defined in S3M/IT.
+
+  - MOD:
+
+    - Warn about `Dxx` jumps to values over 63 and convert them to `D00`.
+    - Fix samples that loop and a loop end point that is different from the
+      sample end. mmutil now appends the looping part of the sample to the end
+      of the sample and adjusts the loop points so that the sample can be played
+      back the same way as in S3M/XM/IT. This increases the size of the
+      soundbank, but it's required to play the sample correctly.
 
   - XM:
 
@@ -184,6 +212,10 @@ weight: 6
       so that Maxmod doesn't need to spend CPU cycles doing it.
     - Fix "continue" in Fine Portamento Up/Down (`E10`, E20`) and Extra Fine
       Portamento Up/Down (`X10`, X20`).
+    - Warn about `Dxx` jumps to values over 63, not supported by FT2.
+    - Warn if a `E60` isn't eventually followed by a `Dxx` in the same pattern.
+      `E60` has a bug that can only be avoided by using a `Dxx` in the same
+      pattern.
 
   - IT:
 
@@ -203,6 +235,9 @@ weight: 6
     - Print a warning when converting S3M files with "amiga limits" flag
       enabled.  It is currently ignored, and implementing it requires changes to
       some effects as well.
+    - Convert `SD0` (note delay) to `v00`. In MOD/XM/IT it causes the note to be
+      heard, but it stays silent in S3M. The fix is done in mmutil to simplify
+      the code in Maxmod.
 
   - WAV:
 
