@@ -40,6 +40,8 @@ weight: 6
     - If `mmInitDefault()` is called, it keeps an open `FILE` pointer to the
       soundbank instead of saving the path to the soundbank and opening/closing
       it every time the application needs to load data, which increases speed.
+    - Fix reverb disable and stop functions. It wasn't possible to stop the
+      effect completely, only enable it.
 
   - A new "Headless" platform has been added.
 
@@ -48,20 +50,19 @@ weight: 6
       charge of providing the buffer to the audio hardware (if any).
     - This platform allows arbitrary sample rates.
     - The main header for this platform is `maxmod_headless.h`.
-
-  - There's a new WAV renderer tool.
-
-    - This tool takes a soundbank as input and generates a WAV file with the
-      first song in the soundbank.
     - There's a new section in the documentation for this platform.
+    - It has been used to create a new WAV renderer tool.
 
-  - There's a new demo application that uses headless Maxmod with SDL3.
+      - This tool takes a soundbank as input and generates a WAV file with the
+        requested song of the soundbank.
 
-    - This application can run in any platform supported by SDL3.
-    - The new CMake build system created for this demo has been tested on Linux
-      and with Emscripten (to generate a WASM binary that can run on web
-      browsers).
-    - This demo shows the name of modules and samples on the screen.
+    - There's a new demo application that uses headless Maxmod with SDL3.
+
+      - This application can run in any platform supported by SDL3.
+      - The new CMake build system created for this demo has been tested on
+        Linux and with Emscripten (to generate a WASM binary that can run on web
+        browsers).
+      - This demo shows the name of modules and samples on the screen.
 
   - A new test suite has been added.
 
@@ -70,14 +71,26 @@ weight: 6
     - The MOD test files have been taken from [UMOD Player](https://codeberg.org/SkyLyrac/umod-player)
       with some modifications to work with Maxmod. Then, they have been adapted
       to test S3M, IT and XM as well.
+    - A new WAV comparison tool has been added to the repository. It reports the
+      time ranges that don't match (in seconds) instead of just reporting
+      "mismatch", like `diff`.
 
-  - MSL files (soundbanks) now can have a dictionary of song and sample names.
+  - MSL file (soundbank) changes:
 
-    - There are new functions to read the dictionary of samples and modules that
+    - MSL files (soundbanks) now can have a dictionary of song and sample names.
+      There are new functions to read the dictionary of samples and modules that
       can be added to soundbanks. Functions `mmGetSampleIdByName()` and
       `mmGetModuleIdByName()` can determine the ID of of a song or sample from
       their original file name, and functions `mmGetSampleNameById()` and
       `mmGetModuleNameById()` can get the file name from their IDs.
+    - Compatibility break: Expand size of some fields in the MAS file header to
+      fit all possible values supported by XM files. This is a breaking change
+      with the old format, still used by devkitPro's `mmutil`. If needed, Maxmod
+      can be built defining `MM_MMUTIL_DEVKITPRO_COMPAT` to assume that files
+      use the old format. This doesn't affect anyone using mmutil and Maxmod
+      from BlocksDS, only people using old versions of mmutil.
+    - The type of `sampleTable` in the `msl_head` struct has been fixed. It
+      isn't a pointer, it's an offset.
 
   - There are a few small changes to make Maxmod work in 64-bit platforms:
 
@@ -101,55 +114,60 @@ weight: 6
       formats.
     - Add a guide of supported/unsupported features of the audio files supported
       by Maxmod.
+    - Added enums of sound effect IDs used in MAS files.
+    - Added enums of all possible waveform types used in MAS files.
+    - Clarify the meaning of the not implemented "old effects" flag in the IT
+      format.
+    - `mmEffectExt()` has been removed from the header, it didn't exist.
 
-  - Some fixes:
+  - General changes:
 
-    - Fix reverb disable and stop functions in NDS mode. It wasn't possible to
-      stop the effect completely, only enable it.
-    - Fixed the global volume effect `Vxx` for S3M files.
-    - The type of `sampleTable` in the `msl_head` struct has been fixed. It
-      isn't a pointer, it's an offset.
     - Clamp maximum sound effect volume to 255.
     - If a module isn't being played, don't allow to modify the position of the
       module with `mmSetPositionEx()`, `mmSetPosition()` or `mmPosition()`.
-    - The tremor effect `Txx` in XM files has been fixed. It was partly broken
-      during the translation from ASM to C, but the original ASM was broken too.
-      The new code behaves like in OpenMPT.
-    - In XM files, the volume command `uxx` (set vibrato speed) now doesn't
-      update the vibrato effect, as expected by FastTracker 2.
     - Fix Note Delay effect when the parameter is higher or equal than the speed
       of the playback.
-
-  - Some general changes:
-
     - Add support for setting the tempo and pitch of jingles, not just the main
       song.
     - Return error codes from functions `mmStart()`, `mmJingleStart()`,
       `mmEffectVolume()`, `mmEffectPanning()`, `mmEffectRate()`,
       `mmEffectScaleRate()` and `mmEffectRelease()`, except for NDS mode from
       the ARM9.
-    - Add support for tremolo and vibrato waveform commands for MOD, XM, S3M and
-      IT formats.
-    - Tremor effect support has been added for S3M and XM files.
     - Set Vibrato Waveform and Set Tremolo Waveform effects now work for
       MOD/S3M/IT/XM. The retrigger/continue modes of XM/MOD are supported.
+    - Add support for the new envelope enabled/disabled flags in MAS files for
+      panning and pitch instrument envelopes.
+    - Fine pattern delay now works in S3M/IT/XM.
     - All common functions have been deduplicated from the platform headers.
       They are now in `maxmod_common.h`.
-    - The global pitch and tempo variables for clarity. They don't affect
-      jingles, so they should clarify that they only affect the main song.
-    - `mmEffectExt()` has been removed from the header, it wasn't implemented.
-    - Added enums of sound effect IDs used in MAS files.
-    - Added enums of all possible waveform types used in MAS files.
-    - Clarify the meaning of the not implemented "old effects" flag in the IT
-      format.
+    - The global pitch and tempo variables have been renamed for clarity. They
+      don't affect jingles, so they should clarify that they only affect the
+      main song.
 
-  - And an optional break of the soundbank format:
+  - S3M:
 
-    - Expand size of some fields in the MAS file header to fit all possible
-      values supported by XM files. This is a breaking change with the old
-      format, still used by devkitPro's `mmutil`. If needed, Maxmod can be built
-      defining `MM_MMUTIL_DEVKITPRO_COMPAT` to assume that files use the old
-      format.
+    - Fixed the global volume effect `Vxx`.
+    - Added support for tremor effect.
+
+  - XM:
+
+    - The tremor effect `Txx` has been enabled and fixed. It was partly broken
+      during the translation from ASM to C, but the original ASM was broken too.
+      The new code behaves like in OpenMPT.
+    - The volume command `uxx` (set vibrato speed) now doesn't update the
+      vibrato effect, as expected by FastTracker 2.
+    - Fix volume command porta to note (`g0x`).
+
+  - IT:
+
+    - Fix volume command vibrato effect (`h0x`). It was broken during the
+      translation from ASM to C, but the original code used to set the speed
+      instead of the depth anyway.
+    - Fix volume command portamento up/down (`e0x`, `f0x`).
+    - Fix volume command porta to note (`g0x`).
+    - Fix crash when a "note fade" (`~~`) is found in the note column.
+    - Add support for the panning/pitch envelope enable/disable effects (`S79`,
+      `S7A`, `S7B` and `S7C`).
 
 - mmutil:
 
@@ -167,20 +185,24 @@ weight: 6
       environment variable, defined [here](https://no-color.org).
     - The formatting of verbose output tables has been improved. This was hidden
       behind a `SUPER_ASCII` flag, which has been removed to simplify the code.
-    - Expand size of some fields in the MAS file header to fit all possible
-      values supported by XM files. Like Maxmod, mmutil can be built with
-      `MM_MMUTIL_DEVKITPRO_COMPAT` to generate files with the old format. In
-      that case, it will crash with an error message if any song uses values
-      that are too big to fit.
     - A new "extra" log level mode has been added after "verbose". Run `mmutil`
       with `-v -v` to enable it.
     - A new option has been added to skip the "overwrite?" prompt that appears
       if the output file already exists. Using option `-y` will overwrite the
       file without asking for confirmation.
-    - The version number has been increased from `0x18` to `0x19`, but only if
-      `MM_MMUTIL_DEVKITPRO_COMPAT` is not defined.
+    - Warn about songs without instruments, samples or patterns.
     - Added enums of sound effect IDs used in MAS files.
     - Added enums of all possible waveform types used in MAS files.
+
+  - MSL file (soundbank) changes:
+
+    - Expand size of some fields in the MAS file header to fit all possible
+      values supported by XM files. Like Maxmod, mmutil can be built with
+      `MM_MMUTIL_DEVKITPRO_COMPAT` to generate files with the old format. In
+      that case, it will crash with an error message if any song uses values
+      that are too big to fit.
+    - The version number has been increased from `0x18` to `0x19`, but only if
+      `MM_MMUTIL_DEVKITPRO_COMPAT` is not defined.
 
   - Module files:
 
@@ -196,6 +218,16 @@ weight: 6
       song.
     - Warn about portamento up/down effects in MOD/XM files that are clamped to
       make room for fine and extra fine portamento effects defined in S3M/IT.
+    - Fix sample auto vibrato in XM and IT files.
+    - Warn about potentially problematic speed effects, and remove effects that
+      set the playback speed to 0.
+    - Handle corner cases in Sample Offset effects correctly in MOD, XM, S3M and
+      IT. The behaviour isn't the same in all formats.
+    - Warn if unsupported note values are found in the note column. Note fade
+      (IT files) isn't supported, so this warning also warns about them.
+    - Add new flags to MAS files for instruments to support panning and pitch
+      envelope default enabled/disabled setting. This was already present for
+      volume envelopes, but not for panning and pitch envelopes.
 
   - MOD:
 
@@ -216,11 +248,21 @@ weight: 6
     - Warn if a `E60` isn't eventually followed by a `Dxx` in the same pattern.
       `E60` has a bug that can only be avoided by using a `Dxx` in the same
       pattern.
+    - Non-standard fine pattern delay (`X6x`) is now supported.
 
   - IT:
 
+    - Detect the sample compression type correctly. Previously, files with
+      `cmwt != `0x0215` (for example, `0x0216`) would be assumed to use
+      compression `0x0214`, which isn't necessarily true. The new check is the
+      one used by trackers like OpenMPT.
     - Show a warning when converting IT files with "old effects" flag enabled
       because Maxmod ignores it and it may help debug playback issues.
+    - Show a warning if samples with sustain loop are detected. Sustain loop
+      isn't supported.
+    - Print warnings when unsupported instrument features are found.
+    - Export the default instrument panning and pitch envelope enabled/disabled
+      status.
 
   - S3M:
 
