@@ -74,6 +74,10 @@ weight: 6
     - A new WAV comparison tool has been added to the repository. It reports the
       time ranges that don't match (in seconds) instead of just reporting
       "mismatch", like `diff`.
+    - There are two scripts that can be used to generate WAV files from all the
+      files in a folder and save them as reference and, after making changes to
+      Maxmod, to re-generate the WAV files and compare them with the original
+      files to detect any changes.
 
   - MSL file (soundbank) changes:
 
@@ -148,6 +152,7 @@ weight: 6
 
     - Fixed the global volume effect `Vxx`.
     - Added support for tremor effect.
+    - Volume slide `DF0` is now applied all ticks instead of ignoring tick 0.
 
   - XM:
 
@@ -168,6 +173,7 @@ weight: 6
     - Fix crash when a "note fade" (`~~`) is found in the note column.
     - Add support for the panning/pitch envelope enable/disable effects (`S79`,
       `S7A`, `S7B` and `S7C`).
+    - Volume slide `DF0` is now applied all ticks instead of ignoring tick 0.
 
 - mmutil:
 
@@ -207,7 +213,8 @@ weight: 6
   - Module files:
 
     - Add support for tremolo and vibrato waveform commands for MOD, XM, S3M and
-      IT formats.
+      IT formats. A warning is printed when the waveform type is over the limit
+      of each file format.
     - Samples of module files that start with `#` were added to the definitions
       header like sound effects. This wasn't in the documentation, and it has
       been added now.
@@ -228,15 +235,24 @@ weight: 6
     - Add new flags to MAS files for instruments to support panning and pitch
       envelope default enabled/disabled setting. This was already present for
       volume envelopes, but not for panning and pitch envelopes.
+    - Fail when converting songs with more channels than `MAS_MAX_CHANNELS`
+      (32). This is a hard limit of the MAS format.
+    - Print error messages and clamp songs that have more pattern orders than
+      `MAS_MAX_PATTERN_ORDERS - 1` (199). This is a hard limit of the MAS
+      format.
 
   - MOD:
 
+    - Warn about `Cxx` (set volume) effects over `C40` and clamp them to `C40`.
     - Warn about `Dxx` jumps to values over 63 and convert them to `D00`.
     - Fix samples that loop and a loop end point that is different from the
       sample end. mmutil now appends the looping part of the sample to the end
       of the sample and adjusts the loop points so that the sample can be played
       back the same way as in S3M/XM/IT. This increases the size of the
       soundbank, but it's required to play the sample correctly.
+    - Invalid volume slides with effect `Axy` are now handled correctly (`5xy`
+      and `6xy` were already handled correctly). A warning is printed if any of
+      them are detected.
 
   - XM:
 
@@ -244,25 +260,45 @@ weight: 6
       so that Maxmod doesn't need to spend CPU cycles doing it.
     - Fix "continue" in Fine Portamento Up/Down (`E10`, E20`) and Extra Fine
       Portamento Up/Down (`X10`, X20`).
+    - Warn about `Cxx` (set volume) effects over `C40` and clamp them to `C40`.
+      Warn about `Gxx` (set global volume) effects over `G40` and clamp them to
+      `G40`.
     - Warn about `Dxx` jumps to values over 63, not supported by FT2.
     - Warn if a `E60` isn't eventually followed by a `Dxx` in the same pattern.
       `E60` has a bug that can only be avoided by using a `Dxx` in the same
       pattern.
     - Non-standard fine pattern delay (`X6x`) is now supported.
+    - Support patterns of up to 1024 rows (the maximum supported by the format).
+    - Support stereo samples (they are converted to mono by removing the right
+      channel).
+    - Invalid volume slides with effects `5xy`, `6xy` and `Axy` are now handled
+      correctly. A warning is printed if any of them are detected.
 
   - IT:
 
     - Detect the sample compression type correctly. Previously, files with
       `cmwt != `0x0215` (for example, `0x0216`) would be assumed to use
       compression `0x0214`, which isn't necessarily true. The new check is the
-      one used by trackers like OpenMPT.
+      one used by trackers like OpenMPT, and it has been tested with mono and
+      stereo samples.
     - Show a warning when converting IT files with "old effects" flag enabled
       because Maxmod ignores it and it may help debug playback issues.
     - Show a warning if samples with sustain loop are detected. Sustain loop
       isn't supported.
-    - Print warnings when unsupported instrument features are found.
+    - Print warnings when unsupported instrument features are found, and when
+      unsupported sample types are found.
     - Export the default instrument panning and pitch envelope enabled/disabled
       status.
+    - Clarify the code that sets the default panning of instruments and samples.
+    - Support patterns of up to 1024 rows (the maximum supported by the format).
+    - Support all values of the channel panning setting. Muted channels are now
+      ignored as expected, and channels marked as surround cause a warning and
+      are treated as center panning.
+    - Warn about `Vxx` (global volume) effects over `V80` and ignore them. Warn
+      about `Mxx` (set channel volume) effects over `M40` and ignore them.
+    - Invalid volume slides with effects `Dxy`, `Kxy`, `Lxy`, `Nxy` and `Wxy`
+      now cause a warning to be printed (but they were already handled
+      correctly).
 
   - S3M:
 
@@ -272,20 +308,29 @@ weight: 6
       right) to be treated as `X00` (fully left).
     - Fix effect `Cnn` (pattern break) when the destination row is higher than
       the limit (63). Now it's ignored, as expected.
-    - Ignore `Vxx` (global volume) effects with a volume greater than 64 so that
-      Maxmod doesn't have to do it.
+    - Warn about `Vxx` (global volume) effects over `V40` and ignore them. Warn
+      about `Mxx` (set channel volume) effects over `M40` and ignore them.
     - Print a warning when converting S3M files with "amiga limits" flag
       enabled.  It is currently ignored, and implementing it requires changes to
       some effects as well.
     - Convert `SD0` (note delay) to `v00`. In MOD/XM/IT it causes the note to be
       heard, but it stays silent in S3M. The fix is done in mmutil to simplify
       the code in Maxmod.
+    - Support stereo samples (they are converted to mono by removing the right
+      channel).
+    - Invalid volume slides with effects `Dxy`, `Kxy`, `Lxy`, `Nxy` and `Wxy`
+      are now handled correctly (they used to be ignored, like in IT files), and
+      they now cause a warning to be printed.
 
   - WAV:
 
+    - Improve RIFF parser. Chunks need to be aligned to 16 bits, which wasn't
+      enforced before. This caused the loop information of some files to be
+      ignored.
     - Improve error messages when a WAV file has an unsupported format, and show
       it even outside of verbose mode. Show warnings and verbose messages when
       unknown chunks are found.
+    - Print loop information in verbose mode.
 
 - ndstool:
 
