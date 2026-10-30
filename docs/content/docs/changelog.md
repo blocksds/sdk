@@ -18,8 +18,7 @@ weight: 6
 
   - Mention that hangs in `Wifi_InitDefault()` may hang if the ARM7 core doesn't
     have support for DSWiFi.
-  - Prevent `Wifi_Update()` from being nested, which can cause issues. Reported
-    by @birowsi.
+  - Prevent `Wifi_Update()` from being nested, which can cause issues.
 
 - Maxmod:
 
@@ -122,10 +121,19 @@ weight: 6
     - Added enums of all possible waveform types used in MAS files.
     - Clarify the meaning of the not implemented "old effects" flag in the IT
       format.
+    - Document the limit of MSL sample IDs. It is a 16-bit value that can't be
+      `0xFFFF`, which has a special meaning.
     - `mmEffectExt()` has been removed from the header, it didn't exist.
 
   - General changes:
 
+    - Modify the `mm_sound_effect` so that platforms other than the DS can play
+      MAS files as sound effects. Previously, it relied on the fact that main
+      RAM on DS starts at `0x2000000`. The new code checks whether the sample
+      pointer is `NULL` or not, which works in any platform.
+    - Protect the code against multiple calls to `mmInit()` and `mmEnd()`. Now,
+      `mmInit()` only works if Maxmod isn't initialized, and `mmEnd()` only
+      works if Maxmod is initialized.
     - Clamp maximum sound effect volume to 255.
     - If a module isn't being played, don't allow to modify the position of the
       module with `mmSetPositionEx()`, `mmSetPosition()` or `mmPosition()`.
@@ -137,6 +145,9 @@ weight: 6
       `mmEffectVolume()`, `mmEffectPanning()`, `mmEffectRate()`,
       `mmEffectScaleRate()` and `mmEffectRelease()`, except for NDS mode from
       the ARM9.
+    - Support playing sound effects from samples outside of soundbanks in all
+      platforms, not just NDS. To do it, set the field `sample` of struct
+      `mm_sound_effect` to point to the sample, then call `mmEffectEx()`.
     - Set Vibrato Waveform and Set Tremolo Waveform effects now work for
       MOD/S3M/IT/XM. The retrigger/continue modes of XM/MOD are supported.
     - Add support for the new envelope enabled/disabled flags in MAS files for
@@ -144,6 +155,10 @@ weight: 6
     - Fine pattern delay now works in S3M/IT/XM.
     - All common functions have been deduplicated from the platform headers.
       They are now in `maxmod_common.h`.
+    - There were many `#ifdef` in common code to handle different plaforms in
+      different ways. This code has been moved to platform code so that the
+      result is easier to understand, and to make it easier to support other
+      platforms to Maxmod.
     - The global pitch and tempo variables have been renamed for clarity. They
       don't affect jingles, so they should clarify that they only affect the
       main song.
@@ -199,6 +214,21 @@ weight: 6
     - Warn about songs without instruments, samples or patterns.
     - Added enums of sound effect IDs used in MAS files.
     - Added enums of all possible waveform types used in MAS files.
+    - Optimizations to the code that fixes samples (and sample loops). @aikku93
+    - Process all samples as 16-bit to simplify the code. Also, reorganize the
+      code that loads samples from modules and WAV files to simplify the code.
+      @aikku93
+    - Reorganize code that decides whether a sample has to be compressed or not.
+      This fixes converting WAV files to MAS. Maxmod only supported playing RAW
+      MAS samples in DS mode, and DS mode supports compression in hardware mixer
+      mode, so the code assumed WAV files were only converted to MAS format if
+      they were going to be played on a DS.  Recent changes to Maxmod also allow
+      other platforms to do it, so this patch fixes them. @aikku93
+    - Fix ADPCM encoding, fixing bugs and improving the search step of the
+      compression algorithm. @aikku93
+    - Detect overflows in the number of samples being saved to a soundbank. The
+      maximum number of samples is `0xFFFF` (an ID of `0xFFFF` has a special
+      meaning).
 
   - MSL file (soundbank) changes:
 
