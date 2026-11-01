@@ -59,10 +59,12 @@ _start:
     ldr     r1, =__bss_size__
     bl      ClearMem
 
-    cmp     r10, #1             // r10 contains SCFG_A9ROM
-    bne     NotTWL
+    // r10 contains the __dsimode flag detected on the ARM9
     ldr     r1, =__dsimode      // Set DSi mode flag
     strb    r10, [r1]
+
+    cmp     r10, #1
+    bne     NotTWL
 
 #ifndef VRAM_OR_IWRAM
 
@@ -143,7 +145,7 @@ arm7lma:
 // ARM7 <-> ARM9 synchronization code
 // -----------------------------------------------------------------------------
 
-// This function returns SCFG_A9ROM in r10
+// This function returns in r10 the __dsimode flag detected by the ARM9
 __sync_start:
     push    {lr}
     mov     r12, #0x4000000

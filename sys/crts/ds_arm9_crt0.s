@@ -31,10 +31,12 @@ _start:
     sub     r1, r1, #0x100
     mov     sp, r1
 
-    // This sets r7 to 1 if the console is a debugger unit, 0 if it is a retail
-    // unit. It also sets r8 to the end address of cached RAM for that DS model.
+    // This sets:
+    // - r7 to 1 if the console is a debugger unit, 0 if it is a retail unit.
+    // - r8 to the end address of cached RAM for that DS model.
+    // - r11 to 1 if the software is runing in DSi mde, 0 if it is running in DS mode.
     // The values need to be saved until after the RAM contents have been
-    // cleared so that they are saved to __dsimode and __debugger_unit.
+    // cleared so that they can be saved to the global variables __dsimode and __debugger_unit.
     ldr     r3, =__libnds_mpu_setup
     blx     r3
 
@@ -50,9 +52,7 @@ _start:
     msr     cpsr, r0
     ldr     sp, =__sp_usr   // Set user stack
 
-    mov     r12, #0x4000000 // Read system ROM status (NTR/TWL)
-    ldrb    r11, [r12, r12, lsr #12] // SCFG_A9ROM
-    and     r11, r11, #0x3
+    mov     r12, #0x4000000
 
     // Synchronize with ARM7
 
@@ -75,13 +75,13 @@ _start:
     bl      IPCSync // Wait until ARM7 sends 0xD
 
     mov     r9, r11, lsl #8
-    str     r9, [r12, #0x180] // Send SCFG_A9ROM to the ARM7
+    str     r9, [r12, #0x180] // Send __dsimode flag to the ARM7
 
     // Wait until ARM7 sends 0x7 to know it is ready to enter main()
     mov     r9, #0x7
     bl      IPCSync
     // Send 0x7 to the ARM7 allow it to enter main(). 0x7 is never a valid value
-    // of doing (SCFG_A9ROM & 3), so we can always tell if the value in the
+    // as earlier we sent either 0 or 1, so we can always tell if the value in the
     // IPC_SYNC register has changed.
     mov     r9, #(0x7 << 8)
     str     r9, [r12, #0x180]
@@ -114,11 +114,11 @@ _start:
     ldr     r9, =__debugger_unit // Set DS/DSi debugger flag
     strb    r7, [r9]
 
-    cmp     r11, #1
-    bne     NotTWL
-
     ldr     r9, =__dsimode      // Set DSi mode flag
     strb    r11, [r9]
+
+    cmp     r11, #1
+    bne     NotTWL
 
     // Copy TWL area (arm9i section) from LMA to VMA
     ldr     r1, =0x02ffe1c8     // Get ARM9i LMA from header
