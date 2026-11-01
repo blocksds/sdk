@@ -59,12 +59,16 @@ _start:
     ldr     r1, =__bss_size__
     bl      ClearMem
 
-    // r10 contains the __dsimode flag detected on the ARM9
-    ldr     r1, =__dsimode      // Set DSi mode flag
-    strb    r10, [r1]
-
-    cmp     r10, #1
-    bne     NotTWL
+    mov     r0, #1
+    // In r10, bit 0 is debugger flag, bit 1 is DSi mode flag.
+    lsrs    r10, #1
+    // If carry is set, it means that bit 0 was set, in r10 then only remains
+    // bit 1 now shifted to bit 0.
+    ldr     r1, =__dsimode
+    ldr     r2, =__debugger_unit
+    strbne  r0, [r1] // Set DSi mode flag
+    strbcs  r0, [r2] // Set debugger unit flag
+    beq     NotTWL
 
 #ifndef VRAM_OR_IWRAM
 
@@ -145,7 +149,8 @@ arm7lma:
 // ARM7 <-> ARM9 synchronization code
 // -----------------------------------------------------------------------------
 
-// This function returns in r10 the __dsimode flag detected by the ARM9
+// This function returns the __dsimode and __debugger_unit flags detected by the
+// ARM9 in r10 (bit 0 is debugger flag, bit 1 is DSi mode flag)
 __sync_start:
     push    {lr}
     mov     r12, #0x4000000

@@ -74,15 +74,18 @@ _start:
     mov     r9, #0xD
     bl      IPCSync // Wait until ARM7 sends 0xD
 
-    mov     r9, r11, lsl #8
-    str     r9, [r12, #0x180] // Send __dsimode flag to the ARM7
+    mov     r9, r7, lsl #8
+    orr     r9, r9, r11, lsl #9
+    // Send __dsimode and __debugger_unit flags to the ARM7 (bit 0 is debugger
+    // flag, bit 1 is DSi mode flag)
+    str     r9, [r12, #0x180]
 
     // Wait until ARM7 sends 0x7 to know it is ready to enter main()
     mov     r9, #0x7
     bl      IPCSync
-    // Send 0x7 to the ARM7 allow it to enter main(). 0x7 is never a valid value
-    // as earlier we sent either 0 or 1, so we can always tell if the value in the
-    // IPC_SYNC register has changed.
+    // Send 0x7 to the ARM7 allow it to enter main(). 0x7 will always be a different
+    // value as earlier we sent values from 0 to 3, so we can always tell if the
+    // value in the IPC_SYNC register has changed.
     mov     r9, #(0x7 << 8)
     str     r9, [r12, #0x180]
 
