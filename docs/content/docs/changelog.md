@@ -13,12 +13,16 @@ weight: 6
   - Simplify the no$gba check in `SDMMC_readSectorsCrypt()`. @edo9300
   - Workaround for no$gba to use multi-block writes in SDMMC. @edo9300
   - Check the value of `__STDC_VERSION__` correctly.
+  - Fix crash when using filesystem functions with invalid file descriptors
+    (like `close(-1)`). Reported by @alejo7797.
 
 - DSWiFi:
 
   - Mention that hangs in `Wifi_InitDefault()` may hang if the ARM7 core doesn't
     have support for DSWiFi.
   - Prevent `Wifi_Update()` from being nested, which can cause issues.
+  - Fix mixmatched definitions in picolibc's and DSWiFi's `poll.h`. DSWiFi now
+    uses the definitions from picolibc. @alejo7797
 
 - Maxmod:
 
@@ -115,12 +119,9 @@ weight: 6
       platforms, there are warning and notes about it.
     - The documentation now has a page of unsupported features of all supported
       formats.
-    - Add a guide of supported/unsupported features of the audio files supported
-      by Maxmod.
     - Added enums of sound effect IDs used in MAS files.
     - Added enums of all possible waveform types used in MAS files.
-    - Clarify the meaning of the not implemented "old effects" flag in the IT
-      format.
+    - Clarify the meaning of all MAS module header flags.
     - Document the limit of MSL sample IDs. It is a 16-bit value that can't be
       `0xFFFF`, which has a special meaning.
     - `mmEffectExt()` has been removed from the header, it didn't exist.
