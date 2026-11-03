@@ -253,7 +253,7 @@ $(SOUNDBANKDIR)/soundbank.h: $(SOURCES_AUDIO)
 	@echo "  MMUTIL  $^"
 	@$(MKDIR) -p $(@D)
 	$(V)$(BLOCKSDS)/tools/mmutil/mmutil $^ -d \
-		-o$(SOUNDBANKDIR)/soundbank.bin -h$(SOUNDBANKDIR)/soundbank.h
+		-o $(SOUNDBANKDIR)/soundbank.bin -h $(SOUNDBANKDIR)/soundbank.h
 
 $(SOUNDBANKDIR)/soundbank.c.o: $(SOUNDBANKDIR)/soundbank.h
 	@echo "  BIN2C   soundbank.bin"
