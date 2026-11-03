@@ -202,6 +202,9 @@ weight: 6
       the definitions header. In some cases, it isn't even possible to use the
       header, so this is an alternative. It is disabled by default, and it can
       be enabled with `-D`.
+    - The code now supports different functions to resample waveforms (nearest,
+      linear, cubic, sinc). They aren't exposed to users currently (it still
+      uses nearest). @aikku93
     - The text now uses ANSI color. Warnings are yellow, errors are red, verbose
       messages are cyan. Color can be disabled by using the `NO_COLOR`
       environment variable, defined [here](https://no-color.org).
@@ -213,6 +216,11 @@ weight: 6
       if the output file already exists. Using option `-y` will overwrite the
       file without asking for confirmation.
     - Warn about songs without instruments, samples or patterns.
+    - Improve parser of command line arguments. It's now possible to split the
+      option (`-o`, `-h`, `-p`) from the argument.
+    - `-pN` is still supported (for `N` between 0 and 9), but the new `-p
+      panning` option supports decimal and hexadecimal values between 0 and 255
+      for more flexibility.
     - Added enums of sound effect IDs used in MAS files.
     - Added enums of all possible waveform types used in MAS files.
     - Optimizations to the code that fixes samples (and sample loops). @aikku93
@@ -375,6 +383,8 @@ weight: 6
   - In the default ARM9-only makefiles, add `-D` to `mmutil` invocation when the
     soundbank is saved to NitroFS. This adds the names of samples and modules to
     the soundbank.
+  - In the default makefiles use separate options with `mmutil` for `-o` and
+    `-h` for clarity.
 
   - Tests:
 
