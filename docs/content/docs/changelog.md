@@ -19,6 +19,9 @@ weight: 6
     for a mask of IRQs instead of a single IRQ, and they can also wait for
     events and IRQs at the same time (so that either an IRQ or an event wakes up
     the thread).
+  - Improve the way DSi mode and debugger units are detected so that it works if
+    the upper BIOS is unlocked or not, or if the `SCFG` registers aren't
+    available. @edo9300
 
 - DSWiFi:
 
@@ -406,6 +409,8 @@ weight: 6
     the soundbank.
   - In the default makefiles use separate options with `mmutil` for `-o` and
     `-h` for clarity.
+  - Update the crt0 to work with the new way the way DSi mode and debugger units
+    are detected in libnds. @edo9300
 
   - Tests:
 
@@ -416,6 +421,8 @@ weight: 6
     - Add a test to ensure that the dictionary of names of samples and modules
       works as expected.
     - Adjust wait times of some automated tests so that they pass again.
+    - In the heaps bound test, show if the console is a debugger unit or not
+      (which is important to know what the limits of the heap should be).
 
   - Tutorial:
 
