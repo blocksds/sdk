@@ -383,6 +383,15 @@ weight: 6
       unknown chunks are found.
     - Print loop information in verbose mode.
 
+- grit:
+
+  - Fix check that prevented maps with the maximum number of tiles to be
+    converted. This issue was pressent since version 1.16.0. Reported by
+    @copyrat90 and @GValiente.
+  - Add clarification about why tile with index 0 must always be empty: so that
+    the edges of backgrounds are transparent when the image doesn't cover it
+    completely.
+
 - ndstool:
 
   - Check the value of `__STDC_VERSION__` correctly.
