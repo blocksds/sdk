@@ -31,6 +31,7 @@ int main(int argc, char **argv)
     consoleSelect(&topScreen);
 
     printf("DSi mode: %d\n", isDSiMode());
+    printf("Debugger unit: %d\n", isHwDebugger());
 
     printf("\n");
 
