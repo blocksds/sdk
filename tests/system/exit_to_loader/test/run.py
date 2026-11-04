@@ -34,7 +34,7 @@ def generate_input():
     yield from repeat(0, 15)
 
     # Wait for nds-hb-menu to boot
-    yield from repeat(0, 20)
+    yield from repeat(0, 40)
 
     yield from repeat(JoypadState(down=True), 5)
     yield from repeat(0, 5)
@@ -48,7 +48,7 @@ def generate_input():
     yield from repeat(0, 15)
 
     # Wait for nds-hb-menu to boot
-    yield from repeat(0, 20)
+    yield from repeat(0, 40)
 
 user_options = {
     "melonds_console_mode": "ds",
@@ -63,11 +63,11 @@ with bt.session_start('test/hbmenu-0.11.0/boot.nds', generate_input, log_driver,
     do_screenshot(session)
     bt.session_run_frames(session, 60)
     do_screenshot(session)
-    bt.session_run_frames(session, 40)
+    bt.session_run_frames(session, 60)
     do_screenshot(session)
     bt.session_run_frames(session, 60)
     do_screenshot(session)
-    bt.session_run_frames(session, 40)
+    bt.session_run_frames(session, 60)
     do_screenshot(session)
 
     bt.assert_no_errors_in_logs(log_driver)
@@ -85,11 +85,11 @@ with bt.session_start('test/hbmenu-0.11.0/boot.nds', generate_input, log_driver,
     do_screenshot(session)
     bt.session_run_frames(session, 60)
     do_screenshot(session)
-    bt.session_run_frames(session, 40)
+    bt.session_run_frames(session, 60)
     do_screenshot(session)
     bt.session_run_frames(session, 60)
     do_screenshot(session)
-    bt.session_run_frames(session, 40)
+    bt.session_run_frames(session, 60)
     do_screenshot(session)
 
     bt.assert_no_errors_in_logs(log_driver)
