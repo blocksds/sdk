@@ -15,6 +15,10 @@ weight: 6
   - Check the value of `__STDC_VERSION__` correctly.
   - Fix crash when using filesystem functions with invalid file descriptors
     (like `close(-1)`). Reported by @alejo7797.
+  - Rework the way threads store their current wait status. Threads can now wait
+    for a mask of IRQs instead of a single IRQ, and they can also wait for
+    events and IRQs at the same time (so that either an IRQ or an event wakes up
+    the thread).
 
 - DSWiFi:
 
@@ -23,6 +27,12 @@ weight: 6
   - Prevent `Wifi_Update()` from being nested, which can cause issues.
   - Fix mixmatched definitions in picolibc's and DSWiFi's `poll.h`. DSWiFi now
     uses the definitions from picolibc. @alejo7797
+  - Fix potential infinite loops in `sys_arch_mbox_fetch()` and
+    `sys_arch_sem_wait()`. The threads waited for events to happen, but that
+    meant that the timeout was never checked unless the event happened. The
+    loops now wait for the events they did before, but now they are also woken
+    up by the timer interrupt that increases the millisecond counter of DSWiFi.
+    This way the thread can check regularly if there has been a timeout.
 
 - Maxmod:
 
@@ -238,6 +248,8 @@ weight: 6
     - Detect overflows in the number of samples being saved to a soundbank. The
       maximum number of samples is `0xFFFF` (an ID of `0xFFFF` has a special
       meaning).
+    - Make sure that option `-z` always saves a compressed sample. This option
+      is only useful to debug the IMA-ADPCM compression code of mmutil.
 
   - MSL file (soundbank) changes:
 
@@ -394,6 +406,7 @@ weight: 6
     - Fix some scripts that generate filesystem images. Reported by @asie.
     - Add a test to ensure that the dictionary of names of samples and modules
       works as expected.
+    - Adjust wait times of some automated tests so that they pass again.
 
   - Tutorial:
 
