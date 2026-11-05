@@ -34,6 +34,56 @@ git config --global --unset url.ssh://git@codeberg.org/blocksds/.insteadOf
 git config --global --unset url.https://codeberg.org/blocksds/.insteadOf
 ```
 
+### Upgrading to BlocksDS 1.25.0
+
+- In previous versions of Maxmod, in `mm_sound_effect`, fields `sample` and `id`
+  were a union. Maxmod could determine if the user had writen `sample` or `id`
+  because IDs are always below `0xFFFF`, and pointers to main RAM are always
+  `0x2XXXXXX`. However, this isn't true in all platforms, so the two fields have
+  been split, and it's necessary to manually set `sample` to `NULL` if you want
+  `mmEffectEx()` to use the field `id` play a sample ID. If you allocate the
+  struct in the stack you need to initialize it to known values. Also, be
+  careful if you allocate it with `malloc()`. For example, if you're allocating
+  the struct on the stack:
+
+  ```c
+  // Valid in C and C++
+  mm_sound_effect effect =
+  {
+      .id = sample_ID,
+      .rate = 1024,
+      .handle = 0,
+      .volume = 255,
+      .panning = 128
+      // sample is initialized to 0 implicitly
+  };
+
+  // Valid in C and C++ (remember to initialize all fields)
+  mm_sound_effect effect;
+  effect.id = sample_ID;
+  effect.sample = NULL;
+  effect.rate = 1024;
+  effect.handle = 0;
+  effect.volume = 255;
+  effect.panning = 128;
+
+  // Valid in C (not valid in C++)
+  mm_sound_effect effect = { 0 }; // All fields are initialized to 0
+  effect.id = sample_ID;
+  effect.rate = 1024;
+  effect.handle = 0;
+  effect.volume = 255;
+  effect.panning = 128;
+
+  // Invalid
+  mm_sound_effect effect; // Fields aren't initialized
+  effect.id = sample_ID;
+  effect.rate = 1024;
+  effect.handle = 0;
+  effect.volume = 255;
+  effect.panning = 128;
+  ```
+
 ### Upgrading to BlocksDS 1.22.3
 
 - In previous versions, `__aeabi_read_tp()` showed an error message when it was
