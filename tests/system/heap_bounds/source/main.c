@@ -1,18 +1,10 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2025
+// SPDX-FileContributor: Antonio Niño Díaz, 2025-2026
 
 #include <stdio.h>
 
 #include <nds.h>
-
-// Addresses taken from mpu_setup.s in libnds
-
-extern char __dtcm_start[];
-extern char __dtcm_top[];
-
-const uintptr_t dtcm_base = (uintptr_t)__dtcm_start;
-const uintptr_t dtcm_end = (uintptr_t)__dtcm_top - 1;
 
 int main(int argc, char **argv)
 {
@@ -47,8 +39,8 @@ int main(int argc, char **argv)
 
     printf("DTCM\n");
     printf("\n");
-    printf("Base: 0x%X\n", dtcm_base);
-    printf("End:  0x%X\n", dtcm_end);
+    printf("Base: 0x%X\n", DTCM_START);
+    printf("End:  0x%X\n", DTCM_END);
 
     printf("\n");
 
