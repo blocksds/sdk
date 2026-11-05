@@ -25,8 +25,8 @@ weight: 6
 
 - DSWiFi:
 
-  - Mention that hangs in `Wifi_InitDefault()` may hang if the ARM7 core doesn't
-    have support for DSWiFi.
+  - Mention that there may be hangs in `Wifi_InitDefault()` if the ARM7 core
+    doesn't have support for DSWiFi.
   - Prevent `Wifi_Update()` from being nested, which can cause issues.
   - Fix mixmatched definitions in picolibc's and DSWiFi's `poll.h`. DSWiFi now
     uses the definitions from picolibc. @alejo7797
