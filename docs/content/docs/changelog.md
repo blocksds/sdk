@@ -253,6 +253,7 @@ weight: 6
       meaning).
     - Make sure that option `-z` always saves a compressed sample. This option
       is only useful to debug the IMA-ADPCM compression code of mmutil.
+    - Update the NDS and GBA test ROMs.
 
   - MSL file (soundbank) changes:
 
@@ -394,6 +395,7 @@ weight: 6
   - Add clarification about why tile with index 0 must always be empty: so that
     the edges of backgrounds are transparent when the image doesn't cover it
     completely.
+  - Remove FreeImage license file and duplicated GPLv2 license file.
 
 - ndstool:
 
@@ -422,7 +424,8 @@ weight: 6
       works as expected.
     - Adjust wait times of some automated tests so that they pass again.
     - In the heaps bound test, show if the console is a debugger unit or not
-      (which is important to know what the limits of the heap should be).
+      (which is important to know what the limits of the heap should be), and
+      get the location of DTCM from linker symbols instead of hardcoded values.
 
   - Tutorial:
 
