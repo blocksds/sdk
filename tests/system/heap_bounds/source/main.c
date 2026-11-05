@@ -8,8 +8,11 @@
 
 // Addresses taken from mpu_setup.s in libnds
 
-const uintptr_t dtcm_base = 0x02FF0000;
-const uintptr_t dtcm_end = dtcm_base + (16 * 1024) - 1;
+extern char __dtcm_start[];
+extern char __dtcm_top[];
+
+const uintptr_t dtcm_base = (uintptr_t)__dtcm_start;
+const uintptr_t dtcm_end = (uintptr_t)__dtcm_top - 1;
 
 int main(int argc, char **argv)
 {
