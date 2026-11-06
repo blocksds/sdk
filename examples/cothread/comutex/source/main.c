@@ -50,8 +50,19 @@ int main(int argc, char **argv)
 
     consoleDebugInit(DebugDevice_NOCASH);
 
-    cothread_create(entrypoint_consumer, NULL, 0, COTHREAD_DETACHED);
-    cothread_create(entrypoint_producer, NULL, 0, COTHREAD_DETACHED);
+    if (cothread_create(entrypoint_consumer, NULL, 0, COTHREAD_DETACHED) == -1)
+    {
+        printf("Failed to create consumer\n");
+        while (1)
+            swiWaitForVBlank();
+    }
+
+    if (cothread_create(entrypoint_producer, NULL, 0, COTHREAD_DETACHED) == -1)
+    {
+        printf("Failed to create producer\n");
+        while (1)
+            swiWaitForVBlank();
+    }
 
     consoleSetCursor(NULL, 0, 18);
     printf("Press START to exit to loader\n");

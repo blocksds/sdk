@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2023
+// SPDX-FileContributor: Antonio Niño Díaz, 2023-2026
 
 // Example of cooperative multithreading with libnds.
 
@@ -81,11 +81,29 @@ int main(int argc, char **argv)
 
     cothread_t threads[NUM_CORO];
 
-    for (int i = 0; i < NUM_CORO; i++)
-        threads[i] = cothread_create(entrypoint_thread, (void *)i, 0, 0);
+    cothread_t thread_id;
 
-    cothread_create(entrypoint_thread_detached, (void *)10000, 0,
-                    COTHREAD_DETACHED);
+    for (int i = 0; i < NUM_CORO; i++)
+    {
+        thread_id = cothread_create(entrypoint_thread, (void *)i, 0, 0);
+        if (thread_id == -1)
+        {
+            printf("Failed to create thread %d.\n", i);
+            while (1)
+                swiWaitForVBlank();
+        }
+
+        threads[i] = thread_id;
+    }
+
+    thread_id = cothread_create(entrypoint_thread_detached, (void *)10000, 0,
+                                COTHREAD_DETACHED);
+    if (thread_id == -1)
+    {
+        printf("Failed to create detached thread.\n");
+        while (1)
+            swiWaitForVBlank();
+    }
 
     while (1)
     {

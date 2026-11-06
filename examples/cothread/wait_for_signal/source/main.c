@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2023, 2025
+// SPDX-FileContributor: Antonio Niño Díaz, 2023-2026
 
 // This example creates many threads. Each thread waits for a signal that is
 // sent by the previous thread: 0 signals 1, 1 signals 2... and the last thread
@@ -68,7 +68,17 @@ int main(int argc, char **argv)
     cothread_t threads[NUM_CORO];
 
     for (int i = 0; i < NUM_CORO; i++)
-        threads[i] = cothread_create(entrypoint_thread, (void *)i, 0, 0);
+    {
+        cothread_t thread_id = cothread_create(entrypoint_thread, (void *)i, 0, 0);
+        if (thread_id == -1)
+        {
+            printf("Failed to create thread %d.\n", i);
+            while (1)
+                swiWaitForVBlank();
+        }
+
+        threads[i] = thread_id;
+    }
 
     // Give all threads the chance to setup and to wait for the initial signal
     cothread_yield_irq(IRQ_VBLANK);
