@@ -12,8 +12,8 @@ ENTRY(_start)
 /* User-configurable symbols. */
 
 /* DTCM data area size. */
-/* If zero, DTCM data is placed at the beginning of the DTCM block, rather than the end. */
-PROVIDE(__dtcm_data_size = 0);
+/* We use PROVIDE so that users can overwrite this value. */
+PROVIDE(__dtcm_data_size = 1024);
 ASSERT((__dtcm_data_size & 3) == 0, "__dtcm_data_size must be a multiple of 4");
 
 /* DLDI driver area size. */
@@ -33,8 +33,8 @@ PROVIDE(__irq_stack_size = 0x100);
 ASSERT((__irq_stack_size & 3) == 0, "__irq_stack_size must be a multiple of 4");
 
 /* ARM user stack size. Used only for stack smash validation at link time. */
-PROVIDE(__usr_stack_size = 0);
-ASSERT((__usr_stack_size & 3) == 0, "__usr_stack_size must be a multiple of 4");
+/*PROVIDE(__usr_stack_size = 0);*/
+/*ASSERT((__usr_stack_size & 3) == 0, "__usr_stack_size must be a multiple of 4");*/
 
 __ewram_end	=	ORIGIN(ewram) + LENGTH(ewram);
 __eheap_end	=	ORIGIN(ewram) + LENGTH(ewram);
@@ -46,10 +46,13 @@ __irq_vector	=	__dtcm_top - 0x04;
 
 __sp_svc	=	__dtcm_top - __dtcm_reserved_size; /* Top of SVC mode stack. */
 __sp_irq	=	__sp_svc - __svc_stack_size; /* Top of IRQ mode stack. */
-__sp_usr	=	__sp_irq - __irq_stack_size - __dtcm_data_size; /* Top of user stack. */
 
-__dtcm_data_start = __dtcm_data_size > 0 ? __sp_usr : ORIGIN(dtcm); /* Start of DTCM data section. */
-__dtcm_data_top = __dtcm_data_size > 0 ? __sp_irq - __irq_stack_size : __sp_usr - __usr_stack_size; /* Top of DTCM data section. */
+/* Space for DTCM bss, data and heap. */
+__dtcm_data_top		=  __sp_irq - __irq_stack_size;
+__dtcm_data_start	=  __dtcm_data_top - __dtcm_data_size;
+
+/* Top of the user stack. It's below DTCM data so that the stack can grow into main RAM. */
+__sp_usr	=	__dtcm_data_start;
 
 __dldi_log2_size = LOG2CEIL(__dldi_size + 1) - 1;
 

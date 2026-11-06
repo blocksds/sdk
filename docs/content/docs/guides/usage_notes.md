@@ -106,25 +106,8 @@ at the end of main RAM:
 However, if an application uses a lot of heap memory and stack it's possible
 that the stack and the heap overlap, so you still need to be careful.
 
-There is another problem.
-
-Users can also designate variables to be placed in DTCM. Normally they are
-placed at the start of DTCM like this:
-
-    +-----------------------------------+--------------------------------------+
-    |             Main RAM              |               DTCM                   |
-    +-----+--------------------+--------+---------------------+--------+-------+
-    | App |        Heap        | Unused | User DTCM variables | Unused | Stack |
-    +-----+--------------------+--------+---------------------+--------+-------+
-
-This means that the stack is now constrained by how much size is taken by
-user-defined DTCM variables. Ideally, we'd want the linker to place user DTCM
-variables at the end of DTCM and the stack right below them. However, the linker
-isn't able to allocate space in a section starting from the end.
-
-BlocksDS has a workaround: Letting the developer hardcode the size reserved for
-user DCTM variables. By hardcoding this size the linker can place them at the
-end of DTCM and have a much more useful memory layout:
+Users can also designate variables to be placed in DTCM. BlocksDS places them
+after the user stack like this:
 
     +-----------------------------------+--------------------------------------+
     |             Main RAM              |               DTCM                   |
@@ -132,8 +115,17 @@ end of DTCM and have a much more useful memory layout:
     | App |        Heap        | Unused | Unused | Stack | User DTCM variables |
     +-----+--------------------+--------+--------+-------+---------------------+
 
-To do this you need to manually set the value of `__dtcm_data_size` to the right
-size for your application. There are two ways to set it:
+This means that, no matter how many user variables are placed in DTCM, the stack
+can still grow into main RAM.
+
+This has a small problem: the linker can't allocate variables starting from the
+end of a section, so the size reserved for DTCM user variables needs to be
+hardcoded by the user. Then, variables are added to that reserved space from the
+bottom. Whatever space is left is available to be used as a DTCM heap.
+
+You can adjust the size of this section by manually setting the value of
+`__dtcm_data_size` to the right value for your application (by default it's 1024
+bytes). There are two ways to set it:
 
 1. Edit your Makefile and the following to `LDFLAGS`:
 
@@ -148,6 +140,9 @@ size for your application. There are two ways to set it:
    .global __dtcm_data_size
    .equ __dtcm_data_size, 1024
    ```
+
+If you try to place more variables in DTCM than the available space, the linker
+will print an error telling you to increase the size.
 
 You can check [this test](https://codeberg.org/blocksds/sdk/src/branch/master/tests/system/dtcm_fixed_size)
 to experiment with this value.

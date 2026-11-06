@@ -104,24 +104,13 @@ can be a problem with small functions, but it can also happen with big functions
 in some cases (for example, a `static` function that is only called from one
 other function in the same file is likely to be inlined).
 
-One last thing to consider is that placing data in DTCM will limit how much
-stack there is available for your application.
+By default, BlocksDS allocates 1024 bytes for DTCM user variables. You can
+change this size by setting the value of the linker symbol `__dtcm_data_size`.
+For example, in your Makefile, add the following line to allocate 2048 bytes:
 
-Normally, DTCM BSS and DATA are placed right at the start of DTCM. The stack
-starts from the end of DTCM and it grows downwards. This configuration allows it
-to overflow into main RAM if it grows too much. However, if you allocate
-variables in DTCM, the stack will be restricted. The libraries included in
-BlocksDS don't place any variables in DTCM.
-
-There isn't an easy way to place your variables at the end of DTCM
-automatically, but BlocksDS gives you the option of setting the value of a
-symbol called `__dtcm_data_size` to hardcode the total size of DTCM used for
-user variables. If you do it, the linker will be able to place your variables at
-the end of DTCM and make it possible for the stack to grow into main RAM again.
-
-You can set the value of this symbol by adding the following to `LDFLAGS` in
-your Makefile. For example, this will leave 512 bytes of DTCM for the code:
-`-Wl,--defsym=__dtcm_data_size=512`
+```make
+LDFLAGS += -Wl,--defsym=__dtcm_data_size=2048
+```
 
 ## 4. DMA copy while the CPU runs
 
