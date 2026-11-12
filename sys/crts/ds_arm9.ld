@@ -311,11 +311,19 @@ SECTIONS
         __tls_start = ABSOLUTE(.);
         . = . + __tdata_size + __tbss_size;
         . = ALIGN(4);
-         __tls_end = ABSOLUTE(.);
-        __end__ = ABSOLUTE(.);
+        __tls_end = ABSOLUTE(.);
     } >ewram :NONE
 
     __tls_size = __tls_end - __tls_start ;
+
+    .tls_sleep ALIGN(4) (NOLOAD) :
+    {
+        __tls_sleep_start = ABSOLUTE(.);
+        . = . + __tls_size;
+        __tls_sleep_end = ABSOLUTE(.);
+
+        __end__ = ABSOLUTE(.);
+    } >ewram :NONE
 
     .twl __end__ : AT(MAX(0x2400000,__end__))
     {
