@@ -6,8 +6,13 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= cothread_coop_threads
-GAME_TITLE	:= Cooperative threads
-GAME_SUBTITLE	:= Cothread
+NAME		:= cothread_many_threads_coop
+GAME_TITLE	:= Many threads
+GAME_SUBTITLE	:= Cothread (coop.)
+
+# Libraries
+
+# Use the debug version of libnds to add extra checking to multithreading
+LIBS := -lnds9d
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile
