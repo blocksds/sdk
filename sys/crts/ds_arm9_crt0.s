@@ -186,15 +186,21 @@ NotTWL:
     // after a valid thread context is setup. Check cothread_start() for more
     // information.
 
-    ldr     r1, [r0,#16]    // argv
-    ldr     r0, [r0,#12]    // argc
-    sub     r2, sp, #1024   // main thread stack. This allocates 1 KB of stack
-                            // for the scheduler and any interrupt that happens
-                            // while the scheduler is running. The rest of the
-                            // stack is available for the main thread.
+    ldr     r1, [r0,#16] // argv
+    ldr     r0, [r0,#12] // argc
+
+    // Reserve 256 bytes for the scheduler stack. Interrupts are disabled in
+    // the scheduler, so we don't need a lot of space, we just need to be able
+    // to store its state (r4-r11, lr) and a few extra words for whatever the
+    // scheduler may need.
+    sub     r2, sp, #256
     bic     r2, r2, #(8-1)  // Align to 8 bytes
-    ldr     r3, =cothread_start     // This starts main as a thread
-    ldr     lr, =__libnds_exit      // Jump to user code
+
+    // When the sheduler returns, call __libnds_exit
+    ldr     lr, =__libnds_exit
+
+    // Start thread scheduler
+    ldr     r3, =cothread_start
     bx      r3
 
 // -----------------------------------------------------------------------------
