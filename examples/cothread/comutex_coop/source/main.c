@@ -1,0 +1,101 @@
+// SPDX-License-Identifier: CC0-1.0
+//
+// SPDX-FileContributor: Antonio Niño Díaz, 2023
+
+#include <stdio.h>
+
+#include <nds.h>
+#include <nds/cothread.h>
+
+comutex_t mutex;
+int count;
+int total_produced, total_consumed;
+
+int entrypoint_producer(void *arg)
+{
+    while (1)
+    {
+        comutex_acquire(&mutex);
+        count++;
+        total_produced++;
+        comutex_release(&mutex);
+
+        cothread_yield();
+    }
+
+    return 0;
+}
+
+int entrypoint_consumer(void *arg)
+{
+    while (1)
+    {
+        comutex_acquire(&mutex);
+        if (count > 0)
+        {
+            count--;
+            total_consumed++;
+        }
+        comutex_release(&mutex);
+
+        cothread_yield();
+    }
+
+    return 0;
+}
+
+int main(int argc, char **argv)
+{
+    consoleDemoInit();
+
+    consoleDebugInit(DebugDevice_NOCASH);
+
+    if (cothread_create(entrypoint_consumer, NULL, 0, COTHREAD_DETACHED) == -1)
+    {
+        printf("Failed to create consumer\n");
+        while (1)
+            swiWaitForVBlank();
+    }
+
+    if (cothread_create(entrypoint_producer, NULL, 0, COTHREAD_DETACHED) == -1)
+    {
+        printf("Failed to create producer\n");
+        while (1)
+            swiWaitForVBlank();
+    }
+
+    consoleSetCursor(NULL, 0, 18);
+    printf("Press START to exit to loader\n");
+
+    bool test_passed = false;
+
+    while (1)
+    {
+        cothread_yield_irq(IRQ_VBLANK);
+
+        consoleSetCursor(NULL, 0, 0);
+        printf("Count:          %10d\n", count);
+        printf("Total produced: %10d\n", total_produced);
+        printf("Total consumed: %10d\n", total_consumed);
+
+        scanKeys();
+
+        if (keysDown() & KEY_START)
+            break;
+
+        if (test_passed == false)
+        {
+            if (total_produced > 1000000)
+            {
+                // Allow for a small margin of error
+                if (total_consumed > 990000)
+                {
+                    test_passed = true;
+                    fprintf(stderr, "[TEST] Test passed\n");
+                }
+            }
+        }
+    }
+
+    return 0;
+}
