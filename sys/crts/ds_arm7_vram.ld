@@ -285,6 +285,14 @@ SECTIONS
         . = . + __tdata_size + __tbss_size;
         . = ALIGN(4);
          __tls_end = ABSOLUTE(.);
+    } >vram
+
+    .tls_sleep ALIGN(4) (NOLOAD) :
+    {
+        __tls_sleep_start = ABSOLUTE(.);
+        . = . + __tls_size;
+        __tls_sleep_end = ABSOLUTE(.);
+
         __end__ = ABSOLUTE(.);
     } >vram
 

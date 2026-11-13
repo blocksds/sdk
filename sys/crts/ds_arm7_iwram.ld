@@ -284,10 +284,18 @@ SECTIONS
         . = . + __tdata_size + __tbss_size;
         . = ALIGN(4);
          __tls_end = ABSOLUTE(.);
-        __end__ = ABSOLUTE(.);
     } >iwram
 
     __tls_size = __tls_end - __tls_start;
+
+    .tls_sleep ALIGN(4) (NOLOAD) :
+    {
+        __tls_sleep_start = ABSOLUTE(.);
+        . = . + __tls_size;
+        __tls_sleep_end = ABSOLUTE(.);
+
+        __end__ = ABSOLUTE(.);
+    } >iwram
 
     HIDDEN(__arm7_size__ = __arm7_end__ - __arm7_start__);
     HIDDEN(__arm7i_size__ = __arm7i_end__ - __arm7i_start__);
