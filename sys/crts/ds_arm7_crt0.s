@@ -106,34 +106,25 @@ NotTWL:
     ldr     r2, =fake_heap_end
     str     r1, [r2]
 
-    // Initialize TLS of the main thread
-    ldr     r0, =__tls_start
-    bl      init_tls
+    // We need to do some additional initialization, but that needs to happen
+    // after a valid thread context is setup. Check cothread_start() for more
+    // information.
 
-    ldr     r3, =__libc_init_array  // global constructors
-    bl      _blx_r3_stub
+    mov     r1, #0 // argv
+    mov     r0, #0 // argc
 
-    // Checks if the argv struct has been passed to the application. If not,
-    // it constructs one from the device list (if any).
-    ldr     r3, =check_device_list
-    bl      _blx_r3_stub
+    // Reserve 256 bytes for the scheduler stack. Interrupts are disabled in
+    // the scheduler, so we don't need a lot of space, we just need to be able
+    // to store its state (r4-r11, lr) and a few extra words for whatever the
+    // scheduler may need.
+    sub     r2, sp, #256
+    bic     r2, r2, #(8-1)  // Align to 8 bytes
 
-    // Send 0x7 to the ARM9 to tell it that we are ready to enter main().
-    mov     r12, #0x4000000
-    mov     r9, #(0x7 << 8)
-    str     r9, [r12, #0x180]
-    // Wait until the ARM9 has read our message and it sends 0x7 to allow us
-    // to enter main().
-    mov     r9, #0x7
-    bl      IPCSync
-
-    // Prepare address, arguments and return address of main().
-    mov     r0, #0              // int argc
-    mov     r1, #0              // char *argv[]
-    mov     r2, #0              // char *envp[] (used in some weird programs)
-    ldr     r3, =main
+    // When the sheduler returns, call __libnds_exit
     ldr     lr, =__libnds_exit
 
+    // Start thread scheduler
+    ldr     r3, =cothread_start
     // Fall through to _blx_r3_stub to call main()
 
 _blx_r3_stub:
