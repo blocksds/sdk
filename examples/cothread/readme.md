@@ -9,4 +9,5 @@ This folder contains examples of how to use co-operative threads with libnds.
 - `many_threads_preempt`: How to create many threads with preemptive multithreading.
 - `sync_to_vbl_coop`: How to wait for interrupts with cooperative multithreading.
 - `sync_to_vbl_preempt`: How to wait for interrupts with preemptive multithreading.
-- `wait_for_signal`: How to make threads wait for user-defined signals.
+- `wait_for_signal_coop`: How to wait for user-defined signals with cooperative threads.
+- `wait_for_signal_preempt`: How to wait for user-defined signals with preemptive threads.

@@ -41,7 +41,7 @@ int entrypoint_thread(void *arg)
 
         if (index != expected_thread_index)
         {
-            printf("Unexpected thread order!");
+            printf("Unexpected thread order! %d != %d", index, expected_thread_index);
             while (1)
                 swiWaitForVBlank();
         }
