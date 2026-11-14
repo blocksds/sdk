@@ -2,6 +2,9 @@
 //
 // SPDX-FileContributor: Antonio Niño Díaz, 2023-2026
 
+// This example shows that we can have an IRQ handler and a high priority thread
+// associated to the VBL interrupt. The main loop, the IRQ handler and the
+// thread should all count the same number of frames.
 
 #include <stdio.h>
 
@@ -46,11 +49,6 @@ int main(int argc, char **argv)
     irqSet(IRQ_VBLANK, vbl_irq_handler);
 
     cothread_create(vbl_thread, NULL, 0, COTHREAD_DETACHED);
-
-    TIMER_CR(2) = 0; // Stop it before setting it up
-    TIMER_DATA(2) = TIMER_FREQ(1200); // 1200 IRQs per second (20 per frame)
-    irqEnable(IRQ_TIMER(2));
-    TIMER_CR(2) = TIMER_IRQ_REQ | ClockDivider_1 | TIMER_ENABLE;
 
     cothread_preemption_enable(true);
 
