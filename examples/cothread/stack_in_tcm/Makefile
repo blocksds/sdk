@@ -17,6 +17,6 @@ LIBS		:= -lnds9d
 # Compiler options
 
 # Reserve space in DTCM to allocate threads
-LDFLAGS		:= -Wl,--defsym,__dtcm_data_size=12000
+LDFLAGS		:= -Wl,--defsym,__dtcm_data_size=14000
 
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile
