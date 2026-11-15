@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 //
-// SPDX-FileContributor: Antonio Niño Díaz, 2023-2024
+// SPDX-FileContributor: Antonio Niño Díaz, 2023-2026
 
 // Random files generated with:
 //
@@ -15,8 +15,6 @@
 
 #include "md5/md5.h"
 
-static char input_buffer[1024];
-
 typedef struct {
     const char *path;
     PrintConsole *console;
@@ -29,22 +27,33 @@ int calculate_file_md5(void *arg)
     const char *path = args->path;
     PrintConsole *con = args->console;
 
+    int oldIME = enterCriticalSection();
+
     consoleSelect(con);
     printf("Opening: %s\n", path);
+
+    leaveCriticalSection(oldIME);
 
     FILE *f = fopen(path, "r");
     if (f == NULL)
     {
+        int oldIME = enterCriticalSection();
         consoleSelect(con);
         perror("fopen");
         fflush(stdout);
+        leaveCriticalSection(oldIME);
         return -1;
     }
 
+    oldIME = enterCriticalSection();
     consoleSelect(con);
     printf("Calculating MD5 in a thread\n");
     printf("\n");
     fflush(stdout);
+
+    leaveCriticalSection(oldIME);
+
+    char input_buffer[1024];
 
     size_t input_size = 0;
 
@@ -64,29 +73,33 @@ int calculate_file_md5(void *arg)
         size += input_size;
         if ((size % (1024 * 64)) == 0)
         {
+            oldIME = enterCriticalSection();
+
             consoleSelect(con);
-            printf(".");
-            fflush(stdout);
+            consolePrintChar('.');
+
+            leaveCriticalSection(oldIME);
         }
 
         cothread_yield();
     }
-
-    consoleSelect(con);
-    printf("\n");
-    printf("\n");
-    fflush(stdout);
 
     md5Finalize(&ctx);
 
     uint8_t digest[16];
     memcpy(digest, ctx.digest, 16);
 
-    printf("Calculated:\n");
+    oldIME = enterCriticalSection();
+
     consoleSelect(con);
+    printf("\n");
+    printf("\n");
+    printf("Calculated:\n");
     for (int i = 0; i < 16; i++)
         printf("%02X", digest[i]);
     fflush(stdout);
+
+    leaveCriticalSection(oldIME);
 
     fclose(f);
 
@@ -145,7 +158,7 @@ int main(int argc, char **argv)
     // The threads need enough stack to do filesystem access. By default it
     // isn't enough for it and it will make the ROM crash because of a stack
     // overflow.
-    size_t stack_size = 4 * 1024;
+    size_t stack_size = 6 * 1024;
 
     thread_args args1 = {
         .path = "random1.bin",
