@@ -168,7 +168,7 @@ void HostMode(void)
     Wifi_MultiplayerFromClientSetPacketHandler(FromClientPacketHandler);
 
     while (!Wifi_LibraryModeReady())
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
     // You can call the next functions before loading a beacon to set up the
     // beacon. They can also be called afterwards.
@@ -177,8 +177,8 @@ void HostMode(void)
 
     Wifi_BeaconStart("NintendoDS", 0xCAFEF00D);
 
-    swiWaitForVBlank();
-    swiWaitForVBlank();
+    cothread_yield_irq(IRQ_VBLANK);
+    cothread_yield_irq(IRQ_VBLANK);
 
     printf("Host ready!\n");
 
@@ -187,7 +187,7 @@ void HostMode(void)
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
         scanKeys();
 
@@ -231,7 +231,7 @@ void HostMode(void)
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
         SendHostStateToClients();
 
@@ -286,7 +286,7 @@ bool AccessPointSelectionMenu(void)
     Wifi_MultiplayerClientMode(sizeof(pkt_client_to_host));
 
     while (!Wifi_LibraryModeReady())
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
     Wifi_ScanMode();
 
@@ -296,7 +296,7 @@ bool AccessPointSelectionMenu(void)
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
         scanKeys();
         uint16_t keys = keysDown();
@@ -411,7 +411,7 @@ connect:
     int oldstatus = -1;
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
         scanKeys();
         if (keysDown() & KEY_B)
@@ -433,7 +433,7 @@ connect:
 
             while (1)
             {
-                swiWaitForVBlank();
+                cothread_yield_irq(IRQ_VBLANK);
                 scanKeys();
                 if (keysDown() & KEY_START)
                     goto connect;
@@ -456,7 +456,7 @@ connect:
 
     while (game.has_started == 0)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
         scanKeys();
 
@@ -472,7 +472,7 @@ connect:
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
         consoleClear();
         printf("START: Disconnect\n");
@@ -546,7 +546,7 @@ int main(int argc, char *argv[])
 
         while (1)
         {
-            swiWaitForVBlank();
+            cothread_yield_irq(IRQ_VBLANK);
             scanKeys();
 
             u16 keys = keysDown();
@@ -577,7 +577,7 @@ end:
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
         scanKeys();
         if (keysHeld() & KEY_START)
             break;

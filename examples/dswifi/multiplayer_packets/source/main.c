@@ -39,22 +39,8 @@ void PrepareMultiplayerReplyFrame(void)
     Wifi_MultiplayerClientReplyTxFrame(&client_packet, sizeof(client_packet));
 }
 
-static void print_string(const char *s)
-{
-    while (1)
-    {
-        char c = *s++;
-        if (c == '\0')
-            break;
-        consolePrintChar(c);
-    }
-}
-
 void FromHostPacketHandler(Wifi_MPPacketType type, int base, int len)
 {
-    // We can't use printf() from this function because it runs inside an IRQ
-    // handler. printf() uses TLS, and IRQ handlers can't access TLS.
-
     consoleSelect(&topScreen);
 
     if (type == WIFI_MPTYPE_CMD)
@@ -64,30 +50,23 @@ void FromHostPacketHandler(Wifi_MPPacketType type, int base, int len)
         if (len == sizeof(packet))
         {
             Wifi_RxRawReadPacket(base, sizeof(packet), &packet);
-
-            char str[64];
-            snprintf(str, sizeof(str), "[H] C: %08X\n",
-                     (unsigned int)packet.count);
-            print_string(str);
+            printf("[H] C: %08X\n", (unsigned int)packet.count);
         }
         else
         {
-            char str[64];
-            snprintf(str, sizeof(str), "[H] C: Bad size (%u != %u)\n",
-                     len, sizeof(packet));
-            print_string(str);
+            printf("[H] C: Bad size (%u != %u)\n", len, sizeof(packet));
         }
     }
     else if (type == WIFI_MPTYPE_DATA)
     {
-        print_string("[H] D: ");
+        printf("[H] D: ");
 
         for (int i = 0; i < len; i += 2)
         {
             u16 data;
             Wifi_RxRawReadPacket(base + i, sizeof(data), &data);
 
-            consolePrintChar( data & 0xFF);
+            consolePrintChar(data & 0xFF);
             if ((len - i) > 1)
                 consolePrintChar((data >> 8) & 0xFF);
         }
@@ -105,13 +84,11 @@ void FromClientPacketHandler(Wifi_MPPacketType type, int aid, int base, int len)
 
     consoleSelect(&topScreen);
 
-    char str[64];
-    snprintf(str, sizeof(str), "[C %d] ", aid);
-    print_string(str);
+    printf("[C %d] ", aid);
 
     if (type == WIFI_MPTYPE_REPLY)
     {
-        print_string("C: ");
+        printf("C: ");
 
         pkt_client_to_host packet;
 
@@ -119,22 +96,16 @@ void FromClientPacketHandler(Wifi_MPPacketType type, int aid, int base, int len)
         {
             Wifi_RxRawReadPacket(base, sizeof(packet), &packet);
 
-            char str[64];
-            snprintf(str, sizeof(str), "[L] C: %08X\n",
-                     (unsigned int)packet.uncount);
-            print_string(str);
+            printf("[L] C: %08X\n", (unsigned int)packet.uncount);
         }
         else
         {
-            char str[64];
-            snprintf(str, sizeof(str), "[L] C: Bad size (%u != %u)\n",
-                     len, sizeof(packet));
-            print_string(str);
+            printf("[L] C: Bad size (%u != %u)\n", len, sizeof(packet));
         }
     }
     else if (type == WIFI_MPTYPE_DATA)
     {
-        print_string("D: ");
+        printf("D: ");
 
         for (int i = 0; i < len; i += 2)
         {
@@ -162,7 +133,7 @@ void host_mode(void)
     Wifi_MultiplayerFromClientSetPacketHandler(FromClientPacketHandler);
 
     while (!Wifi_LibraryModeReady())
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
     // You can call the next functions before loading a beacon to set up the
     // beacon. They can also be called afterwards.
@@ -171,8 +142,8 @@ void host_mode(void)
 
     Wifi_BeaconStart("NintendoDS", 0xCAFEF00D);
 
-    swiWaitForVBlank();
-    swiWaitForVBlank();
+    cothread_yield_irq(IRQ_VBLANK);
+    cothread_yield_irq(IRQ_VBLANK);
 
     printf("Host ready!\n");
 
@@ -180,7 +151,7 @@ void host_mode(void)
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
         consoleClear();
 
@@ -264,7 +235,7 @@ bool access_point_selection_menu(void)
     Wifi_MultiplayerClientMode(sizeof(pkt_client_to_host));
 
     while (!Wifi_LibraryModeReady())
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
     Wifi_ScanMode();
 
@@ -274,7 +245,7 @@ bool access_point_selection_menu(void)
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
         scanKeys();
         uint16_t keys = keysDown();
@@ -389,7 +360,7 @@ connect:
     int oldstatus = -1;
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
 
         scanKeys();
         if (keysDown() & KEY_B)
@@ -411,7 +382,7 @@ connect:
 
             while (1)
             {
-                swiWaitForVBlank();
+                cothread_yield_irq(IRQ_VBLANK);
                 scanKeys();
                 if (keysDown() & KEY_START)
                     goto connect;
@@ -431,7 +402,7 @@ connect:
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
         scanKeys();
         u16 keys = keysDown();
         if (keys & KEY_START)
@@ -491,7 +462,7 @@ int main(int argc, char *argv[])
 
         while (1)
         {
-            swiWaitForVBlank();
+            cothread_yield_irq(IRQ_VBLANK);
             scanKeys();
 
             u16 keys = keysDown();
@@ -522,7 +493,7 @@ end:
 
     while (1)
     {
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
         scanKeys();
         if (keysHeld() & KEY_START)
             break;
