@@ -287,11 +287,17 @@ SECTIONS
          __tls_end = ABSOLUTE(.);
     } >vram
 
-    .tls_sleep ALIGN(4) (NOLOAD) :
+    .tls_extra_threads ALIGN(4) (NOLOAD) :
     {
         __tls_sleep_start = ABSOLUTE(.);
         . = . + __tls_size;
         __tls_sleep_end = ABSOLUTE(.);
+        . = ALIGN(4);
+
+        __tls_fifo_start = ABSOLUTE(.);
+        . = . + __tls_size;
+        __tls_fifo_end = ABSOLUTE(.);
+        . = ALIGN(4);
 
         __end__ = ABSOLUTE(.);
     } >vram

@@ -13,7 +13,7 @@ ENTRY(_start)
 
 /* DTCM data area size. */
 /* We use PROVIDE so that users can overwrite this value. */
-PROVIDE(__dtcm_data_size = 1024);
+PROVIDE(__dtcm_data_size = 2048);
 ASSERT((__dtcm_data_size & 3) == 0, "__dtcm_data_size must be a multiple of 4");
 
 /* DLDI driver area size. */
@@ -316,11 +316,17 @@ SECTIONS
 
     __tls_size = __tls_end - __tls_start ;
 
-    .tls_sleep ALIGN(4) (NOLOAD) :
+    .tls_extra_threads ALIGN(4) (NOLOAD) :
     {
         __tls_sleep_start = ABSOLUTE(.);
         . = . + __tls_size;
         __tls_sleep_end = ABSOLUTE(.);
+        . = ALIGN(4);
+
+        __tls_fifo_start = ABSOLUTE(.);
+        . = . + __tls_size;
+        __tls_fifo_end = ABSOLUTE(.);
+        . = ALIGN(4);
 
         __end__ = ABSOLUTE(.);
     } >ewram :NONE
