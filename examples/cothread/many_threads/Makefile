@@ -6,9 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= cothread_sync_to_vbl_preempt
-GAME_TITLE	:= Sync to VBL
-GAME_SUBTITLE	:= Cothread (preempt.)
+NAME		:= cothread_many_threads
+GAME_TITLE	:= Many threads
+GAME_SUBTITLE	:= Cothread
 
 # Libraries
 

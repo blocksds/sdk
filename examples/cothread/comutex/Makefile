@@ -6,9 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= cothread_comutex_coop
+NAME		:= cothread_comutex
 GAME_TITLE	:= Comutex example
-GAME_SUBTITLE	:= Cothread (coop.)
+GAME_SUBTITLE	:= Cothread
 
 # Libraries
 

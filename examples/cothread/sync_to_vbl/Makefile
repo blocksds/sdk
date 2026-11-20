@@ -6,9 +6,9 @@ BLOCKSDS	?= /opt/blocksds/core
 
 # User config
 
-NAME		:= cothread_comutex_preempt
-GAME_TITLE	:= Comutex example
-GAME_SUBTITLE	:= Cothread (preempt.)
+NAME		:= cothread_sync_to_vbl
+GAME_TITLE	:= Sync to VBL
+GAME_SUBTITLE	:= Cothread
 
 # Libraries
 

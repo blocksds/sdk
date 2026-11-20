@@ -65,8 +65,6 @@ int main(int argc, char **argv)
 
     bool test_passed = false;
 
-    cothread_preemption_enable(true);
-
     while (1)
     {
         cothread_yield_irq(IRQ_VBLANK);
