@@ -119,7 +119,7 @@ int main(int argc, char **argv)
             {
                 consoleSelect(&bottomScreen);
                 consoleSetCursor(NULL, x, y);
-                printf("%5d", thread_counter[i]);
+                printf("%5d  ", thread_counter[i]);
                 fflush(stdout);
 
                 any_thread_running = true;

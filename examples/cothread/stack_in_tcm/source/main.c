@@ -24,19 +24,28 @@ int entrypoint_thread(void *arg)
 
     register char *stack_ptr asm("sp");
 
+    int oldIME = enterCriticalSection();
+
     consoleSelect(&topScreen);
     consoleSetCursor(NULL, x, y);
 
     printf("%X", (unsigned int)stack_ptr);
 
+    leaveCriticalSection(oldIME);
+
     int count = (1 + index) * 50;
 
     while (count > 0)
     {
+        oldIME = enterCriticalSection();
+
         consoleSelect(&bottomScreen);
         consoleSetCursor(NULL, x, y);
         printf("%5d", count);
         fflush(stdout);
+
+        leaveCriticalSection(oldIME);
+
         cothread_yield();
         count--;
     }

@@ -60,6 +60,9 @@ int main(int argc, char **argv)
             swiWaitForVBlank();
     }
 
+    // Give the main thread high priority so that the screen refresh is fluid
+    cothread_set_priority(0, 10);
+
     consoleSetCursor(NULL, 0, 18);
     printf("Press START to exit to loader\n");
 
