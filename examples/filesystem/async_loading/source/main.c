@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 
+#include <fat.h>
 #include <filesystem.h>
 #include <nds.h>
 #include <nds/arm9/dldi.h>
@@ -80,8 +81,6 @@ int calculate_file_md5(void *arg)
 
             leaveCriticalSection(oldIME);
         }
-
-        cothread_yield();
     }
 
     md5Finalize(&ctx);
@@ -125,20 +124,46 @@ int main(int argc, char **argv)
     printf("DLDI name:\n");
     printf("%s\n", io_dldi_data->friendlyName);
     printf("\n");
+    printf("argv[0]:\n");
+    printf("%s\n", argv[0]);
+    printf("\n");
     printf("DSi mode: %d\n", isDSiMode());
+    printf("\n");
 
-    if (isDSiMode() == 0)
+    if (strcmp(fatGetDefaultDrive(), "fat:/") == 0)
     {
-        // In DS mode, access to the SD card is done with DLDI. When running on
-        // emulators DLDI is not be needed, but cartridge reads happen in the
-        // ARM7 at the moment. DLDI usually runs in the ARM9.
-        //
-        // If DLDI runs on the ARM9, it isn't possible to do multithreading
-        // while accessing the filesystem. That can only work if the ARM7 loads
-        // data while the ARM9 waits for it and switches to other threads in the
-        // meantime.
-        printf("Forcing DLDI in ARM7...\n");
-        dldiSetMode(DLDI_MODE_ARM7);
+        printf("Using DLDI. Select mode:\n");
+        printf("\n");
+        printf("  A: Autodetect\n");
+        printf("  L: Force ARM7\n");
+        printf("  R: Force ARM9\n");
+        printf("\n");
+
+        while (1)
+        {
+            cothread_yield_irq(IRQ_VBLANK);
+
+            scanKeys();
+
+            uint32_t keys_down = keysDown();
+            if (keys_down & KEY_A)
+            {
+                dldiSetMode(DLDI_MODE_AUTODETECT);
+                break;
+            }
+
+            if (keys_down & KEY_L)
+            {
+                dldiSetMode(DLDI_MODE_ARM7);
+                break;
+            }
+
+            if (keys_down & KEY_R)
+            {
+                dldiSetMode(DLDI_MODE_ARM9);
+                break;
+            }
+        }
     }
 
     bool init_ok = nitroFSInit(NULL);
@@ -152,7 +177,6 @@ int main(int argc, char **argv)
     char *cwd = getcwd(NULL, 0);
     printf("Current dir: %s\n", cwd);
     free(cwd);
-    printf("\n");
     printf("\n");
 
     // The threads need enough stack to do filesystem access. By default it
@@ -172,6 +196,12 @@ int main(int argc, char **argv)
                     cothread_create(calculate_file_md5, &args1, stack_size, 0);
     cothread_t load_thread2 =
                     cothread_create(calculate_file_md5, &args2, stack_size, 0);
+
+    // Setup a timer to enable time-slicing
+    TIMER_CR(2) = 0; // Stop it before setting it up
+    TIMER_DATA(2) = TIMER_FREQ(2000); // 2000 IRQs per second (~33 per frame)
+    irqEnable(IRQ_TIMER(2));
+    TIMER_CR(2) = TIMER_IRQ_REQ | ClockDivider_1 | TIMER_ENABLE;
 
     // Wait until the two threads are done
     bool joined1 = false;
