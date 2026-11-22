@@ -13,7 +13,7 @@ ENTRY(_start)
 
 /* DTCM data area size. */
 /* We use PROVIDE so that users can overwrite this value. */
-PROVIDE(__dtcm_data_size = 2048);
+PROVIDE(__dtcm_data_size = 4096);
 ASSERT((__dtcm_data_size & 3) == 0, "__dtcm_data_size must be a multiple of 4");
 
 /* DLDI driver area size. */
