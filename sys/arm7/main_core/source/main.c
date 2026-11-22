@@ -52,9 +52,6 @@ void power_button_callback(void)
 void vblank_handler(void)
 {
     inputGetAndSend();
-#if defined(USE_DSWIFI)
-    Wifi_Update();
-#endif
 }
 
 int main(void)
@@ -130,7 +127,7 @@ int main(void)
         if ((keys_pressed & key_mask) == key_mask)
             exit_loop = true;
 
-        swiWaitForVBlank();
+        cothread_yield_irq(IRQ_VBLANK);
     }
 
     return 0;
