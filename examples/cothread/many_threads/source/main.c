@@ -88,8 +88,6 @@ int main(int argc, char **argv)
     // refresh the screen in a fluid way.
     cothread_set_priority(0, 50);
 
-    cothread_preemption_enable(true);
-
     while (1)
     {
         cothread_yield_irq(IRQ_VBLANK);

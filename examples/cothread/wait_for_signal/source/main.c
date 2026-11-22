@@ -82,8 +82,6 @@ int main(int argc, char **argv)
     irqEnable(IRQ_TIMER(2));
     TIMER_CR(2) = TIMER_IRQ_REQ | ClockDivider_1 | TIMER_ENABLE;
 
-    cothread_preemption_enable(true);
-
     // Wake up thread 0
     cothread_send_signal(0);
 

@@ -50,8 +50,6 @@ int main(int argc, char **argv)
 
     cothread_create(vbl_thread, NULL, 0, COTHREAD_DETACHED);
 
-    cothread_preemption_enable(true);
-
     // Synchronize all values now
     irq_frame_count = 0;
     thread_frame_count = 0;
