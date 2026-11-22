@@ -28,13 +28,13 @@ ASSERT((__dtcm_reserved_size & 3) == 0, "__dtcm_reserved_size must be a multiple
 PROVIDE(__svc_stack_size = 0x100);
 ASSERT((__svc_stack_size & 3) == 0, "__svc_stack_size must be a multiple of 4");
 
-/* ARM interrupt handler stack size. */
+/* ARM interrupt handler stack size. Used by the system IRQ dispatcher. */
 PROVIDE(__irq_stack_size = 0x100);
 ASSERT((__irq_stack_size & 3) == 0, "__irq_stack_size must be a multiple of 4");
 
-/* ARM user stack size. Used only for stack smash validation at link time. */
-/*PROVIDE(__usr_stack_size = 0);*/
-/*ASSERT((__usr_stack_size & 3) == 0, "__usr_stack_size must be a multiple of 4");*/
+/* ARM user IRQ stack size. Used in user IRQ Handlers. */
+PROVIDE(__irq_user_stack_size = 512);
+ASSERT((__irq_user_stack_size & 3) == 0, "__irq_user_stack_size must be a multiple of 4");
 
 __ewram_end	=	ORIGIN(ewram) + LENGTH(ewram);
 __eheap_end	=	ORIGIN(ewram) + LENGTH(ewram);
@@ -46,9 +46,10 @@ __irq_vector	=	__dtcm_top - 0x04;
 
 __sp_svc	=	__dtcm_top - __dtcm_reserved_size; /* Top of SVC mode stack. */
 __sp_irq	=	__sp_svc - __svc_stack_size; /* Top of IRQ mode stack. */
+__sp_irq_user	=	__sp_irq - __irq_stack_size; /* Top of user handling IRQ stack. */
 
 /* Space for DTCM bss, data and heap. */
-__dtcm_data_top		=  __sp_irq - __irq_stack_size;
+__dtcm_data_top		=  __sp_irq_user - __irq_user_stack_size;
 __dtcm_data_start	=  __dtcm_data_top - __dtcm_data_size;
 
 /* Top of the user stack. It's below DTCM data so that the stack can grow into main RAM. */

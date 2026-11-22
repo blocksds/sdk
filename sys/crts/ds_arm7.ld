@@ -25,9 +25,13 @@ ASSERT((__iwram_reserved_size & 3) == 0, "__iwram_reserved_size must be a multip
 PROVIDE(__svc_stack_size = 0x100);
 ASSERT((__svc_stack_size & 3) == 0, "__svc_stack_size must be a multiple of 4");
 
-/* ARM interrupt handler stack size. */
+/* ARM interrupt handler stack size. Used by the system IRQ dispatcher. */
 PROVIDE(__irq_stack_size = 0x100);
 ASSERT((__irq_stack_size & 3) == 0, "__irq_stack_size must be a multiple of 4");
+
+/* ARM user IRQ stack size. Used in user IRQ Handlers. */
+PROVIDE(__irq_user_stack_size = 512);
+ASSERT((__irq_user_stack_size & 3) == 0, "__irq_user_stack_size must be a multiple of 4");
 
 PHDRS {
     crt0  PT_LOAD FLAGS(7);
@@ -47,7 +51,8 @@ __iwram_start	=	ORIGIN(iwram);
 __iwram_top	=	ORIGIN(iwram) + LENGTH(iwram);
 
 __sp_irq	=	__iwram_top - __iwram_reserved_size;
-__sp_svc	=	__sp_irq - __irq_stack_size;
+__sp_irq_user	=	__sp_irq - __irq_stack_size;
+__sp_svc	=	__sp_irq_user - __irq_user_stack_size;
 __sp_usr	=	__sp_svc - __svc_stack_size;
 
 __irq_flags	=	0x04000000 - 8;

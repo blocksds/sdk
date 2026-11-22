@@ -44,6 +44,11 @@ _start:
     msr     cpsr, r0
     ldr     sp, =__sp_irq   // Set IRQ stack
 
+    mov     r0, #0x1B       // Switch to Undefined Mode
+    msr     cpsr, r0
+    ldr     lr, =#0xEFCDAB98   // Set a known value to make debugging easier
+    ldr     sp, =__sp_irq_user // Set stack used for IRQ user handlers
+
     mov     r0, #0x13       // Switch to SVC Mode
     msr     cpsr, r0
     ldr     sp, =__sp_svc   // Set SVC stack
