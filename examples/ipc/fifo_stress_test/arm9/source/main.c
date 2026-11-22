@@ -144,6 +144,10 @@ int main(int argc, char **argv)
     {
         cothread_yield_irq(IRQ_VBLANK);
 
+        // Block interrupts while we print information so that other threads
+        // don't try to interrupt it.
+        REG_IME = 0;
+
         consoleClear();
 
         for (uint32_t ch = FIFO_USER_01; ch <= FIFO_USER_08; ch++)
@@ -166,6 +170,8 @@ int main(int argc, char **argv)
         uint16_t keys = keysHeld();
         if (keys & KEY_START)
             break;
+
+        REG_IME = 1;
     }
 
     return 0;
