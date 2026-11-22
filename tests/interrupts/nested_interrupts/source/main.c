@@ -6,27 +6,34 @@
 
 #include <nds.h>
 
+volatile bool timer0_irq_active;
 volatile int timer1_count;
 volatile int timer2_count;
 volatile bool success;
 
 void timer0_handler(void)
 {
+    timer0_irq_active = true;
+
     REG_IME = 1;
 
     while ((timer1_count < 10) && (timer2_count < 100));
 
     success = true;
+
+    timer0_irq_active = false;
 }
 
 void timer1_handler(void)
 {
-    timer1_count++;
+    if (timer0_irq_active)
+        timer1_count++;
 }
 
 void timer2_handler(void)
 {
-    timer2_count++;
+    if (timer0_irq_active)
+        timer2_count++;
 }
 
 int main(int argc, char **argv)
