@@ -13,11 +13,11 @@
 #include <nds.h>
 #include <nds/cothread.h>
 
-#define NUM_CORO (50)
+#define NUM_THREADS (50)
 
 int expected_thread_index = 0;
 
-volatile int thread_counter[NUM_CORO];
+volatile int thread_counter[NUM_THREADS];
 
 int entrypoint_thread(void *arg)
 {
@@ -25,7 +25,7 @@ int entrypoint_thread(void *arg)
 
     // Index of the next thread in the chain
     int next_index = index + 1;
-    if (next_index == NUM_CORO)
+    if (next_index == NUM_THREADS)
         next_index = 0;
 
     int count = 3000; // Number of iterations
@@ -58,9 +58,9 @@ int main(int argc, char **argv)
 
     // Start threads
 
-    cothread_t threads[NUM_CORO];
+    cothread_t threads[NUM_THREADS];
 
-    for (int i = 0; i < NUM_CORO; i++)
+    for (int i = 0; i < NUM_THREADS; i++)
     {
         cothread_t thread_id = cothread_create(entrypoint_thread, (void *)i, 0, 0);
         if (thread_id == -1)
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
 
         bool any_thread_running = false;
 
-        for (int i = 0; i < NUM_CORO; i++)
+        for (int i = 0; i < NUM_THREADS; i++)
         {
             if (threads[i] == -1)
                 continue;

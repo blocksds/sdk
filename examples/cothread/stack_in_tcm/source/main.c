@@ -10,7 +10,7 @@
 #include <nds.h>
 #include <nds/cothread.h>
 
-#define NUM_CORO (50)
+#define NUM_THREADS (50)
 
 static PrintConsole topScreen;
 static PrintConsole bottomScreen;
@@ -71,11 +71,11 @@ int main(int argc, char **argv)
 
     // Start threads
 
-    cothread_t threads[NUM_CORO];
+    cothread_t threads[NUM_THREADS];
 
     cothread_t thread_id;
 
-    for (int i = 0; i < NUM_CORO; i++)
+    for (int i = 0; i < NUM_THREADS; i++)
     {
         // Different combinations of locations of the thread context and stack
         // to make sure that everything works.
@@ -120,7 +120,7 @@ int main(int argc, char **argv)
 
         bool any_thread_running = false;
 
-        for (int i = 0; i < NUM_CORO; i++)
+        for (int i = 0; i < NUM_THREADS; i++)
         {
             if (threads[i] == -1)
                 continue;

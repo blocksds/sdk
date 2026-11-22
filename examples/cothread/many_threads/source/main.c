@@ -9,14 +9,14 @@
 #include <nds.h>
 #include <nds/cothread.h>
 
-#define NUM_CORO (50)
+#define NUM_THREADS (50)
 
 static PrintConsole topScreen;
 static PrintConsole bottomScreen;
 
 comutex_t console_mutex;
 
-volatile int thread_counter[NUM_CORO];
+volatile int thread_counter[NUM_THREADS];
 
 int entrypoint_thread(void *arg)
 {
@@ -48,11 +48,11 @@ int main(int argc, char **argv)
 
     // Start threads
 
-    cothread_t threads[NUM_CORO];
+    cothread_t threads[NUM_THREADS];
 
     cothread_t thread_id;
 
-    for (int i = 0; i < NUM_CORO; i++)
+    for (int i = 0; i < NUM_THREADS; i++)
     {
         thread_id = cothread_create(entrypoint_thread, (void *)i, 0, 0);
         if (thread_id == -1)
@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 
         bool any_thread_running = false;
 
-        for (int i = 0; i < NUM_CORO; i++)
+        for (int i = 0; i < NUM_THREADS; i++)
         {
             if (threads[i] == -1)
                 continue;
