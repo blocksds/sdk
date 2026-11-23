@@ -77,10 +77,7 @@ int main(int argc, char **argv)
     cothread_yield_irq(IRQ_VBLANK);
     cothread_yield_irq(IRQ_VBLANK);
 
-    TIMER_CR(2) = 0; // Stop it before setting it up
-    TIMER_DATA(2) = TIMER_FREQ(2000); // 2000 IRQs per second (~33 per frame)
-    irqEnable(IRQ_TIMER(2));
-    TIMER_CR(2) = TIMER_IRQ_REQ | ClockDivider_1 | TIMER_ENABLE;
+    cothread_setup_time_slicing(2, 2000); // 2000 IRQs per second (~33 per frame)
 
     // Wake up thread 0
     cothread_send_signal(0);

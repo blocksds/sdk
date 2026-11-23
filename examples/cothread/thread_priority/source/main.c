@@ -74,11 +74,7 @@ int main(int argc, char **argv)
     // interrupt, threads won't switch context very frequently. Instead,
     // setup a timer to cause IRQs (without an interrupt handler) so that the
     // scheduler switches between our threads frequently.
-
-    TIMER_CR(2) = 0; // Stop it before setting it up
-    TIMER_DATA(2) = TIMER_FREQ(2000); // 2000 IRQs per second (~33 per frame)
-    irqEnable(IRQ_TIMER(2));
-    TIMER_CR(2) = TIMER_IRQ_REQ | ClockDivider_1 | TIMER_ENABLE;
+    cothread_setup_time_slicing(2, 2000); // 2000 IRQs per second (~33 per frame)
 
     // Make main() have higher priority than the other threads so that it can
     // refresh the screen in a fluid way.

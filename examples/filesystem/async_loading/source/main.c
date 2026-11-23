@@ -198,10 +198,7 @@ int main(int argc, char **argv)
                     cothread_create(calculate_file_md5, &args2, stack_size, 0);
 
     // Setup a timer to enable time-slicing
-    TIMER_CR(2) = 0; // Stop it before setting it up
-    TIMER_DATA(2) = TIMER_FREQ(2000); // 2000 IRQs per second (~33 per frame)
-    irqEnable(IRQ_TIMER(2));
-    TIMER_CR(2) = TIMER_IRQ_REQ | ClockDivider_1 | TIMER_ENABLE;
+    cothread_setup_time_slicing(2, 2000); // 2000 IRQs per second (~33 per frame)
 
     // Wait until the two threads are done
     bool joined1 = false;
