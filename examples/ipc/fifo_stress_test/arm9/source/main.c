@@ -140,13 +140,13 @@ int main(int argc, char **argv)
         cothread_create(thread_fifo_datamsg, (void *)ch, 0, COTHREAD_DETACHED);
     }
 
+    // Give the main thread more priority so that it can print the screen
+    // regularly and without interruptions.
+    cothread_set_priority(0, 50);
+
     while (1)
     {
         cothread_yield_irq(IRQ_VBLANK);
-
-        // Block interrupts while we print information so that other threads
-        // don't try to interrupt it.
-        REG_IME = 0;
 
         consoleClear();
 
@@ -170,8 +170,6 @@ int main(int argc, char **argv)
         uint16_t keys = keysHeld();
         if (keys & KEY_START)
             break;
-
-        REG_IME = 1;
     }
 
     return 0;
