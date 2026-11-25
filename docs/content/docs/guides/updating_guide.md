@@ -34,6 +34,60 @@ git config --global --unset url.ssh://git@codeberg.org/blocksds/.insteadOf
 git config --global --unset url.https://codeberg.org/blocksds/.insteadOf
 ```
 
+### Upgrading to BlocksDS DEV
+
+- Cooperative multithreading has turned into preemptive multithreading, and
+  preemption can't be disabled because some libnds services now rely on it, like
+  FIFO message handling. Single-threaded applications likely won't notice any
+  change, but applications using cooperative multithreading will likely break if
+  they are accessing shared resources that aren't fully protected by a mutex or
+  a semaphore. Some parts of libnds are thread-safe (like filesystem access),
+  but others aren't (like videoGL).
+
+  There isn't a simple fix for this. The recommendation is to build your
+  application with `-lnds9` (and `-lnds7` if you use a custom ARM7 core) to
+  enable more error checks.
+
+  Then, fix any thread that sets `REG_IME` to 0 or calls
+  `enterCriticalSection()` without calling `leaveCriticalSection()` before
+  yielding. If you really need to disable IRQs before yielding, use
+  `cpsrDisableInterrupts()`, which disables interrupts by setting `CPSR.I` to 1.
+  Note that `CPSR.I` is always set to 0 when resuming a thread.
+
+  My recommendation is to add critical sections to most of your threads if you
+  don't know which parts need to be protected. Then, reduce the scope of the
+  critical sections once you have had time to analyze the code and understand
+  which parts really need to be protected.
+
+- DTCM static variables are now always stored on top of the user stack. This
+  solves corruption bugs due to the stack growing into DTCM variables, but it
+  also forces the build system to hardcode the total amount of DTCM reserved for
+  static variables. The default is 4096 bytes, and part of that is used by
+  libnds. If you get error `DTCM data overflow; increase __dtcm_data_size or
+  move data out of DTCM`, you can fix it by adding the new size of the DTCM pool
+  in your Makefile (in bytes):
+
+  ```
+  LDFLAGS := -Wl,--defsym,__dtcm_data_size=8192
+  ```
+
+- Stack management has changed. IRQs are now handled in undefined CPU mode
+  instead of in the stack of the thread that was interrupted. The default IRQ
+  stack size is now 512 bytes, and it can be changed by doing:
+
+  ```
+  LDFLAGS := -Wl,--defsym,__irq_user_stack_size=2048
+  ```
+
+  Debug builds of libnds (`-lnds9` and `-lnds7`) add canary values to the stack
+  of all threads and the IRQ stack. If there's a stack overflow (or underflow)
+  libnds will detect it and print an error message.
+
+- FIFO user handlers and DSWiFi packet handlers now run from a thread instead of
+  an IRQ handler. This shouldn't break anything (the handlers are generally
+  small) but they can now be preempted, which could cause bugs. Disable
+  interrupts in the handler if needed.
+
 ### Upgrading to BlocksDS 1.25.0
 
 - In previous versions of Maxmod, in `mm_sound_effect`, fields `sample` and `id`
