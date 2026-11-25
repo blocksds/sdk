@@ -14,4 +14,9 @@ GAME_SUBTITLE	:= Filesystem
 
 NITROFSDIR	:= nitrofs
 
+# Libraries
+
+# Use the debug version of libnds to add extra checking to multithreading
+LIBS := -lnds9d
+
 include $(BLOCKSDS)/sys/default_makefiles/rom_arm9/Makefile
