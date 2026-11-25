@@ -132,9 +132,19 @@ In order to do a proper release build you need to add `-DNDEBUG` to the `CFLAGS`
 of your Makefile, and you need to use `-lnds9` in `LIBS`.
 
 To do a debug build, leave `CFLAGS` without `-DNDEBUG`, and add `-lnds9d` to
-`LIBS` instead of `-lnds9`.
+`LIBS` instead of `-lnds9`. You need to do the same in the ARM7 (with `-lnds7`
+and `-lnds7d` instead).
 
-You need to do the same in the ARM7 (with `-lnds7` and `-lnds7d` instead).
+Debug builds of libnds also do other checks:
+
+- It enables some corruption checks in `malloc()`.
+- It enables the stack overflow/underflow detection code. When setting up thread
+  stacks and the IRQ stack, libnds writes canary values on both ends. The
+  values are checked whenever a thread is paused, and when an IRQ has been
+  handled and is about to return to the thread that was interrupted.
+- It enables the default exception handler during the initialization of the
+  program (by default, only a reduced version of the exception handler is
+  setup).
 
 ### 4. No$gba debugger
 
