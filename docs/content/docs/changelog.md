@@ -3,6 +3,243 @@ title: 'Changelog'
 weight: 6
 ---
 
+### Version DEV (2026-XX-XX)
+
+- libnds:
+
+  - Lots of changes in the multithreading code:
+
+    - The cooperative multithreading system has been heavily modified and
+      turned into a preemptive multithreading system. This can break code that
+      was using cooperative threads because now it's needed to be more careful
+      about shared resources. Single-threaded applications will likely work just
+      like before. Applications that only used multithreading for DSWiFi won't
+      be affected either.
+    - Some services provided by libnds are thread-safe (filesystem access,
+      `malloc()`), but others aren't thread-safe (videoGL, 2D sprite memory
+      allocation).
+    - Multithreading is now enabled in the ARM7 as well.
+    - Context switches now preserve the full CPU context of a thread instead of
+      just `r4-r11` and `lr`. Restoring thread contexts requires a temporary
+      switch to CPU abort mode.
+    - The scheduler is now a lot simpler, and it can't be interrupted. Only
+      threads can be interrupted, which means that it will take a bit longer to
+      handle IRQs. However, there were already some sections in the code that
+      could cause a big latency to handle IRQs, so this isn't a big change.
+    - Thread contexts and stacks can now be allocated in DTCM or ITCM. Use flags
+      `COTHREAD_CONTEXT_IN_DTCM` and `COTHREAD_STACK_IN_DTCM`, for example.
+    - A new sleep thread has been added. It's a thread with a valid thread local
+      storage that never yields for an interrupt or a signal, and its purposes
+      are to put the CPU to sleep mode, and to clean the resources used by
+      detached threads that have ended (the resources can only be cleaned from a
+      thread, and they can't be cleaned from the thread as it ends).
+    - Thread priorities are now supported. The highest priority is 127 and the
+      lowest one is -128. The `main()` thread starts with priority 0. The
+      priority of a thread can be changed with `cothread_set_priority()`, and
+      new threads can be created with a predefined priority with
+      `cothread_create_priority()` and `cothread_create_priority_manual()`.
+      Threads created with `cothread_create()` and `cothread_create_manual()`
+      inherit the priority of the parent thread.
+    - Debug builds of libnds add canary values to the top and bottom of the
+      stack of all threads. They are checked whenever a thread is halted and the
+      scheduler runs.
+    - Threads are always resumed with `CPSR.I = 0`, regardless of its original
+      value.
+    - It is no longer possible to yield if `IME` is 0.
+    - Function `cothread_setup_time_slicing()` has been added. It sets up a
+      timer to cause threads to be preempted regularly. Note that this isn't
+      required at all for libnds or DSWiFi to work well, and it may be
+      counter-productive to have a high frequency of preemptions (context
+      switches take some time).
+    - The scheduler keeps track of IRQs that are handled but haven't waken up
+      any thread. The next time a thread yields to wait for one of the pending
+      IRQs, it is resumed right away.
+    - The multithreading code no longer relies on the coroutine helpers of
+      `ndsabi`.
+    - The `cothread_info_t` struct has been heavily modified, and it now holds
+      the full CPU stack of a thread when it isn't active.
+    - Some scheduling-related variables have been moved from ITCM to DTCM.
+    - The new scheduler has a priority list of active threads, and it always
+      runs the first thread in the list (which has the highest priority).
+      There's also a list of threads that are waiting for IRQs or signals, and a
+      list of threads that have just ended and are waiting to be freed.
+    - Some scheduling-related functions have been moved to ITCM.
+    - Mutex and semaphore helpers have been improved to work in a preemptive
+      multithreading system.
+    - NitroFS and FatFs disk I/O have been improved to be thread-safe with
+      preemptive threads, not just cooperative threads.
+    - Yield functions no longer work from IRQ handlers, they simply return.
+    - FIFO interrupts are no longer disabled in the ARM7 when handling SDMMC
+      requests from the ARM9. It isn't needed anymore because all FIFO requests
+      are handled sequentially, even if they get interrupted.
+
+  - Interrupt handling has received a few changes:
+
+    - When leaving a non-nested IRQ, the global interrupt dispatcher saves the
+      context of the currently active thread and it returns to the scheduler.
+      This allows high-priority threads to be waken up by an IRQ and to preempt
+      low-priority threads. This is useful for processes that are less
+      timing-critical than an IRQ handler, but that need to happen whenever
+      there's an IRQ. For example, the FIFO system and DSWiFi need to handle
+      messages as they are received, but they shouldn't be handled from an IRQ
+      handler because it can take a while to finish.
+    - IRQ user handler stacks are now unified. Previously, IRQs were handled in
+      the stack of whichever thread was active at the time. Now, the global IRQ
+      dispatcher switches to CPU undefined mode and it uses its stack as user IRQ
+      mode stack. You can change the default size of the stack by adding this to
+      the Makefile: `LDFLAGS := -Wl,--defsym,__irq_user_stack_size=2048`
+    - Thanks to the new unified IRQ stacks, threads only need to allocate a
+      stack big enough for what the threads do. Previously, all threads needed
+      to have a stack big enough to also handle IRQs (and potentially nested
+      IRQs, which made the situation worse).
+    - CPU IRQ mode stack is still used, as it is required to nest IRQ handlers.
+      However, preemptive multithreading is more robust than nested IRQs, so it
+      should be used whenever possible.
+    - The global IRQ dispatcher now checks if `IME` is 0 at the beginning of the
+      dispatcher. In real hardware it takes a small number of cycles for IRQs to
+      be disabled from the point `IME` is set to 0, and the global IRQ
+      dispatcher can't handle this corner-case.
+    - Debug builds of libnds add canary values to the top and bottom of the IRQ
+      user stack. They are checked before returning from the global interrupt
+      handler.
+    - `IME` is no longer preserved in the global interrupt dispatcher between
+      different levels of nesting. It's simply set to 1 before leaving the
+      dispatcher (because it was necessarily 1 when the dispatcher was called).
+
+  - New dynamic memory allocators for DTCM, ITCM and Slot-2 RAM:
+
+    - Added defines `DTCM_START`, `DTCM_SIZE`, `DTCM_END`, `DTCM_HEAP_START` and
+      `DTCM_HEAP_END` (and the same for ITCM).
+    - New DTCM and ITCM allocators have been added. They use the same code as
+      regular `malloc()` and `free()`. For example, two new functions are
+      `dtcm_calloc()` and `itcm_alligned_alloc()`.
+    - Slot-2 RAM allocators have also been added (for example,
+    `slot2_malloc()`). @asie
+    - DTCM has been reorganized. `__dtcm_data_size` is now mandatory. It
+      defaults to 4096 bytes (some of it is used by the FIFO and sleep threads).
+      Whatever is left after all static DTCM allocations is used as DTCM heap.
+      Add the following to the Makefile if you want to change the default value:
+      `LDFLAGS := -Wl,--defsym,__dtcm_data_size=8192`
+    - There are new error callbacks for `dlmalloc()` in debug builds.
+
+  - FIFO system changes:
+
+    - User FIFO callbacks now run from inside a thread instead of running from an
+      IRQ handler, so it is possible to use thread-local storage (functions like
+      `malloc()` are now allowed). They can also be preempted, like any other
+      thread.
+    - Many places used to read the RX hardware queue as a way to refresh the
+      list of received blocks. Sometimes, they even called FIFO user callbacks.
+      This has been replaced by requests to wake up the new FIFO processing
+      threads, which is less error prone, and it makes all FIFO callbacks to run
+      from the same thread every time.
+    - The code (for example, `fifoInternalSend()`) has been simplified in many
+      places, which should make it more robust.
+    - The IRQ setup code now runs completely inside a critical section with
+      IRQs disabled.
+
+  - Other:
+
+    - Improve the way `isHwDebugger()` and the crt0 detect debugger console
+      units. @edo9300
+    - `reduceHeapSize()` is now only available in the ARM9. It didn't work in the
+      ARM7 anyway.
+    - There are new helpers to enable and disable interrupts using CPSR. They
+      are meant to be used internally by libnds. Developers should generally use
+      `enterCriticalSection()` and `leaveCriticalSection()`, which use `IME`.
+    - `sleep()` has been optimized to yield for a timer IRQ instead of doing a
+      plain yield.
+    - Clamp volume in ARM7 volume macros.
+
+- DSWiFi:
+
+  - In the ARM9, the code that used to run inside `Wifi_Update()` now runs
+    inside a thread, even in local multiplayer mode. This means that user WiFi
+    packet handling callbacks now run from a thread and they can use `malloc()`,
+    `printf()` and any other function that requires thread-local storage.
+    However, they can now be preempted.
+  - Most of the ARM7 code has been moved to its own thread. This thread is waken
+    up by the FIFO handler (instead of the FIFO handler running the code). At
+    the moment, this thread isn't very optimized for preemptive multithreading
+    (it's just the previous code with very big sections with IRQs disabled), but
+    it is thread-safe.
+  - Update documentation to mention that user handlers can now call `printf()`
+    and other functions that use TLS.
+
+- Maxmod:
+
+  - Small refactor to a `switch()` statement to silence warnings.
+  - Always enable pan/pitch envelopes in instruments in devkitPro compatibility
+    mode.
+  - Always stop modules and jingles before playing new ones.
+
+- mmutil:
+
+  - Add CLI options for the new resampling features introduced in Version
+    1.25.0. @Aikku93
+
+- SDK:
+
+  - ARM7:
+
+    - The default ARM7 core has been updated for the new changes in DSWiFi.
+
+  - crts:
+
+    - Enable multithreading in the ARM7 crt0.
+    - Force ARM9 user stack below DTCM static data. `__dtcm_data_size` now has a
+      default value and it can't be set to 0 to recover the old mapping (where
+      DTCM static data could be corrupted when the main thread stack grew).
+    - Make the ARM9 tell the ARM7 if the console is a debugger. @edo9300
+    - Add new statically-allocated space for the TLS of sleep and FIFO message
+      processing threads. This has been done in both the ARM9 and ARM7.
+    - The size of the scheduler stack has been reduced (it can't be interrupted
+      anymore, so it doesn't need a very big stack).
+    - A new user IRQ stack section has been added. The crt0 configures the
+      undefined stack pointer to use this new section. This is now used as stack
+      for user IRQ handlers. Its size can be adjusted by changing the size of
+      `__irq_user_stack_size`. It defaults to 512 bytes.
+
+  - Examples:
+
+    - Update multithreading examples to work with preemptive multithreading.
+    - Add example of allocating the stack and context of new threads in DTCM or
+      ITCM.
+    - Improve the multithreading `sync_to_vbl` example.
+    - Update WiFi local multiplayer examples to use `printf()` now that TLS is
+      allowed in WiFi packet handlers.
+    - Improve the `filesystem/async_loading` example. Don't use a shared buffer
+      between all threads as temporary storage. Add critical sections when
+      printing to the console so that the output isn't corrupted. When using
+      DLDI to access NitroFS, let users select ARM9 or ARM7 DLDI modes.
+    - Add new examples of using detached threads, and threads with different
+      priorities.
+    - Fix text rendering in the FIFO stress test example.
+    - Build all multithreading-related examples with the debug version of libnds
+      to detect potential issues.
+
+  - Tests:
+
+    - Add test for DTCM/ITCM allocators.
+    - Add test for Slot-2 RAM allocator. @asie
+    - Add test that uses `malloc()` with preemptive multithreading to ensure
+      that it's thread-safe.
+    - Use new DTCM start/end defines in the heap bounds test.
+    - Removed the `wait_for_irq` test. This test was broken with the changes to
+      the thread scheduler, and it wasn't very useful as it wasn't clear what it
+      was meant to do.
+    - Add a new test to verify that nested interrupts work.
+    - Build all multithreading-related tests with the debug version of libnds to
+      detect potential issues.
+
+  - Docs:
+
+    - Update the explanation of DTCM stack and static variable placement.
+    - Update updating guide with information about the changes introduced in
+      Maxmod in version 1.25.0 and the new preemptive multithreading system.
+    - Update the debugging guide with more information about what debug builds
+      of libnds do.
+
 ### Version 1.25.0 (2026-11-05)
 
 - libnds:
