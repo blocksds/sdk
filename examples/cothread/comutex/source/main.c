@@ -63,6 +63,8 @@ int main(int argc, char **argv)
     // Give the main thread high priority so that the screen refresh is fluid
     cothread_set_priority(0, 10);
 
+    cothread_setup_time_slicing(2, 2000); // 2000 IRQs per second (~33 per frame)
+
     consoleSetCursor(NULL, 0, 18);
     printf("Press START to exit to loader\n");
 
